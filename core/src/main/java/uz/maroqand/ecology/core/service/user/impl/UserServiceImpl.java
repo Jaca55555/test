@@ -1,0 +1,88 @@
+package uz.maroqand.ecology.core.service.user.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.component.UserDetailsImpl;
+import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.user.UserRepository;
+import uz.maroqand.ecology.core.service.user.UserService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Created by Utkirbek Boltaev on 20.05.2019.
+ * (uz)
+ * (ru)
+ */
+@Service
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public User findById(Integer id) {
+        return userRepository.getOne(id);
+    }
+
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Page<User> findFiltered(Integer userId, String userName, Pageable pageable) {
+        return userRepository.findAll(getFilteringSpecification(userId,userName),pageable);
+    }
+
+    private static Specification<User> getFilteringSpecification(
+            final Integer userId,
+            final String userName) {
+        return new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                System.out.println("userId="+userId);
+                System.out.println("userName="+userName);
+
+                if (userId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), userId));
+                }
+                if (userName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + userName + "%"));
+                }
+
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public User getCurrentUserFromContext() {
+        return ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+    }
+
+}

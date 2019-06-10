@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body th:fragment="menu">
+
+<!-- [ navigation menu ] start -->
+<nav class="pcoded-navbar menu-light brand-lightblue icon-colored">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a href="index.html" class="b-brand">
+                <img style="width: 60px;" src="/static/images/logo.png" />
+                <span class="b-title">ЭКОЭКСПEРТИЗА</span>
+            </a>
+            <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+        </div>
+        <div class="navbar-content scroll-div">
+            <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Navigation</label>
+                </li>
+                <li data-username="Sample Page" class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.RegUrls).RegApplicationList}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{reg_application.list}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- [ navigation menu ] end -->
+
+</body>
+</html>
