@@ -51,8 +51,8 @@ public class RegApplicationController {
 
     @RequestMapping(value = RegUrls.RegApplicationStart)
     public String getStart() {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.create(user);
+//        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.create(null);
 
         return "redirect:"+RegUrls.RegApplicationApplicant + "?id=" + regApplication.getId();
     }
@@ -62,13 +62,14 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+//        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, null);
         if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 1);
         return RegTemplates.RegApplicationApplicant;
     }
 
@@ -84,6 +85,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 2);
         return RegTemplates.RegApplicationAbout;
     }
 
@@ -99,6 +101,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 2);
         return RegTemplates.RegApplicationWaiting;
     }
 
@@ -114,6 +117,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 3);
         return RegTemplates.RegApplicationContract;
     }
 
@@ -129,6 +133,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 4);
         return RegTemplates.RegApplicationPrepayment;
     }
 
@@ -144,6 +149,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 4);
         return RegTemplates.RegApplicationPayment;
     }
 
@@ -211,6 +217,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("step_id", 5);
         return RegTemplates.RegApplicationStatus;
     }
 

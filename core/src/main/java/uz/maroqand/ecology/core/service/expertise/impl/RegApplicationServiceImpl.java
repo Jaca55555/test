@@ -31,7 +31,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public RegApplication create(User user){
         RegApplication regApplication = new RegApplication();
         regApplication.setCreatedAt(new Date());
-        regApplication.setCreatedById(user.getId());
+//        regApplication.setCreatedById(user.getId());
 
         regApplicationRepository.save(regApplication);
         return regApplication;
