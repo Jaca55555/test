@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.OpfService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.ecoexpertise.constant.RegTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.RegUrls;
@@ -23,10 +25,15 @@ import java.util.*;
 public class RegApplicationController {
 
     private UserService userService;
+    private SoatoService soatoService;
+    private OpfService opfService;
     private RegApplicationService regApplicationService;
 
     @Autowired
-    public RegApplicationController(RegApplicationService regApplicationService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService) {
+        this.userService = userService;
+        this.soatoService = soatoService;
+        this.opfService = opfService;
         this.regApplicationService = regApplicationService;
     }
 
@@ -68,6 +75,9 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
+        model.addAttribute("opfList", opfService.getOpfList());
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("sub_regions", soatoService.getSubRegions());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 1);
         return RegTemplates.RegApplicationApplicant;

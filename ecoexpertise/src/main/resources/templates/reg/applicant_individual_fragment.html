@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="individual">
+
+<div class="form-group row" >
+    <div class="col-md-3 text-right">
+        <label class="col-form-label" th:text="#{sys_tin}">СТИР</label>
+        <span class="required">*</span>
+    </div>
+    <div class="col-md-6">
+        <input class="form-control only-number" required="" id="individualTin" name="individualTin" value="" minlength="9" maxlength="9">
+    </div>
+</div>
+
+</body>
+</html>

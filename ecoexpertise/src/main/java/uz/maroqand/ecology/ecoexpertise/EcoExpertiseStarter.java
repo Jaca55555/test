@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
@@ -24,10 +25,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class EcoExpertiseStarter {
 
     public static void main(String[] args) throws Throwable {
-        ConfigurableApplicationContext app = SpringApplication.run(EcoExpertiseStarter.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(EcoExpertiseStarter.class, args);
+        EcoExpertiseStarter applicationStarter = applicationContext.getBean(EcoExpertiseStarter.class);
         System.out.println("======================== INITIALIZATION COMPLETED ========================");
 
-
+        ToastrService toastrService = applicationContext.getBean(ToastrService.class);
+        toastrService.initialization();
 
     }
 

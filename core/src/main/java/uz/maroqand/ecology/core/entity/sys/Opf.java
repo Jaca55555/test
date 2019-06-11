@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.entity.expertise;
+package uz.maroqand.ecology.core.entity.sys;
 
 import lombok.Data;
 
@@ -34,5 +34,15 @@ public class Opf {
 
     @Column(name = "name_short_tag")
     private String nameShortTag;
+
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+            case "uz":
+                return name;
+            case "ru":
+            default:
+                return nameRu;
+        }
+    }
 
 }

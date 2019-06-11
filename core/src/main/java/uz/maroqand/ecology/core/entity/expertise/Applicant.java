@@ -1,32 +1,43 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.entity.sys.Opf;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
- * (uz)
+ * (uz) Arizachi ma'lumotlari
  */
 @Data
 @Entity
-@Table(name = "legal_entity")
-public class LegalEntity {
+@Table(name = "applicant")
+public class Applicant {
 
     @Transient
-    private static final String sequenceName = "legal_entity_id_seq";
+    private static final String sequenceName = "applicant_id_seq";
 
     @Id
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @NonNull
+    @Column(name = "type")
+    @Enumerated(EnumType.ORDINAL)
+    private ApplicantType type;
+
     //ИНН
     @Size(max = 9)
     private String tin;
 
     //Фирменное наименование предприятия;
+    //Ф.И.О.;
     @Column
     private String name;
 
@@ -41,6 +52,33 @@ public class LegalEntity {
     //Директор
     @Column(name = "director_full_name")
     private String directorFullName;
+
+    /*
+    * Passport ma'lumotlari
+    * */
+    //Серия паспорта;
+    @Size(max = 3)
+    @Column(name = "passport_serial")
+    private String passportSerial;
+
+    //Номер паспорта;
+    @Size(max = 10)
+    @Column(name = "passport_number")
+    private String passportNumber;
+
+    //Дата выдачи паспорта;
+    @Column(name="passport_date_of_issue", columnDefinition = "date")
+    @DateTimeFormat(pattern="dd.MM.yyyy")
+    private Date passportDateOfIssue;
+
+    //Действителен до;
+    @Column(name="passport_date_of_expiry", columnDefinition = "date")
+    @DateTimeFormat(pattern="dd.MM.yyyy")
+    private Date passportDateOfExpiry;
+
+    //Кем выдан;
+    @Column(name = "passport_issued_by")
+    private String passportIssuedBy;
 
     //ОКЭД
     @Size(max = 6)
