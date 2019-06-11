@@ -1,6 +1,6 @@
 package uz.maroqand.ecology.ecoexpertise.constant;
 
-public class RegTemplates {
+public class Templates {
     private static final String Prefix = "reg";
     private static final String RegApplication = Prefix;
 
@@ -14,5 +14,11 @@ public class RegTemplates {
     public static final String RegApplicationStatus = RegApplication + "/status";
 
     public static final String RegApplicationList = RegApplication + "/list";
+
+
+    private static final String Appeal = "/appeal";
+    public static final String AppealUserList = Prefix + Appeal + "/user_list";
+    public static final String AppealNew = Prefix + Appeal + "/new";
+    public static final String AppealView = Prefix + Appeal + "/view";
 
 }

@@ -1,6 +1,6 @@
 package uz.maroqand.ecology.ecoexpertise.constant;
 
-public class RegUrls {
+public class Urls {
     private static final String Prefix = "/reg";
 
     private static final String RegApplication = Prefix + "/application";
@@ -20,5 +20,18 @@ public class RegUrls {
 
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
+
+
+    private static final String Appeal = "/appeal";
+    public static final String AppealUserList = Prefix + Appeal + "/list";
+    public static final String AppealUserListAjax = Prefix + Appeal + "/list_ajax";
+
+    public static final String AppealNew = Prefix + Appeal + "/new";
+    public static final String AppealCreate = Prefix + Appeal + "/create";
+    public static final String AppealEdit = Prefix + Appeal + "/edit";
+    public static final String AppealUpdate = Prefix + Appeal + "/update";
+    public static final String AppealDelete = Prefix + Appeal + "/delete";
+    public static final String AppealUserView = Prefix + Appeal + "/view";
+    public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
 
 }

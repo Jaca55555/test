@@ -15,8 +15,8 @@ import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OpfService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.ecoexpertise.constant.RegTemplates;
-import uz.maroqand.ecology.ecoexpertise.constant.RegUrls;
+import uz.maroqand.ecology.ecoexpertise.constant.Templates;
+import uz.maroqand.ecology.ecoexpertise.constant.Urls;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -24,10 +24,10 @@ import java.util.*;
 @Controller
 public class RegApplicationController {
 
-    private UserService userService;
-    private SoatoService soatoService;
-    private OpfService opfService;
-    private RegApplicationService regApplicationService;
+    private final UserService userService;
+    private final SoatoService soatoService;
+    private final OpfService opfService;
+    private final RegApplicationService regApplicationService;
 
     @Autowired
     public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService) {
@@ -37,34 +37,34 @@ public class RegApplicationController {
         this.regApplicationService = regApplicationService;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationList)
+    @RequestMapping(value = Urls.RegApplicationList)
     public String getRegApplicationListPage() {
 
-        return RegTemplates.RegApplicationList;
+        return Templates.RegApplicationList;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = Urls.RegApplicationListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public DataTablesOutput<RegApplication> getRegApplicationListAjax(@Valid DataTablesInput input) {
         User user = userService.getCurrentUserFromContext();
         return regApplicationService.findFiltered(input, user.getId());
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationDashboard)
+    @RequestMapping(value = Urls.RegApplicationDashboard)
     public String getDashboardPage() {
 
-        return RegTemplates.RegApplicationDashboard;
+        return Templates.RegApplicationDashboard;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationStart)
+    @RequestMapping(value = Urls.RegApplicationStart)
     public String getStart() {
 //        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.create(null);
 
-        return "redirect:"+RegUrls.RegApplicationApplicant + "?id=" + regApplication.getId();
+        return "redirect:"+Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationApplicant)
+    @RequestMapping(value = Urls.RegApplicationApplicant)
     public String getApplicantPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -72,7 +72,7 @@ public class RegApplicationController {
 //        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, null);
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("opfList", opfService.getOpfList());
@@ -80,10 +80,10 @@ public class RegApplicationController {
         model.addAttribute("sub_regions", soatoService.getSubRegions());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 1);
-        return RegTemplates.RegApplicationApplicant;
+        return Templates.RegApplicationApplicant;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationAbout)
+    @RequestMapping(value = Urls.RegApplicationAbout)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -91,15 +91,15 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 2);
-        return RegTemplates.RegApplicationAbout;
+        return Templates.RegApplicationAbout;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationWaiting)
+    @RequestMapping(value = Urls.RegApplicationWaiting)
     public String getWaitingPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -107,15 +107,15 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 2);
-        return RegTemplates.RegApplicationWaiting;
+        return Templates.RegApplicationWaiting;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationContract)
+    @RequestMapping(value = Urls.RegApplicationContract)
     public String getContractPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -123,15 +123,15 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 3);
-        return RegTemplates.RegApplicationContract;
+        return Templates.RegApplicationContract;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationPrepayment)
+    @RequestMapping(value = Urls.RegApplicationPrepayment)
     public String getPrepaymentPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -139,15 +139,15 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 4);
-        return RegTemplates.RegApplicationPrepayment;
+        return Templates.RegApplicationPrepayment;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationPayment)
+    @RequestMapping(value = Urls.RegApplicationPayment)
     public String getPaymentPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -155,15 +155,15 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 4);
-        return RegTemplates.RegApplicationPayment;
+        return Templates.RegApplicationPayment;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
+    @RequestMapping(value = Urls.RegApplicationPaymentSendSms)
     @ResponseBody
     public Map<String,Object> sendSmsPayment(
             @RequestParam(name = "id") Integer applicationId,
@@ -175,8 +175,8 @@ public class RegApplicationController {
             @RequestParam(name = "serial") String serial
     ) {
 
-        String failUrl = RegUrls.RegApplicationPaymentSendSms;
-        String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
+        String failUrl = Urls.RegApplicationPaymentSendSms;
+        String successUrl = Urls.RegApplicationPaymentConfirmSms;
 
         /*return paymentService.sendSmsPaymentS2ServiceRegistryAndGetResponseMap(
                 applicationId,
@@ -192,7 +192,7 @@ public class RegApplicationController {
         return null;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
+    @RequestMapping(value = Urls.RegApplicationPaymentConfirmSms)
     @ResponseBody
     public Map<String, Object> confirmSmsPayment(
             @RequestParam(name = "id") Integer applicationId,
@@ -201,8 +201,8 @@ public class RegApplicationController {
             @RequestParam(name = "confirmSms") String confirmSms
     ) {
 
-        String successUrl = RegUrls.RegApplicationStatus;
-        String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
+        String successUrl = Urls.RegApplicationStatus;
+        String failUrl = Urls.RegApplicationPaymentConfirmSms;
 
         /*return paymentService.confirmSmsAndGetResponseAsMap(
                 applicationId,
@@ -215,7 +215,7 @@ public class RegApplicationController {
         return null;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationStatus)
+    @RequestMapping(value = Urls.RegApplicationStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -223,12 +223,12 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            return "redirect:" + Urls.RegApplicationList;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 5);
-        return RegTemplates.RegApplicationStatus;
+        return Templates.RegApplicationStatus;
     }
 
 }
