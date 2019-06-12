@@ -56,6 +56,7 @@ public class RegApplicationController {
         return Templates.RegApplicationDashboard;
     }
 
+    
     @RequestMapping(value = Urls.RegApplicationStart)
     public String getStart() {
 //        User user = userService.getCurrentUserFromContext();
