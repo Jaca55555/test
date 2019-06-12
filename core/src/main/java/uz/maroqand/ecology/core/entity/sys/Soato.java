@@ -27,6 +27,9 @@ public class Soato {
     @Column(name = "name_ru")
     private String nameRu;
 
+    @Column(name = "name_oz")
+    private String nameOz;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",updatable = false,insertable = false)
     private Soato parent;
@@ -45,7 +48,7 @@ public class Soato {
                 return name;
             case "ru":
             default:
-                return nameRu;
+                return name;
         }
     }
 

@@ -2,10 +2,10 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.NonNull;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.entity.sys.Opf;
 
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -27,7 +27,6 @@ public class Applicant {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @NonNull
     @Column(name = "type")
     @Enumerated(EnumType.ORDINAL)
     private ApplicantType type;

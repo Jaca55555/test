@@ -58,9 +58,9 @@ public class User {
     private Boolean enabled;
 
     //Organization.ID
-    @NotNull
+    /*@NotNull
     @Column(name = "organization_id")
-    private Integer organizationId;
+    private Integer organizationId;*/
 
     /*@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)

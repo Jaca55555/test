@@ -10,16 +10,21 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name = "opf")
+@Table(name = "sys_opf")
 public class Opf {
 
     @Transient
-    private static final String sequenceName = "opf_id_seq";
+    private static final String sequenceName = "sys_opf_id_seq";
 
     @Id
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
+
+    private Integer code;
+
+    @Column(name = "parent_id")
+    private String parentId;
 
     @Column(name = "name")
     private String name;
@@ -27,13 +32,11 @@ public class Opf {
     @Column(name = "name_ru")
     private String nameRu;
 
-    private Integer code;
+    @Column(name = "name_short")
+    private String nameShort;
 
-    @Column(name = "name_tag")
-    private String nameTag;
-
-    @Column(name = "name_short_tag")
-    private String nameShortTag;
+    @Column(name = "name_short_ru")
+    private String nameShortRu;
 
     public String getNameTranslation(String locale) {
         switch (locale) {
@@ -42,6 +45,16 @@ public class Opf {
             case "ru":
             default:
                 return nameRu;
+        }
+    }
+
+    public String getNameShortTranslation(String locale) {
+        switch (locale) {
+            case "uz":
+                return nameShort;
+            case "ru":
+            default:
+                return nameShortRu;
         }
     }
 

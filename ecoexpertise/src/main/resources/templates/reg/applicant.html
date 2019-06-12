@@ -52,32 +52,21 @@
 
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
-                                            <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
-
-                                                <div class="row" >
-                                                    <div class="form-group col-md-12 text-center" >
-                                                        <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" id="applicantType1" name="applicantType" class="custom-control-input">
-                                                            <label class="custom-control-label" for="applicantType1" th:text="#{sys_legal_entity}">Yuridik shaxs</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" id="applicantType2" name="applicantType" class="custom-control-input">
-                                                            <label class="custom-control-label" for="applicantType2" th:text="#{sys_individual}">Jismoniy shaxs</label>
-                                                        </div>
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeLegalEntity" name="applicantType" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).LegalEntity}" >
+                                                        <label class="custom-control-label" for="applicantTypeLegalEntity" th:text="#{sys_legal_entity}">Yuridik shaxs</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeIndividual" name="applicantType" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).Individual}" >
+                                                        <label class="custom-control-label" for="applicantTypeIndividual" th:text="#{sys_individual}">Jismoniy shaxs</label>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <object th:include="reg/applicant_legal_entity_fragment :: legal_entity" th:remove="tag" ></object>
-                                                <object th:include="reg/applicant_individual_fragment :: individual" th:remove="tag" ></object>
-
-                                                <div class="row" >
-                                                    <div class="form-group col-md-12 text-center" >
-                                                        <button type="button" class="btn btn-danger" th:text="#{sys_cancel}">Отмена</button>
-                                                        <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-
+                                            <object th:include="reg/applicant_legal_entity_fragment :: legal_entity" th:remove="tag" ></object>
+                                            <object th:include="reg/applicant_individual_fragment :: individual" th:remove="tag" ></object>
 
                                         </div>
                                     </div>
@@ -95,6 +84,11 @@
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
-
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            bindSubRegionSelectToRegionSelect('#individualSubRegionId', '#individualRegionId');
+            bindSubRegionSelectToRegionSelect('#legalEntitySubRegionId', '#legalEntityRegionId');
+        });
+    </script>
 </body>
 </html>
