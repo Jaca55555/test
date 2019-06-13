@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 200px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>appeal.view</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" th:object="${appeal}">
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark" th:text="#{appeal.type}">English</label>
+                                                <p>
+                                                    <span th:text="*{appealType}"></span>
+                                                </p>
+                                            </div>
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark" th:text="#{appeal.status}">English</label>
+                                                <p>
+                                                    <span class="badge badge-secondary" th:text="*{appealStatus}"></span>
+                                                </p>
+                                            </div>
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark" th:text="#{appeal.createdBy}">English</label>
+                                                <p th:text="${createdBy.lastname+' '+createdBy.firstname+' '+createdBy.middlename}"></p>
+                                            </div>
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark" th:text="#{appeal.title}">English</label>
+                                                <p th:text="*{title}"></p>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark"></label>
+                                                <p></p>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label class="control-label text-dark" th:text="#{appeal.phone}">English</label>
+                                                <p th:text="*{phone}"></p>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="alert alert-dark">
+                                                    <p th:utext="*{description}"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div th:if="">
+                                                    <div class="alert alert-success">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script src="/static/plugins/ckeditor/js/ckeditor.js"></script>
+<script type="text/javascript">
+    ClassicEditor.create(document.querySelector( '#description' )).catch( error => {console.error( error )});
+</script>
+</body>
+</html>
