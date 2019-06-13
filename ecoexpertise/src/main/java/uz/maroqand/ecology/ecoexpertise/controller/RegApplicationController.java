@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.entity.expertise.Applicant;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
@@ -56,10 +60,14 @@ public class RegApplicationController {
         return Templates.RegApplicationDashboard;
     }
 
+
+    /*
+    * Start
+    * */
     @RequestMapping(value = Urls.RegApplicationStart)
     public String getStart() {
-//        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.create(null);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.create(user);
 
         return "redirect:"+Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
     }
@@ -69,11 +77,21 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-//        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, null);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+
+        Applicant applicant = regApplication.getApplicant();
+        if(applicant==null || applicant.getType()==null){
+            applicant = new Applicant();
+            applicant.setType(ApplicantType.LegalEntity);
+        }
+
+        model.addAttribute("applicant", applicant);
+        model.addAttribute("legalEntity", new LegalEntityDto(applicant));
+        model.addAttribute("individual", new IndividualDto(applicant));
 
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
@@ -86,6 +104,8 @@ public class RegApplicationController {
     @RequestMapping(value = Urls.RegApplicationAbout)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
+            LegalEntityDto legalEntityDto,
+            IndividualDto individualDto,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
