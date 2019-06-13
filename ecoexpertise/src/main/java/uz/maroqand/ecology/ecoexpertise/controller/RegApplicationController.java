@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
@@ -15,6 +16,7 @@ import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.expertise.ApplicantService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OpfService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -32,13 +34,15 @@ public class RegApplicationController {
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
+    private final ApplicantService applicantService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
+        this.applicantService = applicantService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -72,7 +76,7 @@ public class RegApplicationController {
         return "redirect:"+Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(value = Urls.RegApplicationApplicant)
+    @RequestMapping(value = Urls.RegApplicationApplicant,method = RequestMethod.GET)
     public String getApplicantPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -87,12 +91,15 @@ public class RegApplicationController {
         if(applicant==null || applicant.getType()==null){
             applicant = new Applicant();
             applicant.setType(ApplicantType.LegalEntity);
+            model.addAttribute("legalEntity", new LegalEntityDto());
+            model.addAttribute("individual", new IndividualDto());
+
+        }else{
+            model.addAttribute("legalEntity", new LegalEntityDto(applicant));
+            model.addAttribute("individual", new IndividualDto(applicant));
         }
 
         model.addAttribute("applicant", applicant);
-        model.addAttribute("legalEntity", new LegalEntityDto(applicant));
-        model.addAttribute("individual", new IndividualDto(applicant));
-
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("sub_regions", soatoService.getSubRegions());
@@ -101,11 +108,44 @@ public class RegApplicationController {
         return Templates.RegApplicationApplicant;
     }
 
-    @RequestMapping(value = Urls.RegApplicationAbout)
-    public String getAboutPage(
+    @RequestMapping(value = Urls.RegApplicationApplicant,method = RequestMethod.POST)
+    public String createRegApplication(
+            @RequestParam(name = "applicantType") String applicantType,
             @RequestParam(name = "id") Integer id,
             LegalEntityDto legalEntityDto,
-            IndividualDto individualDto,
+            IndividualDto individualDto
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        Applicant applicant = regApplication.getApplicant();
+
+        if (applicantType.equals("LegalEntity")){
+            if (applicant==null){
+                applicantService.createApplicant(legalEntityDto);
+            }else{
+                applicantService.updateApplicant(applicant,legalEntityDto);
+            }
+        }else{
+            if (applicant==null){
+                applicantService.createApplicant(individualDto);
+            }else{
+                applicantService.updateApplicant(applicant,individualDto);
+            }
+        }
+
+        return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;
+    }
+
+
+    @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.GET)
+    public String getAboutPage(
+            @RequestParam(name = "id") Integer id,
+//            LegalEntityDto legalEntityDto,
+//            IndividualDto individualDto,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -115,11 +155,25 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("back_url",Urls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", 2);
         return Templates.RegApplicationAbout;
     }
 
-    @RequestMapping(value = Urls.RegApplicationWaiting)
+    @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.POST)
+    public String regApplicationAbout(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationWaiting,method = RequestMethod.GET)
     public String getWaitingPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -131,11 +185,25 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("back_url",Urls.RegApplicationAbout + "?id=" + id);
         model.addAttribute("step_id", 2);
         return Templates.RegApplicationWaiting;
     }
 
-    @RequestMapping(value = Urls.RegApplicationContract)
+    @RequestMapping(value = Urls.RegApplicationWaiting,method = RequestMethod.POST)
+    public String regApplicationWaiting(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        return "redirect:" + Urls.RegApplicationContract + "?id=" + id;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationContract,method = RequestMethod.GET)
     public String getContractPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -147,8 +215,22 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("back_url",Urls.RegApplicationWaiting + "?id=" + id);
         model.addAttribute("step_id", 3);
         return Templates.RegApplicationContract;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationContract,method = RequestMethod.POST)
+    public String regApplicationContract(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
     }
 
     @RequestMapping(value = Urls.RegApplicationPrepayment)
