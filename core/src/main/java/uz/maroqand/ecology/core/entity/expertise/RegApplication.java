@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
@@ -68,9 +69,17 @@ public class RegApplication {
     @Column(name = "developer_id")
     private Integer developerId;
 
+    //Ko'rib chiquvchi tashkilot
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", insertable = false, updatable = false)
+    private Organization review;
 
+    @Column(name = "review_id")
+    private Integer reviewId;
 
-
+    /*
+     * Technical Fields
+     */
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
 
@@ -80,16 +89,16 @@ public class RegApplication {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", insertable = false, updatable = false)
-    private User createdBy;*/
+    private User createdBy;
 
     @Column(name = "created_by")
     private Integer createdById;
 
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by", insertable = false, updatable = false)
-    private User updateBy;*/
+    private User updateBy;
 
     @Column(name = "update_by")
     private Integer updateById;
