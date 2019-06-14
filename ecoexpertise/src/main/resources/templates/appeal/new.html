@@ -35,7 +35,8 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>appeal.list</h5>
+                                        <h5 th:if="${appeal.id==null}">appeal.new</h5>
+                                        <h5 th:if="${appeal.id!=null}">appeal.edit</h5>
                                     </div>
                                     <div class="card-body">
                                         <form method="post" th:object="${appeal}" data-parsley-validate="" th:action="${action_url}">
@@ -44,9 +45,9 @@
                                                 <div class="form-group row">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12 text-right" th:text="#{appeal.type}">English</label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <select class="form-control" th:field="appealType" required="required">
+                                                        <select class="form-control" th:field="*{appealType}" required="required">
                                                             <option value="" th:text="#{sys_select_appeal_type}" selected="selected"></option>
-                                                            <option th:each="type : ${appealTypeList}" th:value="${type.getId()}" th:text="${type.getName()}"></option>
+                                                            <option th:each="type : ${T(uz.maroqand.ecology.core.constant.sys.AppealType).values()}" th:value="${type}" th:text="${type}"></option>
                                                         </select>
                                                     </div>
                                                 </div>

@@ -40,48 +40,96 @@
                                     <div class="card-body">
                                         <div class="row" th:object="${appeal}">
 
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <label class="control-label text-dark" th:text="#{appeal.type}">English</label>
                                                 <p>
                                                     <span th:text="*{appealType}"></span>
                                                 </p>
                                             </div>
 
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <label class="control-label text-dark" th:text="#{appeal.status}">English</label>
                                                 <p>
-                                                    <span class="badge badge-secondary" th:text="*{appealStatus}"></span>
+                                                    <span th:if="*{appealStatus==T(uz.maroqand.ecology.core.constant.sys.AppealStatus).Open}" class="badge badge-secondary" th:text="*{appealStatus}"></span>
+                                                    <span th:if="*{appealStatus==T(uz.maroqand.ecology.core.constant.sys.AppealStatus).InProgress}" class="badge badge-primary" th:text="*{appealStatus}"></span>
+                                                    <span th:if="*{appealStatus==T(uz.maroqand.ecology.core.constant.sys.AppealStatus).Closed}" class="badge badge-success" th:text="*{appealStatus}"></span>
                                                 </p>
                                             </div>
 
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <label class="control-label text-dark" th:text="#{appeal.createdBy}">English</label>
-                                                <p th:text="${createdBy.lastname+' '+createdBy.firstname+' '+createdBy.middlename}"></p>
+                                                <p th:if="${createdBy.firstname!=null && createdBy.lastname!=null && createdBy.middlename!=null}" th:text="${createdBy.lastname+' '+createdBy.firstname+' '+createdBy.middlename}"></p>
+                                                <p th:if="${createdBy.firstname==null && createdBy.lastname==null && createdBy.middlename==null}"></p>
                                             </div>
 
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label text-dark" th:text="#{appeal.title}">English</label>
-                                                <p th:text="*{title}"></p>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                                <label class="control-label text-dark"></label>
-                                                <p></p>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <label class="control-label text-dark" th:text="#{appeal.phone}">English</label>
                                                 <p th:text="*{phone}"></p>
                                             </div>
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <div class="alert alert-dark">
-                                                    <p th:utext="*{description}"></p>
-                                                </div>
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
+                                                <label class="control-label text-dark" th:text="#{appeal.title}">English</label>
+                                                <p th:text="*{title}"></p>
+                                            </div>
+
+                                            <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
+                                                <label class="control-label text-dark" th:text="#{appeal.createdAt}"></label>
+                                                <p th:text="*{#dates.format(createdAt,'dd:MM:yyyy HH:mm')}"></p>
                                             </div>
 
                                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <div th:if="">
-                                                    <div class="alert alert-success">
+                                                <div class="row">
+                                                    <!-- Description and comments-->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12"></div>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <h5 th:text="#{appeal.content}"></h5><hr>
+                                                        <div class="alert alert-dark rounded" th:utext="*{description}"></div>
+                                                        <div th:if="${#lists.size(appealSubList)>0}">
+                                                            <h5 th:text="#{appeal.comments}"></h5><hr>
+                                                        </div>
 
+                                                        <div class="media alert alert-success rounded" th:each="comment : ${appealSubList}">
+                                                            <div class="media-left mr-3">
+                                                                <span th:if=${isAdmin}>
+                                                                    <i class="fas fa-user-tie fa-2x"></i>
+                                                                </span>
+                                                                <span th:if=${!isAdmin}>
+                                                                    <i class="fas fa-user fa-2x"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h6 class="media-heading txt-primary">
+                                                                <span>
+                                                                    <span th:if="${appealSubCreatedUser.lastname!=null && appealSubCreatedUser.firstname!=null && appealSubCreatedUser.middlename!=null}" th:text="${appealSubCreatedUser.lastname+' '+appealSubCreatedUser.firstname+' '+appealSubCreatedUser.middlename}"></span>
+                                                                    <span th:if="${appealSubCreatedUser.lastname==null && appealSubCreatedUser.firstname==null && appealSubCreatedUser.middlename==null}"></span>
+                                                                </span>
+                                                                    <span class="f-12 text-muted ml-1" th:text="${#dates.format(comment.createdAt,'dd:MM:yyyy HH:mm')}">Just now</span></h6>
+                                                                <p th:utext="${comment.message}"></p>
+                                                                <p th:text="*{appealStatus}"></p>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    <div class="col-md-3 col-sm-3 col-xs-12"></div>
+
+                                                    <!-- Add new comments-->
+                                                    <div class="col-md-3 col-sm-3 col-xs-12"></div>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12" th:if="*{appealStatus!=T(uz.maroqand.ecology.core.constant.sys.AppealStatus).Closed}">
+                                                        <h5 th:text="#{appeal.addComment}"></h5><hr>
+                                                        <form th:action="${action_url}" method="post" th:object="${appealSub}">
+                                                            <textarea class="form-control col-md-12 col-xs-12" name="description" id="description" type="text" rows="8" th:field="*{message}"/>
+                                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                            <input type="hidden" th:value="${appeal.id}" name="appealId"/>
+                                                            <div class="form-group row text-center mt-3">
+                                                                <div class="col-sm-12">
+                                                                    <a class="btn btn-danger" th:href="${cancel_url}" th:text="#{sys_cancel}"></a>
+                                                                    <input type="submit" th:value="#{sys_add}" class="btn btn-primary"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12"></div>
+
                                                 </div>
                                             </div>
                                         </div>

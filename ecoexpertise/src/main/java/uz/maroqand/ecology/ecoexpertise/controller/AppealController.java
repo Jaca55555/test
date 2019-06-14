@@ -16,6 +16,7 @@ import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.sys.AppealSub;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.entity.user.UserRole;
 import uz.maroqand.ecology.core.service.sys.AppealService;
 import uz.maroqand.ecology.core.service.sys.AppealSubService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -99,7 +100,6 @@ public class AppealController {
 
         Appeal appeal = new Appeal();
         model.addAttribute("appeal", appeal);
-        model.addAttribute("appealTypeList", AppealType.getAppealTypeList());
         model.addAttribute("action_url", Urls.AppealCreate);
         model.addAttribute("cancel_url", Urls.AppealUserList);
         return Templates.AppealNew;
@@ -183,13 +183,20 @@ public class AppealController {
 
         //UPDATE MAP
         appealService.updateByUserId(appeal.getCreatedById());
-
+        List<User>appealSubCreatedUserList = new ArrayList<>();
+        for (AppealSub appealSub1 : appealSubList){
+            User appealSubCreatedUser = userService.findById(appealSub1.getCreatedById());
+            appealSubCreatedUserList.add(appealSubCreatedUser);
+        }
         model.addAttribute("createdBy",userService.findById(appeal.getCreatedById()));
+        model.addAttribute("appealSubCreatedUserList",appealSubCreatedUserList);
         model.addAttribute("appealSub", appealSub);
         model.addAttribute("appealSubList", appealSubList);
-        model.addAttribute("appeal", appeal);
+        model.addAttribute("appeal",appeal);
         model.addAttribute("action_url", Urls.AppealSubCreate);
+        model.addAttribute("cancel_url", Urls.AppealUserList);
         model.addAttribute("isAdmin", false);
+
         return Templates.AppealView;
     }
 
@@ -198,6 +205,7 @@ public class AppealController {
             @RequestParam(name = "appealId") Integer id,
             AppealSub appealSub
     ) {
+        System.out.println("appealId == " + id);
         User user = userService.getCurrentUserFromContext();
         Appeal appeal = appealService.getById(id, user.getId());
         if(appeal==null){
@@ -206,7 +214,6 @@ public class AppealController {
 
         appealSub.setAppealId(appeal.getId());
         appealSubService.create(appealSub,user);
-
         Integer count = appeal.getShowAdminCommentCount()!=null?appeal.getShowAdminCommentCount():0;
         appeal.setShowAdminCommentCount(count + 1);
         appealService.updateCommentCount(appeal);
