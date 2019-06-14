@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
@@ -31,7 +32,41 @@ public class RegApplication {
     @Column(name = "applicant_id")
     private Integer applicantId;
 
+    //Объект экспертизы
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "object_id", insertable = false, updatable = false)
+    private ObjectExpertise object;
 
+    @Column(name = "object_id")
+    private Integer objectId;
+
+    //Вид деятельности
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id", insertable = false, updatable = false)
+    private Activity activity;
+
+    @Column(name = "activity_id")
+    private Integer activityId;
+
+    //Категория
+    @Column(name = "category")
+    @Enumerated(EnumType.ORDINAL)
+    private Category category;
+
+    //Вид материалов
+
+
+
+    //Наименование объекта
+    private String name;
+
+    //разработчика проекта
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "developer_id", insertable = false, updatable = false)
+    private ProjectDeveloper developer;
+
+    @Column(name = "developer_id")
+    private Integer developerId;
 
 
 
