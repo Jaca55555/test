@@ -14,6 +14,7 @@ import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ApplicantService;
@@ -125,18 +126,20 @@ public class RegApplicationController {
 
         if (applicantType.equals("LegalEntity")){
             if (applicant==null){
-                applicantService.createApplicant(legalEntityDto);
+                applicant = applicantService.createApplicant(legalEntityDto);
+                regApplication.setApplicantId(applicant.getId());
             }else{
                 applicantService.updateApplicant(applicant,legalEntityDto);
             }
         }else{
             if (applicant==null){
-                applicantService.createApplicant(individualDto);
+                applicant =  applicantService.createApplicant(individualDto);
+                regApplication.setApplicantId(applicant.getId());
             }else{
                 applicantService.updateApplicant(applicant,individualDto);
             }
         }
-
+        regApplicationService.save(regApplication);
         return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;
     }
 
@@ -144,8 +147,6 @@ public class RegApplicationController {
     @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.GET)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
-//            LegalEntityDto legalEntityDto,
-//            IndividualDto individualDto,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();

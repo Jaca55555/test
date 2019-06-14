@@ -37,6 +37,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplication;
     }
 
+    public void save(RegApplication regApplication){
+        regApplicationRepository.save(regApplication);
+    }
+
     public RegApplication getById(Integer id) {
         if(id==null) return null;
         return regApplicationRepository.findByIdAndDeletedFalse(id);
