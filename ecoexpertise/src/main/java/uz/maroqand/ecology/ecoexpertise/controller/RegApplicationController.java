@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
-import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
+import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.service.expertise.ApplicantService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.OpfService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -36,14 +36,22 @@ public class RegApplicationController {
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
     private final ApplicantService applicantService;
+    private final ActivityService activityService;
+    private final ObjectExpertiseService objectExpertiseService;
+    private final OrganizationService organizationService;
+    private final ProjectDeveloperService projectDeveloperService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
         this.applicantService = applicantService;
+        this.activityService = activityService;
+        this.objectExpertiseService = objectExpertiseService;
+        this.organizationService = organizationService;
+        this.projectDeveloperService = projectDeveloperService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -155,7 +163,14 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
+        Integer categoryId=regApplication.getCategory()!=null?regApplication.getCategory().getId():null;
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
+        model.addAttribute("activityList",activityService.getList());
+        model.addAttribute("projectDeveloper",projectDeveloper!=null ? projectDeveloper : new ProjectDeveloper());
+        model.addAttribute("categoryList", Category.getCategoryList());
         model.addAttribute("back_url",Urls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", 2);
         return Templates.RegApplicationAbout;
@@ -163,14 +178,28 @@ public class RegApplicationController {
 
     @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.POST)
     public String regApplicationAbout(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "categoryId") Integer categoryId,
+            RegApplication regApplication,
+            ProjectDeveloper projectDeveloper
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
+        RegApplication regApplication1 = regApplicationService.getById(id, user.getId());
+        if(regApplication1 == null){
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        System.out.println("projectDeveloper.name===" + projectDeveloper.getName());
+        System.out.println("projectDeveloper.tin" + projectDeveloper.getTin());
+        ProjectDeveloper projectDeveloper1 = regApplication1.getDeveloperId()!=null?projectDeveloperService.getById(regApplication1.getDeveloperId()):new ProjectDeveloper();
+        projectDeveloper1.setName(projectDeveloper.getName());
+        projectDeveloper1.setTin(projectDeveloper.getTin());
+        projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
+        regApplication1.setObjectId(regApplication.getObjectId());
+        regApplication1.setActivityId(regApplication.getActivityId());
+        regApplication1.setCategory(Category.getCategory(categoryId));
+        regApplication1.setDeveloperId(projectDeveloper1.getId());
+        regApplicationService.save(regApplication1);
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
     }
 

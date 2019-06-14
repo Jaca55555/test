@@ -126,9 +126,9 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  >
+                                                                <select class="form-control"  th:field="*{objectId}">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option value="1" th:text="#{Объект экспертизы}"></option>
+                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.name}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -139,9 +139,9 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  >
+                                                                <select class="form-control"  th:field="*{activityId}">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option value="1" th:text="#{Вид деятельности}"></option>
+                                                                    <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.name}" th:selected="${regApplication.activityId==activity.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -152,9 +152,9 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  >
+                                                                <select class="form-control" name="categoryId">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option value="1" th:text="#{Категория}"></option>
+                                                                    <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}" th:selected="${categoryId!=null && categoryId==category.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -178,7 +178,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" />
+                                                                <input class="form-control" type="text" th:field="*{name}" />
                                                             </div>
                                                         </div>
 
@@ -188,7 +188,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control only-number"  value="" minlength="9" maxlength="9"/>
+                                                                <input class="form-control only-number" th:field="${projectDeveloper.tin}" minlength="9" maxlength="9"/>
                                                             </div>
                                                         </div>
 
@@ -198,7 +198,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" />
+                                                                <input class="form-control" type="text" th:field="${projectDeveloper.name}" />
                                                             </div>
                                                         </div>
                                                         </br>
