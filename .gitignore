@@ -1,6 +1,8 @@
 # Created by .ignore support plugin
 .idea
-core/core.iml
-ecoexpertise/cabinet.iml
 core/target
 ecoexpertise/target
+cabinet/target
+/home/utkir/IdeaProjects/ecology/cabinet/target
+/home/utkir/IdeaProjects/ecology/core/target
+/home/utkir/IdeaProjects/ecology/ecoexpertise/target
