@@ -2,7 +2,7 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.entity.expertise.Organization;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.repository.expertise.OrganizationRepository;
 import uz.maroqand.ecology.core.service.expertise.OrganizationService;
 

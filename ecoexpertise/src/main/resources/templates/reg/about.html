@@ -216,7 +216,7 @@
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
-                                                                <a th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <a th:href="${back_url}" type="button" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
                                                                 <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
                                                             </div>
                                                         </div>
