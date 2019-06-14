@@ -21,9 +21,9 @@ import java.util.List;
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
 
-    @Autowired
     private RegApplicationRepository regApplicationRepository;
 
+    @Autowired
     public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository) {
         this.regApplicationRepository = regApplicationRepository;
     }
