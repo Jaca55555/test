@@ -51,8 +51,7 @@ public class RegApplicationController {
     private final PaymentService paymentService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -291,7 +290,7 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
-        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
+//        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
         /*if (payment.getStatus() != PaymentStatus.Success) {
             billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
             regApplication.setPaymentId(payment.getId());
@@ -304,7 +303,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
         }*/
 
-        model.addAttribute("payment", payment);
+//        model.addAttribute("payment", payment);
         model.addAttribute("regApplication", regApplication);
 //        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
         model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);

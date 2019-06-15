@@ -54,14 +54,6 @@ public class RegApplication {
     @Column(name = "activity_id")
     private Integer activityId;
 
-    /*//
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", insertable = false, updatable = false)
-    private Invoice invoice;*/
-
-    @Column(name = "invoice_id")
-    private Integer invoiceId;
-
     //Категория
     @Column(name = "category")
     @Enumerated(EnumType.ORDINAL)
