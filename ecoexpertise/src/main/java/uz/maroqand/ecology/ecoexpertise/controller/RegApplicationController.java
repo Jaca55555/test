@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -41,9 +44,10 @@ public class RegApplicationController {
     private final ObjectExpertiseService objectExpertiseService;
     private final OrganizationService organizationService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final OfferService offerService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -53,6 +57,7 @@ public class RegApplicationController {
         this.objectExpertiseService = objectExpertiseService;
         this.organizationService = organizationService;
         this.projectDeveloperService = projectDeveloperService;
+        this.offerService = offerService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -239,13 +244,17 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        Offer offer = offerService.getOffer(locale);
+
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("offer", offer);
         model.addAttribute("back_url",Urls.RegApplicationWaiting + "?id=" + id);
         model.addAttribute("step_id", 3);
         return Templates.RegApplicationContract;
