@@ -3,7 +3,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -90,6 +90,9 @@ public class RegApplication {
     @Column(name = "contract_number")
     private String contractNumber;
 
+    @Column(name = "contract_date")
+    private Date contractDate;
+
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offer_id", insertable = false, updatable = false)
     private Offer offer;*/
@@ -120,13 +123,28 @@ public class RegApplication {
     @Column(name = "review_id")
     private Integer reviewId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performer_id", insertable = false, updatable = false)
-    private User performer;
+    private User performer;*/
 
     @Column(name = "performer_id")
     private Integer performerId;
 
+    @Column(name = "confirm_status")
+    @Enumerated(EnumType.ORDINAL)
+    private ConfirmStatus confirmStatus;
+
+    @Column(name = "forwarding_status")
+    @Enumerated(EnumType.ORDINAL)
+    private ForwardingStatus forwardingStatus;
+
+    @Column(name = "performer_status")
+    @Enumerated(EnumType.ORDINAL)
+    private PerformerStatus performerStatus;
+
+    @Column(name = "agreement_status")
+    @Enumerated(EnumType.ORDINAL)
+    private AgreementStatus agreementStatus;
 
     /*
      * Technical Fields
