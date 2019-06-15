@@ -62,20 +62,27 @@ public class RegApplication {
     private String name;
 
     //разработчика проекта
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", insertable = false, updatable = false)
     private ProjectDeveloper developer;
-
+*/
     @Column(name = "developer_id")
     private Integer developerId;
 
     //Ko'rib chiquvchi tashkilot
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", insertable = false, updatable = false)
-    private Organization review;
+    private Organization review;*/
 
     @Column(name = "review_id")
     private Integer reviewId;
+
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offer_id", insertable = false, updatable = false)
+    private Offer offer;*/
+
+    @Column(name = "offer_id")
+    private Integer offerId;
 
     /*
      * Technical Fields
@@ -89,16 +96,16 @@ public class RegApplication {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", insertable = false, updatable = false)
-    private User createdBy;
+    private User createdBy;*/
 
     @Column(name = "created_by")
     private Integer createdById;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by", insertable = false, updatable = false)
-    private User updateBy;
+    private User updateBy;*/
 
     @Column(name = "update_by")
     private Integer updateById;
