@@ -41,29 +41,29 @@
                             <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
 
-                            <h5 th:text="#{reg_application.id}"></h5>
+                            <h5 th:text="${'reg_application: ' + regApplication.id}"></h5>
                             <hr>
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" th:text="#{general_info}">Home</a>
+                                        <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href=" " role="tab" aria-controls="home" aria-selected="true" th:text="#{general_info}">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" th:text="#{expertise}">Profile</a>
+                                        <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href=" " role="tab" aria-controls="profile" aria-selected="false" th:text="#{expertise}">Profile</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" th:text="#{confirmation}">Contact</a>
+                                        <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href=" " role="tab" aria-controls="contact" aria-selected="false" th:text="#{confirmation}">Contact</a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <object th:include="accountant/general_info :: general_info" th:remove="tag"></object>
+                                        <object th:include="/expertise/accountant/general_info :: general_info" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                        <object th:include="accountant/expertise :: expertise" th:remove="tag"></object>
+                                        <object th:include="/expertise/accountant/expertise :: expertise" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                        <object th:include="accountant/confirmation :: confirmation" th:remove="tag"></object>
+                                        <object th:include="/expertise/accountant/confirmation :: confirmation" th:remove="tag"></object>
                                     </div>
                                 </div>
 

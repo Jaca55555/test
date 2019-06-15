@@ -6,12 +6,27 @@
 </head>
 <body th:fragment="general_info">
 
-        <div class="form-group row" th:object="${regApplication}">
+        <div class="form-group row" th:object="${applicant}">
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_tin}">СТИР</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control only-number" required="" minlength="9" maxlength="9" th:value="*{applicant.tin}">
+                <input class="form-control only-number" readonly="readonly" th:value="*{tin}">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_applicant_type}">Фирменное наименование предприятия</label>
+            </div>
+            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).LegalEntity}">
+                <input class="form-control" th:value="#{sys_legal_entity}" readonly="readonly">
+            </div>
+            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).Individual}">
+                <input class="form-control" th:value="#{sys_individual}" readonly="readonly">
+            </div>
+            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).IndividualEnterprise}">
+                <input class="form-control" th:value="#{sys_individual_enterprise}" readonly="readonly">
             </div>
         </div>
 
@@ -20,7 +35,7 @@
                 <label class="col-form-label" th:text="#{sys_legal_entity_name}">Фирменное наименование предприятия</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityName" name="legalEntityName" th:value="*{applicant.name}" >
+                <input class="form-control" th:value="${applicant.name}" readonly="readonly">
             </div>
         </div>
 
@@ -29,7 +44,7 @@
                 <label class="col-form-label" th:text="#{sys_director_full_name}">Директор</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="directorFullName" name="directorFullName" th:value="*{applicant.directorFullName}" >
+                <input class="form-control" readonly="readonly" th:value="${applicant.directorFullName}" >
             </div>
         </div>
 
@@ -38,7 +53,7 @@
                 <label class="col-form-label" th:text="#{sys_oked}">ОКЭД</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="oked" name="oked" th:value="*{applicant.oked}" >
+                <input class="form-control" th:value="${applicant.oked}" readonly="readonly">
                 <small id="okedName" class="form-text text-muted">Oked nomi shundan iboratki sus sasasfcdsfcvsd d</small>
             </div>
         </div>
@@ -48,20 +63,16 @@
                 <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
             </div>
             <div class="col-md-6">
-                <select class="form-control" readonly="readonly" disabled="disabled">
-                    <option th:text="${region.getNameTranslation(#locale)}"></option>
-                </select>
+                <input class="form-control" th:value="${region.getNameTranslation(#locale)}" readonly="readonly"/>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_subregion}">Туман</label>
+                <label class="col-form-label" th:text="#{sys_subRegion}">Туман</label>
             </div>
             <div class="col-md-6">
-                <select class="form-control" disabled="disabled">
-                    <option th:text="${subRegion.getNameTranslation(#locale)}"></option>
-                </select>
+                <input class="form-control" th:value="${subRegion.getNameTranslation(#locale)}" readonly="readonly"/>
             </div>
         </div>
 
@@ -70,7 +81,7 @@
                 <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${applicant.legalEntityAddress}" readonly="readonly">
+                <input class="form-control" th:value="${applicant.address}" readonly="readonly">
             </div>
         </div>
 
