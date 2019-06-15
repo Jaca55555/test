@@ -4,6 +4,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 
 import javax.persistence.*;
@@ -101,6 +102,14 @@ public class RegApplication {
 
     @Column(name = "requirement_id")
     private Integer requirementId;
+
+    //To'lov uchun invoice
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", insertable = false, updatable = false)
+    private Invoice invoice;*/
+
+    @Column(name = "invoice_id")
+    private Integer invoiceId;
 
     /*
      * Technical Fields
