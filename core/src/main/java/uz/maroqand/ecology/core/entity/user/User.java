@@ -2,11 +2,11 @@ package uz.maroqand.ecology.core.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
@@ -57,18 +57,19 @@ public class User {
 
     private Boolean enabled;
 
-    //Organization.ID
-    /*@NotNull
-    @Column(name = "organization_id")
-    private Integer organizationId;*/
 
-    /*@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //Organization.ID
+    @Column(name = "organization_id")
+    private Integer organizationId;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
-    private Organization organization;*/
+    private Organization organization;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRole> roles;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Transient
     private Integer userAdditionalId;

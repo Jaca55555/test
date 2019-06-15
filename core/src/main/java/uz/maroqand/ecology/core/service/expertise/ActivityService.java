@@ -7,4 +7,7 @@ import java.util.List;
 public interface ActivityService {
 
     List<Activity> getList();
+
+    Activity getById(Integer id);
+
 }

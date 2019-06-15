@@ -13,6 +13,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
 
+    @Autowired
     public ActivityServiceImpl(ActivityRepository activityRepository) {
         this.activityRepository = activityRepository;
     }
@@ -21,4 +22,10 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> getList() {
         return activityRepository.findAll();
     }
+
+    @Override
+    public Activity getById(Integer id){
+        return activityRepository.getOne(id);
+    }
+
 }

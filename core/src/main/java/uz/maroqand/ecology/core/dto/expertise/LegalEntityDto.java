@@ -1,7 +1,7 @@
 package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
-import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.client.Client;
 
 /**
  * Created by Utkirbek Boltaev on 12.06.2019.
@@ -33,7 +33,7 @@ public class LegalEntityDto {
 
     public LegalEntityDto(){}
 
-    public LegalEntityDto(Applicant applicant){
+    public LegalEntityDto(Client applicant){
         this.id = applicant.getId();
         this.legalEntityTin = applicant.getTin();
         this.legalEntityName = applicant.getName();
