@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
+        }
+
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+    </style>
+</head>
+<body>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Объект экспертизы</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control"  th:field="*{objectId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.name}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Вид деятельности</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control"  th:field="*{activityId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.name}" th:selected="${regApplication.activityId==activity.id}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Категория</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control" name="categoryId">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}" th:selected="${categoryId!=null && categoryId==category.id}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Вид материалов</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control"  >
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option value="1" th:text="#{Вид материалов}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="*{name}" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label">ИНН разработчика проекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control only-number" th:field="${projectDeveloper.tin}" minlength="9" maxlength="9"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" >Наименование разработчика проекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${projectDeveloper.name}" />
+                                                            </div>
+                                                        </div>
+                                                        </br>
+                                                        <h4 class="text-center" th:text="#{Добавить электронная (или сканированная) версия документа}"></h4>
+                                                        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+                                                            <a href="#file-input" onclick="openInputFile()" class="col-md-3" style="padding-bottom: 25px;">
+                                                                <div class="add-file">
+                                                                    <i class="feather icon-plus"></i>
+                                                                    <input type="file" id="file-input" style="display: none;">
+                                                                </div>
+                                                            </a>
+                                                        </div>
+
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a th:href="${back_url}" type="button" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script th:inline="javascript">
+
+        function openInputFile() {
+            document.getElementById("file-input").click();
+        }
+
+        $('.only-number').keyup(function() {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -8,17 +8,7 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
-    <style>
-        .table td, .table th{
-            white-space: pre-line;
-        }
-        .datepicker>.datepicker-days {
-            display: block;
-        }
-        ol.linenums {
-            margin: 0 0 0 -8px;
-        }
-    </style>
+
 </head>
 <body>
     <!-- [ Pre-loader ] start -->
@@ -57,24 +47,31 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12 text-center" >
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" id="applicantTypeLegalEntity" name="applicantType" class="custom-control-input" value="0" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).LegalEntity}" >
-                                                        <label class="custom-control-label" for="applicantTypeLegalEntity" th:text="#{sys_legal_entity}">Yuridik shaxs</label>
-                                                    </div>
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" id="applicantTypeIndividual" name="applicantType" value="1" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).Individual}" >
-                                                        <label class="custom-control-label" for="applicantTypeIndividual" th:text="#{sys_individual}">Jismoniy shaxs</label>
-                                                    </div>
+                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+                                                        <div class="alert alert-primary col-md-8 offset-2" role="alert">
+                                                            <p>Ваша заявка в процессе рассмотрения и будет рассмотрена в течении одного рабочего дня.</p>
+                                                        </div>
+
+                                                        <div class="alert alert-success col-md-8 offset-2" role="alert">
+                                                            <p>Ваша заявка успешно рассмотрено, теперь вы можете заключить договор.</p>
+                                                        </div>
+
+                                                        <div class="alert alert-danger col-md-8 offset-2" role="alert">
+                                                            <p>Данная заявка отказано. Пожалуйста, устраните причины отказа и заново отправьте. </br>Причины: </p>
+                                                        </div>
+
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
-
-                                            <div id="selectFormsLegal">
-                                                <object th:include="reg/applicant_legal_entity_fragment :: legal_entity" th:remove="tag"></object>
-                                            </div>
-                                            <div id="selectFormsindividual">
-                                                <object th:include="reg/applicant_individual_fragment :: individual" th:remove="tag"></object>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -91,34 +88,10 @@
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
-    <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
     <script th:inline="javascript">
-        $(document).ready(function () {
-            bindSubRegionSelectToRegionSelect('#individualSubRegionId', '#individualRegionId');
-            bindSubRegionSelectToRegionSelect('#legalEntitySubRegionId', '#legalEntityRegionId');
-            var checkVal=$("input[name='applicantType']:checked").val();
-            selectForm(checkVal);
-            $('.datepicker').datepicker({
-                format: "dd.mm.yyyy",
-                todayHighlight: true,
-                autoclose: true
-                // startDate: '-130y',
-                // endDate: '-5y'
-            });
-        });
 
-        $('input[name="applicantType"]:radio').change(function () {
-            selectForm($(this).val());
-        });
-
-        function selectForm(checkval) {
-            if (checkval==0){
-                $('#selectFormsLegal').show();
-                $('#selectFormsindividual').hide();
-            }else{
-                $('#selectFormsLegal').hide();
-                $('#selectFormsindividual').show();
-            }
+        function openInputFile() {
+            document.getElementById("file-input").click();
         }
 
         $('.only-number').keyup(function() {
