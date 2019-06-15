@@ -107,6 +107,13 @@ public class AppealServiceImpl implements AppealService {
 
                 List<Predicate> predicates = new LinkedList<>();
 
+                System.out.println("appealId=="+appealId);
+                System.out.println("appealType=="+appealType);
+                System.out.println("dateBegin=="+dateBegin);
+                System.out.println("dateEnd=="+dateEnd);
+                System.out.println("title=="+title);
+                System.out.println("createdBy=="+createdBy);
+
                 if (appealId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), appealId));
                 }
@@ -124,7 +131,7 @@ public class AppealServiceImpl implements AppealService {
                 }
 
                 if (createdBy != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("createdBy").get("id"), createdBy));
+                    predicates.add(criteriaBuilder.equal(root.get("createdById"), createdBy));
                 }
 
                 // Show only registered and non-deleted
