@@ -15,6 +15,4 @@ public interface FileRepository extends JpaRepository<File, Integer> {
 
     File findByIdAndUploadedByIdAndDeletedFalse(Integer fileId, Integer userId);
 
-    File findByIdAndUploadedByGuiIdAndDeletedFalse(Integer fileId, Integer guiUserid);
-
 }

@@ -6,9 +6,12 @@ import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
@@ -51,14 +54,6 @@ public class RegApplication {
     @Column(name = "activity_id")
     private Integer activityId;
 
-    /*//
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", insertable = false, updatable = false)
-    private Invoice invoice;*/
-
-    @Column(name = "invoice_id")
-    private Integer invoiceId;
-
     //Категория
     @Column(name = "category")
     @Enumerated(EnumType.ORDINAL)
@@ -84,13 +79,11 @@ public class RegApplication {
     @Column(name = "developer_id")
     private Integer developerId;
 
-    //Ko'rib chiquvchi tashkilot
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", insertable = false, updatable = false)
-    private Organization review;*/
-
-    @Column(name = "review_id")
-    private Integer reviewId;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reg_application_jt_document_files",
+            joinColumns = { @JoinColumn(name = "reg_application_id") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> documentFiles;
 
     //Kontrakt nomer
     //OrganizationService.getContractNumber
@@ -110,6 +103,30 @@ public class RegApplication {
 
     @Column(name = "requirement_id")
     private Integer requirementId;
+
+    //To'lov uchun invoice
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", insertable = false, updatable = false)
+    private Invoice invoice;*/
+
+    @Column(name = "invoice_id")
+    private Integer invoiceId;
+
+    //Ko'rib chiquvchi tashkilot
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", insertable = false, updatable = false)
+    private Organization review;*/
+
+    @Column(name = "review_id")
+    private Integer reviewId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performer_id", insertable = false, updatable = false)
+    private User performer;
+
+    @Column(name = "performer_id")
+    private Integer performerId;
+
 
     /*
      * Technical Fields

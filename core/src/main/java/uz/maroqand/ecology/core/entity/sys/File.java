@@ -35,6 +35,9 @@ public class File {
     @Column
     private Integer size;
 
+    @Column
+    private String title;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -45,15 +48,12 @@ public class File {
     @Column(name = "date_uploaded", columnDefinition = "timestamp without time zone")
     private Date dateUploaded;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uploaded_by", updatable = false, insertable = false)
-    private User uploadedBy;
+    private User uploadedBy;*/
 
     @Column(name = "uploaded_by")
     private Integer uploadedById;
-
-    @Column(name = "uploaded_by_gui")
-    private Integer uploadedByGuiId;
 
     @Column(name = "date_deleted", columnDefinition = "timestamp without time zone")
     private Date dateDeleted;

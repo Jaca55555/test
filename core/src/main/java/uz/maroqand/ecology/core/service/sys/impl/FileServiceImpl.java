@@ -124,7 +124,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File uploadFile(MultipartFile multipartFile, Integer userId, Integer guiUserId, String description) {
+    public File uploadFile(MultipartFile multipartFile, Integer userId, String title, String description) {
 
         if (multipartFile == null || multipartFile.isEmpty()) {
             return null;
@@ -136,29 +136,26 @@ public class FileServiceImpl implements FileService {
             String extension = getExtensionFromFileName(multipartFile.getOriginalFilename());
 
             String filename = userId + "_" + dataLong + "." + extension;
-            if(guiUserId != null)
-                filename = guiUserId + "_" + dataLong + "." + extension;
             String directory = getPathForUpload();
             Path filePath = Paths.get(directory, filename);
 
             // save the file localy
             Files.copy(multipartFile.getInputStream(), filePath);
 
-            File fileEntity = new File();
+            File file = new File();
 
-            fileEntity.setUploadedById(userId);
-            if(guiUserId != null)
-                fileEntity.setUploadedByGuiId(guiUserId);
-            fileEntity.setDateUploaded(new Date());
+            file.setUploadedById(userId);
+            file.setDateUploaded(new Date());
 
-            fileEntity.setName(multipartFile.getOriginalFilename());
-            fileEntity.setExtension(extension);
-            fileEntity.setSize(Integer.valueOf(String.valueOf(multipartFile.getSize())));
-            fileEntity.setDescription(description);
+            file.setName(multipartFile.getOriginalFilename());
+            file.setExtension(extension);
+            file.setSize(Integer.valueOf(String.valueOf(multipartFile.getSize())));
+            file.setTitle(title);
+            file.setDescription(description);
 
-            fileEntity.setPath(directory + "/" + filename);
+            file.setPath(directory + "/" + filename);
 
-            return fileRepository.saveAndFlush(fileEntity);
+            return fileRepository.saveAndFlush(file);
         } catch (Exception e) {
             logger.error("FilesServiceImpl.uploadFile", e);
         }
@@ -197,14 +194,6 @@ public class FileServiceImpl implements FileService {
 
     public File findByIdAndUploadUserId(Integer id, Integer userId){
         return fileRepository.findByIdAndUploadedByIdAndDeletedFalse(id, userId);
-    }
-
-    public File findByIdAndUploadGuiUserId(Integer id, Integer guiUserId){
-        return fileRepository.findByIdAndUploadedByGuiIdAndDeletedFalse(id, guiUserId);
-    }
-
-    public File save(File file){
-        return fileRepository.save(file);
     }
 
 }

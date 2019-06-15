@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
@@ -13,11 +14,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.Activity;
+import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.ActivityService;
+import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.validation.Valid;
@@ -35,13 +42,27 @@ public class AccountantController {
     private final SoatoService soatoService;
     private final UserService userService;
     private final ClientService clientService;
+    private final ObjectExpertiseService objectExpertiseService;
+    private final ActivityService activityService;
+    private final OfferService offerService;
+    private final HelperService helperService;
 
     @Autowired
-    public AccountantController(RegApplicationService regApplicationService, SoatoService soatoService, UserService userService, ClientService clientService) {
+    public AccountantController(
+            RegApplicationService regApplicationService,
+            SoatoService soatoService,
+            UserService userService,
+            ClientService clientService,
+            ObjectExpertiseService objectExpertiseService,
+            ActivityService activityService, OfferService offerService, HelperService helperService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
         this.clientService = clientService;
+        this.objectExpertiseService = objectExpertiseService;
+        this.activityService = activityService;
+        this.offerService = offerService;
+        this.helperService = helperService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantList)
@@ -63,18 +84,23 @@ public class AccountantController {
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AccountantList;
         }
-        if (regApplication.getApplicantId() != null){
-            Client client = clientService.getById(regApplication.getApplicantId());
-            if (client.getRegionId()!=null && client.getSubRegionId()!=null){
-                model.addAttribute("region",soatoService.getById(client.getRegionId()));
-                model.addAttribute("subRegion",soatoService.getById(client.getSubRegionId()));
-            }
-        }
 
+        Client client = clientService.getById(regApplication.getApplicantId());
+        String objectExpertise = helperService.getObjectExpertise(regApplication.getObjectId(),locale);
+        String activity = helperService.getActivity(regApplication.getActivityId(),locale);
+
+
+
+        model.addAttribute("region",soatoService.getById(client.getRegionId()));
+        model.addAttribute("subRegion",soatoService.getById(client.getSubRegionId()));
+        model.addAttribute("applicant",client);
+        model.addAttribute("objectExpertise",objectExpertise);
+        model.addAttribute("activity",activity);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("confirmUrl",ExpertiseUrls.AccountantConfirm);
         model.addAttribute("notConfirmUrl",ExpertiseUrls.AccountantNotConfirm);

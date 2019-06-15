@@ -15,13 +15,9 @@ public interface FileService {
 
     ResponseEntity<Resource> getFileAsResourceForDownloading(File file);
 
-    File uploadFile(MultipartFile multipartFile, Integer userId, Integer guiUserId, String description);
+    File uploadFile(MultipartFile multipartFile, Integer userId, String title, String description);
 
     File findByIdAndUploadUserId(Integer id, Integer userId);
-
-    File findByIdAndUploadGuiUserId(Integer id, Integer guiUserId);
-
-    File save(File file);
 
     String getPathForUpload();
 

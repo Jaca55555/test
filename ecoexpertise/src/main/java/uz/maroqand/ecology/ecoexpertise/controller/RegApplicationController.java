@@ -49,6 +49,7 @@ public class RegApplicationController {
     private final ProjectDeveloperService projectDeveloperService;
     private final OfferService offerService;
     private final PaymentService paymentService;
+
     @Autowired
     public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
         this.userService = userService;
@@ -289,6 +290,7 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+//        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
         /*if (payment.getStatus() != PaymentStatus.Success) {
             billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
             regApplication.setPaymentId(payment.getId());
@@ -301,7 +303,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
         }*/
 
-        model.addAttribute("payment", new Payment());
+//        model.addAttribute("payment", payment);
         model.addAttribute("regApplication", regApplication);
 //        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
         model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);
