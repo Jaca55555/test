@@ -19,14 +19,8 @@
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_applicant_type}">Фирменное наименование предприятия</label>
             </div>
-            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).LegalEntity}">
-                <input class="form-control" th:value="#{sys_legal_entity}" readonly="readonly">
-            </div>
-            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).Individual}">
-                <input class="form-control" th:value="#{sys_individual}" readonly="readonly">
-            </div>
-            <div class="col-md-6" th:if="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).IndividualEnterprise}">
-                <input class="form-control" th:value="#{sys_individual_enterprise}" readonly="readonly">
+            <div class="col-md-6">
+                <input class="form-control" th:value="${@helperService.getApplicantType(applicant.type,#locale)}" readonly="readonly">
             </div>
         </div>
 
@@ -63,7 +57,7 @@
                 <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${region.getNameTranslation(#locale)}" readonly="readonly"/>
+                <input class="form-control" th:value="${@helperService.getSoatoName(applicant.regionId,#locale)}" readonly="readonly"/>
             </div>
         </div>
 
@@ -72,7 +66,7 @@
                 <label class="col-form-label" th:text="#{sys_subRegion}">Туман</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${subRegion.getNameTranslation(#locale)}" readonly="readonly"/>
+                <input class="form-control" th:value="${@helperService.getSoatoName(applicant.subRegionId,#locale)}" readonly="readonly"/>
             </div>
         </div>
 

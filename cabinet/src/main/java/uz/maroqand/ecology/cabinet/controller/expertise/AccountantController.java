@@ -14,14 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Activity;
-import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ActivityService;
-import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -42,27 +37,18 @@ public class AccountantController {
     private final SoatoService soatoService;
     private final UserService userService;
     private final ClientService clientService;
-    private final ObjectExpertiseService objectExpertiseService;
-    private final ActivityService activityService;
-    private final OfferService offerService;
-    private final HelperService helperService;
 
     @Autowired
     public AccountantController(
             RegApplicationService regApplicationService,
             SoatoService soatoService,
             UserService userService,
-            ClientService clientService,
-            ObjectExpertiseService objectExpertiseService,
-            ActivityService activityService, OfferService offerService, HelperService helperService){
+            ClientService clientService
+    ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
         this.clientService = clientService;
-        this.objectExpertiseService = objectExpertiseService;
-        this.activityService = activityService;
-        this.offerService = offerService;
-        this.helperService = helperService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantList)
@@ -91,16 +77,8 @@ public class AccountantController {
         }
 
         Client client = clientService.getById(regApplication.getApplicantId());
-        String objectExpertise = helperService.getObjectExpertise(regApplication.getObjectId(),locale);
-        String activity = helperService.getActivity(regApplication.getActivityId(),locale);
 
-
-
-        model.addAttribute("region",soatoService.getById(client.getRegionId()));
-        model.addAttribute("subRegion",soatoService.getById(client.getSubRegionId()));
         model.addAttribute("applicant",client);
-        model.addAttribute("objectExpertise",objectExpertise);
-        model.addAttribute("activity",activity);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("confirmUrl",ExpertiseUrls.AccountantConfirm);
         model.addAttribute("notConfirmUrl",ExpertiseUrls.AccountantNotConfirm);

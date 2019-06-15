@@ -5,7 +5,31 @@
     <title>Title</title>
 </head>
 <body th:fragment="confirmation">
+    <form th:action="${action_url}">
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.objectExpertise}">СТИР</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" th:value="${objectExpertise}">
+            </div>
+        </div>
 
-
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.activity}">СТИР</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" th:value="${activity}">
+            </div>
+        </div>
+        <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="row" >
+            <div class="form-group col-md-12 text-center" >
+                <a th:href="${cancel_url}" class="btn btn-danger" th:text="#{sys_cancel}">Отмена</a>
+                <a class="btn btn-primary" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" th:text="#{sys_next}">Далее</a>
+            </div>
+        </div>
+    </form>
 </body>
 </html>

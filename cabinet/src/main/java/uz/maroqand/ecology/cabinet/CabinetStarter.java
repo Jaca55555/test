@@ -10,6 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import uz.maroqand.ecology.cabinet.config.WebMVCConfigs;
+import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 
 /**
@@ -29,6 +32,10 @@ public class CabinetStarter {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(CabinetStarter.class, args);
         CabinetStarter applicationStarter = applicationContext.getBean(CabinetStarter.class);
         System.out.println("======================== INITIALIZATION COMPLETED ========================");
+
+        WebMVCConfigs webMVCConfigs = applicationContext.getBean(WebMVCConfigs.class);
+        DatabaseMessageSource messageSource = (DatabaseMessageSource) webMVCConfigs.messageSource();
+        HelperService.setTranslationsSource(messageSource);
 
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();
