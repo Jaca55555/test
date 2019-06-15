@@ -8,8 +8,10 @@ package uz.maroqand.ecology.core.constant.user;
 public enum Permissions {
 
     ADMIN,
-    ACCOUNTANT,
-    MANAGER,
-    WORKER
+    EXPERTISE_CONFIRM,// Arizani tasdiqash
+    EXPERTISE_FORWARDING,// Ariza ko'rb chiquvchini tasdilash, va natijani tasdiqalsh
+    EXPERTISE_PERFORMER,// Ariza natijani kirituvchi (ijrochi)
+    EXPERTISE_AGREEMENT,// Ariza natijasini tasdiqlash
+    EXPERTISE_AGREEMENT_COMPLETE,// Ariza natijasini tasdiqlash va ariza tugatish
 
 }
