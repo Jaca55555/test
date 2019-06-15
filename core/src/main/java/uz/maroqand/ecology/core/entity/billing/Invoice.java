@@ -3,8 +3,10 @@ package uz.maroqand.ecology.core.entity.billing;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -34,7 +36,18 @@ public class Invoice {
     private Integer clientId;
 
     @Column(name = "payer_name")
-    private Integer payerName;
+    private String payerName;
+
+    /*  payee       */
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payee_id", updatable = false, insertable = false)
+    private Organization payee;
+
+    @Column(name = "payee_id")
+    private Integer payeeId;
+
+    @Column(name = "payee_name")
+    private String payeeName;
 
     /* invoice  */
     @Column(name = "invoice")
@@ -42,6 +55,9 @@ public class Invoice {
 
     @Column(name = "amount", precision = 20, scale = 2)
     private Double amount;
+
+    @Column(name = "qty", precision = 20, scale = 2)
+    private Double qty;
 
     //invoice yaratilgan sana
     @Column(name = "created_date")
@@ -58,6 +74,10 @@ public class Invoice {
     //invoice bekor qilingan sana
     @Column(name = "Canceled_date")
     private Date CanceledDate;
+
+    @Size(max = 1000)
+    @Column(columnDefinition = "TEXT")
+    private String detail;
 
     /*  */
     @Column(name = "status")

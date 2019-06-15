@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.billing.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.repository.billing.PaymentRepository;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 
@@ -19,6 +20,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
+    }
+
+    public Payment pay(Payment payment){
+        return paymentRepository.save(payment);
     }
 
 }

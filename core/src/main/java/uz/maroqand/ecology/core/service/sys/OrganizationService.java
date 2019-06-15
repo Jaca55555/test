@@ -6,5 +6,8 @@ import java.util.List;
 
 public interface OrganizationService {
 
+    Organization getById(Integer id);
+
     List<Organization> getList();
+
 }

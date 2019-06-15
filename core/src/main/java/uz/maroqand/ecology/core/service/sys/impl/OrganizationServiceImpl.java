@@ -18,6 +18,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.organizationRepository = organizationRepository;
     }
 
+    @Override
+    public Organization getById(Integer id) {
+        return organizationRepository.getOne(id);
+    }
 
     @Override
     public List<Organization> getList() {

@@ -85,6 +85,13 @@ public class RegApplication {
     @Column(name = "offer_id")
     private Integer offerId;
 
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requirement_id", insertable = false, updatable = false)
+    private Requirement requirement;*/
+
+    @Column(name = "requirement_id")
+    private Integer requirementId;
+
     /*
      * Technical Fields
      */
