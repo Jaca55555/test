@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.expertise;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 
