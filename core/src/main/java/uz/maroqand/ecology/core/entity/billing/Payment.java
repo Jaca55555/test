@@ -5,6 +5,7 @@ import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -79,9 +80,17 @@ public class Payment {
     private String requestId;
 
     /*  */
+    //to'lov miqdori
+    @Column(name = "amount", precision = 20, scale = 2)
+    private Double amount;
+
     //to'lov sanasi
     @Column(name="payment_date", columnDefinition = "timestamp without time zone")
     private Date paymentDate;
+
+    @Size(max = 1000)
+    @Column(columnDefinition = "TEXT")
+    private String detail;
 
     /*  */
     //to'lov turi

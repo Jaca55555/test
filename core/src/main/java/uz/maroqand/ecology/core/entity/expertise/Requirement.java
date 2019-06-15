@@ -2,7 +2,6 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
-import uz.maroqand.ecology.core.entity.billing.MinWage;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
@@ -26,9 +25,9 @@ public class Requirement {
     private Integer id;
 
     //ekspertiza obyekti
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "object_expertise_id", insertable = false, updatable = false)
-    private ObjectExpertise objectExpertise;
+    private ObjectExpertise objectExpertise;*/
 
     @Column(name = "object_expertise_id")
     private Integer objectExpertiseId;
@@ -40,18 +39,18 @@ public class Requirement {
 
 
     //ekspertizaga taqdim etiladigan materiallar
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", insertable = false, updatable = false)
-    private Material material;
+    private Material material;*/
 
     @Column(name = "material_id")
     private Integer materialId;
 
 
     //ekspertizadan o'tkazuvchi organ
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", insertable = false, updatable = false)
-    private Organization review;
+    private Organization review;*/
 
     @Column(name = "review_id")
     private Integer reviewId;

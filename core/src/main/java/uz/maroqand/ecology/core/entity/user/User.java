@@ -67,6 +67,13 @@ public class User {
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private Organization organization;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id", updatable = false, insertable = false)
+    private Position position;
+
+    @Column(name = "position_id")
+    private Integer positionId;
+
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
