@@ -37,21 +37,18 @@ public class AccountantController {
     private final SoatoService soatoService;
     private final UserService userService;
     private final ClientService clientService;
-    private final HelperService helperService;
 
     @Autowired
     public AccountantController(
             RegApplicationService regApplicationService,
             SoatoService soatoService,
             UserService userService,
-            ClientService clientService,
-            HelperService helperService
+            ClientService clientService
     ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
         this.clientService = clientService;
-        this.helperService = helperService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantList)
@@ -80,16 +77,8 @@ public class AccountantController {
         }
 
         Client client = clientService.getById(regApplication.getApplicantId());
-        String objectExpertise = helperService.getObjectExpertise(regApplication.getObjectId(),locale);
-        String activity = helperService.getActivity(regApplication.getActivityId(),locale);
-        String material = helperService.getMaterial(regApplication.getMaterialId(),locale);
 
-        model.addAttribute("region",soatoService.getById(client.getRegionId()));
-        model.addAttribute("subRegion",soatoService.getById(client.getSubRegionId()));
         model.addAttribute("applicant",client);
-        model.addAttribute("objectExpertise",objectExpertise);
-        model.addAttribute("activity",activity);
-        model.addAttribute("material",material);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("confirmUrl",ExpertiseUrls.AccountantConfirm);
         model.addAttribute("notConfirmUrl",ExpertiseUrls.AccountantNotConfirm);

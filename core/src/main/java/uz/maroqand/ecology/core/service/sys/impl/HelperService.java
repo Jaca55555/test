@@ -3,15 +3,18 @@ package uz.maroqand.ecology.core.service.sys.impl;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
+import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 /**
@@ -26,12 +29,14 @@ public class HelperService {
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
     private final MaterialService materialService;
+    private final SoatoService soatoService;
 
-    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService) {
+    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.materialService = materialService;
+        this.soatoService = soatoService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -50,6 +55,13 @@ public class HelperService {
         return user!=null? user.getUsername():"";
     }
 
+    @Cacheable(value = "getSoatoName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getSoatoName(Integer id, String locale) {
+        if(id==null) return "";
+        Soato soato = soatoService.getById(id);
+        return soato!=null? soato.getNameTranslation(locale):"";
+    }
+
     @Cacheable(value = "getAppealType", key = "#id",condition="#id != null",unless="#result == ''")
     public String getAppealType(Integer id, String locale) {
         if(id==null) return "";
@@ -57,6 +69,13 @@ public class HelperService {
         return databaseMessageSource.resolveCodeSimply(taskStep.getName(),locale);
     }
 
+
+    @Cacheable(value = "getApplicantType", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getApplicantType(Integer id, String locale) {
+        if(id==null) return "";
+        ApplicantType applicantType = ApplicantType.getApplicantType(id);
+        return databaseMessageSource.resolveCodeSimply(applicantType.getName(),locale);
+    }
 
     /*  expertise   */
     @Cacheable(value = "getObjectExpertise", key = "#id",condition="#id != null",unless="#result == ''")

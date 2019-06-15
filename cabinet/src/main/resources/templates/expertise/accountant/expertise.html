@@ -7,19 +7,19 @@
 <body th:fragment="expertise">
         <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.objectExpertise}">СТИР</label>
+                <label class="col-form-label" th:text="#{sys_reg_application.objectExpertise}"></label>
             </div>
             <div class="col-md-6">
-                <input class="form-control only-number" readonly="readonly" th:value="${objectExpertise}">
+                <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getObjectExpertise(regApplication.objectId,#locale)}">
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.activity}">СТИР</label>
+                <label class="col-form-label" th:text="#{sys_reg_application.activity}"></label>
             </div>
             <div class="col-md-6">
-                <input class="form-control only-number" readonly="readonly" th:value="${activity}">
+                <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getActivity(regApplication.activityId,#locale)}">
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.material}">Фирменное наименование предприятия</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${material}" readonly="readonly">
+                <input class="form-control" th:value="${@helperService.getMaterial(regApplication.materialId,#locale)}" readonly="readonly">
             </div>
         </div>
 
