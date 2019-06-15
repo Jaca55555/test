@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.service.sys.impl;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
@@ -70,6 +71,13 @@ public class HelperService {
         if(id==null) return "";
         Activity activity = activityService.getById(id);
         return activity !=null? activity.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getCategory", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getCategory(Integer id, String locale) {
+        if(id==null) return "";
+        Category category = Category.getCategory(id);
+        return databaseMessageSource.resolveCodeSimply(category.getName(),locale);
     }
 
     @Cacheable(value = "getMaterial", key = "#id",condition="#id != null",unless="#result == ''")
