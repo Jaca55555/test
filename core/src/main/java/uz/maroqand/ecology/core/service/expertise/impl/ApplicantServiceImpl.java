@@ -24,6 +24,11 @@ public class ApplicantServiceImpl implements ApplicantService {
     }
 
     @Override
+    public Applicant getById(Integer id) {
+        return applicantRepository.getOne(id);
+    }
+
+    @Override
     public Applicant createApplicant(LegalEntityDto legalEntityDto) {
         Applicant applicant = new Applicant();
         applicant.setType(ApplicantType.LegalEntity);

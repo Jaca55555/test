@@ -5,7 +5,7 @@ import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
 
 public interface ApplicantService {
-
+    Applicant getById(Integer id);
     Applicant createApplicant(LegalEntityDto legalEntityDto);
     Applicant createApplicant(IndividualDto individualDto);
 
