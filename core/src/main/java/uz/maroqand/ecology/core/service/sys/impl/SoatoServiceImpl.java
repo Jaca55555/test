@@ -20,6 +20,14 @@ public class SoatoServiceImpl implements SoatoService {
         this.soatoRepository = soatoRepository;
     }
 
+    @Override
+    public Soato getById(Integer id) {
+        System.out.println("soatId == " + id);
+        Soato soato = soatoRepository.getOne(id);
+        System.out.println(soato.getName() + " " + soato.getNameRu() + " " +soato.getNameOz());
+        return soato;
+    }
+
     @Cacheable("SoatoServiceImpl.getRegions")
     public List<Soato> getRegions() {
         return soatoRepository.findByLevelOrderByNameAsc(1);

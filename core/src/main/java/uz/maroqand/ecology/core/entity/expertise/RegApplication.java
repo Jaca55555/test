@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -25,6 +26,7 @@ public class RegApplication {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicant_id", insertable = false, updatable = false)
     private Client applicant;

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface SoatoService {
 
+    Soato getById(Integer id);
+
     List<Soato> getRegions();
 
     List<Soato> getSubRegions();

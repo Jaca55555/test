@@ -1,31 +1,36 @@
-package uz.maroqand.ecology.core.service.client.impl;
+package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
-import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.repository.client.ClientRepository;
-import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.repository.expertise.ApplicantRepository;
+import uz.maroqand.ecology.core.service.expertise.ApplicantService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.Date;
 
 @Service
-public class ClientServiceImpl implements ClientService {
+public class ApplicantServiceImpl implements ApplicantService {
 
-    private final ClientRepository clientRepository;
+    private final ApplicantRepository applicantRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository) {
+        this.applicantRepository = applicantRepository;
     }
 
     @Override
-    public Client createApplicant(LegalEntityDto legalEntityDto) {
-        Client applicant = new Client();
+    public Applicant getById(Integer id) {
+        return applicantRepository.getOne(id);
+    }
+
+    @Override
+    public Applicant createApplicant(LegalEntityDto legalEntityDto) {
+        Applicant applicant = new Applicant();
         applicant.setType(ApplicantType.LegalEntity);
         applicant.setTin(legalEntityDto.getLegalEntityTin());
         applicant.setName(legalEntityDto.getLegalEntityName());
@@ -41,12 +46,12 @@ public class ClientServiceImpl implements ClientService {
         applicant.setMfo(legalEntityDto.getLegalEntityMfo());
         applicant.setBankName(legalEntityDto.getLegalEntityBankName());
         applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = clientRepository.save(applicant);
+        applicant = applicantRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Client createApplicant(IndividualDto individualDto) {
+    public Applicant createApplicant(IndividualDto individualDto) {
         Date passportDateOfIssue=null;
         Date passportDateOfExpiry=null;
 
@@ -57,7 +62,7 @@ public class ClientServiceImpl implements ClientService {
         try {
             passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
         }catch (Exception e){}
-        Client applicant = new Client();
+        Applicant applicant = new Applicant();
         applicant.setType(ApplicantType.Individual);
         applicant.setName(individualDto.getIndividualName());
         applicant.setPassportSerial(individualDto.getPassportSerial());
@@ -71,12 +76,12 @@ public class ClientServiceImpl implements ClientService {
         applicant.setPhone(individualDto.getIndividualPhone());
         applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
         applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = clientRepository.save(applicant);
+        applicant = applicantRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Client updateApplicant(Client applicant, LegalEntityDto legalEntityDto) {
+    public Applicant updateApplicant(Applicant applicant, LegalEntityDto legalEntityDto) {
         applicant.setType(ApplicantType.LegalEntity);
         applicant.setTin(legalEntityDto.getLegalEntityTin());
         applicant.setName(legalEntityDto.getLegalEntityName());
@@ -92,12 +97,12 @@ public class ClientServiceImpl implements ClientService {
         applicant.setMfo(legalEntityDto.getLegalEntityMfo());
         applicant.setBankName(legalEntityDto.getLegalEntityBankName());
         applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = clientRepository.save(applicant);
+        applicant = applicantRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Client updateApplicant(Client applicant, IndividualDto individualDto) {
+    public Applicant updateApplicant(Applicant applicant, IndividualDto individualDto) {
         Date passportDateOfIssue=null;
         Date passportDateOfExpiry=null;
 
@@ -122,7 +127,7 @@ public class ClientServiceImpl implements ClientService {
         applicant.setPhone(individualDto.getIndividualPhone());
         applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
         applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = clientRepository.save(applicant);
+        applicant = applicantRepository.save(applicant);
         return applicant;
     }
 }
