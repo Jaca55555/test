@@ -3,8 +3,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
-import uz.maroqand.ecology.core.entity.sys.Organization;
-import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.entity.client.Client;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class RegApplication {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicant_id", insertable = false, updatable = false)
-    private Applicant applicant;
+    private Client applicant;
 
     @Column(name = "applicant_id")
     private Integer applicantId;

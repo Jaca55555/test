@@ -1,10 +1,8 @@
 package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
-import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.util.Common;
-
-import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 12.06.2019.
@@ -35,7 +33,7 @@ public class IndividualDto {
 
     public IndividualDto(){}
 
-    public IndividualDto(Applicant applicant){
+    public IndividualDto(Client applicant){
         this.id = applicant.getId();
         this.individualName = applicant.getName();
 

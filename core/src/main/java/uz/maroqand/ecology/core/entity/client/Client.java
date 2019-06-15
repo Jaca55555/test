@@ -1,11 +1,9 @@
-package uz.maroqand.ecology.core.entity.expertise;
+package uz.maroqand.ecology.core.entity.client;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.entity.client.Opf;
 
-import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -16,11 +14,11 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "applicant")
-public class Applicant {
+@Table(name = "client")
+public class Client {
 
     @Transient
-    private static final String sequenceName = "applicant_id_seq";
+    private static final String sequenceName = "client_id_seq";
 
     @Id
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
