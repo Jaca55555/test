@@ -49,7 +49,7 @@
 
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    <a href="#" >
+                                                    <a href="#bank-for-print" id="bank">
                                                         <div class="card theme-bg">
                                                             <div class="card-block text-center">
                                                                 <i class="mdi mdi-bank f-80 text-white"></i></br>
@@ -59,7 +59,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <a href="#">
+                                                    <a href="#payment_page" id="payment">
                                                         <div class="card theme-bg">
                                                             <div class="card-block text-center ">
                                                                 <i class="mdi mdi-credit-card f-80 text-white"></i></br>
@@ -69,7 +69,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <a href="#">
+                                                    <a href="#transfer-for-print" id="transfer">
                                                         <div class="card theme-bg">
                                                             <div class="card-block text-center">
                                                                 <i class="mdi mdi-bank-transfer f-80 text-white"></i></br>
@@ -80,9 +80,15 @@
                                                 </div>
                                             </div>
 
-                                            <!--<object th:include="fragments/bank_check :: bank" th:remove="tag"></object>-->
-                                            <object th:include="fragments/transfer :: transfer" th:remove="tag"></object>
-
+                                            <div id="bank_check_fragment" style="display: none">
+                                                <object th:include="fragments/bank_check :: bank" th:remove="tag"></object>
+                                            </div>
+                                            <div id="transfer_fragment" style="display: none">
+                                                <object th:include="fragments/transfer :: transfer" th:remove="tag"></object>
+                                            </div>
+                                            <div id="payment_fragment" style="display: none">
+                                                <object th:include="fragments/payment :: payment" th:remove="tag"></object>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -98,5 +104,26 @@
     <!-- [ Main Content ] end -->
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
     <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+    <script type="text/javascript" th:src="@{/static/plugins/input-mask/jquery.mask.min.js}"></script>
+    <script th:inline="javascript">
+            $(".tel").mask('99 999 99 99');
+            $(".card-bank").mask('9999 9999 9999 9999');
+            $(".card-exp").mask('99/99');
+        $('#bank').on('click',function () {
+           $('#bank_check_fragment').show();
+           $('#transfer_fragment').hide()
+           $('#payment_fragment').hide();
+        });
+        $('#payment').on('click',function () {
+            $('#bank_check_fragment').hide();
+            $('#transfer_fragment').hide()
+            $('#payment_fragment').show();
+        });
+        $('#transfer').on('click',function () {
+            $('#bank_check_fragment').hide();
+            $('#transfer_fragment').show()
+            $('#payment_fragment').hide();
+        });
+    </script>
 </body>
 </html>

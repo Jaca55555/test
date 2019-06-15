@@ -152,10 +152,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control" name="categoryId">
-                                                                    <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}" th:selected="${categoryId!=null && categoryId==category.id}"></option>
-                                                                </select>
+                                                                <input class="form-control" readonly id="category"/>
                                                             </div>
                                                         </div>
 
@@ -167,7 +164,6 @@
                                                             <div class="col-md-6">
                                                                 <select class="form-control"  >
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option value="1" th:text="#{Вид материалов}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
