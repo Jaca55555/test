@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.service.expertise.ApplicantService;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -35,13 +34,14 @@ public class AccountantController {
     private final RegApplicationService regApplicationService;
     private final SoatoService soatoService;
     private final UserService userService;
-    private final ApplicantService applicantService;
+    private final ClientService clientService;
+
     @Autowired
-    public AccountantController(RegApplicationService regApplicationService, SoatoService soatoService, UserService userService, ApplicantService applicantService) {
+    public AccountantController(RegApplicationService regApplicationService, SoatoService soatoService, UserService userService, ClientService clientService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
-        this.applicantService = applicantService;
+        this.clientService = clientService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantList)
@@ -68,10 +68,10 @@ public class AccountantController {
             return "redirect:" + ExpertiseUrls.AccountantList;
         }
         if (regApplication.getApplicantId() != null){
-            Applicant applicant = applicantService.getById(regApplication.getApplicantId());
-            if (applicant.getRegionId()!=null && applicant.getSubRegionId()!=null){
-                model.addAttribute("region",soatoService.getById(applicant.getRegionId()));
-                model.addAttribute("subRegion",soatoService.getById(applicant.getSubRegionId()));
+            Client client = clientService.getById(regApplication.getApplicantId());
+            if (client.getRegionId()!=null && client.getSubRegionId()!=null){
+                model.addAttribute("region",soatoService.getById(client.getRegionId()));
+                model.addAttribute("subRegion",soatoService.getById(client.getSubRegionId()));
             }
         }
 
