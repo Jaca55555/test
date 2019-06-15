@@ -6,9 +6,14 @@ import uz.maroqand.ecology.core.entity.client.Client;
 
 public interface ClientService {
 
-    Client createApplicant(LegalEntityDto legalEntityDto);
-    Client createApplicant(IndividualDto individualDto);
+    Client getById(Integer id);
 
-    Client updateApplicant(Client applicant, LegalEntityDto legalEntityDto);
-    Client updateApplicant(Client applicant, IndividualDto individualDto);
+    Client createClient(LegalEntityDto legalEntityDto);
+
+    Client createClient(IndividualDto individualDto);
+
+    Client updateClient(Client client, LegalEntityDto legalEntityDto);
+
+    Client updateClient(Client client, IndividualDto individualDto);
+
 }

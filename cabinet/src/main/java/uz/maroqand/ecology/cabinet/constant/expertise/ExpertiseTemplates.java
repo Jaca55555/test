@@ -6,7 +6,7 @@ package uz.maroqand.ecology.cabinet.constant.expertise;
  * (ru)
  */
 public class ExpertiseTemplates {
-    private static final String Prefix = "/expertise";
+    private static final String Prefix = "expertise";
 
     private static final String Accountant = Prefix + "/accountant";
 

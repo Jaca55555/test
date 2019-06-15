@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity.client;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.entity.sys.Soato;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -82,10 +83,18 @@ public class Client {
     private String oked;
 
     //Регион
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", updatable = false, insertable = false)
+    private Soato region;
+
     @Column(name = "region_id")
     private Integer regionId;
 
     //Район
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_region_id", updatable = false, insertable = false)
+    private Soato subRegion;
+
     @Column(name = "sub_region_id")
     private Integer subRegionId;
 

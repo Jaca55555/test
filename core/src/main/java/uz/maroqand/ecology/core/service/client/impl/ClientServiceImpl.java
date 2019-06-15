@@ -24,105 +24,96 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client createApplicant(LegalEntityDto legalEntityDto) {
-        Client applicant = new Client();
-        applicant.setType(ApplicantType.LegalEntity);
-        applicant.setTin(legalEntityDto.getLegalEntityTin());
-        applicant.setName(legalEntityDto.getLegalEntityName());
-        applicant.setOpfId(legalEntityDto.getLegalEntityOpfId());
-        applicant.setDirectorFullName(legalEntityDto.getDirectorFullName());
-        applicant.setOked(legalEntityDto.getOked());
-        applicant.setRegionId(legalEntityDto.getLegalEntityRegionId());
-        applicant.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
-        applicant.setAddress(legalEntityDto.getLegalEntityAddress());
-        applicant.setPhone(legalEntityDto.getLegalEntityPhone());
-        applicant.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
-        applicant.setEmail(legalEntityDto.getLegalEntityEmail());
-        applicant.setMfo(legalEntityDto.getLegalEntityMfo());
-        applicant.setBankName(legalEntityDto.getLegalEntityBankName());
-        applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = clientRepository.save(applicant);
-        return applicant;
+    public Client getById(Integer id) {
+        return clientRepository.getOne(id);
     }
 
     @Override
-    public Client createApplicant(IndividualDto individualDto) {
-        Date passportDateOfIssue=null;
-        Date passportDateOfExpiry=null;
-
-        try {
-            passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
-        }catch (Exception e){}
-
-        try {
-            passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
-        }catch (Exception e){}
-        Client applicant = new Client();
-        applicant.setType(ApplicantType.Individual);
-        applicant.setName(individualDto.getIndividualName());
-        applicant.setPassportSerial(individualDto.getPassportSerial());
-        applicant.setPassportNumber(individualDto.getPassportNumber());
-        applicant.setPassportDateOfIssue(passportDateOfIssue);
-        applicant.setPassportDateOfExpiry(passportDateOfExpiry);
-        applicant.setPassportIssuedBy(individualDto.getPassportIssuedBy());
-        applicant.setRegionId(individualDto.getIndividualRegionId());
-        applicant.setSubRegionId(individualDto.getIndividualSubRegionId());
-        applicant.setAddress(individualDto.getIndividualAddress());
-        applicant.setPhone(individualDto.getIndividualPhone());
-        applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
-        applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = clientRepository.save(applicant);
-        return applicant;
+    public Client createClient(LegalEntityDto legalEntityDto) {
+        Client client = new Client();
+        client.setType(ApplicantType.LegalEntity);
+        client.setTin(legalEntityDto.getLegalEntityTin());
+        client.setName(legalEntityDto.getLegalEntityName());
+        client.setOpfId(legalEntityDto.getLegalEntityOpfId());
+        client.setDirectorFullName(legalEntityDto.getDirectorFullName());
+        client.setOked(legalEntityDto.getOked());
+        client.setRegionId(legalEntityDto.getLegalEntityRegionId());
+        client.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
+        client.setAddress(legalEntityDto.getLegalEntityAddress());
+        client.setPhone(legalEntityDto.getLegalEntityPhone());
+        client.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
+        client.setEmail(legalEntityDto.getLegalEntityEmail());
+        client.setMfo(legalEntityDto.getLegalEntityMfo());
+        client.setBankName(legalEntityDto.getLegalEntityBankName());
+        client.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
+        client = clientRepository.save(client);
+        return client;
     }
 
     @Override
-    public Client updateApplicant(Client applicant, LegalEntityDto legalEntityDto) {
-        applicant.setType(ApplicantType.LegalEntity);
-        applicant.setTin(legalEntityDto.getLegalEntityTin());
-        applicant.setName(legalEntityDto.getLegalEntityName());
-        applicant.setOpfId(legalEntityDto.getLegalEntityOpfId());
-        applicant.setDirectorFullName(legalEntityDto.getDirectorFullName());
-        applicant.setOked(legalEntityDto.getOked());
-        applicant.setRegionId(legalEntityDto.getLegalEntityRegionId());
-        applicant.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
-        applicant.setAddress(legalEntityDto.getLegalEntityAddress());
-        applicant.setPhone(legalEntityDto.getLegalEntityPhone());
-        applicant.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
-        applicant.setEmail(legalEntityDto.getLegalEntityEmail());
-        applicant.setMfo(legalEntityDto.getLegalEntityMfo());
-        applicant.setBankName(legalEntityDto.getLegalEntityBankName());
-        applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = clientRepository.save(applicant);
-        return applicant;
+    public Client createClient(IndividualDto individualDto) {
+        Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
+        Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
+
+        Client client = new Client();
+        client.setType(ApplicantType.Individual);
+        client.setName(individualDto.getIndividualName());
+        client.setPassportSerial(individualDto.getPassportSerial());
+        client.setPassportNumber(individualDto.getPassportNumber());
+        client.setPassportDateOfIssue(passportDateOfIssue);
+        client.setPassportDateOfExpiry(passportDateOfExpiry);
+        client.setPassportIssuedBy(individualDto.getPassportIssuedBy());
+        client.setRegionId(individualDto.getIndividualRegionId());
+        client.setSubRegionId(individualDto.getIndividualSubRegionId());
+        client.setAddress(individualDto.getIndividualAddress());
+        client.setPhone(individualDto.getIndividualPhone());
+        client.setMobilePhone(individualDto.getIndividualMobilePhone());
+        client.setEmail(individualDto.getIndividualEmail());
+        client = clientRepository.save(client);
+        return client;
     }
 
     @Override
-    public Client updateApplicant(Client applicant, IndividualDto individualDto) {
-        Date passportDateOfIssue=null;
-        Date passportDateOfExpiry=null;
+    public Client updateClient(Client client, LegalEntityDto legalEntityDto) {
 
-        try {
-            passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
-        }catch (Exception e){}
+        client.setType(ApplicantType.LegalEntity);
+        client.setTin(legalEntityDto.getLegalEntityTin());
+        client.setName(legalEntityDto.getLegalEntityName());
+        client.setOpfId(legalEntityDto.getLegalEntityOpfId());
+        client.setDirectorFullName(legalEntityDto.getDirectorFullName());
+        client.setOked(legalEntityDto.getOked());
+        client.setRegionId(legalEntityDto.getLegalEntityRegionId());
+        client.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
+        client.setAddress(legalEntityDto.getLegalEntityAddress());
+        client.setPhone(legalEntityDto.getLegalEntityPhone());
+        client.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
+        client.setEmail(legalEntityDto.getLegalEntityEmail());
+        client.setMfo(legalEntityDto.getLegalEntityMfo());
+        client.setBankName(legalEntityDto.getLegalEntityBankName());
+        client.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
+        client = clientRepository.save(client);
+        return client;
+    }
 
-        try {
-            passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
-        }catch (Exception e){}
+    @Override
+    public Client updateClient(Client client, IndividualDto individualDto) {
+        Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
+        Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
-        applicant.setType(ApplicantType.Individual);
-        applicant.setName(individualDto.getIndividualName());
-        applicant.setPassportSerial(individualDto.getPassportSerial());
-        applicant.setPassportNumber(individualDto.getPassportNumber());
-        applicant.setPassportDateOfIssue(passportDateOfIssue);
-        applicant.setPassportDateOfExpiry(passportDateOfExpiry);
-        applicant.setPassportIssuedBy(individualDto.getPassportIssuedBy());
-        applicant.setRegionId(individualDto.getIndividualRegionId());
-        applicant.setSubRegionId(individualDto.getIndividualSubRegionId());
-        applicant.setAddress(individualDto.getIndividualAddress());
-        applicant.setPhone(individualDto.getIndividualPhone());
-        applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
-        applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = clientRepository.save(applicant);
-        return applicant;
+        client.setType(ApplicantType.Individual);
+        client.setName(individualDto.getIndividualName());
+        client.setPassportSerial(individualDto.getPassportSerial());
+        client.setPassportNumber(individualDto.getPassportNumber());
+        client.setPassportDateOfIssue(passportDateOfIssue);
+        client.setPassportDateOfExpiry(passportDateOfExpiry);
+        client.setPassportIssuedBy(individualDto.getPassportIssuedBy());
+        client.setRegionId(individualDto.getIndividualRegionId());
+        client.setSubRegionId(individualDto.getIndividualSubRegionId());
+        client.setAddress(individualDto.getIndividualAddress());
+        client.setPhone(individualDto.getIndividualPhone());
+        client.setMobilePhone(individualDto.getIndividualMobilePhone());
+        client.setEmail(individualDto.getIndividualEmail());
+        client = clientRepository.save(client);
+        return client;
     }
 }

@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.core.service.billing;
 
 import uz.maroqand.ecology.core.entity.billing.Payment;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -10,5 +9,6 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
  */
 public interface PaymentService {
 
-    Payment checkRegApplicationPaymentStatus(RegApplication regApplication);
+    Payment pay(Payment payment);
+
 }

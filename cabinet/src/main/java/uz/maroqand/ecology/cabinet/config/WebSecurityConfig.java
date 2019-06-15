@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uz.maroqand.ecology.core.component.CustomSuccessHandler;
 import uz.maroqand.ecology.core.component.UserDetailsServiceImpl;
+import uz.maroqand.ecology.core.constant.user.Permissions;
 
 @Configuration
 @EnableWebSecurity
@@ -45,7 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static*/**").permitAll()
-                .antMatchers("/dashboard/**").authenticated();
+                .antMatchers("/dashboard/**").authenticated()
+                .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
+                .antMatchers("/expertise/forwarding/**").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
+                .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
+                .antMatchers("/expertise/agreement/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT.name())
+                .antMatchers("/expertise/agreement_complete/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT_COMPLETE.name());
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");

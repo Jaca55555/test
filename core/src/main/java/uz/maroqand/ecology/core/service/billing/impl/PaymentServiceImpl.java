@@ -2,9 +2,7 @@ package uz.maroqand.ecology.core.service.billing.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.entity.billing.Payment;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.repository.billing.PaymentRepository;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 
@@ -24,14 +22,8 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    @Override
-    public Payment checkRegApplicationPaymentStatus(RegApplication regApplication) {
-        Payment payment = new Payment();
-        payment.setStatus(PaymentStatus.Initial);
-        //todo shart kerak
-        /*if (regApplication.getInvoiceId()!=null){
-
-        }*/
-        return payment;
+    public Payment pay(Payment payment){
+        return paymentRepository.save(payment);
     }
+
 }

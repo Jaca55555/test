@@ -42,21 +42,21 @@ public class RegApplicationController {
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
-    private final ClientService applicantService;
+    private final ClientService clientService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
     private final OrganizationService organizationService;
     private final ProjectDeveloperService projectDeveloperService;
     private final OfferService offerService;
     private final PaymentService paymentService;
-
     @Autowired
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
     public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
-        this.applicantService = applicantService;
+        this.clientService = clientService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
         this.organizationService = organizationService;
@@ -146,17 +146,17 @@ public class RegApplicationController {
 
         if (applicantType.equals("LegalEntity")){
             if (applicant==null){
-                applicant = applicantService.createApplicant(legalEntityDto);
+                applicant = clientService.createClient(legalEntityDto);
                 regApplication.setApplicantId(applicant.getId());
             }else{
-                applicantService.updateApplicant(applicant,legalEntityDto);
+                clientService.updateClient(applicant,legalEntityDto);
             }
         }else{
             if (applicant==null){
-                applicant =  applicantService.createApplicant(individualDto);
+                applicant =  clientService.createClient(individualDto);
                 regApplication.setApplicantId(applicant.getId());
             }else{
-                applicantService.updateApplicant(applicant,individualDto);
+                clientService.updateClient(applicant,individualDto);
             }
         }
         regApplicationService.save(regApplication);

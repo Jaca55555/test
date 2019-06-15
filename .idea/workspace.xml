@@ -1,230 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="de603611-ea5e-4675-a315-8841eb671475" name="Default" comment="Merge branches 'Akmalbek' and 'master' of http://bitbucket.smst.uz/scm/eco/ecology into Akmalbek&#10;&#10;# Conflicts:&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java">
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/constant/expertise/Category.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/Material.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Activity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/ObjectExpertise.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Organization.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/ProjectDeveloper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ActivityRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ObjectExpertiseRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/OrganizationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ProjectDeveloperRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/RegApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/RegApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/RegApplicationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/RegApplicationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/component/CustomSuccessHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/component/UserDetailsImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/component/UserDetailsServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/config/DatabaseMessageSource.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/config/GlobalConfigs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/sys/BillingErrorMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/sys/SmsSendStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/sys/TableHistoryEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/sys/TableHistoryType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/user/LoginType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/user/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/constant/user/ToastrType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/dto/test" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/dto/user/Toastr.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/expertise/Individual.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/expertise/LegalEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/expertise/Opf.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/expertise/RegApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/expertise/Soato.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/sys/File.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/sys/Option.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/sys/SmsSend.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/sys/TableHistory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/sys/Translation.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/user/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/user/UserAdditional.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/entity/user/UserRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/expertise/RegApplicationRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/sys/FileRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/sys/OptionRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/sys/SmsSendRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/sys/TableHistoryRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/sys/TranslationRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/test" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/user/UserAdditionalRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/user/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/repository/user/UserRoleRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/expertise/RegApplicationService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/FileService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/OptionService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/SmsSendService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/TableHistoryService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/TranslationService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/FileServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/HelperService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/OptionServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/SmsSendServiceImpl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/SmsSendServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/TableHistoryServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/TranslationServiceImpl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/sys/impl/TranslationServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/test" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/ToastrService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/UserAdditionalService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/UserRoleService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/UserService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/impl/ToastrServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/impl/UserAdditionalServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/impl/UserRoleServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/impl/UserServiceImpl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/target/classes/uz/maroqand/ecology/core/service/user/impl/UserServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html" beforeDir="false" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html" beforeDir="false" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/css/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/css/select2.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/css/style_error.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/css/datatables.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/datatables.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/lang_en.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/lang_oz.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/lang_ru.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/datatables/lang_uz.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/datta/datta-icon.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/datta/fonts/pct.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/datta/fonts/pct.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/datta/fonts/pct.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/datta/fonts/pct.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/feather/feather.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/feather/fonts/feather.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/feather/fonts/feather.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/feather/fonts/feather.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/feather/fonts/feather.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/font-date/Material-Design-Icons.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/font-date/Material-Design-Icons.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/font-date/Material-Design-Icons.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/font-date/Material-Design-Icons.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/font-date/Material-Design-Icons.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/fontawesome-all.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/css/materialdesignicons.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/fonts/materialdesignicons-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/fonts/materialdesignicons-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/fonts/materialdesignicons-webfont.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/fonts/materialdesignicons-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/fonts/material/fonts/materialdesignicons-webfont.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/avatar-2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/404-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/Thumbs.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/monster-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/monster-eyes-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/shadows-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/error/text-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/flags/ru.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/flags/uz.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/lock.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/images/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/form.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/parallax.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/pcoded.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/pcoded.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2/js/i18n/en.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2/js/i18n/oz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2/js/i18n/ru.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2/js/i18n/uz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/select2/js/select2.full.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/js/vendor-all.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/modal-window-effects/css/default.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/modal-window-effects/css/md-modal.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/modal-window-effects/js/classie.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/modal-window-effects/js/modalEffects.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/pagination/jquery.twbsPagination.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/en.extra.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/en.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/oz.extra.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/oz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/ru.extra.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/ru.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/uz.extra.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/i18n/uz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/parsley/parsley.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/animation/animate.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-datetimepicker/bootstrap-datepicker.eu.min.js.download" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-datetimepicker/bootstrap-datepicker.ru.min.js.download" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-toggle/css/bootstrap4-toggle.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-toggle/css/bootstrap4-toggle.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-toggle/js/bootstrap4-toggle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap-toggle/js/bootstrap4-toggle.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/bootstrap/bootstrap.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/ckeditor/js/ckeditor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.date.extensions.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.dependencyLib.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.extensions.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.numeric.extensions.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.phone.extensions.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/inputmask.regex.extensions.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/inputmask/jquery.inputmask.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/jquery.inputmask.bundle.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/input-mask/jquery.mask.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/jquery-scrollbar/perfect-scrollbar.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/css/bootstrap-material-datetimepicker.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/font/Material-Design-Icons.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/font/Material-Design-Icons.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/font/Material-Design-Icons.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/font/Material-Design-Icons.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/font/Material-Design-Icons.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/material-datetimepicker/js/bootstrap-material-datetimepicker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/moment/js/moment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/multi-select/jquery.multi-select.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/multi-select/jquery.quicksearch.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/multi-select/multi-select.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/multi-select/switch.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/prism/css/prism-dark.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/prism/css/prism-white.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/prism/css/prism.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/prism/js/prism.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/smart-wizard/css/smart_wizard.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/smart-wizard/css/smart_wizard_theme_arrows.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/smart-wizard/css/smart_wizard_theme_circles.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/plugins/smart-wizard/js/jquery.smartWizard.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/toastr/toastr.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/static/toastr/toastr.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/fragments/header.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/fragments/includes_bottom.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/fragments/includes_top.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/fragments/navigation_menu.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/templates/reg/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/config/WebMVCConfigs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/config/WebSecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/constant/RegTemplates.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/constant/RegUrls.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/controller/MainController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/target/classes/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.class" beforeDir="false" />
+    <list default="true" id="8e7a058d-bee0-4b58-9e7b-cefd6fb86ccb" name="Default Changelist" comment="Merge branches 'Akmalbek' and 'master' of http://bitbucket.smst.uz/scm/eco/ecology into Akmalbek&#10;&#10;# Conflicts:&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Applicant.java&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/service/billing/PaymentService.java&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/service/billing/impl/PaymentServiceImpl.java&#10;#&#9;ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/out/" />
-    <ignored path="$PROJECT_DIR$/target/" />
-    <ignored path="$PROJECT_DIR$/core/target/" />
-    <ignored path="$PROJECT_DIR$/ecoekspertiza/target/" />
-    <ignored path="$PROJECT_DIR$/ecoexpertise/target/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -232,154 +11,67 @@
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-623350546">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="2" />
-        </counts>
-      </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="1" />
-          <entry key="html" value="19" />
-          <entry key="java" value="57" />
-          <entry key="js" value="1" />
-          <entry key="properties" value="1" />
-          <entry key="sql" value="4" />
+          <entry key="java" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="1" />
-          <entry key="HTML" value="19" />
-          <entry key="JAVA" value="57" />
-          <entry key="JavaScript" value="1" />
-          <entry key="Properties" value="1" />
-          <entry key="SQL" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="dummy" value="7" />
-          <entry key="html" value="1078" />
-          <entry key="java" value="1182" />
-          <entry key="txt" value="14" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="HTML" value="1078" />
-          <entry key="JAVA" value="1182" />
-          <entry key="PLAIN_TEXT" value="21" />
+          <entry key="JAVA" value="1" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/transfer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="304">
+              <caret line="47" column="72" lean-forward="true" selection-start-line="47" selection-start-column="72" selection-end-line="47" selection-end-column="72" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#2;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#2;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#3;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#3;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#4;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#4;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#0;n#tr#5;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#5;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/prepayment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="519">
+              <caret line="83" column="49" selection-start-line="83" selection-start-column="49" selection-end-line="83" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>Created by Utkirbek Boltaev on</find>
-      <find>busin</find>
-      <find>ComponentScan</find>
-      <find>business</find>
-      <find>getOrganizationById</find>
-      <find>passport_number</find>
-      <find>ajaxRequestLink</find>
-      <find>darrachequesne</find>
-      <find>applicant.</find>
-      <find>name</find>
-      <find>legalEntity</find>
-      <find>$</find>
-      <find>bo`yicha</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/sys/impl/SmsSendServiceImpl.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/sys/impl/TableHistoryServiceImpl.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/constant/sys/TableHistoryEntity.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/sys/impl/TranslationServiceImpl.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/MainController.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/component/CustomSuccessHandler.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/config/WebMVCConfigs.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/application.properties" />
-        <option value="$PROJECT_DIR$/ecoexpertise/pom.xml" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/config/WebSecurityConfig.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/login.html" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/css/style.css" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/header.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertize/Application.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Soato.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Opf.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/LegalEntity.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Application.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/RegTemplates.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/navigation_menu.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Individual.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/dashboard.html" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/RegUrls.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/list.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/user/User.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/sys/Soato.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/legalEntityDto.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/RegApplicationRepository.java" />
-        <option value="$PROJECT_DIR$/sqlfiles/soato.sql" />
-        <option value="$PROJECT_DIR$/sqlfiles/user.sql" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/RegApplication.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/sys/Opf.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/includes_top.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/LegalEntityDto.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_legal_entity_fragment.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Applicant.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/Applicant.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/about.html" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/waiting.html" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/contract.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/constant/Common.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/util/DateParser.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/IndividualDto.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/ApplicantServiceImpl.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/RegApplicationService.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl.java" />
-        <option value="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java" />
-      </list>
-    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -403,17 +95,13 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1913" />
-    <option name="width" value="1432" />
-    <option name="height" value="1057" />
-  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -425,7 +113,7 @@
             <path>
               <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
               <item name="ecology" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
@@ -461,16 +149,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="ecoexpertise" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ecology" type="462c0819:PsiDirectoryNode" />
-              <item name="ecoexpertise" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ecoexpertise" type="462c0819:PsiDirectoryNode" />
-              <item name="controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
@@ -479,15 +157,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ecology" type="462c0819:PsiDirectoryNode" />
-              <item name="ecoexpertise" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
@@ -508,16 +177,10 @@
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="reg" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="ecology" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ecology" type="462c0819:PsiDirectoryNode" />
-              <item name="sqlfiles" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -525,32 +188,7 @@
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
-    <property name="SearchEverywhereHistoryKey" value="opf&#9;PSI&#9;JAVA://uz.maroqand.ecology.core.entity.sys.Opf&#10;Indi&#9;FILE&#9;file:///home/utkir/IdeaProjects/ecology/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/IndividualDto.java&#10;Applica&#9;PSI&#9;JAVA://uz.maroqand.ecology.core.entity.expertise.Applicant&#10;Soato&#9;PSI&#9;JAVA://uz.maroqand.ecology.core.entity.sys.Soato&#10;User&#9;FILE&#9;file:///home/utkir/IdeaProjects/ecology/core/src/main/java/uz/maroqand/ecology/core/entity/user/User.java&#10;userAdditionalRepository&#9;FILE&#9;file://D:/utkir/ecology/core/src/main/java/uz/maroqand/ecology/core/repository/user/UserAdditionalRepository.java" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560517134167" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="uz.maroqand.ecology.core.util" />
-      <recent name="uz.maroqand.ecology.core.constant" />
-      <recent name="uz.maroqand.ecology.core.repository.expertise" />
-      <recent name="uz.maroqand.ecology.ecoexpertise.controller" />
-      <recent name="uz.maroqand.ecology.core.dto.user" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\ecology\ecoexpertise\src\main\resources\static" />
-      <recent name="E:\ecology\ecoexpertise\src\main\resources\templates\reg" />
-      <recent name="D:\utkir\ecology\ecoexpertise\src\main\resources\templates\reg" />
-      <recent name="D:\utkir\ecology\ecoexpertise\src\main\resources\static\images" />
-      <recent name="D:\utkir\ecology\ecoexpertise\src\main\resources\static\plugins" />
-    </key>
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560631144694" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -564,32 +202,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.EcoExpertiseStarter">
-    <configuration name="EcoExpertiseStarter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="uz.maroqand.ecology.ecoexpertise.EcoExpertiseStarter" />
-      <module name="ecology" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="uz.maroqand.ecology.ecoexpertise.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="EcoExpertiseStarter" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="ecoexpertise" />
       <extension name="coverage">
@@ -603,22 +216,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="Application.EcoExpertiseStarter" />
-      <item itemvalue="Spring Boot.EcoExpertiseStarter" />
-    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.EcoExpertiseStarter" />
-        <item itemvalue="Application.EcoExpertiseStarter" />
       </list>
     </recent_temporary>
   </component>
@@ -636,6 +236,7 @@
       <workItem from="1560339230151" duration="13777000" />
       <workItem from="1560402828373" duration="32159000" />
       <workItem from="1560484709635" duration="17938000" />
+      <workItem from="1560596320031" duration="19558000" />
     </task>
     <task id="LOCAL-00001" summary="reg Applicant">
       <created>1560438313538</created>
@@ -644,17 +245,22 @@
       <option name="project" value="LOCAL" />
       <updated>1560438313538</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="accountant bolimi bazi fayllari">
+      <created>1560617895396</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1560617895396</updated>
+    </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66351000" />
+    <option name="totallyTimeSpent" value="201000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.30863538" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22654584" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -662,30 +268,31 @@
       <window_info id="Web" order="5" side_tool="true" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info id="Capture Tool" order="7" />
-      <window_info anchor="bottom" id="Run" order="0" weight="0.49410504" />
-      <window_info anchor="bottom" id="Messages" order="1" weight="0.3279743" />
-      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="3" weight="0.38156486" />
-      <window_info anchor="bottom" id="Terminal" order="4" />
-      <window_info anchor="bottom" id="Message" order="5" />
-      <window_info anchor="bottom" id="Find" order="6" weight="0.3279743" />
-      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
-      <window_info anchor="bottom" id="Java Enterprise" order="9" weight="0.32984293" />
-      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" />
-      <window_info anchor="bottom" id="Spring" order="12" weight="0.32984293" />
-      <window_info anchor="bottom" id="Database Changes" order="13" weight="0.3290461" />
+      <window_info anchor="bottom" id="Database Changes" order="0" weight="0.3286334" />
+      <window_info anchor="bottom" id="Run" order="1" sideWeight="0.49946696" weight="0.45551983" />
+      <window_info anchor="bottom" id="Messages" order="2" weight="0.32690248" />
+      <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50053304" side_tool="true" weight="0.69239014" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="4" sideWeight="0.49946696" visible="true" weight="0.38049304" />
+      <window_info anchor="bottom" id="Terminal" order="5" />
+      <window_info anchor="bottom" id="Message" order="6" />
+      <window_info anchor="bottom" id="Find" order="7" weight="0.3279743" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Java Enterprise" order="10" weight="0.32984293" />
+      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="12" />
+      <window_info anchor="bottom" id="Spring" order="13" weight="0.32984293" />
+      <window_info anchor="bottom" id="Database Console" order="14" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Database" order="4" weight="0.32977587" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32942432" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Bean Validation" order="8" weight="0.32977587" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="9" visible="true" weight="0.32942432" />
+      <window_info anchor="right" id="Maven Projects" order="9" weight="0.32904884" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23294243" />
@@ -722,12 +329,6 @@
       <window_info anchor="right" id="Maven Projects" order="9" weight="0.32977587" />
     </layout-to-restore>
   </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
-  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -740,460 +341,49 @@
               <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
                 <collection />
               </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
             </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="reg Applicant" />
     <MESSAGE value="Merge branches 'Akmalbek' and 'master' of http://bitbucket.smst.uz/scm/eco/ecology into Akmalbek&#10;&#10;# Conflicts:&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branches 'Akmalbek' and 'master' of http://bitbucket.smst.uz/scm/eco/ecology into Akmalbek&#10;&#10;# Conflicts:&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java" />
+    <MESSAGE value="accountant bolimi bazi fayllari" />
+    <MESSAGE value="transfer" />
+    <option name="LAST_COMMIT_MESSAGE" value="transfer" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/sys/impl/FileServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/transfer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="48" column="4" lean-forward="true" selection-start-line="48" selection-start-column="4" selection-end-line="51" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Individual.java" />
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/LegalEntity.java" />
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Opf.java" />
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Soato.java" />
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/dashboard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="35" column="66" selection-start-line="35" selection-start-column="66" selection-end-line="35" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/RegUrls.java" />
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="94" column="28" selection-start-line="94" selection-start-column="22" selection-end-line="94" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/RegTemplates.java" />
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/navigation_menu.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="70" lean-forward="true" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/sys/Soato.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/static/js/form.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
+        <state relative-caret-position="304">
+          <caret line="47" column="72" lean-forward="true" selection-start-line="47" selection-start-column="72" selection-end-line="47" selection-end-column="72" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#2;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#2;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#3;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#3;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#4;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#4;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#5;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#5;n#table#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
+        <state relative-caret-position="391">
           <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/MainController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="21" column="21" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="16" lean-forward="true" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/RegApplicationRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlfiles/soato.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="29" selection-end-line="218" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/application.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="16" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/fragments/includes_top.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/user/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/user/UserService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/LegalEntityDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlfiles/sys_opf.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/sys/Opf.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5">
-          <caret line="12" column="24" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/step_wizard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="139" selection-start-line="18" selection-start-column="125" selection-end-line="18" selection-end-column="139" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_legal_entity_fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="4" lean-forward="true" selection-start-line="8" selection-start-column="4" selection-end-line="168" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/about.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1772">
-          <caret line="218" column="110" selection-start-line="218" selection-start-column="110" selection-end-line="218" selection-end-column="110" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/waiting.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="59" column="86" selection-start-line="59" selection-start-column="86" selection-end-line="59" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/contract.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="103" column="249" selection-start-line="103" selection-start-column="249" selection-end-line="103" selection-end-column="249" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/Templates.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="83" selection-start-line="10" selection-start-column="75" selection-end-line="10" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/constant/Common.java" />
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/util/Common.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/util/DateParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_74/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/parser/DateParser.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/dto/expertise/IndividualDto.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="43" column="143" selection-start-line="43" selection-start-column="143" selection-end-line="43" selection-end-column="143" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/ApplicantService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/constant/expertise/ApplicantType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="14" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlfiles/user.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/static/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="28" column="14" lean-forward="true" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/RegApplicationServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
-          <folding>
-            <element signature="e#1573#1574#0" expanded="true" />
-            <element signature="e#1612#1613#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/repository/expertise/ApplicantRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/RegApplicationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/ApplicantServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="94" selection-start-line="94" selection-end-line="94" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="65" column="42" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/Urls.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="77" selection-start-line="11" selection-start-column="72" selection-end-line="11" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/Applicant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/expertise/RegApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="22" lean-forward="true" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>No facets are configured</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>core</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>Maven: antlr:antlr:2.7.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
