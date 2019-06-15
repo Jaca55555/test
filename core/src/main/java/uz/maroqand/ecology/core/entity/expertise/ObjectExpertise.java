@@ -27,4 +27,14 @@ public class ObjectExpertise {
     @Column(name = "name_ru")
     private String nameRu;
 
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+            case "uz":
+                return name;
+            case "ru":
+            default:
+                return nameRu;
+        }
+    }
+
 }

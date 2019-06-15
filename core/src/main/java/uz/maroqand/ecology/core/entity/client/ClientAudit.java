@@ -24,7 +24,7 @@ public class ClientAudit {
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name = "client_id", updatable = false, insertable = false)
+    @JoinColumn(name = "client_id", updatable = false, insertable = false)
     private Client client;
 
     @Column(name = "client_id")
