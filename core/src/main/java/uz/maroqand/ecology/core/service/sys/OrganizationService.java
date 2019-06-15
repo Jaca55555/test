@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.service.expertise;
+package uz.maroqand.ecology.core.service.sys;
 
 import uz.maroqand.ecology.core.entity.sys.Organization;
 

@@ -17,8 +17,8 @@ public class Templates {
 
 
     private static final String Appeal = "/appeal";
-    public static final String AppealUserList = Prefix + Appeal + "/user_list";
-    public static final String AppealNew = Prefix + Appeal + "/new";
-    public static final String AppealView = Prefix + Appeal + "/view";
+    public static final String AppealUserList = Appeal + "/list";
+    public static final String AppealNew = Appeal + "/new";
+    public static final String AppealView = Appeal + "/view";
 
 }

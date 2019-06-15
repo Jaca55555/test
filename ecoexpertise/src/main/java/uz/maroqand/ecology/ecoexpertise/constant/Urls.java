@@ -25,7 +25,6 @@ public class Urls {
     private static final String Appeal = "/appeal";
     public static final String AppealUserList = Prefix + Appeal + "/list";
     public static final String AppealUserListAjax = Prefix + Appeal + "/list_ajax";
-
     public static final String AppealNew = Prefix + Appeal + "/new";
     public static final String AppealCreate = Prefix + Appeal + "/create";
     public static final String AppealEdit = Prefix + Appeal + "/edit";

@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.util;
 
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DateFormat;
@@ -12,8 +11,8 @@ import java.util.Date;
  * (uz)
  * (ru)
  */
-public class DateParser {
 
+public class DateParser {
     /**
      * Try to parse the date from the string
      *
@@ -53,6 +52,4 @@ public class DateParser {
         Long milliSecond = date.getTime() +(hour*60*60 + min*60)*1000;
         return new Date(milliSecond);
     }
-
 }
-
