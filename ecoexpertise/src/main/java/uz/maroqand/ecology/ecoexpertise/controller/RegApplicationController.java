@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
@@ -45,9 +48,10 @@ public class RegApplicationController {
     private final OrganizationService organizationService;
     private final ProjectDeveloperService projectDeveloperService;
     private final OfferService offerService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -58,6 +62,8 @@ public class RegApplicationController {
         this.organizationService = organizationService;
         this.projectDeveloperService = projectDeveloperService;
         this.offerService = offerService;
+        this.paymentService = paymentService;
+
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -262,7 +268,8 @@ public class RegApplicationController {
 
     @RequestMapping(value = Urls.RegApplicationContract,method = RequestMethod.POST)
     public String regApplicationContract(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "offerId") Integer offerId
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -283,8 +290,25 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
+        /*if (payment.getStatus() != PaymentStatus.Success) {
+            billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
+            regApplication.setPaymentId(payment.getId());
+            regApplicationService.update(regApplication,StepNumbers.PaymentStep);
+        }else{
+            billingService.getInvoicePaymentInfo(payment);
+        }
 
+        if (payment.getPaymentStatus().equals(PaymentStatus.Success)) {
+            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
+        }*/
+
+        model.addAttribute("payment", payment);
         model.addAttribute("regApplication", regApplication);
+//        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
+        model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);
+//        model.addAttribute("transfer_url", Urls.RegApplicationTransfer + "?id=" + id);
+
         model.addAttribute("step_id", 4);
         return Templates.RegApplicationPrepayment;
     }

@@ -51,8 +51,7 @@
                                                         <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 720px; width: 100%; overflow-y: auto; padding: 20px; margin-bottom: 10px" >
                                                                <p th:utext="${offer.description}"> </p>
                                                         </div>
-                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
-                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
 
                                                         <div id="checkInput">
                                                             <div class="custom-control custom-checkbox mb-3 mt-4">
@@ -84,6 +83,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" name="offerId" th:value="${offer.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                     </form>
                                                 </div>
                                             </div>
@@ -104,7 +106,6 @@
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
     <script th:inline="javascript">
-        var nextButton = [[#{sys_next}]];
         function openInputFile() {
             document.getElementById("file-input").click();
         }
@@ -116,7 +117,6 @@
                 this.value = this.value.replace(/\D/g, '');
             }
         });
-
 
         $('#confirm').on('click',function () {
             if ($('#confirm').is(':checked')) {
