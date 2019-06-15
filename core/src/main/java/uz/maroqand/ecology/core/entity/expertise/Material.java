@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.entity;
+package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 

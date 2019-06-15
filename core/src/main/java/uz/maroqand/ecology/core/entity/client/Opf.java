@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.entity.sys;
+package uz.maroqand.ecology.core.entity.client;
 
 import lombok.Data;
 

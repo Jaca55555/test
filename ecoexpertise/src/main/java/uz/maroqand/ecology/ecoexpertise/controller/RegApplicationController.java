@@ -14,12 +14,13 @@ import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
-import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
-import uz.maroqand.ecology.core.service.sys.OpfService;
+import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -36,14 +37,14 @@ public class RegApplicationController {
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
-    private final ApplicantService applicantService;
+    private final ClientService applicantService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
     private final OrganizationService organizationService;
     private final ProjectDeveloperService projectDeveloperService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ApplicantService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService applicantService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -97,9 +98,9 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        Applicant applicant = regApplication.getApplicant();
+        Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
-            applicant = new Applicant();
+            applicant = new Client();
             applicant.setType(ApplicantType.LegalEntity);
             model.addAttribute("legalEntity", new LegalEntityDto());
             model.addAttribute("individual", new IndividualDto());
@@ -131,7 +132,7 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        Applicant applicant = regApplication.getApplicant();
+        Client applicant = regApplication.getApplicant();
 
         if (applicantType.equals("LegalEntity")){
             if (applicant==null){

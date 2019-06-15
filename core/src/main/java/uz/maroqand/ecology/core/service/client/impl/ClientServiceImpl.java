@@ -1,31 +1,31 @@
-package uz.maroqand.ecology.core.service.expertise.impl;
+package uz.maroqand.ecology.core.service.client.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
-import uz.maroqand.ecology.core.entity.expertise.Applicant;
-import uz.maroqand.ecology.core.repository.expertise.ApplicantRepository;
-import uz.maroqand.ecology.core.service.expertise.ApplicantService;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.repository.client.ClientRepository;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.Date;
 
 @Service
-public class ApplicantServiceImpl implements ApplicantService {
+public class ClientServiceImpl implements ClientService {
 
-    private final ApplicantRepository applicantRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository) {
-        this.applicantRepository = applicantRepository;
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     @Override
-    public Applicant createApplicant(LegalEntityDto legalEntityDto) {
-        Applicant applicant = new Applicant();
+    public Client createApplicant(LegalEntityDto legalEntityDto) {
+        Client applicant = new Client();
         applicant.setType(ApplicantType.LegalEntity);
         applicant.setTin(legalEntityDto.getLegalEntityTin());
         applicant.setName(legalEntityDto.getLegalEntityName());
@@ -41,12 +41,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setMfo(legalEntityDto.getLegalEntityMfo());
         applicant.setBankName(legalEntityDto.getLegalEntityBankName());
         applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = applicantRepository.save(applicant);
+        applicant = clientRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Applicant createApplicant(IndividualDto individualDto) {
+    public Client createApplicant(IndividualDto individualDto) {
         Date passportDateOfIssue=null;
         Date passportDateOfExpiry=null;
 
@@ -57,7 +57,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         try {
             passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
         }catch (Exception e){}
-        Applicant applicant = new Applicant();
+        Client applicant = new Client();
         applicant.setType(ApplicantType.Individual);
         applicant.setName(individualDto.getIndividualName());
         applicant.setPassportSerial(individualDto.getPassportSerial());
@@ -71,12 +71,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setPhone(individualDto.getIndividualPhone());
         applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
         applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = applicantRepository.save(applicant);
+        applicant = clientRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Applicant updateApplicant(Applicant applicant, LegalEntityDto legalEntityDto) {
+    public Client updateApplicant(Client applicant, LegalEntityDto legalEntityDto) {
         applicant.setType(ApplicantType.LegalEntity);
         applicant.setTin(legalEntityDto.getLegalEntityTin());
         applicant.setName(legalEntityDto.getLegalEntityName());
@@ -92,12 +92,12 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setMfo(legalEntityDto.getLegalEntityMfo());
         applicant.setBankName(legalEntityDto.getLegalEntityBankName());
         applicant.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        applicant = applicantRepository.save(applicant);
+        applicant = clientRepository.save(applicant);
         return applicant;
     }
 
     @Override
-    public Applicant updateApplicant(Applicant applicant, IndividualDto individualDto) {
+    public Client updateApplicant(Client applicant, IndividualDto individualDto) {
         Date passportDateOfIssue=null;
         Date passportDateOfExpiry=null;
 
@@ -122,7 +122,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         applicant.setPhone(individualDto.getIndividualPhone());
         applicant.setMobilePhone(individualDto.getIndividualMobilePhone());
         applicant.setEmail(individualDto.getIndividualEmail());
-        applicant = applicantRepository.save(applicant);
+        applicant = clientRepository.save(applicant);
         return applicant;
     }
 }
