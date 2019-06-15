@@ -7,4 +7,7 @@ import java.util.List;
 public interface ObjectExpertiseService {
 
     List<ObjectExpertise> getList();
+
+    ObjectExpertise getById(Integer id);
+
 }

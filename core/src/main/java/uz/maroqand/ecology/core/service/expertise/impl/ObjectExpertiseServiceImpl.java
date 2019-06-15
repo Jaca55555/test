@@ -22,4 +22,10 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
     public List<ObjectExpertise> getList() {
         return objectExpertiseRepository.findAll();
     }
+
+    @Override
+    public ObjectExpertise getById(Integer id){
+        return objectExpertiseRepository.getOne(id);
+    }
+
 }

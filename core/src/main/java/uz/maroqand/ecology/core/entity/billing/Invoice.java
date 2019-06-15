@@ -27,11 +27,11 @@ public class Invoice {
 
     /*  payer       */
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name = "payer", updatable = false, insertable = false)
-    private Client payer;
+    @JoinColumn(name = "client_id", updatable = false, insertable = false)
+    private Client client;
 
-    @Column(name = "payer_id")
-    private Integer payerId;
+    @Column(name = "client_id")
+    private Integer clientId;
 
     @Column(name = "payer_name")
     private Integer payerName;

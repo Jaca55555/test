@@ -27,7 +27,7 @@ public class Payment {
 
     /*  Invoice */
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name = "invoice_id", updatable = false, insertable = false)
+    @JoinColumn(name = "invoice_id", updatable = false, insertable = false)
     private Invoice invoice;
 
     @Column(name = "invoice_id")
