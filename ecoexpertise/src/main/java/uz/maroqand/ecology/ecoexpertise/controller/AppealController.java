@@ -16,7 +16,6 @@ import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.sys.AppealSub;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.entity.user.UserRole;
 import uz.maroqand.ecology.core.service.sys.AppealService;
 import uz.maroqand.ecology.core.service.sys.AppealSubService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;

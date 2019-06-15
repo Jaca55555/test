@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uz.maroqand.ecology.core.component.CustomSuccessHandler;
 import uz.maroqand.ecology.core.component.UserDetailsServiceImpl;
-import uz.maroqand.ecology.core.constant.user.Role;
 
 @Configuration
 @EnableWebSecurity
