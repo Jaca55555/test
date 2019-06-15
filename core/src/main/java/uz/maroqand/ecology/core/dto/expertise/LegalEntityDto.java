@@ -31,6 +31,8 @@ public class LegalEntityDto {
     private String legalEntityBankName;
     private String legalEntityBankAccount;
 
+    public LegalEntityDto(){}
+
     public LegalEntityDto(Applicant applicant){
         this.id = applicant.getId();
         this.legalEntityTin = applicant.getTin();

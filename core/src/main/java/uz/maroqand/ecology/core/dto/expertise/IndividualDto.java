@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.expertise.Applicant;
+import uz.maroqand.ecology.core.util.Common;
 
 import java.util.Date;
 
@@ -20,8 +21,8 @@ public class IndividualDto {
 
     private String passportSerial;
     private String passportNumber;
-    private Date passportDateOfIssue;
-    private Date passportDateOfExpiry;
+    private String passportDateOfIssue;
+    private String passportDateOfExpiry;
     private String passportIssuedBy;
 
     private Integer individualRegionId;
@@ -32,14 +33,16 @@ public class IndividualDto {
     private String individualMobilePhone;
     private String individualEmail;
 
+    public IndividualDto(){}
+
     public IndividualDto(Applicant applicant){
         this.id = applicant.getId();
         this.individualName = applicant.getName();
 
         this.passportSerial = applicant.getPassportSerial();
         this.passportNumber = applicant.getPassportNumber();
-        this.passportDateOfIssue = applicant.getPassportDateOfIssue();
-        this.passportDateOfExpiry = applicant.getPassportDateOfExpiry();
+        this.passportDateOfIssue = applicant.getPassportDateOfIssue()!=null?Common.uzbekistanDateFormat.format(applicant.getPassportDateOfIssue()):"";
+        this.passportDateOfExpiry = applicant.getPassportDateOfExpiry()!=null?Common.uzbekistanDateFormat.format(applicant.getPassportDateOfExpiry()):"";
         this.passportIssuedBy = applicant.getPassportIssuedBy();
 
         this.individualRegionId = applicant.getRegionId();
