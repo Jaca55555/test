@@ -27,4 +27,15 @@ public class OrganizationServiceImpl implements OrganizationService {
     public List<Organization> getList() {
         return organizationRepository.findAll();
     }
+
+    @Override
+    public String getContractNumber(Integer organizationId) {
+        Organization organization = organizationRepository.getOne(organizationId);
+        organization.setLastNumber(organization.getLastNumber()+1);
+        organizationRepository.save(organization);
+
+        String number = organization.getLastNumber()+"-"+"/19";
+        return number;
+    }
+
 }

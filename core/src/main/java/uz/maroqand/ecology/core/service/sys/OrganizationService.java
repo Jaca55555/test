@@ -10,4 +10,6 @@ public interface OrganizationService {
 
     List<Organization> getList();
 
+    String getContractNumber(Integer organizationId);
+
 }

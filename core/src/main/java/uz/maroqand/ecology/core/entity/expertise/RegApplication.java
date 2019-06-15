@@ -85,6 +85,10 @@ public class RegApplication {
     @Column(name = "offer_id")
     private Integer offerId;
 
+    //OrganizationService.getContractNumber
+    @Column(name = "contract_number")
+    private String contractNumber;
+
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requirement_id", insertable = false, updatable = false)
     private Requirement requirement;*/

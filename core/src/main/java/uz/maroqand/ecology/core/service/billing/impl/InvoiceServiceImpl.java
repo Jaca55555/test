@@ -53,9 +53,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPayerName(regApplication.getApplicant().getName());
 
         /*  payee */
-        invoice.setPayeeId(requirement.getReviewId());
         Organization review = organizationService.getById(requirement.getReviewId());
+        invoice.setPayeeId(requirement.getReviewId());
         invoice.setPayeeName(review.getNameRu());
+        invoice.setPayeeAccount(review.getAccount());
+        invoice.setPayeeTin(review.getTin());
+        invoice.setPayeeAddress(review.getAddress());
+        invoice.setPayeeMfo(review.getMfo());
 
         /* invoice  */
         invoice.setInvoice(createInvoiceSerial());

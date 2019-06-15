@@ -49,6 +49,18 @@ public class Invoice {
     @Column(name = "payee_name")
     private String payeeName;
 
+    @Column(name = "payee_account")
+    private String payeeAccount;
+
+    @Column(name = "payee_tin")
+    private Integer payeeTin;
+
+    @Column(name = "payee_address")
+    private String payeeAddress;
+
+    @Column(name = "payee_mfo")
+    private String payeeMfo;
+
     /* invoice  */
     @Column(name = "invoice")
     private String invoice;
