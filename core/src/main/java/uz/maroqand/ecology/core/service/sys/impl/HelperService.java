@@ -74,6 +74,8 @@ public class HelperService {
     public String getRegApplicationStatus(Integer id, String locale) {
         if(id==null) return "";
         RegApplicationStatus regApplicationStatus = RegApplicationStatus.getRegApplicationStatus(id);
+        System.out.println("regApplicationStatus="+regApplicationStatus);
+        System.out.println("regApplicationStatus="+regApplicationStatus.getName());
         return databaseMessageSource.resolveCodeSimply(regApplicationStatus.getName(),locale);
     }
 

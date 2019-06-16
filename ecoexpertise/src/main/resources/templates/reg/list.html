@@ -79,6 +79,7 @@
 
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationListAjax}]];
+        var resume = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationResume}]];
 
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -115,10 +116,14 @@
                     {data: 1, name: 'objectId'},
                     {data: 2, name: 'materialId'},
                     {data: 3, name: 'createdAt'},
-                    {data: 4, name: 'status'},
                     {
                         render: function (data, type, row, meta) {
-                            return '<a href="'+downloadBlanLink+'?id='+row[11]+'" class="btn btn-icon btn-info"><i class="feather icon-info"></i></a>';
+                            return '<span class="'+row[5]+'">'+row[4]+'</span>';
+                        },orderable:false, className:'text-center'
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            return '<a href="'+resume+'?id='+row[0]+'" class="btn btn-icon btn-info"><i class="feather icon-info"></i></a>';
                         },orderable:false, className:'text-center'
                     }
                 ],

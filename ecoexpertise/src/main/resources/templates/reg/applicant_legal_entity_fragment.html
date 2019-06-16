@@ -56,8 +56,8 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="oked" name="oked" th:value="${legalEntity.oked}" >
-                <small id="okedName" class="form-text text-muted">Oked nomi shundan iboratki sus sasasfcdsfcvsd d</small>
+                <input class="form-control only-number" required="" minlength="5" maxlength="5" id="oked" name="oked" th:value="${legalEntity.oked}" >
+                <!--<small id="okedName" class="form-text text-muted">Oked nomi shundan iboratki sus sasasfcdsfcvsd d</small>-->
             </div>
         </div>
 
@@ -103,7 +103,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityPhone" name="legalEntityPhone" th:value="${legalEntity.legalEntityPhone}" >
+                <input class="form-control phone" required="" id="legalEntityPhone" name="legalEntityPhone" th:value="${legalEntity.legalEntityPhone}" >
             </div>
         </div>
 
@@ -113,7 +113,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" >
+                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" >
             </div>
         </div>
 
@@ -123,7 +123,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityEmail" name="legalEntityEmail" th:value="${legalEntity.legalEntityEmail}" >
+                <input type="email" class="form-control" required="" id="legalEntityEmail" name="legalEntityEmail" th:value="${legalEntity.legalEntityEmail}" >
             </div>
         </div>
 
@@ -133,7 +133,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityMfo" name="legalEntityMfo" th:value="${legalEntity.legalEntityMfo}" >
+                <input class="form-control only-number" required="" id="legalEntityMfo" name="legalEntityMfo" minlength="5" maxlength="5" th:value="${legalEntity.legalEntityMfo}" >
             </div>
         </div>
 
@@ -153,7 +153,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="legalEntityBankAccount" name="legalEntityBankAccount" th:value="${legalEntity.legalEntityBankAccount}" >
+                <input class="form-control only-number" required="" id="legalEntityBankAccount" minlength="12" maxlength="24" name="legalEntityBankAccount" th:value="${legalEntity.legalEntityBankAccount}" >
             </div>
         </div>
 
