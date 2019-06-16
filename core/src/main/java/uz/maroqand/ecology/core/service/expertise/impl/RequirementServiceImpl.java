@@ -25,6 +25,10 @@ public class RequirementServiceImpl implements RequirementService {
         this.requirementRepository = requirementRepository;
     }
 
+    public Requirement getById(Integer id){
+        return requirementRepository.getOne(id);
+    }
+
     public List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category){
         return requirementRepository.findByObjectExpertiseIdAndCategory(objectExpertiseId,category);
     }

@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface RequirementService {
 
+    Requirement getById(Integer id);
+
     List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category);
 
 }

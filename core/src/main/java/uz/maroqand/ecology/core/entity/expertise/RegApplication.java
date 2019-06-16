@@ -107,6 +107,8 @@ public class RegApplication {
     @Column(name = "requirement_id")
     private Integer requirementId;
 
+    private Integer deadline;
+
     //To'lov uchun invoice
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id", insertable = false, updatable = false)

@@ -11,16 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
-import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Offer;
-import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -28,6 +26,7 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.ecoexpertise.constant.Templates;
 import uz.maroqand.ecology.ecoexpertise.constant.Urls;
@@ -45,13 +44,15 @@ public class RegApplicationController {
     private final ClientService clientService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
-    private final OrganizationService organizationService;
     private final ProjectDeveloperService projectDeveloperService;
     private final OfferService offerService;
     private final PaymentService paymentService;
+    private final RequirementService requirementService;
+    private final OrganizationService organizationService;
+    private final HelperService helperService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -59,11 +60,13 @@ public class RegApplicationController {
         this.clientService = clientService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
-        this.organizationService = organizationService;
         this.projectDeveloperService = projectDeveloperService;
         this.offerService = offerService;
         this.paymentService = paymentService;
 
+        this.requirementService = requirementService;
+        this.organizationService = organizationService;
+        this.helperService = helperService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -192,6 +195,7 @@ public class RegApplicationController {
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "categoryId") Integer categoryId,
+            @RequestParam(name = "requirementId") Integer requirementId,
             RegApplication regApplication,
             ProjectDeveloper projectDeveloper
     ){
@@ -207,12 +211,39 @@ public class RegApplicationController {
         projectDeveloper1.setName(projectDeveloper.getName());
         projectDeveloper1.setTin(projectDeveloper.getTin());
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
+
         regApplication1.setObjectId(regApplication.getObjectId());
         regApplication1.setActivityId(regApplication.getActivityId());
         regApplication1.setCategory(Category.getCategory(categoryId));
         regApplication1.setDeveloperId(projectDeveloper1.getId());
+
+        Requirement requirement = requirementService.getById(requirementId);
+        regApplication1.setRequirementId(requirementId);
+        regApplication1.setReviewId(requirement.getReviewId());
+        regApplication1.setDeadline(requirement.getDeadline());
+
+        regApplication1.setConfirmStatus(ConfirmStatus.Initial);
         regApplicationService.save(regApplication1);
+
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationGetMaterial, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> getRegApplicationGetMaterial(
+            @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "activityId") Integer activityId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        Activity activity = activityService.getById(activityId);
+        List<Requirement> requirementList = requirementService.getRequirementMaterials(objectId,activity.getCategory());
+
+        result.put("category", helperService.getCategory(activity.getId(),locale));
+        result.put("requirementList", requirementList);
+        return result;
     }
 
     @RequestMapping(value = Urls.RegApplicationWaiting,method = RequestMethod.GET)
@@ -276,6 +307,15 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        Offer offer = offerService.getOffer(locale);
+        regApplication.setOfferId(offer.getId());
+
+        String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
+        regApplication.setContractNumber(contractNumber);
+        regApplication.setContractDate(new Date());
+        regApplicationService.save(regApplication);
 
         return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
     }

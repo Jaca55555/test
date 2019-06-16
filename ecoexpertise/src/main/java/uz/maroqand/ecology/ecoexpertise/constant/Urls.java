@@ -10,6 +10,7 @@ public class Urls {
     public static final String RegApplicationStart = RegApplication + "/start";
     public static final String RegApplicationApplicant = RegApplication + "/applicant";
     public static final String RegApplicationAbout = RegApplication + "/about";
+    public static final String RegApplicationGetMaterial = RegApplication + "/material";
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
