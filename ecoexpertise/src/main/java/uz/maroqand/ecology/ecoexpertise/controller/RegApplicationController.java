@@ -30,6 +30,7 @@ import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.ecoexpertise.constant.Templates;
 import uz.maroqand.ecology.ecoexpertise.constant.Urls;
 
@@ -77,7 +78,7 @@ public class RegApplicationController {
         return Templates.RegApplicationList;
     }
 
-    @RequestMapping(value = Urls.RegApplicationListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = Urls.RegApplicationListAjax,produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String,Object> getRegApplicationListAjax(
             Pageable pageable
@@ -95,7 +96,11 @@ public class RegApplicationController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             convenientForJSONArray.add(new Object[]{
-                    //data
+                    regApplication.getId(),
+                    helperService.getObjectExpertise(regApplication.getObjectId(),locale),
+                    helperService.getMaterial(regApplication.getMaterialId(),locale),
+                    regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
+                    regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):""
             });
         }
         result.put("data",convenientForJSONArray);

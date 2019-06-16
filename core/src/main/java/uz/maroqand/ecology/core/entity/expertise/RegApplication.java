@@ -132,6 +132,13 @@ public class RegApplication {
     @Column(name = "performer_id")
     private Integer performerId;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationStatus status;
+
+
+
+
     @Column(name = "confirm_status")
     @Enumerated(EnumType.ORDINAL)
     private ConfirmStatus confirmStatus;

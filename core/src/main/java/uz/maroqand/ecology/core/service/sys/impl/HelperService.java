@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
@@ -67,6 +68,13 @@ public class HelperService {
         if(id==null) return "";
         AppealType taskStep = AppealType.getAppealType(id);
         return databaseMessageSource.resolveCodeSimply(taskStep.getName(),locale);
+    }
+
+    @Cacheable(value = "getRegApplicationStatus", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getRegApplicationStatus(Integer id, String locale) {
+        if(id==null) return "";
+        RegApplicationStatus regApplicationStatus = RegApplicationStatus.getRegApplicationStatus(id);
+        return databaseMessageSource.resolveCodeSimply(regApplicationStatus.getName(),locale);
     }
 
 
