@@ -1,8 +1,7 @@
 package uz.maroqand.ecology.core.service.expertise;
 
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
-import uz.maroqand.ecology.core.entity.billing.Payment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 
@@ -16,6 +15,6 @@ public interface RegApplicationService {
 
     RegApplication getById(Integer id, Integer createdBy);
 
-    DataTablesOutput<RegApplication> findFiltered(DataTablesInput input, Integer userId);
+    Page<RegApplication> findFiltered(Integer userId, Pageable pageable);
 
 }

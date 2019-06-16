@@ -2,6 +2,8 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
@@ -77,9 +79,27 @@ public class RegApplicationController {
 
     @RequestMapping(value = Urls.RegApplicationListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public DataTablesOutput<RegApplication> getRegApplicationListAjax(@Valid DataTablesInput input) {
+    public HashMap<String,Object> getRegApplicationListAjax(
+            Pageable pageable
+    ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
-        return regApplicationService.findFiltered(input, user.getId());
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            convenientForJSONArray.add(new Object[]{
+                    //data
+            });
+        }
+        result.put("data",convenientForJSONArray);
+        return result;
     }
 
     @RequestMapping(value = Urls.RegApplicationDashboard)
