@@ -1,11 +1,12 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.entity.billing.Payment;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
@@ -33,6 +34,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         RegApplication regApplication = new RegApplication();
         regApplication.setCreatedAt(new Date());
         regApplication.setCreatedById(user.getId());
+        regApplication.setStatus(RegApplicationStatus.Initial);
+        regApplication.setStep(RegApplicationStep.APPLICANT);
 
         regApplicationRepository.save(regApplication);
         return regApplication;
@@ -53,8 +56,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public DataTablesOutput<RegApplication> findFiltered(DataTablesInput input, Integer userId) {
-        return regApplicationRepository.findAll(input,getFilteringSpecification(userId));
+    public Page<RegApplication> findFiltered(Integer userId, Pageable pageable) {
+        return regApplicationRepository.findAll(getFilteringSpecification(userId),pageable);
     }
 
     private static Specification<RegApplication> getFilteringSpecification(

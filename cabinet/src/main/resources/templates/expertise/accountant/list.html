@@ -143,8 +143,12 @@
                                                     <thead>
                                                     <tr>
                                                         <th th:text="#{reg_application.id}"></th>
-                                                        <th th:text="#{reg_application.content}"></th>
-                                                        <th th:text="#{reg_application.view}"></th>
+                                                        <th th:text="#{reg_application.tin}"></th>
+                                                        <th th:text="#{sys_legal_entity_name}"></th>
+                                                        <th th:text="#{sys_opf}"></th>
+                                                        <th th:text="#{sys_oked}"></th>
+                                                        <th th:text="#{sys_region}"></th>
+                                                        <th th:text="#{sys_subregion}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
@@ -173,13 +177,12 @@
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
-<script type="text/javascript"  src="/static/datatables/jquery.spring-friendly.min.js"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantListAjax}]];
-
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantChecking}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -187,46 +190,98 @@
 <script th:inline="none">
     /*<![CDATA[*/
     var cDataTable;
-    $(document).ready(function() {
+    var labelView = "View";
+    var dataDatatableSelector;
+    var thead;
 
-        $('.datepicker').datepicker({
-            format: "dd.mm.yyyy",
-            todayHighlight: true,
-            autoclose: true
-            // startDate: '-130y',
-            // endDate: '-5y'
-        });
+    function sendRequest() {
+        var form = new FormData();
+        form.append('template',$('#template').val());
+        form.append('comments',$('#comments').val());
+        form.append("_csrf",$('#global_csrf').val());
+    }
 
-        bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
-        cDataTable = $('#data-table').DataTable( {
-            ajax: ajaxRequestLink,
-            serverSide:true,
-            searching: true,
-            dom: 'lrtip',
+    function renderActionsColumn(data, type, row, meta) {
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var html = '';
+        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
+        if(row[4] !== 'Open'){
+            return html +='</div>';
+        }
+        return html;
+    }
+
+    /*function renderStatusColumn(data, type, row, meta) {
+        var statusLabel = '';
+        if (row[4]=='Open')statusLabel += '<span class="badge badge-secondary">'+row[4]+'</span>';
+        if (row[4]=='InProgress')statusLabel += '<span class="badge badge-primary">'+row[4]+'</span>';
+        if (row[4]=='Closed')statusLabel +='<span class="badge badge-success">'+row[4]+'</span>';
+        return statusLabel;
+    }*/
+
+    function datatableConnect() {
+            dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
             scrollX: true,
             pageLength: 25,
-            processing: true,
-            lengthMenu: [ [25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000] ],
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[0, 'desc']],
-            "columns": [
-                {"data": "id", className: "text-left"},
-                {"data": "id",className: "text-left"},
-                {"data": "id",className: "text-left"},
-                {"data": "id",className: "text-left"},
-                {"data": "id",className: "text-left"},
-                {
-                    "data" : "id",
-                    "render": function(data, type, row){
-                        return '';
-                    }, orderable: false
-                }
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'tin'},
+                {data: 2, name: 'name'},
+                {data: 3, name: 'opf'},
+                {data: 4, name: 'oked'},
+                {data: 5, name: 'region'},
+                {data: 6, name: 'subregion'},
+                {data: 7, name: 'createdAt'},
+                {data: 8, name: 'status'},
+                {render: renderActionsColumn, orderable: false}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }
         });
+    }
 
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#data-table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
     });
+
+    $('#data-table').css("width", "100%");
     /*]]>*/
 </script>
 </body>

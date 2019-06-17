@@ -49,8 +49,8 @@
                                                     <thead>
                                                     <tr>
                                                         <th th:text="#{reg_application.id}"></th>
-                                                        <th th:text="#{reg_application.content}"></th>
-                                                        <th th:text="#{reg_application.view}"></th>
+                                                        <th th:text="#{sys_expertise.objectExpertise}"></th>
+                                                        <th th:text="#{sys_expertise.material}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
@@ -79,6 +79,7 @@
 
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationListAjax}]];
+        var resume = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationResume}]];
 
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -86,37 +87,67 @@
     </script>
     <script th:inline="none">
         /*<![CDATA[*/
-        var cDataTable;
-        $(document).ready(function() {
-            cDataTable = $('#data-table').DataTable( {
-                ajax: ajaxRequestLink,
-                serverSide:true,
-                searching: true,
-                dom: 'lfrtip',
-                scrollX: true,
-                pageLength: 25,
+        var dataDatatableSelector;
+        var thead;
+
+        function datatableConnect() {
+            dataDatatableSelector.DataTable({
                 processing: true,
-                lengthMenu: [ [25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000] ],
-                order: [[0, 'desc']],
-                "columns": [
-                    {"data": "id", className: "text-left"},
-                    {"data": "id",className: "text-left"},
-                    {"data": "id",className: "text-left"},
-                    {"data": "id",className: "text-left"},
-                    {"data": "id",className: "text-left"},
+                serverSide: true,
+                scrollX: true,
+                pageLength: 20,
+                lengthMenu: [ [20, 50, 75, 100], [20, 50, 75, 100] ],
+                order: [],
+                dom: 'lrtip',
+                ajax : function (dataToSend, callback, settings) {
+                    var api = this.api();
+                    dataToSend.page = api != undefined ? api.page() : 0;
+                    dataToSend.size = api != undefined ? api.page.len() : 25;
+                    dataToSend._csrf = $("#global_csrf").val();
+                    dataToSend.sort = api.order().length > 0 ? dataToSend.columns[ api.order()[0][0] ].name + ',' + api.order()[0][1] : "id,DESC";
+
+                    $.post(ajaxRequestLink, dataToSend, function(data){
+                        callback(data);
+                    });
+
+                },
+                columns: [
+                    {data: 0, name: 'id'},
+                    {data: 1, name: 'objectId'},
+                    {data: 2, name: 'materialId'},
+                    {data: 3, name: 'createdAt'},
                     {
-                        "data" : "id",
-                        "render": function(data, type, row){
-                            return '';
-                        }, orderable: false
+                        render: function (data, type, row, meta) {
+                            return '<span class="'+row[5]+'">'+row[4]+'</span>';
+                        },orderable:false, className:'text-center'
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            return '<a href="'+resume+'?id='+row[0]+'" class="btn btn-icon btn-info"><i class="feather icon-info"></i></a>';
+                        },orderable:false, className:'text-center'
                     }
                 ],
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
                 }
             });
+        }
 
+        function getDatatableConnect() {
+            dataDatatableSelector.DataTable().destroy();
+            dataDatatableSelector.html(thead);
+            datatableConnect();
+        }
+
+        $(document).ready(function () {
+            dataDatatableSelector = $('#data-table');
+            thead = dataDatatableSelector.html();
+            bindSubRegionSelectToRegionSelect('#subregionId', '#regionId');
+            mahallaListGetSubRegionId('#subregionId','#mahallaId',getCurrentLanguage());
+            datatableConnect();
         });
+
+
         /*]]>*/
     </script>
 </body>
