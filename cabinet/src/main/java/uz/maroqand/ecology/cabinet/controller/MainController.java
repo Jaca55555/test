@@ -1,7 +1,10 @@
 package uz.maroqand.ecology.cabinet.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.user.UserService;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -10,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class MainController {
+    private final UserService userService;
+
+    @Autowired
+    public MainController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("/")
     public String getPage() {
@@ -24,6 +33,8 @@ public class MainController {
 
     @RequestMapping("/dashboard")
     public String getDashboardPage() {
+        User user = userService.getCurrentUserFromContext();
+        System.out.println("userRole == " + user.getRole().getName());
         System.out.println("--dashboard");
         return "dashboard";
     }

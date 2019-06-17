@@ -50,12 +50,25 @@
             </div>
         </div>
 
-
-        <div class="row" >
-            <div class="form-group col-md-12 text-center" >
-                <a th:href="${cancel_url}" class="btn btn-danger" th:text="#{sys_cancel}">Отмена</a>
-                <a class="btn btn-primary" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" th:text="#{sys_next}">Далее</a>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.documents}">Директор</label>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+                    <div class="file">
+                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).DownloadDocumentFiles + '?file_id=' + file.id}">
+                            <i class="feather icon-file file-icon"></i>
+                            <span th:text="${file.name}">File.pdf</span>
+                            <span th:text="${file.size}">size</span>
+                        </a>
+                        <!--<button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">-->
+                            <!--<i class="feather icon-x"></i>-->
+                        <!--</button>-->
+                    </div>
+                </div>
             </div>
         </div>
+
 </body>
 </html>

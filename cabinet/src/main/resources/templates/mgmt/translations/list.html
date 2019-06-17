@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <style>
+        table.dataTable.nowrap th, table.dataTable.nowrap td {
+            white-space: pre-line;
+        }
+        .table td, .table th{
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{mntr_translations_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="regIndividual" method="post" class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_translations.name}"></label><br/>
+                                                <input type="text" class="form-control" id="translationTag" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_translations.uz}">:</label><br/>
+                                                <input type="text" id="translationUz" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{mntr_translations.oz}">:</label><br/>
+                                                <input type="text" id="translationOz" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{mntr_translations.ru}">:</label><br/>
+                                                <input type="text" id="translationRu" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{mntr_translations.en}">:</label><br/>
+                                                <input type="text" id="translationEn" class="form-control" />
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <div class="col-sm-12 text-right">
+                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info btn-sm"><i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}">Поиск</span>
+                                                </a>
+                                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).TranslationsNew}" class="btn btn-success btn-sm"><i class="feather icon-plus-square"></i>
+                                                    <span th:text="#{mntr_translations.newTranslation}"></span>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table id="fixed-header" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th th:text="#{mntr_translations.name}">name</th>
+                                                    <th th:text="#{mntr_translations.uz}">uzbek</th>
+                                                    <th th:text="#{mntr_translations.oz}">english</th>
+                                                    <th th:text="#{mntr_translations.ru}">russian</th>
+                                                    <th th:text="#{mntr_translations.en}">english</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+
+<script th:inline="javascript">
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).TranslationsListAjax}]];
+    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).TranslationsEdit}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+    var labelEdit = "Edit";
+    var labelDelete = "Delete";
+    var dataDatatableSelector;
+    var thead;
+
+    function renderActionsColumn(data, type, row, meta) {
+        var currentEditLink = editLink + '?id=' + row[0];
+        var html = '';
+        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit"></i></a>';
+        // html += '<a class="btn btn-xs btn-warning btn-delete disabled" onclick="deleteItemInDT('+row[0]+',\''+escapeStr(row[1])+'\')" title="'+labelDelete+'"><i class="fa fa-times"></i></a>';
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                dataToSend.translationTag = $('#translationTag').val();
+                dataToSend.translationRu = $('#translationRu').val();
+                dataToSend.translationUz = $('#translationUz').val();
+                dataToSend.translationEn = $('#translationEn').val();
+                dataToSend.translationOz = $('#translationOz').val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'name'},
+                {data: 2, name: 'uzbek'},
+                {data: 3, name: 'ozbek'},
+                {data: 4, name: 'russian'},
+                {data: 5, name: 'english'},
+                {render: renderActionsColumn, orderable: false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#fixed-header');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+    });
+
+    $('#fixed-header').css("width", "100%");
+    /*]]>*/
+</script>
+</body>
+</html>
