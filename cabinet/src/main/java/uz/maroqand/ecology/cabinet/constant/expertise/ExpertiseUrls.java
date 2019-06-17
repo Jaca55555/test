@@ -16,7 +16,7 @@ public class ExpertiseUrls {
     public static final String AccountantChecking = Accountant + "/checking";
     public static final String AccountantConfirm = Accountant + "/confirm";
     public static final String AccountantNotConfirm = Accountant + "/not_confirm";
-
+    public static final String DownloadDocumentFiles = Accountant + "/download";
 
     private static final String Forwarding = Prefix + "/forwarding";
     public static final String ForwardingList = Forwarding + "/list";
