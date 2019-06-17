@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
@@ -32,6 +34,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         RegApplication regApplication = new RegApplication();
         regApplication.setCreatedAt(new Date());
         regApplication.setCreatedById(user.getId());
+        regApplication.setStatus(RegApplicationStatus.Initial);
+        regApplication.setStep(RegApplicationStep.APPLICANT);
 
         regApplicationRepository.save(regApplication);
         return regApplication;

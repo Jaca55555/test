@@ -10,7 +10,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
+import uz.maroqand.ecology.ecoexpertise.config.WebMVCConfigs;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
@@ -28,6 +31,10 @@ public class EcoExpertiseStarter {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(EcoExpertiseStarter.class, args);
         EcoExpertiseStarter applicationStarter = applicationContext.getBean(EcoExpertiseStarter.class);
         System.out.println("======================== INITIALIZATION COMPLETED ========================");
+
+        WebMVCConfigs webMVCConfigs = applicationContext.getBean(WebMVCConfigs.class);
+        DatabaseMessageSource messageSource = (DatabaseMessageSource) webMVCConfigs.messageSource();
+        HelperService.setTranslationsSource(messageSource);
 
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();

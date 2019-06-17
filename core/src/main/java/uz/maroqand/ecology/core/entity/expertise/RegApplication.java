@@ -136,6 +136,11 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStatus status;
 
+    @Column(name = "step")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationStep step;
+
+
 
 
 

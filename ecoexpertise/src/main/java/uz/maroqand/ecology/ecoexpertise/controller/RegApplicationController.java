@@ -100,7 +100,8 @@ public class RegApplicationController {
                     helperService.getObjectExpertise(regApplication.getObjectId(),locale),
                     helperService.getMaterial(regApplication.getMaterialId(),locale),
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
-                    regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):""
+                    regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():""
             });
         }
         result.put("data",convenientForJSONArray);
@@ -123,6 +124,27 @@ public class RegApplicationController {
         RegApplication regApplication = regApplicationService.create(user);
 
         return "redirect:"+Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(value = Urls.RegApplicationResume,method = RequestMethod.GET)
+    public String getResumeMethod(
+            @RequestParam(name = "id") Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        switch (regApplication.getStep()){
+            case APPLICANT: return "redirect:" + Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
+            case ABOUT: return "redirect:" + Urls.RegApplicationAbout + "?id=" + regApplication.getId();
+            case CONTRACT: return "redirect:" + Urls.RegApplicationContract + "?id=" + regApplication.getId();
+            case PAYMENT: return "redirect:" + Urls.RegApplicationPayment + "?id=" + regApplication.getId();
+            case STATUS: return "redirect:" + Urls.RegApplicationStatus+ "?id=" + regApplication.getId();
+        }
+
+        return "redirect:" + Urls.RegApplicationList;
     }
 
     @RequestMapping(value = Urls.RegApplicationApplicant,method = RequestMethod.GET)
@@ -219,8 +241,8 @@ public class RegApplicationController {
     @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.POST)
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "categoryId") Integer categoryId,
-            @RequestParam(name = "requirementId") Integer requirementId,
+//            @RequestParam(name = "categoryId") Integer categoryId,
+//            @RequestParam(name = "requirementId") Integer requirementId,
             RegApplication regApplication,
             ProjectDeveloper projectDeveloper
     ){
@@ -239,13 +261,13 @@ public class RegApplicationController {
 
         regApplication1.setObjectId(regApplication.getObjectId());
         regApplication1.setActivityId(regApplication.getActivityId());
-        regApplication1.setCategory(Category.getCategory(categoryId));
+//        regApplication1.setCategory(Category.getCategory(categoryId));
         regApplication1.setDeveloperId(projectDeveloper1.getId());
 
-        Requirement requirement = requirementService.getById(requirementId);
-        regApplication1.setRequirementId(requirementId);
-        regApplication1.setReviewId(requirement.getReviewId());
-        regApplication1.setDeadline(requirement.getDeadline());
+//        Requirement requirement = requirementService.getById(requirementId);
+//        regApplication1.setRequirementId(requirementId);
+//        regApplication1.setReviewId(requirement.getReviewId());
+//        regApplication1.setDeadline(requirement.getDeadline());
 
         regApplication1.setConfirmStatus(ConfirmStatus.Initial);
         regApplicationService.save(regApplication1);

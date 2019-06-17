@@ -92,6 +92,10 @@
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
     <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+
     <script th:inline="javascript">
         $(document).ready(function () {
             bindSubRegionSelectToRegionSelect('#individualSubRegionId', '#individualRegionId');
@@ -106,6 +110,8 @@
                 // endDate: '-5y'
             });
         });
+
+        $(".phone").mask('+999(99)999-99-99');
 
         $('input[name="applicantType"]:radio').change(function () {
             selectForm($(this).val());

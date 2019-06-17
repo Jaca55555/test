@@ -22,7 +22,7 @@
             <li><a href="#!" class="full-screen" onclick="javascript:toggleFullScreen()"><i class="feather icon-maximize"></i></a></li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li>
+            <!--<li>
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
                     <div class="dropdown-menu dropdown-menu-right notification">
@@ -73,8 +73,37 @@
                         </div>
                     </div>
                 </div>
+            </li>-->
+            <!--<li><a href="#!" class="displayChatbox"><i class="icon feather icon-mail"></i></a></li>-->
+            <li>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="icon feather icon-globe"></i>
+                        <span th:if="__${#locale}__=='uz'">O`zbekcha</span>
+                        <span th:if="__${#locale}__=='oz'">Ўзбекча</span>
+                        <span th:if="__${#locale}__=='ru'">Русский</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right notification" style="width: 200px;min-width: 200px;">
+                        <ul class="noti-body">
+                            <li class="flag-image-li" onclick="switchLanguage('uz'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/uz.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> O`zbekcha
+                                </div>
+                            </li>
+                            <li class="flag-image-li" onclick="switchLanguage('oz'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/uz.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> Ўзбекча
+                                </div>
+                            </li>
+                            <li class="flag-image-li" onclick="switchLanguage('ru'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/ru.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> Русский
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </li>
-            <li><a href="#!" class="displayChatbox"><i class="icon feather icon-mail"></i></a></li>
             <li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
