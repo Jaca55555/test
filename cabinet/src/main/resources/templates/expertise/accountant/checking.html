@@ -2,16 +2,67 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
-    <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
-    <!-- Bootstrap datetimepicker css -->
-    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
-    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
     <style>
         .table td, .table th{
             white-space: pre-line;
         }
         .datepicker>.datepicker-days {
             display: block;
+        }
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
         }
     </style>
 </head>
@@ -65,6 +116,12 @@
                                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                         <object th:include="/expertise/accountant/confirmation :: confirmation" th:remove="tag"></object>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12 text-center" id="tab-control-buttons">
+                                            <a class="btn btn-danger" data-toggle="tab" href="#home" role="tab" aria-controls="profile" th:text="#{sys_back}">Отмена</a>
+                                            <a class="btn btn-primary" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" th:text="#{sys_next}">Далее</a>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -79,8 +136,47 @@
 </div>
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
-<script th:src="@{/static/datatables/datatables.min.js}"></script>
-<script type="text/javascript"  src="/static/datatables/jquery.spring-friendly.min.js"></script>
-<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    var accountantConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantConfirm}]];
+    var accountantNotConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantNotConfirm}]];
+    $('#tab-control-buttons').show();
+
+
+    function sendRequest(url) {
+        var form = new FormData();
+        form.append('id',[[${regApplication.id}]]);
+        form.append('template',$('#template').val());
+        form.append('comments',$('#comments').val());
+        form.append("_csrf",$('#global_csrf').val());
+        $.ajax({
+            url:url,
+            type: "POST",
+            data:form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success:function (response) {
+                $('#tab-control-buttons').hide();
+                $('#confirm').hide();
+                $('#notConfirm').hide();
+                console.log(response);
+                if (response.status==="Approved")$('#message-box').append('<div class="alert alert-success">'+[[#{sys_message_application_approved}]]+'</div>');
+                if (response.status==="Denied")$('#message-box').append('<div class="alert alert-danger">'+[[#{sys_message_application_denied}]]+'</div>');
+
+                $('#message-box-buttons').append('<div class="ml-1"><a class="btn btn-danger text-white">'+[[#{sys_change_status_application}]]+'</a>\n' +
+                                                 '<a class="btn btn-primary text-white">'+[[#{sys_return_main_page}]]+'</a></div>\n');
+            }
+        });
+    }
+
+    $('#confirm').on('click',function () {
+        sendRequest(accountantConfirm);
+    });
+    $('#notConfirm').on('click',function () {
+        sendRequest(accountantNotConfirm);
+    });
+</script>
 </body>
 </html>

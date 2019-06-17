@@ -194,20 +194,10 @@
     var dataDatatableSelector;
     var thead;
 
-    function sendRequest() {
-        var form = new FormData();
-        form.append('template',$('#template').val());
-        form.append('comments',$('#comments').val());
-        form.append("_csrf",$('#global_csrf').val());
-    }
-
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
-        if(row[4] !== 'Open'){
-            return html +='</div>';
-        }
+        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 

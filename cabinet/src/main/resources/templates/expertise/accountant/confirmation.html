@@ -13,7 +13,7 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.template}">СТИР</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" id="template" />
+                <input class="form-control" id="template" name="template"/>
             </div>
         </div>
 
@@ -22,14 +22,24 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.comments}">СТИР</label>
             </div>
             <div class="col-md-6">
-                <textarea class="form-control" rows="8" id="comments"></textarea>
+                <textarea class="form-control" rows="8" id="comments" name="comments"></textarea>
             </div>
         </div>
-        <div class="row" >
-            <div class="form-group col-md-12 text-center" >
-                <button class="btn btn-danger" type="submit" id="notConfirm" th:text="#{sys_notConfirm}"></button>
-                <button class="btn btn-primary" type="submit" id="confirm" th:text="#{sys_confirm}"></button>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label"></label>
             </div>
+            <div class="col-md-6" id="message-box"></div>
+        </div>
+
+        <div class="row" >
+
+             <div class="form-group col-md-12 text-center" >
+                 <div id="message-box-buttons"></div>
+                 <button class="btn btn-danger" type="button" id="notConfirm" th:text="#{sys_notConfirm}"></button>
+                 <button class="btn btn-primary" type="button" id="confirm" th:text="#{sys_confirm}"></button>
+             </div>
         </div>
 </body>
 </html>
