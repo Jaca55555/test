@@ -170,7 +170,7 @@ public class FileServiceImpl implements FileService {
         } else {
             extension = "";
         }
-        return extension;
+        return extension.toLowerCase();
     }
 
     private String currentDir = "";
@@ -180,6 +180,11 @@ public class FileServiceImpl implements FileService {
         createAndSetNextUploadFolder();
 
         return currentDir;
+    }
+
+    @Override
+    public File save(File file) {
+        return fileRepository.save(file);
     }
 
     private void createAndSetNextUploadFolder() {
