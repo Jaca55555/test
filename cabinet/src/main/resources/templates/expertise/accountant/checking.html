@@ -96,13 +96,13 @@
                             <hr>
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" th:text="#{general_info}">Home</a>
+                                        <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" onclick="tabActive(1)" th:text="#{general_info}">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" th:text="#{expertise}">Profile</a>
+                                        <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" onclick="tabActive(2)" th:text="#{expertise}">Profile</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" th:text="#{confirmation}">Contact</a>
+                                        <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" onclick="tabActive(3)" th:text="#{confirmation}">Contact</a>
                                     </li>
                                 </ul>
 
@@ -115,12 +115,6 @@
                                     </div>
                                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                         <object th:include="/expertise/accountant/confirmation :: confirmation" th:remove="tag"></object>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-12 text-center" id="tab-control-buttons">
-                                            <a class="btn btn-danger" data-toggle="tab" href="#home" role="tab" aria-controls="profile" th:text="#{sys_back}">Отмена</a>
-                                            <a class="btn btn-primary" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" th:text="#{sys_next}">Далее</a>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -139,44 +133,64 @@
 <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
 
+    $(document).ready(function () {
+
+        console.log([[${status}]]);
+        if ([[${status}]]!=null){
+            $('#contact').addClass ('show').addClass('active');
+            $('#contact-tab').addClass('active');
+            $('#home-tab').removeClass('active');
+            $('#home').removeClass('active','show');
+            $('#buttons-1').hide();
+        }
+    });
     var accountantConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantConfirm}]];
     var accountantNotConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantNotConfirm}]];
-    $('#tab-control-buttons').show();
 
-
-    function sendRequest(url) {
-        var form = new FormData();
-        form.append('id',[[${regApplication.id}]]);
-        form.append('template',$('#template').val());
-        form.append('comments',$('#comments').val());
-        form.append("_csrf",$('#global_csrf').val());
-        $.ajax({
-            url:url,
-            type: "POST",
-            data:form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success:function (response) {
-                $('#tab-control-buttons').hide();
-                $('#confirm').hide();
-                $('#notConfirm').hide();
-                console.log(response);
-                if (response.status==="Approved")$('#message-box').append('<div class="alert alert-success">'+[[#{sys_message_application_approved}]]+'</div>');
-                if (response.status==="Denied")$('#message-box').append('<div class="alert alert-danger">'+[[#{sys_message_application_denied}]]+'</div>');
-
-                $('#message-box-buttons').append('<div class="ml-1"><a class="btn btn-danger text-white">'+[[#{sys_change_status_application}]]+'</a>\n' +
-                                                 '<a class="btn btn-primary text-white">'+[[#{sys_return_main_page}]]+'</a></div>\n');
-            }
-        });
-    }
 
     $('#confirm').on('click',function () {
-        sendRequest(accountantConfirm);
+       $('#form').attr('action',accountantConfirm,true);
     });
     $('#notConfirm').on('click',function () {
-        sendRequest(accountantNotConfirm);
+        $('#form').attr('action',accountantNotConfirm,true);
     });
+    function tabActive(count){
+        if (count == 1){
+            $('#contact-tab').removeClass('active');
+            $('#contact').removeClass('active');
+            $('#contact').removeClass('show');
+            $('#profile-tab').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#profile').removeClass('show');
+            $('#home-tab').addClass('active');
+            $('#home').addClass('active');
+            $('#home').addClass('show');
+        }
+        if (count == 2){
+            $('#contact-tab').removeClass('active');
+            $('#contact').removeClass('active','show');
+            $('#contact').removeClass('show');
+            $('#home-tab').removeClass('active');
+            $('#home').removeClass('active');
+            $('#home').removeClass('show');
+            $('#profile-tab').addClass('active');
+            $('#profile').addClass('active');
+            $('#profile').addClass('show');
+        }
+        if (count == 3){
+            $('#home-tab').removeClass('active');
+            $('#home').removeClass('active');
+            $('#home').removeClass('show');
+            $('#profile-tab').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#profile').removeClass('show');
+            $('#contact-tab').addClass('active');
+            $('#contact').addClass('active');
+            $('#contact').addClass('show');
+        }
+
+    }
+
 </script>
 </body>
 </html>

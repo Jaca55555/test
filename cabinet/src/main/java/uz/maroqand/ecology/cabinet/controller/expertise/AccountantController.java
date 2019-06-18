@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -29,8 +30,10 @@ import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,6 +73,7 @@ public class AccountantController {
     public String getAccountantListPage(Model model) {
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("statusList",ConfirmStatus.getConfirmStatusList());
         return ExpertiseTemplates.AccountantList;
     }
 
@@ -79,18 +83,25 @@ public class AccountantController {
             @RequestParam(name = "tin",required = false)Integer tin,
             @RequestParam(name = "name",required = false)String name,
             @RequestParam(name = "regApplicationId",required = false)Integer regApplicationId,
+            @RequestParam(name = "status",required = false)Integer status,
             @RequestParam(name = "regionId",required = false)Integer regionId,
             @RequestParam(name = "subRegionId",required = false)Integer subRegionId,
-            @RequestParam(name = "regDateBegin",required = false)String regDateBegin,
-            @RequestParam(name = "regDateEnd",required = false)String regDateEnd,
-            @RequestParam(name = "contractDateBegin",required = false)String contractDateBegin,
-            @RequestParam(name = "contractDateEnd",required = false)String contractDateEnd,
+            @RequestParam(name = "regDateBegin",required = false)String registrationDateBegin,
+            @RequestParam(name = "regDateEnd",required = false)String registrationDateEnd,
+            @RequestParam(name = "contractDateBegin",required = false)String contractDateBeginDate,
+            @RequestParam(name = "contractDateEnd",required = false)String contractDateEndDate,
             Pageable pageable
     ){
         User user = userService.getCurrentUserFromContext();
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        Date regDateBegin = DateParser.TryParse(registrationDateBegin,Common.uzbekistanDateFormat);
+        Date regDateEnd = DateParser.TryParse(registrationDateEnd,Common.uzbekistanDateFormat);
+        Date contractDateBegin = DateParser.TryParse(contractDateBeginDate,Common.uzbekistanDateFormat);
+        Date contractDateEnd = DateParser.TryParse(contractDateEndDate,Common.uzbekistanDateFormat);
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
 
@@ -102,7 +113,7 @@ public class AccountantController {
                 regApplication.getId(),
                 client.getTin(),
                 client.getName(),
-                client.getOpf()!=null?client.getOpf().getId():"",
+                client.getOpf()!=null?client.getOpf().getNameShortTranslation(locale):"",
                 client.getOked()!=null?client.getOked():"",
                 client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale):"",
                 client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale):"",
@@ -117,9 +128,9 @@ public class AccountantController {
     @RequestMapping(ExpertiseUrls.AccountantChecking)
     public String getCheckingPage(
             @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "status",required = false) ConfirmStatus confirmStatus,
             Model model
     ) {
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AccountantList;
@@ -127,6 +138,7 @@ public class AccountantController {
 
         Client client = clientService.getById(regApplication.getApplicantId());
 
+        model.addAttribute("status", confirmStatus);
         model.addAttribute("applicant",client);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("cancel_url",ExpertiseUrls.AccountantList);
@@ -134,39 +146,36 @@ public class AccountantController {
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantConfirm,method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String,Object> confirmApplication(
+    public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "template")String template,
             @RequestParam(name = "comments")String comments
     ){
-        HashMap<String,Object> result = new HashMap<>();
+        System.out.println("confirm");
         RegApplication regApplication = regApplicationService.getById(id);
         Comment comment = new Comment();
         comment.setRegApplicationId(regApplication.getId());
         comment.setMessage(comments);
         commentService.createComment(comment);
         regApplication.setConfirmStatus(ConfirmStatus.Approved);
-        result.put("status",ConfirmStatus.Approved);
-        return result;
+
+        return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId() + "&status=" + ConfirmStatus.Approved;
     }
 
     @RequestMapping(value = ExpertiseUrls.AccountantNotConfirm,method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String,Object> notConfirmApplication(
+    public String notConfirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "template")String template,
             @RequestParam(name = "comments")String comments
     ){
-        HashMap<String,Object> result = new HashMap<>();
+        System.out.println("not confirm");
         RegApplication regApplication = regApplicationService.getById(id);
-        regApplication.setConfirmStatus(ConfirmStatus.Approved);
+        regApplication.setConfirmStatus(ConfirmStatus.Denied);
         Comment comment = new Comment();
         comment.setRegApplicationId(regApplication.getId());
         comment.setMessage(comments);
         commentService.createComment(comment);
-        result.put("status",ConfirmStatus.Denied);
-        return result;
+        return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
     }
 
     @RequestMapping(ExpertiseUrls.DownloadDocumentFiles)
