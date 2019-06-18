@@ -4,10 +4,8 @@ package uz.maroqand.ecology.core.entity.expertise;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.*;
-import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
-import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;

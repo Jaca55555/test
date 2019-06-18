@@ -2,17 +2,17 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
@@ -20,7 +20,7 @@ import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
-import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -28,13 +28,13 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.ecoexpertise.constant.Templates;
 import uz.maroqand.ecology.ecoexpertise.constant.Urls;
 
-import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -53,9 +53,10 @@ public class RegApplicationController {
     private final RequirementService requirementService;
     private final OrganizationService organizationService;
     private final HelperService helperService;
+    private final FileService fileService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -70,6 +71,7 @@ public class RegApplicationController {
         this.requirementService = requirementService;
         this.organizationService = organizationService;
         this.helperService = helperService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -241,6 +243,7 @@ public class RegApplicationController {
     @RequestMapping(value = Urls.RegApplicationAbout,method = RequestMethod.POST)
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
 //            @RequestParam(name = "categoryId") Integer categoryId,
 //            @RequestParam(name = "requirementId") Integer requirementId,
             RegApplication regApplication,
@@ -252,16 +255,17 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        System.out.println("projectDeveloper.name===" + projectDeveloper.getName());
+        System.out.println("projectDeveloper.name===" + projectDeveloperName);
         System.out.println("projectDeveloper.tin" + projectDeveloper.getTin());
         ProjectDeveloper projectDeveloper1 = regApplication1.getDeveloperId()!=null?projectDeveloperService.getById(regApplication1.getDeveloperId()):new ProjectDeveloper();
-        projectDeveloper1.setName(projectDeveloper.getName());
+        projectDeveloper1.setName(projectDeveloperName);
         projectDeveloper1.setTin(projectDeveloper.getTin());
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
 
         regApplication1.setObjectId(regApplication.getObjectId());
         regApplication1.setActivityId(regApplication.getActivityId());
-//        regApplication1.setCategory(Category.getCategory(categoryId));
+        regApplication1.setName(regApplication.getName());
+        regApplication1.setCategory(activityService.getById(regApplication.getActivityId()).getCategory());
         regApplication1.setDeveloperId(projectDeveloper1.getId());
 
 //        Requirement requirement = requirementService.getById(requirementId);
@@ -291,6 +295,100 @@ public class RegApplicationController {
         result.put("category", helperService.getCategory(activity.getId(),locale));
         result.put("requirementList", requirementList);
         return result;
+    }
+
+    //fileUpload
+    @RequestMapping(value = Urls.RegApplicationFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "file_name") String fileNname,
+            @RequestParam(name = "file") MultipartFile multipartFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication  = regApplicationService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        /*if (regApplication.getStatus() != regApplication.Initial) {
+            responseMap.put("message", "Object will not able to update.");
+            return responseMap;
+        }*/
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"regApplication="+regApplication.getId(),fileNname);
+        if (file != null) {
+            Set<File> fileSet = regApplication.getDocumentFiles();
+            fileSet.add(file);
+            regApplicationService.save(regApplication);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("link", Urls.RegApplicationFileDownload+ "?file_id=" + file.getId());
+            responseMap.put("id", id);
+            responseMap.put("fileId", file.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    //fileDownload
+    @RequestMapping(Urls.RegApplicationFileDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId
+    ){
+        User user = userService.getCurrentUserFromContext();
+
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    //fileDelete
+    @RequestMapping(value = Urls.RegApplicationFileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        /*if (regApplication.getStatus() != regApplication.Initial) {
+            responseMap.put("message", "Object will not able to update.");
+            return responseMap;
+        }*/
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = regApplication.getDocumentFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                regApplicationService.save(regApplication);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
     @RequestMapping(value = Urls.RegApplicationWaiting,method = RequestMethod.GET)
