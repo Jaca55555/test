@@ -53,19 +53,19 @@
                                             <div class="row">
                                                 <div class="col-sm-2">
                                                     <label for="tin" th:text="#{tin}">Email</label>
-                                                    <input type="text" class="form-control" id="tin" placeholder="STIR">
+                                                    <input type="text" class="form-control" id="tin">
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <label for="name" th:text="#{name}">Email</label>
-                                                    <input type="text" class="form-control" id="name" placeholder="Name">
+                                                    <input type="text" class="form-control" id="name">
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <label for="contractId" th:text="#{contract_number}">Email</label>
-                                                    <input type="text" class="form-control" id="contractId" placeholder="Contract number">
+                                                    <input type="text" class="form-control" id="contractId">
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <label for="id" th:text="#{id}">Email</label>
-                                                    <input type="text" class="form-control" id="id" placeholder="Email">
+                                                    <input type="text" class="form-control" id="id">
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <label th:text="#{sys_region}">Вилоят</label>
@@ -84,9 +84,7 @@
                                                 </div>
                                                 <div class="col-sm-3 mt-1">
                                                     <label th:text="#{sys_oked}">Вилоят</label>
-                                                    <select id="oked" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                    </select>
+                                                    <input class="form-control" id="oked"/>
                                                 </div>
                                                 <div class="col-sm-3 mt-1">
                                                     <label th:text="#{sys_expertiseForm}">Вилоят</label>
@@ -98,6 +96,7 @@
                                                     <label th:text="#{sys_status}">Вилоят</label>
                                                     <select id="status" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status.getId()}" th:text="${status.getName()}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-2">
@@ -108,22 +107,18 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-1">
-                                                    <label for="executionDateBegin">From</label>
-                                                    <input class="form-control datepicker" id="executionDateBegin"/>
+                                                    <label for="contractDateBegin">From</label>
+                                                    <input class="form-control datepicker" id="contractDateBegin"/>
                                                 </div>
                                                 <div class="col-sm-1">
-                                                    <label for="executionDateEnd">To</label>
-                                                    <input class="form-control datepicker" id="executionDateEnd"/>
+                                                    <label for="contractDateEnd">To</label>
+                                                    <input class="form-control datepicker" id="contractDateEnd"/>
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <div class="card-block text-center mt-3">
-                                                        <a class="btn btn-primary" href="#">
+                                                    <div class="card-block text-center">
+                                                        <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
                                                             <i class="feather icon-search mr-1"></i>
                                                             <span th:text="#{sys_search}">Search</span>
-                                                        </a>
-                                                        <a class="btn btn-success" href="#">
-                                                            <i class="feather icon-plus mr-1"></i>
-                                                            <span th:text="#{sys_add}">Search</span>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -201,13 +196,13 @@
         return html;
     }
 
-    /*function renderStatusColumn(data, type, row, meta) {
+    function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[4]=='Open')statusLabel += '<span class="badge badge-secondary">'+row[4]+'</span>';
-        if (row[4]=='InProgress')statusLabel += '<span class="badge badge-primary">'+row[4]+'</span>';
-        if (row[4]=='Closed')statusLabel +='<span class="badge badge-success">'+row[4]+'</span>';
+        if (row[8]==="sys_confirmStatus.initial")statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
+        if (row[8]==="sys_confirmStatus.approved")statusLabel += '<span class="badge badge-success">'+row[8]+'</span>';
+        if (row[8]==="sys_confirmStatus.denied")statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
         return statusLabel;
-    }*/
+    }
 
     function datatableConnect() {
             dataDatatableSelector.DataTable({
@@ -224,9 +219,16 @@
 
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
-
-                dataToSend.dateBegin = $('#dateBegin').val();
-                dataToSend.dateEnd = $('#dateEnd').val();
+                dataToSend.tin = $('#tin').val();
+                dataToSend.name = $('#name').val();
+                dataToSend.contractId = $('#contractId').val();
+                dataToSend.id = $('#id').val();
+                dataToSend.regionId = $('#regionId').val();
+                dataToSend.subRegionId = $('#subRegionId').val();
+                dataToSend.regDateBegin = $('#regDateBegin').val();
+                dataToSend.regDateEnd = $('#regDateEnd').val();
+                dataToSend.contractDateBegin = $('#contractDateBegin').val();
+                dataToSend.contractDateEnd = $('#contractDateEnd').val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
@@ -244,7 +246,10 @@
                 {data: 5, name: 'region'},
                 {data: 6, name: 'subregion'},
                 {data: 7, name: 'createdAt'},
-                {data: 8, name: 'status'},
+                {
+                    data: 8, name: 'status',
+                    render:renderStatusColumn, orderable:false
+                },
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
