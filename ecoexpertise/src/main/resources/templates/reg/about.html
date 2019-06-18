@@ -190,7 +190,9 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  >
+                                                                <select class="form-control" id="requirementId" required="" th:field="*{requirementId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option style="display: none" th:each="requirement : ${requirementList}" th:value="${requirement.id}" th:text="${@helperService.getMaterial(requirement.materialId,#locale)}" th:selected="${regApplication.materialId==requirement.materialId}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -259,13 +261,12 @@
                                                             </div>
 
                                                         </div>
-
-                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
-                                                                <a th:href="${back_url}" type="button" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+                                                                <a  th:href="${back_url}" type="button" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button  type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -332,9 +333,13 @@
         var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationFileUpload}]];
         var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationFileDelete}]];
         var regApplicationId = [[${regApplication.id}]];
+        $(document).ready(function () {
+            var srSelector = $('#materialId');
+            srSelector.find('option:selected').show();
+        });
         function openInputFile() {
             document.getElementById("file-input").click();
-        }
+        };
 
         $('.only-number').keyup(function() {
             if (/\D/g.test(this.value))
@@ -349,7 +354,10 @@
             form.append("objectId", $("#objectId").val());
             form.append("activityId", $("#activityId").val());
             form.append("_csrf", $("#global_csrf").val());
-
+            var srSelector = $('#requirementId');
+            srSelector.find('option:selected').prop('selected',false);
+            srSelector.find('option').hide();
+            var html = '';
             $.ajax({
                 url: '/reg/application/material',
                 type: "POST",
@@ -362,10 +370,9 @@
                     $('#category').val(response.category);
                     console.log(response.requirementList.length);
                     if (response.requirementList.length>0){
-                        $.each(response.requirementList, function (index, val) {
-                            console.log(index + " index");
-                            console.log(val.name + " val");
-                        })
+                        $.each(response.requirementList, function (index, value) {
+                            $('#requirementId option[value="'+value.id+'"]').show();
+                        });
                     }
                 }
             });

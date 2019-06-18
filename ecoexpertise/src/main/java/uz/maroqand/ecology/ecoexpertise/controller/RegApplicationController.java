@@ -160,6 +160,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+        }
+
         Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
             applicant = new Client();
@@ -227,6 +231,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+        }
+
         ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
         Integer categoryId=regApplication.getCategory()!=null?regApplication.getCategory().getId():null;
         model.addAttribute("regApplication", regApplication);
@@ -235,6 +243,7 @@ public class RegApplicationController {
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("projectDeveloper",projectDeveloper!=null ? projectDeveloper : new ProjectDeveloper());
         model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("back_url",Urls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", 2);
         return Templates.RegApplicationAbout;
@@ -255,25 +264,26 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        System.out.println("projectDeveloper.name===" + projectDeveloperName);
-        System.out.println("projectDeveloper.tin" + projectDeveloper.getTin());
+
         ProjectDeveloper projectDeveloper1 = regApplication1.getDeveloperId()!=null?projectDeveloperService.getById(regApplication1.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
         projectDeveloper1.setTin(projectDeveloper.getTin());
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
+        regApplication1.setDeveloperId(projectDeveloper1.getId());
+
+        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+        regApplication1.setRequirementId(requirement.getId());
+        regApplication1.setReviewId(requirement.getReviewId());
+        regApplication1.setDeadline(requirement.getDeadline());
 
         regApplication1.setObjectId(regApplication.getObjectId());
         regApplication1.setActivityId(regApplication.getActivityId());
         regApplication1.setName(regApplication.getName());
         regApplication1.setCategory(activityService.getById(regApplication.getActivityId()).getCategory());
-        regApplication1.setDeveloperId(projectDeveloper1.getId());
-
-//        Requirement requirement = requirementService.getById(requirementId);
-//        regApplication1.setRequirementId(requirementId);
-//        regApplication1.setReviewId(requirement.getReviewId());
-//        regApplication1.setDeadline(requirement.getDeadline());
+        regApplication1.setMaterialId(requirement.getMaterialId());
 
         regApplication1.setConfirmStatus(ConfirmStatus.Initial);
+
         regApplicationService.save(regApplication1);
 
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
@@ -328,7 +338,6 @@ public class RegApplicationController {
 
             responseMap.put("name", file.getName());
             responseMap.put("link", Urls.RegApplicationFileDownload+ "?file_id=" + file.getId());
-            responseMap.put("id", id);
             responseMap.put("fileId", file.getId());
             responseMap.put("status", 1);
         }
@@ -475,7 +484,6 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
-//        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
         /*if (payment.getStatus() != PaymentStatus.Success) {
             billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
             regApplication.setPaymentId(payment.getId());

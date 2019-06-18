@@ -33,4 +33,9 @@ public class RequirementServiceImpl implements RequirementService {
         return requirementRepository.findByObjectExpertiseIdAndCategory(objectExpertiseId,category);
     }
 
+    @Override
+    public List<Requirement> getAllList() {
+        return requirementRepository.findAll();
+    }
+
 }
