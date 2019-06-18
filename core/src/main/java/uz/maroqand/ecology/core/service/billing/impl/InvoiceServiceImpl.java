@@ -84,7 +84,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 ", "+material.getNameTranslation("ru")+
                 ", "+invoice.getPayerName()+
                 ", "+invoice.getPayeeName());
-
+        invoiceRepository.save(invoice);
         return invoice;
     }
 
