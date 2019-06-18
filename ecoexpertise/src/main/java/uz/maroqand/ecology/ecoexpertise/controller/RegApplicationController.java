@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
@@ -240,6 +241,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
         }
 
+        if (regApplication.getInvoiceId()!=null){
+            return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
+        }
+
         ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
         Integer categoryId=regApplication.getCategory()!=null?regApplication.getCategory().getId():null;
         model.addAttribute("regApplication", regApplication);
@@ -410,6 +415,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getInvoiceId()!=null){
+            return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
+        }
+
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url",Urls.RegApplicationAbout + "?id=" + id);
         model.addAttribute("step_id", 2);
@@ -441,6 +450,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getInvoiceId()!=null){
+            return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
+        }
+
         Offer offer = offerService.getOffer(locale);
 
         model.addAttribute("regApplication", regApplication);
@@ -460,6 +473,7 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Offer offer = offerService.getOffer(locale);
@@ -484,11 +498,23 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-        Invoice invoice = invoiceService.create(regApplication,requirement);
 
+        Invoice invoice = null;
+        if (regApplication.getInvoiceId()==null){
+            invoice = invoiceService.create(regApplication,requirement);
+        }else{
+            invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+
+            //todo vaqtinchalik
+            if (invoice.getStatus()== InvoiceStatus.Success){
+                return "redirect:" + Urls.RegApplicationStatus + "?id=" + id + "&invoiceId=" + invoice.getId();
+            }
+        }
+        regApplication.setInvoiceId(invoice.getId());
+        regApplicationService.save(regApplication);
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);
+        model.addAttribute("upay_url", Urls.RegApplicationStatus);//todo to`grilash kerak
 
         model.addAttribute("step_id", 4);
         return Templates.RegApplicationPrepayment;
@@ -566,6 +592,7 @@ public class RegApplicationController {
     @RequestMapping(value = Urls.RegApplicationStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "invoiceId") Integer invoiceId,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -574,7 +601,14 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        if (invoice.getStatus()!=InvoiceStatus.Success){
+            invoice = invoiceService.payTest(invoiceId);
+        }
+
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("invoice", invoice);
+        model.addAttribute("back_url", Urls.RegApplicationList);
         model.addAttribute("step_id", 5);
         return Templates.RegApplicationStatus;
     }
