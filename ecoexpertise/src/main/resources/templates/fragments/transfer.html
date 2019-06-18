@@ -13,7 +13,7 @@
 
     <div class="row mb-3">
         <div class="col-md-6 offset-2 text-center">
-            <h3>Реквизиты для оплаты через банк клиент</h3>
+            <h3 th:text="#{sys_transfer.info}">Реквизиты для оплаты через банк клиент</h3>
         </div>
         <div class="col-md-4 text-right">
             <button type="button" class="btn btn-primary" onclick="$('#transfer-for-print').printThis();">
@@ -22,54 +22,54 @@
         </div>
     </div>
 
-    <div class="row mr-0 ml-0" id="transfer-for-print">
+    <div class="row mr-0 ml-0" id="transfer-for-print" th:object="${invoice}">
         <table style="width: 90%;font-size: 14px">
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="p-2">
-                    <span>Организация</span>
+                    <span th:text="#{sys_transfer.organization}">Организация</span>
                 </td>
                 <td style="width: 70%;" class="pb-4">
-                    <input class="form-control" readonly value="ГУП ЦЕНТР ГОСУДАРСТВЕННОЙ ЭКОЛОГИЧЕСКОЙ ЭКСПЕРТИЗЫ РЕСПУБЛИКИ УЗБЕКИСТАН"/>
+                    <input class="form-control" readonly th:value="*{payeeName}"/>
                 </td>
             </tr>
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="pr-2 pb-4">
-                    <span>расчетный счет</span>
+                    <span th:text="#{sys_transfer.payeeAccount}">расчетный счет</span>
                 </td>
                 <td style="width: 70%" class="pb-4">
-                    <input class="form-control" readonly value="2020 8000 0008 6684 0001 "/>
+                    <input class="form-control" readonly th:value="*{payeeAccount}"/>
                 </td>
             </tr>
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="pr-2 pb-4">
-                    <span>МФО</span>
+                    <span th:text="#{sys_transfer.payeeMfo}"></span>
                 </td>
                 <td style="width: 70%" class="pb-4">
-                    <input class="form-control" readonly value="00996"/>
+                    <input class="form-control" readonly th:value="*{payeeMfo}"/>
                 </td>
             </tr>
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="pr-2 pb-4">
-                    <span>ИНН</span>
+                    <span th:text="#{sys_transfer.payeeTin}">ИНН</span>
                 </td>
                 <td style="width: 70%" class="pb-4">
-                    <input class="form-control" readonly value="305465762"/>
+                    <input class="form-control" readonly th:value="*{payeeTin}"/>
                 </td>
             </tr>
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="pr-2 pb-4">
-                    <span>Номер инвойса*</span>
+                    <span th:text="#{sys_invoice.invoice}">Номер инвойса*</span>
                 </td>
                 <td style="width: 70%" class="pb-4">
-                    <input class="form-control" readonly value="87711994645926"/>
+                    <input class="form-control" readonly th:value="*{invoice}"/>
                 </td>
             </tr>
             <tr>
                 <td style="width: 30%;text-align: right; color: black; font-weight: bold" class="pr-2 pb-4">
-                    <span>Сумма</span>
+                    <span th:text="#{sys_invoice.amount}">Сумма</span>
                 </td>
                 <td style="width: 70%" class="pb-4">
-                    <input class="form-control" readonly value="4 054 600.00"/>
+                    <input class="form-control" readonly th:value="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}"/>
                 </td>
             </tr>
             <tr>
@@ -77,7 +77,7 @@
                     <span class="hei-50 wid-50 d-inline-block mr-4" style="margin-left: 20%">
                         <img src="/static/images/warning.png" style="width: 100%; height: 100%">
                     </span>
-                    <span class="f-16 font-weight-bold" style="color: black"> Примечание: * Тўлов ўтказилаётганда тўлов топшириқномасига инвойс рақамини киритиш лозим!</span>
+                    <span class="f-16 font-weight-bold" style="color: black" th:text="#{sys_transfer.notification}"> Примечание: * Тўлов ўтказилаётганда тўлов топшириқномасига инвойс рақамини киритиш лозим!</span>
                 </td>
             </tr>
         </table>

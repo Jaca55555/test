@@ -10,11 +10,13 @@ import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
@@ -31,13 +33,15 @@ public class HelperService {
     private final ActivityService activityService;
     private final MaterialService materialService;
     private final SoatoService soatoService;
+    private final OrganizationService organizationService;
 
-    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService) {
+    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.materialService = materialService;
         this.soatoService = soatoService;
+        this.organizationService = organizationService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -114,6 +118,13 @@ public class HelperService {
         if(id==null) return "";
         Material material = materialService.getById(id);
         return material!=null? material.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getOrganizationName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getOrganizationName(Integer id, String locale) {
+        if(id==null) return "";
+        Organization organization = organizationService.getById(id);
+        return organization!=null? organization.getNameTranslation(locale):"";
     }
 
 }

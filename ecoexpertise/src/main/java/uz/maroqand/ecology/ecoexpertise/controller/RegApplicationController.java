@@ -18,10 +18,13 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -54,9 +57,10 @@ public class RegApplicationController {
     private final OrganizationService organizationService;
     private final HelperService helperService;
     private final FileService fileService;
+    private final InvoiceService invoiceService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -72,6 +76,7 @@ public class RegApplicationController {
         this.organizationService = organizationService;
         this.helperService = helperService;
         this.fileService = fileService;
+        this.invoiceService = invoiceService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -253,8 +258,6 @@ public class RegApplicationController {
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-//            @RequestParam(name = "categoryId") Integer categoryId,
-//            @RequestParam(name = "requirementId") Integer requirementId,
             RegApplication regApplication,
             ProjectDeveloper projectDeveloper
     ){
@@ -484,19 +487,17 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
-        /*if (payment.getStatus() != PaymentStatus.Success) {
-            billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
-            regApplication.setPaymentId(payment.getId());
-            regApplicationService.update(regApplication,StepNumbers.PaymentStep);
+        System.out.println("-------------------------------------");
+        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+        if (requirement==null){
+            System.out.println("nulll");
         }else{
-            billingService.getInvoicePaymentInfo(payment);
+            System.out.println(requirement.getQty() + "--------------------");
         }
+        Invoice invoice = invoiceService.create(regApplication,requirement);
+//        Invoice testInvoice = invoiceService.payTest(invoice.getId());
 
-        if (payment.getPaymentStatus().equals(PaymentStatus.Success)) {
-            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
-        }*/
-
-//        model.addAttribute("payment", payment);
+        model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
 //        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
         model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);

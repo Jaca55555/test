@@ -59,4 +59,14 @@ public class Organization {
     @Column(name = "last_number")
     private Integer lastNumber;
 
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+            case "ru":
+                return nameRu;
+
+            default:
+                return name;
+        }
+    }
+
 }
