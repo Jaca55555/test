@@ -6,48 +6,57 @@
 <body>
     <div th:fragment="prepayment">
         <div class="container-fluid mb-lg-5">
-            <div class="row">
+            <div class="row" th:object="${invoice}">
                 <div class="col-md-7 border-right" style="border-color: #7d878c; border:2px">
                     <div class="row m-15">
                         <div class="col-md-6 text-left">
-                            <h3>Номер инвойса</h3>
+                            <h3 th:text="#{sys_invoice.invoice}">Номер инвойса</h3>
                         </div>
                         <div class="col-md-6 text-right">
-                            <h4>87711994645926</h4>
+                            <h4><span th:text="*{invoice}"></span></h4>
                         </div>
                     </div>
                     <div class="row m-15">
                         <div class="col-md-6 text-left">
-                            <h3>ФИО плательщика</h3>
+                            <h3 th:text="#{sys_payerName}">ФИО плательщика</h3>
                         </div>
                         <div class="col-md-6 text-right">
-                            <h4>DAVLATOVA NARGIZA BAROTOVNA</h4>
+                            <h4><span th:text="*{payerName}"></span></h4>
                         </div>
                     </div>
                     <div class="row m-15">
                         <div class="col-md-6 text-left">
-                            <h3>Дата выдачи инвойса</h3>
+                            <h3 th:text="#{sys_invoice.createdDate}">Дата выдачи инвойса</h3>
                         </div>
                         <div class="col-md-6 text-right">
-                            <h4>03.05.2019</h4>
+                            <h4>
+                                <span th:if="${invoice.createdDate!=null}" th:utext="${#dates.format(invoice.createdDate, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                                <!--03.05.2019-->
+                            </h4>
                         </div>
                     </div>
                     <div class="row m-15">
                         <div class="col-md-6 text-left">
-                            <h3>Оплата в МРЗП</h3>
+                            <h3 th:text="sys_invoice.qty">Оплата в МРЗП</h3>
                         </div>
                         <div class="col-md-6 text-right">
-                            <h4>20</h4>
+                            <h4>
+                                <span th:text="*{qty}"></span>
+                                <!--20-->
+                            </h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-5 ">
                     <div class="row  text-center">
                         <div class="col-md-12 m-40">
-                            <h1 class="display-4"> Сумма к оплате </h1>
+                            <h1 class="display-4" th:text="sys_invoice.amount"> Сумма к оплате </h1>
                         </div>
                         <div class="col-md-12 m-40">
-                            <h1 class="display-3">4 054 600.00</h1>
+                            <h1 class="display-4">
+                                <strong th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}"> </strong>&nbsp;<span th:text="#{sum}"></span>
+                                <!--4 054 600.00-->
+                            </h1>
                         </div>
                     </div>
                 </div>

@@ -17,6 +17,16 @@
                 <input class="form-control" required="" id="individualName" name="individualName" th:value="${individual.individualName}" >
             </div>
         </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}">Ф.И.О</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6 input-group">
+                <input class="form-control col-md-4 mr-3" id="passportSerial" name="passportSerial" th:value="${individual.passportSerial}" maxlength="3" placeholder="CR">
+                <input class="form-control col-md-8" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" maxlength="10" placeholder="12365498">
+            </div>
+        </div>
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
@@ -88,13 +98,13 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" >
+                <input class="form-control phone" required="" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" >
             </div>
         </div>
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <label class="col-form-label phone" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">

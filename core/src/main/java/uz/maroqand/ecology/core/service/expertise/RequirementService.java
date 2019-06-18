@@ -16,4 +16,6 @@ public interface RequirementService {
 
     List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category);
 
+    List<Requirement> getAllList();
+
 }

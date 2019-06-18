@@ -18,10 +18,13 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -54,9 +57,10 @@ public class RegApplicationController {
     private final OrganizationService organizationService;
     private final HelperService helperService;
     private final FileService fileService;
+    private final InvoiceService invoiceService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -72,6 +76,7 @@ public class RegApplicationController {
         this.organizationService = organizationService;
         this.helperService = helperService;
         this.fileService = fileService;
+        this.invoiceService = invoiceService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -160,6 +165,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+        }
+
         Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
             applicant = new Client();
@@ -227,6 +236,10 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
+        }
+
         ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
         Integer categoryId=regApplication.getCategory()!=null?regApplication.getCategory().getId():null;
         model.addAttribute("regApplication", regApplication);
@@ -235,6 +248,7 @@ public class RegApplicationController {
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("projectDeveloper",projectDeveloper!=null ? projectDeveloper : new ProjectDeveloper());
         model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("back_url",Urls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", 2);
         return Templates.RegApplicationAbout;
@@ -244,8 +258,6 @@ public class RegApplicationController {
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-//            @RequestParam(name = "categoryId") Integer categoryId,
-//            @RequestParam(name = "requirementId") Integer requirementId,
             RegApplication regApplication,
             ProjectDeveloper projectDeveloper
     ){
@@ -255,25 +267,26 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        System.out.println("projectDeveloper.name===" + projectDeveloperName);
-        System.out.println("projectDeveloper.tin" + projectDeveloper.getTin());
+
         ProjectDeveloper projectDeveloper1 = regApplication1.getDeveloperId()!=null?projectDeveloperService.getById(regApplication1.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
         projectDeveloper1.setTin(projectDeveloper.getTin());
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
+        regApplication1.setDeveloperId(projectDeveloper1.getId());
+
+        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+        regApplication1.setRequirementId(requirement.getId());
+        regApplication1.setReviewId(requirement.getReviewId());
+        regApplication1.setDeadline(requirement.getDeadline());
 
         regApplication1.setObjectId(regApplication.getObjectId());
         regApplication1.setActivityId(regApplication.getActivityId());
         regApplication1.setName(regApplication.getName());
         regApplication1.setCategory(activityService.getById(regApplication.getActivityId()).getCategory());
-        regApplication1.setDeveloperId(projectDeveloper1.getId());
-
-//        Requirement requirement = requirementService.getById(requirementId);
-//        regApplication1.setRequirementId(requirementId);
-//        regApplication1.setReviewId(requirement.getReviewId());
-//        regApplication1.setDeadline(requirement.getDeadline());
+        regApplication1.setMaterialId(requirement.getMaterialId());
 
         regApplication1.setConfirmStatus(ConfirmStatus.Initial);
+
         regApplicationService.save(regApplication1);
 
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
@@ -328,7 +341,6 @@ public class RegApplicationController {
 
             responseMap.put("name", file.getName());
             responseMap.put("link", Urls.RegApplicationFileDownload+ "?file_id=" + file.getId());
-            responseMap.put("id", id);
             responseMap.put("fileId", file.getId());
             responseMap.put("status", 1);
         }
@@ -475,20 +487,17 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
-//        Payment payment = paymentService.checkRegApplicationPaymentStatus(regApplication);
-        /*if (payment.getStatus() != PaymentStatus.Success) {
-            billingService.getWorkingInvoiceDtoByRegIndividualAndPayment(regApplication, payment);
-            regApplication.setPaymentId(payment.getId());
-            regApplicationService.update(regApplication,StepNumbers.PaymentStep);
+        System.out.println("-------------------------------------");
+        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+        if (requirement==null){
+            System.out.println("nulll");
         }else{
-            billingService.getInvoicePaymentInfo(payment);
+            System.out.println(requirement.getQty() + "--------------------");
         }
+        Invoice invoice = invoiceService.create(regApplication,requirement);
+//        Invoice testInvoice = invoiceService.payTest(invoice.getId());
 
-        if (payment.getPaymentStatus().equals(PaymentStatus.Success)) {
-            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
-        }*/
-
-//        model.addAttribute("payment", payment);
+        model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
 //        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
         model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);
