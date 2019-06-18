@@ -380,10 +380,6 @@ public class RegApplicationController {
             responseMap.put("message", "Object not found.");
             return responseMap;
         }
-        /*if (regApplication.getStatus() != regApplication.Initial) {
-            responseMap.put("message", "Object will not able to update.");
-            return responseMap;
-        }*/
         File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
 
         if (file != null) {
@@ -487,21 +483,12 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
-        System.out.println("-------------------------------------");
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-        if (requirement==null){
-            System.out.println("nulll");
-        }else{
-            System.out.println(requirement.getQty() + "--------------------");
-        }
         Invoice invoice = invoiceService.create(regApplication,requirement);
-//        Invoice testInvoice = invoiceService.payTest(invoice.getId());
 
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-//        model.addAttribute("bank_url", Urls.RegApplicationBank + "?id=" + id);
         model.addAttribute("upay_url", Urls.RegApplicationPayment + "?id=" + id);
-//        model.addAttribute("transfer_url", Urls.RegApplicationTransfer + "?id=" + id);
 
         model.addAttribute("step_id", 4);
         return Templates.RegApplicationPrepayment;
@@ -517,6 +504,7 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + Urls.RegApplicationList;
         }
+
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 4);
