@@ -13,4 +13,9 @@ public class ExpertiseTemplates {
     public static final String AccountantList = Accountant + "/list";
     public static final String AccountantChecking = Accountant + "/checking";
 
+    private static final String Forwarding = Prefix + "/forwarding";
+
+    public static final String ForwardingList = Forwarding + "/list";
+    public static final String ForwardingChecking = Forwarding + "/checking";
+
 }

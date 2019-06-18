@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dashboard/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
                 .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
-                .antMatchers("/expertise/forwarding/**").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
+                .antMatchers("/expertise/forwarding/").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
                 .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
                 .antMatchers("/expertise/agreement/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT.name())
                 .antMatchers("/expertise/agreement_complete/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT_COMPLETE.name())

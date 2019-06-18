@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+
+                            <h5 th:text="${'reg_application: ' + regApplication.id}"></h5>
+                            <hr>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase show active" id="general_info-tab" data-toggle="tab" href="#general_info" role="tab" aria-controls="general_info" aria-selected="true" onclick="tabActive(1)" th:text="#{general_info}">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" onclick="tabActive(2)" th:text="#{contract}">Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" onclick="tabActive(3)" th:text="#{payment}">Contact</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" onclick="tabActive(4)" th:text="#{expertise}">Contact</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-uppercase show" id="forward-tab" data-toggle="tab" href="#forward" role="tab" aria-controls="forward" aria-selected="false" onclick="tabActive(5)" th:text="#{forward}">Contact</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="general_info" role="tabpanel" aria-labelledby="home-tab">
+                                        <object th:include="/expertise/forwarding/general_info :: general_info" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                                        <object th:include="/expertise/forwarding/contract :: contract" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                                        <object th:include="/expertise/forwarding/payment :: payment" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
+                                        <object th:include="/expertise/forwarding/expertise :: expertise" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="forward" role="tabpanel" aria-labelledby="forward-tab">
+                                        <object th:include="/expertise/forwarding/forward :: forward" th:remove="tag"></object>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    function tabActive(count){
+        if (count == 1){
+            $('#forward-tab').removeClass('active');
+            $('#forward').removeClass('active');
+            $('#forward').removeClass('show');
+            $('#expertise-tab').removeClass('active');
+            $('#expertise').removeClass('active');
+            $('#expertise').removeClass('show');
+            $('#payment-tab').removeClass('active');
+            $('#payment').removeClass('active');
+            $('#payment').removeClass('show');
+            $('#contract-tab').removeClass('active');
+            $('#contract').removeClass('active');
+            $('#contract').removeClass('show');
+            $('#general_info-tab').addClass('active');
+            $('#general_info').addClass('active');
+            $('#general_info').addClass('show');
+        }
+        if (count == 2){
+            $('#forward-tab').removeClass('active');
+            $('#forward').removeClass('active');
+            $('#forward').removeClass('show');
+            $('#expertise-tab').removeClass('active');
+            $('#expertise').removeClass('active');
+            $('#expertise').removeClass('show');
+            $('#payment-tab').removeClass('active');
+            $('#payment').removeClass('active');
+            $('#payment').removeClass('show');
+            $('#contract-tab').addClass('active');
+            $('#contract').addClass('active');
+            $('#contract').addClass('show');
+            $('#general_info-tab').removeClass('active');
+            $('#general_info').removeClass('active');
+            $('#general_info').removeClass('show');
+        }
+        if (count == 3){
+            $('#forward-tab').removeClass('active');
+            $('#forward').removeClass('active');
+            $('#forward').removeClass('show');
+            $('#expertise-tab').removeClass('active');
+            $('#expertise').removeClass('active');
+            $('#expertise').removeClass('show');
+            $('#payment-tab').addClass('active');
+            $('#payment').addClass('active');
+            $('#payment').addClass('show');
+            $('#contract-tab').removeClass('active');
+            $('#contract').removeClass('active');
+            $('#contract').removeClass('show');
+            $('#general_info-tab').removeClass('active');
+            $('#general_info').removeClass('active');
+            $('#general_info').removeClass('show');
+        }
+        if (count == 4){
+            $('#forward-tab').removeClass('active');
+            $('#forward').removeClass('active');
+            $('#forward').removeClass('show');
+            $('#expertise-tab').addClass('active');
+            $('#expertise').addClass('active');
+            $('#expertise').addClass('show');
+            $('#payment-tab').removeClass('active');
+            $('#payment').removeClass('active');
+            $('#payment').removeClass('show');
+            $('#contract-tab').removeClass('active');
+            $('#contract').removeClass('active');
+            $('#contract').removeClass('show');
+            $('#general_info-tab').removeClass('active');
+            $('#general_info').removeClass('active');
+            $('#general_info').removeClass('show');
+        }
+        if (count == 5){
+            $('#forward-tab').addClass('active');
+            $('#forward').addClass('active');
+            $('#forward').addClass('show');
+            $('#expertise-tab').removeClass('active');
+            $('#expertise').removeClass('active');
+            $('#expertise').removeClass('show');
+            $('#payment-tab').removeClass('active');
+            $('#payment').removeClass('active');
+            $('#payment').removeClass('show');
+            $('#contract-tab').removeClass('active');
+            $('#contract').removeClass('active');
+            $('#contract').removeClass('show');
+            $('#general_info-tab').removeClass('active');
+            $('#general_info').removeClass('active');
+            $('#general_info').removeClass('show');
+        }
+
+    }
+
+</script>
+</body>
+</html>

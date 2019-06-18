@@ -21,6 +21,7 @@ public class ExpertiseUrls {
     private static final String Forwarding = Prefix + "/forwarding";
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
+    public static final String ForwardingChecking = Forwarding + "/checking";
 
     private static final String Performer = Prefix + "/performer";
     public static final String PerformerList = Performer + "/list";
