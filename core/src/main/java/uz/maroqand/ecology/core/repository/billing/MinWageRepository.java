@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.billing;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.billing.MinWage;
 
@@ -12,7 +13,7 @@ import java.util.Date;
  * (ru)
  */
 @Repository
-public interface MinWageRepository extends JpaRepository<MinWage, Integer> {
+public interface MinWageRepository extends JpaRepository<MinWage, Integer>, JpaSpecificationExecutor<MinWage> {
 
     MinWage findFirst1ByBeginDateLessThanEqualOrderByBeginDateDesc(Date beginDate);
 

@@ -8,5 +8,6 @@ public enum TableHistoryEntity {
     User,
     UserRole,
     Translation,
-    Activity
+    Activity,
+    MinWage
 }

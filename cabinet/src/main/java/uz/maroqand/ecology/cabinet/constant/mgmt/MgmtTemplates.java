@@ -13,4 +13,9 @@ public class MgmtTemplates {
     private static final String Activity = Prefix + "/activity";
     public static final String ActivityList = Activity + "/list";
     public static final String ActivityNew = Activity + "/new";
+
+    //MinWage
+    private static final String MinWage = Prefix + "/min_wage";
+    public static final String MinWageList = MinWage + "/list";
+    public static final String MinWageNew = MinWage + "/new";
 }
