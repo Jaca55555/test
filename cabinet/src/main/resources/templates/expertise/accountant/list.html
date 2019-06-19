@@ -265,6 +265,7 @@
     }
 
     $(document).ready(function () {
+        bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
         dataDatatableSelector = $('#data-table');
         thead = dataDatatableSelector.html();
         datatableConnect();

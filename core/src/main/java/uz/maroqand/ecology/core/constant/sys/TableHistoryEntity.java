@@ -7,5 +7,6 @@ package uz.maroqand.ecology.core.constant.sys;
 public enum TableHistoryEntity {
     User,
     UserRole,
-    Translation
+    Translation,
+    Activity
 }

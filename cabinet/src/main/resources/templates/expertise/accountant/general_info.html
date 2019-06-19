@@ -20,7 +20,7 @@
                 <label class="col-form-label" th:text="#{sys_applicant_type}">Фирменное наименование предприятия</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${@helperService.getApplicantType(applicant.type,#locale)}" readonly="readonly">
+                <input class="form-control" th:value="${@helperService.getApplicantType(applicant.type.getId(),#locale)}" readonly="readonly">
             </div>
         </div>
 

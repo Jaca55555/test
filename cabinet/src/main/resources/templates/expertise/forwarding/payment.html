@@ -5,30 +5,32 @@
     <title>Title</title>
 </head>
 <body th:fragment="payment">
-    <div class="row">
+    <div class="row" th:object="${invoice}">
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_invoice_number}"></h4>
         </div>
         <div class="col-md-6 text-center">
-            <h4>123123123123123</h4>
+            <h4 th:text="*{invoice.number}">123123123123123</h4>
         </div>
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_payer_name}"></h4>
         </div>
         <div class="col-md-6 text-center">
-            <h4>Applicant Name</h4>
+            <h4 th:text="*{payerName}">Applicant Name</h4>
         </div>
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_invoice_createdAt}"></h4>
         </div>
         <div class="col-md-6 text-center">
-            <h4>OPF Name</h4>
+            <h4 th:text="*{createdDate}">OPF Name</h4>
         </div>
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_payment_amount}"></h4>
+            <h6 th:text="*{amount}"></h6>
         </div>
         <div class="col-md-6 text-center">
             <h4>payed</h4>
+            <h6 th:text="*{status}"></h6>
         </div>
         <div class="col-md-12 text-center" id="tab-control-buttons">
             <a class="btn btn-danger" onclick="tabActive(2)" href="#contract" th:text="#{sys_back}">Отмена</a>

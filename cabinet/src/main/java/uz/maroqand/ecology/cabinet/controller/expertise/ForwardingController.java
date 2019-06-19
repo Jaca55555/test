@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ForwardingStatus;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ProjectDeveloperService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
@@ -44,6 +46,7 @@ public class ForwardingController {
     private final HelperService helperService;
     private final SoatoService soatoService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final InvoiceService invoiceService;
 
     @Autowired
     public ForwardingController(
@@ -51,13 +54,14 @@ public class ForwardingController {
             ClientService clientService,
             UserService userService,
             HelperService helperService,
-            SoatoService soatoService, ProjectDeveloperService projectDeveloperService) {
+            SoatoService soatoService, ProjectDeveloperService projectDeveloperService, InvoiceService invoiceService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
         this.helperService = helperService;
         this.soatoService = soatoService;
         this.projectDeveloperService = projectDeveloperService;
+        this.invoiceService = invoiceService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -126,9 +130,12 @@ public class ForwardingController {
         }
 
         Client client = clientService.getById(regApplication.getApplicantId());
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         model.addAttribute("applicant",client);
         model.addAttribute("regApplication",regApplication);
+        model.addAttribute("invoice",invoice);
         model.addAttribute("cancel_url",ExpertiseUrls.ForwardingList);
         return ExpertiseTemplates.ForwardingChecking;
     }
+
 }
