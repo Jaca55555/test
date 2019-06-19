@@ -150,7 +150,7 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_expertise.objectExpertise}">Объект экспертизы</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.objectExpertise}">Объект экспертизы</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -163,11 +163,11 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" >Вид деятельности</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  th:field="*{activityId}" required="" onclick="getMaterialList()">
+                                                                <select class="form-control" th:field="*{activityId}" required="" onclick="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.name}" th:selected="${regApplication.activityId==activity.id}"></option>
                                                                 </select>
@@ -176,7 +176,7 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" >Категория</label>
+                                                                <label class="col-form-label"  th:text="#{sys_about.category}" >Категория</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -186,7 +186,7 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" >Вид материалов</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.material}">Вид материалов</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -199,7 +199,7 @@
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" >Наименование объекта</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.name}">Наименование объекта</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -209,7 +209,7 @@
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label">ИНН разработчика проекта</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_tin}">ИНН разработчика проекта</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -219,7 +219,7 @@
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" >Наименование разработчика проекта</label>
+                                                                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_name}">Наименование разработчика проекта</label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
@@ -227,7 +227,7 @@
                                                             </div>
                                                         </div>
                                                         </br>
-                                                        <h4 class="text-center" th:text="#{Добавить электронная (или сканированная) версия документа}"></h4>
+                                                        <h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
                                                         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
                                                             <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
                                                                 <div class="add-file">
@@ -265,7 +265,7 @@
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
-                                                                <a  th:href="${back_url}" type="button" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
                                                                 <button  type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button>
                                                             </div>
                                                         </div>
@@ -290,7 +290,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" th:text="#{appeal_register.upload_files}" style="float: left">Modal title</h5>
+                    <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -306,7 +306,7 @@
                     <div class="input-group">
                           <span class="input-group-btn">
                             <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
-                               <i class="mdi mdi-file-download-outline"></i> Browse
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
                             </span>
                             <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
                           </span>

@@ -98,17 +98,17 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control phone" required="" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" >
+                <input class="form-control phone" required="" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label phone" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" >
+                <input class="form-control phone" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
@@ -118,7 +118,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input type="email" class="form-control" required="" id="individualEmail" name="individualEmail" th:value="${individual.individualEmail}" >
+                <input type="email" class="form-control" required="" id="individualEmail" name="individualEmail" th:value="${individual.individualEmail}" placeholder="example@gmail.com">
             </div>
         </div>
 
