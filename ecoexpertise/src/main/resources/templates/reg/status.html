@@ -70,7 +70,7 @@
                                                     </button>
                                                 </div>
 
-                                                <h3 th:text="#{sys_comment}" class="text-center mt-lg-5"></h3>
+                                                <h3 th:text="#{sys_comment}" id="comment-title" class="text-center mt-lg-5"></h3>
                                                 <div class="col-md-4 offset-4" id="comments">
                                                     <div id="comments-first"></div>
                                                     <div class="row" th:each="comment : ${commentList}" th:if="${#lists.size(commentList)>0}">
@@ -82,7 +82,7 @@
                                                             <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-8 offset-2 text-center mt-2 mr-0 mb-lg-5" >
+                                                    <div class="col-md-8 offset-2 text-center mt-2 mr-0 mb-lg-5" th:if="${#lists.size(commentList)>5}">
                                                         <button class="btn btn-outline-secondary pl-lg-3 pr-lg-3 mr-0 btn-block" >
                                                             <span th:text="#{sys_comments_full}"></span>
                                                         </button>
@@ -105,6 +105,7 @@
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:inline="javascript">
     var regApplicationId = [[${regApplication.id}]];
+    var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationCommentAdd}]];
 
     function addComment() {
         var message = $('#message').val();
@@ -114,7 +115,7 @@
             form.append("comment", $('#message').val());
             form.append("_csrf", $('#global_csrf').val());
             $.ajax({
-                url: "",
+                url: addCommentUrl,
                 type: "POST",
                 data: form,
                 processData: false,

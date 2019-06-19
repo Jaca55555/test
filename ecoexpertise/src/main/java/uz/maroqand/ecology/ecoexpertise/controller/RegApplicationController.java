@@ -595,7 +595,7 @@ public class RegApplicationController {
         return null;
     }
 
-    @RequestMapping(value = Urls.RegApplicationStatus,method = RequestMethod.GET)
+    @RequestMapping(value = Urls.RegApplicationStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "invoiceId") Integer invoiceId,
@@ -620,7 +620,7 @@ public class RegApplicationController {
         return Templates.RegApplicationStatus;
     }
 
-    @RequestMapping(value = Urls.RegApplicationStatus,method = RequestMethod.POST)
+    @RequestMapping(value = Urls.RegApplicationCommentAdd,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String,Object> createCommet(
             @RequestParam(name = "id") Integer id,
