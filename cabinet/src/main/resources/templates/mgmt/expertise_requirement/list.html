@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <style>
+        table.dataTable.nowrap th, table.dataTable.nowrap td {
+            white-space: pre-line;
+        }
+        .table td, .table th{
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{mntr_expertise_requirement_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="regIndividual" method="post" class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.objectExpertise}"></label><br/>
+                                                <select class="form-control" required="" id="objectExpertiseId">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}"  th:text="${@helperService.getObjectExpertise(objectExpertise.id,#locale)}" ></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.category}"></label><br/>
+                                                <select class="form-control" required="" id="categoryId">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${@helperService.getCategory(category.id,#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.material}"></label><br/>
+                                                <select class="form-control" required="" id="materialId">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="material : ${materialList}" th:value="${material.id}" th:text="${@helperService.getMaterial(material.id,#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.organization}"></label><br/>
+                                                <select class="form-control" required="" id="organizationId">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${@helperService.getOrganizationName(organization.id,#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.qty}"></label><br/>
+                                                <input type="text" class="form-control" id="qty" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_expertise_requirement.deadline}"></label><br/>
+                                                <input type="text" class="form-control only-number" id="deadline" />
+                                            </div>
+
+                                            <div class="clearfix"></div>
+                                            <div class="col-sm-6 text-right">
+                                                <label class="control-label">&nbsp;</label><br/>
+                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}">Поиск</span>
+                                                </a>
+                                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementNew}" class="btn btn-success"><i class="feather icon-plus-square"></i>
+                                                    <span th:text="#{mntr_expertise_requirement.new}"></span>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table id="expertise_requirement_table" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th th:text="#{mntr_expertise_requirement.objectExpertise}">name</th>
+                                                    <th th:text="#{mntr_expertise_requirement.category}">name</th>
+                                                    <th th:text="#{mntr_expertise_requirement.material}">name</th>
+                                                    <th th:text="#{mntr_expertise_requirement.organization}">name</th>
+                                                    <th th:text="#{mntr_expertise_requirement.qty}">name</th>
+                                                    <th th:text="#{mntr_expertise_requirement.deadline}">name</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+
+<script th:inline="javascript">
+    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementEdit}]];
+    var labelEdit = [[#{sys_edit}]];
+    var labelDelete = [[#{sys_delete}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+
+    $('.only-number').keyup(function() {
+        if (/\D/g.test(this.value))
+        {
+            // Filter non-digits from input value.
+            this.value = this.value.replace(/\D/g, '');
+        }
+    });
+
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+
+    var dataDatatableSelector;
+    var thead;
+
+    function renderActionsColumn(data, type, row, meta) {
+        var currentEditLink = editLink + '?id=' + row[0];
+        var html = '';
+        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit mr-0"></i></a>';
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                dataToSend.objectExpertiseId = $('#objectExpertiseId').val();
+                dataToSend.category = $('#category').val();
+                dataToSend.materialId = $('#materialId').val();
+                dataToSend.reviewId = $('#reviewId').val();
+                dataToSend.qty = $('#qty').val();
+                dataToSend.deadline = $('#deadline').val();
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post("", dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'objectExpertiseId'},
+                {data: 2, name: 'category'},
+                {data: 3, name: 'materialId'},
+                {data: 4, name: 'reviewId'},
+                {data: 5, name: 'qty'},
+                {data: 6, name: 'deadline'},
+                {render: renderActionsColumn, orderable: false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#expertise_requirement_table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+    });
+
+    $('#expertise_requirement_table').css("width", "100%");
+    /*]]>*/
+</script>
+</body>
+</html>

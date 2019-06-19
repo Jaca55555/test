@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.expertise;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
@@ -13,7 +14,7 @@ import java.util.List;
  * (ru)
  */
 @Repository
-public interface RequirementRepository extends JpaRepository<Requirement, Integer> {
+public interface RequirementRepository extends JpaRepository<Requirement, Integer>, JpaSpecificationExecutor<Requirement> {
 
     List<Requirement> findByObjectExpertiseIdAndCategory(Integer objectExpertiseId, Category category);
 

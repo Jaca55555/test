@@ -30,6 +30,8 @@
                         <span class="pcoded-mtext" th:text="#{mgmt_admin_panel}">Dashboard</span></a>
                     <ul class="pcoded-submenu" style="display: none;">
                         <li class=""><a href="/mgmt/translations/" class="" th:text="#{mgmt_translations}">Default</a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ObjectExpertiseList}" class="" th:text="#{mntr_objectExpertise_list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementList}" class="" th:text="#{mntr_expertise_requirement_list}"></a></li>
                     </ul>
                 </li>
             </ul>

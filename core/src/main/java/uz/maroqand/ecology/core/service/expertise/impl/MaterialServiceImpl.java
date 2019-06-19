@@ -29,4 +29,9 @@ public class MaterialServiceImpl implements MaterialService {
         return materialRepository.getOne(id);
     }
 
+    @Override
+    public List<Material> getList() {
+        return materialRepository.findAll();
+    }
+
 }

@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.core.service.expertise;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 
@@ -17,5 +19,17 @@ public interface RequirementService {
     List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category);
 
     List<Requirement> getAllList();
+
+    Page<Requirement> findFiltered(
+            Integer id,
+            Integer objectExpertiseId,
+            Category category,
+            Integer materialId,
+            Integer reviewId,
+            Double qty,
+            Integer deadline,
+            Pageable pageable);
+
+    Requirement save(Requirement requirement);
 
 }
