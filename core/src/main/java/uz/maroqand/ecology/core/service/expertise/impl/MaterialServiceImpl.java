@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.repository.expertise.MaterialRepository;
@@ -27,6 +29,16 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public Material getById(Integer id){
         return materialRepository.getOne(id);
+    }
+
+    @Override
+    public Page<Material> getAll(Pageable pageable){
+        return materialRepository.findAll(pageable);
+    }
+
+    @Override
+    public Material save(Material material){
+        return materialRepository.save(material);
     }
 
 }
