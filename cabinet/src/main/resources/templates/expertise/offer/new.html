@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+
+                                    <!-- Accordion block begins here -->
+                                    <div class="accordion" id="accordionExample">
+
+                                        <!-- dataTable card begins here -->
+                                        <div class="card">
+                                        <div class="card-header">
+                                            <h5 th:text="#{offer.new}"></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form th:action="${action_url}" method="post" th:object="${offer}">
+                                                <div class="form-group col-md-5">
+                                                    <label for="name" th:text="#{offer.name}"></label>
+                                                    <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label for="language" th:text="#{offer.language}"></label>
+                                                    <select id="language" th:field="*{language}" required="" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option value="uz" th:text="#{sys_uz}"></option>
+                                                        <option value="oz" th:text="#{sys_oz}"></option>
+                                                        <option value="ru" th:text="#{sys_ru}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label for="description" th:text="#{offer.description}"></label>
+                                                    <textarea type="text" class="form-control" id="description" th:field="*{description}" required=""></textarea>
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label for="mainId" th:text="#{offer.main_id}"></label>
+                                                    <select id="mainId" th:field="*{mainId}" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:value="${offer.id}" th:text="${offer.name}" th:each="offer : ${uzOfferList}"></option>
+                                                    </select>
+                                                </div>
+
+                                                <input type="hidden" th:field="*{id}">
+                                                <div class="form-group col-md-5">
+                                                    <button type="submit" th:text="#{sys_add}" class="btn btn-success" style="float: right; margin-right: 0;"></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                        <!-- dataTable card ends here -->
+
+                                    </div>
+                                    <!-- Accordion block ends here -->
+
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+
+</body>
+</html>
