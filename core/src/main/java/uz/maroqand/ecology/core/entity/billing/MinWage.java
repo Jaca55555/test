@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.billing;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,10 +27,12 @@ public class MinWage {
     @Column(name = "amount")
     private Double amount;
 
-    @Column(name = "begin_date", columnDefinition = "timestamp without time zone")
+    @Column(name = "begin_date")
+    @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date beginDate;
 
-    @Column(name = "registered_at", columnDefinition = "timestamp without time zone")
+    @Column(name = "registered_at")
+    @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date registeredAt;
 
 }

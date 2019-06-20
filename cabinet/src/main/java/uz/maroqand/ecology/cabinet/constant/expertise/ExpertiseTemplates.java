@@ -13,6 +13,11 @@ public class ExpertiseTemplates {
     public static final String AccountantList = Accountant + "/list";
     public static final String AccountantChecking = Accountant + "/checking";
 
+    private static final String Forwarding = Prefix + "/forwarding";
+
+    public static final String ForwardingList = Forwarding + "/list";
+    public static final String ForwardingChecking = Forwarding + "/checking";
+
     private static final String Material = Prefix + "/material";
     public static final String MaterialList = Material + "/list";
     public static final String MaterialNew = Material + "/new";

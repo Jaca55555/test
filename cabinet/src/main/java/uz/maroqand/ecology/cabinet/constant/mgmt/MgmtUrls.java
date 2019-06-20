@@ -31,4 +31,23 @@ public class MgmtUrls {
     public static final String ExpertiseRequirementCreate = ExpertiseRequirement + "/create";
     public static final String ExpertiseRequirementUpdate = ExpertiseRequirement + "/update";
 
+
+    private static final String Activity = Prefix + "/activity";
+
+    public static final String ActivityList = Activity;
+    public static final String ActivityListAjax = Activity + "/ajax_list";
+    public static final String ActivityNew = Activity + "/new";
+    public static final String ActivityEdit = Activity + "/edit";
+    public static final String ActivityCreate = Activity + "/create";
+    public static final String ActivityUpdate = Activity + "/update";
+
+
+    private static final String MinWage = Prefix + "/min_wage";
+
+    public static final String MinWageList = MinWage;
+    public static final String MinWageListAjax = MinWage + "/ajax_list";
+    public static final String MinWageNew = MinWage + "/new";
+    public static final String MinWageEdit = MinWage + "/edit";
+    public static final String MinWageCreate = MinWage + "/create";
+    public static final String MinWageUpdate = MinWage + "/update";
 }

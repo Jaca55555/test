@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+                <!--<div class="page-header">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                    <h5 class="m-b-10">Sample Page</h5>
+                                </div>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="#!">Sample Page</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="${activity.id==null?'mntr_activity_new':'mntr_activity_edit ' + activity.id}"></h5>
+                                        <!--<div class="card-header-right">-->
+                                        <!--<div class="btn-group card-option">-->
+                                        <!--<button type="button" class="btn dropdown-toggle btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                                        <!--<i class="feather icon-more-horizontal"></i>-->
+                                        <!--</button>-->
+                                        <!--<ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">-->
+                                        <!--<li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>-->
+                                        <!--<li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>-->
+                                        <!--<li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>-->
+                                        <!--<li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li>-->
+                                        <!--</ul>-->
+                                        <!--</div>-->
+                                        <!--</div>-->
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" th:object="${activity}" data-parsley-validate="" th:action="${action_url}">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 form-horizontal form-label-center">
+
+                                                <div class="form-group">
+                                                    <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12" >
+                                                        <span th:text="#{mntr_activity.name}">Translation tag</span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="name" required="required" class="form-control  has-feedback-left col-md-7 col-xs-12" type="text" th:field="*{name}" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="nameRu" class="control-label col-md-3 col-sm-3 col-xs-12" th:text="#{mntr_activity.nameRu}">Russian</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="nameRu" class="form-control  has-feedback-left col-md-7 col-xs-12" type="text" th:field="*{nameRu}" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" >
+                                                        <span th:text="#{mntr_activity.category}">Uzbek</span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select name="category" class="form-control">
+                                                            <option value="" th:text="sys_select_category"></option>
+                                                            <option th:each="category : ${categoryList}" th:value="${category}" th:text="${category.name}" th:selected="${activity.category==category}"></option>                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!--<div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" th:text="#{mntr_translations.isHtml}">Html</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        &lt;!&ndash;<input type="checkbox" th:field="*{isHtml}"/>&ndash;&gt;
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>-->
+
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                <input type="hidden" name="id" th:value="*{id}"/>
+                                                <div class="text-center">
+                                                    <div class="col-sm-3 col-sm-offset-3">
+                                                        <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ActivityList}" th:text="#{sys_cancel}"></a>
+                                                        <input type="submit" th:value="#{sys_add}" class="btn btn-success"/>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+</body>
+</html>

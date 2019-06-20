@@ -137,9 +137,10 @@ public class AccountantController {
         }
 
         Client client = clientService.getById(regApplication.getApplicantId());
-
+        Comment comment = commentService.getById(regApplication.getId());
         model.addAttribute("status", confirmStatus);
         model.addAttribute("applicant",client);
+        model.addAttribute("comment",comment);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("cancel_url",ExpertiseUrls.AccountantList);
         return ExpertiseTemplates.AccountantChecking;
@@ -151,7 +152,6 @@ public class AccountantController {
             @RequestParam(name = "template")String template,
             @RequestParam(name = "comments")String comments
     ){
-        System.out.println("confirm");
         RegApplication regApplication = regApplicationService.getById(id);
         Comment comment = new Comment();
         comment.setRegApplicationId(regApplication.getId());
@@ -168,7 +168,6 @@ public class AccountantController {
             @RequestParam(name = "template")String template,
             @RequestParam(name = "comments")String comments
     ){
-        System.out.println("not confirm");
         RegApplication regApplication = regApplicationService.getById(id);
         regApplication.setConfirmStatus(ConfirmStatus.Denied);
         Comment comment = new Comment();

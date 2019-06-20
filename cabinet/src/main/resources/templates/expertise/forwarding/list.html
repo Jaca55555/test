@@ -140,11 +140,10 @@
                                                         <th th:text="#{reg_application.id}"></th>
                                                         <th th:text="#{reg_application.tin}"></th>
                                                         <th th:text="#{sys_legal_entity_name}"></th>
-                                                        <th th:text="#{sys_opf}"></th>
-                                                        <th th:text="#{sys_oked}"></th>
-                                                        <th th:text="#{sys_region}"></th>
-                                                        <th th:text="#{sys_subregion}"></th>
-                                                        <th th:text="#{reg_application.createdAt}"></th>
+                                                        <th th:text="#{sys_material}"></th>
+                                                        <th th:text="#{sys_activity}"></th>
+                                                        <th th:text="#{reg_application.regDate}"></th>
+                                                        <th th:text="#{reg_application.executionDate}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
                                                     </tr>
@@ -176,8 +175,8 @@
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 
 <script th:inline="javascript">
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantListAjax}]];
-    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantChecking}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingListAjax}]];
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingChecking}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -198,9 +197,9 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[8]==="sys_confirmStatus.initial")statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
-        if (row[8]==="sys_confirmStatus.approved")statusLabel += '<span class="badge badge-success">'+row[8]+'</span>';
-        if (row[8]==="sys_confirmStatus.denied")statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
+        if (row[8]==="sys_forwardingStatus.initial")statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
+        if (row[8]==="sys_forwardingStatus.approved")statusLabel += '<span class="badge badge-success">'+row[8]+'</span>';
+        if (row[8]==="sys_forwardingStatus.denied")statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
         return statusLabel;
     }
 
@@ -241,13 +240,12 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'tin'},
                 {data: 2, name: 'name'},
-                {data: 3, name: 'opf'},
-                {data: 4, name: 'oked'},
-                {data: 5, name: 'region'},
-                {data: 6, name: 'subregion'},
-                {data: 7, name: 'createdAt'},
+                {data: 3, name: 'material'},
+                {data: 4, name: 'activity'},
+                {data: 5, name: 'regDate'},
+                {data: 6, name: 'executionDate'},
                 {
-                    data: 8, name: 'status',
+                    data: 7, name: 'status',
                     render:renderStatusColumn, orderable:false
                 },
                 {render: renderActionsColumn, orderable: false}

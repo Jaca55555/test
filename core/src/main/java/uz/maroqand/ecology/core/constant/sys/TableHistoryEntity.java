@@ -10,4 +10,7 @@ public enum TableHistoryEntity {
     Translation,
     Requirement,
     ObjectExpertise
+    Translation,
+    Activity,
+    MinWage
 }
