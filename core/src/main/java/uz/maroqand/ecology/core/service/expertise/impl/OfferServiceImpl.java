@@ -1,10 +1,14 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.repository.expertise.OfferRepository;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
+
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -24,6 +28,26 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer getOffer(String language){
         return offerRepository.findTop1ByActiveTrueAndLanguageOrderByIdDesc(language);
+    }
+
+    @Override
+    public Page<Offer> getAll(Pageable pageable){
+        return offerRepository.findAllByActiveTrueAndDeletedFalse(pageable);
+    }
+
+    @Override
+    public Offer getById(Integer id){
+        return offerRepository.getOne(id);
+    }
+
+    @Override
+    public Offer save(Offer offer){
+        return offerRepository.save(offer);
+    }
+
+    @Override
+    public List<Offer> getAllByLanguage(String language){
+        return offerRepository.findAllByLanguageAndActiveTrueAndDeletedFalse(language);
     }
 
 }

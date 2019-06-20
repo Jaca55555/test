@@ -18,4 +18,12 @@ public class ExpertiseTemplates {
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingChecking = Forwarding + "/checking";
 
+    private static final String Material = Prefix + "/material";
+    public static final String MaterialList = Material + "/list";
+    public static final String MaterialNew = Material + "/new";
+
+    private static final String Offer = Prefix + "/offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferNew = Offer + "/new";
+
 }

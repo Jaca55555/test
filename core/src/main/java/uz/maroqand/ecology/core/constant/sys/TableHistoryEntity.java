@@ -8,6 +8,8 @@ public enum TableHistoryEntity {
     User,
     UserRole,
     Translation,
+    Requirement,
+    ObjectExpertise,
     Activity,
     MinWage
 }

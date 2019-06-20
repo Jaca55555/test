@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+
+</head>
+<body>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="container mt-lg-5">
+
+                                                    <div class="col-md-12 text-center " style="color: #2f9c0a;">
+                                                                    <span class="hei-75 wid-75 d-inline-block mr-4">
+                                                                        <img src="/static/images/check.png" style="width: 100%; height: 100%">
+                                                                    </span>
+                                                        <span class="f-48 font-weight-bold" style="vertical-align: middle" th:text="reg_application.status_Approved"> Ваша заявка принята</span></br>
+                                                        <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')}"></span>
+                                                    </div>
+
+                                                <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
+
+                                                <h3 th:text="#{sys_chat}" class="text-center"></h3>
+
+                                                <div class="col-md-4 offset-4">
+                                                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message"></textarea>
+                                                </div>
+
+                                                <div class="col-md-12 text-center mt-2 mr-0 mb-lg-5" >
+                                                    <button class="btn btn-primary pl-lg-3 pr-lg-3 mr-0" onclick="addComment()">
+                                                        <i class="mdi mdi-telegram"></i>
+                                                        <span th:text="#{sys_send}"></span>
+                                                    </button>
+                                                </div>
+
+                                                <h3 th:text="#{sys_comment}" id="comment-title" class="text-center mt-lg-5"></h3>
+                                                <div class="col-md-4 offset-4" id="comments">
+                                                    <div id="comments-first"></div>
+                                                    <div class="row" th:each="comment : ${commentList}" th:if="${#lists.size(commentList)>0}">
+                                                        <div class="col-md-2">
+                                                            <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 25%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
+                                                        </div>
+                                                        <div class="col-md-10 pl-0">
+                                                            <p class="p-2 mb-1 mt-lg-4" th:text="${comment.message}" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px"></p>
+                                                            <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 offset-2 text-center mt-2 mr-0 mb-lg-5" th:if="${#lists.size(commentList)>5}">
+                                                        <button class="btn btn-outline-secondary pl-lg-3 pr-lg-3 mr-0 btn-block" >
+                                                            <span th:text="#{sys_comments_full}"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:inline="javascript">
+    var regApplicationId = [[${regApplication.id}]];
+    var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationCommentAdd}]];
+
+    function addComment() {
+        var message = $('#message').val();
+        if (message!=''){
+            var form = new FormData();
+            form.append("id", regApplicationId);
+            form.append("comment", $('#message').val());
+            form.append("_csrf", $('#global_csrf').val());
+            $.ajax({
+                url: addCommentUrl,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if (response.status==1){
+                        $('#message').val('');
+                        html='<div class="row">\n' +
+                            '   <div class="col-md-2">\n' +
+                            '       <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 25%; background-color: #bdc0c3" >'+response.fioShort+'</span>\n' +
+                            '   </div>\n' +
+                            '   <div class="col-md-10 pl-0">\n' +
+                            '       <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">'+response.message+'</p>\n' +
+                            '       <p class="text-right">'+response.created+'</p>\n' +
+                            '    </div>\n' +
+                            ' </div>';
+                        $('#comments').prepend(html);
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

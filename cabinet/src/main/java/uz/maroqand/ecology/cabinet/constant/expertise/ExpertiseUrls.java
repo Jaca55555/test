@@ -35,4 +35,16 @@ public class ExpertiseUrls {
     public static final String AgreementCompleteList = AgreementComplete + "/list";
     public static final String AgreementCompleteListAjax = AgreementComplete + "/list_ajax";
 
+    private static final String Material = Prefix + "/material";
+    public static final String MaterialList = Material + "/list";
+    public static final String MaterialListAjax = Material + "/list_ajax";
+    public static final String MaterialNew = Material + "/new";
+    public static final String MaterialEdit = Material + "/edit";
+
+    private static final String Offer = Prefix + "/offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferListAjax = Offer + "/list_ajax";
+    public static final String OfferNew = Offer + "/new";
+    public static final String OfferEdit = Offer + "/edit";
+
 }

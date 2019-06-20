@@ -6,6 +6,8 @@ import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.repository.expertise.CommentRepository;
 import uz.maroqand.ecology.core.service.expertise.CommentService;
 
+import java.util.List;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -14,6 +16,11 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
+    }
+
+    @Override
+    public Comment getById(Integer id) {
+        return commentRepository.getOne(id);
     }
 
     @Override
@@ -29,5 +36,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment updateComment(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    @Override
+    public List<Comment> getListByRegApplicationId(Integer id) {
+        return commentRepository.findByRegApplicationIdAndDeletedFalse(id);
     }
 }

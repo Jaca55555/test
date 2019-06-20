@@ -21,6 +21,7 @@ public class Urls {
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
+    public static final String RegApplicationCommentAdd = RegApplication + "/comment_add";
 
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";

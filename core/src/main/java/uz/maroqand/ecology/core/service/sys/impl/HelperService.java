@@ -60,6 +60,20 @@ public class HelperService {
         return user!=null? user.getUsername():"";
     }
 
+    //for comment
+    @Cacheable(value = "getUserLastAndFirstShortById", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getUserLastAndFirstShortById(Integer id) {
+        if(id==null) return "";
+        User user = userService.findById(id);
+        String fio_short = "  ";
+        if (user!=null){
+            fio_short=user.getFirstname()!=null?user.getFirstname().substring(0,1):" ";
+            fio_short+=user.getLastname()!=null?user.getLastname().substring(0,1):" ";
+        }
+
+        return fio_short;
+    }
+
     @Cacheable(value = "getSoatoName", key = "#id",condition="#id != null",unless="#result == ''")
     public String getSoatoName(Integer id, String locale) {
         if(id==null) return "";

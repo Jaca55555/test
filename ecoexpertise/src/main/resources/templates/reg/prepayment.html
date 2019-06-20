@@ -105,6 +105,8 @@
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
     <script type="text/javascript" src="/static/plugins/printThis.js"></script>
     <script type="text/javascript" th:src="@{/static/plugins/input-mask/jquery.mask.min.js}"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
     <script th:inline="javascript">
             $(".tel").mask('99 999 99 99');
             $(".card-bank").mask('9999 9999 9999 9999');
