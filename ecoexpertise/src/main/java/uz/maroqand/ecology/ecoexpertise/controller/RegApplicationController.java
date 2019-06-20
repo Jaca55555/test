@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.Category;
-import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
-import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -59,9 +56,10 @@ public class RegApplicationController {
     private final HelperService helperService;
     private final FileService fileService;
     private final InvoiceService invoiceService;
+    private final CommentService commentService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -78,6 +76,7 @@ public class RegApplicationController {
         this.helperService = helperService;
         this.fileService = fileService;
         this.invoiceService = invoiceService;
+        this.commentService = commentService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -187,7 +186,7 @@ public class RegApplicationController {
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("sub_regions", soatoService.getSubRegions());
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("step_id", 1);
+        model.addAttribute("step_id", RegApplicationStep.APPLICANT.ordinal()+1);
         return Templates.RegApplicationApplicant;
     }
 
@@ -221,6 +220,7 @@ public class RegApplicationController {
                 clientService.updateClient(applicant,individualDto);
             }
         }
+        regApplication.setStep(RegApplicationStep.ABOUT);
         regApplicationService.save(regApplication);
         return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;
     }
@@ -255,7 +255,7 @@ public class RegApplicationController {
         model.addAttribute("categoryList", Category.getCategoryList());
         model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("back_url",Urls.RegApplicationApplicant + "?id=" + id);
-        model.addAttribute("step_id", 2);
+        model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return Templates.RegApplicationAbout;
     }
 
@@ -291,7 +291,7 @@ public class RegApplicationController {
         regApplication1.setMaterialId(requirement.getMaterialId());
 
         regApplication1.setConfirmStatus(ConfirmStatus.Initial);
-
+        regApplication1.setStep(RegApplicationStep.ABOUT);
         regApplicationService.save(regApplication1);
 
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
@@ -415,13 +415,18 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
+        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus() == ConfirmStatus.Approved){
+            regApplication.setStep(RegApplicationStep.CONTRACT);
+            regApplicationService.save(regApplication);
+        }
+
         if (regApplication.getInvoiceId()!=null){
             return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url",Urls.RegApplicationAbout + "?id=" + id);
-        model.addAttribute("step_id", 2);
+        model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return Templates.RegApplicationWaiting;
     }
 
@@ -459,7 +464,7 @@ public class RegApplicationController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
         model.addAttribute("back_url",Urls.RegApplicationWaiting + "?id=" + id);
-        model.addAttribute("step_id", 3);
+        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
         return Templates.RegApplicationContract;
     }
 
@@ -482,6 +487,7 @@ public class RegApplicationController {
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
         regApplication.setContractDate(new Date());
+        regApplication.setStep(RegApplicationStep.PAYMENT);
         regApplicationService.save(regApplication);
 
         return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
@@ -516,7 +522,7 @@ public class RegApplicationController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("upay_url", Urls.RegApplicationStatus);//todo to`grilash kerak
 
-        model.addAttribute("step_id", 4);
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
         return Templates.RegApplicationPrepayment;
     }
 
@@ -605,12 +611,44 @@ public class RegApplicationController {
         if (invoice.getStatus()!=InvoiceStatus.Success){
             invoice = invoiceService.payTest(invoiceId);
         }
-
+        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
         model.addAttribute("back_url", Urls.RegApplicationList);
-        model.addAttribute("step_id", 5);
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
         return Templates.RegApplicationStatus;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationCommentAdd,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> createCommet(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "comment") String message
+    ){
+        User user =userService.getCurrentUserFromContext();
+        Integer status=1;
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null){
+            status = 0;
+            result.put("status",status);
+            return result;
+        }
+
+        Comment comment = new Comment();
+        comment.setMessage(message);
+        comment.setRegApplicationId(regApplication.getId());
+        comment.setCreatedAt(new Date());
+        comment.setCreatedById(user.getId());
+        comment = commentService.createComment(comment);
+
+        result.put("status", status);
+        result.put("created",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
+        result.put("fioShort",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
+        result.put("message",comment.getMessage());
+
+        return result;
     }
 
 }

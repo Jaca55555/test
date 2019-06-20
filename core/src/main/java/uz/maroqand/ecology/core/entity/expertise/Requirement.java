@@ -34,7 +34,7 @@ public class Requirement {
 
     //ekspertiza obyekti kategoriyasi
     @Column(name = "category")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated
     private Category category;
 
 

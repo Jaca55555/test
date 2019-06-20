@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{mntr_objectExpertise_new}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" th:object="${objectExpertise}" data-parsley-validate="" th:action="${action_url}">
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-right">
+                                                    <label class="col-form-label">
+                                                        <span th:text="#{mntr_objectExpertise.name}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input id="name" required="required" class="form-control" type="text" th:field="*{name}" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-right">
+                                                    <label class="col-form-label">
+                                                        <span th:text="#{mntr_objectExpertise.nameRu}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input id="nameRu" required="required" class="form-control" type="text" th:field="*{nameRu}" />
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" name="id" th:value="*{id}"/>
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                            <div class="text-center">
+                                                <div class="col-md-12 text-center">
+                                                    <a class="btn btn-secondary" th:href="${back_url}" th:text="#{sys_cancel}"></a>
+                                                    <input  type="submit" th:value="#{sys_add}" class="btn btn-success"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+</body>
+</html>

@@ -13,4 +13,6 @@ public interface MaterialService {
 
     Material getById(Integer id);
 
+    List<Material> getList();
+
 }
