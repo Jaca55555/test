@@ -144,16 +144,16 @@
             $('#buttons-1').hide();
         }
     });
-    var accountantConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantConfirm}]];
-    var accountantNotConfirm = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantNotConfirm}]];
+    
+    function setAction(actionNumber) {
+        if (actionNumber == 1){
+            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantConfirm}]]);
+        }
+        if (actionNumber == 2) {
+            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantNotConfirm}]]);
+        }
+    }
 
-
-    $('#confirm').on('click',function () {
-       $('#form').attr('action',accountantConfirm,true);
-    });
-    $('#notConfirm').on('click',function () {
-        $('#form').attr('action',accountantNotConfirm,true);
-    });
     function tabActive(count){
         if (count == 1){
             $('#contact-tab').removeClass('active');

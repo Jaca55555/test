@@ -17,12 +17,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getById(Integer id) {
-        return commentRepository.getOne(id);
+    public Comment getByRegApplicationId(Integer id) {
+        return commentRepository.getByRegApplicationId(id);
     }
 
     @Override
     public Comment createComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public Comment updateComment(Comment comment) {
         return commentRepository.save(comment);
     }
 }
