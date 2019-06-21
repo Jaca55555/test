@@ -611,6 +611,8 @@ public class RegApplicationController {
         if (invoice.getStatus()!=InvoiceStatus.Success){
             invoice = invoiceService.payTest(invoiceId);
         }
+        regApplication.setForwardingStatus(ForwardingStatus.Initial);
+        regApplicationService.save(regApplication);
         List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("commentList", commentList);
