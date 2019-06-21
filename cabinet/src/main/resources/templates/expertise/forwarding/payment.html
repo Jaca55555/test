@@ -10,7 +10,7 @@
             <h4 th:text="#{sys_invoice_number}"></h4>
         </div>
         <div class="col-md-6 text-center">
-            <h4 th:text="*{invoice.number}">123123123123123</h4>
+            <h4 th:text="*{invoice}">123123123123123</h4>
         </div>
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_payer_name}"></h4>
@@ -22,7 +22,7 @@
             <h4 th:text="#{sys_invoice_createdAt}"></h4>
         </div>
         <div class="col-md-6 text-center">
-            <h4 th:text="*{createdDate}">OPF Name</h4>
+            <h4 th:text="*{#dates.format(createdDate,'dd.MM.yyyy HH:mm:ss')}">OPF Name</h4>
         </div>
         <div class="col-md-6 text-center">
             <h4 th:text="#{sys_payment_amount}"></h4>

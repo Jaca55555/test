@@ -209,7 +209,7 @@ public class AccountantController {
         return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
     }
 
-    @RequestMapping(ExpertiseUrls.DownloadDocumentFiles)
+    @RequestMapping(ExpertiseUrls.AccountantFileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "file_id") Integer fileId){
         User user = userService.getCurrentUserFromContext();
