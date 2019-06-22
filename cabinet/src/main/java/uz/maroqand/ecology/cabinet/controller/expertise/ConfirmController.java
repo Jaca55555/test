@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
-import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.CommentService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
@@ -40,28 +41,29 @@ import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
- * (uz)
+ * (uz) Ariza ma'lumotlarini tekshirish
  * (ru)
  */
 @Controller
-public class AccountantController {
+public class ConfirmController {
 
     private final RegApplicationService regApplicationService;
+    private final ClientService clientService;
     private final SoatoService soatoService;
     private final UserService userService;
-    private final ClientService clientService;
+    private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
     private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
 
     @Autowired
-    public AccountantController(
+    public ConfirmController(
             RegApplicationService regApplicationService,
             SoatoService soatoService,
             UserService userService,
             ClientService clientService,
-            ObjectExpertiseService objectExpertiseService,
+            ActivityService activityService, ObjectExpertiseService objectExpertiseService,
             CommentService commentService,
             HelperService helperService,
             FileService fileService
@@ -70,55 +72,45 @@ public class AccountantController {
         this.soatoService = soatoService;
         this.userService = userService;
         this.clientService = clientService;
+        this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
         this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AccountantList)
-    public String getAccountantListPage(Model model) {
+    @RequestMapping(value = ExpertiseUrls.ConfirmList)
+    public String getConfirmListPage(Model model) {
+
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
-        model.addAttribute("expertiseFormList",objectExpertiseService.getList());
+        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
+        model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList",ConfirmStatus.getConfirmStatusList());
-        return ExpertiseTemplates.AccountantList;
+        return ExpertiseTemplates.ConfirmList;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AccountantListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseUrls.ConfirmListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HashMap<String,Object> getAccountantListPageListAjax(
-            @RequestParam(name = "tin",required = false)Integer tin,
-            @RequestParam(name = "name",required = false)String name,
-            @RequestParam(name = "contractNumber",required = false)Integer contractNumber,
-            @RequestParam(name = "id",required = false)Integer regApplicationId,
-            @RequestParam(name = "oked",required = false)Integer oked,
-            @RequestParam(name = "expertiseForm",required = false)Integer expertiseForm,
-            @RequestParam(name = "status",required = false)ConfirmStatus confirmStatus,
-            @RequestParam(name = "regionId",required = false)Integer regionId,
-            @RequestParam(name = "subRegionId",required = false)Integer subRegionId,
-            @RequestParam(name = "regDateBegin",required = false)String registrationDateBegin,
-            @RequestParam(name = "regDateEnd",required = false)String registrationDateEnd,
-            @RequestParam(name = "contractDateBegin",required = false)String contractDateBeginDate,
-            @RequestParam(name = "contractDateEnd",required = false)String contractDateEndDate,
+    public HashMap<String,Object> getConfirmListPageListAjax(
+            FilterDto filterDto,
             Pageable pageable
     ){
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        Date regDateBegin = DateParser.TryParse(registrationDateBegin,Common.uzbekistanDateFormat);
-        Date regDateEnd = DateParser.TryParse(registrationDateEnd,Common.uzbekistanDateFormat);
-        Date contractDateBegin = DateParser.TryParse(contractDateBeginDate,Common.uzbekistanDateFormat);
-        Date contractDateEnd = DateParser.TryParse(contractDateEndDate,Common.uzbekistanDateFormat);
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto, user.getId(), pageable);
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
 
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
-            Client client = clientService.getById(regApplication.getApplicantId());
+            Client client = regApplication.getApplicant();
+            if(client==null){
+                client = new Client();
+            }
             convenientForJSONArray.add(new Object[]{
                 regApplication.getId(),
                 client.getTin(),
@@ -135,7 +127,7 @@ public class AccountantController {
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.AccountantChecking)
+    @RequestMapping(ExpertiseUrls.ConfirmChecking)
     public String getCheckingPage(
             @RequestParam(name = "id")Integer regApplicationId,
             @RequestParam(name = "status",required = false) ConfirmStatus confirmStatus,
@@ -143,7 +135,7 @@ public class AccountantController {
     ) {
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.AccountantList;
+            return "redirect:" + ExpertiseUrls.ConfirmList;
         }
         Client client = clientService.getById(regApplication.getApplicantId());
         Comment comment = commentService.getByRegApplicationId(regApplication.getId());
@@ -151,11 +143,11 @@ public class AccountantController {
         model.addAttribute("applicant",client);
         model.addAttribute("comment",comment!=null?comment:new Comment());
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("cancel_url",ExpertiseUrls.AccountantList);
-        return ExpertiseTemplates.AccountantChecking;
+        model.addAttribute("cancel_url",ExpertiseUrls.ConfirmList);
+        return ExpertiseTemplates.ConfirmChecking;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AccountantConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConfirmConfirm,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "template")String template,
@@ -179,10 +171,10 @@ public class AccountantController {
         }
         regApplication.setConfirmStatus(ConfirmStatus.Approved);
         regApplicationService.save(regApplication);
-        return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId() + "&status=" + ConfirmStatus.Approved;
+        return "redirect:"+ExpertiseUrls.ConfirmChecking + "?id=" + regApplication.getId() + "&status=" + ConfirmStatus.Approved;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AccountantNotConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConfirmNotConfirm,method = RequestMethod.POST)
     public String notConfirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "template")String template,
@@ -206,10 +198,10 @@ public class AccountantController {
         }
         regApplication.setConfirmStatus(ConfirmStatus.Denied);
         regApplicationService.save(regApplication);
-        return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
+        return "redirect:"+ExpertiseUrls.ConfirmChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
     }
 
-    @RequestMapping(ExpertiseUrls.AccountantFileDownload)
+    @RequestMapping(ExpertiseUrls.ConfirmFileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "file_id") Integer fileId){
         User user = userService.getCurrentUserFromContext();

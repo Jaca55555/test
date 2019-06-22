@@ -1,0 +1,36 @@
+package uz.maroqand.ecology.cabinet.constant.expertise_mgmt;
+
+/**
+ * Created by Utkirbek Boltaev on 14.06.2019.
+ * (uz)
+ * (ru)
+ */
+public class ExpertiseMgmtTemplates {
+    private static final String Prefix = "mgmt/expertise";
+
+    //ObjectExpertise
+    private static final String ObjectExpertise = Prefix + "/object_expertise";
+    public static final String ObjectExpertiseList = ObjectExpertise + "/list";
+    public static final String ObjectExpertiseNew = ObjectExpertise + "/new";
+
+    //Activity
+    private static final String Activity = Prefix + "/activity";
+    public static final String ActivityList = Activity + "/list";
+    public static final String ActivityNew = Activity + "/new";
+
+    //Material
+    private static final String Material = Prefix + "/material";
+    public static final String MaterialList = Material + "/list";
+    public static final String MaterialNew = Material + "/new";
+
+    //ExpertiseRequirement
+    private static final String ExpertiseRequirement = Prefix + "/expertise_requirement";
+    public static final String ExpertiseRequirementList = ExpertiseRequirement + "/list";
+    public static final String ExpertiseRequirementNew = ExpertiseRequirement + "/new";
+
+    //Offerta
+    private static final String Offer = Prefix + "/offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferNew = Offer + "/new";
+
+}

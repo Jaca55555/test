@@ -8,22 +8,29 @@ package uz.maroqand.ecology.cabinet.constant.expertise;
 public class ExpertiseTemplates {
     private static final String Prefix = "expertise";
 
-    private static final String Accountant = Prefix + "/accountant";
+    //Birinchi tekshiruv
+    private static final String Confirm = Prefix + "/confirm";
+    public static final String ConfirmList = Confirm + "/list";
+    public static final String ConfirmChecking = Confirm + "/checking";
 
-    public static final String AccountantList = Accountant + "/list";
-    public static final String AccountantChecking = Accountant + "/checking";
-
+    //Boshqaruv
     private static final String Forwarding = Prefix + "/forwarding";
-
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingChecking = Forwarding + "/checking";
 
-    private static final String Material = Prefix + "/material";
-    public static final String MaterialList = Material + "/list";
-    public static final String MaterialNew = Material + "/new";
+    //Natijani kiritish
+    private static final String Performer = Prefix + "/performer";
+    public static final String PerformerList = Performer + "/list";
+    public static final String PerformerView = Performer + "/view";
 
-    private static final String Offer = Prefix + "/offer";
-    public static final String OfferList = Offer + "/list";
-    public static final String OfferNew = Offer + "/new";
+    //Kelishish
+    private static final String Agreement = Prefix + "/agreement";
+    public static final String AgreementList = Agreement + "/list";
+    public static final String AgreementView = Agreement + "/view";
+
+    //Oxirgi kelishuv
+    private static final String AgreementComplete = Prefix + "/agreement_complete";
+    public static final String AgreementCompleteList = AgreementComplete + "/list";
+    public static final String AgreementCompleteView = AgreementComplete + "/view";
 
 }

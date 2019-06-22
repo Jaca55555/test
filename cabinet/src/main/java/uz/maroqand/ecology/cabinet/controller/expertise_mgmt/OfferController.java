@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.expertise;
+package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
-import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
@@ -33,12 +33,12 @@ public class OfferController {
         this.userService = userService;
     }
 
-    @RequestMapping(ExpertiseUrls.OfferList)
+    @RequestMapping(ExpertiseMgmtUrls.OfferList)
     public String offerList(){
-        return ExpertiseTemplates.OfferList;
+        return ExpertiseMgmtTemplates.OfferList;
     }
 
-    @RequestMapping(value = ExpertiseUrls.OfferListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseMgmtUrls.OfferListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> offerListAjax(Pageable pageable){
 
@@ -62,25 +62,29 @@ public class OfferController {
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.OfferEdit)
+    @RequestMapping(ExpertiseMgmtUrls.OfferEdit)
     public String offerEdit(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         Offer offer = offerService.getById(id);
-        if(offer == null) return "redirect:" + ExpertiseUrls.OfferList;
+        if(offer == null){
+            return "redirect:" + ExpertiseMgmtUrls.OfferList;
+        }
 
         model.addAttribute("offer", offer);
-        model.addAttribute("action_url", ExpertiseUrls.OfferEdit);
+        model.addAttribute("action_url", ExpertiseMgmtUrls.OfferEdit);
         model.addAttribute("uzOfferList", offerService.getAllByLanguage("uz"));
-        return ExpertiseTemplates.OfferNew;
+        return ExpertiseMgmtTemplates.OfferNew;
     }
 
-    @RequestMapping(value = ExpertiseUrls.OfferEdit, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.OfferEdit, method = RequestMethod.POST)
     public String offerEditSubmit(Offer offer){
         User user = userService.getCurrentUserFromContext();
         Offer oldOffer = offerService.getById(offer.getId());
-        if(oldOffer == null) return "redirect:" + ExpertiseUrls.OfferList;
+        if(oldOffer == null){
+            return "redirect:" + ExpertiseMgmtUrls.OfferList;
+        }
 
         oldOffer.setName(offer.getName());
         oldOffer.setLanguage(offer.getLanguage());
@@ -89,20 +93,21 @@ public class OfferController {
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
         offerService.save(oldOffer);
-        return "redirect:" + ExpertiseUrls.OfferList;
+        return "redirect:" + ExpertiseMgmtUrls.OfferList;
     }
 
 
-    @RequestMapping(ExpertiseUrls.OfferNew)
+    @RequestMapping(ExpertiseMgmtUrls.OfferNew)
     public String offerNew(Model model){
+
         Offer offer = new Offer();
         model.addAttribute("offer", offer);
-        model.addAttribute("action_url", ExpertiseUrls.OfferNew);
+        model.addAttribute("action_url", ExpertiseMgmtUrls.OfferNew);
         model.addAttribute("uzOfferList", offerService.getAllByLanguage("uz"));
-        return ExpertiseTemplates.OfferNew;
+        return ExpertiseMgmtTemplates.OfferNew;
     }
 
-    @RequestMapping(value = ExpertiseUrls.OfferNew, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.OfferNew, method = RequestMethod.POST)
     public String offerNewSubmit(Offer offer){
         User user = userService.getCurrentUserFromContext();
 
@@ -111,6 +116,6 @@ public class OfferController {
         offer.setCreatedAt(new Date());
         offer.setCreatedById(user.getId());
         offerService.save(offer);
-        return "redirect:" + ExpertiseUrls.OfferList;
+        return "redirect:" + ExpertiseMgmtUrls.OfferList;
     }
 }

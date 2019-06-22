@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
@@ -44,13 +44,13 @@ public class ActivityController {
         this.objectMapper = objectMapper;
     }
 
-    @RequestMapping(MgmtUrls.ActivityList)
+    @RequestMapping(ExpertiseMgmtUrls.ActivityList)
     public String getActivityList(Model model){
         model.addAttribute("categoryList", Category.getCategoryList());
-        return MgmtTemplates.ActivityList;
+        return ExpertiseMgmtTemplates.ActivityList;
     }
 
-    @RequestMapping(value = MgmtUrls.ActivityListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseMgmtUrls.ActivityListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getActivityListAjax(
             @RequestParam(name = "id",required = false)Integer id,
@@ -78,15 +78,15 @@ public class ActivityController {
         return result;
     }
 
-    @RequestMapping(MgmtUrls.ActivityNew)
+    @RequestMapping(ExpertiseMgmtUrls.ActivityNew)
     public String getActivityNewPage(Model model){
-        model.addAttribute("action_url",MgmtUrls.ActivityCreate);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ActivityCreate);
         model.addAttribute("categoryList",Category.getCategoryList());
         model.addAttribute("activity",new Activity());
-        return MgmtTemplates.ActivityNew;
+        return ExpertiseMgmtTemplates.ActivityNew;
     }
 
-    @RequestMapping(value = MgmtUrls.ActivityCreate,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.ActivityCreate,method = RequestMethod.POST)
     public String createActivity(
             @RequestParam(name = "category",required = false)Category category,
             Activity activity
@@ -110,26 +110,26 @@ public class ActivityController {
                 user.getId(),
                 user.getUserAdditionalId()
         );
-        return "redirect:" + MgmtUrls.ActivityList;
+        return "redirect:" + ExpertiseMgmtUrls.ActivityList;
     }
 
-    @RequestMapping(value = MgmtUrls.ActivityEdit)
+    @RequestMapping(value = ExpertiseMgmtUrls.ActivityEdit)
     public String getActivityEditPage(
             @RequestParam(name = "id")Integer id,
             Model model
     ){
         Activity oldActivity = activityService.getById(id);
         if (oldActivity == null){
-            return "redirect:" + MgmtUrls.ActivityList;
+            return "redirect:" + ExpertiseMgmtUrls.ActivityList;
         }
-        model.addAttribute("action_url",MgmtUrls.ActivityUpdate);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ActivityUpdate);
         model.addAttribute("categoryList",Category.getCategoryList());
         model.addAttribute("activity",oldActivity);
-        return MgmtTemplates.ActivityNew;
+        return ExpertiseMgmtTemplates.ActivityNew;
     }
 
 
-    @RequestMapping(value = MgmtUrls.ActivityUpdate,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.ActivityUpdate,method = RequestMethod.POST)
     public String updateEditPage(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "category",required = false)Category category,
@@ -140,7 +140,7 @@ public class ActivityController {
         User user = userService.getCurrentUserFromContext();
         Activity oldActivity = activityService.getById(id);
         if (oldActivity == null){
-            return "redirect:" + MgmtUrls.ActivityList;
+            return "redirect:" + ExpertiseMgmtUrls.ActivityList;
         }
         try {
             before = objectMapper.writeValueAsString(oldActivity);
@@ -164,6 +164,6 @@ public class ActivityController {
                 user.getId(),
                 user.getUserAdditionalId()
         );
-        return "redirect:" + MgmtUrls.ActivityList;
+        return "redirect:" + ExpertiseMgmtUrls.ActivityList;
     }
 }

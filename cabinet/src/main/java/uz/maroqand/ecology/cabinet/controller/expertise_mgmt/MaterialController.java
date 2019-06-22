@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.expertise;
+package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
-import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 
@@ -28,12 +28,12 @@ public class MaterialController {
         this.materialService = materialService;
     }
 
-    @RequestMapping(ExpertiseUrls.MaterialList)
+    @RequestMapping(ExpertiseMgmtUrls.MaterialList)
     public String materialList(){
-        return ExpertiseTemplates.MaterialList;
+        return ExpertiseMgmtTemplates.MaterialList;
     }
 
-    @RequestMapping(value = ExpertiseUrls.MaterialListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseMgmtUrls.MaterialListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> materialListAjax(Pageable pageable){
 
@@ -55,27 +55,27 @@ public class MaterialController {
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.MaterialEdit)
+    @RequestMapping(ExpertiseMgmtUrls.MaterialEdit)
     public String materialEdit(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         Material material = materialService.getById(id);
-        if(material == null) return "redirect:" + ExpertiseUrls.MaterialList;
+        if(material == null) return "redirect:" + ExpertiseMgmtUrls.MaterialList;
         model.addAttribute("material", material);
-        return ExpertiseTemplates.MaterialNew;
+        return ExpertiseMgmtTemplates.MaterialNew;
     }
 
-    @RequestMapping(value = ExpertiseUrls.MaterialNew, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.MaterialNew, method = RequestMethod.POST)
     public String materialSubmit(Material material){
         materialService.save(material);
-        return "redirect:" + ExpertiseUrls.MaterialList;
+        return "redirect:" + ExpertiseMgmtUrls.MaterialList;
     }
 
-    @RequestMapping(ExpertiseUrls.MaterialNew)
+    @RequestMapping(ExpertiseMgmtUrls.MaterialNew)
     public String materialNew(Model model){
         Material material = new Material();
         model.addAttribute("material", material);
-        return ExpertiseTemplates.MaterialNew;
+        return ExpertiseMgmtTemplates.MaterialNew;
     }
 }

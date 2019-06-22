@@ -16,16 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ForwardingStatus;
+import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
-import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
-import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.ActivityService;
+import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -38,7 +39,7 @@ import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
- * (uz)
+ * (uz) Arizani ijrochisini kiritish va kelishish uchun yuborish
  * (ru)
  */
 @Controller
@@ -51,6 +52,8 @@ public class ForwardingController {
     private final SoatoService soatoService;
     private final InvoiceService invoiceService;
     private final FileService fileService;
+    private final ActivityService activityService;
+    private final ObjectExpertiseService objectExpertiseService;
 
     @Autowired
     public ForwardingController(
@@ -60,7 +63,10 @@ public class ForwardingController {
             HelperService helperService,
             SoatoService soatoService,
             InvoiceService invoiceService,
-            FileService fileService) {
+            FileService fileService,
+            ActivityService activityService,
+            ObjectExpertiseService objectExpertiseService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -68,41 +74,43 @@ public class ForwardingController {
         this.soatoService = soatoService;
         this.invoiceService = invoiceService;
         this.fileService = fileService;
+        this.activityService = activityService;
+        this.objectExpertiseService = objectExpertiseService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
     public String getForwardingListPage(Model model){
+
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
-        model.addAttribute("statusList", ForwardingStatus.getForwardingStatusList());
+        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
+        model.addAttribute("activityList",activityService.getList());
+        model.addAttribute("statusList", ConfirmStatus.getConfirmStatusList());
         return ExpertiseTemplates.ForwardingList;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping(value = ExpertiseUrls.ForwardingListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getForwardingListAjaxPage(
-            @RequestParam(name = "tin",required = false)Integer tin,
-            @RequestParam(name = "name",required = false)String name,
-            @RequestParam(name = "regApplicationId",required = false)Integer regApplicationId,
-            @RequestParam(name = "status",required = false)Integer status,
-            @RequestParam(name = "regionId",required = false)Integer regionId,
-            @RequestParam(name = "subRegionId",required = false)Integer subRegionId,
-            @RequestParam(name = "regDateBegin",required = false)String registrationDateBegin,
-            @RequestParam(name = "regDateEnd",required = false)String registrationDateEnd,
-            @RequestParam(name = "contractDateBegin",required = false)String contractDateBeginDate,
-            @RequestParam(name = "contractDateEnd",required = false)String contractDateEndDate,
+            FilterDto filterDto,
             Pageable pageable
     ){
         HashMap<String,Object> result = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Date regDateBegin = DateParser.TryParse(registrationDateBegin, Common.uzbekistanDateFormat);
-        Date regDateEnd = DateParser.TryParse(registrationDateEnd,Common.uzbekistanDateFormat);
-        Date contractDateBegin = DateParser.TryParse(contractDateBeginDate,Common.uzbekistanDateFormat);
-        Date contractDateEnd = DateParser.TryParse(contractDateEndDate,Common.uzbekistanDateFormat);
-
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto, user.getId(), pageable);
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements

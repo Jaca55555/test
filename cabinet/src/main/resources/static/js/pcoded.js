@@ -664,6 +664,36 @@ function getToastrList() {
     });
 }
 
+function bindSubRegionSelectToRegionSelect(subRegionSelector, regionSelector) {
+    $(regionSelector).change(function(){
+        var regionId = $(this).val();
+        var srSelector = $(subRegionSelector);
+        srSelector.find('option').hide();
+        srSelector.find('option:first').show();
+
+        if(regionId != '' && regionId != null) {
+            srSelector.find('.sr-' + regionId).show();
+        }else{
+            srSelector.find('option:first').prop("selected", true);
+            srSelector.change();
+        }
+
+        var selected = srSelector.find('option:selected');
+        if(
+            selected.length>0 &&
+            selected.attr('class') != undefined &&
+            selected.attr('class').length>3 &&
+            (selected.attr('class').substr(3)!=regionId)
+        ) {
+            selected.prop("selected", false);
+            srSelector.find('option:first').prop("selected", true);
+            srSelector.change();
+        }
+        //srSelector.val('');
+    });
+    $(regionSelector).change();
+}
+
 function switchLanguage(targetLanguage) {
     var currentUrl = window.location.href;
 

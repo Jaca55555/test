@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
@@ -56,7 +57,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public Page<RegApplication> findFiltered(Integer userId, Pageable pageable) {
+    public Page<RegApplication> findFiltered(
+            FilterDto filterDto,
+            Integer userId,
+            Pageable pageable
+    ) {
         return regApplicationRepository.findAll(getFilteringSpecification(userId),pageable);
     }
 

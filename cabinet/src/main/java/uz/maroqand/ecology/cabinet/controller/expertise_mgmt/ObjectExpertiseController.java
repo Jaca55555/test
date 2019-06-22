@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
@@ -42,10 +42,12 @@ public class ObjectExpertiseController {
         this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseList,method = RequestMethod.GET)
-    public String getList(){return MgmtTemplates.ObjectExpertiseList;}
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseList,method = RequestMethod.GET)
+    public String getList(){
+        return ExpertiseMgmtTemplates.ObjectExpertiseList;
+    }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseList,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseList,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object>  getAjaxList(
             @RequestParam(name = "id",required = false) Integer id,
@@ -78,18 +80,18 @@ public class ObjectExpertiseController {
         return result;
     }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseNew)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseNew)
     public String objectExpertiseNew(Model model){
         ObjectExpertise objectExpertise = new ObjectExpertise();
 
         model.addAttribute("objectExpertise",objectExpertise);
-        model.addAttribute("action_url",MgmtUrls.ObjectExpertiseCreate);
-        model.addAttribute("back_url",MgmtUrls.ObjectExpertiseList);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ObjectExpertiseCreate);
+        model.addAttribute("back_url",ExpertiseMgmtUrls.ObjectExpertiseList);
 
-        return MgmtTemplates.ObjectExpertiseNew;
+        return ExpertiseMgmtTemplates.ObjectExpertiseNew;
     }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseCreate)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseCreate)
     public String objectExpertiseCreate(ObjectExpertise objectExpertise){
         User user = userService.getCurrentUserFromContext();
         ObjectExpertise objectExpertise1 = new ObjectExpertise();
@@ -108,26 +110,26 @@ public class ObjectExpertiseController {
                 user.getUserAdditionalId()
         );
 
-        return "redirect:" + MgmtUrls.ObjectExpertiseList;
+        return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
     }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseEdit)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseEdit)
     public String objectExpertiseEdit(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         ObjectExpertise objectExpertise = objectExpertiseService.getById(id);
         if (objectExpertise==null){
-            return "redirect:" + MgmtUrls.ObjectExpertiseList;
+            return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
         }
         model.addAttribute("objectExpertise",objectExpertise);
-        model.addAttribute("action_url",MgmtUrls.ObjectExpertiseUpdate);
-        model.addAttribute("back_url",MgmtUrls.ObjectExpertiseList);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ObjectExpertiseUpdate);
+        model.addAttribute("back_url",ExpertiseMgmtUrls.ObjectExpertiseList);
 
-        return MgmtTemplates.ObjectExpertiseNew;
+        return ExpertiseMgmtTemplates.ObjectExpertiseNew;
     }
 
-    @RequestMapping(value = MgmtUrls.ObjectExpertiseUpdate)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseUpdate)
     public String objectExpertiseUpdate(
             @RequestParam(name = "id") Integer id,
             ObjectExpertise objectExpertise
@@ -135,7 +137,7 @@ public class ObjectExpertiseController {
         User user = userService.getCurrentUserFromContext();
         ObjectExpertise objectExpertise1 = objectExpertiseService.getById(id);
         if (objectExpertise1==null){
-            return "redirect:" + MgmtUrls.ObjectExpertiseList;
+            return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
         }
         String oldObjectExpertise = gson.toJson(objectExpertise1);
         objectExpertise1.setName(objectExpertise.getName());
@@ -152,7 +154,7 @@ public class ObjectExpertiseController {
                 user.getId(),
                 user.getUserAdditionalId()
         );
-        return "redirect:" + MgmtUrls.ObjectExpertiseList;
+        return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
     }
 
 }

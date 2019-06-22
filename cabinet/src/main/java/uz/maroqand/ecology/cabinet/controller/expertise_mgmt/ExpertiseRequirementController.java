@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
@@ -55,16 +55,16 @@ public class ExpertiseRequirementController {
         this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     }
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementList,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementList,method = RequestMethod.GET)
     public String getList(Model model ){
 
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("materialList",materialService.getList());
         model.addAttribute("categoryList",Category.getCategoryList());
         model.addAttribute("organizationList",organizationService.getList());
-        return MgmtTemplates.ExpertiseRequirementList;}
+        return ExpertiseMgmtTemplates.ExpertiseRequirementList;}
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementList,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementList,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object>  getAjaxList(
             @RequestParam(name = "id",required = false) Integer id,
@@ -102,7 +102,7 @@ public class ExpertiseRequirementController {
         return result;
     }
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementNew)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementNew)
     public String expertiseRequirementNew(Model model){
         Requirement requirement = new Requirement();
 
@@ -111,13 +111,13 @@ public class ExpertiseRequirementController {
         model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("categoryList",Category.getCategoryList());
         model.addAttribute("requirement",requirement);
-        model.addAttribute("action_url",MgmtUrls.ExpertiseRequirementCreate);
-        model.addAttribute("back_url",MgmtUrls.ExpertiseRequirementList);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ExpertiseRequirementCreate);
+        model.addAttribute("back_url",ExpertiseMgmtUrls.ExpertiseRequirementList);
 
-        return MgmtTemplates.ExpertiseRequirementNew;
+        return ExpertiseMgmtTemplates.ExpertiseRequirementNew;
     }
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementCreate)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementCreate)
     public String expertiseRequirementCreate(
             @RequestParam(name = "categoryId") Integer categoryId,
             Requirement requirement
@@ -143,30 +143,30 @@ public class ExpertiseRequirementController {
                 user.getUserAdditionalId()
                 );
 
-        return "redirect:" + MgmtUrls.ExpertiseRequirementList;
+        return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
     }
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementEdit)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementEdit)
     public String expertiseRequirementEdit(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         Requirement requirement = requirementService.getById(id);
         if (requirement==null){
-            return "redirect:" + MgmtUrls.ExpertiseRequirementList;
+            return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
         }
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("materialList",materialService.getList());
         model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("categoryList",Category.getCategoryList());
         model.addAttribute("requirement",requirement);
-        model.addAttribute("action_url",MgmtUrls.ExpertiseRequirementUpdate);
-        model.addAttribute("back_url",MgmtUrls.ExpertiseRequirementList);
+        model.addAttribute("action_url",ExpertiseMgmtUrls.ExpertiseRequirementUpdate);
+        model.addAttribute("back_url",ExpertiseMgmtUrls.ExpertiseRequirementList);
 
-        return MgmtTemplates.ExpertiseRequirementNew;
+        return ExpertiseMgmtTemplates.ExpertiseRequirementNew;
     }
 
-    @RequestMapping(value = MgmtUrls.ExpertiseRequirementUpdate)
+    @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementUpdate)
     public String objectExpertiseUpdate(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "categoryId") Integer categoryId,
@@ -175,7 +175,7 @@ public class ExpertiseRequirementController {
         User user = userService.getCurrentUserFromContext();
         Requirement requirement1 = requirementService.getById(id);
         if (requirement1==null){
-            return "redirect:" + MgmtUrls.ExpertiseRequirementList;
+            return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
         }
         String oldRequirement = gson.toJson(requirement1);
         System.out.println(categoryId);
@@ -198,7 +198,7 @@ public class ExpertiseRequirementController {
                 user.getUserAdditionalId()
         );
 
-        return "redirect:" + MgmtUrls.ExpertiseRequirementList;
+        return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
     }
 
 }

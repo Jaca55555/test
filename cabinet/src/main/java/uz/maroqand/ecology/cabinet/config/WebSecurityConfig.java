@@ -48,15 +48,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static*/**").permitAll()
                 .antMatchers("/dashboard/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
-                .antMatchers("/mgmt/object_expertise/**").authenticated()
-                .antMatchers("/mgmt/expertise_requirement/**").authenticated()
-                .antMatchers("/mgmt/min_wage/**").authenticated()
-                .antMatchers("/mgmt/activity/**").authenticated()
+
+                .antMatchers("/mgmt/expertise/object_expertise/**").authenticated()
+                .antMatchers("/mgmt/expertise/activity/**").authenticated()
+                .antMatchers("/mgmt/expertise/material/**").authenticated()
+                .antMatchers("/mgmt/expertise/expertise_requirement/**").authenticated()
+                .antMatchers("/mgmt/expertise/offer/**").authenticated()
+
                 .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
                 .antMatchers("/expertise/forwarding/").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
                 .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
                 .antMatchers("/expertise/agreement/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT.name())
                 .antMatchers("/expertise/agreement_complete/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT_COMPLETE.name())
+
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

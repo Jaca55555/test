@@ -23,10 +23,12 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
         if (authorities == null) authorities = new HashSet<>();
 
-        /*user.getRole().getPermissions().forEach(permission -> {
-            System.out.println(permission.name());
-            authorities.add(new SimpleGrantedAuthority(permission.name()));
-        });*/
+        if(user.getRole()!=null){
+            user.getRole().getPermissions().forEach(permission -> {
+                System.out.println(permission.name());
+                authorities.add(new SimpleGrantedAuthority(permission.name()));
+            });
+        }
 
     }
 

@@ -21,10 +21,26 @@
                     <label th:text="#{sys_control_panel}">Navigation</label>
                 </li>
                 <li data-username="Sample Page" class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/accountant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.accountantList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/material/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.materialList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/offer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label th:text="#{sys_expertise_control}"></label>
+                </li>
+                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label th:text="#{sys_expertise_control}"></label>
+                </li>
+                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/object_expertise/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/activity/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/material/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.materialList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/expertise_requirement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/offer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
+
+
                 <li data-username="Translations" class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
@@ -32,11 +48,7 @@
                         </span>
                         <span class="pcoded-mtext" th:text="#{mgmt_admin_panel}">Dashboard</span></a>
                     <ul class="pcoded-submenu" style="display: none;">
-                        <li class=""><a href="/mgmt/translations/" class="" th:text="#{mgmt_translations}">Default</a></li>
-                        <li class=""><a href="/mgmt/activity/" class="" th:text="#{mgmt_activities}">Default</a></li>
-                        <li class=""><a href="/mgmt/min_wage/" class="" th:text="#{mgmt_min_wages}">Default</a></li>
-                        <li class=""><a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ObjectExpertiseList}" class="" th:text="#{mntr_objectExpertise_list}"></a></li>
-                        <li class=""><a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementList}" class="" th:text="#{mntr_expertise_requirement_list}"></a></li>
+                        <li class=""><a href="/mgmt/translations" class="" th:text="#{mgmt_translations}">Default</a></li>
                     </ul>
                 </li>
             </ul>
