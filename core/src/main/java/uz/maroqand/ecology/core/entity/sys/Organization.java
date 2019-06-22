@@ -23,7 +23,6 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @Size(max = 9)
     private Integer tin;
 
     private String name;

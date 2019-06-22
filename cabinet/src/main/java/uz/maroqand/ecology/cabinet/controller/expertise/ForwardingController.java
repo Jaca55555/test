@@ -16,24 +16,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
 
@@ -54,6 +56,7 @@ public class ForwardingController {
     private final FileService fileService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
     public ForwardingController(
@@ -65,8 +68,8 @@ public class ForwardingController {
             InvoiceService invoiceService,
             FileService fileService,
             ActivityService activityService,
-            ObjectExpertiseService objectExpertiseService
-    ) {
+            ObjectExpertiseService objectExpertiseService,
+            RegApplicationLogService regApplicationLogService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -76,6 +79,7 @@ public class ForwardingController {
         this.fileService = fileService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -85,7 +89,7 @@ public class ForwardingController {
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", ConfirmStatus.getConfirmStatusList());
+        model.addAttribute("statusList", LogStatus.getLogStatusList());
         return ExpertiseTemplates.ForwardingList;
     }
 
@@ -110,7 +114,13 @@ public class ForwardingController {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto, user.getId(), pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                user.getOrganizationId(),
+                LogType.Forwarding,
+                user.getId(),
+                pageable
+        );
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
@@ -120,6 +130,7 @@ public class ForwardingController {
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
             Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -127,8 +138,9 @@ public class ForwardingController {
                     regApplication.getMaterialId() != null ?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
                     regApplication.getActivityId() != null ?helperService.getActivity(regApplication.getActivityId(),locale):"",
                     regApplication.getCreatedAt() != null ?Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
-                    invoice.getRegisteredAt()!=null ?Common.uzbekistanDateFormat.format(setExecutionDate(invoice.getRegisteredAt(),regApplication.getDeadline())):"",
-                    regApplication.getForwardingStatus() != null ?regApplication.getForwardingStatus().getName():""
+                    regApplicationLog.getCreatedAt() != null ?Common.uzbekistanDateFormat.format(regApplicationLog.getCreatedAt()):"",
+                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getForwardingName():""
+//                    invoice.getRegisteredAt()!=null ?Common.uzbekistanDateFormat.format(setExecutionDate(invoice.getRegisteredAt(),regApplication.getDeadline())):"",
             });
         }
         result.put("data",convenientForJSONArray);

@@ -11,7 +11,7 @@ public class ExpertiseTemplates {
     //Birinchi tekshiruv
     private static final String Confirm = Prefix + "/confirm";
     public static final String ConfirmList = Confirm + "/list";
-    public static final String ConfirmChecking = Confirm + "/checking";
+    public static final String ConfirmView = Confirm + "/view";
 
     //Boshqaruv
     private static final String Forwarding = Prefix + "/forwarding";

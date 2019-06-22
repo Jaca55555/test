@@ -57,7 +57,7 @@
 
             <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
                 <div class="file">
-                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantFileDownload + '?file_id=' + file.id}">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmFileDownload + '?file_id=' + file.id}">
                         <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
                         <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
                         <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>

@@ -15,24 +15,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ActivityService;
-import uz.maroqand.ecology.core.service.expertise.CommentService;
-import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +54,7 @@ public class ConfirmController {
     private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
     public ConfirmController(
@@ -66,8 +65,8 @@ public class ConfirmController {
             ActivityService activityService, ObjectExpertiseService objectExpertiseService,
             CommentService commentService,
             HelperService helperService,
-            FileService fileService
-    ){
+            FileService fileService,
+            RegApplicationLogService regApplicationLogService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -77,6 +76,7 @@ public class ConfirmController {
         this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -86,7 +86,7 @@ public class ConfirmController {
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList",ConfirmStatus.getConfirmStatusList());
+        model.addAttribute("statusList", LogStatus.getLogStatusList());
         return ExpertiseTemplates.ConfirmList;
     }
 
@@ -100,7 +100,13 @@ public class ConfirmController {
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto, user.getId(), pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                user.getOrganizationId(),
+                LogType.Confirm,
+                user.getId(),
+                pageable
+        );
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
 
@@ -111,6 +117,8 @@ public class ConfirmController {
             if(client==null){
                 client = new Client();
             }
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+
             convenientForJSONArray.add(new Object[]{
                 regApplication.getId(),
                 client.getTin(),
@@ -119,86 +127,75 @@ public class ConfirmController {
                 client.getOked()!=null?client.getOked():"",
                 client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale):"",
                 client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale):"",
-                regApplication.getCreatedAt()!=null?Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
-                regApplication.getConfirmStatus()!=null?regApplication.getConfirmStatus().getName():""
+                regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
+                regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getConfirmName():""
             });
         }
         result.put("data",convenientForJSONArray);
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.ConfirmChecking)
+    @RequestMapping(ExpertiseUrls.ConfirmView)
     public String getCheckingPage(
             @RequestParam(name = "id")Integer regApplicationId,
-            @RequestParam(name = "status",required = false) ConfirmStatus confirmStatus,
             Model model
     ) {
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+
         Client client = clientService.getById(regApplication.getApplicantId());
         Comment comment = commentService.getByRegApplicationId(regApplication.getId());
-        model.addAttribute("status", confirmStatus);
-        model.addAttribute("applicant",client);
+
+
         model.addAttribute("comment",comment!=null?comment:new Comment());
-        model.addAttribute("regApplication",regApplication);
         model.addAttribute("cancel_url",ExpertiseUrls.ConfirmList);
-        return ExpertiseTemplates.ConfirmChecking;
+
+        model.addAttribute("applicant",client);
+        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("regApplicationLog",regApplicationLog);
+        return ExpertiseTemplates.ConfirmView;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ConfirmConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConfirmApproved,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "template")String template,
-            @RequestParam(name = "comments")String comments
+            @RequestParam(name = "comment")String comment
     ){
-        RegApplication regApplication = regApplicationService.getById(id);
         User user = userService.getCurrentUserFromContext();
-        Comment comment = commentService.getByRegApplicationId(regApplication.getId());
-        if (comment == null){
-            Comment newComment = new Comment();
-            newComment.setCreatedAt(new Date());
-            newComment.setCreatedById(user.getId());
-            newComment.setMessage(comments);
-            newComment.setDeleted(false);
-            newComment.setRegApplicationId(regApplication.getId());
-            commentService.createComment(newComment);
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
         }
-        if (comment != null){
-            comment.setMessage(comments);
-            commentService.updateComment(comment);
-        }
-        regApplication.setConfirmStatus(ConfirmStatus.Approved);
-        regApplicationService.save(regApplication);
-        return "redirect:"+ExpertiseUrls.ConfirmChecking + "?id=" + regApplication.getId() + "&status=" + ConfirmStatus.Approved;
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        regApplicationLog.setStatus(LogStatus.Approved);
+        regApplicationLog.setComment(comment);
+        regApplicationLogService.update(regApplicationLog,user);
+
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(value = ExpertiseUrls.ConfirmNotConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConfirmDenied,method = RequestMethod.POST)
     public String notConfirmApplication(
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "template")String template,
-            @RequestParam(name = "comments")String comments
+            @RequestParam(name = "comment")String comment
     ){
-        RegApplication regApplication = regApplicationService.getById(id);
         User user = userService.getCurrentUserFromContext();
-        Comment commentForNotConfirm = commentService.getByRegApplicationId(regApplication.getId());
-        if (commentForNotConfirm == null){
-            Comment newComment = new Comment();
-            newComment.setCreatedAt(new Date());
-            newComment.setCreatedById(user.getId());
-            newComment.setMessage(comments);
-            newComment.setDeleted(false);
-            newComment.setRegApplicationId(regApplication.getId());
-            commentService.createComment(newComment);
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
         }
-        if (commentForNotConfirm != null){
-            commentForNotConfirm.setMessage(comments);
-            commentService.updateComment(commentForNotConfirm);
-        }
-        regApplication.setConfirmStatus(ConfirmStatus.Denied);
-        regApplicationService.save(regApplication);
-        return "redirect:"+ExpertiseUrls.ConfirmChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        regApplicationLog.setStatus(LogStatus.Denied);
+        regApplicationLog.setComment(comment);
+        regApplicationLogService.update(regApplicationLog,user);
+
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
     @RequestMapping(ExpertiseUrls.ConfirmFileDownload)

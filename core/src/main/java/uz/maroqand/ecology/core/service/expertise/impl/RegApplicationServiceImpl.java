@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
@@ -59,21 +60,47 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public Page<RegApplication> findFiltered(
             FilterDto filterDto,
+            Integer reviewId,
+            LogType logType,
             Integer userId,
             Pageable pageable
     ) {
-        return regApplicationRepository.findAll(getFilteringSpecification(userId),pageable);
+        return regApplicationRepository.findAll(getFilteringSpecification(reviewId, logType, userId),pageable);
     }
 
     private static Specification<RegApplication> getFilteringSpecification(
+            final Integer reviewId,
+            final LogType logType,
             final Integer userId
     ) {
         return new Specification<RegApplication>() {
             @Override
             public Predicate toPredicate(Root<RegApplication> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
+
+                //Ko'rib chiquvchi organization
+                if(reviewId!=null){
+                    criteriaBuilder.equal(root.get("reviewId"),reviewId);
+                }
+
+                System.out.println("logType="+logType);
+                if(logType!=null){
+                    switch (logType){
+                        case Confirm:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("confirmLogId")));break;
+                        case Forwarding:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("forwardingLogId")));break;
+                        case Performer:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("performerLogId")));break;
+                        case Agreement:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementLogId")));break;
+                        case AgreementComplete:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementCompleteLogId")));break;
+                    }
+                }
+
                 if(userId!=null){
-                    Predicate notDeleted = criteriaBuilder.equal(root.get("createdById"), userId);
+                    predicates.add(criteriaBuilder.equal(root.get("createdById"), userId));
                 }
 
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);

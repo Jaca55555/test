@@ -105,7 +105,7 @@
                                                     <label for="confirmStatus" class="control-label" th:text="#{sys_status}"></label>
                                                     <select id="confirmStatus" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getName()}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getConfirmName()}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-2">
@@ -157,7 +157,7 @@
                                                     <th th:text="#{sys_oked}"></th>
                                                     <th th:text="#{sys_region}"></th>
                                                     <th th:text="#{sys_subregion}"></th>
-                                                    <th th:text="#{reg_application.createdAt}"></th>
+                                                    <th th:text="#{reg_application_log.createdAt}"></th>
                                                     <th th:text="#{sys_status}"></th>
                                                     <th ></th>
                                                 </tr>
@@ -186,7 +186,7 @@
 
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmListAjax}]];
-    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmChecking}]];
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }

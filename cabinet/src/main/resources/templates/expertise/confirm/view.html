@@ -123,13 +123,13 @@
 
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <object th:include="/expertise/accountant/general_info :: general_info" th:remove="tag"></object>
+                                        <object th:include="/expertise/fragment/general_info :: general_info" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                        <object th:include="/expertise/accountant/expertise :: expertise" th:remove="tag"></object>
+                                        <object th:include="/expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                        <object th:include="/expertise/accountant/confirmation :: confirmation" th:remove="tag"></object>
+                                        <object th:include="/expertise/confirm/action :: action" th:remove="tag"></object>
                                     </div>
                                 </div>
 
@@ -162,10 +162,10 @@
     
     function setAction(actionNumber) {
         if (actionNumber == 1){
-            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantConfirm}]]);
+            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApproved}]]);
         }
         if (actionNumber == 2) {
-            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantNotConfirm}]]);
+            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDenied}]]);
         }
     }
 

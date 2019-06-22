@@ -13,9 +13,8 @@ public class ExpertiseUrls {
     public static final String ConfirmList = Confirm + "/list";
     public static final String ConfirmListAjax = Confirm + "/list_ajax";
     public static final String ConfirmView = Confirm + "/view";
-    public static final String ConfirmChecking = Confirm + "/checking";
-    public static final String ConfirmConfirm = Confirm + "/confirm";
-    public static final String ConfirmNotConfirm = Confirm + "/not_confirm";
+    public static final String ConfirmApproved = Confirm + "/approved";
+    public static final String ConfirmDenied = Confirm + "/denied";
     public static final String ConfirmFileDownload = Confirm + "/download";
 
     //Boshqaruv

@@ -107,6 +107,14 @@ public class RegApplication {
 
     private Integer deadline;
 
+    //Дата рег.
+    @Column(name = "registration_date")
+    private Date registrationDate;
+
+    //Срок исполнения
+    @Column(name = "deadline_date")
+    private Date deadlineDate;
+
     //To'lov uchun invoice
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id", insertable = false, updatable = false)
@@ -123,6 +131,7 @@ public class RegApplication {
     @Column(name = "review_id")
     private Integer reviewId;
 
+    //Исполнитель
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performer_id", insertable = false, updatable = false)
     private User performer;*/
@@ -138,25 +147,23 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStep step;
 
+    /*
+    * oxirgi log id lar saqlanadi
+    * */
+    @Column(name = "confirm_log_id")
+    private Integer confirmLogId;
 
+    @Column(name = "forwarding_log_id")
+    private Integer forwardingLogId;
 
+    @Column(name = "performer_log_id")
+    private Integer performerLogId;
 
+    @Column(name = "agreement_log_id")
+    private Integer agreementLogId;
 
-    @Column(name = "confirm_status")
-    @Enumerated(EnumType.ORDINAL)
-    private ConfirmStatus confirmStatus;
-
-    @Column(name = "forwarding_status")
-    @Enumerated(EnumType.ORDINAL)
-    private ForwardingStatus forwardingStatus;
-
-    @Column(name = "performer_status")
-    @Enumerated(EnumType.ORDINAL)
-    private PerformerStatus performerStatus;
-
-    @Column(name = "agreement_status")
-    @Enumerated(EnumType.ORDINAL)
-    private AgreementStatus agreementStatus;
+    @Column(name = "agreement_complete_log_id")
+    private Integer agreementCompleteLogId;
 
     /*
      * Technical Fields

@@ -26,5 +26,12 @@ public class FilterDto {
 
     private Integer confirmStatus;
     private Integer forwardingStatus;
+    private Integer performerStatus;
+    private Integer agreementStatus;
+    private Integer agreementCompleteStatus;
+
+    private Integer status;
+    private String dateBegin;
+    private String dateEnd;
 
 }

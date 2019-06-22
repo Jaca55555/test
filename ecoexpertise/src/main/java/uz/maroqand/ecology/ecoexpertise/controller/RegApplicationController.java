@@ -57,9 +57,10 @@ public class RegApplicationController {
     private final FileService fileService;
     private final InvoiceService invoiceService;
     private final CommentService commentService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -77,6 +78,7 @@ public class RegApplicationController {
         this.fileService = fileService;
         this.invoiceService = invoiceService;
         this.commentService = commentService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -93,7 +95,7 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,user.getId(),pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -165,9 +167,9 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+        /*if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()== LogStatus.Approved){
             return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
-        }
+        }*/
 
         Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
@@ -237,9 +239,9 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()==ConfirmStatus.Approved){
+        /*if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()== LogStatus.Approved){
             return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
-        }
+        }*/
 
         if (regApplication.getInvoiceId()!=null){
             return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
@@ -290,9 +292,12 @@ public class RegApplicationController {
         regApplication1.setCategory(activityService.getById(regApplication.getActivityId()).getCategory());
         regApplication1.setMaterialId(requirement.getMaterialId());
 
-        regApplication1.setConfirmStatus(ConfirmStatus.Initial);
+        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication1,LogType.Confirm,"",user);
+        regApplication1.setConfirmLogId(regApplicationLog.getId());
+
         regApplication1.setStep(RegApplicationStep.ABOUT);
         regApplicationService.save(regApplication1);
+
 
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
     }
@@ -415,9 +420,9 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus() == ConfirmStatus.Approved){
-            regApplication.setStep(RegApplicationStep.CONTRACT);
-            regApplicationService.save(regApplication);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        if (regApplicationLog==null){
+            return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;
         }
 
         if (regApplication.getInvoiceId()!=null){
@@ -425,6 +430,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
         model.addAttribute("back_url",Urls.RegApplicationAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return Templates.RegApplicationWaiting;
@@ -611,7 +617,7 @@ public class RegApplicationController {
         if (invoice.getStatus()!=InvoiceStatus.Success){
             invoice = invoiceService.payTest(invoiceId);
         }
-        regApplication.setForwardingStatus(ForwardingStatus.Initial);
+//        regApplication.setForwardingStatus(ForwardingStatus.Initial);
         regApplicationService.save(regApplication);
         List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
         model.addAttribute("regApplication", regApplication);

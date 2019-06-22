@@ -49,7 +49,7 @@
                                                 <div class="form-group col-md-12 text-center" >
                                                     <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
                                                         <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 720px; width: 100%; overflow-y: auto; padding: 20px; margin-bottom: 10px" >
-                                                               <p th:utext="${offer.description}"> </p>
+                                                               <p th:utext="${offer!=null? offer.description:''}"> </p>
                                                         </div>
 
 
