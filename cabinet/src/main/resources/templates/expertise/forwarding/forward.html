@@ -5,31 +5,100 @@
     <title>Title</title>
 </head>
 <body th:fragment="forward">
-<form id="form" method="post" action="">
+<form id="form" method="post" th:action="${action_url}">
     <div class="form-group row">
         <div class="col-md-3 text-right">
-            <label class="col-form-label" th:text="#{sys_reg_application.template}">СТИР</label>
+            <label class="col-form-label" th:text="#{sys_reg_application.performer}">СТИР</label>
         </div>
         <div class="col-md-6">
-            <input class="form-control" id="performerId" name="performerId"/>
+            <input class="form-control" name="performerId"/>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-md-3 text-right">
-            <label class="col-form-label" th:text="#{sys_reg_application.comments}">СТИР</label>
+            <label class="col-form-label" th:text="#{sys_reg_application.performer_text}">СТИР</label>
         </div>
         <div class="col-md-6">
-            <textarea class="form-control" rows="8" id="comments" name="comments"></textarea>
+            <textarea class="form-control" name="performer_text" rows="8"></textarea>
         </div>
     </div>
+    <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+        <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+            <div class="add-file">
+                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                <span id="percentage"><span id="percentage-num"></span>%</span>
+                <i class="feather icon-plus" id="plus-icon"></i>
+            </div>
+        </a>
+        <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+            <div class="file">
+                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingFileDownload + '?file_id=' + file.id}">
+                    <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                    <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                    <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                    <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                    <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                    <span th:text="${file.description}"></span>
+                    <p th:text="${file.name}"></p>
+                </a>
+                <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                    <i class="feather icon-x"></i>
+                </button>
+            </div>
+        </div>
 
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="file-name">
+                            <span th:text="#{sys_file_name}"></span>
+                            <span class="required">*</span>
+                        </label>
+                        <input class="form-control" type="text" id="file-name" required="" />
+                    </div>
+                    <div class="input-group">
+                          <span class="input-group-btn">
+                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                            </span>
+                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                          </span>
+                        <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
 <div class="form-group row">
     <div class="col-md-12 text-center" id="tab-control-buttons">
         <a class="btn btn-danger" onclick="tabActive(4)" data-toggle="tab" href="#home" role="tab" aria-controls="home" th:text="#{sys_back}">Отмена</a>
-        <a class="btn btn-primary" onclick="tabActive(3)" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" th:text="#{sys_next}">Далее</a>
+        <input class="btn btn-primary" type="submit" th:text="#{sys_send}">Далее</input>
     </div>
 </div>
+
 </form>
 </body>
 </html>

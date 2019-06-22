@@ -16,12 +16,15 @@ public class ExpertiseUrls {
     public static final String AccountantChecking = Accountant + "/checking";
     public static final String AccountantConfirm = Accountant + "/confirm";
     public static final String AccountantNotConfirm = Accountant + "/not_confirm";
-    public static final String DownloadDocumentFiles = Accountant + "/download";
+    public static final String AccountantFileDownload = Accountant + "/download";
 
     private static final String Forwarding = Prefix + "/forwarding";
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
     public static final String ForwardingChecking = Forwarding + "/checking";
+    public static final String ForwardingFileUpload = Forwarding + "/file_upload";
+    public static final String ForwardingFileDownload = Forwarding + "/file_download";
+    public static final String ForwardingFileDelete = Forwarding + "/file_delete";
 
     private static final String Performer = Prefix + "/performer";
     public static final String PerformerList = Performer + "/list";

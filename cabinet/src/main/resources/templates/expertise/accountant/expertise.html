@@ -50,30 +50,36 @@
             </div>
         </div>
 
-        <div class="form-group row" >
-            <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.documents}">Директор</label>
-            </div>
-            <div class="col-md-6">
-                <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
-                    <div class="file">
-                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).DownloadDocumentFiles + '?file_id=' + file.id}">
-                            <i class="feather icon-file file-icon"></i>
-                            <span th:text="${file.name}">File.pdf</span>
-                            <span th:text="${file.size}">size</span>
-                        </a>
-                        <!--<button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">-->
-                            <!--<i class="feather icon-x"></i>-->
-                        <!--</button>-->
-                    </div>
+        <div class="col-md-3 text-right">
+            <label class="col-form-label" th:text="#{sys_reg_application.documents}">Директор</label>
+        </div>
+        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+
+            <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+                <div class="file">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AccountantFileDownload + '?file_id=' + file.id}">
+                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                        <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                        <span th:text="${file.description}"></span>
+                        <p th:text="${file.name}"></p>
+                    </a>
                 </div>
             </div>
         </div>
-
         <div class="form-group row">
             <div class="col-md-12 text-center" id="tab-control-buttons">
-                <a class="btn btn-danger" onclick="tabActive(1)" data-toggle="tab" href="#home" role="tab" aria-controls="home" th:text="#{sys_back}">Отмена</a>
-                <a class="btn btn-primary" onclick="tabActive(3)" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" th:text="#{sys_next}">Далее</a>
+                <a class="btn btn-danger text-white" onclick="tabActive(1)" th:text="#{sys_back}">Отмена</a>
+                <a class="btn btn-primary text-white" onclick="tabActive(3)" href="#contact" th:text="#{sys_next}">Далее</a>
             </div>
         </div>
 

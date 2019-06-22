@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ConfirmStatus;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
+import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.CommentService;
+import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -49,6 +50,7 @@ public class AccountantController {
     private final SoatoService soatoService;
     private final UserService userService;
     private final ClientService clientService;
+    private final ObjectExpertiseService objectExpertiseService;
     private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
@@ -59,11 +61,16 @@ public class AccountantController {
             SoatoService soatoService,
             UserService userService,
             ClientService clientService,
-            CommentService commentService, HelperService helperService, FileService fileService){
+            ObjectExpertiseService objectExpertiseService,
+            CommentService commentService,
+            HelperService helperService,
+            FileService fileService
+    ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
         this.clientService = clientService;
+        this.objectExpertiseService = objectExpertiseService;
         this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
@@ -73,6 +80,7 @@ public class AccountantController {
     public String getAccountantListPage(Model model) {
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("expertiseFormList",objectExpertiseService.getList());
         model.addAttribute("statusList",ConfirmStatus.getConfirmStatusList());
         return ExpertiseTemplates.AccountantList;
     }
@@ -82,8 +90,11 @@ public class AccountantController {
     public HashMap<String,Object> getAccountantListPageListAjax(
             @RequestParam(name = "tin",required = false)Integer tin,
             @RequestParam(name = "name",required = false)String name,
-            @RequestParam(name = "regApplicationId",required = false)Integer regApplicationId,
-            @RequestParam(name = "status",required = false)Integer status,
+            @RequestParam(name = "contractNumber",required = false)Integer contractNumber,
+            @RequestParam(name = "id",required = false)Integer regApplicationId,
+            @RequestParam(name = "oked",required = false)Integer oked,
+            @RequestParam(name = "expertiseForm",required = false)Integer expertiseForm,
+            @RequestParam(name = "status",required = false)ConfirmStatus confirmStatus,
             @RequestParam(name = "regionId",required = false)Integer regionId,
             @RequestParam(name = "subRegionId",required = false)Integer subRegionId,
             @RequestParam(name = "regDateBegin",required = false)String registrationDateBegin,
@@ -95,7 +106,6 @@ public class AccountantController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
         Date regDateBegin = DateParser.TryParse(registrationDateBegin,Common.uzbekistanDateFormat);
         Date regDateEnd = DateParser.TryParse(registrationDateEnd,Common.uzbekistanDateFormat);
         Date contractDateBegin = DateParser.TryParse(contractDateBeginDate,Common.uzbekistanDateFormat);
@@ -135,12 +145,11 @@ public class AccountantController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AccountantList;
         }
-
         Client client = clientService.getById(regApplication.getApplicantId());
-        Comment comment = commentService.getById(regApplication.getId());
+        Comment comment = commentService.getByRegApplicationId(regApplication.getId());
         model.addAttribute("status", confirmStatus);
         model.addAttribute("applicant",client);
-        model.addAttribute("comment",comment);
+        model.addAttribute("comment",comment!=null?comment:new Comment());
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("cancel_url",ExpertiseUrls.AccountantList);
         return ExpertiseTemplates.AccountantChecking;
@@ -153,12 +162,23 @@ public class AccountantController {
             @RequestParam(name = "comments")String comments
     ){
         RegApplication regApplication = regApplicationService.getById(id);
-        Comment comment = new Comment();
-        comment.setRegApplicationId(regApplication.getId());
-        comment.setMessage(comments);
-        commentService.createComment(comment);
+        User user = userService.getCurrentUserFromContext();
+        Comment comment = commentService.getByRegApplicationId(regApplication.getId());
+        if (comment == null){
+            Comment newComment = new Comment();
+            newComment.setCreatedAt(new Date());
+            newComment.setCreatedById(user.getId());
+            newComment.setMessage(comments);
+            newComment.setDeleted(false);
+            newComment.setRegApplicationId(regApplication.getId());
+            commentService.createComment(newComment);
+        }
+        if (comment != null){
+            comment.setMessage(comments);
+            commentService.updateComment(comment);
+        }
         regApplication.setConfirmStatus(ConfirmStatus.Approved);
-
+        regApplicationService.save(regApplication);
         return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId() + "&status=" + ConfirmStatus.Approved;
     }
 
@@ -169,15 +189,27 @@ public class AccountantController {
             @RequestParam(name = "comments")String comments
     ){
         RegApplication regApplication = regApplicationService.getById(id);
+        User user = userService.getCurrentUserFromContext();
+        Comment commentForNotConfirm = commentService.getByRegApplicationId(regApplication.getId());
+        if (commentForNotConfirm == null){
+            Comment newComment = new Comment();
+            newComment.setCreatedAt(new Date());
+            newComment.setCreatedById(user.getId());
+            newComment.setMessage(comments);
+            newComment.setDeleted(false);
+            newComment.setRegApplicationId(regApplication.getId());
+            commentService.createComment(newComment);
+        }
+        if (commentForNotConfirm != null){
+            commentForNotConfirm.setMessage(comments);
+            commentService.updateComment(commentForNotConfirm);
+        }
         regApplication.setConfirmStatus(ConfirmStatus.Denied);
-        Comment comment = new Comment();
-        comment.setRegApplicationId(regApplication.getId());
-        comment.setMessage(comments);
-        commentService.createComment(comment);
+        regApplicationService.save(regApplication);
         return "redirect:"+ExpertiseUrls.AccountantChecking + "?id=" + regApplication.getId()  + "&status=" + ConfirmStatus.Denied;
     }
 
-    @RequestMapping(ExpertiseUrls.DownloadDocumentFiles)
+    @RequestMapping(ExpertiseUrls.AccountantFileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "file_id") Integer fileId){
         User user = userService.getCurrentUserFromContext();
