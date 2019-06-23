@@ -7,12 +7,14 @@ import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
+import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
@@ -34,14 +36,16 @@ public class HelperService {
     private final MaterialService materialService;
     private final SoatoService soatoService;
     private final OrganizationService organizationService;
+    private final OpfService opfService;
 
-    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService) {
+    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService, OpfService opfService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.materialService = materialService;
         this.soatoService = soatoService;
         this.organizationService = organizationService;
+        this.opfService = opfService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -79,6 +83,13 @@ public class HelperService {
         if(id==null) return "";
         Soato soato = soatoService.getById(id);
         return soato!=null? soato.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getOpfName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getOpfName(Integer id, String locale) {
+        if(id==null) return "";
+        Opf opf = opfService.getById(id);
+        return opf!=null? opf.getNameTranslation(locale):"";
     }
 
     @Cacheable(value = "getAppealType", key = "#id",condition="#id != null",unless="#result == ''")

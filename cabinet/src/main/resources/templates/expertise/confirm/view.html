@@ -111,24 +111,30 @@
                             <hr>
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" onclick="tabActive(1)" th:text="#{general_info}">Home</a>
+                                        <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" onclick="tabActive(2)" th:text="#{expertise}">Profile</a>
+                                        <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" onclick="tabActive(3)" th:text="#{confirmation}">Contact</a>
+                                        <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#confirmation" role="tab" aria-controls="confirmation" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <object th:include="/expertise/fragment/general_info :: general_info" th:remove="tag"></object>
+                                    <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                        <object th:include="/expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-center" id="tab-control-buttons">
+                                                <a class="btn btn-danger text-white" href="/expertise/confirm/list" th:text="#{sys_back}"></a>
+                                                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
                                         <object th:include="/expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                     </div>
-                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                    <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
                                         <object th:include="/expertise/confirm/action :: action" th:remove="tag"></object>
                                     </div>
                                 </div>
@@ -148,18 +154,6 @@
 <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
 
-    $(document).ready(function () {
-
-        console.log([[${status}]]);
-        if ([[${status}]]!=null){
-            $('#contact').addClass ('show').addClass('active');
-            $('#contact-tab').addClass('active');
-            $('#home-tab').removeClass('active');
-            $('#home').removeClass('active','show');
-            $('#buttons-1').hide();
-        }
-    });
-    
     function setAction(actionNumber) {
         if (actionNumber == 1){
             $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApproved}]]);
@@ -169,42 +163,13 @@
         }
     }
 
-    function tabActive(count){
-        if (count == 1){
-            $('#contact-tab').removeClass('active');
-            $('#contact').removeClass('active');
-            $('#contact').removeClass('show');
-            $('#profile-tab').removeClass('active');
-            $('#profile').removeClass('active');
-            $('#profile').removeClass('show');
-            $('#home-tab').addClass('active');
-            $('#home').addClass('active');
-            $('#home').addClass('show');
-        }
-        if (count == 2){
-            $('#contact-tab').removeClass('active');
-            $('#contact').removeClass('active','show');
-            $('#contact').removeClass('show');
-            $('#home-tab').removeClass('active');
-            $('#home').removeClass('active');
-            $('#home').removeClass('show');
-            $('#profile-tab').addClass('active');
-            $('#profile').addClass('active');
-            $('#profile').addClass('show');
-        }
-        if (count == 3){
-            $('#home-tab').removeClass('active');
-            $('#home').removeClass('active');
-            $('#home').removeClass('show');
-            $('#profile-tab').removeClass('active');
-            $('#profile').removeClass('active');
-            $('#profile').removeClass('show');
-            $('#contact-tab').addClass('active');
-            $('#contact').addClass('active');
-            $('#contact').addClass('show');
-        }
+    $('.btnNext').click(function() {
+        $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
+    });
 
-    }
+    $('.btnPrevious').click(function() {
+        $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
+    });
 
 </script>
 </body>

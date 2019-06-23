@@ -38,17 +38,12 @@
                    <button class="btn btn-danger" type="submit" onclick="setAction(2)" th:text="#{sys_notConfirm}"></button>
                    <button class="btn btn-primary" type="submit" onclick="setAction(1)" th:text="#{sys_confirm}"></button>
                </div>
-               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
-                   <button class="btn btn-danger" type="submit" onclick="setAction(1)" th:text="#{sys_change_status}"></button>
-                   <a class="btn btn-primary" href="/expertise/accountant/list" th:text="#{sys_home_url}"></a>
+
+               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+                   <button class="btn btn-danger" type="submit" th:text="#{sys_change_status}"></button>
+                   <a class="btn btn-primary" href="/expertise/confirm/list" th:text="#{sys_home_url}"></a>
                </div>
-               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}">
-                   <button class="btn btn-danger" type="submit" onclick="setAction(2)" th:text="#{sys_change_status}"></button>
-                   <a class="btn btn-primary" href="/expertise/accountant/list" th:text="#{sys_home_url}"></a>
-               </div>
-               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || status==false}">
-                   <a class="btn btn-primary" href="/expertise/accountant/list" th:text="#{sys_home_url}"></a>
-               </div>
+
            </div>
        </form>
 </body>

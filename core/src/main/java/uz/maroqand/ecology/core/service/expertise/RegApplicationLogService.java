@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.service.expertise;
 
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
@@ -20,6 +21,6 @@ public interface RegApplicationLogService {
 
     RegApplicationLog create(RegApplication regApplication, LogType logType, String comment, User user);
 
-    RegApplicationLog update(RegApplicationLog regApplicationLog, User user);
+    RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, User user);
 
 }

@@ -7,7 +7,7 @@
 <body th:fragment="expertise">
         <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.objectExpertise}"></label>
+                <label class="col-form-label" th:text="#{sys_about.objectExpertise}"></label>
             </div>
             <div class="col-md-6">
                 <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getObjectExpertise(regApplication.objectId,#locale)}">
@@ -16,7 +16,7 @@
 
         <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.activity}"></label>
+                <label class="col-form-label" th:text="#{sys_about.activity}"></label>
             </div>
             <div class="col-md-6">
                 <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getActivity(regApplication.activityId,#locale)}">
@@ -25,16 +25,25 @@
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.material}">Фирменное наименование предприятия</label>
+                <label class="col-form-label" th:text="#{sys_about.category}"></label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" th:value="${@helperService.getMaterial(regApplication.materialId,#locale)}" readonly="readonly">
+                <input class="form-control" readonly="readonly" th:value="${regApplication.category!=null? @helperService.getCategory(regApplication.category.getId(),#locale):''}" >
             </div>
         </div>
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.name}">Директор</label>
+                <label class="col-form-label" th:text="#{sys_about.material}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getMaterial(regApplication.materialId,#locale)}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_about.name}"></label>
             </div>
             <div class="col-md-6">
                 <input class="form-control" readonly="readonly" th:value="${regApplication.name}" >
@@ -43,15 +52,24 @@
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_reg_application.offer}">Директор</label>
+                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_tin}">ИНН разработчика проекта</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" readonly="readonly" th:value="${regApplication.name}" >
+                <input class="form-control" readonly="readonly" th:value="${projectDeveloper!=null? projectDeveloper.tin:''}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_name}">Наименование разработчика проекта</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${projectDeveloper!=null? projectDeveloper.name:''}" >
             </div>
         </div>
 
         <div class="col-md-3 text-right">
-            <label class="col-form-label" th:text="#{sys_reg_application.documents}">Директор</label>
+            <label class="col-form-label" th:text="#{sys_reg_application.documents}"></label>
         </div>
         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
 
@@ -62,14 +80,7 @@
                         <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
                         <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
                         <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
-                        <i th:if="${file.extension!='doc'
-                                                                                    && file.extension!='docx'
-                                                                                    && file.extension!='xls'
-                                                                                    && file.extension!='xlsx'
-                                                                                    && file.extension!='pdf'
-                                                                                    && file.extension!='png'
-                                                                                    && file.extension!='jpg'
-                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
                         <span th:text="${file.description}"></span>
                         <p th:text="${file.name}"></p>
                     </a>
@@ -78,8 +89,8 @@
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-center" id="tab-control-buttons">
-                <a class="btn btn-danger text-white" onclick="tabActive(1)" th:text="#{sys_back}">Отмена</a>
-                <a class="btn btn-primary text-white" onclick="tabActive(3)" href="#contact" th:text="#{sys_next}">Далее</a>
+                <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
+                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
             </div>
         </div>
 

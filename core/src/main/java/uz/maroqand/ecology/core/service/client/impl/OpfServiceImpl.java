@@ -24,5 +24,9 @@ public class OpfServiceImpl implements OpfService {
         return opfRepository.findByOrderByIdAsc();
     }
 
+    @Cacheable("getOpfById")
+    public Opf getById(Integer id){
+        return opfRepository.getOne(id);
+    }
 
 }

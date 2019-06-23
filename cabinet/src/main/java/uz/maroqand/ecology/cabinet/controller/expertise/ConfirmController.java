@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
+import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -33,7 +37,6 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +58,7 @@ public class ConfirmController {
     private final HelperService helperService;
     private final FileService fileService;
     private final RegApplicationLogService regApplicationLogService;
+    private final ProjectDeveloperService projectDeveloperService;
 
     @Autowired
     public ConfirmController(
@@ -66,8 +70,8 @@ public class ConfirmController {
             CommentService commentService,
             HelperService helperService,
             FileService fileService,
-            RegApplicationLogService regApplicationLogService
-    ){
+            RegApplicationLogService regApplicationLogService,
+            ProjectDeveloperService projectDeveloperService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -78,6 +82,7 @@ public class ConfirmController {
         this.helperService = helperService;
         this.fileService = fileService;
         this.regApplicationLogService = regApplicationLogService;
+        this.projectDeveloperService = projectDeveloperService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -147,13 +152,18 @@ public class ConfirmController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
+        if(client.getType().equals(ApplicantType.Individual)){
+            model.addAttribute("individual", new IndividualDto(client));
+        }else {
+            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        }
+
         Comment comment = commentService.getByRegApplicationId(regApplication.getId());
-
-
         model.addAttribute("comment",comment!=null?comment:new Comment());
         model.addAttribute("cancel_url",ExpertiseUrls.ConfirmList);
 
         model.addAttribute("applicant",client);
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
         return ExpertiseTemplates.ConfirmView;
@@ -171,9 +181,7 @@ public class ConfirmController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-        regApplicationLog.setStatus(LogStatus.Approved);
-        regApplicationLog.setComment(comment);
-        regApplicationLogService.update(regApplicationLog,user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
@@ -190,9 +198,7 @@ public class ConfirmController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-        regApplicationLog.setStatus(LogStatus.Denied);
-        regApplicationLog.setComment(comment);
-        regApplicationLogService.update(regApplicationLog,user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
 
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }

@@ -8,4 +8,6 @@ public interface OpfService {
 
     List<Opf> getOpfList();
 
+    Opf getById(Integer id);
+
 }

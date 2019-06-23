@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 public class SoatoServiceImpl implements SoatoService {
 
-    @Autowired
     private SoatoRepository soatoRepository;
 
+    @Autowired
     public SoatoServiceImpl(SoatoRepository soatoRepository) {
         this.soatoRepository = soatoRepository;
     }

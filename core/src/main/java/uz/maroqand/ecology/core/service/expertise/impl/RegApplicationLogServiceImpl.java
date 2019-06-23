@@ -46,15 +46,24 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         RegApplicationLog regApplicationLog = new RegApplicationLog();
         regApplicationLog.setRegApplicationId(regApplication.getId());
         regApplicationLog.setComment(comment);
-        regApplicationLog.setCreatedAt(new Date());
-        regApplicationLog.setCreatedById(user.getId());
+
         regApplicationLog.setType(logType);
         regApplicationLog.setStatus(LogStatus.Initial);
-
+        regApplicationLog.setCreatedAt(new Date());
+        regApplicationLog.setCreatedById(user.getId());
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
-    public RegApplicationLog update(RegApplicationLog regApplicationLog, User user){
+    public RegApplicationLog update(
+            RegApplicationLog regApplicationLog,
+            LogStatus logStatus,
+            String comment,
+            User user
+    ){
+
+        regApplicationLog.setStatus(logStatus);
+        regApplicationLog.setComment(comment);
+
         regApplicationLog.setUpdateAt(new Date());
         regApplicationLog.setUpdateById(user.getId());
         return regApplicationLogRepository.save(regApplicationLog);
