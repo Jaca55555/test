@@ -63,15 +63,17 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             FilterDto filterDto,
             Integer reviewId,
             LogType logType,
+            Integer performerId,
             Integer userId,
             Pageable pageable
     ) {
-        return regApplicationRepository.findAll(getFilteringSpecification(reviewId, logType, userId),pageable);
+        return regApplicationRepository.findAll(getFilteringSpecification(reviewId, logType, performerId, userId),pageable);
     }
 
     private static Specification<RegApplication> getFilteringSpecification(
             final Integer reviewId,
             final LogType logType,
+            final Integer performerId,
             final Integer userId
     ) {
         return new Specification<RegApplication>() {
@@ -98,6 +100,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                         case AgreementComplete:
                             predicates.add(criteriaBuilder.isNotNull(root.get("agreementCompleteLogId")));break;
                     }
+                }
+
+                if(performerId!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("performerId"), performerId));
                 }
 
                 if(userId!=null){

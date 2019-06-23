@@ -95,7 +95,7 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,null,user.getId(),pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -149,7 +149,7 @@ public class RegApplicationController {
             case APPLICANT: return "redirect:" + Urls.RegApplicationApplicant + "?id=" + regApplication.getId();
             case ABOUT: return "redirect:" + Urls.RegApplicationAbout + "?id=" + regApplication.getId();
             case CONTRACT: return "redirect:" + Urls.RegApplicationContract + "?id=" + regApplication.getId();
-            case PAYMENT: return "redirect:" + Urls.RegApplicationPayment + "?id=" + regApplication.getId();
+            case PAYMENT: return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + regApplication.getId();
             case STATUS: return "redirect:" + Urls.RegApplicationStatus+ "?id=" + regApplication.getId();
         }
 
@@ -526,13 +526,13 @@ public class RegApplicationController {
         regApplicationService.update(regApplication);
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", Urls.RegApplicationStatus);//todo to`grilash kerak
+        model.addAttribute("upay_url", Urls.RegApplicationStatus+ "?id=" + id);//todo to`grilash kerak
 
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
         return Templates.RegApplicationPrepayment;
     }
 
-    @RequestMapping(value = Urls.RegApplicationPayment)
+    /*@RequestMapping(value = Urls.RegApplicationPayment)
     public String getPaymentPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -547,7 +547,7 @@ public class RegApplicationController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", 4);
         return Templates.RegApplicationPayment;
-    }
+    }*/
 
     @RequestMapping(value = Urls.RegApplicationPaymentSendSms)
     @ResponseBody
@@ -587,7 +587,7 @@ public class RegApplicationController {
             @RequestParam(name = "confirmSms") String confirmSms
     ) {
 
-        String successUrl = Urls.RegApplicationStatus;
+        String successUrl = Urls.RegApplicationStatus+ "?id=" + applicationId;
         String failUrl = Urls.RegApplicationPaymentConfirmSms;
 
         /*return paymentService.confirmSmsAndGetResponseAsMap(
@@ -621,7 +621,7 @@ public class RegApplicationController {
         if(regApplication.getForwardingLogId()==null){
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
             regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.New);
+            regApplication.setStatus(RegApplicationStatus.Initial);
             regApplication.setRegistrationDate(new Date());
             regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
             regApplicationService.update(regApplication);

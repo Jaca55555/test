@@ -107,6 +107,7 @@ public class AgreementController {
                 user.getOrganizationId(),
                 LogType.Agreement,
                 null,
+                null,
                 pageable
         );
 
@@ -114,7 +115,7 @@ public class AgreementController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -137,7 +138,7 @@ public class AgreementController {
     }
 
     @RequestMapping(ExpertiseUrls.AgreementView)
-    public String getForwardingViewPage(
+    public String getAgreementViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {

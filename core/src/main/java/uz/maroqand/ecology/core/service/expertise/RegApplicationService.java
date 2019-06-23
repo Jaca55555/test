@@ -17,6 +17,6 @@ public interface RegApplicationService {
 
     RegApplication getById(Integer id, Integer createdBy);
 
-    Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer userId, Pageable pageable);
+    Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, Pageable pageable);
 
 }

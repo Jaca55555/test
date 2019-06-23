@@ -16,6 +16,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -103,6 +104,7 @@ public class ForwardingController {
                 user.getOrganizationId(),
                 LogType.Forwarding,
                 null,
+                null,
                 pageable
         );
 
@@ -142,8 +144,12 @@ public class ForwardingController {
             return "redirect:" + ExpertiseUrls.ForwardingList;
         }
 
+        System.out.println("regApplication.getForwardingLogId()="+regApplication.getForwardingLogId());
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
-        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        if(regApplication.getPerformerLogId()!=null){
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            model.addAttribute("performerLog",performerLog);
+        }
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -152,7 +158,6 @@ public class ForwardingController {
             model.addAttribute("legalEntity", new LegalEntityDto(client));
         }
 
-        model.addAttribute("performerLog",performerLog);
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant",client);
         model.addAttribute("userList",userService.findPerformerList());
@@ -185,6 +190,7 @@ public class ForwardingController {
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Performer,comment,user);
 
+        regApplication.setStatus(RegApplicationStatus.New);
         regApplication.setPerformerId(performerId);
         regApplication.setPerformerLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);

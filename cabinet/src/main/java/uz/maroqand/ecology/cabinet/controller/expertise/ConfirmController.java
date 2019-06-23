@@ -111,6 +111,7 @@ public class ConfirmController {
                 user.getOrganizationId(),
                 LogType.Confirm,
                 null,
+                null,
                 pageable
         );
 

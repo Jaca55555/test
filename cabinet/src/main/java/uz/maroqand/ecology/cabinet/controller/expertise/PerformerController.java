@@ -107,6 +107,7 @@ public class PerformerController {
                 filterDto,
                 user.getOrganizationId(),
                 LogType.Performer,
+                user.getId(),
                 null,
                 pageable
         );
@@ -115,7 +116,7 @@ public class PerformerController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -138,7 +139,7 @@ public class PerformerController {
     }
 
     @RequestMapping(ExpertiseUrls.PerformerView)
-    public String getForwardingViewPage(
+    public String getPerformerViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {
