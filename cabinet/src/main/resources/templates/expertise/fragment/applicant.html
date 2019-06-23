@@ -15,8 +15,8 @@
         </div>
     </div>
 
-    <object th:if="${legalEntity}" th:include="/expertise/fragment/applicant_legal_entity :: legal_entity" th:remove="tag"></object>
-    <object th:if="${individual}" th:include="/expertise/fragment/applicant_individual :: individual" th:remove="tag"></object>
+    <object th:if="${legalEntity}" th:include="expertise/fragment/applicant_legal_entity :: legal_entity" th:remove="tag"></object>
+    <object th:if="${individual}" th:include="expertise/fragment/applicant_individual :: individual" th:remove="tag"></object>
 
 </body>
 </html>

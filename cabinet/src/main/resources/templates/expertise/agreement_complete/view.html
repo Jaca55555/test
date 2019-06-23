@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
-    <!-- smart-wizard css -->
-    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
-    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
@@ -129,7 +126,7 @@
 
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
-                                        <object th:include="/expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                        <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
                                         <div class="form-group row">
                                             <div class="col-md-12 text-center" id="tab-control-buttons">
                                                 <a class="btn btn-danger text-white" href="/expertise/forwarding/list" th:text="#{sys_back}"></a>
@@ -138,13 +135,13 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
-                                        <object th:include="/expertise/fragment/contract :: contract" th:remove="tag"></object>
+                                        <object th:include="expertise/fragment/contract :: contract" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-                                        <object th:include="/expertise/fragment/payment :: payment" th:remove="tag"></object>
+                                        <object th:include="expertise/fragment/payment :: payment" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
-                                        <object th:include="/expertise/fragment/expertise :: expertise" th:remove="tag"></object>
+                                        <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
 
