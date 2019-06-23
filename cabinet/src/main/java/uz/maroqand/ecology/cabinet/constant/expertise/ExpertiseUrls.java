@@ -22,10 +22,6 @@ public class ExpertiseUrls {
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
     public static final String ForwardingView = Forwarding + "/view";
-    public static final String ForwardingChecking = Forwarding + "/checking";
-    public static final String ForwardingFileUpload = Forwarding + "/file_upload";
-    public static final String ForwardingFileDownload = Forwarding + "/file_download";
-    public static final String ForwardingFileDelete = Forwarding + "/file_delete";
 
     //Natijani kiritish
     private static final String Performer = Prefix + "/performer";
@@ -45,5 +41,9 @@ public class ExpertiseUrls {
     public static final String AgreementCompleteListAjax = AgreementComplete + "/list_ajax";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
 
+    //File
+    public static final String FileUpload = Prefix + "/file/upload";
+    public static final String FileDownload = Prefix + "/file/download";
+    public static final String FileDelete = Prefix + "/file/delete";
 
 }

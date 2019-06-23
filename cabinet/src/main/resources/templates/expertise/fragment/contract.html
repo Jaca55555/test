@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="contract">
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_contractNumber}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" th:value="${regApplication.contractNumber}">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_contractDate}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${regApplication.contractDate}" >
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.ecp_client}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getUserById(regApplication.createdById)}">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.ecp_performer}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" >
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-12 text-center" id="tab-control-buttons">
+                <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
+                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+            </div>
+        </div>
+
+</body>
+</html>

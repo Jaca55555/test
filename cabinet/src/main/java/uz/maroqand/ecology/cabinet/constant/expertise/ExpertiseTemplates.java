@@ -16,6 +16,7 @@ public class ExpertiseTemplates {
     //Boshqaruv
     private static final String Forwarding = Prefix + "/forwarding";
     public static final String ForwardingList = Forwarding + "/list";
+    public static final String ForwardingView = Forwarding + "/view";
     public static final String ForwardingChecking = Forwarding + "/checking";
 
     //Natijani kiritish

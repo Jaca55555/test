@@ -79,34 +79,6 @@
         .file a:hover {
             color: #5CB85C;
         }
-
-        .file-delete-btn {
-            color: red;
-            position: absolute;
-            right: 0;
-            border: none;
-            margin: 5px;
-        }
-        .file-delete-btn:hover {
-            color:darkred;
-        }
-
-        #upload-gif{
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 125px;
-        }
-
-        #percentage {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -130,7 +102,7 @@
                 <div class="main-body">
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
-                        <div class="row" th:object="${regApplication}">
+                        <div class="row">
 
                             <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
@@ -139,37 +111,43 @@
                             <hr>
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show active" id="general_info-tab" data-toggle="tab" href="#general_info" role="tab" aria-controls="general_info" aria-selected="true" onclick="tabActive(1)" th:text="#{general_info}">Home</a>
+                                        <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" onclick="tabActive(2)" th:text="#{contract}">Profile</a>
+                                        <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" onclick="tabActive(3)" th:text="#{payment}">Contact</a>
+                                        <a class="nav-link show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" th:text="#{sys_payment}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" onclick="tabActive(4)" th:text="#{expertise}">Contact</a>
+                                        <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-uppercase show" id="forward-tab" data-toggle="tab" href="#forward" role="tab" aria-controls="forward" aria-selected="false" onclick="tabActive(5)" th:text="#{forward}">Contact</a>
+                                        <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade active show" id="general_info" role="tabpanel" aria-labelledby="home-tab">
-                                        <object th:include="/expertise/forwarding/applicant :: applicant" th:remove="tag"></object>
+                                    <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                        <object th:include="/expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-center" id="tab-control-buttons">
+                                                <a class="btn btn-danger text-white" href="/expertise/forwarding/list" th:text="#{sys_back}"></a>
+                                                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
-                                        <object th:include="/expertise/forwarding/contract :: contract" th:remove="tag"></object>
+                                        <object th:include="/expertise/fragment/contract :: contract" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-                                        <object th:include="/expertise/forwarding/payment :: payment" th:remove="tag"></object>
+                                        <object th:include="/expertise/fragment/payment :: payment" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
-                                        <object th:include="/expertise/forwarding/expertise :: expertise" th:remove="tag"></object>
+                                        <object th:include="/expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                     </div>
-                                    <div class="tab-pane fade" id="forward" role="tabpanel" aria-labelledby="forward-tab">
-                                        <object th:include="/expertise/forwarding/forward :: forward" th:remove="tag"></object>
+                                    <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+
                                     </div>
                                 </div>
 
@@ -185,101 +163,27 @@
 </div>
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
-<script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script type="text/javascript" th:inline="javascript">
-    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingFileUpload}]];
-    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingFileDelete}]];
 
-    function tabActive(count){
-        if (count == 1){
-            $('#forward-tab').removeClass('active');
-            $('#forward').removeClass('active');
-            $('#forward').removeClass('show');
-            $('#expertise-tab').removeClass('active');
-            $('#expertise').removeClass('active');
-            $('#expertise').removeClass('show');
-            $('#payment-tab').removeClass('active');
-            $('#payment').removeClass('active');
-            $('#payment').removeClass('show');
-            $('#contract-tab').removeClass('active');
-            $('#contract').removeClass('active');
-            $('#contract').removeClass('show');
-            $('#general_info-tab').addClass('active');
-            $('#general_info').addClass('active');
-            $('#general_info').addClass('show');
-        }
-        if (count == 2){
-            $('#forward-tab').removeClass('active');
-            $('#forward').removeClass('active');
-            $('#forward').removeClass('show');
-            $('#expertise-tab').removeClass('active');
-            $('#expertise').removeClass('active');
-            $('#expertise').removeClass('show');
-            $('#payment-tab').removeClass('active');
-            $('#payment').removeClass('active');
-            $('#payment').removeClass('show');
-            $('#contract-tab').addClass('active');
-            $('#contract').addClass('active');
-            $('#contract').addClass('show');
-            $('#general_info-tab').removeClass('active');
-            $('#general_info').removeClass('active');
-            $('#general_info').removeClass('show');
-        }
-        if (count == 3){
-            $('#forward-tab').removeClass('active');
-            $('#forward').removeClass('active');
-            $('#forward').removeClass('show');
-            $('#expertise-tab').removeClass('active');
-            $('#expertise').removeClass('active');
-            $('#expertise').removeClass('show');
-            $('#payment-tab').addClass('active');
-            $('#payment').addClass('active');
-            $('#payment').addClass('show');
-            $('#contract-tab').removeClass('active');
-            $('#contract').removeClass('active');
-            $('#contract').removeClass('show');
-            $('#general_info-tab').removeClass('active');
-            $('#general_info').removeClass('active');
-            $('#general_info').removeClass('show');
-        }
-        if (count == 4){
-            $('#forward-tab').removeClass('active');
-            $('#forward').removeClass('active');
-            $('#forward').removeClass('show');
-            $('#expertise-tab').addClass('active');
-            $('#expertise').addClass('active');
-            $('#expertise').addClass('show');
-            $('#payment-tab').removeClass('active');
-            $('#payment').removeClass('active');
-            $('#payment').removeClass('show');
-            $('#contract-tab').removeClass('active');
-            $('#contract').removeClass('active');
-            $('#contract').removeClass('show');
-            $('#general_info-tab').removeClass('active');
-            $('#general_info').removeClass('active');
-            $('#general_info').removeClass('show');
-        }
-        if (count == 5){
-            $('#forward-tab').addClass('active');
-            $('#forward').addClass('active');
-            $('#forward').addClass('show');
-            $('#expertise-tab').removeClass('active');
-            $('#expertise').removeClass('active');
-            $('#expertise').removeClass('show');
-            $('#payment-tab').removeClass('active');
-            $('#payment').removeClass('active');
-            $('#payment').removeClass('show');
-            $('#contract-tab').removeClass('active');
-            $('#contract').removeClass('active');
-            $('#contract').removeClass('show');
-            $('#general_info-tab').removeClass('active');
-            $('#general_info').removeClass('active');
-            $('#general_info').removeClass('show');
-        }
+    $('.btnNext').click(function() {
+        $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
+    });
 
-    }
+    $('.btnPrevious').click(function() {
+        $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
+    });
 
+    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
+    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
+    var regApplicationId = [[${regApplicationLog.id}]];
+
+    $(document).ready(function () {
+        var srSelector = $('#materialId');
+        srSelector.find('option:selected').show();
+    });
     function openInputFile() {
         document.getElementById("file-input").click();
     };
@@ -291,6 +195,35 @@
             this.value = this.value.replace(/\D/g, '');
         }
     });
+
+    function getMaterialList() {
+        var form = new FormData();
+        form.append("objectId", $("#objectId").val());
+        form.append("activityId", $("#activityId").val());
+        form.append("_csrf", $("#global_csrf").val());
+        var srSelector = $('#requirementId');
+        srSelector.find('option:selected').prop('selected',false);
+        srSelector.find('option').hide();
+        var html = '';
+        $.ajax({
+            url: '/reg/application/material',
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                $('#category').val(response.category);
+                console.log(response.requirementList.length);
+                if (response.requirementList.length>0){
+                    $.each(response.requirementList, function (index, value) {
+                        $('#requirementId option[value="'+value.id+'"]').show();
+                    });
+                }
+            }
+        });
+    }
 
     function openModalFile() {
         $('#upload-file-modal').modal('show');
@@ -306,7 +239,7 @@
         $('#upload-file-modal').modal('hide');
 
         var form = new FormData();
-        form.append("id", [[${regApplication.id}]]);
+        form.append("id", regApplicationId);
         form.append("file", $('#file-input').prop('files')[0]);
         form.append("file_name", $('#file-name').val());
         form.append("_csrf", $('#global_csrf').val());
@@ -360,7 +293,7 @@
 
     function deleteFile(fileId) {
         var form = new FormData();
-        form.append("id", [[${regApplication.id}]]);
+        form.append("id", regApplicationId);
         form.append("fileId", fileId);
         form.append("_csrf", $('#global_csrf').val());
 
@@ -384,6 +317,7 @@
         var progress = Math.round(percent);
         $('#percentage-num').html(progress);
     }
+
 </script>
 </body>
 </html>

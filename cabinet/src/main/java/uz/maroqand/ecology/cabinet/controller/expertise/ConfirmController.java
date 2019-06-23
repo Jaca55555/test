@@ -160,7 +160,6 @@ public class ConfirmController {
 
         Comment comment = commentService.getByRegApplicationId(regApplication.getId());
         model.addAttribute("comment",comment!=null?comment:new Comment());
-        model.addAttribute("cancel_url",ExpertiseUrls.ConfirmList);
 
         model.addAttribute("applicant",client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));

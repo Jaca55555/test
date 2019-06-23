@@ -8,22 +8,23 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ActivityService;
-import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -52,6 +53,7 @@ public class PerformerController {
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
     private final RegApplicationLogService regApplicationLogService;
+    private final ProjectDeveloperService projectDeveloperService;
 
     @Autowired
     public PerformerController(
@@ -64,7 +66,8 @@ public class PerformerController {
             FileService fileService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            RegApplicationLogService regApplicationLogService
+            RegApplicationLogService regApplicationLogService,
+            ProjectDeveloperService projectDeveloperService
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -76,6 +79,7 @@ public class PerformerController {
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
         this.regApplicationLogService = regApplicationLogService;
+        this.projectDeveloperService = projectDeveloperService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -131,6 +135,33 @@ public class PerformerController {
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
+    }
+
+    @RequestMapping(ExpertiseUrls.PerformerView)
+    public String getForwardingViewPage(
+            @RequestParam(name = "id")Integer regApplicationId,
+            Model model
+    ) {
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+
+        Client client = clientService.getById(regApplication.getApplicantId());
+        if(client.getType().equals(ApplicantType.Individual)){
+            model.addAttribute("individual", new IndividualDto(client));
+        }else {
+            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        }
+
+        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("applicant",client);
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("regApplicationLog",regApplicationLog);
+        return ExpertiseTemplates.PerformerView;
     }
 
 }

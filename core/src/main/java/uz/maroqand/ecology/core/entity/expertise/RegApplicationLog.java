@@ -3,11 +3,13 @@ package uz.maroqand.ecology.core.entity.expertise;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 16.06.2019.
@@ -67,6 +69,13 @@ public class RegApplicationLog {
     @Size(max = 1000)
     @Column(name = "comment",columnDefinition = "TEXT")
     private String comment;
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reg_application_log_jt_document_files",
+            joinColumns = { @JoinColumn(name = "reg_application_log") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> documentFiles;
 
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;

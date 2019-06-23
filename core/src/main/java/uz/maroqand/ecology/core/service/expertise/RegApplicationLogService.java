@@ -23,4 +23,6 @@ public interface RegApplicationLogService {
 
     RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, User user);
 
+    RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user);
+
 }

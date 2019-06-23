@@ -69,4 +69,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
+    public RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user){
+        regApplicationLog.setUpdateAt(new Date());
+        regApplicationLog.setUpdateById(user.getId());
+        return regApplicationLogRepository.save(regApplicationLog);
+    }
 }

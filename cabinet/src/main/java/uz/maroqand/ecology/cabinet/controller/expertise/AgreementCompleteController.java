@@ -8,16 +8,21 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -46,8 +51,9 @@ public class AgreementCompleteController {
     private final ObjectExpertiseService objectExpertiseService;
     private final CommentService commentService;
     private final HelperService helperService;
-    private final FileService fileService;
     private final RegApplicationLogService regApplicationLogService;
+    private final InvoiceService invoiceService;
+    private final ProjectDeveloperService projectDeveloperService;
 
     @Autowired
     public AgreementCompleteController(
@@ -59,9 +65,10 @@ public class AgreementCompleteController {
             ObjectExpertiseService objectExpertiseService,
             CommentService commentService,
             HelperService helperService,
-            FileService fileService,
-            RegApplicationLogService regApplicationLogService
-    ){
+            RegApplicationLogService regApplicationLogService,
+            InvoiceService invoiceService,
+            ProjectDeveloperService projectDeveloperService)
+    {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -70,8 +77,9 @@ public class AgreementCompleteController {
         this.objectExpertiseService = objectExpertiseService;
         this.commentService = commentService;
         this.helperService = helperService;
-        this.fileService = fileService;
         this.regApplicationLogService = regApplicationLogService;
+        this.invoiceService = invoiceService;
+        this.projectDeveloperService = projectDeveloperService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -127,6 +135,33 @@ public class AgreementCompleteController {
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
+    }
+
+    @RequestMapping(ExpertiseUrls.AgreementCompleteView)
+    public String getForwardingViewPage(
+            @RequestParam(name = "id")Integer regApplicationId,
+            Model model
+    ) {
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+
+        Client client = clientService.getById(regApplication.getApplicantId());
+        if(client.getType().equals(ApplicantType.Individual)){
+            model.addAttribute("individual", new IndividualDto(client));
+        }else {
+            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        }
+
+        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("applicant",client);
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("regApplicationLog",regApplicationLog);
+        return ExpertiseTemplates.AgreementCompleteView;
     }
 
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="payment">
+    <style>
+        .table td, .table th{
+            border: none;
+        }
+    </style>
+    <div class="row" th:object="${invoice}">
+        <div class="col-md-6 offset-md-3" style="margin-bottom: 40px">
+            <table class="table table-borderless">
+                <tbody>
+                <tr>
+                    <td th:text="#{sys_invoice_number}"></td>
+                    <td class="text-right" th:text="*{invoice}"></td>
+                </tr>
+                <tr>
+                    <td th:text="#{sys_payer_name}"></td>
+                    <td class="text-right" th:text="*{payerName}"></td>
+                </tr>
+                <tr>
+                    <td th:text="#{sys_invoice_createdAt}"></td>
+                    <td class="text-right">
+                        <span th:text="*{#dates.format(createdDate,'dd.MM.yyyy HH:mm:ss')}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td th:text="#{sys_payment_detail}"></td>
+                    <td class="text-right" th:text="*{detail}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;">
+            <p class="text-center" th:text="#{sys_payment_amount}" style="font-size: 22px;"> Сумма к оплате </p>
+            <p class="text-center text-summa" th:text="*{amount}" style="font-size: 22px;"> 101 365.00 </p>
+        </div>
+        <div class="col-md-3 col-12">
+            <p class="text-center">
+                <i class="feather icon-check text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
+            </p>
+            <p class="text-center" style="margin-bottom: 20px;font-size: 22px;" th:text="#{sys_payment_successful}">Оплата успешно</p>
+        </div>
+
+        <div class="col-md-12 form-group row" style="margin-top: 40px;">
+            <div class="col-md-12 text-center" id="tab-control-buttons">
+                <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
+                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
