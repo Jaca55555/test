@@ -43,7 +43,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplication;
     }
 
-    public void save(RegApplication regApplication){
+    public void update(RegApplication regApplication){
+        regApplication.setUpdateAt(new Date());
         regApplicationRepository.save(regApplication);
     }
 

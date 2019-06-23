@@ -223,7 +223,7 @@ public class RegApplicationController {
             }
         }
         regApplication.setStep(RegApplicationStep.ABOUT);
-        regApplicationService.save(regApplication);
+        regApplicationService.update(regApplication);
         return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;
     }
 
@@ -296,7 +296,7 @@ public class RegApplicationController {
         regApplication1.setConfirmLogId(regApplicationLog.getId());
 
         regApplication1.setStep(RegApplicationStep.ABOUT);
-        regApplicationService.save(regApplication1);
+        regApplicationService.update(regApplication1);
 
 
         return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
@@ -347,7 +347,7 @@ public class RegApplicationController {
         if (file != null) {
             Set<File> fileSet = regApplication.getDocumentFiles();
             fileSet.add(file);
-            regApplicationService.save(regApplication);
+            regApplicationService.update(regApplication);
 
             responseMap.put("name", file.getName());
             responseMap.put("link", Urls.RegApplicationFileDownload+ "?file_id=" + file.getId());
@@ -396,7 +396,7 @@ public class RegApplicationController {
             Set<File> fileSet = regApplication.getDocumentFiles();
             if(fileSet.contains(file)) {
                 fileSet.remove(file);
-                regApplicationService.save(regApplication);
+                regApplicationService.update(regApplication);
 
                 file.setDeleted(true);
                 file.setDateDeleted(new Date());
@@ -494,7 +494,7 @@ public class RegApplicationController {
         regApplication.setContractNumber(contractNumber);
         regApplication.setContractDate(new Date());
         regApplication.setStep(RegApplicationStep.PAYMENT);
-        regApplicationService.save(regApplication);
+        regApplicationService.update(regApplication);
 
         return "redirect:" + Urls.RegApplicationPrepayment + "?id=" + id;
     }
@@ -523,7 +523,7 @@ public class RegApplicationController {
             }
         }
         regApplication.setInvoiceId(invoice.getId());
-        regApplicationService.save(regApplication);
+        regApplicationService.update(regApplication);
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("upay_url", Urls.RegApplicationStatus);//todo to`grilash kerak
@@ -624,7 +624,7 @@ public class RegApplicationController {
             regApplication.setStatus(RegApplicationStatus.New);
             regApplication.setRegistrationDate(new Date());
             regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-            regApplicationService.save(regApplication);
+            regApplicationService.update(regApplication);
         }
 
         List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());

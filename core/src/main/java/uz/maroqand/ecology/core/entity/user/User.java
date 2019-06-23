@@ -81,4 +81,8 @@ public class User {
     @Transient
     private Integer userAdditionalId;
 
+    public String getFullName(){
+        return lastname+" "+firstname+" "+middlename;
+    }
+
 }

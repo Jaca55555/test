@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
@@ -138,10 +139,11 @@ public class ForwardingController {
     ) {
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.ConfirmList;
+            return "redirect:" + ExpertiseUrls.ForwardingList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -150,12 +152,44 @@ public class ForwardingController {
             model.addAttribute("legalEntity", new LegalEntityDto(client));
         }
 
+        model.addAttribute("performerLog",performerLog);
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant",client);
+        model.addAttribute("userList",userService.findPerformerList());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
         return ExpertiseTemplates.ForwardingView;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ForwardingAction,method = RequestMethod.POST)
+    public String confirmApplication(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
+            @RequestParam(name = "performerId")Integer performerId,
+            @RequestParam(name = "comment")String comment
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ForwardingList;
+        }
+
+        User performer = userService.findById(performerId);
+        if (performer== null){
+            return "redirect:" + ExpertiseUrls.ForwardingList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
+
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Performer,comment,user);
+
+        regApplication.setPerformerId(performerId);
+        regApplication.setPerformerLogId(regApplicationLogCreate.getId());
+        regApplicationService.update(regApplication);
+
+        return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
     }
 
 }

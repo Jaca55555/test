@@ -9,7 +9,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 
 public interface RegApplicationService {
 
-    void save(RegApplication regApplication);
+    void update(RegApplication regApplication);
 
     RegApplication create(User user);
 

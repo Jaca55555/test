@@ -85,4 +85,7 @@ public class UserServiceImpl implements UserService {
         return ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
+    public List<User> findPerformerList(){
+        return userRepository.findAll();
+    }
 }

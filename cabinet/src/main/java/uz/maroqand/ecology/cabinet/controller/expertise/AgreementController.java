@@ -143,7 +143,7 @@ public class AgreementController {
     ) {
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.ConfirmList;
+            return "redirect:" + ExpertiseUrls.AgreementList;
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());

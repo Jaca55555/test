@@ -144,7 +144,7 @@ public class PerformerController {
     ) {
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.ConfirmList;
+            return "redirect:" + ExpertiseUrls.PerformerList;
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
