@@ -6,6 +6,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,5 +25,7 @@ public interface RegApplicationLogService {
     RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, User user);
 
     RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user);
+
+    Date getDeadlineDate(Integer deadline, Date beginDate);
 
 }

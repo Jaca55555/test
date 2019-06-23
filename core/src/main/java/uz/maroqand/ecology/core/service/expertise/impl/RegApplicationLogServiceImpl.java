@@ -10,6 +10,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationLogRepository;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -73,5 +74,12 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         regApplicationLog.setUpdateAt(new Date());
         regApplicationLog.setUpdateById(user.getId());
         return regApplicationLogRepository.save(regApplicationLog);
+    }
+
+    public Date getDeadlineDate(Integer deadline,Date beginDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(beginDate);
+        calendar.add(Calendar.DAY_OF_MONTH, deadline);
+        return calendar.getTime();
     }
 }
