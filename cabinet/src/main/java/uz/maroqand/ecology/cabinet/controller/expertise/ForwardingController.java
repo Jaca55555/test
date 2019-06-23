@@ -69,7 +69,8 @@ public class ForwardingController {
             FileService fileService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            RegApplicationLogService regApplicationLogService) {
+            RegApplicationLogService regApplicationLogService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -93,59 +94,56 @@ public class ForwardingController {
         return ExpertiseTemplates.ForwardingList;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @RequestMapping(value = ExpertiseUrls.ForwardingListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getForwardingListAjaxPage(
             FilterDto filterDto,
             Pageable pageable
     ){
-        HashMap<String,Object> result = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        HashMap<String,Object> result = new HashMap<>();
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 user.getOrganizationId(),
                 LogType.Forwarding,
-                user.getId(),
+                null,
                 pageable
         );
-
-        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
 
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
-            Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
                     regApplication.getMaterialId() != null ?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
-                    regApplication.getActivityId() != null ?helperService.getActivity(regApplication.getActivityId(),locale):"",
-                    regApplication.getCreatedAt() != null ?Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
-                    regApplicationLog.getCreatedAt() != null ?Common.uzbekistanDateFormat.format(regApplicationLog.getCreatedAt()):"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getForwardingName():""
-//                    invoice.getRegisteredAt()!=null ?Common.uzbekistanDateFormat.format(setExecutionDate(invoice.getRegisteredAt(),regApplication.getDeadline())):"",
+                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+                    regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
+                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
+                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getForwardingName():"",
+                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
             });
         }
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
     }
+
+
+
+
+
+
+
 
     @RequestMapping(ExpertiseUrls.ForwardingChecking)
     public String getCheckingPage(

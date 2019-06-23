@@ -1,21 +1,34 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ActivityService;
-import uz.maroqand.ecology.core.service.expertise.CommentService;
-import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -34,6 +47,7 @@ public class AgreementCompleteController {
     private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
     public AgreementCompleteController(
@@ -45,7 +59,8 @@ public class AgreementCompleteController {
             ObjectExpertiseService objectExpertiseService,
             CommentService commentService,
             HelperService helperService,
-            FileService fileService
+            FileService fileService,
+            RegApplicationLogService regApplicationLogService
     ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
@@ -56,6 +71,7 @@ public class AgreementCompleteController {
         this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -67,6 +83,50 @@ public class AgreementCompleteController {
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", LogStatus.getLogStatusList());
         return ExpertiseTemplates.AgreementCompleteList;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.AgreementCompleteListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getAgreementCompleteListAjax(
+            FilterDto filterDto,
+            Pageable pageable
+    ){
+        User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        HashMap<String,Object> result = new HashMap<>();
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                user.getOrganizationId(),
+                LogType.AgreementComplete,
+                null,
+                pageable
+        );
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            Client client = clientService.getById(regApplication.getApplicantId());
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+            convenientForJSONArray.add(new Object[]{
+                    regApplication.getId(),
+                    client.getTin(),
+                    client.getName(),
+                    regApplication.getMaterialId() != null ?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
+                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+                    regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
+                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
+                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getAgreementName():"",
+                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
+            });
+        }
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("data",convenientForJSONArray);
+        return result;
     }
 
 }

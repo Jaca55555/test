@@ -72,13 +72,13 @@
                                                 </div>
 
                                                 <div class="form-group col-sm-2" >
-                                                    <label for="dateBegin" class="control-label" th:text="#{reg_application_log.createdAt}"></label>
+                                                    <label for="regDateBegin" class="control-label" th:text="#{reg_application.regdate}"></label>
                                                     <div class="row">
                                                         <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="dateBegin" th:placeholder="#{sys_begin}"/>
+                                                            <input class="form-control datepicker" id="regDateBegin" th:placeholder="#{sys_begin}"/>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="dateEnd" th:placeholder="#{sys_end}"/>
+                                                            <input class="form-control datepicker" id="regDateEnd" th:placeholder="#{sys_end}"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -103,7 +103,7 @@
                                                     <label for="status" class="control-label" th:text="#{sys_status}"></label>
                                                     <select id="status" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getConfirmName()}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getAgreementName()}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-2">
@@ -112,6 +112,17 @@
                                                         <option value="" th:text="#{sys_select}"></option>
                                                         <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                     </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label for="deadlineDateBegin" class="control-label" th:text="#{sys_deadlineDate}"></label>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control datepicker" id="deadlineDateBegin" th:placeholder="#{sys_begin}" />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control datepicker" id="deadlineDateEnd" th:placeholder="#{sys_end}" />
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div class="form-group col-sm-12 text-center">
@@ -138,11 +149,11 @@
                                                     <th th:text="#{reg_application.number}"></th>
                                                     <th th:text="#{sys_tin}"></th>
                                                     <th th:text="#{sys_legal_entity_name}"></th>
-                                                    <th th:text="#{sys_opf}"></th>
-                                                    <th th:text="#{sys_oked}"></th>
-                                                    <th th:text="#{sys_region}"></th>
-                                                    <th th:text="#{sys_subregion}"></th>
-                                                    <th th:text="#{reg_application_log.createdAt}"></th>
+                                                    <th th:text="#{sys_about.material}"></th>
+                                                    <th th:text="#{sys_about.activity}"></th>
+                                                    <th th:text="#{sys_list.registration_date}"></th>
+                                                    <th th:text="#{sys_list.deadline_date}"></th>
+                                                    <th th:text="#{sys_conclusion_status}"></th>
                                                     <th th:text="#{sys_status}"></th>
                                                     <th ></th>
                                                 </tr>
@@ -170,8 +181,8 @@
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 
 <script th:inline="javascript">
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmListAjax}]];
-    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmView}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreementCompleteListAjax}]];
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreementCompleteView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -191,17 +202,20 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[9]===0)statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
-        if (row[9]===1)statusLabel += '<span class="badge badge-success">'+row[8]+'</span>';
-        if (row[9]===2)statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
+        if (row[8]===0)statusLabel += '<span class="badge badge-secondary">'+row[7]+'</span>';
+        if (row[8]===1)statusLabel += '<span class="badge badge-info">'+row[7]+'</span>';
+        if (row[8]===2)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
+        if (row[8]===3)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
         return statusLabel;
     }
 
-    $('.datepicker').datepicker({
-        format: "dd.mm.yyyy",
-        todayHighlight: true,
-        autoclose: true
-    });
+    function renderLogStatusColumn(data, type, row, meta) {
+        var statusLabel = '';
+        if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===1)statusLabel += '<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===2)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        return statusLabel;
+    }
 
     function datatableConnect() {
             dataDatatableSelector.DataTable({
@@ -230,11 +244,7 @@
                 dataToSend.objectId = $('#objectId').val();
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
-                dataToSend.confirmStatus = $('#confirmStatus').val();
-
                 dataToSend.status = $('#status').val();
-                dataToSend.dateBegin = $('#dateBegin').val();
-                dataToSend.dateEnd = $('#dateEnd').val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
@@ -245,17 +255,14 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'tin'},
-                {data: 2, name: 'name'},
-                {data: 3, name: 'opf'},
-                {data: 4, name: 'oked'},
-                {data: 5, name: 'region'},
-                {data: 6, name: 'subregion'},
-                {data: 7, name: 'createdAt'},
-                {
-                    data: 8, name: 'status',
-                    render:renderStatusColumn, orderable:false
-                },
+                {data: 1, name: 'applicant.tin'},
+                {data: 2, name: 'applicant.name'},
+                {data: 3, name: 'materialId'},
+                {data: 4, name: 'category'},
+                {data: 5, name: 'registrationDate'},
+                {data: 6, name: 'deadlineDate'},
+                {data: 7, render:renderStatusColumn, orderable:false},
+                {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
