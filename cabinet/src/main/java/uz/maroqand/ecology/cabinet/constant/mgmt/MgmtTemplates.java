@@ -13,4 +13,10 @@ public class MgmtTemplates {
     public static final String MinWageList = MinWage + "/list";
     public static final String MinWageNew = MinWage + "/new";
 
+    //Roles
+    private static final String Roles = Prefix + "/roles";
+    public static final String RolesList = Roles + "/list";
+    public static final String RolesNew = Roles + "/new";
+    public static final String RolesView = Roles + "/view";
+
 }
