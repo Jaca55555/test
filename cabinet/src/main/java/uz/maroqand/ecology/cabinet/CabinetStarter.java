@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import uz.maroqand.ecology.cabinet.config.WebMVCConfigs;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 
 /**
@@ -39,6 +40,9 @@ public class CabinetStarter {
 
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();
+
+        NotificationService notificationService = applicationContext.getBean(NotificationService.class);
+        notificationService.initialization();
 
     }
 

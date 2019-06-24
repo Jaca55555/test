@@ -38,4 +38,13 @@ public class Urls {
     public static final String AppealUserView = Prefix + Appeal + "/view";
     public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
 
+    private static final String PrefixSys = "/sys";
+
+    public static final String Toastr = PrefixSys + "/toastr";
+
+    private static final String Notification = PrefixSys + "/notification";
+    private static final String NotificationShow = Notification + "/show";
+    private static final String NotificationList = Notification + "/list";
+    private static final String NotificationView = Notification + "/view";
+
 }

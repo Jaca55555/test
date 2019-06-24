@@ -1,22 +1,23 @@
-package uz.maroqand.ecology.ecoexpertise.controller;
+package uz.maroqand.ecology.cabinet.controller.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.dto.user.Toastr;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.ecoexpertise.constant.Urls;
 
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Utkirbek Boltaev on 08.04.2019.
+ * Created by Utkirbek Boltaev on 24.06.2019.
  * (uz)
+ * (ru)
  */
 @Controller
 public class ToastrController {
@@ -25,12 +26,12 @@ public class ToastrController {
     private final ToastrService toastrService;
 
     @Autowired
-    public ToastrController(UserService userService, ToastrService toastrService) {
+    public ToastrController(UserService userService,ToastrService toastrService) {
         this.userService = userService;
         this.toastrService = toastrService;
     }
 
-    @RequestMapping(value = Urls.Toastr, method = RequestMethod.POST)
+    @RequestMapping(value = SysUrls.Toastr, method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getToastr(
     ) {
