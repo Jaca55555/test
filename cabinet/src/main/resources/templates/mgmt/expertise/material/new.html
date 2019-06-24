@@ -42,7 +42,7 @@
                                             <h5 th:text="#{material.new}"></h5>
                                         </div>
                                         <div class="card-body">
-                                            <form th:action="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).MaterialNew}" method="post" th:object="${material}">
+                                            <form th:action="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialNew}" method="post" th:object="${material}">
                                                 <div class="form-group col-md-5">
                                                     <label for="name" th:text="#{material.name}"></label>
                                                     <input type="text" class="form-control" id="name" th:field="*{name}" required="">

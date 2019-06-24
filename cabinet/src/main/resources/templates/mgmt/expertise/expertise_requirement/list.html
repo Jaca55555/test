@@ -85,7 +85,7 @@
                                                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                     <span th:text="#{sys_search}">Поиск</span>
                                                 </a>
-                                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementNew}" class="btn btn-success"><i class="feather icon-plus-square"></i>
+                                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ExpertiseRequirementNew}" class="btn btn-success"><i class="feather icon-plus-square"></i>
                                                     <span th:text="#{mntr_expertise_requirement.new}"></span>
                                                 </a>
                                             </div>
@@ -127,7 +127,7 @@
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
 <script th:inline="javascript">
-    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).ExpertiseRequirementEdit}]];
+    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ExpertiseRequirementEdit}]];
     var labelEdit = [[#{sys_edit}]];
     var labelDelete = [[#{sys_delete}]];
     function getCurrentLanguage() {
