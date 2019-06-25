@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.service.user.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.repository.user.RoleRepository;
@@ -16,6 +18,16 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public DataTablesOutput<Role> getAll(DataTablesInput input) {
+        return roleRepository.findAll(input);
+    }
+
+    @Override
+    public Role getById(Integer id) {
+        return roleRepository.findById(id).get();
     }
 
     @Override

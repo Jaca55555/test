@@ -22,4 +22,14 @@ public class MgmtUrls {
     public static final String MinWageCreate = MinWage + "/create";
     public static final String MinWageUpdate = MinWage + "/update";
 
+    //Roles
+    private static final String Roles = Prefix + "/roles";
+    public static final String RolesList = Roles + "/list";
+    public static final String RolesListAjax = Roles + "/ajax_list";
+    public static final String RolesNew = Roles + "/new";
+    public static final String RolesEdit = Roles + "/edit";
+    public static final String RolesCreate = Roles + "/create";
+    public static final String RolesUpdate = Roles + "/update";
+    public static final String RolesView = Roles + "/view";
+
 }
