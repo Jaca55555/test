@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.client.Client;
 
@@ -10,7 +11,7 @@ import uz.maroqand.ecology.core.entity.client.Client;
  * (ru)
  */
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface ClientRepository extends JpaRepository<Client, Integer>, JpaSpecificationExecutor<Client> {
 
 
 }
