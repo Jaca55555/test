@@ -22,7 +22,13 @@ public interface UserService {
 
     Page<User> findFiltered(
             Integer userId,
-            String userName,
+            String lastName,
+            String firstName,
+            String middleName,
+            String username,
+            Integer organizationId,
+            Integer departmentId,
+            Integer positionId,
             Pageable pageable
     );
 

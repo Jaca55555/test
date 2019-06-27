@@ -27,4 +27,17 @@ public class Position {
     @Column(name = "name_ru")
     private String nameRu;
 
+    @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
+    private Boolean deleted = false;
+
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+            case "ru":
+                return nameRu;
+
+            default:
+                return name;
+        }
+    }
+
 }

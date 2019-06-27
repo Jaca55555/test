@@ -57,7 +57,6 @@ public class User {
 
     private Boolean enabled;
 
-
     //Organization.ID
     @Column(name = "organization_id")
     private Integer organizationId;
@@ -66,6 +65,15 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private Organization organization;
+
+    //Department.ID
+    @Column(name = "department_id")
+    private Integer departmentId;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", insertable = false, updatable = false)
+    private Department department;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", updatable = false, insertable = false)
@@ -82,7 +90,11 @@ public class User {
     private Integer userAdditionalId;
 
     public String getFullName(){
-        return lastname+" "+firstname+" "+middlename;
+        String fullName = " ";
+        if (lastname!=null) fullName+=lastname + " ";
+        if (firstname!=null) fullName+=firstname+" ";
+        if (middlename!=null) fullName+=middlename+" ";
+        return fullName;
     }
 
 }
