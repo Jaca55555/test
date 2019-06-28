@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <style>
+        table.dataTable.nowrap th, table.dataTable.nowrap td {
+            white-space: pre-line;
+        }
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        .btn-active{
+            color: #fff;
+            background-color: #748892;
+            border-color: #748892;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{invoice_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="regIndividual" method="post" class="row">
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
+                                                <input type="text" class="form-control datepicker" id="dateBegin" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
+                                                <input type="text" class="form-control datepicker" id="dateEnd" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">&nbsp;</label><br/>
+                                                <button type="button" class="btn btn-outline-secondary" th:text="#{sys_today}" onclick="todayClick()" id="today" style="width: 100%"></button>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">&nbsp;</label><br/>
+                                                <button type="button" class="btn btn-outline-secondary" th:text="#{sys_this_month}" onclick="thisMonthClick()" id="thisMonth" style="width: 100%"></button>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{invoice_status}"></label>
+                                                <select id="status" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option value="Initial" th:text="#{invoice_status.initial}"></option>
+                                                    <option value="Success" th:text="#{invoice_status.success}"></option>
+                                                    <option value="Canceled" th:text="#{invoice_status.canceled}"></option>
+                                                    <option value="Error" th:text="#{invoice_status.error}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{invoice_number}"></label>
+                                                <input type="text" class="form-control" id="invoice">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{invoice_detail}"></label>
+                                                <input type="text" class="form-control" id="detail">
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_region}"></label>
+                                                <select id="regionId" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:each="region : ${regionsList}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_sub_region}"></label>
+                                                <select id="subRegionId" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <div class="col-sm-12 text-right">
+                                                <label class="control-label">&nbsp;</label><br/>
+                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}">Поиск</span>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th th:text="#{invoice_number}"></th>
+                                                    <th th:text="#{sys_organization_name}"></th>
+                                                    <th th:text="#{invoice_amount}"></th>
+                                                    <th th:text="#{invoice_status}"></th>
+                                                    <th style="max-width: 50px;"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<div id="billing-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 row" style="font-size:24px;margin-bottom: 15px;">
+                    <div class="col-md-6" style="color: #3EBFEA;" id="status-initial">
+                        <i class="feather icon-settings"></i>
+                        <span th:text="#{invoice_status.initial}">В процессе</span>
+                    </div>
+                    <div class="col-md-6" style="color: #31B79A;" id="status-success">
+                        <i class="feather icon-check-circle"></i>
+                        <span th:text="#{invoice_status.success}">Инвойс оплачен</span>
+                    </div>
+                    <div class="col-md-6" style="color: #F7432C;" id="status-canceled">
+                        <i class="feather icon-x-circle"></i>
+                        <span th:text="#{invoice_status.canceled}">Инвойс отменен</span>
+                    </div>
+                    <div class="col-md-6" style="color: #F7D705;" id="status-error">
+                        <i class="feather icon-alert-triangle"></i>
+                        <span th:text="#{invoice_status.error}">Не успешно</span>
+                    </div>
+                    <div class="col-md-6 text-right" style="color: #937676;">
+                        <span><span th:text="#{sys_date}">Дата</span>: <span id="date">27.06.2019</span></span>
+                    </div>
+                </div>
+
+                <div class="col-md-12 row" style="font-size: 12px;color:#73869A; margin-bottom: 50px;">
+                    <div class="col-md-4">
+                        <span><span th:text="#{invoice_payee}">Назначение</span> <br><b id="payee-name">Центр Единого Окна</b></span><br>
+                        <span><span th:text="#{invoice_payee.tin}">ИНН</span>: <span id="payee-tin">201122919</span></span><br>
+                        <span><span th:text="#{invoice_payee.account}">Аккаунт</span>: <span id="payee-account">401428601274043422199255</span></span><br>
+                        <span><span th:text="#{invoice_payee.address}">Адресс</span>: <span id="payee-address"></span></span><br>
+                    </div>
+
+                    <div class="col-md-4">
+                        <span th:text="#{invoice_payer}">Плательщик</span><br>
+                        <span><b class="payer-name">BEKMURODOV ORZUMURODJN ABDUMAJIT O'G'LI</b></span><br>
+                        <span><span th:text="#{invoice_payer.type}">Тип плательщика</span>: <span id="payer-type">Физическое лицо</span></span><br>
+                        <span><span th:text="#{invoice_payer.tin}">ИНН</span>: <span id="payer-tin">61035739</span></span><br>
+                        <span><span th:text="#{invoice_payer.passport}">Паспорт</span>: <span id="payer-passport">АА83471245</span></span><br>
+                        <span><span th:text="#{invoice_payer.phone}">Телефон</span>: <span id="payer-phone">949345479</span></span><br>
+                        <span><span th:text="#{invoice_payer.email}">Email</span>: <span id="payer-mail">bekmurod@mail.ru</span></span><br>
+                        <span><span th:text="#{invoice_payer.bank}">Банк</span>: <span id="payer-bank">Xalq Bank</span></span><br>
+                        <span><span th:text="#{invoice_payer.bank_account}">Банк</span>: <span id="payer-bank-account">Xalq Bank</span></span><br>
+                    </div>
+
+                    <div class="col-md-4">
+                        <span><span th:text="#{invoice_number}">Номер инвойся</span>: <b>#<span class="invoice-number">47239949861205</span></b></span><br>
+                        <span><span th:text="#{invoice_expiryAt}">Срок истечения</span>: <span id="expiry-at">21.06.2020 00:17</span></span><br>
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="font-size: 12px; color: #73869A; margin-bottom: 50px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="30%" th:text="#{invoice_name}">Наименование</th>
+                                <th width="57%" th:text="#{invoice_detail}">Описание</th>
+                                <th width="13%" th:text="#{invoice_cost}">Стоимость</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td th:text="#{sys_service_name}">Перегистрация Общество с ограниченной отвественностью (через сеть интернет)</td>
+                                <td id="invoice-detail">ID: 47239949861205, Перерегистрация Общество с ограниченной отвественоость (через сеть интернет), BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI, Бир Дарча Маркази - Olmaliq</td>
+                                <td><b><span id="invoice-qty">0.125</span>MRZP</b></td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{sys_total}">Итого</td>
+                                <td></td>
+                                <td><span id="invoice-amount">25,341.25</span> UZS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <div style="font-size: 24px; color: #ABB7C3;" th:text="#{invoice_payments}">Платежи по инвойсу:</div>
+                    <table class="table" style="color: #778A9D;font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th width="30%"></th>
+                                <th th:text="#{sys_data}">Дата</th>
+                                <th width="15%" th:text="#{sys_sum}">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments">
+                            <!--<tr>
+                                <td class="text-center"><i class="feather icon-credit-card" style="font-size: 30px;"></i></td>
+                                <td>27.06.2019 00:22:36</td>
+                                <td>25,341.25 UZS</td>
+                            </tr>-->
+                            <tr>
+                                <td></td>
+                                <td th:text="#{sys_total}">Итого:</td>
+                                <td>25,341.25 UZS</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td th:text="#{sys_left_pay}">Осталось оплатить:</td>
+                                <td>.00 UZS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+
+<script th:inline="javascript">
+
+    var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingListAjax}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
+    var labelView = [[#{sys_view}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+
+    var dataDatatableSelector;
+    var thead;
+    var dateToday = false;
+    var dateThisMonth = false;
+
+    function renderActionsColumn(data, type, row, meta) {
+        // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var html = '';
+        html += '<div class="btn-group"><button class="btn btn-outline-info btn-sm" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+
+                dataToSend.dateBegin = $("#dateBegin").val();
+                dataToSend.dateEnd = $("#dateEnd").val();
+                dataToSend.dateToday = dateToday;
+                dataToSend.dateThisMonth = dateThisMonth;
+                dataToSend.status = $("#status").val();
+                dataToSend.invoice = $("#invoice").val();
+                dataToSend.detail = $("#detail").val();
+                dataToSend.regionId = $("#regionId").val();
+                dataToSend.subRegionId = $("#subRegionId").val();
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post(ajaxLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 1, name: 'invoice'},
+                {data: 2, name: 'organizationName', orderable:false},
+                {data: 3, name: 'amount'},
+                {data: 4, name: 'status'},
+                {render: renderActionsColumn, orderable:false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
+        dataDatatableSelector = $('#data-table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
+    });
+
+    $('#data-table').css("width", "100%");
+
+    function todayClick() {
+        if($('#today').hasClass('btn-active')){
+            $('#dateBegin').prop('disabled', false);
+            $('#dateEnd').prop('disabled', false);
+            $('#today').removeClass('btn-active');
+            dateToday = false;
+        }else{
+            $('#dateBegin').prop('disabled', true);
+            $('#dateBegin').val('');
+            $('#dateEnd').prop('disabled', true);
+            $('#dateEnd').val('');
+            $('#today').addClass('btn-active');
+            $('#thisMonth').removeClass('btn-active');
+            dateToday = true;
+            dateThisMonth = false;
+        }
+    }
+
+    function thisMonthClick() {
+        if($('#thisMonth').hasClass('btn-active')){
+            $('#dateBegin').prop('disabled', false);
+            $('#dateEnd').prop('disabled', false);
+            $('#thisMonth').removeClass('btn-active');
+            dateThisMonth = false;
+        }else{
+            $('#dateBegin').prop('disabled', true);
+            $('#dateBegin').val('');
+            $('#dateEnd').prop('disabled', true);
+            $('#dateEnd').val('');
+            $('#thisMonth').addClass('btn-active');
+            $('#today').removeClass('btn-active');
+            dateThisMonth = true;
+            dateToday = false;
+        }
+    }
+
+    function billingView(id) {
+        $.ajax({
+            url: viewLink,
+            data: {
+                id: id
+            },
+            success: function (response) {
+                $('.invoice-number').html(response.invoiceNumber);
+                $('.payer-name').html(response.payerName);
+
+                invoiceStatus(response.invoiceStatus);
+
+                $('#date').html(response.invoiceDate);
+                $('#payee-name').html(response.payeeName);
+                $('#payee-tin').html(response.payeeTin);
+                $('#payee-account').html(response.payeeAccount);
+                $('#payee-address').html(response.payeeAddress);
+
+                $('#payer-type').html(response.payerType);
+                $('#payer-tin').html(response.payerTin);
+                $('#payer-passport').html(response.payerPassport);
+                $('#payer-phone').html(response.payerPhone);
+                $('#payer-mail').html(response.payerEmail);
+                $('#payer-bank').html(response.payerBank);
+                $('#payer-bank-account').html(response.payerBankAccount);
+
+                $('#expiry-at').html(response.invoiceExpiryAt);
+                $('#invoice-detail').html(response.invoiceDetail);
+                $('#invoice-qty').html(response.invoiceQty);
+                $('#invoice-amount').html(response.invoiceAmount);
+
+                $('.payment-tr').remove();
+                $.each(response.payments, function (index, value) {
+                    $('#payments').prepend('<tr class="payment-tr">\n' +
+                        '                                <td class="text-center"><i class="feather icon-credit-card" style="font-size: 30px;"></i></td>\n' +
+                        '                                <td>'+value[1]+'</td>\n' +
+                        '                                <td>'+value[2]+' UZS</td>\n' +
+                        '                            </tr>');
+                });
+                $('#billing-view').modal('show');
+            }
+        });
+    }
+
+    function invoiceStatus(status) {
+        $('#status-initial').hide();
+        $('#status-success').hide();
+        $('#status-canceled').hide();
+        $('#status-error').hide();
+
+        if(status == "Initial")
+            $('#status-initial').show();
+        if(status == "Success")
+            $('#status-success').show();
+        if(status == "Canceled")
+            $('#status-canceled').show();
+        if(status == "Error")
+            $('#status-error').show();
+
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

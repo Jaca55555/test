@@ -47,4 +47,10 @@ public class ExpertiseUrls {
     public static final String FileDownload = Prefix + "/file/download";
     public static final String FileDelete = Prefix + "/file/delete";
 
+    //Billing
+    private static final String Billing = Prefix + "/billing";
+    public static final String BillingList = Billing + "/list";
+    public static final String BillingListAjax = Billing + "/list_ajax";
+    public static final String BillingView = Billing + "/view";
+
 }
