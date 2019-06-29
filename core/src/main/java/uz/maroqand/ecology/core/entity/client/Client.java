@@ -125,4 +125,30 @@ public class Client {
     @Column(name = "bank_account")
     private String bankAccount;
 
+    /*
+     * Technical Fields
+     */
+    @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
+    private Boolean deleted = false;
+
+    @Column(name="created_at", columnDefinition = "timestamp without time zone")
+    private Date createdAt;
+
+    @Column(name="update_at", columnDefinition = "timestamp without time zone")
+    private Date updateAt;
+
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", insertable = false, updatable = false)
+    private User createdBy;*/
+
+    @Column(name = "created_by")
+    private Integer createdById;
+
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "update_by", insertable = false, updatable = false)
+    private User updateBy;*/
+
+    @Column(name = "update_by")
+    private Integer updateById;
+
 }

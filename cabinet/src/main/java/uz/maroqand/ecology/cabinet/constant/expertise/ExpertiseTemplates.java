@@ -34,4 +34,9 @@ public class ExpertiseTemplates {
     public static final String AgreementCompleteList = AgreementComplete + "/list";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
 
+    //Applicant
+    private static final String Applicant = Prefix + "/applicant";
+    public static final String ApplicantList = Applicant + "/list";
+    public static final String ApplicantView = Applicant + "/view";
+
 }
