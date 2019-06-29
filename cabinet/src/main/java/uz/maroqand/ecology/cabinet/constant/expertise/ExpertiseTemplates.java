@@ -38,4 +38,9 @@ public class ExpertiseTemplates {
     private static final String Billing = Prefix + "/billing";
     public static final String BillingList = Billing + "/list";
 
+    //Applicant
+    private static final String Applicant = Prefix + "/applicant";
+    public static final String ApplicantList = Applicant + "/list";
+    public static final String ApplicantView = Applicant + "/view";
+
 }

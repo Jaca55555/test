@@ -53,4 +53,11 @@ public class ExpertiseUrls {
     public static final String BillingListAjax = Billing + "/list_ajax";
     public static final String BillingView = Billing + "/view";
 
+
+    //Applicant
+    private static final String Applicant = Prefix + "/applicant";
+    public static final String ApplicantList = Applicant + "/list";
+    public static final String ApplicantListAjax = Applicant + "/list_ajax";
+    public static final String ApplicantView = Applicant + "/view";
+
 }
