@@ -130,6 +130,10 @@ public class BillingController {
         if(invoice == null)
             return null;
         List<Payment> paymentList = paymentService.findAllByInvoiceId(id);
+
+        Double paymentTotal = 0.0;
+        Double invoiceLeft = invoice.getAmount();
+
         List<Object[]> convenientForJSONArray = new ArrayList<>(paymentList.size());
             for (Payment payment : paymentList){
                 convenientForJSONArray.add(new Object[]{
@@ -137,7 +141,12 @@ public class BillingController {
                         payment.getPaymentDate() != null ? Common.uzbekistanDateAndTimeFormat.format(payment.getPaymentDate()) : "",
                         payment.getAmount()
                 });
+                paymentTotal += payment.getAmount();
         }
+            invoiceLeft -= paymentTotal;
+            result.put("paymentTotal",paymentTotal);
+            result.put("invoiceLeft",invoiceLeft);
+
             result.put("invoiceNumber", invoice.getInvoice());
             result.put("invoiceStatus", invoice.getStatus());
             result.put("invoiceDate", invoice.getCreatedDate() != null ? Common.uzbekistanDateFormat.format(invoice.getCreatedDate()) : "");
@@ -162,6 +171,6 @@ public class BillingController {
 
 
             result.put("payments",convenientForJSONArray);
-        return result;
+            return result;
     }
 }

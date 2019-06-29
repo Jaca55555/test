@@ -234,12 +234,12 @@
                             <tr>
                                 <td></td>
                                 <td th:text="#{sys_total}">Итого:</td>
-                                <td>25,341.25 UZS</td>
+                                <td><span id="payment-total">25,341.25</span> UZS</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td th:text="#{sys_left_pay}">Осталось оплатить:</td>
-                                <td>.00 UZS</td>
+                                <td><span id="invoice-left">0.00</span> UZS</td>
                             </tr>
                         </tbody>
                     </table>
@@ -418,11 +418,24 @@
                 $('#invoice-detail').html(response.invoiceDetail);
                 $('#invoice-qty').html(response.invoiceQty);
                 $('#invoice-amount').html(response.invoiceAmount);
+                $('#payment-total').html(response.paymentTotal.toFixed(2));
+                $('#invoice-left').html(response.invoiceLeft.toFixed(2));
+
 
                 $('.payment-tr').remove();
                 $.each(response.payments, function (index, value) {
+                    var type = value[0];
+                    var img_src = "";
+
+                    if(type == "BANK")
+                        img_src = "/static/images/bank.png";
+                    if(type == "UPAY")
+                        img_src = "/static/images/upay.png";
+                    if(type == "INTERNET_BANKING")
+                        img_src = "/static/images/transfer.png";
+
                     $('#payments').prepend('<tr class="payment-tr">\n' +
-                        '                                <td class="text-center"><i class="feather icon-credit-card" style="font-size: 30px;"></i></td>\n' +
+                        '                                <td class="text-center"><img src="'+img_src+'" style="max-height: 30px;"></td>\n' +
                         '                                <td>'+value[1]+'</td>\n' +
                         '                                <td>'+value[2]+' UZS</td>\n' +
                         '                            </tr>');
