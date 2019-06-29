@@ -141,6 +141,8 @@
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersListAjax}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEdit}]];
     var labelEdit = [[#{sys_edit}]];
+    var statusActive = [[#{status_avtive}]];
+    var statusNotActive = [[#{status_not_avtive}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -155,6 +157,10 @@
         var html = '';
         html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit mr-0"></i></a>';
         return html;
+    }
+
+    function renderStatusColumn(data, type, row, meta) {
+        return row[7]?statusActive:statusNotActive;
     }
 
     function datatableConnect() {
@@ -197,7 +203,7 @@
                 {data: 4, name: 'departmentId'},
                 {data: 5, name: 'positionId'},
                 {data: 6, name: 'phone'},
-                {data: 7, name: 'enabled'},
+                {render: renderStatusColumn, name: 'enable'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

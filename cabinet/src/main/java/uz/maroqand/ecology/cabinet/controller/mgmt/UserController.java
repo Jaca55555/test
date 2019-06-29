@@ -122,6 +122,7 @@ public class UserController {
     public String getUsersNewPage(Model model) {
 
         model.addAttribute("user",new User());
+        model.addAttribute("departmentId",null);
         model.addAttribute("departmentList",departmentService.getAll());
         model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("positionList",positionService.getAll());
@@ -141,7 +142,7 @@ public class UserController {
             return "redirect:" + MgmtUrls.UsersList;
         }
         model.addAttribute("user",user);
-        model.addAttribute("department",user.getDepartmentId()!=null?departmentService.getById(user.getDepartmentId()):null);
+        model.addAttribute("departmentId",user.getDepartmentId()!=null?user.getDepartmentId():null);
         model.addAttribute("departmentList",departmentService.getAll());
         model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("positionList",positionService.getAll());
@@ -155,9 +156,9 @@ public class UserController {
     @ResponseBody
     public HashMap<String, Object> getUsernameCheck(
             @RequestParam(name = "username", defaultValue = "", required = false) String username,
-            @RequestParam(name = "userId", required = false) Integer userId
+            @RequestParam(name = "id", required = false) Integer userId
     ) {
-        System.out.println("username="+username);
+        System.out.println("username="+username + " userId=" + userId);
         User user1 =null;
         if (userId!=null){
             user1 = userService.findById(userId);

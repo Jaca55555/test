@@ -32,4 +32,8 @@ public class MgmtTemplates {
     public static final String UserPswEdit = User + "/psw_edit";
     public static final String UserView = User + "/view";
 
+    //Position
+    private static final String Position = Prefix + "/position";
+    public static final String PositionList = Position + "/list";
+
 }

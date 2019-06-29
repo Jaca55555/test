@@ -36,7 +36,7 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public List<Position> getAll() {
-        return positionRepository.findAllByDeletedFalse();
+        return positionRepository.findAllByDeletedFalseOrderByIdDesc();
     }
 
 
