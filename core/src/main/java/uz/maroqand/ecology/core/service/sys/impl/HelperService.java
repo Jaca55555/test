@@ -13,6 +13,7 @@ import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
+import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
@@ -20,6 +21,7 @@ import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 /**
@@ -37,8 +39,9 @@ public class HelperService {
     private final SoatoService soatoService;
     private final OrganizationService organizationService;
     private final OpfService opfService;
+    private final DepartmentService departmentService;
 
-    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService, OpfService opfService) {
+    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService, OpfService opfService, DepartmentService departmentService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
@@ -46,6 +49,7 @@ public class HelperService {
         this.soatoService = soatoService;
         this.organizationService = organizationService;
         this.opfService = opfService;
+        this.departmentService = departmentService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -150,6 +154,13 @@ public class HelperService {
         if(id==null) return "";
         Organization organization = organizationService.getById(id);
         return organization!=null? organization.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getDepartmentName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getDepartmentName(Integer id, String locale) {
+        if(id==null) return "";
+        Department department = departmentService.getById(id);
+        return department!=null? department.getNameTranslation(locale):"";
     }
 
 }

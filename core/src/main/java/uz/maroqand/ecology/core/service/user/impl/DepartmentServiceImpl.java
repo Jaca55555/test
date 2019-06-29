@@ -60,10 +60,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Page<Department> findFiltered(
-            Integer id,
+            Integer departmentId,
+            Integer organizationId,
+            Integer parentId,
             String name,
+            String nameRu,
             Pageable pageable) {
-        return departmentRepository.findAll(getFilteringSpecification(id,name), pageable);
+        return departmentRepository.findAll(getFilteringSpecification(departmentId,organizationId,parentId,name,nameRu), pageable);
     }
 
     @Override
@@ -94,21 +97,37 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     private static Specification<Department> getFilteringSpecification(
-            final Integer id,
-            final String name
+            final Integer departmentId,
+            final Integer organizationId,
+            final Integer parentId,
+            final String name,
+            final String nameRu
         ) {
         return new Specification<Department>() {
             @Override
             public Predicate toPredicate(Root<Department> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
 
+                System.out.println("departmentId="+departmentId);
+                System.out.println("organizationId="+organizationId);
+                System.out.println("parentId="+parentId);
                 System.out.println("name="+name);
-                System.out.println("id="+id);
-                if (id != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("id"), id));
+                System.out.println("nameRu="+nameRu);
+
+                if (departmentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), departmentId));
+                }
+                if (organizationId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
+                }
+                if (parentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("parentId"), parentId));
                 }
                 if (name != null) {
                     predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                }
+                if (nameRu != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + nameRu + "%"));
                 }
                 // Show only registered and non-deleted
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);

@@ -18,8 +18,11 @@ public interface DepartmentService {
     List<Department> getListByOrganizationId(Integer id);
 
     Page<Department> findFiltered(
-            Integer id,
+            Integer departmentId,
+            Integer organizationId,
+            Integer parentId,
             String name,
+            String nameRu,
             Pageable pageable
     );
 
