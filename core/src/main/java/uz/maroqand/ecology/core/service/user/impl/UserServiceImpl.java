@@ -49,13 +49,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findFiltered(Integer userId, String userName, Pageable pageable) {
-        return userRepository.findAll(getFilteringSpecification(userId,userName),pageable);
+    public Page<User> findFiltered(
+            Integer userId,
+            String lastName,
+            String firstName,
+            String middleName,
+            String userName,
+            Integer organizationId,
+            Integer departmentId,
+            Integer positionId,
+            Pageable pageable
+    ) {
+        return userRepository.findAll(getFilteringSpecification(userId,userName,lastName,firstName,middleName,organizationId,departmentId,positionId),pageable);
     }
 
     private static Specification<User> getFilteringSpecification(
             final Integer userId,
-            final String userName) {
+            final String userName,
+            final String lastName,
+            final String firstName,
+            final String middleName,
+            final Integer organizationId,
+            final Integer departmentId,
+            final Integer positionId
+    ) {
         return new Specification<User>() {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -63,14 +80,30 @@ public class UserServiceImpl implements UserService {
 
                 System.out.println("userId="+userId);
                 System.out.println("userName="+userName);
-
                 if (userId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), userId));
                 }
                 if (userName != null) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + userName + "%"));
+                    predicates.add(criteriaBuilder.like(root.get("username"), "%" + userName + "%"));
                 }
-
+                if (lastName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("lastname"), "%" + lastName + "%"));
+                }
+                if (firstName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("firstname"), "%" + firstName + "%"));
+                }
+                if (middleName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("middlename"), "%" + middleName + "%"));
+                }
+                if (organizationId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
+                }
+                if (departmentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+                }
+                if (positionId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("positionId"), positionId));
+                }
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }
