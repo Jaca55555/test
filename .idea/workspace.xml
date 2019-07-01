@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1622bc60-7b72-4769-8e73-5f9ec5ecc37f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/bell.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/file.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/icon-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/icon-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/icon-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/icon-4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/icon-5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/pdf-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/play-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/statistic-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/images/icon/warning.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1622bc60-7b72-4769-8e73-5f9ec5ecc37f" name="Default" comment="dashboard view">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cabinet/cabinet.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/resources/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/cabinet/src/main/resources/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/resources/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/cabinet/src/main/resources/templates/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/core.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/ecoexpertise.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/EcoExpertiseStarter.java" afterDir="false" />
     </list>
     <list id="b9887927-4780-4bb7-a00b-23377122d3fd" name="Revert: fixed reg" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -139,7 +120,7 @@
           <entry key="css" value="16" />
           <entry key="html" value="50" />
           <entry key="java" value="1" />
-          <entry key="txt" value="10" />
+          <entry key="txt" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -147,7 +128,7 @@
           <entry key="CSS" value="16" />
           <entry key="HTML" value="50" />
           <entry key="JAVA" value="1" />
-          <entry key="PLAIN_TEXT" value="10" />
+          <entry key="PLAIN_TEXT" value="24" />
           <entry key="Scratch" value="32" />
         </counts>
       </usages-collector>
@@ -187,8 +168,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cabinet/src/main/resources/static/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="10751" column="24" selection-start-line="10751" selection-start-column="24" selection-end-line="10751" selection-end-column="24" />
+            <state relative-caret-position="399">
+              <caret line="10771" column="16" lean-forward="true" selection-start-line="10771" selection-start-column="16" selection-end-line="10771" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -606,7 +587,7 @@
       <workItem from="1561197521374" duration="12922000" />
       <workItem from="1561966397849" duration="622000" />
       <workItem from="1561967054996" duration="2055000" />
-      <workItem from="1561978749492" duration="1807000" />
+      <workItem from="1561978749492" duration="2064000" />
     </task>
     <task id="LOCAL-00001" summary="reg application">
       <created>1560699097801</created>
@@ -650,11 +631,18 @@
       <option name="project" value="LOCAL" />
       <updated>1561013838866</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="dashboard view">
+      <created>1561980719703</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1561980719703</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37865000" />
+    <option name="totallyTimeSpent" value="38122000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
@@ -733,7 +721,8 @@
     <MESSAGE value="Merge branches 'master' and 'Shokhrukh' of http://bitbucket.smst.uz/scm/eco/ecology&#10;&#10;# Conflicts:&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/service/expertise/MaterialService.java&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/service/expertise/impl/MaterialServiceImpl.java" />
     <MESSAGE value="Merge branches 'Bahrom' and 'master' of http://bitbucket.smst.uz/scm/eco/ecology&#10;&#10;# Conflicts:&#10;#&#9;cabinet/src/main/java/uz/maroqand/ecology/cabinet/config/WebSecurityConfig.java&#10;#&#9;cabinet/src/main/java/uz/maroqand/ecology/cabinet/constant/expertise/ExpertiseTemplates.java&#10;#&#9;cabinet/src/main/java/uz/maroqand/ecology/cabinet/constant/mgmt/MgmtTemplates.java&#10;#&#9;cabinet/src/main/java/uz/maroqand/ecology/cabinet/constant/mgmt/MgmtUrls.java&#10;#&#9;cabinet/src/main/resources/templates/fragments/navigation_menu.html&#10;#&#9;core/src/main/java/uz/maroqand/ecology/core/constant/sys/TableHistoryEntity.java" />
     <MESSAGE value="table history" />
-    <option name="LAST_COMMIT_MESSAGE" value="table history" />
+    <MESSAGE value="dashboard view" />
+    <option name="LAST_COMMIT_MESSAGE" value="dashboard view" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/core/src/main/java/uz/maroqand/ecology/core/entity/user/Role.java">
@@ -1069,8 +1058,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cabinet/src/main/resources/static/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="10751" column="24" selection-start-line="10751" selection-start-column="24" selection-end-line="10751" selection-end-column="24" />
+        <state relative-caret-position="399">
+          <caret line="10771" column="16" lean-forward="true" selection-start-line="10771" selection-start-column="16" selection-end-line="10771" selection-end-column="16" />
         </state>
       </provider>
     </entry>
