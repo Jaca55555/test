@@ -10667,3 +10667,134 @@ div .dt-buttons{
   padding: 5px 5px;
   vertical-align: middle;
 }
+
+
+
+
+/**======================================================================MY CSS**/
+.card-dashboard{
+
+}
+.card-dashboard .card-header{
+  padding: 10px;
+  background-color: #4DD7FA;
+}
+.card-dashboard .card-header.bgc-orange{
+  background-color: #ffa834;
+}
+.card-dashboard .card-header.bgc-red{
+  background-color: #FF3823;
+}
+.card-header .header-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-header .header-top .img-block{
+  margin-right: 20px;
+}
+.card-header .header-top .img-block img{
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  display: block;
+  transition: all .3s ease-in;
+}
+.card-header .header-top .info{
+
+}
+.card-header .header-top .info .title-count{
+  font-size: 55px;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+.card-header .header-top .info .subtitle{
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+}
+.card-dashboard .card-link{
+  display: block;
+  background-color: #00c8f8;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+.card-dashboard .card-link.bgc-orange{
+  background-color: #d68227;
+}
+.card-dashboard .card-link.bgc-red{
+  background-color: #B70F0A;
+}
+.card-dashboard .card-header-bottom{
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #D6D6D6;
+  display: block;
+}
+.card-dashboard .card-header-bottom .info{
+
+}
+.card-dashboard .card-header-bottom .info .title{
+  text-align: center;
+  font-size: 20px;
+  color: #000;
+  font-weight: 400;
+}
+.card-dashboard .card-header-bottom .img-block{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    margin-bottom: 25px;
+}
+.card-dashboard .card-header-bottom .img-block img{
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  transition: all .3s ease-in;
+}
+.card-dashboard .card-header:hover .header-top .img-block img{
+  transform: scale(.9);
+}
+.card-dashboard .card-header-bottom:hover .img-block img{
+  transform: translateY(-5px);
+}
+
+
+.service-card{
+  background-color: #fff;
+  border: 1px solid #D6D6D6;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+.service-card .img-block{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 25px;
+}
+.service-card img{
+  width: 50px;
+  height: 50px;
+  display: block;
+  object-fit: contain;
+  transition: all .3s ease-in;
+}
+.service-card .info{
+
+}
+.service-card .title{
+  text-align: center;
+  color: #000;
+  font-size: 17px;
+  font-weight: 500;
+}
+.service-card:hover .img-block img{
+  transform: scale(1.09);
+}
