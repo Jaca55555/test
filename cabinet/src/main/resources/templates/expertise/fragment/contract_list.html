@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="contract_list">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{id}">#</th>
+                <th th:text="#{sys_contractNumber}">First Name</th>
+                <th th:text="#{sys_contractDate}">Last Name</th>
+                <th th:text="#{sys_payment_amount_mrzp}">Username</th>
+                <th th:text="#{sys_payment_amount}">#</th>
+                <th th:text="#{sys_payment_date}">First Name</th>
+                <th th:text="#{sys_invoice_number}">Last Name</th>
+                <th th:text="#{sys_contract_text}">Username</th>
+                <th th:text="#{sys_contract_file}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contract : ${contractList}">
+                <th scope="row" th:text="${contract[0]} ? ${contract[0]} : ' '"></th>
+                <td class="text-center" th:text="${contract[1]} ? ${contract[1]} : ' '"></td>
+                <td class="text-center" th:text="${contract[2]} ? ${#dates.format(contract[2],'dd.MM.yyyy')} : ' '"></td>
+                <td class="text-center" th:text="${contract[3]} ? ${contract[3]} : ' '"></td>
+                <td class="text-center" th:text="${contract[4]} ? ${contract[4]} : ' '"></td>
+                <td class="text-center" th:text="${contract[5]} ? ${#dates.format(contract[5],'dd.MM.yyyy')} : ' '"></td>
+                <td class="text-center" th:text="${contract[6]} ? ${contract[4]} : ' '"></td>
+                <td>
+                    <a class="btn btn-primary btn-sm text-white" th:text="#{sys_open_text}"></a>
+                </td>
+                <td>
+                    <div class="media d-flex">
+                        <div class="file-attach">
+                            <i class="mdi mdi-file-pdf card-icon text-danger" style="font-size: 40px"></i>
+                        </div>
+                        <p class="m-t-20 d-block text-secondary">test.pdf</p>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    <div class="col-md-12 text-center" id="tab-control-buttons">
+        <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
+        <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+    </div>
+
+</body>
+</html>

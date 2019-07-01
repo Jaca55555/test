@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+
+                            <h5 th:text="${'applicant: ' + applicant.id}"></h5>
+                            <hr>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_history}"></a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                        <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-center" id="tab-control-buttons">
+                                                <a class="btn btn-danger text-white" href="/expertise/applicant/list" th:text="#{sys_back}"></a>
+                                                <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                                        <object th:include="expertise/fragment/contract_list :: contract_list" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
+                                        <object th:include="expertise/fragment/expertise_list :: expertise_list" th:remove="tag"></object>
+                                    </div>
+                                    <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                                        <object th:include="expertise/fragment/client_audit :: client_audit" th:remove="tag"></object>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script type="text/javascript" th:inline="javascript">
+console.log([[${contractList}]]);
+// console.log([[${applicantAuditList}]]);
+
+    $('.btnNext').click(function() {
+        $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
+    });
+
+    $('.btnPrevious').click(function() {
+        $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
+    });
+
+</script>
+</body>
+</html>

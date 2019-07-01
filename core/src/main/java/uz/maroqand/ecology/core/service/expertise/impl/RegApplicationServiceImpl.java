@@ -43,6 +43,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplication;
     }
 
+    @Override
+    public List<RegApplication> getByClientId(Integer id) {
+        return regApplicationRepository.findByApplicantId(id);
+    }
+
     public void update(RegApplication regApplication){
         regApplication.setUpdateAt(new Date());
         regApplicationRepository.save(regApplication);

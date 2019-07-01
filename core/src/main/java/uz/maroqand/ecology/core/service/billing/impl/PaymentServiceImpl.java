@@ -26,4 +26,9 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.save(payment);
     }
 
+    @Override
+    public Payment getByInvoiceId(Integer id) {
+        return paymentRepository.findByInvoiceId(id);
+    }
+
 }

@@ -10,5 +10,5 @@ import uz.maroqand.ecology.core.entity.billing.Payment;
 public interface PaymentService {
 
     Payment pay(Payment payment);
-
+    Payment getByInvoiceId(Integer id);
 }

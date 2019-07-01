@@ -212,14 +212,14 @@ public class RegApplicationController {
                 applicant = clientService.createClient(legalEntityDto);
                 regApplication.setApplicantId(applicant.getId());
             }else{
-                clientService.updateClient(applicant,legalEntityDto);
+                clientService.updateClient(applicant,legalEntityDto,user);
             }
         }else{
             if (applicant==null){
                 applicant =  clientService.createClient(individualDto);
                 regApplication.setApplicantId(applicant.getId());
             }else{
-                clientService.updateClient(applicant,individualDto);
+                clientService.updateClient(applicant,individualDto,user);
             }
         }
         regApplication.setStep(RegApplicationStep.ABOUT);

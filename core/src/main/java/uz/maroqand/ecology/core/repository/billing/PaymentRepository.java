@@ -13,4 +13,5 @@ import uz.maroqand.ecology.core.entity.billing.Payment;
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 
+    Payment findByInvoiceId(Integer id);
 }

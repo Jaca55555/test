@@ -30,6 +30,10 @@
                 <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
                 <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
                 <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
+                <li class="nav-item pcoded-menu-caption">
+                    <label th:text="#{sys_expertise_registry}"></label>
+                </li>
+                <li data-username="Sample Page" class="nav-item"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
 
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_control}"></label>
