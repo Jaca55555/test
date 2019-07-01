@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.billing;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 
@@ -10,7 +11,7 @@ import uz.maroqand.ecology.core.entity.billing.Invoice;
  * (ru)
  */
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaSpecificationExecutor<Invoice> {
 
 
 }
