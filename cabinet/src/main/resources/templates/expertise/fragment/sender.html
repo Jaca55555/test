@@ -81,57 +81,42 @@
                     <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message"> написать комментарий...   </textarea>
                     <p class="mt-2 mb-0" style="color: black">Добавить файл</p>
                     <div class="col-md-12 row" id="files-div">
-                        <a href="#upload-file-modal" class="col-md-3 pb-2 p-0" onclick="openModalFile()">
+                        <a href="#upload-file-modal" class="col-md-3 pb-3 p-0" onclick="openModalFile()">
                             <div class="add-file">
                                 <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                                 <span id="percentage"><span id="percentage-num"></span>%</span>
                                 <i class="feather icon-plus" id="plus-icon"></i>
                             </div>
                         </a>
-                        <!--<div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">
-                            <div class="file">
-                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload + '?file_id=' + file.id}">
-                                    <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
-                                    <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
-                                    <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
-                                    <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
-                                    <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
-                                    <span th:text="${file.description}"></span>
-                                    <p th:text="${file.name}"></p>
-                                </a>
-                                <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
-                                    <i class="feather icon-x"></i>
-                                </button>
-                            </div>
-                        </div>-->
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-danger float-left" > Возврат</button>
-                        <button class="btn btn-primary float-right" >Согласовать</button>
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-danger float-left" > Возврат</button>
+                            <button type="button" class="btn btn-primary float-right" >Согласовать</button>
+                        </div>
                     </div>
-                        <h5 class="mt-lg-5">Последние комментарии к документу</h5>
-                        <div class="col-md-12" id="comments">
-                            <div id="comments-first"></div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AI</span>
-                                </div>
-                                <div class="col-md-10 pl-0">
-                                    <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">ok</p>
-                                    <p class="text-right" >03.05.2019 - 15:00</p>
-                                </div>
+                    <h5 class="mt-lg-5">Последние комментарии к документу</h5>
+                    <div class="col-md-12" id="comments">
+                        <div id="comments-first"></div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AI</span>
                             </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AS</span>
-                                </div>
-                                <div class="col-md-10 pl-0">
-                                    <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">В пункте №5 грамматическая ошибка</p>
-                                    <p class="text-right">03.05.2019 - 19:11</p>
-                                </div>
+                            <div class="col-md-10 pl-0">
+                                <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">ok</p>
+                                <p class="text-right" >03.05.2019 - 15:00</p>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AS</span>
+                            </div>
+                            <div class="col-md-10 pl-0">
+                                <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">В пункте №5 грамматическая ошибка</p>
+                                <p class="text-right">03.05.2019 - 19:11</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
