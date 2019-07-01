@@ -26,6 +26,8 @@
             float: left;
             top: 50%;
             left: 50%;
+            right: 60px;
+            bottom: 60px;
             transform: translate(-50%, -50%);
         }
 
@@ -76,6 +78,33 @@
         .file a:hover {
             color: #5CB85C;
         }
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +151,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link show" id="sender-tab" data-toggle="tab" href="#sender" role="tab" aria-controls="sender" aria-selected="false" th:text="#{sys_sender}"></a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content" id="myTabContent">
@@ -145,6 +177,9 @@
                                     </div>
                                     <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
 
+                                    </div>
+                                    <div class="tab-pane fade" id="sender" role="tabpanel" aria-labelledby="sender-tab">
+                                        <object th:include="expertise/fragment/sender :: sender" th:remove="tag"></object>
                                     </div>
                                 </div>
 
