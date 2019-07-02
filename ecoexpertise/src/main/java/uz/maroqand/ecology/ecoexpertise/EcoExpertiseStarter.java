@@ -18,6 +18,7 @@ import uz.maroqand.ecology.ecoexpertise.config.WebMVCConfigs;
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
  * (uz)
+ *
  */
 @Configuration
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
