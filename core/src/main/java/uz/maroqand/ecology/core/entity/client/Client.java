@@ -42,9 +42,9 @@ public class Client {
     @Column
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "opf_id", updatable = false, insertable = false)
-    private Opf opf;
+    private Opf opf;*/
 
     //Организационно правовая форма предприятия
     @Column(name = "opf_id")
@@ -95,17 +95,17 @@ public class Client {
     private Integer countryId;
 
     //Регион
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", updatable = false, insertable = false)
-    private Soato region;
+    private Soato region;*/
 
     @Column(name = "region_id")
     private Integer regionId;
 
     //Район
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_region_id", updatable = false, insertable = false)
-    private Soato subRegion;
+    private Soato subRegion;*/
 
     @Column(name = "sub_region_id")
     private Integer subRegionId;

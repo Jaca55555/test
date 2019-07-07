@@ -34,4 +34,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
+    @Override
+    public Payment getByInvoiceId(Integer id) {
+        return paymentRepository.findByInvoiceId(id);
+    }
+
 }

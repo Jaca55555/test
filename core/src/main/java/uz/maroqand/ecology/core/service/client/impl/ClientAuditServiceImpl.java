@@ -1,7 +1,9 @@
 package uz.maroqand.ecology.core.service.client.impl;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.ClientAudit;
 import uz.maroqand.ecology.core.repository.client.ClientAuditRepository;
 import uz.maroqand.ecology.core.service.client.ClientAuditService;
@@ -19,10 +21,12 @@ import java.util.List;
 public class ClientAuditServiceImpl implements ClientAuditService {
 
     private final ClientAuditRepository clientAuditRepository;
+    private final Gson gson;
 
     @Autowired
-    public ClientAuditServiceImpl(ClientAuditRepository clientAuditRepository) {
+    public ClientAuditServiceImpl(ClientAuditRepository clientAuditRepository, Gson gson) {
         this.clientAuditRepository = clientAuditRepository;
+        this.gson = gson;
     }
 
     @Override
@@ -36,7 +40,8 @@ public class ClientAuditServiceImpl implements ClientAuditService {
     ){
         ClientAudit clientAudit = new ClientAudit();
         clientAudit.setClientId(clientId);
-        clientAudit.setChangesSerialized(before+","+after);
+        clientAudit.setBeforeChanges(before);
+        clientAudit.setAfterChanges(after);
 
         clientAudit.setMessage(message);
         clientAudit.setUserId(userId);
@@ -48,7 +53,19 @@ public class ClientAuditServiceImpl implements ClientAuditService {
 
     @Override
     public List<ClientAudit> getByClientId(Integer clientId){
-        return clientAuditRepository.findByClientIdOrderByIdDesc(clientId);
+        List<ClientAudit> clientAuditList = clientAuditRepository.findByClientIdOrderByIdDesc(clientId);
+        for (ClientAudit clientAudit:clientAuditList){
+            clientAudit.setBefore(gson.fromJson(clientAudit.getBeforeChanges(), Client.class));
+            clientAudit.setAfter(gson.fromJson(clientAudit.getAfterChanges(), Client.class));
+
+            if(clientAudit.getBefore()==null){
+                clientAudit.setBefore(new Client());
+            }
+            if(clientAudit.getAfter()==null){
+                clientAudit.setAfter(new Client());
+            }
+        }
+        return clientAuditList;
     }
 
 }

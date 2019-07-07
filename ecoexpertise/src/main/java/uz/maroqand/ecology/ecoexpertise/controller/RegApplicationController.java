@@ -239,7 +239,7 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        Client applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());
+        Client applicant = regApplication.getApplicant();
 
         switch (applicantType){
             case "LegalEntity":applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());break;

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="client_audit">
+<div class="card-block table-border-style">
+    <div class="col-sm-12">
+        <div class="accordion" id="accordionExample">
+            <div class="card" th:each="applicantAudit : ${applicantAuditList}">
+                <div class="card-header" th:id="'heading'+${applicantAudit.id}">
+                    <h5 class="mb-0">
+                        <a href="#!" data-toggle="collapse" th:data-target="'#'+'collapse' + ${applicantAudit.id}" aria-expanded="false" th:aria-controls="'#'+'collapse' + ${applicantAudit.id}" class="collapsed">
+                            <div class="media d-flex">
+                                <div class="m-r-10 file-attach" style="font-size: 32px">
+                                    <i class="fas fa-exchange-alt m-r-5"></i>
+                                </div>
+                                <div class="media-body">
+                                    <span class="m-b-5 d-block text-dark" th:text="${applicant.name}"></span>
+                                    <span class="text-muted" th:text="${applicantAudit.registeredDate!=null? #dates.format(applicantAudit.registeredDate,'dd.MM.yyyy HH:mm'):''}">01.07.2019</span>
+                                </div>
+                            </div>
+                        </a>
+                    </h5>
+                </div>
+                <div th:id="'collapse'+${applicantAudit.id}" class="card-body collapse" th:aria-labelledby="'heading' +${applicantAudit.id}" data-parent="#accordionExample">
+                    <table class="table table-columned">
+                        <thead>
+                            <tr role="row">
+                                <th>Наименования поля</th>
+                                <th>Предыдушее состояние</th>
+                                <th>Следуюшее состояние</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr role="row">
+                            <th th:text="#{sys_tin}"></th>
+                            <td th:text="${applicantAudit.before.type}"></td>
+                            <td th:text="${applicantAudit.after.type}"></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_tin}"></th>
+                            <td th:text="${applicantAudit.before.tin}"></td>
+                            <td th:text="${applicantAudit.after.tin}"></td>
+                        </tr>
+                        <tr role="row">
+                            <th>Наименование предпиятия</th>
+                            <td th:text="${applicantAudit.before.name}"></td>
+                            <td th:text="${applicantAudit.after.name}"></td>
+                        </tr>
+
+                        <tr role="row">
+                            <th th:text="#{sys_applicant_type}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_director_full_name}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_oked}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_region}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_subregion}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_address}"></th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

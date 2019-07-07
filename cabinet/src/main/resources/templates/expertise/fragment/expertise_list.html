@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="expertise_list">
+
+<div class="card-block table-border-style">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>№id</th>
+                <th>№Заключения</th>
+                <th>Дата Заключения</th>
+                <th>Обьект экспертизы</th>
+                <th>Форма экспертизы</th>
+                <th>Исполнител</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>707-2019</td>
+                <td>02.05.2019</td>
+                <td>Градостроительная документация</td>
+                <td>ПДВ</td>
+                <td>А.Акрамов</td>
+                <td>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                        <i class="feather icon-eye" style="margin-right: 0px;"></i>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel" th:text="${'sys_conclusion '+ '№' + reg}">Заключение №1</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6 text-dark p-2">
+                                            Номер заключения
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            707-2019
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2">
+                                            Дата заключения
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            02.05.2019
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2">
+                                            Обьект экспертизы
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            test
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2">
+                                            Вид деятельности
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            test
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2">
+                                            Вид материалов
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            test
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2">
+                                            Ф.И.О исполнителя
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark p-2">
+                                            test
+                                        </div>
+                                        <div class="col-md-6 text-dark p-2" style="box-sizing: border-box">
+                                                Электронная(или сканированная)<br />версия документа
+                                        </div>
+                                        <div class="col-md-6 text-right text-dark">
+                                            <div class="m-l-50 media d-flex">
+                                                <div class="m-r-10 file-attach">
+                                                    <i class="mdi mdi-file-pdf card-icon text-danger" style="font-size: 50px"></i>
+                                                </div>
+                                                <p class="m-t-30 d-block text-secondary">test.pdf</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="justify-content: unset;">
+                                    <div class="card" style="box-shadow: unset;margin-left: 35%">
+                                        <h3 class="card-title">Текст заключения</h3>
+                                        <div class="card-text text-center">
+                                            <a class="btn btn-primary btn-sm text-white">open</a>
+                                        </div>
+
+                                        <div class="card-text">
+                                            <div class="media d-flex m-b-15">
+                                                <div class="m-r-10 file-attach">
+                                                    <i class="mdi mdi-file-pdf card-icon text-danger" style="font-size: 50px"></i>
+                                                </div>
+                                                <div class="media-body m-t-20">
+                                                    <p class="m-b-5 m-t-10 d-block text-secondary">The_less_overslept.pdf</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="col-md-12 text-center" id="tab-control-buttons">
+    <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
+    <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+</div>
+
+</body>
+</html>

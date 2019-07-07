@@ -51,12 +51,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByTinAndDeletedFalseOrderByIdDesc(legalEntityDto.getLegalEntityTin());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.LegalEntity);
 
         client.setTin(legalEntityDto.getLegalEntityTin());
@@ -85,19 +87,19 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
-
-
     //Jismoniy shaxs
     @Override
     public Client saveIndividual(IndividualDto individualDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualDto.getIndividualPinfl());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.Individual);
 
         Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -133,12 +135,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveIndividualEntrepreneur(IndividualEntrepreneurDto individualEntrepreneurDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualEntrepreneurDto.getIndividualPinfl());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.IndividualEnterprise);
 
         Date passportDateOfIssue = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -175,12 +179,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPassportSerialAndPassportNumberAndDeletedFalseOrderByIdDesc(foreignIndividualDto.getForeignPassportSerial(), foreignIndividualDto.getForeignPassportNumber());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.ForeignIndividual);
 
         Date passportDateOfIssue = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -208,7 +214,6 @@ public class ClientServiceImpl implements ClientService {
         clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
         return client;
     }
-
 
 
     @Override
@@ -245,7 +250,7 @@ public class ClientServiceImpl implements ClientService {
                 List<Predicate> predicates = new LinkedList<>();
 
                 if(type!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type.ordinal()));
                 }
 
                 if(tin!=null){

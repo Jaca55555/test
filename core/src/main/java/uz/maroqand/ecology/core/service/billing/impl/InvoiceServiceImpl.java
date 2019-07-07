@@ -119,7 +119,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     public Invoice getInvoice(Integer id) {
-        return invoiceRepository.getOne(id);
+        return invoiceRepository.findByIdAndDeletedFalse(id);
     }
 
     private String createInvoiceSerial() {

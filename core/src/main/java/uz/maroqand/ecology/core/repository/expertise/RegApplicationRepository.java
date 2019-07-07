@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 
+import java.awt.*;
 import java.awt.print.Pageable;
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
@@ -18,6 +20,8 @@ import java.awt.print.Pageable;
 public interface RegApplicationRepository extends DataTablesRepository<RegApplication, Integer>, JpaRepository<RegApplication, Integer>, JpaSpecificationExecutor<RegApplication> {
 
     RegApplication findByIdAndDeletedFalse(Integer id);
+
+    List<RegApplication> findByApplicantId(Integer id);
 
     RegApplication findByIdAndCreatedByIdAndDeletedFalse(Integer id, Integer createdBy);
 }

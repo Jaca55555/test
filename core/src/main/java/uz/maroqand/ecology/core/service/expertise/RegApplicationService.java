@@ -7,11 +7,15 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.util.List;
+
 public interface RegApplicationService {
 
     void update(RegApplication regApplication);
 
     RegApplication create(User user);
+
+    List<RegApplication> getByClientId(Integer id);
 
     RegApplication getById(Integer id);
 
