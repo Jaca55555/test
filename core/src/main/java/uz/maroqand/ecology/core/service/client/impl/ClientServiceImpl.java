@@ -134,7 +134,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client saveIndividualEntrepreneur(IndividualEntrepreneurDto individualEntrepreneurDto, User user, String message) {
 
-        Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualEntrepreneurDto.getIndividualPinfl());
+        Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualEntrepreneurDto.getIndividualEntrepreneurPinfl());
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
@@ -148,7 +148,7 @@ public class ClientServiceImpl implements ClientService {
         Date passportDateOfIssue = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfIssue(), Common.uzbekistanDateFormat);
         Date passportDateOfExpiry = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
-        client.setPinfl(individualEntrepreneurDto.getIndividualPinfl());
+        client.setPinfl(individualEntrepreneurDto.getIndividualEntrepreneurPinfl());
         client.setTin(individualEntrepreneurDto.getIndividualEntrepreneurTin());
         client.setName(individualEntrepreneurDto.getIndividualEntrepreneurName());
 
