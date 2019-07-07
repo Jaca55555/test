@@ -13,5 +13,6 @@ import uz.maroqand.ecology.core.entity.billing.Invoice;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaSpecificationExecutor<Invoice> {
 
+    Invoice findByIdAndDeletedFalse(Integer id);
 
 }

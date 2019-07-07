@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="media-body">
                                     <span class="m-b-5 d-block text-dark" th:text="${applicant.name}"></span>
-                                    <span class="text-muted" th:text="${applicantAudit.registeredDate} ? ${#dates.format(registeredDate,'dd.MM.yyyy HH:mm')}">01.07.2019</span>
+                                    <span class="text-muted" th:text="${applicantAudit.registeredDate!=null? #dates.format(applicantAudit.registeredDate,'dd.MM.yyyy HH:mm'):''}">01.07.2019</span>
                                 </div>
                             </div>
                         </a>
@@ -36,14 +36,20 @@
                         <tbody>
                         <tr role="row">
                             <th th:text="#{sys_tin}"></th>
-                            <td>100000000</td>
-                            <td>111111111</td>
+                            <td th:text="${applicantAudit.before.type}"></td>
+                            <td th:text="${applicantAudit.after.type}"></td>
+                        </tr>
+                        <tr role="row">
+                            <th th:text="#{sys_tin}"></th>
+                            <td th:text="${applicantAudit.before.tin}"></td>
+                            <td th:text="${applicantAudit.after.tin}"></td>
                         </tr>
                         <tr role="row">
                             <th>Наименование предпиятия</th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${applicantAudit.before.name}"></td>
+                            <td th:text="${applicantAudit.after.name}"></td>
                         </tr>
+
                         <tr role="row">
                             <th th:text="#{sys_applicant_type}"></th>
                             <td></td>

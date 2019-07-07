@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.core.service.client.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +35,10 @@ public class ClientServiceImpl implements ClientService {
     private final Gson gson;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService) {
+    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService, Gson gson) {
         this.clientRepository = clientRepository;
         this.clientAuditService = clientAuditService;
-        this.gson = new Gson();
+        this.gson = gson;
     }
 
     @Override
@@ -52,13 +51,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByTinAndDeletedFalseOrderByIdDesc(legalEntityDto.getLegalEntityTin());
-
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
-        String before = gson.toJson(client.toString());
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.LegalEntity);
 
         client.setTin(legalEntityDto.getLegalEntityTin());
@@ -87,19 +87,19 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
-
-
     //Jismoniy shaxs
     @Override
     public Client saveIndividual(IndividualDto individualDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualDto.getIndividualPinfl());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.Individual);
 
         Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -135,12 +135,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveIndividualEntrepreneur(IndividualEntrepreneurDto individualEntrepreneurDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualEntrepreneurDto.getIndividualPinfl());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.IndividualEnterprise);
 
         Date passportDateOfIssue = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -177,12 +179,14 @@ public class ClientServiceImpl implements ClientService {
     public Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByPassportSerialAndPassportNumberAndDeletedFalseOrderByIdDesc(foreignIndividualDto.getForeignPassportSerial(), foreignIndividualDto.getForeignPassportNumber());
-        String before = gson.toJson(client);
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        client = clientRepository.save(client);
+        String before = gson.toJson(client);
+
         client.setType(ApplicantType.ForeignIndividual);
 
         Date passportDateOfIssue = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfIssue(), Common.uzbekistanDateFormat);
@@ -210,7 +214,6 @@ public class ClientServiceImpl implements ClientService {
         clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
         return client;
     }
-
 
 
     @Override

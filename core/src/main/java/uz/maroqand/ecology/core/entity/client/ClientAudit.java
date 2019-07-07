@@ -23,16 +23,28 @@ public class ClientAudit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", updatable = false, insertable = false)
-    private Client client;
+    private Client client;*/
 
     @Column(name = "client_id")
     private Integer clientId;
 
     //o'zgarish (before, after)
-    @Column(name = "changes_serialized", columnDefinition = "TEXT")
-    private String changesSerialized;
+    /*@Column(name = "changes_serialized", columnDefinition = "TEXT")
+    private String changesSerialized;*/
+
+    @Column(name = "before_changes", columnDefinition = "TEXT")
+    private String beforeChanges;
+
+    @Column(name = "after_changes", columnDefinition = "TEXT")
+    private String afterChanges;
+
+    @Transient
+    private Client before;
+
+    @Transient
+    private Client after;
 
     //sabab
     private String message;
