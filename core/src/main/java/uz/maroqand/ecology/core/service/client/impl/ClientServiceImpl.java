@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.service.client.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,10 +36,10 @@ public class ClientServiceImpl implements ClientService {
     private final Gson gson;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService, Gson gson) {
+    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService) {
         this.clientRepository = clientRepository;
         this.clientAuditService = clientAuditService;
-        this.gson = gson;
+        this.gson = new Gson();
     }
 
     @Override
@@ -51,12 +52,13 @@ public class ClientServiceImpl implements ClientService {
     public Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message) {
 
         Client client = clientRepository.findTop1ByTinAndDeletedFalseOrderByIdDesc(legalEntityDto.getLegalEntityTin());
-        String before = gson.toJson(client);
+
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
         }
+        String before = gson.toJson(client.toString());
         client.setType(ApplicantType.LegalEntity);
 
         client.setTin(legalEntityDto.getLegalEntityTin());
