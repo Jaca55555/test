@@ -67,4 +67,9 @@ public class MgmtUrls {
     public static final String PositionStatusUpdate = Position + "/status_update";
     public static final String PositionDelete = Position + "/delete";
 
+    //test html to Word
+    private static final String Word = Prefix + "/word";
+    public static final String WordEditor = Word;
+    public static final String WordCreate = Word + "/create";
+
 }

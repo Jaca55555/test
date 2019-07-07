@@ -36,4 +36,9 @@ public class MgmtTemplates {
     private static final String Position = Prefix + "/position";
     public static final String PositionList = Position + "/list";
 
+    //test html to Word
+    private static final String Word = Prefix + "/word";
+    public static final String WordEditor = Word;
+
+
 }

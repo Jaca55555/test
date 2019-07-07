@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body >
+<!-- [ Main Content ] start -->
+<div class="row">
+    <!-- [ Document-editor ] start -->
+    <div class="col-sm-12" >
+        <div class="card">
+            <div class="card-header">
+                <h5>Document-Editor</h5>
+            </div>
+            <div class="card-block">
+                <form th:action="${action_url}" id="textForm" method="post">
+                <textarea id="summernote" name="text" class="click2edit" style="width: 100%"></textarea>
+                    <button type="button" onclick="save()" class="btn btn-primary float-right" >
+                        <span>Submit</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- [ Document-editor ] end -->
+</div>
+                        <!-- [ Main Content ] end -->
+<!-- [ Main Content ] end -->
+
+</body>
+</html>
