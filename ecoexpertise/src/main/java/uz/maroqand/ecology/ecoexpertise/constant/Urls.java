@@ -8,6 +8,7 @@ public class Urls {
     public static final String RegApplicationDashboard = RegApplication + "/dashboard";
     public static final String RegApplicationResume = RegApplication + "/resume";
     public static final String RegApplicationStart = RegApplication + "/start";
+    public static final String RegApplicationApplicantCancel = RegApplication + "/cancel";
     public static final String RegApplicationApplicant = RegApplication + "/applicant";
     public static final String RegApplicationAbout = RegApplication + "/about";
     public static final String RegApplicationGetMaterial = RegApplication + "/material";
