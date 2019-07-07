@@ -12,6 +12,7 @@ import java.util.List;
 public interface PaymentService {
 
     Payment pay(Payment payment);
+    Payment getByInvoiceId(Integer id);
 
     List<Payment> findAllByInvoiceId(Integer invoiceId);
 
