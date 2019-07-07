@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- include summernote css/js -->
+    <link href="/static/summer/dist/summernote.css" rel="stylesheet">
+    <link href="/static/summer/dist/summernote-bs4.css" rel="stylesheet">
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ Document-editor ] start -->
+                            <div class="col-sm-12" >
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Document-Editor</h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <form th:action="${action_url}" id="textForm" method="post">
+                                            <textarea id="summernote" name="text" class="click2edit" style="width: 100%"></textarea>
+                                            <button type="button" onclick="Export2Doc()" class="btn btn-primary float-right" >
+                                                <span>Submit</span>
+                                            </button>
+                                            <input type="hidden" id="textVal" name="textVal"/>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Document-editor ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script src="/static/summer/dist/summernote.js"></script>
+<script src="/static/summer/dist/summernote-bs4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            width: "100%"
+        });
+    });
+
+    function Export2Doc(element, filename = 'qwe'){
+
+        var preHtml = "<html><head><meta charset='utf-8'></meta><title></title></head><body>";
+        var postHtml = "</body></html>";
+        var html = preHtml+$('#summernote').summernote('code')+postHtml;
+        console.log('text=' + html);
+
+        $('#textVal').val(html);
+
+        var blob = new Blob(['\ufeff', html], {
+            type: 'application/msword'
+        });
+
+        // Specify link url
+        var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+            console.log(blob);
+            console.log(url);
+        // Specify file name
+        filename = filename?filename+'.doc':'document.doc';
+
+        // Create download link element
+        var downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if(navigator.msSaveOrOpenBlob ){
+            navigator.msSaveOrOpenBlob(blob, filename);
+        }else{
+            // Create a link to the file
+            downloadLink.href = url;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
+
+        document.body.removeChild(downloadLink);
+        $('#textForm').submit();
+    }
+
+</script>
+<!--<script>
+    function exportHTML(){
+        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+            "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+            "xmlns='http://www.w3.org/TR/REC-html40'>"+
+            "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+        var footer = "</body></html>";
+        var sourceHTML = header+document.getElementById("textDiv").innerHTML+footer;
+
+        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        var fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = 'document.doc';
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+</script>-->
+</body>
+</html>
