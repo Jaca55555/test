@@ -161,6 +161,27 @@ public class RegApplicationController {
         return "redirect:" + Urls.RegApplicationList;
     }
 
+    @RequestMapping(value = Urls.RegApplicationApplicantCancel)
+    public String getCancelMethod(
+            @RequestParam(name = "id") Integer regApplicationId,
+            @RequestParam(name = "message") String message
+    ){
+        System.out.println("id==" + regApplicationId);
+        System.out.println("message=" + message);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId,user.getId());
+        if (regApplication==null){
+            System.out.println("null");
+            return "redirect:" + Urls.RegApplicationList;
+        }
+
+        regApplication.setMessage(message);
+        regApplication.setDeleted(Boolean.TRUE);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + Urls.RegApplicationList;
+    }
+
     @RequestMapping(value = Urls.RegApplicationApplicant,method = RequestMethod.GET)
     public String getApplicantPage(
             @RequestParam(name = "id") Integer id,

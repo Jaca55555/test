@@ -151,7 +151,7 @@
         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="row" >
             <div class="form-group col-md-12 text-center" >
-                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}">Отмена</button>
+                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}" data-toggle="modal" data-target="#cancel_modal">Отмена</button>
                 <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
             </div>
         </div>

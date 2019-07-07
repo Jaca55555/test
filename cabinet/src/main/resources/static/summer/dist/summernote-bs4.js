@@ -2089,7 +2089,7 @@
   });
 
   /**
-   * return boundaryPoint from TextRange, inspired by Andy Na's HuskyRange.js
+   * return boundaryPoint from TextRange, inspired by Andy Na's HuskyRange.sweetalert
    *
    * @param {TextRange} textRange
    * @param {Boolean} isStart
@@ -6829,8 +6829,8 @@
 
   /**
    * Image popover module
-   *  mouse events that show/hide popover will be handled by Handle.js.
-   *  Handle.js will receive the events and invoke 'imagePopover.update'.
+   *  mouse events that show/hide popover will be handled by Handle.sweetalert.
+   *  Handle.sweetalert will receive the events and invoke 'imagePopover.update'.
    */
   var ImagePopover = /** @class */ (function () {
       function ImagePopover(context) {
@@ -7765,4 +7765,4 @@
   ];
 
 }));
-//# sourceMappingURL=summernote-bs4.js.map
+//# sourceMappingURL=summernote-bs4.sweetalert.map

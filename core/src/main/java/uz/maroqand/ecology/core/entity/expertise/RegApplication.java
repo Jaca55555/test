@@ -172,6 +172,11 @@ public class RegApplication {
     /*
      * Technical Fields
      */
+
+    //for cancel
+    private String message;
+
+
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
 
