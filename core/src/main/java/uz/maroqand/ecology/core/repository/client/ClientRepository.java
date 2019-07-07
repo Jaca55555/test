@@ -13,5 +13,10 @@ import uz.maroqand.ecology.core.entity.client.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer>, JpaSpecificationExecutor<Client> {
 
+    Client findTop1ByTinAndDeletedFalseOrderByIdDesc(Integer tin);
+
+    Client findTop1ByPinflAndDeletedFalseOrderByIdDesc(String pinfl);
+
+    Client findTop1ByPassportSerialAndPassportNumberAndDeletedFalseOrderByIdDesc(String passportSerial, String passportNumber);
 
 }

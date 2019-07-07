@@ -7,7 +7,9 @@ import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.repository.client.OpfRepository;
 import uz.maroqand.ecology.core.service.client.OpfService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OpfServiceImpl implements OpfService {
@@ -17,6 +19,24 @@ public class OpfServiceImpl implements OpfService {
     @Autowired
     public OpfServiceImpl(OpfRepository opfRepository) {
         this.opfRepository = opfRepository;
+    }
+
+    @Cacheable("getOpfLegalEntityList")
+    public List<Opf> getOpfLegalEntityList() {
+        Set<Integer> ids = new HashSet<>();
+        ids.add(100);
+        ids.add(200);
+        ids.add(400);
+        ids.add(1000);
+        ids.add(2000);
+        return opfRepository.findByIdInOrParentIdInOrderByIdAsc(ids,ids);
+    }
+
+    @Cacheable("getOpfIndividualList")
+    public List<Opf> getOpfIndividualList() {
+        Set<Integer> ids = new HashSet<>();
+        ids.add(300);
+        return opfRepository.findByIdInOrParentIdInOrderByIdAsc(ids,ids);
     }
 
     @Cacheable("getOpfList")

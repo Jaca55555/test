@@ -12,7 +12,7 @@ import uz.maroqand.ecology.core.entity.client.Client;
 public class LegalEntityDto {
 
     private Integer id;
-    private String legalEntityTin;
+    private Integer legalEntityTin;
     private String legalEntityName;
 
     private Integer legalEntityOpfId;

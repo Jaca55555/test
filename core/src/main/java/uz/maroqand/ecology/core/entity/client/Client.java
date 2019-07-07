@@ -31,8 +31,11 @@ public class Client {
     private ApplicantType type;
 
     //ИНН
-    @Size(max = 9)
-    private String tin;
+    private Integer tin;
+
+    //ПИФЛ
+    @Size(max = 14)
+    private String pinfl;
 
     //Фирменное наименование предприятия;
     //Ф.И.О.;
@@ -82,6 +85,15 @@ public class Client {
     @Size(max = 6)
     private String oked;
 
+    //Country
+    /*@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", insertable = false, updatable = false)
+    private Country country;*/
+
+    @Column(name = "country_id")
+    private Integer countryId;
+
     //Регион
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", updatable = false, insertable = false)
@@ -124,6 +136,10 @@ public class Client {
     //Расчетный счет (Основной)
     @Column(name = "bank_account")
     private String bankAccount;
+
+    //ariza yuborsa yoki arizasi bor bo'lsa active bo'ladi va client register da chiqadi
+    @Column(name = "active",columnDefinition = "boolean DEFAULT false")
+    private Boolean active = false;
 
     /*
      * Technical Fields

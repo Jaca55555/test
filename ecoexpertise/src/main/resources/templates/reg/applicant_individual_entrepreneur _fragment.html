@@ -4,17 +4,39 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body th:fragment="individual">
+<body th:fragment="individual_entrepreneur">
 
     <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_pinfl}"></label>
+                <label class="col-form-label" th:text="#{sys_tin_individual}">СТИР</label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="individualPinfl" name="individualPinfl" th:value="${individual.individualPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14">
+                <input class="form-control only-number" required="" id="individualEntrepreneurTin" name="individualEntrepreneurTin" value="" minlength="9" maxlength="9" th:value="${individualEntrepreneur.individualEntrepreneurTin}">
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="individualEntrepreneurName" name="individualEntrepreneurName" th:value="${individualEntrepreneur.individualEntrepreneurName}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_opf}">Организационно правовая форма предприятия</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="opf : ${opfIndividualList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${opf.parentId==null}"></option>
+                </select>
             </div>
         </div>
 
@@ -23,21 +45,9 @@
                 <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
                 <span class="required">*</span>
             </div>
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input class="form-control col-md-4 mr-3" required="" id="passportSerial" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-type="alphanum" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA">
-                    <input class="form-control col-md-8" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001">
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row" >
-            <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
-                <span class="required">*</span>
-            </div>
-            <div class="col-md-6">
-                <input class="form-control" required="" id="individualName" name="individualName" th:value="${individual.individualName}" data-parsley-maxlength="250">
+            <div class="col-md-6 input-group">
+                <input class="form-control col-md-4 mr-3" required="" id="entrepreneurPassportSerial" name="entrepreneurPassportSerial" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" maxlength="3" placeholder="CR">
+                <input class="form-control col-md-8" required="" id="entrepreneurPassportNumber" name="entrepreneurPassportNumber" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" maxlength="10" placeholder="12365498">
             </div>
         </div>
 
@@ -47,7 +57,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control datepicker" required="" id="passportDateOfIssue" name="passportDateOfIssue" th:value="${individual.passportDateOfIssue}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+                <input class="form-control datepicker" required="" id="entrepreneurPassportDateOfIssue" name="entrepreneurPassportDateOfIssue" th:value="${individualEntrepreneur.entrepreneurPassportDateOfIssue}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
             </div>
         </div>
         <div class="form-group row" >
@@ -56,7 +66,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control datepicker" required="" id="passportDateOfExpiry" name="passportDateOfExpiry" th:value="${individual.passportDateOfExpiry}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+                <input class="form-control datepicker" required="" id="entrepreneurPassportDateOfExpiry" name="entrepreneurPassportDateOfExpiry" th:value="${individualEntrepreneur.entrepreneurPassportDateOfExpiry}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
             </div>
         </div>
         <div class="form-group row" >
@@ -65,20 +75,20 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="passportIssuedBy" name="passportIssuedBy" th:value="${individual.passportIssuedBy}" >
+                <input class="form-control" required="" id="entrepreneurPassportIssuedBy" name="entrepreneurPassportIssuedBy" th:value="${individualEntrepreneur.entrepreneurPassportIssuedBy}" >
             </div>
         </div>
 
-        <p class="text-center" th:text="#{sys_individual_address}">Yashash manzili</p>
+        <p class="text-center" th:text="#{sys_individual_entrepreneur_address}">Faoliyatini amalga manzili</p>
         <div class="form-group row">
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="individualRegionId" name="individualRegionId" >
+                <select class="form-control" required="" id="entrepreneurRegionId" name="entrepreneurRegionId" >
                     <option value="" th:text="#{sys_select}"></option>
-                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:selected="${individual.individualRegionId==region.id}"></option>
+                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:selected="${individualEntrepreneur.entrepreneurRegionId==region.id}"></option>
                 </select>
             </div>
         </div>
@@ -89,9 +99,9 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="individualSubRegionId" name="individualSubRegionId" >
+                <select class="form-control" required="" id="entrepreneurSubRegionId" name="entrepreneurSubRegionId" >
                     <option value="" th:text="#{sys_select}"></option>
-                    <option th:each="sub_region : ${sub_regions}" th:value="${sub_region.id}" th:text="${sub_region.getNameTranslation(#locale)}" th:class="${'sr-'+sub_region.parentId}" th:selected="${individual.individualSubRegionId==sub_region.id}"></option>
+                    <option th:each="sub_region : ${sub_regions}" th:value="${sub_region.id}" th:text="${sub_region.getNameTranslation(#locale)}" th:class="${'sr-'+sub_region.parentId}" th:selected="${individualEntrepreneur.entrepreneurSubRegionId==sub_region.id}"></option>
                 </select>
             </div>
         </div>
@@ -102,16 +112,17 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="individualAddress" name="individualAddress" th:value="${individual.individualAddress}" data-parsley-maxlength="250">
+                <input class="form-control" required="" id="entrepreneurAddress" name="entrepreneurAddress" th:value="${individualEntrepreneur.entrepreneurAddress}" >
             </div>
         </div>
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+                <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control phone" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" placeholder="+998 ( -- ) --- -- --">
+                <input class="form-control phone" required="" id="entrepreneurPhone" name="entrepreneurPhone" th:value="${individualEntrepreneur.entrepreneurPhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
@@ -121,7 +132,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control phone" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" placeholder="+998 ( -- ) --- -- --">
+                <input class="form-control phone" required="" id="entrepreneurMobilePhone" name="entrepreneurMobilePhone" th:value="${individualEntrepreneur.entrepreneurMobilePhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
@@ -131,11 +142,11 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input type="email" class="form-control" id="individualEmail" name="individualEmail" th:value="${individual.individualEmail}" placeholder="example@gmail.com" data-parsley-maxlength="250">
+                <input type="email" class="form-control" required="" id="entrepreneurEmail" name="entrepreneurEmail" th:value="${individualEntrepreneur.entrepreneurEmail}" placeholder="example@gmail.com">
             </div>
         </div>
 
-        <input type="hidden" name="applicantType" value="Individual" >
+        <input type="hidden" name="applicantType" value="IndividualEnterprise" >
         <input type="hidden" name="id" th:value="${regApplication.id}" >
         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="row" >

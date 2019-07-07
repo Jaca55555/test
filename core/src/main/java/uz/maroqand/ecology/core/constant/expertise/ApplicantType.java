@@ -9,7 +9,8 @@ public enum ApplicantType {
 
     LegalEntity(0,"sys_applicantType.legalEntity"),
     Individual(1,"sys_applicantType.individual"),
-    IndividualEnterprise(2,"sys_applicantType.individualEnterprise");
+    IndividualEnterprise(2,"sys_applicantType.individualEnterprise"),
+    ForeignIndividual(3,"sys_applicantType.foreignIndividual");
 
     private Integer id;
     private String name;

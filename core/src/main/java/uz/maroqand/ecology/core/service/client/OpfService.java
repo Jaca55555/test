@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface OpfService {
 
+    List<Opf> getOpfLegalEntityList();
+
+    List<Opf> getOpfIndividualList();
+
     List<Opf> getOpfList();
 
     Opf getById(Integer id);

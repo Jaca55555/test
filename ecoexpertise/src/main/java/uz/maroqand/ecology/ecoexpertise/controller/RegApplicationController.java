@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -27,6 +29,7 @@ import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
+import uz.maroqand.ecology.core.service.sys.CountryService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -58,9 +61,10 @@ public class RegApplicationController {
     private final InvoiceService invoiceService;
     private final CommentService commentService;
     private final RegApplicationLogService regApplicationLogService;
+    private final CountryService countryService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -79,6 +83,7 @@ public class RegApplicationController {
         this.invoiceService = invoiceService;
         this.commentService = commentService;
         this.regApplicationLogService = regApplicationLogService;
+        this.countryService = countryService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -170,6 +175,7 @@ public class RegApplicationController {
         /*if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()== LogStatus.Approved){
             return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
         }*/
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
@@ -177,14 +183,19 @@ public class RegApplicationController {
             applicant.setType(ApplicantType.LegalEntity);
             model.addAttribute("legalEntity", new LegalEntityDto());
             model.addAttribute("individual", new IndividualDto());
-
+            model.addAttribute("foreignIndividual", new ForeignIndividualDto());
+            model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto());
         }else{
             model.addAttribute("legalEntity", new LegalEntityDto(applicant));
             model.addAttribute("individual", new IndividualDto(applicant));
+            model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant));
+            model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant));
         }
 
         model.addAttribute("applicant", applicant);
-        model.addAttribute("opfList", opfService.getOpfList());
+        model.addAttribute("opfLegalEntityList", opfService.getOpfLegalEntityList());
+        model.addAttribute("opfIndividualList", opfService.getOpfIndividualList());
+        model.addAttribute("countriesList", countryService.getCountriesList(locale));
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("sub_regions", soatoService.getSubRegions());
         model.addAttribute("regApplication", regApplication);
@@ -194,10 +205,12 @@ public class RegApplicationController {
 
     @RequestMapping(value = Urls.RegApplicationApplicant,method = RequestMethod.POST)
     public String createRegApplication(
-            @RequestParam(name = "applicantType") String applicantType,
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "applicantType") String applicantType,
             LegalEntityDto legalEntityDto,
-            IndividualDto individualDto
+            IndividualDto individualDto,
+            ForeignIndividualDto foreignIndividualDto,
+            IndividualEntrepreneurDto individualEntrepreneurDto
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -205,23 +218,17 @@ public class RegApplicationController {
             return "redirect:" + Urls.RegApplicationList;
         }
 
-        Client applicant = regApplication.getApplicant();
+        Client applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());
 
-        if (applicantType.equals("LegalEntity")){
-            if (applicant==null){
-                applicant = clientService.createClient(legalEntityDto);
-                regApplication.setApplicantId(applicant.getId());
-            }else{
-                clientService.updateClient(applicant,legalEntityDto, user);
-            }
-        }else{
-            if (applicant==null){
-                applicant =  clientService.createClient(individualDto);
-                regApplication.setApplicantId(applicant.getId());
-            }else{
-                clientService.updateClient(applicant,individualDto, user);
-            }
+        switch (applicantType){
+            case "LegalEntity":applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());break;
+            case "Individual":applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());break;
+            case "IndividualEnterprise":applicant = clientService.saveIndividualEntrepreneur(individualEntrepreneurDto, user, "regApplicationId="+regApplication.getId());break;
+            case "ForeignIndividual":applicant = clientService.saveForeignIndividual(foreignIndividualDto, user, "regApplicationId="+regApplication.getId());break;
         }
+
+        regApplication.setApplicantType(applicant.getType());
+        regApplication.setApplicantId(applicant.getId());
         regApplication.setStep(RegApplicationStep.ABOUT);
         regApplicationService.update(regApplication);
         return "redirect:" + Urls.RegApplicationAbout + "?id=" + id;

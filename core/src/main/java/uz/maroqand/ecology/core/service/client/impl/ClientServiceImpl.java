@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -44,67 +46,33 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.getOne(id);
     }
 
+    //Yuridik shaxs
     @Override
-    public Client createClient(LegalEntityDto legalEntityDto) {
-        Client client = new Client();
-        client.setType(ApplicantType.LegalEntity);
-        client.setTin(legalEntityDto.getLegalEntityTin());
-        client.setName(legalEntityDto.getLegalEntityName());
-        client.setOpfId(legalEntityDto.getLegalEntityOpfId());
-        client.setDirectorFullName(legalEntityDto.getDirectorFullName());
-        client.setOked(legalEntityDto.getOked());
-        client.setRegionId(legalEntityDto.getLegalEntityRegionId());
-        client.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
-        client.setAddress(legalEntityDto.getLegalEntityAddress());
-        client.setPhone(legalEntityDto.getLegalEntityPhone());
-        client.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
-        client.setEmail(legalEntityDto.getLegalEntityEmail());
-        client.setMfo(legalEntityDto.getLegalEntityMfo());
-        client.setBankName(legalEntityDto.getLegalEntityBankName());
-        client.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
-        client = clientRepository.save(client);
-        return client;
-    }
+    public Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message) {
 
-    @Override
-    public Client createClient(IndividualDto individualDto) {
-        Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
-        Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
-
-        Client client = new Client();
-        client.setType(ApplicantType.Individual);
-        client.setName(individualDto.getIndividualName());
-        client.setPassportSerial(individualDto.getPassportSerial());
-        client.setPassportNumber(individualDto.getPassportNumber());
-        client.setPassportDateOfIssue(passportDateOfIssue);
-        client.setPassportDateOfExpiry(passportDateOfExpiry);
-        client.setPassportIssuedBy(individualDto.getPassportIssuedBy());
-        client.setRegionId(individualDto.getIndividualRegionId());
-        client.setSubRegionId(individualDto.getIndividualSubRegionId());
-        client.setAddress(individualDto.getIndividualAddress());
-        client.setPhone(individualDto.getIndividualPhone());
-        client.setMobilePhone(individualDto.getIndividualMobilePhone());
-        client.setEmail(individualDto.getIndividualEmail());
-        client = clientRepository.save(client);
-        return client;
-    }
-
-    @Override
-    public Client updateClient(Client client, LegalEntityDto legalEntityDto, User user) {
+        Client client = clientRepository.findTop1ByTinAndDeletedFalseOrderByIdDesc(legalEntityDto.getLegalEntityTin());
         String before = gson.toJson(client);
-
+        if(client==null){
+            client = new Client();
+            client.setCreatedAt(new Date());
+            client.setCreatedById(user.getId());
+        }
         client.setType(ApplicantType.LegalEntity);
+
         client.setTin(legalEntityDto.getLegalEntityTin());
         client.setName(legalEntityDto.getLegalEntityName());
         client.setOpfId(legalEntityDto.getLegalEntityOpfId());
         client.setDirectorFullName(legalEntityDto.getDirectorFullName());
         client.setOked(legalEntityDto.getOked());
+
         client.setRegionId(legalEntityDto.getLegalEntityRegionId());
         client.setSubRegionId(legalEntityDto.getLegalEntitySubRegionId());
         client.setAddress(legalEntityDto.getLegalEntityAddress());
+
         client.setPhone(legalEntityDto.getLegalEntityPhone());
         client.setMobilePhone(legalEntityDto.getLegalEntityMobilePhone());
         client.setEmail(legalEntityDto.getLegalEntityEmail());
+
         client.setMfo(legalEntityDto.getLegalEntityMfo());
         client.setBankName(legalEntityDto.getLegalEntityBankName());
         client.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
@@ -113,26 +81,41 @@ public class ClientServiceImpl implements ClientService {
         client.setUpdateById(user.getId());
         client = clientRepository.save(client);
 
-        clientAuditService.create(client.getId(),before,gson.toJson(client),"",user.getId(),user.getUserAdditionalId());
+        clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
         return client;
     }
 
+
+
+    //Jismoniy shaxs
     @Override
-    public Client updateClient(Client client, IndividualDto individualDto, User user) {
+    public Client saveIndividual(IndividualDto individualDto, User user, String message) {
+
+        Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualDto.getIndividualPinfl());
         String before = gson.toJson(client);
+        if(client==null){
+            client = new Client();
+            client.setCreatedAt(new Date());
+            client.setCreatedById(user.getId());
+        }
+        client.setType(ApplicantType.Individual);
+
         Date passportDateOfIssue = DateParser.TryParse(individualDto.getPassportDateOfIssue(), Common.uzbekistanDateFormat);
         Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
-        client.setType(ApplicantType.Individual);
+        client.setPinfl(individualDto.getIndividualPinfl());
         client.setName(individualDto.getIndividualName());
+
         client.setPassportSerial(individualDto.getPassportSerial());
         client.setPassportNumber(individualDto.getPassportNumber());
         client.setPassportDateOfIssue(passportDateOfIssue);
         client.setPassportDateOfExpiry(passportDateOfExpiry);
         client.setPassportIssuedBy(individualDto.getPassportIssuedBy());
+
         client.setRegionId(individualDto.getIndividualRegionId());
         client.setSubRegionId(individualDto.getIndividualSubRegionId());
         client.setAddress(individualDto.getIndividualAddress());
+
         client.setPhone(individualDto.getIndividualPhone());
         client.setMobilePhone(individualDto.getIndividualMobilePhone());
         client.setEmail(individualDto.getIndividualEmail());
@@ -141,9 +124,92 @@ public class ClientServiceImpl implements ClientService {
         client.setUpdateById(user.getId());
         client = clientRepository.save(client);
 
-        clientAuditService.create(client.getId(),before,gson.toJson(client),"",user.getId(),user.getUserAdditionalId());
+        clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
         return client;
     }
+
+    //YaTT
+    @Override
+    public Client saveIndividualEntrepreneur(IndividualEntrepreneurDto individualEntrepreneurDto, User user, String message) {
+
+        Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualEntrepreneurDto.getIndividualPinfl());
+        String before = gson.toJson(client);
+        if(client==null){
+            client = new Client();
+            client.setCreatedAt(new Date());
+            client.setCreatedById(user.getId());
+        }
+        client.setType(ApplicantType.IndividualEnterprise);
+
+        Date passportDateOfIssue = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfIssue(), Common.uzbekistanDateFormat);
+        Date passportDateOfExpiry = DateParser.TryParse(individualEntrepreneurDto.getEntrepreneurPassportDateOfExpiry(), Common.uzbekistanDateFormat);
+
+        client.setPinfl(individualEntrepreneurDto.getIndividualPinfl());
+        client.setTin(individualEntrepreneurDto.getIndividualEntrepreneurTin());
+        client.setName(individualEntrepreneurDto.getIndividualEntrepreneurName());
+
+        client.setPassportSerial(individualEntrepreneurDto.getEntrepreneurPassportSerial());
+        client.setPassportNumber(individualEntrepreneurDto.getEntrepreneurPassportNumber());
+        client.setPassportDateOfIssue(passportDateOfIssue);
+        client.setPassportDateOfExpiry(passportDateOfExpiry);
+        client.setPassportIssuedBy(individualEntrepreneurDto.getEntrepreneurPassportIssuedBy());
+
+        client.setRegionId(individualEntrepreneurDto.getEntrepreneurRegionId());
+        client.setSubRegionId(individualEntrepreneurDto.getEntrepreneurSubRegionId());
+        client.setAddress(individualEntrepreneurDto.getEntrepreneurAddress());
+
+        client.setPhone(individualEntrepreneurDto.getEntrepreneurPhone());
+        client.setMobilePhone(individualEntrepreneurDto.getEntrepreneurMobilePhone());
+        client.setEmail(individualEntrepreneurDto.getEntrepreneurEmail());
+
+        client.setUpdateAt(new Date());
+        client.setUpdateById(user.getId());
+        client = clientRepository.save(client);
+
+        clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
+        return client;
+    }
+
+    //Xorijiy jismoniy shaxs
+    @Override
+    public Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message) {
+
+        Client client = clientRepository.findTop1ByPassportSerialAndPassportNumberAndDeletedFalseOrderByIdDesc(foreignIndividualDto.getForeignPassportSerial(), foreignIndividualDto.getForeignPassportNumber());
+        String before = gson.toJson(client);
+        if(client==null){
+            client = new Client();
+            client.setCreatedAt(new Date());
+            client.setCreatedById(user.getId());
+        }
+        client.setType(ApplicantType.ForeignIndividual);
+
+        Date passportDateOfIssue = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfIssue(), Common.uzbekistanDateFormat);
+        Date passportDateOfExpiry = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfExpiry(), Common.uzbekistanDateFormat);
+
+        client.setName(foreignIndividualDto.getForeignIndividualName());
+
+        client.setPassportSerial(foreignIndividualDto.getForeignPassportSerial());
+        client.setPassportNumber(foreignIndividualDto.getForeignPassportNumber());
+        client.setPassportDateOfIssue(passportDateOfIssue);
+        client.setPassportDateOfExpiry(passportDateOfExpiry);
+        client.setPassportIssuedBy(foreignIndividualDto.getForeignPassportIssuedBy());
+
+        client.setCountryId(foreignIndividualDto.getForeignCountryId());
+        client.setAddress(foreignIndividualDto.getForeignAddress());
+
+        client.setPhone(foreignIndividualDto.getForeignPhone());
+        client.setMobilePhone(foreignIndividualDto.getForeignMobilePhone());
+        client.setEmail(foreignIndividualDto.getForeignEmail());
+
+        client.setUpdateAt(new Date());
+        client.setUpdateById(user.getId());
+        client = clientRepository.save(client);
+
+        clientAuditService.create(client.getId(),before,gson.toJson(client),message,user.getId(),user.getUserAdditionalId());
+        return client;
+    }
+
+
 
     @Override
     public Page<Client> findFiltered(

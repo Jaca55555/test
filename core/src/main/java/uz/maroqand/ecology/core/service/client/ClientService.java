@@ -3,7 +3,9 @@ package uz.maroqand.ecology.core.service.client;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -14,13 +16,13 @@ public interface ClientService {
 
     Client getById(Integer id);
 
-    Client createClient(LegalEntityDto legalEntityDto);
+    Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message);
 
-    Client createClient(IndividualDto individualDto);
+    Client saveIndividual(IndividualDto individualDto, User user, String message);
 
-    Client updateClient(Client client, LegalEntityDto legalEntityDto, User user);
+    Client saveIndividualEntrepreneur(IndividualEntrepreneurDto individualEntrepreneurDto, User user, String message);
 
-    Client updateClient(Client client, IndividualDto individualDto, User user);
+    Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message);
 
     Page<Client> findFiltered(
             ApplicantType type,

@@ -24,7 +24,7 @@ public class Opf {
     private Integer code;
 
     @Column(name = "parent_id")
-    private String parentId;
+    private Integer parentId;
 
     @Column(name = "name")
     private String name;

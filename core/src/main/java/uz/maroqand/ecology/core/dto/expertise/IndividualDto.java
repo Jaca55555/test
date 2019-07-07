@@ -14,6 +14,7 @@ public class IndividualDto {
 
     private Integer id;
 
+    private String individualPinfl;
     //Ф.И.О.
     private String individualName;
 

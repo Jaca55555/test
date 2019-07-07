@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="foreign_individual">
+
+    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="foreignIndividualName" name="foreignIndividualName" th:value="${foreignIndividual.foreignIndividualName}" >
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6 input-group">
+                <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA">
+                <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_passport.dateOfIssue}" >Дата выдачи паспорта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" required="" id="foreignPassportDateOfIssue" name="foreignPassportDateOfIssue" th:value="${foreignIndividual.foreignPassportDateOfIssue}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.dateOfExpiry}">Действителен до</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" required="" id="foreignPassportDateOfExpiry" name="foreignPassportDateOfExpiry" th:value="${foreignIndividual.foreignPassportDateOfExpiry}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.IssuedBy}">Кем выдан</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="foreignPassportIssuedBy" name="foreignPassportIssuedBy" th:value="${foreignIndividual.foreignPassportIssuedBy}" >
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_foreign_individual_address}">Yashash manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_country}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="foreignCountryId" name="foreignCountryId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.getNameTranslation(#locale)}" th:selected="${foreignIndividual.foreignCountryId==country.id}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control" rows="4" required="" id="foreignAddress" name="foreignAddress" th:value="${foreignIndividual.foreignAddress}"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" required="" id="foreignPhone" name="foreignPhone" th:value="${foreignIndividual.foreignPhone}" placeholder="+998 ( -- ) --- -- --">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" required="" id="foreignMobilePhone" name="foreignMobilePhone" th:value="${foreignIndividual.foreignMobilePhone}" placeholder="+998 ( -- ) --- -- --">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" required="" id="foreignEmail" name="foreignEmail" th:value="${foreignIndividual.foreignEmail}" placeholder="example@gmail.com">
+            </div>
+        </div>
+
+        <input type="hidden" name="applicantType" value="ForeignIndividual" >
+        <input type="hidden" name="id" th:value="${regApplication.id}" >
+        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="row" >
+            <div class="form-group col-md-12 text-center" >
+                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}">Отмена</button>
+                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

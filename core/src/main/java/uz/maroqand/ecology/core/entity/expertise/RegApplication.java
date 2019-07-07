@@ -36,6 +36,10 @@ public class RegApplication {
     @Column(name = "applicant_id")
     private Integer applicantId;
 
+    @Column(name = "applicant_type")
+    @Enumerated(EnumType.ORDINAL)
+    private ApplicantType applicantType;
+
     //Объект экспертизы
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "object_id", insertable = false, updatable = false)
