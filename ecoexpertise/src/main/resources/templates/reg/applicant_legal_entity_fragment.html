@@ -56,8 +56,8 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" id="oked" name="oked" th:value="${legalEntity.oked}" placeholder="81100">
-                <small id="okedName" class="form-text text-muted">Oked nomi shundan iboratki </small>
+                <input class="form-control" onkeypress="getOkedName()" required="" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" id="oked" name="oked" th:value="${legalEntity.oked}" placeholder="81100">
+                <small id="okedName" class="form-text text-muted" style="display: none"></small>
             </div>
         </div>
 

@@ -21,12 +21,14 @@ import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.client.OKEDService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.sys.CountryService;
@@ -62,9 +64,10 @@ public class RegApplicationController {
     private final CommentService commentService;
     private final RegApplicationLogService regApplicationLogService;
     private final CountryService countryService;
+    private final OKEDService okedService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService, OKEDService okedService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -84,6 +87,7 @@ public class RegApplicationController {
         this.commentService = commentService;
         this.regApplicationLogService = regApplicationLogService;
         this.countryService = countryService;
+        this.okedService = okedService;
     }
 
     @RequestMapping(value = Urls.RegApplicationList)
@@ -692,6 +696,25 @@ public class RegApplicationController {
         result.put("fioShort",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
         result.put("message",comment.getMessage());
 
+        return result;
+    }
+
+    @RequestMapping(value = Urls.RegApplicationGetOkedName)
+    @ResponseBody
+    public HashMap<String,Object> getOkedName(
+            @RequestParam(name = "okedCode") String okedCode
+    ){
+        Integer status=1;
+        HashMap<String,Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        OKED oked = okedService.getOkedFromOkedV1Code(okedCode);
+        if (oked==null){
+            status=0;
+            result.put("status",status);
+            return result;
+        }
+        result.put("status",status);
+        result.put("okedName",oked.getNameTranslation(locale));
         return result;
     }
 
