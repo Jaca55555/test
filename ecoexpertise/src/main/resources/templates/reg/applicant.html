@@ -193,6 +193,12 @@
             selectForm($(this).val());
         });
 
+        function getSMSCode() {
+            $('#sms_code').show();
+            $('#allow').attr("hidden", true);
+            $('#notAllow').attr("hidden", false);
+        }
+        
         function getOkedName() {
 
             $('#oked').parsley().validate();

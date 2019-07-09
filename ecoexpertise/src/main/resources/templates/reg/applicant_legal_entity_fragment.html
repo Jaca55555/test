@@ -112,8 +112,25 @@
                 <label class="col-form-label" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
                 <span class="required">*</span>
             </div>
-            <div class="col-md-6">
-                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" >
+            <div class="col-md-4">
+                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" placeholder="+998 ( -- ) --- -- --">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode()"> Tasdiqlash</button>
+            </div>
+        </div>
+
+        <div class="form-group row" id="sms_code" style="display: none">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="code" id="code"/>
+            </div>
+            <div class="col-md-2">
+                <i class=" fa fa-check-square fa-2x" id="allow" style="margin-top: 6px;color: green;" hidden=""></i>
+                <i class="fa fa-times fa-2x" id="notAllow" style="margin-top: 6px;color: red;" hidden=""></i>
             </div>
         </div>
 
