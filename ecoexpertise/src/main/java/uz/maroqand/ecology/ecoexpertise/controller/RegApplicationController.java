@@ -206,15 +206,22 @@ public class RegApplicationController {
         if(applicant==null || applicant.getType()==null){
             applicant = new Client();
             applicant.setType(ApplicantType.LegalEntity);
-            model.addAttribute("legalEntity", new LegalEntityDto());
-            model.addAttribute("individual", new IndividualDto());
-            model.addAttribute("foreignIndividual", new ForeignIndividualDto());
-            model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto());
-        }else{
-            model.addAttribute("legalEntity", new LegalEntityDto(applicant));
-            model.addAttribute("individual", new IndividualDto(applicant));
-            model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant));
-            model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant));
+        }
+
+        model.addAttribute("individual", new IndividualDto());
+        model.addAttribute("legalEntity", new LegalEntityDto());
+        model.addAttribute("foreignIndividual", new ForeignIndividualDto());
+        model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto());
+
+        switch (applicant.getType()){
+            case Individual:
+            model.addAttribute("individual", new IndividualDto(applicant));break;
+            case LegalEntity:
+            model.addAttribute("legalEntity", new LegalEntityDto(applicant));break;
+            case ForeignIndividual:
+            model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant));break;
+            case IndividualEnterprise:
+                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant));break;
         }
 
         model.addAttribute("applicant", applicant);

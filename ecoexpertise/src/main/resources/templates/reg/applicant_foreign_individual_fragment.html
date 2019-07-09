@@ -22,9 +22,11 @@
                 <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
                 <span class="required">*</span>
             </div>
-            <div class="col-md-6 input-group">
-                <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA">
-                <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA">
+                    <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498">
+                </div>
             </div>
         </div>
 
@@ -83,10 +85,9 @@
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
-                <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control phone" required="" id="foreignPhone" name="foreignPhone" th:value="${foreignIndividual.foreignPhone}" placeholder="+998 ( -- ) --- -- --">
+                <input class="form-control phone" id="foreignPhone" name="foreignPhone" th:value="${foreignIndividual.foreignPhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
@@ -103,10 +104,9 @@
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
-                <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input type="email" class="form-control" required="" id="foreignEmail" name="foreignEmail" th:value="${foreignIndividual.foreignEmail}" placeholder="example@gmail.com">
+                <input type="email" class="form-control" id="foreignEmail" name="foreignEmail" th:value="${foreignIndividual.foreignEmail}" placeholder="example@gmail.com">
             </div>
         </div>
 

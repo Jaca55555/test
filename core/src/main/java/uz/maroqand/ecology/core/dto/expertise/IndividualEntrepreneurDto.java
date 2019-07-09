@@ -14,7 +14,7 @@ public class IndividualEntrepreneurDto {
 
     private Integer id;
 
-    private String individualPinfl;
+    private String individualEntrepreneurPinfl;
     //Ф.И.О.
     private String individualEntrepreneurName;
     private Integer individualEntrepreneurTin;
@@ -38,6 +38,7 @@ public class IndividualEntrepreneurDto {
 
     public IndividualEntrepreneurDto(Client applicant){
         this.id = applicant.getId();
+        this.individualEntrepreneurPinfl = applicant.getPinfl();
         this.individualEntrepreneurName = applicant.getName();
         this.individualEntrepreneurTin = applicant.getTin();
 

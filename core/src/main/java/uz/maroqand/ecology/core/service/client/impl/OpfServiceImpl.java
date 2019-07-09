@@ -35,7 +35,7 @@ public class OpfServiceImpl implements OpfService {
     @Cacheable("getOpfIndividualList")
     public List<Opf> getOpfIndividualList() {
         Set<Integer> ids = new HashSet<>();
-        ids.add(300);
+        ids.add(400);
         return opfRepository.findByIdInOrParentIdInOrderByIdAsc(ids,ids);
     }
 

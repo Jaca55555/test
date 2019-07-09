@@ -10,6 +10,29 @@
 
         <div class="form-group row" >
             <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_pinfl}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="individualEntrepreneurPinfl" name="individualEntrepreneurPinfl" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input class="form-control col-md-4 mr-3" required="" id="entrepreneurPassportSerial" name="entrepreneurPassportSerial" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" maxlength="3" placeholder="AA">
+                    <input class="form-control col-md-8" required="" id="entrepreneurPassportNumber" name="entrepreneurPassportNumber" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" maxlength="10" placeholder="0000001">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_tin_individual}">СТИР</label>
                 <span class="required">*</span>
             </div>
@@ -17,6 +40,7 @@
                 <input class="form-control only-number" required="" id="individualEntrepreneurTin" name="individualEntrepreneurTin" value="" minlength="9" maxlength="9" th:value="${individualEntrepreneur.individualEntrepreneurTin}">
             </div>
         </div>
+
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
@@ -37,17 +61,6 @@
                     <option value="" th:text="#{sys_select}"></option>
                     <option th:each="opf : ${opfIndividualList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${opf.parentId==null}"></option>
                 </select>
-            </div>
-        </div>
-
-        <div class="form-group row" >
-            <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
-                <span class="required">*</span>
-            </div>
-            <div class="col-md-6 input-group">
-                <input class="form-control col-md-4 mr-3" required="" id="entrepreneurPassportSerial" name="entrepreneurPassportSerial" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" maxlength="3" placeholder="CR">
-                <input class="form-control col-md-8" required="" id="entrepreneurPassportNumber" name="entrepreneurPassportNumber" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" maxlength="10" placeholder="12365498">
             </div>
         </div>
 
@@ -119,10 +132,9 @@
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
-                <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control phone" required="" id="entrepreneurPhone" name="entrepreneurPhone" th:value="${individualEntrepreneur.entrepreneurPhone}" placeholder="+998 ( -- ) --- -- --">
+                <input class="form-control phone" id="entrepreneurPhone" name="entrepreneurPhone" th:value="${individualEntrepreneur.entrepreneurPhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
         </div>
 
@@ -139,10 +151,9 @@
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
-                <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input type="email" class="form-control" required="" id="entrepreneurEmail" name="entrepreneurEmail" th:value="${individualEntrepreneur.entrepreneurEmail}" placeholder="example@gmail.com">
+                <input type="email" class="form-control" id="entrepreneurEmail" name="entrepreneurEmail" th:value="${individualEntrepreneur.entrepreneurEmail}" placeholder="example@gmail.com">
             </div>
         </div>
 
