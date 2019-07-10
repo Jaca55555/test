@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public enum Category {
 
+    CategoryAll(0,"sys_categoryAll"),
     Category1(1,"sys_category1"),
     Category2(2,"sys_category2"),
     Category3(3,"sys_category3"),
