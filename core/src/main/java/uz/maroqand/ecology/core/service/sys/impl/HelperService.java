@@ -68,6 +68,13 @@ public class HelperService {
         return user!=null? user.getUsername():"";
     }
 
+    @Cacheable(value = "getUserFullNameById", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getUserFullNameById(Integer id) {
+        if(id==null) return "";
+        User user = userService.findById(id);
+        return user!=null? user.getFullName():"";
+    }
+
     //for comment
     @Cacheable(value = "getUserLastAndFirstShortById", key = "#id",condition="#id != null",unless="#result == ''")
     public String getUserLastAndFirstShortById(Integer id) {

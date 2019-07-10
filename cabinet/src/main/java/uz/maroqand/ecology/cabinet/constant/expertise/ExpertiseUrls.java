@@ -60,4 +60,9 @@ public class ExpertiseUrls {
     public static final String ApplicantListAjax = Applicant + "/list_ajax";
     public static final String ApplicantView = Applicant + "/view";
 
+    //RegApplication
+    private static final String RegApplication= Prefix + "/reg_application";
+    public static final String RegApplications= RegApplication + "s";
+    public static final String RegApplicationList = RegApplication + "/list";
+
 }
