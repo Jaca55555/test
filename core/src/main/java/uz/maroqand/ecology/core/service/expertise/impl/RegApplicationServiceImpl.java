@@ -50,6 +50,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplicationRepository.findAllByDeletedFalse();
     }
 
+    @Override
+    public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
+        return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalse();
+    }
+
     public void update(RegApplication regApplication){
         regApplication.setUpdateAt(new Date());
         regApplicationRepository.save(regApplication);

@@ -19,7 +19,6 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.entity.user.User;
 import org.springframework.data.domain.Pageable;
-import uz.maroqand.ecology.core.util.Common;
 
 import java.util.*;
 
@@ -45,8 +44,9 @@ public class RegApplicationMonitoringController {
     @RequestMapping(value = ExpertiseUrls.RegApplications)
     public String getApplications(Model model){
 
-        List<RegApplication> regApplications = regApplicationService.getAllByDeletedFalse();
+        List<RegApplication> regApplications = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
         model.addAttribute("regApplications",regApplications);
+        model.addAttribute("proccess",getProccess());
         model.addAttribute("users",userService.findPerformerList());
         return ExpertiseTemplates.RegApplications;
     }
@@ -55,6 +55,7 @@ public class RegApplicationMonitoringController {
 
     @RequestMapping(value = ExpertiseUrls.RegApplicationList,method = RequestMethod.GET)
     public String getRegApplicationList(Model model){
+        model.addAttribute("proccess",getProccess());
         model.addAttribute("users",userService.findPerformerList());
         return ExpertiseTemplates.RegApplicationList;
     }
@@ -77,13 +78,13 @@ public class RegApplicationMonitoringController {
         HashMap<String,Object> result = new HashMap<>();
 
 
-        List<RegApplication> regApplicationList = regApplicationService.getAllByDeletedFalse();
+        List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
         //All User by organizationId
         //All RegApplication by reviewId
         //      User.id_0,count
         HashMap<String,Integer> userPermissionCount = new HashMap<>();
         for (RegApplication regApplication : regApplicationList){
-            if(regApplication.getPerformerId()!=null){
+//            if(regApplication.getPerformerId()!=null){
                 if(userPermissionCount.containsKey(regApplication.getPerformerId().toString()+"_0")){
                     userPermissionCount.put(regApplication.getPerformerId()+"_0",userPermissionCount.get(regApplication.getPerformerId().toString()+"_0")+1);
                 }else {
@@ -113,7 +114,7 @@ public class RegApplicationMonitoringController {
                         userPermissionCount.put(regApplication.getPerformerId()+"_3",1);
                     }
                 }
-            }
+//            }
         }
 
         Page<User> userPage = userService.findFiltered(
@@ -143,6 +144,36 @@ public class RegApplicationMonitoringController {
         result.put("recordsTotal", userPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", userPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
+        return result;
+    }
+
+    public List<Integer> getProccess(){
+
+        List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
+        Integer count = regApplicationList.size();
+        Integer inProgress = 0;
+        Integer deelineNow = 0;//3 kun colganlar
+        Integer deeline = 0;
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,-3);
+        Date deedlineThree = calendar.getTime();
+        if (count>0){
+            for (RegApplication regApplication: regApplicationList) {
+                    if (regApplication.getStatus()!=null && regApplication.getStatus().equals(RegApplicationStatus.New))inProgress++;
+                    if (regApplication.getDeadlineDate()!=null && (regApplication.getDeadlineDate().after(deedlineThree) && regApplication.getDeadlineDate().before(new Date())))deelineNow++;
+                    if (regApplication.getDeadlineDate()!=null && regApplication.getDeadlineDate().before(new Date()))deeline++;
+            }
+        }
+        List<Integer> result = new ArrayList<>();
+        result.add(inProgress);//sonda
+        inProgress = (inProgress*100)/count;
+        result.add(inProgress);//foizda
+        result.add(deelineNow);//sonda
+        deelineNow = (deelineNow*100)/count;
+        result.add(deelineNow);//foizda
+        result.add(deeline);//sonda
+        deeline = (deeline*100)/count;
+        result.add(deeline);//foizda
         return result;
     }
 
