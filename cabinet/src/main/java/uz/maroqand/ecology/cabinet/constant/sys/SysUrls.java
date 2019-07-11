@@ -16,7 +16,7 @@ public class SysUrls {
     public static final String NotificationView = Notification + "/view";
 
     private static final String AppealAdmin = Prefix + "/appeal_admin";
-    public static final String AppealAdminList = AppealAdmin;
+    public static final String AppealAdminList = AppealAdmin + "/list";
     public static final String AppealAdminListAjax = AppealAdmin + "/list_ajax";
     public static final String AppealAdminView = AppealAdmin + "/view";
     public static final String AppealAdminSubCreate = AppealAdmin + "/sub_create";

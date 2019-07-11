@@ -33,4 +33,13 @@ public class AppealSubServiceImpl implements AppealSubService {
         appealSub.setCreatedAt(new Date());
         return appealSubRepository.save(appealSub);
     }
+
+    @Override
+    public AppealSub update(AppealSub appealSub,User user) {
+        appealSub.setDeleted(false);
+        appealSub.setAdminWrite(true);
+        appealSub.setCreatedById(user.getId());
+        appealSub.setCreatedAt(new Date());
+        return appealSubRepository.save(appealSub);
+    }
 }
