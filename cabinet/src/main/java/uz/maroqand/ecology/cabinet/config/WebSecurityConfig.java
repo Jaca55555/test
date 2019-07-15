@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customSuccessHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/static*/**").permitAll()
+                .antMatchers("/static*/**", "/map").permitAll()
                 .antMatchers("/dashboard/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
 
