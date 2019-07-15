@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.entity.user.User;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.util.Common;
 
 import java.util.*;
 
@@ -41,15 +44,59 @@ public class RegApplicationMonitoringController {
         this.helperService = helperService;
     }
 
-    @RequestMapping(value = ExpertiseUrls.RegApplications)
+    @RequestMapping(value = ExpertiseUrls.RegApplications,method = RequestMethod.GET)
     public String getApplications(Model model){
-
-        List<RegApplication> regApplications = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
-        model.addAttribute("regApplications",regApplications);
         model.addAttribute("proccess",getProccess());
         model.addAttribute("users",userService.findPerformerList());
         return ExpertiseTemplates.RegApplications;
     }
+
+    @RequestMapping(value = ExpertiseUrls.RegApplications,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getFilter(
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "firstname",required = false) String firstname,
+            @RequestParam(name = "lastname",required = false)String lastname,
+            @RequestParam(name = "middlename",required = false) String middlename
+    ){
+
+        firstname = StringUtils.trimToNull(firstname);
+        lastname = StringUtils.trimToNull(lastname);
+        middlename = StringUtils.trimToNull(middlename);
+
+        System.out.println("id==" + id);
+        System.out.println("firstname==" + firstname);
+        System.out.println("lastname==" + lastname);
+        System.out.println("middlename==" + middlename);
+
+        List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
+        PageRequest pageRequest = new PageRequest(0, regApplicationList.size(), Sort.Direction.ASC, "id");
+        Page<User> userPage = userService.findFiltered(id,lastname,firstname,middlename,null,null,null,null,pageRequest );
+        List<User> userList = userPage.getContent();
+        System.out.println(userList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(userList.size());
+        HashMap<String,Object> result = new HashMap<>();
+
+        for (RegApplication regApplication: regApplicationList) {
+            for (User user: userList) {
+                if (user.getId().equals(regApplication.getPerformerId())){
+                    convenientForJSONArray.add(new Object[]{
+                            regApplication.getId(),
+                            regApplication.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                            regApplication.getMaterialId()!=null?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
+                            regApplication.getDeadlineDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                            user.getFullName()
+                    });
+                }
+            }
+        }
+
+        result.put("data",convenientForJSONArray);
+
+        return result;
+    }
+
 
 
 

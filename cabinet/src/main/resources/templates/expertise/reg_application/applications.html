@@ -76,8 +76,10 @@
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h6 th:text="${user.fullName}">Josephin Doe</h6>
-                                                        <p th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}">Santa Ana,CA</p>
+                                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplications+'?id='+user.id}">
+                                                                <h6 th:text="${user.fullName}">Josephin Doe</h6>
+                                                                <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -96,36 +98,35 @@
                                             <i class="fas fa-th-large"></i>
                                         </a>
                                     </div>
-                                </nav>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12" th:each="regApplication :${regApplications}">
-                                        <div class="card card-border-c-blue">
-                                            <div class="card-header">
-                                                <a href="#" class="text-secondary"><span th:text="#{reg_application_number}">ariza raqami</span>:<span th:text="${regApplication.id}"></span></a>
-                                                <span class="label label-primary float-right" th:if="${regApplication.registrationDate!=null}" th:text="${#dates.format(regApplication.registrationDate, 'dd.MM.yyyy HH:mm:ss')}"> </span>
+                                    <form class="row" method="post" action="" id="filterForm">
+                                        <div class="col-md-10 row ">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_id}">id</label>
+                                                <input type="text" class="form-control" id="id" data-parsley-type="integer">
                                             </div>
-                                            <div class="card-block card-task">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <p class="task-detail" th:if="${regApplication.materialId!=null}" th:text="${@helperService.getMaterial(regApplication.materialId,#locale)}"></p>
-                                                        <p class="task-due" th:if="${regApplication.deadlineDate!=null}">
-                                                            <strong> <span th:text="#{reg_application.deadlineDate}"></span></strong>
-                                                            <strong class="label label-danger">
-                                                                <span th:text="${#dates.format(regApplication.deadlineDate, 'dd.MM.yyyy HH:mm:ss')}"></span>
-                                                            </strong>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <div class="task-list-table">
-                                                    <a href="#">
-                                                        <img class="img-fluid img-radius mr-1" src="/static/images/avatar-2.jpg" alt="1">
-                                                        <span th:if="${regApplication.performerId!=null}" th:text="${@helperService.getUserFullNameById(regApplication.performerId)}"></span>
-                                                    </a>
-                                                </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_name}">Наименование предприятия</label>
+                                                <input type="text" class="form-control" id="firstname">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_lastname}">Номер договора</label>
+                                                <input type="text" class="form-control" id="lastname">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_middlename}">№ id</label>
+                                                <input type="text" class="form-control" id="middlename">
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group col-md-2 text-center">
+                                            <label class="control-label" >&nbsp;</label></br>
+                                            <button class="btn btn-primary text-white" type="button" onclick="getAllApp()">
+                                                <i class="feather icon-search mr-1"></i>
+                                                <span th:text="#{sys_search}">Search</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </nav>
+                                <div class="row" id="applications">
                                 </div>
                             </div>
                             <!-- [ task-board ] end -->
@@ -144,5 +145,71 @@
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/js/task-board.js}"></script>
+<script th:inline="javascript">
+    var reg_application_number = [[#{reg_application_number}]];
+    var reg_application_deadlineDate = [[#{reg_application.deadlineDate}]];
+    $(document).ready(function () {
+        getAllApp();
+    });
+
+    function getAllApp(){
+        var id = $('#id').val();
+        var firstname = $('#firstname').val();
+        var lastname = $('#lastname').val();
+        var middlename = $('#middlename').val();
+        $.ajax({
+            url: '',
+            data: {
+                id: id,
+                firstname: firstname,
+                lastname: lastname,
+                middlename: middlename,
+                _csrf: $('#global_csrf').val()
+            },
+            type: 'post',
+            dataType: 'json',
+            cache: true,
+            success: function (response) {
+                var html='';
+                $('#applications').html('');
+                $.each(response.data,function (value,item) {
+                html+='<div class="col-md-6 col-sm-12">\n' +
+                    '     <div class="card card-border-c-blue">\n' +
+                    '            <div class="card-header">\n' +
+                    '                  <a href="#" class="text-secondary">'+reg_application_number+': '+item[0]+'</a>\n' +
+                    '                          <span class="label label-primary float-right"> '+item[1]+'</span>\n' +
+                    '            </div>\n' +
+                    '     <div class="card-block card-task">\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-detail">'+item[2]+'</p>\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+reg_application_deadlineDate+'</strong>\n' +
+                    '                       <strong class="label label-danger">\n' +
+                    '                        <span>'+item[3]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <hr>\n' +
+                    '           <div class="task-list-table">\n' +
+                    '                <a href="#">\n' +
+                    '                    <img class="img-fluid img-radius mr-1" src="/static/images/avatar-2.jpg" alt="1">\n' +
+                    '                    <span>'+item[4]+'</span>\n' +
+                    '                </a>\n' +
+                    '          </div>\n' +
+                    '       </div>\n' +
+                    '   </div>\n' +
+                    '</div>';
+                });
+                $('#applications').append(html);
+            },
+            error: function () {
+            }
+        });
+    }
+
+</script>
+
 </body>
 </html>
