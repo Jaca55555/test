@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
@@ -36,49 +36,43 @@
                         <tbody>
                         <tr role="row">
                             <th th:text="#{sys_tin}"></th>
-                            <td th:text="${applicantAudit.before.type}"></td>
-                            <td th:text="${applicantAudit.after.type}"></td>
-                        </tr>
-                        <tr role="row">
-                            <th th:text="#{sys_tin}"></th>
                             <td th:text="${applicantAudit.before.tin}"></td>
                             <td th:text="${applicantAudit.after.tin}"></td>
                         </tr>
                         <tr role="row">
-                            <th>Наименование предпиятия</th>
+                            <th th:text="#{sys_legal_entity_name}"></th>
                             <td th:text="${applicantAudit.before.name}"></td>
                             <td th:text="${applicantAudit.after.name}"></td>
                         </tr>
-
                         <tr role="row">
                             <th th:text="#{sys_applicant_type}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${applicantAudit.before.type}"></td>
+                            <td th:text="${applicantAudit.after.type}"></td>
                         </tr>
                         <tr role="row">
                             <th th:text="#{sys_director_full_name}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${applicantAudit.before.directorFullName}"></td>
+                            <td th:text="${applicantAudit.after.directorFullName}"></td>
                         </tr>
                         <tr role="row">
                             <th th:text="#{sys_oked}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${applicantAudit.before.oked}"></td>
+                            <td th:text="${applicantAudit.after.oked}"></td>
                         </tr>
                         <tr role="row">
                             <th th:text="#{sys_region}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${@helperService.getSoatoName(applicantAudit.before.regionId,#locale)}"></td>
+                            <td th:text="${@helperService.getSoatoName(applicantAudit.after.regionId,#locale)}"></td>
                         </tr>
                         <tr role="row">
                             <th th:text="#{sys_subregion}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${@helperService.getSoatoName(applicantAudit.before.subRegionId,#locale)}"></td>
+                            <td th:text="${@helperService.getSoatoName(applicantAudit.after.subRegionId,#locale)}"></td>
                         </tr>
                         <tr role="row">
                             <th th:text="#{sys_address}"></th>
-                            <td></td>
-                            <td></td>
+                            <td th:text="${applicantAudit.before.address}"></td>
+                            <td th:text="${applicantAudit.after.address}"></td>
                         </tr>
                         </tbody>
                     </table>
