@@ -76,8 +76,10 @@
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h6 th:text="${user.fullName}">Josephin Doe</h6>
-                                                        <p th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}">Santa Ana,CA</p>
+                                                        <a href="#" th:onclick="'getUserId('+${user.id}+')'">
+                                                            <h6 th:text="${user.fullName}">Josephin Doe</h6>
+                                                            <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -253,6 +255,14 @@
         thead = dataDatatableSelector.html();
         datatableConnect();
     });
+
+    function getUserId(id) {
+        $('#id').val(id);
+        $('#firstname').val('');
+        $('#lastname').val('');
+        $('#middlename').val('');
+        getDatatableConnect();
+    }
 
     $('#data-table').css("width", "100%");
     /*]]>*/

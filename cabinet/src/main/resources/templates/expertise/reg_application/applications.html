@@ -76,7 +76,7 @@
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplications+'?id='+user.id}">
+                                                        <a href="#" th:onclick="'getUserId('+${user.id}+')'">
                                                                 <h6 th:text="${user.fullName}">Josephin Doe</h6>
                                                                 <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
                                                         </a>
@@ -207,6 +207,15 @@
             error: function () {
             }
         });
+    }
+
+
+    function getUserId(id) {
+        $('#id').val(id);
+        $('#firstname').val('');
+        $('#lastname').val('');
+        $('#middlename').val('');
+        getAllApp();
     }
 
 </script>
