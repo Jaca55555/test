@@ -105,7 +105,7 @@
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:inline="javascript">
     var regApplicationId = [[${regApplication.id}]];
-    var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationCommentAdd}]];
+    var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.Urls).RegApplicationCommentAdd}]];
 
     function addComment() {
         var message = $('#message').val();

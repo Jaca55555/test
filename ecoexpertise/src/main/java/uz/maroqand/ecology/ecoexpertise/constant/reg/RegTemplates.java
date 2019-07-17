@@ -1,6 +1,6 @@
-package uz.maroqand.ecology.ecoexpertise.constant;
+package uz.maroqand.ecology.ecoexpertise.constant.reg;
 
-public class Templates {
+public class RegTemplates {
     private static final String Prefix = "reg";
     private static final String RegApplication = Prefix;
 
@@ -21,8 +21,5 @@ public class Templates {
     public static final String AppealNew = Appeal + "/new";
     public static final String AppealView = Appeal + "/view";
 
-    public static final String ErrorNotFound = "404";
-    public static final String ErrorInternalServerError = "500";
-    public static final String ErrorForbidden = "403";
 
 }

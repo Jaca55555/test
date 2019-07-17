@@ -77,7 +77,7 @@
                                                     </div>
                                                     <div class="media-body">
                                                         <a href="#" th:onclick="'getUserId('+${user.id}+')'">
-                                                            <h6 th:text="${user.fullName}">Josephin Doe</h6>
+                                                            <h6 th:text="${user.getFullName()}">Josephin Doe</h6>
                                                             <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
                                                         </a>
                                                     </div>

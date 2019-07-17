@@ -20,7 +20,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
-import uz.maroqand.ecology.ecoexpertise.constant.Urls;
+import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -51,10 +51,10 @@ public class WebMVCConfigs implements WebMvcConfigurer {
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
         return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, Urls.ErrorNotFound));
-            container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, Urls.ErrorInternalServerError));
-            container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, Urls.ErrorInternalServerError));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, Urls.ErrorForbidden));
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, SysUrls.ErrorNotFound));
+            container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, SysUrls.ErrorInternalServerError));
+            container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, SysUrls.ErrorInternalServerError));
+            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, SysUrls.ErrorForbidden));
         };
     }
 
