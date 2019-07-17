@@ -137,8 +137,8 @@ public class ApplicantController {
         int index = 0;
         for (RegApplication regApplication : regApplicationList){
             Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            index++;
             if (regApplication.getStatus() == RegApplicationStatus.Approved){
+                index++;
                 contractList.add(new Object[]{
                    index,
                    regApplication.getContractNumber(),

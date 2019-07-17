@@ -43,4 +43,9 @@ public class ExpertiseTemplates {
     public static final String ApplicantList = Applicant + "/list";
     public static final String ApplicantView = Applicant + "/view";
 
+    //RegApplication
+    private static final String RegApplication= Prefix + "/reg_application";
+    public static final String RegApplications= RegApplication + "/applications";
+    public static final String RegApplicationList = RegApplication + "/list";
+
 }

@@ -33,8 +33,8 @@ public class Requirement {
     private Integer objectExpertiseId;
 
     //ekspertiza obyekti kategoriyasi
-    @Column(name = "category")
     @Enumerated
+    @Column(name = "category")
     private Category category;
 
 

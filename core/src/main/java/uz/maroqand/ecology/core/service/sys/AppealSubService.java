@@ -10,5 +10,5 @@ public interface AppealSubService {
     List<AppealSub> getById(Integer id);
 
     AppealSub create(AppealSub appealSub, User user);
-
+    AppealSub update(AppealSub appealSub, User user);
 }

@@ -2,6 +2,8 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uz.maroqand.ecology.ecoexpertise.constant.Templates;
+import uz.maroqand.ecology.ecoexpertise.constant.Urls;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -28,19 +30,19 @@ public class MainController {
         return "dashboard";
     }
 
-    /*@RequestMapping(SysUrls.ErrorInternalServerError)
+    @RequestMapping(Urls.ErrorInternalServerError)
     public String getError500Page() {
-        return SysTemplates.ErrorInternalServerError;
+        return Templates.ErrorInternalServerError;
     }
 
-    @RequestMapping(SysUrls.ErrorNotFound)
+    @RequestMapping(Urls.ErrorNotFound)
     public String getError404Page() {
-        return SysTemplates.ErrorNotFound;
+        return Templates.ErrorNotFound;
     }
 
-    @RequestMapping(SysUrls.ErrorForbidden)
+    @RequestMapping(Urls.ErrorForbidden)
     public String getError403Page() {
-        return SysTemplates.ErrorForbidden;
-    }*/
+        return Templates.ErrorForbidden;
+    }
 
 }

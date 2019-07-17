@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/static*/**", "/map").permitAll()
                 .antMatchers("/dashboard/**").authenticated()
+                .antMatchers("/sys/appeal_admin/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
 
                 .antMatchers("/mgmt/expertise/object_expertise/**").authenticated()

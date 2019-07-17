@@ -23,6 +23,7 @@ public class Urls {
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
     public static final String RegApplicationCommentAdd = RegApplication + "/comment_add";
+    public static final String RegApplicationGetOkedName = RegApplication + "/get_oked_name";
 
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
@@ -47,5 +48,9 @@ public class Urls {
     private static final String NotificationShow = Notification + "/show";
     private static final String NotificationList = Notification + "/list";
     private static final String NotificationView = Notification + "/view";
+
+    public static final String ErrorNotFound = Prefix + "/404";
+    public static final String ErrorInternalServerError = Prefix + "/500";
+    public static final String ErrorForbidden = Prefix + "/403";
 
 }

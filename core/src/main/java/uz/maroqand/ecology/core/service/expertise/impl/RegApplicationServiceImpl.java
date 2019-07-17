@@ -14,10 +14,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +43,16 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public List<RegApplication> getByClientId(Integer id) {
         return regApplicationRepository.findByApplicantId(id);
+    }
+
+    @Override
+    public List<RegApplication> getAllByDeletedFalse() {
+        return regApplicationRepository.findAllByDeletedFalse();
+    }
+
+    @Override
+    public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
+        return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalse();
     }
 
     public void update(RegApplication regApplication){

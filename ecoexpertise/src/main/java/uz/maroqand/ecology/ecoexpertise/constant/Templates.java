@@ -21,4 +21,8 @@ public class Templates {
     public static final String AppealNew = Appeal + "/new";
     public static final String AppealView = Appeal + "/view";
 
+    public static final String ErrorNotFound = Prefix + "/404";
+    public static final String ErrorInternalServerError = Prefix + "/500";
+    public static final String ErrorForbidden = Prefix + "/403";
+
 }

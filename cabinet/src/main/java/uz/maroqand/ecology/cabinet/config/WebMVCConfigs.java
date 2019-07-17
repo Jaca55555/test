@@ -2,12 +2,14 @@ package uz.maroqand.ecology.cabinet.config;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -17,6 +19,7 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 
 import java.util.HashSet;
@@ -48,10 +51,10 @@ public class WebMVCConfigs implements WebMvcConfigurer {
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
         return container -> {
-            /*container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, SysUrls.ErrorNotFound));
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, SysUrls.ErrorNotFound));
             container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, SysUrls.ErrorInternalServerError));
             container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, SysUrls.ErrorInternalServerError));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, SysUrls.ErrorForbidden));*/
+            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, SysUrls.ErrorForbidden));
         };
     }
 
@@ -66,7 +69,7 @@ public class WebMVCConfigs implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(new Locale("uz"));
+        resolver.setDefaultLocale(new Locale("oz"));
         resolver.setCookieName("localeCookie");
         resolver.setCookieMaxAge(4800);
         return resolver;

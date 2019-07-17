@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/select2.min.css}">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ task-board ] start -->
+                            <div class="col-xl-3 col-lg-12">
+                                <div class="card task-board-left">
+                                    <div class="card-header">
+                                        <h5>Status Box</h5>
+                                    </div>
+                                    <div class="card-block ">
+                                        <div class="task-right">
+                                            <div class="task-right-header-status">
+                                                <span class="f-w-400" data-toggle="collapse">Arizalar holati</span>
+                                                <i class="fas fa-caret-down float-right m-t-5"></i>
+                                            </div>
+                                            <div class="taskboard-right-progress" style="">
+                                                <h6 class="m-t-15">Jarayondagi arizalar</h6>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-primary" role="progressbar" th:style="'width: '+${proccess[1]}+'%'" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[0]}"></span></div>
+                                                </div>
+                                                <h6 class="m-t-15">Muddati yaqinlashayotgan arizalar</h6>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-warning" role="progressbar" th:style="'width: '+${proccess[3]}+'%'" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[2]}"></span></div>
+                                                </div>
+                                                <h6 class="m-t-15">Muddati o'tgan arizalar</h6>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-danger" role="progressbar" th:style="'width: '+${proccess[5]}+'%'" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[4]}"></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="task-right-header-users">
+                                                <span class="f-w-400" data-toggle="collapse">Hodimlar</span>
+                                                <i class="fas fa-caret-down float-right m-t-5"></i>
+                                            </div>
+                                            <div class="user-box assign-user taskboard-right-users" style="">
+                                                <div class="media mb-2" th:each="user : ${users}">
+                                                    <div class="media-left media-middle mr-3">
+                                                        <a href="#">
+                                                            <img class="media-object img-radius" src="/static/images/avatar-2.jpg" alt="Generic placeholder image">
+                                                            <div class="live-status bg-danger"></div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <a href="#" th:onclick="'getUserId('+${user.id}+')'">
+                                                                <h6 th:text="${user.fullName}">Josephin Doe</h6>
+                                                                <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-9 col-lg-12 filter-bar">
+                                <nav class="navbar m-b-30 p-10">
+                                    <ul class="nav"> </ul>
+                                    <div class="nav-item nav-grid f-view">
+                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationList}" class="btn btn-primary btn-icon m-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="list view">
+                                            <i class="fas fa-list-ul"></i>
+                                        </a>
+                                        <a  th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplications}" class="btn btn-primary btn-icon m-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="grid view">
+                                            <i class="fas fa-th-large"></i>
+                                        </a>
+                                    </div>
+                                    <form class="row" method="post" action="" id="filterForm">
+                                        <div class="col-md-10 row ">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_id}">id</label>
+                                                <input type="text" class="form-control" id="id" data-parsley-type="integer">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_name}">Наименование предприятия</label>
+                                                <input type="text" class="form-control" id="firstname">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_lastname}">Номер договора</label>
+                                                <input type="text" class="form-control" id="lastname">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{sys_middlename}">№ id</label>
+                                                <input type="text" class="form-control" id="middlename">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 text-center">
+                                            <label class="control-label" >&nbsp;</label></br>
+                                            <button class="btn btn-primary text-white" type="button" onclick="getAllApp()">
+                                                <i class="feather icon-search mr-1"></i>
+                                                <span th:text="#{sys_search}">Search</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </nav>
+                                <div class="row" id="applications">
+                                </div>
+                            </div>
+                            <!-- [ task-board ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/task-board.js}"></script>
+<script th:inline="javascript">
+    var reg_application_number = [[#{reg_application_number}]];
+    var reg_application_deadlineDate = [[#{reg_application.deadlineDate}]];
+    $(document).ready(function () {
+        getAllApp();
+    });
+
+    function getAllApp(){
+        var id = $('#id').val();
+        var firstname = $('#firstname').val();
+        var lastname = $('#lastname').val();
+        var middlename = $('#middlename').val();
+        $.ajax({
+            url: '',
+            data: {
+                id: id,
+                firstname: firstname,
+                lastname: lastname,
+                middlename: middlename,
+                _csrf: $('#global_csrf').val()
+            },
+            type: 'post',
+            dataType: 'json',
+            cache: true,
+            success: function (response) {
+                var html='';
+                $('#applications').html('');
+                $.each(response.data,function (value,item) {
+                html+='<div class="col-md-6 col-sm-12">\n' +
+                    '     <div class="card card-border-c-blue">\n' +
+                    '            <div class="card-header">\n' +
+                    '                  <a href="#" class="text-secondary">'+reg_application_number+': '+item[0]+'</a>\n' +
+                    '                          <span class="label label-primary float-right"> '+item[1]+'</span>\n' +
+                    '            </div>\n' +
+                    '     <div class="card-block card-task">\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-detail">'+item[2]+'</p>\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+reg_application_deadlineDate+'</strong>\n' +
+                    '                       <strong class="label label-danger">\n' +
+                    '                        <span>'+item[3]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <hr>\n' +
+                    '           <div class="task-list-table">\n' +
+                    '                <a href="#">\n' +
+                    '                    <img class="img-fluid img-radius mr-1" src="/static/images/avatar-2.jpg" alt="1">\n' +
+                    '                    <span>'+item[4]+'</span>\n' +
+                    '                </a>\n' +
+                    '          </div>\n' +
+                    '       </div>\n' +
+                    '   </div>\n' +
+                    '</div>';
+                });
+                $('#applications').append(html);
+            },
+            error: function () {
+            }
+        });
+    }
+
+
+    function getUserId(id) {
+        $('#id').val(id);
+        $('#firstname').val('');
+        $('#lastname').val('');
+        $('#middlename').val('');
+        getAllApp();
+    }
+
+</script>
+
+</body>
+</html>

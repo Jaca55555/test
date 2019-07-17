@@ -16,6 +16,8 @@ public interface RegApplicationService {
     RegApplication create(User user);
 
     List<RegApplication> getByClientId(Integer id);
+    List<RegApplication> getAllByDeletedFalse();
+    List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);
 
