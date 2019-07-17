@@ -11,5 +11,9 @@ public enum TableHistoryEntity {
     Requirement,
     ObjectExpertise,
     Activity,
-    MinWage
+    MinWage,
+    Position,
+    Department,
+    Material,
+    Offer
 }

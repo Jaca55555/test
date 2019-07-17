@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.expertise.Material;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
+import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,10 +29,16 @@ import java.util.List;
 @Controller
 public class MaterialController {
     private final MaterialService materialService;
+    private final TableHistoryService tableHistoryService;
+    private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     @Autowired
-    public MaterialController(MaterialService materialService){
+    public MaterialController(MaterialService materialService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserService userService){
         this.materialService = materialService;
+        this.tableHistoryService = tableHistoryService;
+        this.objectMapper = objectMapper;
+        this.userService = userService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.MaterialList)
@@ -66,9 +79,68 @@ public class MaterialController {
         return ExpertiseMgmtTemplates.MaterialNew;
     }
 
+    //Create or Update
     @RequestMapping(value = ExpertiseMgmtUrls.MaterialNew, method = RequestMethod.POST)
     public String materialSubmit(Material material){
-        materialService.save(material);
+
+        User user = userService.getCurrentUserFromContext();
+        String before = null;
+        String after="";
+
+        //Update
+        if (material.getId()!=null){
+
+            try {
+                after = objectMapper.writeValueAsString(material);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            material = materialService.save(material);
+
+            tableHistoryService.create(
+                    TableHistoryType.add,
+                    TableHistoryEntity.Material,
+                    material.getId(),
+                    before,
+                    after,
+                    "",
+                    user.getId(),
+                    user.getUserAdditionalId()
+            );
+
+        }else{//Create
+
+            try {
+                before = objectMapper.writeValueAsString(material);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            material = materialService.save(material);
+
+            try {
+                after = objectMapper.writeValueAsString(material);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            tableHistoryService.create(
+                    TableHistoryType.edit,
+                    TableHistoryEntity.Material,
+                    material.getId(),
+                    before,
+                    after,
+                    "",
+                    user.getId(),
+                    user.getUserAdditionalId()
+            );
+
+        }
+
+
+
+
         return "redirect:" + ExpertiseMgmtUrls.MaterialList;
     }
 

@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
+import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.util.ArrayList;
@@ -26,11 +31,15 @@ import java.util.List;
 public class OfferController {
     private final OfferService offerService;
     private final UserService userService;
+    private final TableHistoryService tableHistoryService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService){
+    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper){
         this.offerService = offerService;
         this.userService = userService;
+        this.tableHistoryService = tableHistoryService;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.OfferList)
@@ -85,6 +94,12 @@ public class OfferController {
         if(oldOffer == null){
             return "redirect:" + ExpertiseMgmtUrls.OfferList;
         }
+        String oldOfferStr = "";
+        try {
+            oldOfferStr = objectMapper.writeValueAsString(oldOffer);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         oldOffer.setName(offer.getName());
         oldOffer.setLanguage(offer.getLanguage());
@@ -92,7 +107,24 @@ public class OfferController {
         oldOffer.setMainId(offer.getMainId());
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
-        offerService.save(oldOffer);
+        oldOffer = offerService.save(oldOffer);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(oldOffer);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        tableHistoryService.create(
+                TableHistoryType.edit,
+                TableHistoryEntity.Offer,
+                oldOffer.getId(),
+                oldOfferStr,
+                after,
+                "",
+                user.getId(),
+                user.getUserAdditionalId()
+        );
         return "redirect:" + ExpertiseMgmtUrls.OfferList;
     }
 
@@ -115,7 +147,23 @@ public class OfferController {
         offer.setDeleted(false);
         offer.setCreatedAt(new Date());
         offer.setCreatedById(user.getId());
-        offerService.save(offer);
+        offer = offerService.save(offer);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(offer);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        tableHistoryService.create(
+                TableHistoryType.edit,
+                TableHistoryEntity.Offer,
+                offer.getId(),
+                null,
+                after,
+                "",
+                user.getId(),
+                user.getUserAdditionalId()
+        );
         return "redirect:" + ExpertiseMgmtUrls.OfferList;
     }
 }

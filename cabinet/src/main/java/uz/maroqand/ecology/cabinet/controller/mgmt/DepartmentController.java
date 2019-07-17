@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.mgmt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
+import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -34,13 +38,16 @@ public class DepartmentController {
     private final HelperService helperService;
     private final OrganizationService organizationService;
     private final ObjectMapper objectMapper;
+    private final TableHistoryService tableHistoryService;
+
     @Autowired
-    public DepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper) {
+    public DepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper, TableHistoryService tableHistoryService) {
         this.departmentService = departmentService;
         this.userService = userService;
         this.helperService = helperService;
         this.organizationService = organizationService;
         this.objectMapper = objectMapper;
+        this.tableHistoryService = tableHistoryService;
     }
 
     @RequestMapping(MgmtUrls.DepartmentList)
@@ -127,7 +134,24 @@ public class DepartmentController {
         department1.setDeleted(Boolean.FALSE);
         department1.setCreatedAt(new Date());
         department1.setCreatedById(user.getId());
-        departmentService.save(department1);
+        department1 = departmentService.save(department1);
+        String after="";
+        try {
+            after = objectMapper.writeValueAsString(department1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        tableHistoryService.create(
+                TableHistoryType.add,
+                TableHistoryEntity.Department,
+                department1.getId(),
+                null,
+                after,
+                "",
+                user.getId(),
+                user.getUserAdditionalId()
+        );
+
 
         return "redirect:" + MgmtUrls.DepartmentList;
     }
@@ -143,13 +167,39 @@ public class DepartmentController {
             return "redirect:" + MgmtUrls.DepartmentList;
         }
 
+        String oldDepartmentStr="";
+        try {
+            oldDepartmentStr = objectMapper.writeValueAsString(oldDepartment);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         oldDepartment.setParentId(department.getParentId());
         oldDepartment.setOrganizationId(department.getOrganizationId());
         oldDepartment.setName(department.getName());
         oldDepartment.setNameRu(department.getNameRu());
         oldDepartment.setUpdatedAt(new Date());
         oldDepartment.setUpdatedById(user.getId());
-        departmentService.save(oldDepartment);
+        oldDepartment = departmentService.save(oldDepartment);
+
+        String after = "";
+
+
+        try {
+            after = objectMapper.writeValueAsString(oldDepartment);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        tableHistoryService.create(
+                TableHistoryType.edit,
+                TableHistoryEntity.Department,
+                oldDepartment.getId(),
+                oldDepartmentStr,
+                after,
+                "",
+                user.getId(),
+                user.getUserAdditionalId()
+        );
 
         return "redirect:" + MgmtUrls.DepartmentList;
     }

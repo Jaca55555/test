@@ -1,7 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,14 +32,14 @@ public class ObjectExpertiseController {
     private final ObjectExpertiseService objectExpertiseService;
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ObjectExpertiseController(ObjectExpertiseService objectExpertiseService, TableHistoryService tableHistoryService, UserService userService, Gson gson) {
+    public ObjectExpertiseController(ObjectExpertiseService objectExpertiseService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper) {
         this.objectExpertiseService = objectExpertiseService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
-        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseList,method = RequestMethod.GET)
@@ -97,14 +97,19 @@ public class ObjectExpertiseController {
         ObjectExpertise objectExpertise1 = new ObjectExpertise();
         objectExpertise1.setName(objectExpertise.getName());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
-        objectExpertiseService.save(objectExpertise1);
-
+        objectExpertise1 = objectExpertiseService.save(objectExpertise1);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(objectExpertise1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         tableHistoryService.create(
                 TableHistoryType.add,
                 TableHistoryEntity.ObjectExpertise,
                 objectExpertise1.getId(),
                 null,
-                gson.toJson(objectExpertise1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId()
@@ -139,17 +144,27 @@ public class ObjectExpertiseController {
         if (objectExpertise1==null){
             return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
         }
-        String oldObjectExpertise = gson.toJson(objectExpertise1);
+        String oldObjectExpertise = "";
+        try {
+            oldObjectExpertise = objectMapper.writeValueAsString(objectExpertise1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         objectExpertise1.setName(objectExpertise.getName());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
-        objectExpertiseService.save(objectExpertise1);
-
+        objectExpertise1 = objectExpertiseService.save(objectExpertise1);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(objectExpertise1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.ObjectExpertise,
                 objectExpertise1.getId(),
                 oldObjectExpertise,
-                gson.toJson(objectExpertise1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId()

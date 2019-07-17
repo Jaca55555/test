@@ -1,7 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -41,10 +41,10 @@ public class ExpertiseRequirementController {
     private final OrganizationService organizationService;
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ExpertiseRequirementController(RequirementService requirementService, HelperService helperService, ObjectExpertiseService objectExpertiseService, MaterialService materialService, OrganizationService organizationService, TableHistoryService tableHistoryService, UserService userService, Gson gson) {
+    public ExpertiseRequirementController(RequirementService requirementService, HelperService helperService, ObjectExpertiseService objectExpertiseService, MaterialService materialService, OrganizationService organizationService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper) {
         this.requirementService = requirementService;
         this.helperService = helperService;
         this.objectExpertiseService = objectExpertiseService;
@@ -52,7 +52,7 @@ public class ExpertiseRequirementController {
         this.organizationService = organizationService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
-        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementList,method = RequestMethod.GET)
@@ -130,14 +130,19 @@ public class ExpertiseRequirementController {
         requirement1.setReviewId(requirement.getReviewId());
         requirement1.setQty(requirement.getQty());
         requirement1.setDeadline(requirement.getDeadline());
-        requirementService.save(requirement1);
-
+        requirement1 = requirementService.save(requirement1);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(requirement1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         tableHistoryService.create(
                 TableHistoryType.add,
                 TableHistoryEntity.Requirement,
                 requirement1.getId(),
                 null,
-                gson.toJson(requirement1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId()
@@ -177,7 +182,12 @@ public class ExpertiseRequirementController {
         if (requirement1==null){
             return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
         }
-        String oldRequirement = gson.toJson(requirement1);
+        String oldRequirement = "";
+        try {
+            oldRequirement = objectMapper.writeValueAsString(requirement1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         System.out.println(categoryId);
         requirement1.setObjectExpertiseId(requirement.getObjectExpertiseId());
         requirement1.setCategory(Category.getCategory(categoryId));
@@ -185,14 +195,19 @@ public class ExpertiseRequirementController {
         requirement1.setReviewId(requirement.getReviewId());
         requirement1.setQty(requirement.getQty());
         requirement1.setDeadline(requirement.getDeadline());
-        requirementService.save(requirement1);
-
+        requirement1 = requirementService.save(requirement1);
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(requirement1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.Requirement,
                 requirement1.getId(),
                 oldRequirement,
-                gson.toJson(requirement1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId()

@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.mgmt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,12 +104,19 @@ public class RolesController {
         role1.setPermissions(permissions);
         roleService.createRole(role1);
 
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         tableHistoryService.create(
                 TableHistoryType.add,
                 TableHistoryEntity.UserRole,
                 role1.getId(),
                 null,
-                gson.toJson(role1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId());
@@ -127,7 +135,13 @@ public class RolesController {
         if (role1==null){
             return "redirect:" + MgmtUrls.RolesList;
         }
-        String oldRole = gson.toJson(role1);
+        String oldRole = "";
+        try {
+            oldRole = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         role1.setName(role.getName().trim());
         role1.setDescription(role.getDescription().trim());
         Set<Permissions> permissionsSet =new HashSet<>();
@@ -137,12 +151,20 @@ public class RolesController {
         }
         role1.setPermissions(permissionsSet);
         roleService.updateRole(role1);
+
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.UserRole,
                 role1.getId(),
                 oldRole,
-                gson.toJson(role1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId());
