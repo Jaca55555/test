@@ -2,6 +2,8 @@ package uz.maroqand.ecology.core.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
@@ -13,7 +15,7 @@ import javax.validation.constraints.Size;
  * (uz)
  * (ru)
  */
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "sys_user", indexes = {@Index(columnList = "username")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.component.CustomSuccessHandler;
 import uz.maroqand.ecology.core.component.UserDetailsServiceImpl;
 import uz.maroqand.ecology.core.constant.user.Permissions;
@@ -46,6 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static*/**").permitAll()
+                .antMatchers(SysUrls.ErrorNotFound).permitAll()
+                .antMatchers(SysUrls.ErrorForbidden).permitAll()
+                .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
                 .antMatchers("/dashboard/**").authenticated()
                 .antMatchers("/sys/appeal_admin/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
