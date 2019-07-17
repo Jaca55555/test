@@ -56,7 +56,6 @@ public class User {
 
     private Boolean enabled;
 
-    @NotNull
     @Column(name="date_registered", columnDefinition = "timestamp without time zone")
     private Date dateRegistered;
 

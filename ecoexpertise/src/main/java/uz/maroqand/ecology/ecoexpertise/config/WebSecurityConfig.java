@@ -48,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/404").permitAll()
                 .antMatchers("/500").permitAll()
                 .antMatchers("/test/login").permitAll()
+                .antMatchers("/sys/igu/login").permitAll()
+                .antMatchers("/sys/eds_login").permitAll()
                 .antMatchers("/static*/**").permitAll()
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()
