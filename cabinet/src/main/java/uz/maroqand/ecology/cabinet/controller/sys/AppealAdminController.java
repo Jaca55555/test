@@ -148,7 +148,7 @@ public class AppealAdminController {
             appealSub.setClosed(true);
         }
         appealSub.setAppealId(appeal.getId());
-        appealSubService.create(appealSub,user);
+        appealSubService.update(appealSub,user);
         Integer count = appeal.getShowAdminCommentCount()!=null?appeal.getShowAdminCommentCount():0;
         appeal.setShowAdminCommentCount(count + 1);
         appealService.updateCommentCount(appeal);

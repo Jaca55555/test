@@ -88,16 +88,25 @@
                                                             <h5 th:text="#{appeal.comments}"></h5><hr>
                                                         </div>
 
-                                                        <div class="media alert alert-success rounded" th:each="comment : ${appealSubList}">
+                                                        <div class="media alert alert-success text-dark rounded" th:each="comment : ${appealSubList}">
                                                             <div class="media-left mr-3">
-                                                                <i class="fas fa-user fa-2x"></i>
+                                                                <i class="fas fa-user fa-2x" style="color:#299b85"></i>
                                                             </div>
                                                             <div class="media-body">
                                                                 <h6 class="media-heading txt-primary">
-                                                                    <span th:text="${@helperService.getUserById(comment.createdById )}"></span>
-                                                                <span class="f-12 text-muted ml-1" th:text="${#dates.format(comment.createdAt,'dd:MM:yyyy HH:mm')}">Just now</span></h6>
+                                                                    <span th:text="${@helperService.getUserFullNameById(comment.createdById )}"></span>
+                                                                    <span th:text="${#dates.format(comment.createdAt,'dd.MM.yyyy HH:mm')}"></span>
+                                                                </h6>
+
                                                                 <p th:utext="${comment.message}"></p>
-                                                                <p th:text="*{appealStatus}"></p>
+
+                                                                <p th:if="${comment.inProgress == true}">
+                                                                    <span th:text="#{inProgress}" style="color:#299b85"></span>
+                                                                </p>
+
+                                                                <p th:if="${comment.closed == true}">
+                                                                    <span th:text="#{Closed}" style="color:#299b85"></span>
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>
