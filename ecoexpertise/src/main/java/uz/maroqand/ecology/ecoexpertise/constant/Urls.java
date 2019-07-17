@@ -49,4 +49,8 @@ public class Urls {
     private static final String NotificationList = Notification + "/list";
     private static final String NotificationView = Notification + "/view";
 
+    public static final String ErrorNotFound = Prefix + "/404";
+    public static final String ErrorInternalServerError = Prefix + "/500";
+    public static final String ErrorForbidden = Prefix + "/403";
+
 }
