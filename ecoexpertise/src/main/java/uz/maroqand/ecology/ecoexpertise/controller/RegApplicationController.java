@@ -19,6 +19,7 @@ import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
@@ -31,6 +32,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.client.OKEDService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
+import uz.maroqand.ecology.core.service.gnk.GnkService;
 import uz.maroqand.ecology.core.service.sys.CountryService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -65,9 +67,10 @@ public class RegApplicationController {
     private final RegApplicationLogService regApplicationLogService;
     private final CountryService countryService;
     private final OKEDService okedService;
+    private final GnkService gnkService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService, OKEDService okedService) {
+    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService, OKEDService okedService, GnkService gnkService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -88,6 +91,7 @@ public class RegApplicationController {
         this.regApplicationLogService = regApplicationLogService;
         this.countryService = countryService;
         this.okedService = okedService;
+        this.gnkService = gnkService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -723,6 +727,15 @@ public class RegApplicationController {
         result.put("status",status);
         result.put("okedName",oked.getNameTranslation(locale));
         return result;
+    }
+
+
+    @RequestMapping(value = RegUrls.getLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public GnkResponseObject getLegalEntityTaxPayerInfo(
+            @RequestParam(name = "tin") Integer tin
+    ) {
+        return gnkService.getLegalEntityByTin(tin);
     }
 
 }

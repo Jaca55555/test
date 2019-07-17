@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.util;
 
 import com.google.gson.Gson;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -333,17 +335,18 @@ public class HttpRequestHelper {
         }
     }
 
-    public static String httpGetRequest(String getUrl, Map paramMap) {
+    public static String httpGetRequest(String getUrl, final String username, final String password) {
         try {
-            URL urlObject;
-            if (paramMap != null) {
-                String param = HttpRequestHelper.generateParam(paramMap);
-                urlObject = new URL(getUrl + "?" + param);
-            } else {
-                urlObject = new URL(getUrl);
-            }
+            URL urlObject = new URL(getUrl);
             HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
             con.setRequestMethod("GET");
+
+            String auth = username + ":" + password;
+            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("UTF-8")));
+
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Authorization", "Basic " + new String(encodedAuth));
+
 //            con.setRequestProperty("User-Agent", USER_AGENT);
             int responseCode = con.getResponseCode();
             logger.debug("GET Response Code :: " + responseCode);

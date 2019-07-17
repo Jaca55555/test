@@ -7,8 +7,8 @@ public class SysTemplates {
 
     public static final String EDSLogin = Prefix + "/ecp_login";
 
-    public static final String ErrorNotFound = Prefix + "404";
-    public static final String ErrorInternalServerError = Prefix + "500";
-    public static final String ErrorForbidden = Prefix + "403";
+    public static final String ErrorNotFound = Prefix + "/404";
+    public static final String ErrorInternalServerError = Prefix + "/500";
+    public static final String ErrorForbidden = Prefix + "/403";
 
 }

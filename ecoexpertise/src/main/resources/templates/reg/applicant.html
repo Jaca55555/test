@@ -147,9 +147,11 @@
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
 
     <script th:inline="javascript">
-        var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.Urls).RegApplicationGetOkedName}]];
-        var oked_name_text = [[#{sys_oked_name}]]
-        var oked_not_name_text = [[#{sys_not_oked_name}]]
+        var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
+        var oked_name_text = [[#{sys_oked_name}]];
+        var oked_not_name_text = [[#{sys_not_oked_name}]];
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).getLegalEntityByTin}]];
+
         $(document).ready(function () {
             (function () {
                 var keystoppedTimer = null;
@@ -251,6 +253,46 @@
                 this.value = this.value.replace(/\D/g, '');
             }
         });
+
+        $('#legalEntityTin').change(function () {
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#legalEntityName").val(val.aname);
+
+                        $("#directorFullName").val(val.director);
+
+                        $("#oked").val(val.oked);
+
+                        $("#legalEntityPhone").val(val.phone);
+                        $("#legalEntityEmail").val(val.email);
+                        $("#legalEntityAddress").val(val.address);
+
+                        $("#legalEntityMfo").val(val.mfo);
+                        $("#legalEntityBankAccount").val(val.account);
+                        $("#legalEntityBankName").val(val.bankname);
+                    }
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
+
 
     </script>
 </body>
