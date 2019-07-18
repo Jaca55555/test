@@ -12,9 +12,9 @@ public class SysUrls {
     public static final String Toastr = Prefix + "/toastr";
 
     private static final String Notification = Prefix + "/notification";
-    private static final String NotificationShow = Notification + "/show";
-    private static final String NotificationList = Notification + "/list";
-    private static final String NotificationView = Notification + "/view";
+    public static final String NotificationShow = Notification + "/show";
+    public static final String NotificationList = Notification + "/list";
+    public static final String NotificationView = Notification + "/view";
 
     public static final String ErrorNotFound = Prefix + "/404";
     public static final String ErrorInternalServerError = Prefix + "/500";

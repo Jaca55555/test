@@ -38,7 +38,7 @@ public class NotificationController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
 
-        List<Notification> notificationList = notificationService.getReviewerNotificationList(user.getId());
+        List<Notification> notificationList = notificationService.getNotificationList(user.getId());
         result.put("notificationSize", notificationList.size());
         result.put("notificationList", notificationList);
         return result;

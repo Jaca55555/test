@@ -22,20 +22,23 @@
             <li><a href="#!" class="full-screen" onclick="javascript:toggleFullScreen()"><i class="feather icon-maximize"></i></a></li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <!--<li>
+            <li>
                 <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <sub style="font-size: 100%;"><i class="icon feather icon-bell"></i></sub>
+                        <sup ><span class="badge badge-warning" id="new-notification-count">0</span></sup>
+                    </a>
                     <div class="dropdown-menu dropdown-menu-right notification">
                         <div class="noti-head">
                             <h6 class="d-inline-block m-b-0">Notifications</h6>
-                            <div class="float-right">
+                            <!--<div class="float-right">
                                 <a href="#!" class="m-r-10">mark as read</a>
                                 <a href="#!">clear all</a>
-                            </div>
+                            </div>-->
                         </div>
-                        <ul class="noti-body">
-                            <li class="n-title">
-                                <p class="m-b-0">NEW</p>
+                        <ul class="noti-body" id="noti-body">
+                            <!--<li class="n-title">
+                                <p class="m-b-0" th:text="#{sys_notification.statusNEW}">NEW</p>
                             </li>
                             <li class="notification">
                                 <div class="media">
@@ -47,7 +50,7 @@
                                 </div>
                             </li>
                             <li class="n-title">
-                                <p class="m-b-0">EARLIER</p>
+                                <p class="m-b-0" th:text="#{sys_notification.statusEARLIER}">EARLIER</p>
                             </li>
                             <li class="notification">
                                 <div class="media">
@@ -66,14 +69,14 @@
                                         <p>currently login</p>
                                     </div>
                                 </div>
-                            </li>
+                            </li>-->
                         </ul>
                         <div class="noti-footer">
                             <a href="#!">show all</a>
                         </div>
                     </div>
                 </div>
-            </li>-->
+            </li>
             <!--<li><a href="#!" class="displayChatbox"><i class="icon feather icon-mail"></i></a></li>-->
             <li>
                 <div class="dropdown">

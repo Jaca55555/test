@@ -13,6 +13,8 @@ public interface NotificationService {
 
     void initialization();
 
-    List<Notification> getReviewerNotificationList(Integer reviewerId);
+    List<Notification> getNotificationList(Integer reviewerId);
+
+    List<Notification> getNewNotificationList(Integer reviewerId);
 
 }
