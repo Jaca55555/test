@@ -140,6 +140,7 @@
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersListAjax}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEdit}]];
+    var pswEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersPswEdit}]];
     var labelEdit = [[#{sys_edit}]];
     var statusActive = [[#{status_avtive}]];
     var statusNotActive = [[#{status_not_avtive}]];
@@ -154,8 +155,10 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
+        var currentPswEditLink = pswEditLink + '?id=' + row[0];
         var html = '';
         html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit mr-0"></i></a>';
+        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentPswEditLink+'" title="'+labelEdit+'"><i class="fa fa-key mr-0"></i></a>';
         return html;
     }
 

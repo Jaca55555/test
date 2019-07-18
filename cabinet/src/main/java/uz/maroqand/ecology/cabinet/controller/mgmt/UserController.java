@@ -298,6 +298,46 @@ public class UserController {
         return result.toString();
     }
 
+    @RequestMapping(value = MgmtUrls.UsersPswEdit)
+    public String userPswEdit(
+            @RequestParam(name = "id")Integer id,
+            Model model
+    ){
+        User user = userService.findById(id);
+        if (user==null){
+            return "redirect:"+MgmtUrls.UsersList;
+        }
+
+        model.addAttribute("user",user);
+        model.addAttribute("action_url",MgmtUrls.UsersPswUpdate);
+        return MgmtTemplates.UserPswEdit;
+    }
+
+    @RequestMapping(value = MgmtUrls.UsersPswUpdate,method = RequestMethod.POST)
+    public String updateUserPsw(
+            @RequestParam(name = "userPassword")String userPassword,
+            @RequestParam(name = "userPasswordConfirmation")String userPasswordConfirmation,
+            User user
+    ){
+          if (!userPassword.equals(userPasswordConfirmation)){
+              return "redirect:"+ MgmtUrls.UsersPswEdit + "?error=true";
+          }
+          User oldUser = userService.findById(user.getId());
+          String oldUserString = gson.toJson(oldUser);
+          oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
+          userService.updateUser(oldUser);
+          tableHistoryService.create(
+                  TableHistoryType.edit,
+                  TableHistoryEntity.User,
+                  oldUser.getId(),
+                  oldUserString,
+                  gson.toJson(oldUser),
+                  "Users password updated successfully!!!",
+                  oldUser.getId(),
+                  oldUser.getUserAdditionalId());
+          return "redirect:" + MgmtUrls.UsersList;
+    }
+
     /*@RequestMapping(value = MgmtUrls.UserDelete)
     @ResponseBody
     public String userDelete(
