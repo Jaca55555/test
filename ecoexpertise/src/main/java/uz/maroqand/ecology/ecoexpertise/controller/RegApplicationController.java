@@ -26,6 +26,7 @@ import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -33,6 +34,7 @@ import uz.maroqand.ecology.core.service.client.OKEDService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.gnk.GnkService;
+import uz.maroqand.ecology.ecoexpertise.mips.MIPIndividualsPassportInfoService;
 import uz.maroqand.ecology.core.service.sys.CountryService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -68,6 +70,7 @@ public class RegApplicationController {
     private final CountryService countryService;
     private final OKEDService okedService;
     private final GnkService gnkService;
+    private final MIPIndividualsPassportInfoService mipIndividualsPassportInfoService;
 
     @Autowired
     public RegApplicationController(
@@ -90,7 +93,8 @@ public class RegApplicationController {
             RegApplicationLogService regApplicationLogService,
             CountryService countryService,
             OKEDService okedService,
-            GnkService gnkService
+            GnkService gnkService,
+            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService
     ) {
         this.userService = userService;
         this.soatoService = soatoService;
@@ -113,6 +117,7 @@ public class RegApplicationController {
         this.countryService = countryService;
         this.okedService = okedService;
         this.gnkService = gnkService;
+        this.mipIndividualsPassportInfoService = mipIndividualsPassportInfoService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -751,7 +756,7 @@ public class RegApplicationController {
     }
 
 
-    @RequestMapping(value = RegUrls.getLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = RegUrls.GetLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public GnkResponseObject getLegalEntityTaxPayerInfo(
             @RequestParam(name = "tin") Integer tin
@@ -759,14 +764,16 @@ public class RegApplicationController {
         return gnkService.getLegalEntityByTin(tin);
     }
 
-    @RequestMapping(value = RegUrls.getIndividualByPinfl, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = RegUrls.GetIndividualByPinfl, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Map<String, Object> getIndividualInfo(
+    public IndividualPassportInfoResponse getIndividualInfo(
             @RequestParam(name = "tin", required = false) String tin,
             @RequestParam(name = "p_serial") String serial,
             @RequestParam(name = "pinfl") String pinfl
     ) {
-        return null;
+        System.out.println("serial="+serial);
+        System.out.println("pinfl="+pinfl);
+        return  mipIndividualsPassportInfoService.getPassportInfoBy(serial,pinfl);
     }
 
 }

@@ -38,7 +38,7 @@ public class RegUrls {
     public static final String AppealUserView = Prefix + Appeal + "/view";
     public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
 
-    public static final String getLegalEntityByTin = Prefix + "/get_legal_entity";
-    public static final String getIndividualByPinfl = Prefix + "/get_individual";
+    public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
+    public static final String GetIndividualByPinfl = Prefix + "/get_individual";
 
 }

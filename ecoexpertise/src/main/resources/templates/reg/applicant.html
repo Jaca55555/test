@@ -150,8 +150,8 @@
         var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
         var oked_name_text = [[#{sys_oked_name}]];
         var oked_not_name_text = [[#{sys_not_oked_name}]];
-        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).getLegalEntityByTin}]];
-        var individualByPinfl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).getIndividualByPinfl}]];
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
+        var individualByPinfl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetIndividualByPinfl}]];
 
         $(document).ready(function () {
             (function () {
@@ -300,7 +300,7 @@
             var pinfl = $('#individualPinfl').val();
 
             if (pSerial.length !== 2 || pNumber.length !== 7 || pinfl.length !== 14) return;
-
+            console.log('individualByPinfl');
             $.ajax({
                 url: individualByPinfl,
                 data: {

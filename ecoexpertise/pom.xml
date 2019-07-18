@@ -113,6 +113,13 @@
             <version>1.0</version>
         </dependency>
 
+        <!-- FOR SOAP: Web services -->
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+            <!--<version>3.0.8.SNAPSHOT</version>-->
+        </dependency>
+
     </dependencies>
 
     <build>
