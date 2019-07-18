@@ -151,6 +151,7 @@
         var oked_name_text = [[#{sys_oked_name}]];
         var oked_not_name_text = [[#{sys_not_oked_name}]];
         var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).getLegalEntityByTin}]];
+        var individualByPinfl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).getIndividualByPinfl}]];
 
         $(document).ready(function () {
             (function () {
@@ -293,6 +294,47 @@
 
         }).change();
 
+        $('#passportSerial, #passportNumber, #individualPinfl').change(function () {
+            var pSerial = $('#passportSerial').val();
+            var pNumber = $('#passportNumber').val();
+            var pinfl = $('#individualPinfl').val();
+
+            if (pSerial.length !== 2 || pNumber.length !== 7 || pinfl.length !== 14) return;
+
+            $.ajax({
+                url: individualByPinfl,
+                data: {
+                    p_serial: pSerial+""+pNumber,
+                    pinfl: pinfl,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#legalEntityName").val(val.aname);
+
+                        $("#directorFullName").val(val.director);
+
+                        $("#oked").val(val.oked);
+
+                        $("#legalEntityPhone").val(val.phone);
+                        $("#legalEntityEmail").val(val.email);
+                        $("#legalEntityAddress").val(val.address);
+
+                        $("#legalEntityMfo").val(val.mfo);
+                        $("#legalEntityBankAccount").val(val.account);
+                        $("#legalEntityBankName").val(val.bankname);
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
 
     </script>
 </body>

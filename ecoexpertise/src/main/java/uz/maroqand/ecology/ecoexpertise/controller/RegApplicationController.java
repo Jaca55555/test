@@ -70,7 +70,28 @@ public class RegApplicationController {
     private final GnkService gnkService;
 
     @Autowired
-    public RegApplicationController(UserService userService, SoatoService soatoService, OpfService opfService, RegApplicationService regApplicationService, ClientService clientService, ActivityService activityService, ObjectExpertiseService objectExpertiseService, ProjectDeveloperService projectDeveloperService, OfferService offerService, PaymentService paymentService, RequirementService requirementService, OrganizationService organizationService, HelperService helperService, FileService fileService, InvoiceService invoiceService, CommentService commentService, RegApplicationLogService regApplicationLogService, CountryService countryService, OKEDService okedService, GnkService gnkService) {
+    public RegApplicationController(
+            UserService userService,
+            SoatoService soatoService,
+            OpfService opfService,
+            RegApplicationService regApplicationService,
+            ClientService clientService,
+            ActivityService activityService,
+            ObjectExpertiseService objectExpertiseService,
+            ProjectDeveloperService projectDeveloperService,
+            OfferService offerService,
+            PaymentService paymentService,
+            RequirementService requirementService,
+            OrganizationService organizationService,
+            HelperService helperService,
+            FileService fileService,
+            InvoiceService invoiceService,
+            CommentService commentService,
+            RegApplicationLogService regApplicationLogService,
+            CountryService countryService,
+            OKEDService okedService,
+            GnkService gnkService
+    ) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -736,6 +757,16 @@ public class RegApplicationController {
             @RequestParam(name = "tin") Integer tin
     ) {
         return gnkService.getLegalEntityByTin(tin);
+    }
+
+    @RequestMapping(value = RegUrls.getIndividualByPinfl, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public Map<String, Object> getIndividualInfo(
+            @RequestParam(name = "tin", required = false) String tin,
+            @RequestParam(name = "p_serial") String serial,
+            @RequestParam(name = "pinfl") String pinfl
+    ) {
+        return null;
     }
 
 }
