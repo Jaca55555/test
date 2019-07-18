@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,10 @@ import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +38,15 @@ public class ActivityController {
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public ActivityController(ActivityService activityService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper) {
+    public ActivityController(ActivityService activityService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.activityService = activityService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.ActivityList)
@@ -71,7 +76,10 @@ public class ActivityController {
             convenientForJSONArray.add(new Object[]{
                    activity.getId()!=null?activity.getId():"",
                    activity.getCategory()!=null?activity.getCategory().getName():"",
-                   activity.getName()!=null?activity.getNameTranslation(locale):""
+                   activity.getName(),
+                   activity.getNameOz(),
+                   activity.getNameEn(),
+                   activity.getNameRu()
             });
         }
         result.put("data",convenientForJSONArray);
@@ -165,5 +173,22 @@ public class ActivityController {
                 user.getUserAdditionalId()
         );
         return "redirect:" + ExpertiseMgmtUrls.ActivityList;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.ActivityView)
+    public String getActivityViewPage(
+            @RequestParam(name = "id") Integer activityId,
+            Model model
+    ){
+        Activity activity = activityService.getById(activityId);
+        if (activity==null){
+            return "redirect:" + ExpertiseMgmtUrls.ActivityList;
+        }
+        Type type = new TypeToken<List<Activity>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Activity,activityId);
+
+        model.addAttribute("activity",activity);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return ExpertiseMgmtTemplates.ActivityView;
     }
 }

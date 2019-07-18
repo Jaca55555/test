@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,10 @@ import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,13 +36,16 @@ public class ObjectExpertiseController {
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
+
 
     @Autowired
-    public ObjectExpertiseController(ObjectExpertiseService objectExpertiseService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper) {
+    public ObjectExpertiseController(ObjectExpertiseService objectExpertiseService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.objectExpertiseService = objectExpertiseService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseList,method = RequestMethod.GET)
@@ -52,14 +58,18 @@ public class ObjectExpertiseController {
     public HashMap<String, Object>  getAjaxList(
             @RequestParam(name = "id",required = false) Integer id,
             @RequestParam(name = "name",required = false) String name,
+            @RequestParam(name = "nameOz",required = false) String nameOz,
+            @RequestParam(name = "nameEn",required = false) String nameEn,
             @RequestParam(name = "nameRu",required = false) String nameRu,
             Pageable pageable
     ){
         System.out.println("keldi");
         name = StringUtils.trimToNull(name);
+        nameOz = StringUtils.trimToNull(nameOz);
+        nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
         HashMap<String, Object> result = new HashMap<>();
-        Page<ObjectExpertise> objectExpertisePage = objectExpertiseService.findFiltered(id,name,nameRu,pageable);
+        Page<ObjectExpertise> objectExpertisePage = objectExpertiseService.findFiltered(id,name,nameOz,nameEn,nameRu,pageable);
 
         result.put("recordsTotal", objectExpertisePage.getTotalElements()); //Total elements
         result.put("recordsFiltered", objectExpertisePage.getTotalElements()); //Filtered elements
@@ -72,6 +82,8 @@ public class ObjectExpertiseController {
             convenientForJSONArray.add(new Object[]{
                     objectExpertise.getId(),
                     objectExpertise.getName(),
+                    objectExpertise.getNameOz(),
+                    objectExpertise.getNameEn(),
                     objectExpertise.getNameRu(),
             });
         }
@@ -96,6 +108,8 @@ public class ObjectExpertiseController {
         User user = userService.getCurrentUserFromContext();
         ObjectExpertise objectExpertise1 = new ObjectExpertise();
         objectExpertise1.setName(objectExpertise.getName());
+        objectExpertise1.setNameOz(objectExpertise.getNameOz());
+        objectExpertise1.setNameEn(objectExpertise.getNameEn());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
         String after = "";
@@ -151,6 +165,8 @@ public class ObjectExpertiseController {
             e.printStackTrace();
         }
         objectExpertise1.setName(objectExpertise.getName());
+        objectExpertise1.setNameOz(objectExpertise.getNameOz());
+        objectExpertise1.setNameEn(objectExpertise.getNameEn());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
         String after = "";
@@ -172,4 +188,20 @@ public class ObjectExpertiseController {
         return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
     }
 
+    @RequestMapping(ExpertiseMgmtUrls.ObjectExpertiseView)
+    public String getObjectExpertiseViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        ObjectExpertise objectExpertise = objectExpertiseService.getById(id);
+        if (objectExpertise==null){
+            return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
+        }
+        Type type = new TypeToken<List<ObjectExpertise>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.ObjectExpertise,id);
+
+        model.addAttribute("objectExpertise",objectExpertise);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return ExpertiseMgmtTemplates.ActivityView;
+    }
 }

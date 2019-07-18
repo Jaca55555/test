@@ -66,4 +66,9 @@ public class UserAdditionalServiceImpl implements UserAdditionalService {
         return userAdditional.getId();
     }
 
+    @Override
+    public UserAdditional getById(Integer id) {
+        return userAdditionalRepository.findById(id).get();
+    }
+
 }

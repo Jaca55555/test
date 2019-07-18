@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,12 @@ import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.RequirementService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +45,10 @@ public class ExpertiseRequirementController {
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public ExpertiseRequirementController(RequirementService requirementService, HelperService helperService, ObjectExpertiseService objectExpertiseService, MaterialService materialService, OrganizationService organizationService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper) {
+    public ExpertiseRequirementController(RequirementService requirementService, HelperService helperService, ObjectExpertiseService objectExpertiseService, MaterialService materialService, OrganizationService organizationService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.requirementService = requirementService;
         this.helperService = helperService;
         this.objectExpertiseService = objectExpertiseService;
@@ -53,6 +57,7 @@ public class ExpertiseRequirementController {
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.ExpertiseRequirementList,method = RequestMethod.GET)
@@ -214,6 +219,24 @@ public class ExpertiseRequirementController {
         );
 
         return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementList;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.ExpertiseRequirementView)
+    public String getExpertiseRequirementViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Requirement requirement = requirementService.getById(id);
+        if (requirement==null){
+            return "redirect:" + ExpertiseMgmtUrls.ExpertiseRequirementView;
+        }
+
+        Type type = new TypeToken<List<Requirement>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Requirement,id);
+
+        model.addAttribute("requirement",requirement);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return ExpertiseMgmtTemplates.ExpertiseRequirementView;
     }
 
 }

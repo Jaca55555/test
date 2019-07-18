@@ -12,6 +12,7 @@ public class MgmtTemplates {
     private static final String Department = Prefix + "/department";
     public static final String DepartmentList = Department + "/list";
     public static final String DepartmentNew = Department + "/new";
+    public static final String DepartmentView = Department + "/view";
 
 
     //MinWage
@@ -35,6 +36,7 @@ public class MgmtTemplates {
     //Position
     private static final String Position = Prefix + "/position";
     public static final String PositionList = Position + "/list";
+    public static final String PositionView = Position + "/view";
 
     //test html to Word
     private static final String Word = Prefix + "/word";

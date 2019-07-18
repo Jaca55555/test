@@ -67,11 +67,19 @@
                                                 <input type="text" class="form-control" id="name" />
                                             </div>
                                             <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_department.nameOz}"></label><br/>
+                                                <input type="text" class="form-control" id="nameOz" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_department.nameEn}"></label><br/>
+                                                <input type="text" class="form-control" id="nameEn" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
                                                 <label class="control-label"  th:text="#{mntr_department.nameRu}"></label><br/>
                                                 <input type="text" class="form-control" id="nameRu" />
                                             </div>
                                             <div class="clearfix"></div>
-                                            <div class="col-sm-9 text-right">
+                                            <div class="col-sm-12 text-right">
                                                 <label class="control-label">&nbsp;</label><br/>
                                                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                     <span th:text="#{sys_search}">Поиск</span>
@@ -87,6 +95,8 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th th:text="#{mntr_department.name}">name</th>
+                                                    <th th:text="#{mntr_department.nameOz}">name</th>
+                                                    <th th:text="#{mntr_department.nameEn}">name</th>
                                                     <th th:text="#{mntr_department.nameRu}">name</th>
                                                     <th th:text="#{mntr_department.organization}">name</th>
                                                     <th th:text="#{mntr_department.parent}">name</th>
@@ -152,9 +162,16 @@
                         if (locale === 'ru'){
                             html+='>' + value.nameRu + '</option>'
                         } else{
-
-                        }html+='>' + value.name + '</option>'
-
+                            if (locale === 'en'){
+                                html+='>' + value.nameEn + '</option>'
+                            }else {
+                                if (locale === 'oz') {
+                                    html += '>' + value.nameOz + '</option>'
+                                } else {
+                                    html += '>' + value.name + '</option>'
+                                }
+                            }
+                        }
                     });
                     $('#parentId').find(':first-child').after(html);
 
@@ -198,7 +215,9 @@
                 dataToSend.organizationId = $('#organizationId').val();
                 dataToSend.parentId = $('#parentId').val();
                 dataToSend.name = $('#name').val();
-                dataToSend.name = $('#nameRu').val();
+                dataToSend.nameOz = $('#nameOz').val();
+                dataToSend.nameEn = $('#nameEn').val();
+                dataToSend.nameRu = $('#nameRu').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -211,9 +230,11 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {data: 2, name: 'nameRu'},
-                {data: 3, name: 'organizationId'},
-                {data: 4, name: 'parentId'},
+                {data: 2, name: 'nameOz'},
+                {data: 3, name: 'nameEn'},
+                {data: 4, name: 'nameRu'},
+                {data: 5, name: 'organizationId'},
+                {data: 6, name: 'parentId'},
                 {render: renderActionsColumn, orderable: false, className: 'text-center'}
             ],
             language: {

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+<!---->
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><span th:text="#{mntr_requirement_view}"></span><span th:text="${':' + requirement.id}"></span></h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="col-sm-12">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-uppercase show active" id="requirement-tab" data-toggle="tab" href="#requirement" role="tab" aria-controls="requirement" aria-selected="true"><span th:text="#{mntr_requirement_info}"></span></a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-uppercase show" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false"><span th:text="#{sys_history}"></span></a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent" style="padding: 15px 5px;">
+                                                <div class="tab-pane fade active show" id="requirement" role="tabpanel" aria-labelledby="activity-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" th:object="${requirement}">
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="2" class="text-center"><h5 th:text="#{mntr_requirement_info}"></h5></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_expertise_requirement.objectExpertise}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:if="*{objectExpertiseId!=null}" th:text="${@helperService.getObjectExpertise(requirement.objectExpertiseId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_expertise_requirement.category}"></span>:</th>
+                                                                <td class="text-left"><span th:if="*{category.id!=null}" th:text="${@helperService.getCategory(requirement.category.id,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_expertise_requirement.material}"></span>:</th>
+                                                                <td class="text-left"><span th:if="*{materialId!=null}" th:text="${@helperService.getMaterial(requirement.materialId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_expertise_requirement.organization}"></span>:</th>
+                                                                <td class="text-left"><span th:if="*{reviewId!=null}" th:text="${@helperService.getOrganizationName(requirement.reviewId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_expertise_requirement.qty}"></span>:</th>
+                                                                <td class="text-left"><span th:text="*{qty}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_expertise_requirement.deadline}"></span>:</th>
+                                                                <td class="text-left"><span th:text="*{deadline}"></span></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:inline="javascript">
+    var html;
+    var table;
+    var tableUserAdditional='';
+    $(document).ready(function () {
+        html='<div class="col-sm-12"><div class="accordion" id="accordionExample">';
+            $.each([[${beforeAndAfterList}]],function (val,elem) {
+                console.log("val==" + val + " elem==" + elem["after"].id);
+                var divId = 'collapse-' + val + '-' + elem["after"].id;
+                var headingId = 'heading-' + val + '-' + elem["after"].id;
+                var beforeObjectExpertise='';
+                var beforeCategory='';
+                var beforeMaterial='';
+                var beforeOrganization='';
+                var beforeQty='';
+                var beforeDeadline='';
+                if (elem["before"]!=null) {
+                    beforeObjectExpertise = elem["before"].objectExpertiseId;
+                    beforeCategory = elem["before"].category;
+                    beforeMaterial = elem["before"].materialId;
+                    beforeOrganization = elem["before"].reviewId;
+                    beforeQty = elem["before"].qty;
+                    beforeDeadline = elem["before"].deadline;
+                }
+                var afterObjectExpertise=elem["after"].objectExpertiseId;
+                var afterCategory=elem["after"].category;
+                var afterMaterial=elem["after"].materialId;
+                var afterOrganization=elem["after"].reviewId;
+                var afterQty=elem["after"].qty;
+                var afterDeadline=elem["after"].deadline;
+                console.log(elem["userAdditional"]);
+                if (elem["userAdditional"]!=null){
+                    tableUserAdditional = '<table class="table table-columned" >' +
+                        '                       <thead>' +
+                        '                           <tr class="text-center">' +
+                        '                               <th>'+[[#{user_name}]]+'</th>' +
+                        '                               <th>'+[[#{sys_info}]]+'</th>' +
+                        '                               <th>'+[[#{sys_ipClient}]]+'</th>' +
+                        '                               <th> '+[[#{sys_userAgent}]]+'</th>' +
+                        '                               <th>'+[[#{sys_loginType}]]+'</th>' +
+                        '                           </tr>' +
+                        '                       </thead>' +
+                        '                       <tbody>' +
+                        '                               <td>'+elem["userName"]+'</td>' +
+                        '                               <td style="word-break: break-all; width: 30%">'+elem["userAdditional"].info+'</td>' +
+                        '                               <td>'+elem["userAdditional"].ipClient+'</td>' +
+                        '                               <td>'+elem["userAdditional"].userAgent+'</td>' +
+                        '                               <td>'+[[#{sys_loginType_}]] + elem["userAdditional"].loginType+'</td>' +
+                        '                       </tbody>' +
+                        '                   </table>';
+                }
+
+                table=' <table class="table info-table" >\n' +
+                    '       <thead>\n' +
+                    '           <tr>\n' +
+                    '               <th  class="text-right" style="width: 30%"><h5></h5></th>\n' +
+                    '               <th  class="text-center" style="width: 35%"><h5>'+[[#{sys_before}]]+'</h5></th>\n' +
+                    '               <th  class="text-center" style="width: 35%"><h5>'+[[#{sys_after}]]+'</h5></th>\n' +
+                    '           </tr>\n' +
+                    '       </thead>' +
+                    '       <tbody>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.objectExpertise}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeObjectExpertise+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterObjectExpertise+'</span></td>\n' +
+                    '           </tr>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.category}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeCategory+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterCategory+'</span></td>\n' +
+                    '           </tr>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.material}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeMaterial+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterMaterial+'</span></td>\n' +
+                    '           </tr>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.organization}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeOrganization+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterOrganization+'</span></td>\n' +
+                    '           </tr>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.qty}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeQty+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterQty+'</span></td>\n' +
+                    '           </tr>' +
+                    '           <tr>' +
+                    '               <td class="text-right"><span>'+[[#{mntr_expertise_requirement.deadline}]]+'</span>:</td>\n' +
+                    '               <td class="text-center"><span>'+beforeDeadline+'</span></td>\n' +
+                    '               <td class="text-center"><span>'+afterDeadline+'</span></td>\n' +
+                    '           </tr>' +
+                    '           </tbody>' +
+                    '</table>';
+
+
+                html+='  <div class="card" style="margin:5px 0px; border: 0.5px solid #dee2e6;" >\n' +
+                    '       <div id="'+headingId+'">\n' +
+                    '           <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#'+divId+'" aria-expanded="false" aria-controls="'+divId+'">' +
+                    '               <span>'+elem["registeredDate"]+'</span>&nbsp; - &nbsp;' +
+                    '               <span>'+elem["userName"]+'</span>' +
+                    '           </button>\n' +
+                    '       </div>\n' +
+                    '       <div id="'+divId+'" class="card-body collapse" aria-labelledby="'+headingId+'" data-parent="#accordionExample" >' +
+                    '           <div class="table-responsive">' +
+                    table +
+                    '           </div>'+
+                    '           </br><h5 class="text-center">UserAdditional info</h5>' +
+                    '           <div class="table-responsive text-nowrap">' +
+                    tableUserAdditional+
+                    '           </div>' +
+                    '       </div>\n' +
+                    '   </div>';
+            });
+        html+='</div></div>';
+        $('#history').append(html);
+        audit();
+    });
+
+    function audit() {
+        $('.info-table tbody').find('tr').each(function () {
+            var td = $(this).find('td');
+            if(td.length > 2 && ($(td[1]).html() != $(td[2]).html())) {
+                $(td[1]).addClass('table-success');
+                $(td[2]).addClass('table-success');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

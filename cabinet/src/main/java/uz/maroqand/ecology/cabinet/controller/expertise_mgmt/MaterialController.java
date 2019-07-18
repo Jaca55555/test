@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,10 @@ import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +35,15 @@ public class MaterialController {
     private final TableHistoryService tableHistoryService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public MaterialController(MaterialService materialService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserService userService){
+    public MaterialController(MaterialService materialService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserService userService, UserAdditionalService userAdditionalService){
         this.materialService = materialService;
         this.tableHistoryService = tableHistoryService;
         this.objectMapper = objectMapper;
         this.userService = userService;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.MaterialList)
@@ -60,8 +65,10 @@ public class MaterialController {
         for (Material material : materialList){
             convenientForJSONArray.add(new Object[]{
                     material.getId(),
-                    material.getName(),
-                    material.getNameRu()
+                    material.getName()+"  ("+(material.getNameShort()!=null?material.getNameShort():"")+")",
+                    material.getNameOz()+"  ("+(material.getNameShortOz()!=null?material.getNameShortOz():"")+")",
+                    material.getNameEn()+"  ("+(material.getNameShortEn()!=null?material.getNameShortEn():"")+")",
+                    material.getNameRu()+"  ("+(material.getNameShortRu()!=null?material.getNameShortRu():"")+")"
             });
         }
         result.put("data",convenientForJSONArray);
@@ -138,9 +145,6 @@ public class MaterialController {
 
         }
 
-
-
-
         return "redirect:" + ExpertiseMgmtUrls.MaterialList;
     }
 
@@ -149,5 +153,22 @@ public class MaterialController {
         Material material = new Material();
         model.addAttribute("material", material);
         return ExpertiseMgmtTemplates.MaterialNew;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.MaterialView)
+    public String getMaterialViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Material material = materialService.getById(id);
+        if (material==null){
+            return "redirect:" + ExpertiseMgmtUrls.MaterialList;
+        }
+        Type type = new TypeToken<List<Material>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Material,id);
+
+        model.addAttribute("material",material);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return ExpertiseMgmtTemplates.ActivityView;
     }
 }

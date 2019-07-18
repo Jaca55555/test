@@ -48,6 +48,28 @@
                                             <div class="form-group row">
                                                 <div class="col-md-4 text-right">
                                                     <label class="col-form-label">
+                                                        <span th:text="#{mntr_department.nameOz}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input id="nameOz" required="required" class="form-control" type="text" th:field="*{nameOz}" data-parsley-maxlength="255"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-right">
+                                                    <label class="col-form-label">
+                                                        <span th:text="#{mntr_department.nameEn}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input id="nameEn" required="required" class="form-control" type="text" th:field="*{nameEn}" data-parsley-maxlength="255"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-right">
+                                                    <label class="col-form-label">
                                                         <span th:text="#{mntr_department.nameRu}"></span>
                                                         <span class="required">*</span>
                                                     </label>
@@ -156,8 +178,16 @@
                         if (locale === 'ru'){
                             html+='>' + value.nameRu + '</option>'
                         } else{
-
-                        }html+='>' + value.name + '</option>'
+                            if (locale === 'en'){
+                                html+='>' + value.nameEn + '</option>'
+                            }else {
+                                if (locale === 'oz') {
+                                    html += '>' + value.nameOz + '</option>'
+                                } else {
+                                    html += '>' + value.name + '</option>'
+                                }
+                            }
+                        }
 
                     });
                     $('#parentId').find(':first-child').after(html);

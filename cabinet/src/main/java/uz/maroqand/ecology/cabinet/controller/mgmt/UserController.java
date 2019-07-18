@@ -3,7 +3,7 @@ package uz.maroqand.ecology.cabinet.controller.mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,12 +24,10 @@ import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
-import uz.maroqand.ecology.core.service.user.DepartmentService;
-import uz.maroqand.ecology.core.service.user.PositionService;
-import uz.maroqand.ecology.core.service.user.RoleService;
-import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.service.user.*;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -48,9 +46,10 @@ public class UserController {
     private final SoatoService soatoService;
     private final OrganizationService organizationService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper) {
+    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.userService = userService;
         this.positionService = positionService;
         this.departmentService = departmentService;
@@ -59,6 +58,7 @@ public class UserController {
         this.soatoService = soatoService;
         this.organizationService = organizationService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(MgmtUrls.UsersList)
@@ -328,6 +328,23 @@ public class UserController {
                 user.getId(),
                 user.getUserAdditionalId());
         return result.toString();
+    }
+
+    @RequestMapping(MgmtUrls.UsersView)
+    public String getUsersViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        User user = userService.findById(id);
+        if (user==null){
+            return "redirect:" + MgmtUrls.UsersList;
+        }
+        Type type = new TypeToken<List<User>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.User,id);
+
+        model.addAttribute("user",user);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return MgmtTemplates.DepartmentView;
     }
 
     /*@RequestMapping(value = MgmtUrls.UserDelete)

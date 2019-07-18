@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,12 @@ import uz.maroqand.ecology.core.entity.user.Position;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.PositionService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 public class PositionController {
@@ -27,13 +31,15 @@ public class PositionController {
     private final UserService userService;
     private final TableHistoryService tableHistoryService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public PositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService,ObjectMapper objectMapper) {
+    public PositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.positionService = positionService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(MgmtUrls.PositionList)
@@ -125,6 +131,23 @@ public class PositionController {
         );
 
         return "redirect:" + MgmtUrls.PositionList;
+    }
+
+    @RequestMapping(MgmtUrls.PositionView)
+    public String getPositionViewPage(
+            @RequestParam(name = "id") Integer positionId,
+            Model model
+    ){
+        Position position = positionService.getById(positionId);
+        if (position==null){
+            return "redirect:" + MgmtUrls.PositionList;
+        }
+        Type type = new TypeToken<List<Position>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Position,positionId);
+
+        model.addAttribute("position",position);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return MgmtTemplates.PositionView;
     }
 
 }

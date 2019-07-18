@@ -49,6 +49,12 @@ public class Department {
 
     private String name;
 
+    @Column(name = "name_oz")
+    private String nameOz;
+
+    @Column(name = "name_en")
+    private String nameEn;
+
     @Column(name = "name_ru")
     private String nameRu;
 
@@ -97,7 +103,10 @@ public class Department {
         switch (locale) {
             case "ru":
                 return nameRu;
-
+            case "oz":
+                return nameOz;
+            case "en":
+                return nameEn;
             default:
                 return name;
         }

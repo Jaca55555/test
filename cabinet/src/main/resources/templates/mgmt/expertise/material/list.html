@@ -59,8 +59,10 @@
                                                     <tr>
                                                         <th th:text="#{material.id}"></th>
                                                         <th th:text="#{material.name}"></th>
+                                                        <th th:text="#{material.nameOz}"></th>
+                                                        <th th:text="#{material.nameEn}"></th>
                                                         <th th:text="#{material.name_ru}"></th>
-                                                        <th style="max-width: 50px;"></th>
+                                                        <th></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -136,7 +138,9 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {data: 2, name: 'nameRu'},
+                {data: 2, name: 'nameOz'},
+                {data: 3, name: 'nameEn'},
+                {data: 4, name: 'nameRu'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

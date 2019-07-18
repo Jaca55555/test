@@ -24,6 +24,10 @@ public class ObjectExpertise {
 
     private String name;
 
+    private String nameOz;
+
+    private String nameEn;
+
     @Column(name = "name_ru")
     private String nameRu;
 
@@ -31,6 +35,10 @@ public class ObjectExpertise {
         switch (locale) {
             case "uz":
                 return name;
+            case "oz":
+                return nameOz;
+            case "en":
+                return nameEn;
             case "ru":
             default:
                 return nameRu;

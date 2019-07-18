@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,10 @@ import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,13 +36,15 @@ public class OfferController {
     private final UserService userService;
     private final TableHistoryService tableHistoryService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper){
+    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService){
         this.offerService = offerService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.OfferList)
@@ -165,5 +170,22 @@ public class OfferController {
                 user.getUserAdditionalId()
         );
         return "redirect:" + ExpertiseMgmtUrls.OfferList;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.OfferView)
+    public String getOfferViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Offer offer = offerService.getById(id);
+        if (offer==null){
+            return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
+        }
+        Type type = new TypeToken<List<Offer>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Offer,id);
+
+        model.addAttribute("offer",offer);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return ExpertiseMgmtTemplates.ActivityView;
     }
 }

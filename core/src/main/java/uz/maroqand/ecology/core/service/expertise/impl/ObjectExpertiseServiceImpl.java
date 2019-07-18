@@ -43,13 +43,15 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
     }
 
     @Override
-    public Page<ObjectExpertise> findFiltered(Integer id,String name, String nameRu, Pageable pageable) {
-        return objectExpertiseRepository.findAll(getFilteringSpecification(id,name,nameRu),pageable);
+    public Page<ObjectExpertise> findFiltered(Integer id,String name, String nameOz,String nameEn,String nameRu, Pageable pageable) {
+        return objectExpertiseRepository.findAll(getFilteringSpecification(id,name,nameOz,nameEn,nameRu),pageable);
     }
 
     private static Specification<ObjectExpertise> getFilteringSpecification(
             final Integer id,
             final String name,
+            final String nameOz,
+            final String nameEn,
             final String nameRu
     ) {
         return new Specification<ObjectExpertise>() {
@@ -59,6 +61,12 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
 
                 if (name != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + name + "%"));
+                }
+                if (nameOz != null) {
+                    predicates.add(criteriaBuilder.like(root.<String>get("nameOz"), "%" + nameOz + "%"));
+                }
+                if (nameEn != null) {
+                    predicates.add(criteriaBuilder.like(root.<String>get("nameEn"), "%" + nameEn + "%"));
                 }
                 if (nameRu != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("nameRu"), "%" + nameRu + "%"));

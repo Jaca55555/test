@@ -1,9 +1,12 @@
 package uz.maroqand.ecology.core.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.user.LoginType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -23,6 +26,7 @@ public class UserAdditional {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private User user;

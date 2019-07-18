@@ -4,6 +4,8 @@ import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.TableHistory;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,5 +26,7 @@ public interface TableHistoryService {
     );
 
     List<TableHistory> getByEntityId(TableHistoryEntity entity, Integer entityId);
+
+    List<HashMap<String,Object>> forAudit(Type type,TableHistoryEntity tableHistoryEntity,Integer id);
 
 }

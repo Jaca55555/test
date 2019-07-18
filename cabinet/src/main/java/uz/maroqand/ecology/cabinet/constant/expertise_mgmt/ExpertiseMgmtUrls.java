@@ -14,6 +14,7 @@ public class ExpertiseMgmtUrls {
     public static final String ObjectExpertiseEdit = ObjectExpertise + "/edit";
     public static final String ObjectExpertiseCreate = ObjectExpertise + "/create";
     public static final String ObjectExpertiseUpdate = ObjectExpertise + "/update";
+    public static final String ObjectExpertiseView = ObjectExpertise + "/view";
 
     //Activity
     private static final String Activity = Prefix + "/activity";
@@ -23,6 +24,7 @@ public class ExpertiseMgmtUrls {
     public static final String ActivityEdit = Activity + "/edit";
     public static final String ActivityCreate = Activity + "/create";
     public static final String ActivityUpdate = Activity + "/update";
+    public static final String ActivityView = Activity + "/view";
 
     //Material
     private static final String Material = Prefix + "/material";
@@ -30,6 +32,7 @@ public class ExpertiseMgmtUrls {
     public static final String MaterialListAjax = Material + "/list_ajax";
     public static final String MaterialNew = Material + "/new";
     public static final String MaterialEdit = Material + "/edit";
+    public static final String MaterialView = Material + "/view";
 
     //ExpertiseRequirement
     private static final String ExpertiseRequirement = Prefix + "/expertise_requirement";
@@ -38,6 +41,7 @@ public class ExpertiseMgmtUrls {
     public static final String ExpertiseRequirementEdit = ExpertiseRequirement + "/edit";
     public static final String ExpertiseRequirementCreate = ExpertiseRequirement + "/create";
     public static final String ExpertiseRequirementUpdate = ExpertiseRequirement + "/update";
+    public static final String ExpertiseRequirementView = ExpertiseRequirement + "/view";
 
     //Offerta
     private static final String Offer = Prefix + "/offer";
@@ -45,5 +49,6 @@ public class ExpertiseMgmtUrls {
     public static final String OfferListAjax = Offer + "/list_ajax";
     public static final String OfferNew = Offer + "/new";
     public static final String OfferEdit = Offer + "/edit";
+    public static final String OfferView = Offer + "/view";
 
 }

@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.mgmt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,8 +24,10 @@ import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,15 +42,17 @@ public class DepartmentController {
     private final OrganizationService organizationService;
     private final ObjectMapper objectMapper;
     private final TableHistoryService tableHistoryService;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public DepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper, TableHistoryService tableHistoryService) {
+    public DepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper, TableHistoryService tableHistoryService, UserAdditionalService userAdditionalService) {
         this.departmentService = departmentService;
         this.userService = userService;
         this.helperService = helperService;
         this.organizationService = organizationService;
         this.objectMapper = objectMapper;
         this.tableHistoryService = tableHistoryService;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(MgmtUrls.DepartmentList)
@@ -64,13 +69,17 @@ public class DepartmentController {
             @RequestParam(name = "organizationId", required = false) Integer organizationId,
             @RequestParam(name = "parentId", required = false) Integer parentId,
             @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "nameOz", required = false) String nameOz,
+            @RequestParam(name = "nameEn", required = false) String nameEn,
             @RequestParam(name = "nameRu", required = false) String nameRu,
             Pageable pageable
     ) {
         name = StringUtils.trimToNull(name);
+        nameOz = StringUtils.trimToNull(nameOz);
+        nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
 
-        Page<Department>  departmentPage = departmentService.findFiltered(departmentId, organizationId, parentId, name, nameRu, pageable);
+        Page<Department>  departmentPage = departmentService.findFiltered(departmentId, organizationId, parentId, name, nameOz,nameEn,nameRu, pageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", departmentPage.getTotalElements()); //Total elements
@@ -83,6 +92,8 @@ public class DepartmentController {
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
                     department.getName(),
+                    department.getNameOz(),
+                    department.getNameEn(),
                     department.getNameRu(),
                     department.getOrganizationId()!=null?helperService.getOrganizationName(department.getOrganizationId(),locale):"",
                     department.getParentId()!=null?helperService.getDepartmentName(department.getParentId(),locale):""
@@ -130,6 +141,8 @@ public class DepartmentController {
         department1.setParentId(department.getParentId());
         department1.setOrganizationId(department.getOrganizationId());
         department1.setName(department.getName());
+        department1.setNameOz(department.getNameOz());
+        department1.setNameEn(department.getNameEn());
         department1.setNameRu(department.getNameRu());
         department1.setDeleted(Boolean.FALSE);
         department1.setCreatedAt(new Date());
@@ -177,6 +190,8 @@ public class DepartmentController {
         oldDepartment.setParentId(department.getParentId());
         oldDepartment.setOrganizationId(department.getOrganizationId());
         oldDepartment.setName(department.getName());
+        oldDepartment.setNameOz(department.getNameOz());
+        oldDepartment.setNameEn(department.getNameEn());
         oldDepartment.setNameRu(department.getNameRu());
         oldDepartment.setUpdatedAt(new Date());
         oldDepartment.setUpdatedById(user.getId());
@@ -214,5 +229,22 @@ public class DepartmentController {
 
         List<Department> departmentList = departmentService.getListByOrganizationId(organization.getId());
         return departmentList;
+    }
+
+    @RequestMapping(MgmtUrls.DepartmentView)
+    public String getDepartmentViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Department department = departmentService.getById(id);
+        if (department==null){
+            return "redirect:" + MgmtUrls.DepartmentList;
+        }
+        Type type = new TypeToken<List<Department>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Department,id);
+
+        model.addAttribute("department",department);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return MgmtTemplates.DepartmentView;
     }
 }
