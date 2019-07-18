@@ -41,30 +41,30 @@
                             <div class="col-xl-3 col-lg-12">
                                 <div class="card task-board-left">
                                     <div class="card-header">
-                                        <h5>Status Box</h5>
+                                        <h5 th:text="#{sys_nav_header}">Status Box</h5>
                                     </div>
                                     <div class="card-block ">
                                         <div class="task-right">
                                             <div class="task-right-header-status">
-                                                <span class="f-w-400" data-toggle="collapse">Arizalar holati</span>
+                                                <span class="f-w-400" data-toggle="collapse" th:text="#{sys_application_status}">Arizalar holati</span>
                                                 <i class="fas fa-caret-down float-right m-t-5"></i>
                                             </div>
                                             <div class="taskboard-right-progress" style="">
-                                                <h6 class="m-t-15">Jarayondagi arizalar</h6>
+                                                <h6 class="m-t-15" th:text="#{sys_application_status.Initial}">Jarayondagi arizalar</h6>
                                                 <div class="progress">
                                                     <div class="progress-bar bg-primary" role="progressbar" th:style="'width: '+${proccess[1]}+'%'" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[0]}"></span></div>
                                                 </div>
-                                                <h6 class="m-t-15">Muddati yaqinlashayotgan arizalar</h6>
+                                                <h6 class="m-t-15" th:text="#{sys_application_deadline.Near}">Muddati yaqinlashayotgan arizalar</h6>
                                                 <div class="progress">
                                                     <div class="progress-bar bg-warning" role="progressbar" th:style="'width: '+${proccess[3]}+'%'" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[2]}"></span></div>
                                                 </div>
-                                                <h6 class="m-t-15">Muddati o'tgan arizalar</h6>
+                                                <h6 class="m-t-15" th:text="#{sys_application_deadline.overdue}">Muddati o'tgan arizalar</h6>
                                                 <div class="progress">
                                                     <div class="progress-bar bg-danger" role="progressbar" th:style="'width: '+${proccess[5]}+'%'" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[4]}"></span></div>
                                                 </div>
                                             </div>
                                             <div class="task-right-header-users">
-                                                <span class="f-w-400" data-toggle="collapse">Hodimlar</span>
+                                                <span class="f-w-400" data-toggle="collapse" th:text="#{sys_employee}">Hodimlar</span>
                                                 <i class="fas fa-caret-down float-right m-t-5"></i>
                                             </div>
                                             <div class="user-box assign-user taskboard-right-users" style="">
@@ -105,7 +105,7 @@
                                                 <input type="text" class="form-control" id="id" data-parsley-type="integer">
                                             </div>
                                             <div class="form-group col-sm-3">
-                                                <label class="control-label" th:text="#{sys_name}">Наименование предприятия</label>
+                                                <label class="control-label" th:text="#{sys_firstname}">Наименование предприятия</label>
                                                 <input type="text" class="form-control" id="firstname">
                                             </div>
                                             <div class="form-group col-sm-3">
