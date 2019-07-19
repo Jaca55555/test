@@ -27,16 +27,16 @@ public class RegUrls {
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
 
-    private static final String Appeal = "/appeal";
-    public static final String AppealUserList = Prefix + Appeal + "/list";
-    public static final String AppealUserListAjax = Prefix + Appeal + "/list_ajax";
-    public static final String AppealNew = Prefix + Appeal + "/new";
-    public static final String AppealCreate = Prefix + Appeal + "/create";
-    public static final String AppealEdit = Prefix + Appeal + "/edit";
-    public static final String AppealUpdate = Prefix + Appeal + "/update";
-    public static final String AppealDelete = Prefix + Appeal + "/delete";
-    public static final String AppealUserView = Prefix + Appeal + "/view";
-    public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
+    private static final String Appeal = Prefix + "/appeal";
+    public static final String AppealUserList = Appeal + "/list";
+    public static final String AppealUserListAjax = Appeal + "/list_ajax";
+    public static final String AppealNew = Appeal + "/new";
+    public static final String AppealCreate = Appeal + "/create";
+    public static final String AppealEdit = Appeal + "/edit";
+    public static final String AppealUpdate = Appeal + "/update";
+    public static final String AppealDelete = Appeal + "/delete";
+    public static final String AppealUserView = Appeal + "/view";
+    public static final String AppealSubCreate = Appeal + "/sub_create";
 
     public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
     public static final String GetIndividualByPinfl = Prefix + "/get_individual";
