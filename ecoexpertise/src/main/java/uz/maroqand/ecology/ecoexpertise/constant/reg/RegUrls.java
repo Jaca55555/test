@@ -1,6 +1,6 @@
-package uz.maroqand.ecology.ecoexpertise.constant;
+package uz.maroqand.ecology.ecoexpertise.constant.reg;
 
-public class Urls {
+public class RegUrls {
     private static final String Prefix = "/reg";
 
     private static final String RegApplication = Prefix + "/application";
@@ -18,7 +18,6 @@ public class Urls {
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
-//    public static final String RegApplicationPayment = RegApplication + "/payment";
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
@@ -27,7 +26,6 @@ public class Urls {
 
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
-
 
     private static final String Appeal = "/appeal";
     public static final String AppealUserList = Prefix + Appeal + "/list";
@@ -40,13 +38,7 @@ public class Urls {
     public static final String AppealUserView = Prefix + Appeal + "/view";
     public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
 
-    private static final String PrefixSys = "/sys";
-
-    public static final String Toastr = PrefixSys + "/toastr";
-
-    private static final String Notification = PrefixSys + "/notification";
-    private static final String NotificationShow = Notification + "/show";
-    private static final String NotificationList = Notification + "/list";
-    private static final String NotificationView = Notification + "/view";
+    public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
+    public static final String GetIndividualByPinfl = Prefix + "/get_individual";
 
 }

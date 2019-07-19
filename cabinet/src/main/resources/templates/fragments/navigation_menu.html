@@ -11,7 +11,7 @@
         <div class="navbar-brand header-logo">
             <a href="/dashboard" class="b-brand">
                 <img style="width: 60px;" src="/static/images/logo.png" />
-                <span class="b-title">ЭКОЭКСПEРТИЗА</span>
+                <span class="b-title" th:text="#{sys_site_main_title}"></span>
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
         </div>
@@ -40,27 +40,27 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/object_expertise/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{mntr_objectExpertise_list}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/activity/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{mntr_activity_list}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/material/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.materialList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/expertise_requirement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{mntr_expertise_requirement_list}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/expertise/offer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.offerList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/roles/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.roleList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/users/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.usersList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/position/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.positionList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/department/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.departmentList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/mgmt/word" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.word}"> </span></a></li>
 
+                <!--<li data-username="Sample Page" class="nav-item"><a href="/mgmt/word" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.word}"> </span></a></li>-->
 
                 <li data-username="Translations" class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
                             <i class="feather icon-file"></i>
                         </span>
-                        <span class="pcoded-mtext" th:text="#{mgmt_admin_panel}">Dashboard</span></a>
+                        <span class="pcoded-mtext" th:text="#{mgmt_admin_panel}"></span></a>
                     <ul class="pcoded-submenu" style="display: none;">
-                        <li class=""><a href="/mgmt/translations" class="" th:text="#{mgmt_translations}">Default</a></li>
-                        <li class=""><a href="/mgmt/min_wage" class="" th:text="#{mgmt_min_wage}">Default</a></li>
+                        <li class=""><a href="/mgmt/translations"  th:text="#{mgmt_translations}"> </a></li>
+                        <li class=""><a href="/mgmt/expertise/object_expertise/list"  th:text="#{mntr_objectExpertise_list}"> </a></li>
+                        <li class=""><a href="/mgmt/expertise/activity/list" th:text="#{mntr_activity_list}"> </a></li>
+                        <li class=""><a href="/mgmt/expertise/material/list" th:text="#{sys_menu.materialList}"> </a></li>
+                        <li class=""><a href="/mgmt/expertise/expertise_requirement/list"  th:text="#{mntr_expertise_requirement_list}"></a></li>
+                        <li class=""><a href="/mgmt/expertise/offer/list"  th:text="#{sys_menu.offerList}"></a></li>
+                        <li class=""><a href="/mgmt/roles/list"  th:text="#{sys_menu.roleList}"></a></li>
+                        <li class=""><a href="/mgmt/users/list"  th:text="#{sys_menu.usersList}"></a></li>
+                        <li class=""><a href="/mgmt/position/list"  th:text="#{sys_menu.positionList}"></a></li>
+                        <li class=""><a href="/mgmt/department/list"  th:text="#{sys_menu.departmentList}"></a></li>
+                        <li class=""><a href="/mgmt/min_wage"  th:text="#{mgmt_min_wage}"></a></li>
                     </ul>
                 </li>
             </ul>

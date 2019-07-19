@@ -12,6 +12,7 @@ import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFa
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.ecoexpertise.config.WebMVCConfigs;
 
@@ -40,6 +41,8 @@ public class EcoExpertiseStarter {
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();
 
+        NotificationService notificationService = applicationContext.getBean(NotificationService.class);
+        notificationService.initialization();
     }
 
 }

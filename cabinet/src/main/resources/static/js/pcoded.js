@@ -271,6 +271,7 @@ $(document).ready(function() {
     // remove pre-loader end
 
     getToastrList();
+    getNotificationList();
 });
 
 // ===============
@@ -662,6 +663,42 @@ function getToastrList() {
             }
         });
     });
+}
+
+function getNotificationList() {
+    $.post('/sys/notification/show', {_csrf: $('#global_csrf').val()}, function (data) {
+        var notification = '';
+
+        if(data.newNotificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >Yangi</p></li>';
+            $("#noti-body").append(notification);
+            $("#new-notification-count").text(data.newNotificationList.length);
+            $("#new-notification-count").show();
+        }else {
+            $("#new-notification-count").hide();
+        }
+        $.each(data.newNotificationList, function( index, value ){
+            appendNotification(value);
+        });
+
+        if(data.notificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >Oldingi</p></li>';
+            $("#noti-body").append(notification);
+        }
+        $.each(data.notificationList, function( index, value ){
+            appendNotification(value);
+        });
+    });
+}
+
+function appendNotification(value) {
+    var notification =
+        '<li class="notification"> <div class="media"> <div class="media-body">\n' +
+        '  <p><strong>'+value.createdBy+'</strong><span class="n-time text-muted">' +
+        '    <i class="icon feather icon-clock m-r-10"></i>'+value.createdAt+'</span></p>\n' +
+        '  <p>'+value.title+'</p>\n' +
+        '</div> </div> </li>';
+    $("#noti-body").append(notification);
 }
 
 function bindSubRegionSelectToRegionSelect(subRegionSelector, regionSelector) {

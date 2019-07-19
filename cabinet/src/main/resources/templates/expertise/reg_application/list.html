@@ -41,40 +41,30 @@
                             <div class="col-xl-3 col-lg-12">
                                 <div class="card task-board-left">
                                     <div class="card-header">
-                                        <h5>List</h5>
+                                        <h5>Status Box</h5>
                                     </div>
                                     <div class="card-block ">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control add_task_todo" placeholder="Search here..." required="">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary btn-icon btn-msg-send" type="button"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
                                         <div class="task-right">
                                             <div class="task-right-header-status">
-                                                <span class="f-w-400" data-toggle="collapse">Completed Status</span>
+                                                <span class="f-w-400" data-toggle="collapse">Arizalar holati</span>
                                                 <i class="fas fa-caret-down float-right m-t-5"></i>
                                             </div>
                                             <div class="taskboard-right-progress" style="">
-                                                <h6 class="m-t-10">Highest priority</h6>
+                                                <h6 class="m-t-15">Jarayondagi arizalar</h6>
                                                 <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" th:style="'width: '+${proccess[1]}+'%'" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[0]}"></span></div>
                                                 </div>
-                                                <h6 class="m-t-15">High priority</h6>
+                                                <h6 class="m-t-15">Muddati yaqinlashayotgan arizalar</h6>
                                                 <div class="progress">
-                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-warning" role="progressbar" th:style="'width: '+${proccess[3]}+'%'" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[2]}"></span></div>
                                                 </div>
-                                                <h6 class="m-t-15">Normal priority</h6>
+                                                <h6 class="m-t-15">Muddati o'tgan arizalar</h6>
                                                 <div class="progress">
-                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                <h6 class="m-t-15">Low priority</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-danger" role="progressbar" th:style="'width: '+${proccess[5]}+'%'" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"><span th:text="${proccess[4]}"></span></div>
                                                 </div>
                                             </div>
                                             <div class="task-right-header-users">
-                                                <span class="f-w-400" data-toggle="collapse">Assign Users</span>
+                                                <span class="f-w-400" data-toggle="collapse">Hodimlar</span>
                                                 <i class="fas fa-caret-down float-right m-t-5"></i>
                                             </div>
                                             <div class="user-box assign-user taskboard-right-users" style="">
@@ -86,54 +76,10 @@
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h6 th:text="${user.fullName}">Josephin Doe</h6>
-                                                        <p th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}">Santa Ana,CA</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="task-right-header-revision">
-                                                <span class="f-w-400" data-toggle="collapse">Revision</span>
-                                                <i class="fas fa-caret-down float-right m-t-5"></i>
-                                            </div>
-                                            <div class="taskboard-right-revision user-box" style="display: none;">
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <a class="btn btn-outline-primary btn-icon" href="#" role="button"><i class="fas fa-cogs"></i>
+                                                        <a href="#" th:onclick="'getUserId('+${user.id}+')'">
+                                                            <h6 th:text="${user.getFullName()}">Josephin Doe</h6>
+                                                            <p><span th:if="${user.organizationId}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></p>
                                                         </a>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div class="chat-header f-w-400 mb-1">Drop the IE specific hacks for temporal inputs</div>
-                                                        <p class="chat-header  text-muted">4 minutes ago</p>
-                                                    </div>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <a class="btn btn-outline-danger btn-icon" href="#" role="button"><i class="fas fa-share-alt"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div class="chat-header f-w-400 mb-1">Have Carousel ignore keyboard events</div>
-                                                        <p class="chat-header text-muted">12 Dec,2015</p>
-                                                    </div>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <a class="btn btn-outline-warning btn-icon" href="#" role="button"><i class="fas fa-font"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div class="chat-header f-w-400 mb-1">Add full font overrides for popovers and tooltips</div>
-                                                        <p class="chat-header text-muted">2 month ago</p>
-                                                    </div>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <a class="btn btn-outline-success btn-icon" href="#" role="button"><i class="fas fa-mobile-alt"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div class="chat-header">Responsive Asssignment</div>
-                                                        <p class="chat-header  text-muted">6 month ago</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,47 +89,7 @@
                             </div>
                             <div class="col-xl-9 col-lg-12 filter-bar">
                                 <nav class="navbar m-b-30 p-10">
-                                    <ul class="nav">
-                                        <li class="nav-item f-text active">
-                                            <a class="nav-link text-secondary" href="#">Filter: <span class="sr-only">(current)</span></a>
-                                        </li>
-                                        <!--<li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle text-secondary" href="#" id="bydate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i> By Date</a>
-                                            <div class="dropdown-menu" aria-labelledby="bydate">
-                                                <a class="dropdown-item" href="#">Show all</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Today</a>
-                                                <a class="dropdown-item" href="#">Yesterday</a>
-                                                <a class="dropdown-item" href="#">This week</a>
-                                                <a class="dropdown-item" href="#">This month</a>
-                                                <a class="dropdown-item" href="#">This year</a>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle text-secondary" href="#" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-chart-line"></i> By Status</a>
-                                            <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                <a class="dropdown-item" href="#">Show all</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Open</a>
-                                                <a class="dropdown-item" href="#">On hold</a>
-                                                <a class="dropdown-item" href="#">Resolved</a>
-                                                <a class="dropdown-item" href="#">Closed</a>
-                                                <a class="dropdown-item" href="#">Dublicate</a>
-                                                <a class="dropdown-item" href="#">Wontfix</a>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle text-secondary" href="#" id="bypriority" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-list-ol"></i> By Priority</a>
-                                            <div class="dropdown-menu" aria-labelledby="bypriority">
-                                                <a class="dropdown-item" href="#">Show all</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Highest</a>
-                                                <a class="dropdown-item" href="#">High</a>
-                                                <a class="dropdown-item" href="#">Normal</a>
-                                                <a class="dropdown-item" href="#">Low</a>
-                                            </div>
-                                        </li>-->
-                                    </ul>
+                                    <ul class="nav"> </ul>
                                     <div class="nav-item nav-grid f-view">
                                         <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationList}" class="btn btn-primary btn-icon m-0" data-toggle="tooltip" data-placement="top" title="" data-original-title="list view">
                                             <i class="fas fa-list-ul"></i>
@@ -233,6 +139,7 @@
                                                         <thead>
                                                         <tr>
                                                             <th>ID</th>
+                                                            <th>status</th>
                                                             <th>Сотрудник</th>
                                                             <th>Общая количество заявок</th>
                                                             <th>В процессе</th>
@@ -276,6 +183,23 @@
     var dataDatatableSelector;
     var thead;
 
+    function renderStatusColumn(data, type, row, meta) {
+        var proccess1 = 0;
+        if (row[2]!=0){
+            proccess1 = Math.trunc((row[4]*100)/row[2]);
+            var residue = proccess1%5;
+            if (residue!=0){
+                proccess1+=(5-residue);
+            }
+        }
+
+       var html="";
+       html='<div class="radial-bar radial-bar-'+proccess1+' radial-bar-xs radial-bar-danger" style="margin: auto;">\n' +
+           '                                                <img src="/static/images/avatar-2.jpg" alt="User-Image">\n' +
+           '                                            </div>';
+        return html;
+    }
+
     function datatableConnect() {
             dataDatatableSelector.DataTable({
             processing: true,
@@ -307,6 +231,7 @@
             },
             columns: [
                 {data: 0, name: 'id'},
+                {data: 0, render: renderStatusColumn, orderable: false},
                 {data: 1, name: 'firstname'},
                 {data: 2, orderable:false},
                 {data: 3, orderable:false },
@@ -330,6 +255,14 @@
         thead = dataDatatableSelector.html();
         datatableConnect();
     });
+
+    function getUserId(id) {
+        $('#id').val(id);
+        $('#firstname').val('');
+        $('#lastname').val('');
+        $('#middlename').val('');
+        getDatatableConnect();
+    }
 
     $('#data-table').css("width", "100%");
     /*]]>*/
