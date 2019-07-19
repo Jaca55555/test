@@ -372,15 +372,27 @@ public class UserController {
               return "redirect:"+ MgmtUrls.UsersPswEdit + "?error=true";
           }
           User oldUser = userService.findById(user.getId());
-          String oldUserString = gson.toJson(oldUser);
+
+          String oldUserString = "";
+        try {
+            oldUserString = objectMapper.writeValueAsString(oldUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
           oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
           userService.updateUser(oldUser);
+        String after ="";
+        try {
+            after = objectMapper.writeValueAsString(oldUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
           tableHistoryService.create(
                   TableHistoryType.edit,
                   TableHistoryEntity.User,
                   oldUser.getId(),
                   oldUserString,
-                  gson.toJson(oldUser),
+                  after,
                   "Users password updated successfully!!!",
                   oldUser.getId(),
                   oldUser.getUserAdditionalId());
