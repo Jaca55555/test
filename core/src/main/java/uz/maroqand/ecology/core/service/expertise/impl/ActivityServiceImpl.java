@@ -34,7 +34,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity getById(Integer id){
-        return activityRepository.getOne(id);
+        return activityRepository.findById(id).get();
     }
 
     @Override

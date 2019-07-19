@@ -3,14 +3,6 @@
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
-    <style>
-        table.dataTable.nowrap th, table.dataTable.nowrap td {
-            white-space: pre-line;
-        }
-        .table td, .table th{
-            white-space: pre-line;
-        }
-    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -47,13 +39,20 @@
                                                 <input type="text" class="form-control" id="name" />
                                             </div>
                                             <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_objectExpertise.nameOz}"></label><br/>
+                                                <input type="text" class="form-control" id="nameOz" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_objectExpertise.nameEn}"></label><br/>
+                                                <input type="text" class="form-control" id="nameEn" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
                                                 <label class="control-label"  th:text="#{mntr_objectExpertise.nameRu}"></label><br/>
                                                 <input type="text" class="form-control" id="nameRu" />
                                             </div>
                                             <div class="clearfix"></div>
 
-                                            <div class="col-sm-6 text-right">
-                                                <label class="control-label">&nbsp;</label><br/>
+                                            <div class="col-sm-12 text-right">
                                                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                     <span th:text="#{sys_search}">Поиск</span>
                                                 </a>
@@ -68,6 +67,8 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th th:text="#{mntr_objectExpertise.name}">name</th>
+                                                    <th th:text="#{mntr_objectExpertise.nameOz}">name</th>
+                                                    <th th:text="#{mntr_objectExpertise.nameEn}">name</th>
                                                     <th th:text="#{mntr_objectExpertise.nameRu}">nameRu</th>
                                                     <th></th>
                                                 </tr>
@@ -96,8 +97,7 @@
 
 <script th:inline="javascript">
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseEdit}]];
-    var labelEdit = [[#{sys_edit}]];
-    var labelDelete = [[#{sys_delete}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -110,8 +110,16 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
+        var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit mr-0"></i></a>';
+        html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
+            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
+            '                    <i class="feather icon-eye" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
+            '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '      </div>';
         return html;
     }
 
@@ -132,6 +140,8 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
 
                 dataToSend.name = $('#name').val();
+                dataToSend.nameOz = $('#nameOz').val();
+                dataToSend.nameEn = $('#nameEn').val();
                 dataToSend.nameRu = $('#nameRu').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
@@ -145,7 +155,9 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {data: 2, name: 'nameRu'},
+                {data: 2, name: 'nameOz'},
+                {data: 3, name: 'nameEn'},
+                {data: 4, name: 'nameRu'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

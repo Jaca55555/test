@@ -64,9 +64,11 @@ public class DepartmentServiceImpl implements DepartmentService {
             Integer organizationId,
             Integer parentId,
             String name,
+            String nameOz,
+            String nameEn,
             String nameRu,
             Pageable pageable) {
-        return departmentRepository.findAll(getFilteringSpecification(departmentId,organizationId,parentId,name,nameRu), pageable);
+        return departmentRepository.findAll(getFilteringSpecification(departmentId,organizationId,parentId,name,nameOz,nameEn,nameRu), pageable);
     }
 
     @Override
@@ -101,6 +103,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             final Integer organizationId,
             final Integer parentId,
             final String name,
+            final String nameOz,
+            final String nameEn,
             final String nameRu
         ) {
         return new Specification<Department>() {
@@ -125,6 +129,12 @@ public class DepartmentServiceImpl implements DepartmentService {
                 }
                 if (name != null) {
                     predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                }
+                if (nameOz != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameOz"), "%" + nameOz + "%"));
+                }
+                if (nameEn != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameEn"), "%" + nameEn + "%"));
                 }
                 if (nameRu != null) {
                     predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + nameRu + "%"));

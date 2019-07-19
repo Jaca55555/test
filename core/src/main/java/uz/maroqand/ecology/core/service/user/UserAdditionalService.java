@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.service.user;
 
 import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.entity.user.UserAdditional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,5 +17,7 @@ public interface UserAdditionalService {
     Integer createUserAdditional(User user);
 
     Integer updateUserAdditional(User user, LoginType loginType, HttpServletRequest request);
+
+    UserAdditional getById(Integer id);
 
 }

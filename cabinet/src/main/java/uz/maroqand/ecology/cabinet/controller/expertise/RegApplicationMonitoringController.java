@@ -64,11 +64,6 @@ public class RegApplicationMonitoringController {
         lastname = StringUtils.trimToNull(lastname);
         middlename = StringUtils.trimToNull(middlename);
 
-        System.out.println("id==" + id);
-        System.out.println("firstname==" + firstname);
-        System.out.println("lastname==" + lastname);
-        System.out.println("middlename==" + middlename);
-
         List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
         PageRequest pageRequest = new PageRequest(0, regApplicationList.size(), Sort.Direction.ASC, "id");
         Page<User> userPage = userService.findFiltered(id,lastname,firstname,middlename,null,null,null,null,pageRequest );
@@ -116,7 +111,6 @@ public class RegApplicationMonitoringController {
             @RequestParam(name = "middlename",required = false) String middlename,
             Pageable pageable
     ){
-        System.out.println("keldi");
         firstname = StringUtils.trimToNull(firstname);
         lastname = StringUtils.trimToNull(lastname);
         middlename = StringUtils.trimToNull(middlename);

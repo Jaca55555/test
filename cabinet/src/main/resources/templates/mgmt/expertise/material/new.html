@@ -43,18 +43,52 @@
                                         </div>
                                         <div class="card-body">
                                             <form th:action="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialNew}" method="post" th:object="${material}">
-                                                <div class="form-group col-md-5">
-                                                    <label for="name" th:text="#{material.name}"></label>
-                                                    <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                               <div class="row col-md-10 offset-2">
+                                                   <div class="form-group col-md-5">
+                                                       <label for="name" th:text="#{material.name}"></label>
+                                                       <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                                   </div>
+                                                   <div class="form-group col-md-3">
+                                                       <label for="name" th:text="#{material.nameShort}"></label>
+                                                       <input type="text" class="form-control" id="nameShort" th:field="*{nameShort}" required="">
+                                                   </div>
+                                               </div>
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="name" th:text="#{material.nameOz}"></label>
+                                                        <input type="text" class="form-control" id="nameOz" th:field="*{nameOz}" required="">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label for="name" th:text="#{material.nameShortOz}"></label>
+                                                        <input type="text" class="form-control" id="nameShortOz" th:field="*{nameShortOz}" required="">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-5">
-                                                    <label for="nameRu" th:text="#{material.name_ru}"></label>
-                                                    <input type="text" class="form-control" id="nameRu" th:field="*{nameRu}" required="">
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="name" th:text="#{material.nameEn}"></label>
+                                                        <input type="text" class="form-control" id="nameEn" th:field="*{nameEn}" required="">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label for="name" th:text="#{material.nameShortEn}"></label>
+                                                        <input type="text" class="form-control" id="nameShortEn" th:field="*{nameShortEn}" required="">
+                                                    </div>
                                                 </div>
-
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="nameRu" th:text="#{material.nameRu}"></label>
+                                                        <input type="text" class="form-control" id="nameRu" th:field="*{nameRu}" required="">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label for="nameRu" th:text="#{material.nameShortRu}"></label>
+                                                        <input type="text" class="form-control" id="nameShortRu" th:field="*{nameShortRu}" required="">
+                                                    </div>
+                                                </div>
                                                 <input type="hidden" th:field="*{id}">
-                                                <div class="form-group col-md-5">
-                                                    <button type="submit" th:text="#{sys_add}" class="btn btn-success" style="float: right; margin-right: 0;"></button>
+                                                <div class="col-md-2 offset-5">
+                                                    <button type="submit" class="btn btn-success btn-block">
+                                                        <i class="feather icon-check"></i>
+                                                        <span th:text="#{sys_add}" ></span>
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>

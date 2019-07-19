@@ -1,15 +1,14 @@
 package uz.maroqand.ecology.cabinet.controller.mgmt;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,16 +21,13 @@ import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
-import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
-import uz.maroqand.ecology.core.service.user.DepartmentService;
-import uz.maroqand.ecology.core.service.user.PositionService;
-import uz.maroqand.ecology.core.service.user.RoleService;
-import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.service.user.*;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -49,10 +45,11 @@ public class UserController {
     private final TableHistoryService tableHistoryService;
     private final SoatoService soatoService;
     private final OrganizationService organizationService;
-    private Gson gson;
+    private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService) {
+    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.userService = userService;
         this.positionService = positionService;
         this.departmentService = departmentService;
@@ -60,7 +57,8 @@ public class UserController {
         this.userRoleService = userRoleService;
         this.soatoService = soatoService;
         this.organizationService = organizationService;
-        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(MgmtUrls.UsersList)
@@ -185,7 +183,7 @@ public class UserController {
             @RequestParam(name = "userPasswordConfirmation") String userPasswordConfirmation,
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
-            @RequestParam(name = "enebled") Integer enebled,
+            @RequestParam(name = "enabled") Integer enebled,
             User userCreate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -211,13 +209,20 @@ public class UserController {
             user1.setEmail(userCreate.getEmail());
             user1.setUsername(userCreate.getUsername());
             user1.setPassword(encoder.encode(userPassword));
-            userService.createUser(user1);
+            user1 = userService.createUser(user1);
+
+            String after="";
+            try {
+                after = objectMapper.writeValueAsString(user1);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             tableHistoryService.create(
                     TableHistoryType.add,
                     TableHistoryEntity.User,
-                    userCreate.getId(),
+                    user1.getId(),
                     null,
-                    gson.toJson(userCreate),
+                    after,
                     "",
                     user.getId(),
                     user.getUserAdditionalId());
@@ -231,7 +236,7 @@ public class UserController {
             @RequestParam(name = "id") Integer userId,
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
-            @RequestParam(name = "enebled") Integer enebled,
+            @RequestParam(name = "enabled") Integer enebled,
             User userUpdate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -239,7 +244,13 @@ public class UserController {
             return "redirect:" + MgmtUrls.UsersList;
         }
         User updateUser  = userService.findById(userId);
-        String oldUser = gson.toJson(updateUser);
+        String oldUser = "";
+        try {
+            oldUser = objectMapper.writeValueAsString(updateUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         if (updateUser==null){
             return "redirect:" + MgmtUrls.UsersList;
         }
@@ -257,12 +268,20 @@ public class UserController {
             updateUser.setEmail(userUpdate.getEmail());
             updateUser.setUsername(userUpdate.getUsername());
             userService.updateUser(updateUser);
+
+            String after="";
+            try {
+                after = objectMapper.writeValueAsString(updateUser);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
             tableHistoryService.create(
                     TableHistoryType.edit,
                     TableHistoryEntity.User,
                     updateUser.getId(),
                     oldUser,
-                    gson.toJson(updateUser),
+                    after,
                     "",
                     user.getId(),
                     user.getUserAdditionalId());
@@ -279,23 +298,53 @@ public class UserController {
         User user = userService.getCurrentUserFromContext();
         Integer result=1;
         User editedUser = userService.findById(id);
-        String oldUser = gson.toJson(editedUser);
+        String oldUser = "";
+        try {
+            oldUser = objectMapper.writeValueAsString(editedUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         if (editedUser == null){
             result=-1;
             return result.toString();
         }
         editedUser.setEnabled(status);
         userService.updateUser(editedUser);
+        String after ="";
+        try {
+            after = objectMapper.writeValueAsString(editedUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.User,
                 editedUser.getId(),
                 oldUser,
-                gson.toJson(editedUser),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId());
         return result.toString();
+    }
+
+    @RequestMapping(MgmtUrls.UsersView)
+    public String getUsersViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        User user = userService.findById(id);
+        if (user==null){
+            return "redirect:" + MgmtUrls.UsersList;
+        }
+        Type type = new TypeToken<List<User>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.User,id);
+
+        model.addAttribute("user",user);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        return MgmtTemplates.UserView;
     }
 
     @RequestMapping(value = MgmtUrls.UsersPswEdit)
@@ -323,15 +372,27 @@ public class UserController {
               return "redirect:"+ MgmtUrls.UsersPswEdit + "?error=true";
           }
           User oldUser = userService.findById(user.getId());
-          String oldUserString = gson.toJson(oldUser);
+
+          String oldUserString = "";
+        try {
+            oldUserString = objectMapper.writeValueAsString(oldUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
           oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
           userService.updateUser(oldUser);
+        String after ="";
+        try {
+            after = objectMapper.writeValueAsString(oldUser);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
           tableHistoryService.create(
                   TableHistoryType.edit,
                   TableHistoryEntity.User,
                   oldUser.getId(),
                   oldUserString,
-                  gson.toJson(oldUser),
+                  after,
                   "Users password updated successfully!!!",
                   oldUser.getId(),
                   oldUser.getUserAdditionalId());

@@ -47,19 +47,6 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 th:text="${activity.id==null?'mntr_activity_new':'mntr_activity_edit ' + activity.id}"></h5>
-                                        <!--<div class="card-header-right">-->
-                                        <!--<div class="btn-group card-option">-->
-                                        <!--<button type="button" class="btn dropdown-toggle btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-                                        <!--<i class="feather icon-more-horizontal"></i>-->
-                                        <!--</button>-->
-                                        <!--<ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">-->
-                                        <!--<li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>-->
-                                        <!--<li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>-->
-                                        <!--<li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>-->
-                                        <!--<li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li>-->
-                                        <!--</ul>-->
-                                        <!--</div>-->
-                                        <!--</div>-->
                                     </div>
                                     <div class="card-body">
                                         <form method="post" th:object="${activity}" data-parsley-validate="" th:action="${action_url}">
@@ -71,14 +58,31 @@
                                                         <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input id="name" required="required" class="form-control  has-feedback-left col-md-7 col-xs-12" type="text" th:field="*{name}" />
+                                                        <input id="name" required="required" class="form-control" type="text" th:field="*{name}" />
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12" >
+                                                        <span th:text="#{mntr_activity.nameOz}">Translation tag</span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="nameOz" required="required" class="form-control" type="text" th:field="*{nameOz}" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12" >
+                                                        <span th:text="#{mntr_activity.nameEn}">Translation tag</span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input id="nameEn" required="required" class="form-control" type="text" th:field="*{nameEn}" />
+                                                    </div>
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="nameRu" class="control-label col-md-3 col-sm-3 col-xs-12" th:text="#{mntr_activity.nameRu}">Russian</label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input id="nameRu" class="form-control  has-feedback-left col-md-7 col-xs-12" type="text" th:field="*{nameRu}" />
+                                                        <input id="nameRu" class="form-control" type="text" th:field="*{nameRu}" />
                                                     </div>
                                                 </div>
 
@@ -94,18 +98,10 @@
                                                     </div>
                                                 </div>
 
-                                                <!--<div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" th:text="#{mntr_translations.isHtml}">Html</label>
-                                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        &lt;!&ndash;<input type="checkbox" th:field="*{isHtml}"/>&ndash;&gt;
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>-->
-
                                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                 <input type="hidden" name="id" th:value="*{id}"/>
                                                 <div class="text-center">
-                                                    <div class="col-sm-3 col-sm-offset-3">
+                                                    <div class="col-sm-6 col-sm-offset-3">
                                                         <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ActivityList}" th:text="#{sys_cancel}"></a>
                                                         <input type="submit" th:value="#{sys_add}" class="btn btn-success"/>
                                                     </div>

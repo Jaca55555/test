@@ -52,7 +52,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
     @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
-        return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalse();
+        return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
 
     public void update(RegApplication regApplication){

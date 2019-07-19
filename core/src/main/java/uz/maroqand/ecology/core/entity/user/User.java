@@ -87,6 +87,7 @@ public class User {
     @JoinColumn(name = "department_id", insertable = false, updatable = false)
     private Department department;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", updatable = false, insertable = false)
     private Position position;
@@ -94,8 +95,7 @@ public class User {
     @Column(name = "position_id")
     private Integer positionId;
 
-
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;

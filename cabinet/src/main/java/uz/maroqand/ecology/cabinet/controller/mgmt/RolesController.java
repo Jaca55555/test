@@ -1,7 +1,8 @@
 package uz.maroqand.ecology.cabinet.controller.mgmt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -21,10 +22,11 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.sys.TranslationService;
 import uz.maroqand.ecology.core.service.user.RoleService;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.validation.Valid;
-import java.time.Period;
+import java.lang.reflect.Type;
 import java.util.*;
 
 @Controller
@@ -35,16 +37,16 @@ public class RolesController {
     private final UserService userService;
     private final ObjectMapper objectMapper;
     private final RoleService roleService;
-    private final Gson gson;
+    private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public RolesController(TranslationService translationService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, RoleService roleService, Gson gson) {
+    public RolesController(TranslationService translationService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, RoleService roleService, UserAdditionalService userAdditionalService) {
         this.translationService = translationService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
         this.objectMapper = objectMapper;
         this.roleService = roleService;
-        this.gson = gson;
+        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(MgmtUrls.RolesList)
@@ -103,12 +105,19 @@ public class RolesController {
         role1.setPermissions(permissions);
         roleService.createRole(role1);
 
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         tableHistoryService.create(
                 TableHistoryType.add,
                 TableHistoryEntity.UserRole,
                 role1.getId(),
                 null,
-                gson.toJson(role1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId());
@@ -127,7 +136,13 @@ public class RolesController {
         if (role1==null){
             return "redirect:" + MgmtUrls.RolesList;
         }
-        String oldRole = gson.toJson(role1);
+        String oldRole = "";
+        try {
+            oldRole = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         role1.setName(role.getName().trim());
         role1.setDescription(role.getDescription().trim());
         Set<Permissions> permissionsSet =new HashSet<>();
@@ -137,12 +152,20 @@ public class RolesController {
         }
         role1.setPermissions(permissionsSet);
         roleService.updateRole(role1);
+
+        String after = "";
+        try {
+            after = objectMapper.writeValueAsString(role1);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.UserRole,
                 role1.getId(),
                 oldRole,
-                gson.toJson(role1),
+                after,
                 "",
                 user.getId(),
                 user.getUserAdditionalId());
@@ -151,31 +174,20 @@ public class RolesController {
     }
 
 
-    /*@RequestMapping(MgmtUrls.RolesView)
+    @RequestMapping(MgmtUrls.RolesView)
     public String getRolesViewPage(
-            @RequestParam(name = "id") Integer roleId,
+            @RequestParam(name = "id") Integer id,
             Model model
     ){
-        Role role = roleService.getById(roleId);
+        Role role = roleService.getById(id);
         if (role==null){
             return "redirect:" + MgmtUrls.RolesList;
         }
-       *//* Type type = new TypeToken<List<Unit>>(){}.getType();
-        List<TableHistory> tableHistoryList = tableHistoryService.getByEntityId(TableHistoryEntity.Unit,unitId);
-        List<HashMap<String,Object>> beforeAndAfterList = new ArrayList<>();
-        for (TableHistory tableHistory: tableHistoryList){
-            HashMap<String,Object> stringObjectHashMap = new HashMap<>();
-            List<Object> categoryList = gson.fromJson("["+tableHistory.getChangesSerialized()+"]",type);
-            stringObjectHashMap.put("before",categoryList.get(0));
-            stringObjectHashMap.put("after",categoryList.get(1));
-            stringObjectHashMap.put("userName",userService.findById(tableHistory.getUserId()).getUsername());
-            stringObjectHashMap.put("registeredDate", tableHistory.getRegisteredDate()!=null?uzbekistanDateFormat.format(tableHistory.getRegisteredDate()) : "");
-            stringObjectHashMap.put("userAdditional", tableHistory.getUserAdditionalId()!=null?userAdditionalService.getByIdUserAdditional(tableHistory.getUserAdditionalId()):null);
-            beforeAndAfterList.add(stringObjectHashMap);
-        }
-*//*
+        Type type = new TypeToken<List<Role>>(){}.getType();
+        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.UserRole,id);
+
         model.addAttribute("role",role);
-//        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
         return MgmtTemplates.RolesView;
-    }*/
+    }
 }

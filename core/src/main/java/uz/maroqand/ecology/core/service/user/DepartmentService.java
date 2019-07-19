@@ -22,6 +22,8 @@ public interface DepartmentService {
             Integer organizationId,
             Integer parentId,
             String name,
+            String nameOz,
+            String nameEn,
             String nameRu,
             Pageable pageable
     );

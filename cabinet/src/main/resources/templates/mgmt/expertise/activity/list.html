@@ -3,14 +3,6 @@
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
-    <style>
-        table.dataTable.nowrap th, table.dataTable.nowrap td {
-            white-space: pre-line;
-        }
-        .table td, .table th{
-            white-space: pre-line;
-        }
-    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -78,6 +70,9 @@
                                                     <th>Id</th>
                                                     <th th:text="#{mntr_activity.category}">uzbek</th>
                                                     <th th:text="#{mntr_activity.name}">english</th>
+                                                    <th th:text="#{mntr_activity.nameOz}">english</th>
+                                                    <th th:text="#{mntr_activity.nameEn}">english</th>
+                                                    <th th:text="#{mntr_activity.nameRu}">english</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -106,6 +101,7 @@
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ActivityListAjax}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ActivityEdit}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ActivityView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -119,9 +115,16 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
+        var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit"></i></a>';
-        // html += '<a class="btn btn-xs btn-warning btn-delete disabled" onclick="deleteItemInDT('+row[0]+',\''+escapeStr(row[1])+'\')" title="'+labelDelete+'"><i class="fa fa-times"></i></a>';
+        html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
+            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
+            '                    <i class="feather icon-eye" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
+            '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '      </div>';
         return html;
     }
 
@@ -156,6 +159,9 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'category'},
                 {data: 2, name: 'name'},
+                {data: 3, name: 'nameOz'},
+                {data: 4, name: 'nameEn'},
+                {data: 5, name: 'nameRu'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

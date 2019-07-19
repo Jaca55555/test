@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "activity")
+@JsonIgnoreProperties
 public class Activity {
 
     @Transient
@@ -29,6 +31,12 @@ public class Activity {
 
     private String name;
 
+    @Column(name = "name_oz")
+    private String nameOz;
+
+    @Column(name = "name_en")
+    private String nameEn;
+
     @Column(name = "name_ru")
     private String nameRu;
 
@@ -36,6 +44,10 @@ public class Activity {
         switch (locale) {
             case "uz":
                 return name;
+            case "oz":
+                return nameOz;
+            case "en":
+                return nameEn;
             case "ru":
             default:
                 return nameRu;
