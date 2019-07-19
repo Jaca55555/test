@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uz.maroqand.ecology.core.component.CustomSuccessHandler;
 import uz.maroqand.ecology.core.component.UserDetailsServiceImpl;
+import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 @Configuration
 @EnableWebSecurity
@@ -39,11 +40,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login?error")
-                .loginProcessingUrl("/login")
+//                .loginProcessingUrl("/login")
                 .permitAll()
-                .successHandler(customSuccessHandler)
+//                .successHandler(customSuccessHandler)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/test/login").permitAll()
+                .antMatchers(SysUrls.ErrorNotFound).permitAll()
+                .antMatchers(SysUrls.ErrorNotFound).permitAll()
+                .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
+                .antMatchers(SysUrls.IdGovUzLogin).permitAll()
+                .antMatchers(SysUrls.IdGovUzAccessToken).permitAll()
+                .antMatchers(SysUrls.EDSLogin).permitAll()
                 .antMatchers("/static*/**").permitAll()
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()

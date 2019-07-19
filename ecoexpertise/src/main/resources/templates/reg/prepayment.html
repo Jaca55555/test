@@ -45,7 +45,7 @@
 
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
-                                            <object th:include="fragments/prepayment_view :: prepayment" th:remove="tag"></object>
+                                            <object th:include="reg/fragments/prepayment_view :: prepayment" th:remove="tag"></object>
 
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -81,13 +81,13 @@
                                             </div>
 
                                             <div id="bank_check_fragment" style="display: none">
-                                                <object th:include="fragments/bank_check :: bank" th:remove="tag"></object>
+                                                <object th:include="reg/fragments/bank_check :: bank" th:remove="tag"></object>
                                             </div>
                                             <div id="transfer_fragment" style="display: none">
-                                                <object th:include="fragments/transfer :: transfer" th:remove="tag"></object>
+                                                <object th:include="reg/fragments/transfer :: transfer" th:remove="tag"></object>
                                             </div>
                                             <div id="payment_fragment" style="display: none">
-                                                <object th:include="fragments/payment :: payment" th:remove="tag"></object>
+                                                <object th:include="reg/fragments/payment :: payment" th:remove="tag"></object>
                                             </div>
                                         </div>
                                     </div>

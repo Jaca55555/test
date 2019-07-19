@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+
+<form name="OAuthForm" th:action="${authorization_url}" method="get">
+    <input type="hidden" name="response_type" value="one_code"/>
+    <input type="hidden" name="client_id" th:value="${client_id}"/>
+    <input type="hidden" name="redirect_uri" th:value="${redirect_uri}"/>
+    <input type="hidden" name="scope" th:value="${scope}"/>
+    <input type="hidden" name="state" th:value="${state}"/>
+</form>
+
+<script type="text/javascript">
+    document.OAuthForm.submit();
+</script>
+
+</body>
+
+</html>

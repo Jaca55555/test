@@ -33,18 +33,18 @@
 
                         <div class="col-md-6 col-xl-3">
                             <div class="card">
-                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationDashboard}">
+                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationDashboard}">
                                     <i class="feather icon-align-center" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
-                                    <h5  style="margin-top: 25px;">Отправить заявление</h5>
+                                    <h5  style="margin-top: 25px;" th:text="#{reg_application.dashboard}">Отправить заявление</h5>
                                 </a>
                             </div>
                         </div>
 
                         <div class="col-md-6 col-xl-3">
                             <div class="card">
-                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealUserList}">
+                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealUserList}">
                                     <i class="feather icon-mail" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
-                                    <h5  style="margin-top: 25px;">Обрашения</h5>
+                                    <h5  style="margin-top: 25px;" th:text="#{sys_appeal.list}">Обрашения</h5>
                                 </a>
                             </div>
                         </div>

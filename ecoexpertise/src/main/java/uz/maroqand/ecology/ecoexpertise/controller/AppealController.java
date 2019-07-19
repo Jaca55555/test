@@ -22,8 +22,8 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.ecoexpertise.constant.Templates;
-import uz.maroqand.ecology.ecoexpertise.constant.Urls;
+import uz.maroqand.ecology.ecoexpertise.constant.reg.RegTemplates;
+import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,13 +47,13 @@ public class AppealController {
     }
 
 
-    @RequestMapping(Urls.AppealUserList)
+    @RequestMapping(RegUrls.AppealUserList)
     public String appealUserListPage( Model model ) {
         model.addAttribute("appealTypeList",AppealType.getAppealTypeList());
-        return Templates.AppealUserList;
+        return RegTemplates.AppealUserList;
     }
 
-    @RequestMapping(value = Urls.AppealUserListAjax,produces = "application/json")
+    @RequestMapping(value = RegUrls.AppealUserListAjax,produces = "application/json")
     @ResponseBody
     public HashMap<String,Object> appealUserListAjax(
             @RequestParam(name = "dateBegin", required = false) String registrationDateBegin,
@@ -94,25 +94,25 @@ public class AppealController {
         return result;
     }
 
-    @RequestMapping(Urls.AppealNew)
+    @RequestMapping(RegUrls.AppealNew)
     public String appealNew( Model model ) {
 
         Appeal appeal = new Appeal();
         model.addAttribute("appeal", appeal);
-        model.addAttribute("action_url", Urls.AppealCreate);
-        model.addAttribute("cancel_url", Urls.AppealUserList);
-        return Templates.AppealNew;
+        model.addAttribute("action_url", RegUrls.AppealCreate);
+        model.addAttribute("cancel_url", RegUrls.AppealUserList);
+        return RegTemplates.AppealNew;
     }
 
-    @RequestMapping(value = Urls.AppealCreate, method = RequestMethod.POST)
+    @RequestMapping(value = RegUrls.AppealCreate, method = RequestMethod.POST)
     public String appealCreate(Appeal appeal)
     {
         User user = userService.getCurrentUserFromContext();
         appealService.create(appeal,user);
-        return "redirect:" + Urls.AppealUserList;
+        return "redirect:" + RegUrls.AppealUserList;
     }
 
-    @RequestMapping(Urls.AppealEdit)
+    @RequestMapping(RegUrls.AppealEdit)
     public String appealEdit(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -121,21 +121,21 @@ public class AppealController {
         Appeal appeal = appealService.getById(id, user.getId());
 
         if(appeal==null || appeal.getAppealStatus()!=AppealStatus.Open){
-            return "redirect:" + Urls.AppealUserList;
+            return "redirect:" + RegUrls.AppealUserList;
         }
         model.addAttribute("appeal", appeal);
-        model.addAttribute("action_url", Urls.AppealUpdate);
-        model.addAttribute("cancel_url", Urls.AppealUserList);
-        return Templates.AppealNew;
+        model.addAttribute("action_url", RegUrls.AppealUpdate);
+        model.addAttribute("cancel_url", RegUrls.AppealUserList);
+        return RegTemplates.AppealNew;
     }
 
-    @RequestMapping(value = Urls.AppealUpdate, method = RequestMethod.POST)
+    @RequestMapping(value = RegUrls.AppealUpdate, method = RequestMethod.POST)
     public String appealUpdate(Appeal appeal) {
 
         User user = userService.getCurrentUserFromContext();
         Appeal appealCurrent = appealService.getById(appeal.getId(), user.getId());
         if(appealCurrent == null || appealCurrent.getAppealStatus() != AppealStatus.Open){
-            return "redirect:" + Urls.AppealUserList;
+            return "redirect:" + RegUrls.AppealUserList;
         }
 
         appealCurrent.setAppealType(appeal.getAppealType());
@@ -144,24 +144,24 @@ public class AppealController {
         appealCurrent.setDescription(appeal.getDescription());
         appealService.update(appealCurrent,user);
 
-        return "redirect:" + Urls.AppealUserList;
+        return "redirect:" + RegUrls.AppealUserList;
     }
 
-    @RequestMapping(value = Urls.AppealDelete)
+    @RequestMapping(value = RegUrls.AppealDelete)
     public String appealDelete(
             @RequestParam(name = "id") Integer id
     ) {
         User user = userService.getCurrentUserFromContext();
         Appeal appeal = appealService.getById(id, user.getId());
         if(appeal==null || appeal.getAppealStatus()!=AppealStatus.Open){
-            return "redirect:" + Urls.AppealUserList;
+            return "redirect:" + RegUrls.AppealUserList;
         }
         appealService.delete(appeal,user);
 
-        return "redirect:" + Urls.AppealUserList;
+        return "redirect:" + RegUrls.AppealUserList;
     }
 
-    @RequestMapping(value = Urls.AppealUserView)
+    @RequestMapping(value = RegUrls.AppealUserView)
     public String appealUser(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -169,7 +169,7 @@ public class AppealController {
         User user = userService.getCurrentUserFromContext();
         Appeal appeal = appealService.getById(id, user.getId());
         if(appeal==null){
-            return "redirect:" + Urls.AppealUserList;
+            return "redirect:" + RegUrls.AppealUserList;
         }
 
         AppealSub appealSub = new AppealSub();
@@ -192,12 +192,12 @@ public class AppealController {
         model.addAttribute("appealSub", appealSub);
         model.addAttribute("appealSubList", appealSubList);
         model.addAttribute("appeal",appeal);
-        model.addAttribute("action_url", Urls.AppealSubCreate);
-        model.addAttribute("cancel_url", Urls.AppealUserList);
-        return Templates.AppealView;
+        model.addAttribute("action_url", RegUrls.AppealSubCreate);
+        model.addAttribute("cancel_url", RegUrls.AppealUserList);
+        return RegTemplates.AppealView;
     }
 
-    @RequestMapping(value = Urls.AppealSubCreate, method = RequestMethod.POST)
+    @RequestMapping(value = RegUrls.AppealSubCreate, method = RequestMethod.POST)
     public String appealSubCreate(
             @RequestParam(name = "appealId") Integer id,
             AppealSub appealSub
@@ -206,7 +206,7 @@ public class AppealController {
         User user = userService.getCurrentUserFromContext();
         Appeal appeal = appealService.getById(id, user.getId());
         if(appeal==null){
-            return "redirect:" + Urls.AppealUserList;
+            return "redirect:" + RegUrls.AppealUserList;
         }
 
         appealSub.setAppealId(appeal.getId());
@@ -215,7 +215,7 @@ public class AppealController {
         appeal.setShowUserCommentCount(count + 1);
         appealService.updateCommentCount(appeal);
 
-        return "redirect:" + Urls.AppealUserView + "?id=" + appeal.getId();
+        return "redirect:" + RegUrls.AppealUserView + "?id=" + appeal.getId();
     }
 
 }

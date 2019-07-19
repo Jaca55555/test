@@ -11,12 +11,12 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>№id</th>
-                <th>№Заключения</th>
-                <th>Дата Заключения</th>
-                <th>Обьект экспертизы</th>
-                <th>Форма экспертизы</th>
-                <th>Исполнител</th>
+                <th>ID</th>
+                <th th:text="#{sys_conclusion_number}">№Заключения</th>
+                <th th:text="#{sys_conclusion_date}">Дата Заключения</th>
+                <th th:text="#{sys_about.objectExpertise}">Обьект экспертизы</th>
+                <th th:text="#{sys_about.category}">Форма экспертизы</th>
+                <th th:text="#{sys_reg_application.performer}">Исполнител</th>
                 <th></th>
             </tr>
             </thead>
@@ -46,43 +46,43 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-6 text-dark p-2">
-                                            Номер заключения
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_conclusion_number}">
+                                            Номер
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             707-2019
                                         </div>
-                                        <div class="col-md-6 text-dark p-2">
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_conclusion_date}">
                                             Дата заключения
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             02.05.2019
                                         </div>
-                                        <div class="col-md-6 text-dark p-2">
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_about.objectExpertise}">
                                             Обьект экспертизы
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             test
                                         </div>
-                                        <div class="col-md-6 text-dark p-2">
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_about.activity}">
                                             Вид деятельности
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             test
                                         </div>
-                                        <div class="col-md-6 text-dark p-2">
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_about.material}">
                                             Вид материалов
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             test
                                         </div>
-                                        <div class="col-md-6 text-dark p-2">
+                                        <div class="col-md-6 text-dark p-2" th:text="#{sys_reg_application.performer}">
                                             Ф.И.О исполнителя
                                         </div>
                                         <div class="col-md-6 text-right text-dark p-2">
                                             test
                                         </div>
-                                        <div class="col-md-6 text-dark p-2" style="box-sizing: border-box">
+                                        <div class="col-md-6 text-dark p-2" style="box-sizing: border-box" th:text="#{sys_downloadFile}">
                                                 Электронная(или сканированная)<br />версия документа
                                         </div>
                                         <div class="col-md-6 text-right text-dark">
@@ -97,9 +97,9 @@
                                 </div>
                                 <div class="modal-footer" style="justify-content: unset;">
                                     <div class="card" style="box-shadow: unset;margin-left: 35%">
-                                        <h3 class="card-title">Текст заключения</h3>
+                                        <h3 class="card-title" th:text="#{sys_conclusion_text}">Текст заключения</h3>
                                         <div class="card-text text-center">
-                                            <a class="btn btn-primary btn-sm text-white">open</a>
+                                            <a class="btn btn-primary btn-sm text-white" th:text="#{sys_open_text}">open</a>
                                         </div>
 
                                         <div class="card-text">

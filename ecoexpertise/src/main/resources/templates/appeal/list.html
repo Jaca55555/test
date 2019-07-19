@@ -82,7 +82,7 @@
                                                         <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-outline-primary"><i class="feather icon-search"></i>
                                                             <span th:text="#{sys_search}">Поиск</span>
                                                         </a>
-                                                        <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealNew}" class="btn btn-outline-success"><i class="feather icon-plus"></i>
+                                                        <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealNew}" class="btn btn-outline-success"><i class="feather icon-plus"></i>
                                                             <span th:text="#{sys_add}">Поиск</span>
                                                         </a>
                                                     </div>
@@ -125,10 +125,10 @@
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 
     <script th:inline="javascript">
-        var ajaxRequestLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealUserListAjax}]];
-        var editLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealEdit}]];
-        var viewLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealUserView}]];
-        var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).AppealDelete}]];
+        var ajaxRequestLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealUserListAjax}]];
+        var editLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealEdit}]];
+        var viewLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealUserView}]];
+        var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealDelete}]];
         function getCurrentLanguage() {
             return [[__${#locale}__]];
         }

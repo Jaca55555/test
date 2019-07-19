@@ -29,16 +29,25 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private ConcurrentMap<Integer, List<Notification>> notificationMap;
+    private ConcurrentMap<Integer, List<Notification>> newNotificationMap;
 
     public void initialization(){
         notificationMap = new ConcurrentHashMap<>();
+        newNotificationMap = new ConcurrentHashMap<>();
 
         List<Notification> notificationList = notificationRepository.findByStatus(NotificationStatus.New);
         for (Notification notification:notificationList){
-            if (!notificationMap.containsKey(notification.getReviewerId())) {
-                notificationMap.put(notification.getReviewerId(), new LinkedList<>());
+            if (notification.getStatus().equals(NotificationStatus.Reviewed)){
+                if (!notificationMap.containsKey(notification.getReviewerId())) {
+                    notificationMap.put(notification.getReviewerId(), new LinkedList<>());
+                }
+                notificationMap.get(notification.getReviewerId()).add(notification);
+            }else {
+                if (!newNotificationMap.containsKey(notification.getReviewerId())) {
+                    newNotificationMap.put(notification.getReviewerId(), new LinkedList<>());
+                }
+                newNotificationMap.get(notification.getReviewerId()).add(notification);
             }
-            notificationMap.get(notification.getReviewerId()).add(notification);
         }
     }
 
@@ -59,20 +68,36 @@ public class NotificationServiceImpl implements NotificationService {
 
         notification.setCreatedAt(new Date());
         notification.setCreatedById(userId);
+        notificationRepository.saveAndFlush(notification);
 
-        if (!notificationMap.containsKey(notification.getReviewerId())) {
-            notificationMap.put(notification.getReviewerId(), new LinkedList<>());
+        if (!newNotificationMap.containsKey(notification.getReviewerId())) {
+            newNotificationMap.put(notification.getReviewerId(), new LinkedList<>());
         }
-        notificationMap.get(notification.getReviewerId()).add(notification);
+        newNotificationMap.get(notification.getReviewerId()).add(notification);
     }
 
-    public List<Notification> getReviewerNotificationList(Integer reviewerId){
+    public List<Notification> getNotificationList(Integer reviewerId){
         if (notificationMap.containsKey(reviewerId)) {
             return notificationMap.get(reviewerId);
         }
         return new LinkedList<>();
     }
 
-    //TODO remove Notification
+    public List<Notification> getNewNotificationList(Integer reviewerId){
+        //get and clear
+        List<Notification> notificationList = new LinkedList<>();
+        if (newNotificationMap.containsKey(reviewerId)) {
+            notificationList = newNotificationMap.get(reviewerId);
+        }
+        newNotificationMap.put(reviewerId, new LinkedList<>());
+
+        //put
+        if (notificationList.size()>0 && !notificationMap.containsKey(reviewerId)) {
+            notificationMap.put(reviewerId, new LinkedList<>());
+            notificationMap.get(reviewerId).addAll(notificationList);
+        }
+
+        return notificationList;
+    }
 
 }

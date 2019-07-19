@@ -1,19 +1,21 @@
 package uz.maroqand.ecology.core.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019.
  * (uz)
  * (ru)
  */
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "sys_user", indexes = {@Index(columnList = "username")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})
@@ -39,9 +41,6 @@ public class User {
 
     private String phone;
 
-    @Column(name = "full_name")
-    private String fullName;
-
     @Column(name = "lastname")
     private String lastname;
 
@@ -56,6 +55,19 @@ public class User {
     private Boolean gender;
 
     private Boolean enabled;
+
+    @Column(name="date_registered", columnDefinition = "timestamp without time zone")
+    private Date dateRegistered;
+
+
+    //foydalanuvchi fiz yoki yur bo'lsa, fiz inn
+    @Column(name = "tin")
+    private Integer tin;
+
+    //foydalanuvchi yur bo'lsa yoki NNT bo'lsa, yur inn
+    @Column(name = "le_tin")
+    private Integer leTin;
+
 
     //Organization.ID
     @Column(name = "organization_id")
@@ -87,6 +99,10 @@ public class User {
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    //Oxirgi kirgan vaqti
+    @Column(name = "last_event", columnDefinition = "timestamp without time zone")
+    private Date lastEvent;
 
     @Transient
     private Integer userAdditionalId;

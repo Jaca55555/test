@@ -20,6 +20,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -50,10 +51,10 @@ public class WebMVCConfigs implements WebMvcConfigurer {
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
         return container -> {
-            /*container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, SysUrls.ErrorNotFound));
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, SysUrls.ErrorNotFound));
             container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, SysUrls.ErrorInternalServerError));
             container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, SysUrls.ErrorInternalServerError));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, SysUrls.ErrorForbidden));*/
+            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, SysUrls.ErrorForbidden));
         };
     }
 
@@ -68,7 +69,7 @@ public class WebMVCConfigs implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(new Locale("uz"));
+        resolver.setDefaultLocale(new Locale("oz"));
         resolver.setCookieName("localeCookie");
         resolver.setCookieMaxAge(4800);
         return resolver;

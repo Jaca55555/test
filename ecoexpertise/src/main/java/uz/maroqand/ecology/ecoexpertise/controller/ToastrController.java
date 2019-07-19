@@ -9,7 +9,8 @@ import uz.maroqand.ecology.core.dto.user.Toastr;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.ecoexpertise.constant.Urls;
+import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
+import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ToastrController {
         this.toastrService = toastrService;
     }
 
-    @RequestMapping(value = Urls.Toastr, method = RequestMethod.POST)
+    @RequestMapping(value = SysUrls.Toastr, method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getToastr(
     ) {

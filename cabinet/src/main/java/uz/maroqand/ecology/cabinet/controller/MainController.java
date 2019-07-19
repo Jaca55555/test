@@ -3,6 +3,8 @@ package uz.maroqand.ecology.cabinet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uz.maroqand.ecology.cabinet.constant.sys.SysTemplates;
+import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 
@@ -39,7 +41,7 @@ public class MainController {
         return "dashboard";
     }
 
-    /*@RequestMapping(SysUrls.ErrorInternalServerError)
+    @RequestMapping(SysUrls.ErrorInternalServerError)
     public String getError500Page() {
         return SysTemplates.ErrorInternalServerError;
     }
@@ -52,6 +54,6 @@ public class MainController {
     @RequestMapping(SysUrls.ErrorForbidden)
     public String getError403Page() {
         return SysTemplates.ErrorForbidden;
-    }*/
+    }
 
 }

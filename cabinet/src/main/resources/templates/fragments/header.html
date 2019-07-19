@@ -11,7 +11,7 @@
         <a class="mobile-menu" id="mobile-collapse1" href="#!"><span></span></a>
         <a href="index.html" class="b-brand">
             <img style="width: 60px;" src="/static/images/logo.png" />
-            <span class="b-title">ЭКОЭКСПEРТИЗА</span>
+            <span class="b-title" th:text="#{sys_site_main_title}"></span>
         </a>
     </div>
     <a class="mobile-menu" id="mobile-header" href="#!">
@@ -24,49 +24,20 @@
         <ul class="navbar-nav ml-auto">
             <li>
                 <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <sub style="font-size: 100%;"><i class="icon feather icon-bell"></i></sub>
+                        <sup ><span class="badge badge-warning" id="new-notification-count">0</span></sup>
+                    </a>
                     <div class="dropdown-menu dropdown-menu-right notification">
                         <div class="noti-head">
                             <h6 class="d-inline-block m-b-0">Notifications</h6>
-                            <div class="float-right">
+                            <!--<div class="float-right">
                                 <a href="#!" class="m-r-10">mark as read</a>
                                 <a href="#!">clear all</a>
-                            </div>
+                            </div>-->
                         </div>
-                        <ul class="noti-body">
-                            <li class="n-title">
-                                <p class="m-b-0">NEW</p>
-                            </li>
-                            <li class="notification">
-                                <div class="media">
-                                    <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <p><strong>John Doe</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                                        <p>New ticket Added</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="n-title">
-                                <p class="m-b-0">EARLIER</p>
-                            </li>
-                            <li class="notification">
-                                <div class="media">
-                                    <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                                        <p>Prchace New Theme and make payment</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="notification">
-                                <div class="media">
-                                    <img class="img-radius" src="assets/images/user/avatar-3.jpg" alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <p><strong>Sara Soudein</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                                        <p>currently login</p>
-                                    </div>
-                                </div>
-                            </li>
+                        <ul class="noti-body" id="noti-body">
+
                         </ul>
                         <div class="noti-footer">
                             <a href="#!">show all</a>
@@ -74,7 +45,36 @@
                     </div>
                 </div>
             </li>
-            <li><a href="#!" class="displayChatbox"><i class="icon feather icon-mail"></i></a></li>
+            <!--<li><a href="#!" class="displayChatbox"><i class="icon feather icon-mail"></i></a></li>-->
+            <li>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="icon feather icon-globe"></i>
+                        <span th:if="__${#locale}__=='uz'">O`zbekcha</span>
+                        <span th:if="__${#locale}__=='oz'">Ўзбекча</span>
+                        <span th:if="__${#locale}__=='ru'">Русский</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right notification" style="width: 200px;min-width: 200px;">
+                        <ul class="noti-body">
+                            <li class="flag-image-li" onclick="switchLanguage('uz'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/uz.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> O`zbekcha
+                                </div>
+                            </li>
+                            <li class="flag-image-li" onclick="switchLanguage('oz'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/uz.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> Ўзбекча
+                                </div>
+                            </li>
+                            <li class="flag-image-li" onclick="switchLanguage('ru'); return false;">
+                                <div class="media">
+                                    <img src="/static/images/flags/ru.svg" class="flag-image" style="width: 30px;margin-right: 10px;"> Русский
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
             <li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -84,16 +84,16 @@
                         <div class="pro-head">
                             <img src="/static/images/avatar-2.jpg" class="img-radius" alt="User-Profile-Image">
                             <span th:utext="${#request.userPrincipal.name}"></span>
-                            <a href="auth-signin.html" class="dud-logout" title="Logout">
+                            <a href="/logout" class="dud-logout" title="Logout">
                                 <i class="feather icon-log-out"></i>
                             </a>
                         </div>
                         <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <ul class="pro-body">
-                            <li><a href="#!" class="dropdown-item"><i class="feather icon-settings"></i> Settings</a></li>
-                            <li><a href="#!" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
-                            <li><a href="message.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
-                            <li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
+                            <li><a href="#!" class="dropdown-item"><i class="feather icon-settings"></i> <span th:text="#{my settings}"></span> </a></li>
+                            <li><a href="#!" class="dropdown-item"><i class="feather icon-user"></i> <span th:text="#{my profile}"></span> </a></li>
+                            <!--<li><a href="message.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>-->
+                            <li><a href="/logout" class="dropdown-item"><i class="feather icon-log-out"></i> <span th:text="#{sys_logout}"></span> </a></li>
                         </ul>
                     </div>
                 </div>

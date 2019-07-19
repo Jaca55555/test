@@ -1,6 +1,6 @@
-package uz.maroqand.ecology.ecoexpertise.constant;
+package uz.maroqand.ecology.ecoexpertise.constant.reg;
 
-public class Urls {
+public class RegUrls {
     private static final String Prefix = "/reg";
 
     private static final String RegApplication = Prefix + "/application";
@@ -18,7 +18,6 @@ public class Urls {
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
-//    public static final String RegApplicationPayment = RegApplication + "/payment";
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
@@ -28,25 +27,18 @@ public class Urls {
     public static final String RegApplicationList = RegApplication + "/list";
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
 
+    private static final String Appeal = Prefix + "/appeal";
+    public static final String AppealUserList = Appeal + "/list";
+    public static final String AppealUserListAjax = Appeal + "/list_ajax";
+    public static final String AppealNew = Appeal + "/new";
+    public static final String AppealCreate = Appeal + "/create";
+    public static final String AppealEdit = Appeal + "/edit";
+    public static final String AppealUpdate = Appeal + "/update";
+    public static final String AppealDelete = Appeal + "/delete";
+    public static final String AppealUserView = Appeal + "/view";
+    public static final String AppealSubCreate = Appeal + "/sub_create";
 
-    private static final String Appeal = "/appeal";
-    public static final String AppealUserList = Prefix + Appeal + "/list";
-    public static final String AppealUserListAjax = Prefix + Appeal + "/list_ajax";
-    public static final String AppealNew = Prefix + Appeal + "/new";
-    public static final String AppealCreate = Prefix + Appeal + "/create";
-    public static final String AppealEdit = Prefix + Appeal + "/edit";
-    public static final String AppealUpdate = Prefix + Appeal + "/update";
-    public static final String AppealDelete = Prefix + Appeal + "/delete";
-    public static final String AppealUserView = Prefix + Appeal + "/view";
-    public static final String AppealSubCreate = Prefix + Appeal + "/sub_create";
-
-    private static final String PrefixSys = "/sys";
-
-    public static final String Toastr = PrefixSys + "/toastr";
-
-    private static final String Notification = PrefixSys + "/notification";
-    private static final String NotificationShow = Notification + "/show";
-    private static final String NotificationList = Notification + "/list";
-    private static final String NotificationView = Notification + "/view";
+    public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
+    public static final String GetIndividualByPinfl = Prefix + "/get_individual";
 
 }

@@ -41,17 +41,17 @@
                                 <div class="col-md-6 col-sm-12">
                                     <div class="card card-border-c-purple">
                                         <div class="card-header">
-                                            <a href="#" class="text-secondary">Новий проект </a>
+                                            <a href="#" class="text-secondary" th:text="#{sys_dashboard.newProject}">Новий проект </a>
                                         </div>
                                         <div class="card-block card-task">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <p class="task-detail">A collection of textile samples lay spread out on the table One morning, when Gregor Samsa woke from troubled.</p>
+                                                    <p class="task-detail" th:utext="#{sys_dashboard.newProjectDescription}"></p>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="task-board text-right">
-                                                <a class="btn btn-square btn-primary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.Urls).RegApplicationStart}">Boshlash</a>
+                                                <a class="btn btn-square btn-primary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationStart}" th:text="#{sys_start}">Boshlash</a>
                                             </div>
                                         </div>
                                     </div>
@@ -60,17 +60,17 @@
                                 <div class="col-md-6 col-sm-12">
                                     <div class="card card-border-c-green">
                                         <div class="card-header">
-                                            <a href="#" class="text-secondary">Продление срока заключения </a>
+                                            <a href="#" class="text-secondary" th:text="#{sys_dashboard.prolongProject}">Продление срока заключения </a>
                                         </div>
                                         <div class="card-block card-task">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <p class="task-detail">A collection of textile samples lay spread out on the table One morning, when Gregor Samsa woke from troubled.</p>
+                                                    <p class="task-detail" th:utext="#{sys_dashboard.prolongProjectDescription}"></p>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="task-board text-right">
-                                                <button type="button" class="btn btn-square btn-primary">Boshlash</button>
+                                                <button type="button" class="btn btn-square btn-primary" th:text="#{sys_start}">Boshlash</button>
                                             </div>
                                         </div>
                                     </div>

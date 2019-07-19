@@ -140,6 +140,8 @@
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersListAjax}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEdit}]];
+    var pswEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersPswEdit}]];
+    var labelEdit = [[#{sys_edit}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersView}]];
     var statusActive = [[#{status_avtive}]];
     var statusNotActive = [[#{status_not_avtive}]];
@@ -155,6 +157,7 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
         var currentViewLink = viewLink + '?id=' + row[0];
+        var currentPswEditLink = pswEditLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group mr-2" role="group" aria-label="First group">' +
             '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">' +
@@ -162,6 +165,9 @@
             '            </a>' +
             '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">' +
             '                   <i class="feather icon-edit" style="margin: 0px"></i>' +
+            '            </a>\n'+
+            '            <a href="'+currentPswEditLink+'"  class="btn btn-sm btn-outline-primary">' +
+            '                   <i class="fa fa-key" style="margin: 0px"></i>' +
             '            </a>\n' +
             '      </div>';
         return html;
