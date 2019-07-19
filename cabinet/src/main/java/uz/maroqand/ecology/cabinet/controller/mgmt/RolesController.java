@@ -188,6 +188,6 @@ public class RolesController {
 
         model.addAttribute("role",role);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return MgmtTemplates.DepartmentView;
+        return MgmtTemplates.RolesView;
     }
 }

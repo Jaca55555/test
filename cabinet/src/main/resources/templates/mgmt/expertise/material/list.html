@@ -6,14 +6,6 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
-    <style>
-        .table td, .table th{
-            white-space: pre-line;
-        }
-        .datepicker>.datepicker-days {
-            display: block;
-        }
-    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -94,6 +86,7 @@
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialListAjax}]];
     var ajaxRequestEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialEdit}]];
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -107,8 +100,16 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = ajaxRequestEditLink + '?id=' + row[0];
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
+            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
+            '                    <i class="feather icon-eye" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
+            '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '      </div>';
         return html;
     }
 

@@ -202,6 +202,6 @@ public class ObjectExpertiseController {
 
         model.addAttribute("objectExpertise",objectExpertise);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return ExpertiseMgmtTemplates.ActivityView;
+        return ExpertiseMgmtTemplates.ObjectExpertiseView;
     }
 }

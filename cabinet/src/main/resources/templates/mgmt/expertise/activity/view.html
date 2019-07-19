@@ -75,7 +75,81 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                                <div th:if="${beforeAndAfterList!=null}" class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                                    <div class="col-sm-12">
+                                                        <div class="accordion" id="accordionExample">
+                                                            <div class="card" style="margin:5px 0px; border: 0.5px solid #dee2e6;" th:each="elem,iter:${beforeAndAfterList}">
+                                                                <div th:id="'heading-'+${iter['index']}">
+                                                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" th:data-target="'#collapse-'+${iter['index']}" aria-expanded="false" th:aria-controls="'collapse-'+${iter['index']}">
+                                                                        <span th:text="${elem['registeredDate']}"></span>&nbsp; - &nbsp;
+                                                                        <span th:text="${elem['userName']}"></span>
+                                                                    </button>
+                                                                </div>
+                                                                <div th:id="'collapse-'+${iter['index']}" class="card-body collapse" th:aria-labelledby="'heading-'+${iter['index']}" data-parent="#accordionExample" >
+                                                                    <div class="table-responsive">
+                                                                        <table class="table info-table" >
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th  class="text-right" style="width: 30%"><h5></h5></th>
+                                                                                <th  class="text-center" style="width: 35%"><h5 th:text="#{sys_before}"></h5></th>
+                                                                                <th  class="text-center" style="width: 35%"><h5 th:text="#{sys_after}"></h5></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td class="text-right"><span th:text="#{mntr_activity.name}"></span>:</td>
+                                                                                <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].name}"></span></td>
+                                                                                <td class="text-center"><span th:text="${elem['after'].name}"></span></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-right"><span th:text="#{mntr_activity.nameOz}"></span>:</td>
+                                                                                <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].nameOz}"></span></td>
+                                                                                <td class="text-center"><span th:text="${elem['after'].nameOz}"></span></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-right"><span th:text="#{mntr_activity.nameEn}"></span>:</td>
+                                                                                <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].nameEn}"></span></td>
+                                                                                <td class="text-center"><span th:text="${elem['after'].nameEn}"></span></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-right"><span th:text="#{mntr_activity.nameRu}"></span>:</td>
+                                                                                <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].nameRu}"></span></td>
+                                                                                <td class="text-center"><span th:text="${elem['after'].nameRu}"></span></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-right"><span th:text="#{mntr_activity.category}"></span>:</td>
+                                                                                <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].category}"></span></td>
+                                                                                <td class="text-center"><span th:text="${elem['after'].category}"></span></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <br>
+                                                                    <h5 class="text-center">UserAdditional info</h5>
+                                                                    <div class="table-responsive text-nowrap">
+                                                                        <table class="table table-columned" >
+                                                                            <thead>
+                                                                            <tr class="text-center">
+                                                                                <th th:text="#{user_name}"></th>
+                                                                                <th th:text="#{sys_info}"></th>
+                                                                                <th th:text="#{sys_ipClient}"></th>
+                                                                                <th th:text="#{ sys_userAgent}"></th>
+                                                                                <th th:text="#{sys_loginType}"></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <td th:text="${elem['userName']}"></td>
+                                                                            <td style="word-break: break-all; width: 30%" th:text="${elem['userAdditional'].info}"></td>
+                                                                            <td th:text="${elem['userAdditional'].ipClient}"></td>
+                                                                            <td th:text="${elem['userAdditional'].userAgent}"></td>
+                                                                            <td th:text="#{sys_loginType_} + ${elem['userAdditional'].loginType}"></td>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,113 +169,7 @@
 
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:inline="javascript">
-    var html;
-    var table;
-    var tableUserAdditional='';
     $(document).ready(function () {
-        html='<div class="col-sm-12"><div class="accordion" id="accordionExample">';
-            $.each([[${beforeAndAfterList}]],function (val,elem) {
-                console.log("val==" + val + " elem==" + elem["after"].id);
-                var divId = 'collapse-' + val + '-' + elem["after"].id;
-                var headingId = 'heading-' + val + '-' + elem["after"].id;
-                var beforeActivityName='';
-                var beforeActivityNameOz='';
-                var beforeActivityNameEn='';
-                var beforeActivityNameRu='';
-                var beforeActivityCategory='';
-
-                if (elem["before"]!=null) {
-                    beforeActivityName = elem["before"].name;
-                    beforeActivityNameOz = elem["before"].nameOz;
-                    beforeActivityNameEn = elem["before"].nameEn;
-                    beforeActivityNameRu = elem["before"].nameRu;
-                    beforeActivityCategory = elem["before"].category;
-                }
-                var afterActivityName=elem["after"].name;
-                var afterActivityNameOz=elem["after"].nameOz;
-                var afterActivityNameEn=elem["after"].nameEn;
-                var afterActivityNameRu=elem["after"].nameRu;
-                var afterActivityCategory=elem["after"].category;
-                console.log(elem["userAdditional"]);
-                if (elem["userAdditional"]!=null){
-                    tableUserAdditional = '<table class="table table-columned" >' +
-                        '                       <thead>' +
-                        '                           <tr class="text-center">' +
-                        '                               <th>'+[[#{user_name}]]+'</th>' +
-                        '                               <th>'+[[#{sys_info}]]+'</th>' +
-                        '                               <th>'+[[#{sys_ipClient}]]+'</th>' +
-                        '                               <th> '+[[#{sys_userAgent}]]+'</th>' +
-                        '                               <th>'+[[#{sys_loginType}]]+'</th>' +
-                        '                           </tr>' +
-                        '                       </thead>' +
-                        '                       <tbody>' +
-                        '                               <td>'+elem["userName"]+'</td>' +
-                        '                               <td style="word-break: break-all; width: 30%">'+elem["userAdditional"].info+'</td>' +
-                        '                               <td>'+elem["userAdditional"].ipClient+'</td>' +
-                        '                               <td>'+elem["userAdditional"].userAgent+'</td>' +
-                        '                               <td>'+[[#{sys_loginType_}]] + elem["userAdditional"].loginType+'</td>' +
-                        '                       </tbody>' +
-                        '                   </table>';
-                }
-
-                table=' <table class="table info-table" >\n' +
-                    '       <thead>\n' +
-                    '           <tr>\n' +
-                    '               <th  class="text-right" style="width: 30%"><h5></h5></th>\n' +
-                    '               <th  class="text-center" style="width: 35%"><h5>'+[[#{sys_before}]]+'</h5></th>\n' +
-                    '               <th  class="text-center" style="width: 35%"><h5>'+[[#{sys_after}]]+'</h5></th>\n' +
-                    '           </tr>\n' +
-                    '       </thead>' +
-                    '       <tbody>' +
-                    '           <tr>' +
-                    '               <td class="text-right"><span>'+[[#{mntr_activity.name}]]+'</span>:</td>\n' +
-                    '               <td class="text-center"><span>'+beforeActivityName+'</span></td>\n' +
-                    '               <td class="text-center"><span>'+afterActivityName+'</span></td>\n' +
-                    '           </tr>' +
-                    '           <tr>' +
-                    '               <td class="text-right"><span>'+[[#{mntr_activity.nameOz}]]+'</span>:</td>\n' +
-                    '               <td class="text-center"><span>'+beforeActivityNameOz+'</span></td>\n' +
-                    '               <td class="text-center"><span>'+afterActivityNameOz+'</span></td>\n' +
-                    '           </tr>' +
-                    '           <tr>' +
-                    '               <td class="text-right"><span>'+[[#{mntr_activity.nameEn}]]+'</span>:</td>\n' +
-                    '               <td class="text-center"><span>'+beforeActivityNameEn+'</span></td>\n' +
-                    '               <td class="text-center"><span>'+afterActivityNameEn+'</span></td>\n' +
-                    '           </tr>' +
-                    '           <tr>' +
-                    '               <td class="text-right"><span>'+[[#{mntr_activity.nameRu}]]+'</span>:</td>\n' +
-                    '               <td class="text-center"><span>'+beforeActivityNameRu+'</span></td>\n' +
-                    '               <td class="text-center"><span>'+afterActivityNameRu+'</span></td>\n' +
-                    '           </tr>' +
-                    '           <tr>' +
-                    '               <td class="text-right"><span>'+[[#{mntr_activity.category}]]+'</span>:</td>\n' +
-                    '               <td class="text-center"><span>'+beforeActivityCategory+'</span></td>\n' +
-                    '               <td class="text-center"><span>'+afterActivityCategory+'</span></td>\n' +
-                    '           </tr>' +
-                    '           </tbody>' +
-                    '</table>';
-
-
-                html+='  <div class="card" style="margin:5px 0px; border: 0.5px solid #dee2e6;" >\n' +
-                    '       <div id="'+headingId+'">\n' +
-                    '           <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#'+divId+'" aria-expanded="false" aria-controls="'+divId+'">' +
-                    '               <span>'+elem["registeredDate"]+'</span>&nbsp; - &nbsp;' +
-                    '               <span>'+elem["userName"]+'</span>' +
-                    '           </button>\n' +
-                    '       </div>\n' +
-                    '       <div id="'+divId+'" class="card-body collapse" aria-labelledby="'+headingId+'" data-parent="#accordionExample" >' +
-                    '           <div class="table-responsive">' +
-                    table +
-                    '           </div>'+
-                    '           </br><h5 class="text-center">UserAdditional info</h5>' +
-                    '           <div class="table-responsive text-nowrap">' +
-                    tableUserAdditional+
-                    '           </div>' +
-                    '       </div>\n' +
-                    '   </div>';
-            });
-        html+='</div></div>';
-        $('#history').append(html);
         audit();
     });
 

@@ -169,6 +169,6 @@ public class MaterialController {
 
         model.addAttribute("material",material);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return ExpertiseMgmtTemplates.ActivityView;
+        return ExpertiseMgmtTemplates.MaterialView;
     }
 }

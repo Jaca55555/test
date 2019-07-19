@@ -183,7 +183,7 @@ public class UserController {
             @RequestParam(name = "userPasswordConfirmation") String userPasswordConfirmation,
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
-            @RequestParam(name = "enebled") Integer enebled,
+            @RequestParam(name = "enabled") Integer enebled,
             User userCreate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -209,7 +209,7 @@ public class UserController {
             user1.setEmail(userCreate.getEmail());
             user1.setUsername(userCreate.getUsername());
             user1.setPassword(encoder.encode(userPassword));
-            userService.createUser(user1);
+            user1 = userService.createUser(user1);
 
             String after="";
             try {
@@ -220,7 +220,7 @@ public class UserController {
             tableHistoryService.create(
                     TableHistoryType.add,
                     TableHistoryEntity.User,
-                    userCreate.getId(),
+                    user1.getId(),
                     null,
                     after,
                     "",
@@ -236,7 +236,7 @@ public class UserController {
             @RequestParam(name = "id") Integer userId,
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
-            @RequestParam(name = "enebled") Integer enebled,
+            @RequestParam(name = "enabled") Integer enebled,
             User userUpdate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -344,7 +344,7 @@ public class UserController {
 
         model.addAttribute("user",user);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return MgmtTemplates.DepartmentView;
+        return MgmtTemplates.UserView;
     }
 
     /*@RequestMapping(value = MgmtUrls.UserDelete)

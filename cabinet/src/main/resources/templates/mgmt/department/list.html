@@ -3,14 +3,6 @@
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
-    <style>
-        table.dataTable.nowrap th, table.dataTable.nowrap td {
-            white-space: pre-line;
-        }
-        .table td, .table th{
-            white-space: pre-line;
-        }
-    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -128,8 +120,8 @@
 <script th:inline="javascript">
     var url = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentGetByOrganization}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentEdit}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentView}]];
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentListAjax}]];
-    var labelEdit = [[#{sys_edit}]];
     var locale = getCurrentLanguage();
     function getCurrentLanguage() {
         return [[__${#locale}__]];
@@ -190,8 +182,16 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
+        var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<a class="btn btn-xs btn-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit mr-0"></i></a>';
+        html += '<div class="btn-group mr-2" role="group" aria-label="First group">' +
+            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">' +
+            '                    <i class="feather icon-eye" style="margin: 0px"></i>' +
+            '            </a>' +
+            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">' +
+            '                   <i class="feather icon-edit" style="margin: 0px"></i>' +
+            '            </a>\n' +
+            '      </div>';
         return html;
     }
 
