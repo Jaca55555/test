@@ -36,4 +36,5 @@ public interface AppealService {
             Pageable pageable
     );
 
+    Appeal findById(Integer id);
 }
