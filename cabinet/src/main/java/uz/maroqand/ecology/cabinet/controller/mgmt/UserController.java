@@ -240,9 +240,7 @@ public class UserController {
     public ResponseEntity<Resource> downloadFile(
             @RequestParam(name = "file_id") Integer fileId
     ){
-        User user = userService.getCurrentUserFromContext();
-
-        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+        File file = fileService.findById(fileId);
 
         if (file == null) {
             return null;
@@ -342,7 +340,7 @@ public class UserController {
             if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
             if (userEvidence==null) userEvidence = new UserEvidence();
 
-            userEvidence.setUserId(user.getId());
+            userEvidence.setUserId(user1.getId());
             userEvidence.setTableHistoryId(tableHistory.getId());
             userEvidence.setTableHistoryId(tableHistory.getId());
             userEvidence.setReason(reason);
@@ -414,7 +412,7 @@ public class UserController {
             if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
             if (userEvidence==null) userEvidence = new UserEvidence();
 
-            userEvidence.setUserId(user.getId());
+            userEvidence.setUserId(updateUser.getId());
             userEvidence.setTableHistoryId(tableHistory.getId());
             userEvidence.setTableHistoryId(tableHistory.getId());
             userEvidence.setReason(reason);
@@ -480,9 +478,12 @@ public class UserController {
         }
         Type type = new TypeToken<List<User>>(){}.getType();
         List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.User,id);
-
+        List<UserEvidence> userEvidenceList = userEvidenceService.getListByUserId(user.getId());
+        System.out.println("list" + userEvidenceList.size());
+        System.out.println("list==" + userEvidenceList);
         model.addAttribute("user",user);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        model.addAttribute("userEvidenceList",userEvidenceList);
         return MgmtTemplates.UserView;
     }
 
