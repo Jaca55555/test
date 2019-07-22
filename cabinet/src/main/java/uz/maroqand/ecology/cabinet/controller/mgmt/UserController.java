@@ -7,8 +7,10 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.TableHistory;
+import uz.maroqand.ecology.core.entity.user.EvidinceStatus;
+import uz.maroqand.ecology.core.entity.user.UserEvidence;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
@@ -47,9 +55,11 @@ public class UserController {
     private final OrganizationService organizationService;
     private final ObjectMapper objectMapper;
     private final UserAdditionalService userAdditionalService;
+    private final UserEvidenceService userEvidenceService;
+    private final FileService fileService;
 
     @Autowired
-    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
+    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
         this.userService = userService;
         this.positionService = positionService;
         this.departmentService = departmentService;
@@ -59,6 +69,8 @@ public class UserController {
         this.organizationService = organizationService;
         this.objectMapper = objectMapper;
         this.userAdditionalService = userAdditionalService;
+        this.userEvidenceService = userEvidenceService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(MgmtUrls.UsersList)
@@ -177,11 +189,111 @@ public class UserController {
         return result;
     }
 
+    //fileUpload
+    @RequestMapping(value = MgmtUrls.UsersEvidenceFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "file_name") String fileNname,
+            @RequestParam(name = "file") MultipartFile multipartFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        System.out.println("id==" + id);
+        System.out.println("file_name==" + fileNname);
+        System.out.println("file==" + multipartFile);
+        UserEvidence userEvidence = new UserEvidence() ;
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (id!=null){
+            userEvidence = userEvidenceService.getById(id);
+            if (userEvidence == null) {
+                responseMap.put("message", "Object not found.");
+                return responseMap;
+            }
+        }else{
+            userEvidence = userEvidenceService.save(userEvidence);
+
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"userEvidence="+userEvidence.getId(),fileNname);
+        if (file != null) {
+            Set<File> fileSet = userEvidence.getDocumentFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            userEvidence.setDocumentFiles(null);
+            userEvidence.setDocumentFiles(fileSet);
+            userEvidence = userEvidenceService.save(userEvidence);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("link", MgmtUrls.UsersEvidenceFileDownload+ "?file_id=" + file.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("id", userEvidence.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    //fileDownload
+    @RequestMapping(MgmtUrls.UsersEvidenceFileDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId
+    ){
+        User user = userService.getCurrentUserFromContext();
+
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    //fileDelete
+    @RequestMapping(value = MgmtUrls.UsersEvidenceFileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        UserEvidence userEvidence = userEvidenceService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (userEvidence == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = userEvidence.getDocumentFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                userEvidenceService.save(userEvidence);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
+    }
+
     @RequestMapping(value = MgmtUrls.UsersCreate, method = RequestMethod.POST)
     public String createUserMethod(
             @RequestParam(name = "userPassword") String userPassword,
             @RequestParam(name = "userPasswordConfirmation") String userPasswordConfirmation,
             @RequestParam(name = "departmentId") Integer departmentId,
+            @RequestParam(name = "userEvidenceId") Integer userEvidenceId,
+            @RequestParam(name = "reason") String reason,
             @RequestParam(name = "roleId") Integer roleId,
             @RequestParam(name = "enabled") Integer enebled,
             User userCreate
@@ -196,7 +308,7 @@ public class UserController {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         User user1 = new User();
         User userCheck = userService.findByUsername(userCreate.getUsername());
-        if(userCheck==null){
+        if(userCheck==null ){
             user1.setFirstname(userCreate.getFirstname());
             user1.setLastname(userCreate.getLastname());
             user1.setMiddlename(userCreate.getMiddlename());
@@ -217,7 +329,7 @@ public class UserController {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            tableHistoryService.create(
+            TableHistory tableHistory = tableHistoryService.create(
                     TableHistoryType.add,
                     TableHistoryEntity.User,
                     user1.getId(),
@@ -226,6 +338,17 @@ public class UserController {
                     "",
                     user.getId(),
                     user.getUserAdditionalId());
+            UserEvidence userEvidence = null;
+            if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
+            if (userEvidence==null) userEvidence = new UserEvidence();
+
+            userEvidence.setUserId(user.getId());
+            userEvidence.setTableHistoryId(tableHistory.getId());
+            userEvidence.setTableHistoryId(tableHistory.getId());
+            userEvidence.setReason(reason);
+            userEvidence.setRegisteredDate(new Date());
+            userEvidence.setEvidinceStatus(EvidinceStatus.Create);
+            userEvidenceService.save(userEvidence);
         }
         return "redirect:" + MgmtUrls.UsersList;
     }
@@ -234,6 +357,8 @@ public class UserController {
     @RequestMapping(value = MgmtUrls.UsersUpdate, method = RequestMethod.POST)
     public String userUpdateMethod(
             @RequestParam(name = "id") Integer userId,
+            @RequestParam(name = "userEvidenceId") Integer userEvidenceId,
+            @RequestParam(name = "reason") String reason,
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
             @RequestParam(name = "enabled") Integer enebled,
@@ -276,7 +401,7 @@ public class UserController {
                 e.printStackTrace();
             }
 
-            tableHistoryService.create(
+            TableHistory tableHistory = tableHistoryService.create(
                     TableHistoryType.edit,
                     TableHistoryEntity.User,
                     updateUser.getId(),
@@ -285,7 +410,21 @@ public class UserController {
                     "",
                     user.getId(),
                     user.getUserAdditionalId());
+            UserEvidence userEvidence = null;
+            if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
+            if (userEvidence==null) userEvidence = new UserEvidence();
+
+            userEvidence.setUserId(user.getId());
+            userEvidence.setTableHistoryId(tableHistory.getId());
+            userEvidence.setTableHistoryId(tableHistory.getId());
+            userEvidence.setReason(reason);
+            userEvidence.setRegisteredDate(new Date());
+            userEvidence.setEvidinceStatus(EvidinceStatus.Active);
+            userEvidenceService.save(userEvidence);
         }
+
+
+
         return "redirect:" + MgmtUrls.UsersList;
     }
 
