@@ -45,13 +45,16 @@
         var features = vector.getSource().getFeatures();
         features.forEach(function (feature) {
             console.log(feature.getGeometry().getCoordinates()[0][0]);
-            /*var lonlat = ol.proj.toLonLat(feature.getGeometry().getCoordinates());
-            console.log(lonlat)*/
             var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
             console.log(lonlat[0]);
             console.log(lonlat[1]);
         })
-    })
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.which == 8)
+            vector.getSource().clear();
+    });
 
 </script>
 </body>

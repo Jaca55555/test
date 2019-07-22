@@ -48,4 +48,8 @@ public class ExpertiseTemplates {
     public static final String RegApplications= RegApplication + "/applications";
     public static final String RegApplicationList = RegApplication + "/list";
 
+    //Coordinate
+    private static final String Coordinate = Prefix + "/coordinate";
+    public static final String CoordinateList = Coordinate + "/list";
+
 }
