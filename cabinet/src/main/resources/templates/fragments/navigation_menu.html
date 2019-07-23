@@ -34,8 +34,14 @@
                     <label th:text="#{sys_expertise_registry}"></label>
                 </li>
                 <li data-username="Sample Page" class="nav-item"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
                 <li data-username="Sample Page" class="nav-item"><a href="/expertise/reg_application/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label th:text="#{sys_menu.billing}"></label>
+                </li>
+                <li data-username="" class="nav-item"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
+                <li data-username="" class="nav-item"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
+
 
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_control}"></label>

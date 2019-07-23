@@ -1,0 +1,47 @@
+<Configuration monitorInterval="86400">
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="archive">${log-path}/archive</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="MainLogFile-Appender"
+                     fileName="${log-path}/application.log"
+                     filePattern="${archive}/application.log.%d{yyyy-MM-dd-hh-mm}.gz">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy interval="86400000" />
+                <SizeBasedTriggeringPolicy size="4 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Logger level="debug" name="org.springframework.ws.client.MessageTracing">
+            <AppenderRef ref="MainLogFile-Appender"/>
+        </Logger>
+        <Logger level="trace" name="org.springframework.ws.client.MessageTracing.received">
+            <AppenderRef ref="MainLogFile-Appender"/>
+        </Logger>
+
+
+        <Root level="info">
+            <AppenderRef ref="Console-Appender"/>
+            <AppenderRef ref="MainLogFile-Appender"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

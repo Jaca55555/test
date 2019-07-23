@@ -1,0 +1,122 @@
+package uz.maroqand.ecology.core.service.billing.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.billing.PaymentFile;
+import uz.maroqand.ecology.core.repository.billing.PaymentFileRepository;
+import uz.maroqand.ecology.core.service.billing.PaymentFileService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Created by Utkirbek Boltaev on 23.07.2019.
+ * (uz)
+ * (ru)
+ */
+
+@Service
+public class PaymentFileServiceImpl implements PaymentFileService {
+
+    private final PaymentFileRepository paymentFileRepository;
+
+    @Autowired
+    public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository) {
+        this.paymentFileRepository = paymentFileRepository;
+    }
+
+    public PaymentFile create(PaymentFile paymentFile){
+        paymentFile.setCreatedAt(new Date());
+        paymentFile.setDeleted(false);
+        return paymentFileRepository.save(paymentFile);
+    }
+
+    public Page<PaymentFile> findFiltered(
+            Date dateBegin,
+            Date dateEnd,
+            String invoice,
+            Integer paymentId,
+
+            Integer payerTin,
+            String payerName,
+            String details,
+            String bankMfo,
+
+            Boolean isComplete,
+            Pageable pageable
+    ) {
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete),pageable);
+    }
+
+    private static Specification<PaymentFile> getFilteringSpecification(
+            final Date dateBegin,
+            final Date dateEnd,
+            final String invoice,
+            final Integer paymentId,
+            final Integer payerTin,
+            final String payerName,
+            final String details,
+            final String bankMfo,
+            final Boolean isComplete
+    ) {
+        return new Specification<PaymentFile>() {
+            @Override
+            public Predicate toPredicate(Root<PaymentFile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                if(dateBegin != null && dateEnd != null){
+                    predicates.add(criteriaBuilder.between(root.get("createdAt"), dateBegin ,dateEnd));
+                }
+
+                if(dateBegin != null && dateEnd == null){
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), dateBegin));
+                }
+
+                if(dateBegin == null && dateEnd != null){
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), dateEnd));
+                }
+
+                if(invoice != null){
+                    predicates.add(criteriaBuilder.equal(root.get("invoice"), invoice));
+                }
+                if(paymentId != null){
+                    predicates.add(criteriaBuilder.equal(root.get("paymentId"), paymentId));
+                }
+
+                if(payerTin != null){
+                    predicates.add(criteriaBuilder.equal(root.get("payerTin"), payerTin));
+                }
+                if(payerName != null){
+                    predicates.add(criteriaBuilder.like(root.get("payerName"), "%" + payerName + "%"));
+                }
+                if(details != null){
+                    predicates.add(criteriaBuilder.like(root.get("details"), "%" + details + "%"));
+                }
+                if(bankMfo != null){
+                    predicates.add(criteriaBuilder.like(root.get("bankMfo"), "%" + bankMfo + "%"));
+                }
+
+                if(isComplete != null){
+                    if(isComplete){
+                        predicates.add(criteriaBuilder.isNotNull(root.get("paymentId")));
+                    }else {
+                        predicates.add(criteriaBuilder.isNull(root.get("paymentId")));
+                    }
+                }
+
+
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
+
+}

@@ -101,25 +101,17 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setUpdatedAt(new Date());
         invoiceRepository.save(invoice);
 
-        Payment payment = new Payment();
-        payment.setInvoiceId(invoice.getId());
-        payment.setAmount(invoice.getAmount());
-        payment.setPaymentDate(new Date());
-        payment.setDetail(invoice.getDetail());
-
-        payment.setType(PaymentType.BANK);
-        payment.setStatus(PaymentStatus.Success);
-
-        payment.setDeleted(true);
-        payment.setRegisteredAt(new Date());
-
-        paymentService.pay(payment);
+        paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
 
         return invoice;
     }
 
     public Invoice getInvoice(Integer id) {
         return invoiceRepository.findByIdAndDeletedFalse(id);
+    }
+
+    public Invoice getInvoice(String invoice) {
+        return invoiceRepository.findByInvoiceAndDeletedFalse(invoice);
     }
 
     private String createInvoiceSerial() {

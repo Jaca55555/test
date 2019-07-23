@@ -3,7 +3,6 @@ package uz.maroqand.ecology.core.service.billing;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
-import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
@@ -20,6 +19,8 @@ public interface InvoiceService {
     Invoice create(RegApplication regApplication, Requirement requirement);
 
     Invoice getInvoice(Integer id);
+
+    Invoice getInvoice(String invoice);
 
     Invoice payTest(Integer id);
 
