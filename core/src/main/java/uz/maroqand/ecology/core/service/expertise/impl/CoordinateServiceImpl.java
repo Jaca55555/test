@@ -78,4 +78,8 @@ public class CoordinateServiceImpl implements CoordinateService {
             }
         };
     }
+
+    public Coordinate findById(Integer id){
+        return coordinateRepository.getOne(id);
+    }
 }

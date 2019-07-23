@@ -7,5 +7,7 @@ import uz.maroqand.ecology.core.entity.expertise.Coordinate;
 import java.util.Date;
 
 public interface CoordinateService {
-    public Page<Coordinate> findFiltered(Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable);
+    Page<Coordinate> findFiltered(Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable);
+
+    Coordinate findById(Integer id);
 }

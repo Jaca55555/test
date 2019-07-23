@@ -51,5 +51,6 @@ public class ExpertiseTemplates {
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";
     public static final String CoordinateList = Coordinate + "/list";
+    public static final String CoordinateView = Coordinate + "/view";
 
 }

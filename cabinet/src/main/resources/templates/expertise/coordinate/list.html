@@ -64,7 +64,7 @@
                                                 <input type="text" class="form-control" id="name" />
                                             </div>
                                             <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{sys_conclusion_number}"></label><br/>
+                                                <label class="control-label" th:text="#{coordinate.conclusion_number}"></label><br/>
                                                 <input type="text" class="form-control" id="number" />
                                             </div>
                                             <div class="form-group col-sm-2">
@@ -103,8 +103,8 @@
                                                 <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th th:text="#{sys_conclusion_number}"></th>
-                                                    <th th:text="#{sys_conclusion_date}"></th>
+                                                    <th th:text="#{coordinate.conclusion_number}"></th>
+                                                    <th th:text="#{coordinate.conclusion_date}"></th>
                                                     <th th:text="#{sys_tin}"></th>
                                                     <th th:text="#{sys_company_name}"></th>
                                                     <th th:text="#{sys_region}"></th>
@@ -152,9 +152,9 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><button class="btn btn-outline-info btn-sm" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+        html += '<div class="btn-group"><a href="'+currentViewLink+'" class="btn btn-outline-info btn-sm" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 

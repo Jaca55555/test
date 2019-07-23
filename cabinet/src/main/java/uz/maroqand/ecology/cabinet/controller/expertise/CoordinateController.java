@@ -15,8 +15,12 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Coordinate;
+import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.service.expertise.CoordinateService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -35,13 +39,18 @@ public class CoordinateController {
     private final CoordinateService coordinateService;
     private final HelperService helperService;
     private final SoatoService soatoService;
+    private final RegApplicationService regApplicationService;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
+
 
     @Autowired
-    public CoordinateController(UserService userService, CoordinateService coordinateService, HelperService helperService, SoatoService soatoService){
+    public CoordinateController(UserService userService, CoordinateService coordinateService, HelperService helperService, SoatoService soatoService, RegApplicationService regApplicationService, CoordinateLatLongRepository coordinateLatLongRepository){
         this.userService = userService;
         this.coordinateService = coordinateService;
         this.helperService = helperService;
         this.soatoService = soatoService;
+        this.regApplicationService = regApplicationService;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(ExpertiseUrls.CoordinateList)
@@ -86,8 +95,8 @@ public class CoordinateController {
                     coordinate.getId(),
                     coordinate.getNumber(),
                     coordinate.getDate() != null ? Common.uzbekistanDateAndTimeFormat.format(coordinate.getDate()) : "",
-                    client.getTin(),
-                    client.getName(),
+                    client != null ? client.getTin() : "",
+                    coordinate.getClientName(),
                     coordinate.getRegionId() != null ? helperService.getSoatoName(coordinate.getRegionId(),locale) : "",
                     coordinate.getSubRegionId() != null ? helperService.getSoatoName(coordinate.getSubRegionId(),locale) : "",
             });
@@ -97,5 +106,32 @@ public class CoordinateController {
         result.put("recordsFiltered", coordinatePage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
+    }
+
+    @RequestMapping(ExpertiseUrls.CoordinateView)
+    public String coordinateView(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Coordinate coordinate = coordinateService.findById(id);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        if(coordinate == null) return "redirect:" + ExpertiseUrls.CoordinateList;
+        RegApplication regApplication = null;
+        if(coordinate.getRegApplicationId() != null)
+            regApplication = regApplicationService.getById(coordinate.getRegApplicationId());
+
+        if(regApplication != null){
+            model.addAttribute("object_expertise", helperService.getObjectExpertise(regApplication.getObjectId(), locale));
+            model.addAttribute("materials_type", helperService.getMaterial(regApplication.getMaterialId(), locale));
+            model.addAttribute("category", helperService.getCategory(regApplication.getCategory() != null ? regApplication.getCategory().getId() : null, locale));
+            model.addAttribute("activity", helperService.getActivity(regApplication.getActivityId(), locale));
+            model.addAttribute("object_name", regApplication.getName());
+        }
+
+        List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+        model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+        model.addAttribute("coordinate", coordinate);
+        return ExpertiseTemplates.CoordinateView;
     }
 }
