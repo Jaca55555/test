@@ -13,6 +13,7 @@
         <module>core</module>
         <module>ecoexpertise</module>
         <module>cabinet</module>
+        <module>rest</module>
     </modules>
 
     <parent>
