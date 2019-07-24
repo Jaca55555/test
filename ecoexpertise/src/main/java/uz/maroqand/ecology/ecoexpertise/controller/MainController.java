@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
@@ -13,14 +14,18 @@ import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 @Controller
 public class MainController {
 
+    private final String apiKey = "800D00EAA115F8BB0D5083ECBDEC6ABDF9124235BDD6C2CD558CD686B583743524FB947AF54B11A6A98D3A303CF14CF6D86BD71C975E95B45E34D07F327674CA";
+
     @RequestMapping("/")
     public String getPage() {
         return "redirect: login";
     }
 
     @RequestMapping("/login")
-    public String getLoginPage() {
-        System.out.println("--login");
+    public String getLoginPage(Model model) {
+
+        model.addAttribute("api_key", apiKey);
+        model.addAttribute("api_key_domain", "eco-service.uz");
         return "login";
     }
 
