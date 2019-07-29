@@ -46,9 +46,11 @@ public class Soato {
         switch (locale) {
             case "uz":
                 return name;
+            case "oz":
+                return nameOz;
             case "ru":
             default:
-                return name;
+                return nameRu;
         }
     }
 

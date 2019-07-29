@@ -191,15 +191,19 @@
         });
 
         $(".phone").mask('+999(99)999-99-99');
+        $("#legalEntityBankAccount").mask('9999 9999 9999 9999 9999 9999 9999');
 
         $('input[name="applicantType"]:radio').change(function () {
             selectForm($(this).val());
         });
 
         function getSMSCode() {
-            $('#sms_code').show();
-            $('#allow').attr("hidden", true);
-            $('#notAllow').attr("hidden", false);
+            $('#legalEntityMobilePhone').parsley().validate();
+            if ($('#legalEntityMobilePhone').parsley().isValid()){
+                $('#sms_code').show();
+                $('#allow').attr("hidden", true);
+                $('#notAllow').attr("hidden", false);
+            }
         }
         
         function getOkedName() {
