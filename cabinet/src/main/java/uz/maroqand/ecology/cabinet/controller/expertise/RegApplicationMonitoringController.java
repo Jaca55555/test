@@ -47,7 +47,7 @@ public class RegApplicationMonitoringController {
     @RequestMapping(value = ExpertiseUrls.RegApplications,method = RequestMethod.GET)
     public String getApplications(Model model){
         model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.findPerformerList());
+        model.addAttribute("users",userService.getEmployeeList());
         return ExpertiseTemplates.RegApplications;
     }
 
@@ -66,7 +66,7 @@ public class RegApplicationMonitoringController {
 
         List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
         PageRequest pageRequest = new PageRequest(0, regApplicationList.size(), Sort.Direction.ASC, "id");
-        Page<User> userPage = userService.findFiltered(id,lastname,firstname,middlename,null,null,null,null,pageRequest );
+        Page<User> userPage = userService.findFilteredForEmployee(id,lastname,firstname,middlename,null,null,null,null,pageRequest );
         List<User> userList = userPage.getContent();
         System.out.println(userList.size());
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -98,7 +98,7 @@ public class RegApplicationMonitoringController {
     @RequestMapping(value = ExpertiseUrls.RegApplicationList,method = RequestMethod.GET)
     public String getRegApplicationList(Model model){
         model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.findPerformerList());
+        model.addAttribute("users",userService.getEmployeeList());
         return ExpertiseTemplates.RegApplicationList;
     }
 
@@ -158,7 +158,7 @@ public class RegApplicationMonitoringController {
 //            }
         }
 
-        Page<User> userPage = userService.findFiltered(
+        Page<User> userPage = userService.findFilteredForEmployee(
                 id,
                 lastname,
                 firstname,

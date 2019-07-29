@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface UserService {
 
+    List<User> getEmployeeList();
 
     User findById(Integer id);
 
@@ -21,6 +22,18 @@ public interface UserService {
     User updateUser(User user);
 
     Page<User> findFiltered(
+            Integer userId,
+            String lastName,
+            String firstName,
+            String middleName,
+            String username,
+            Integer organizationId,
+            Integer departmentId,
+            Integer positionId,
+            Pageable pageable
+    );
+
+    Page<User> findFilteredForEmployee(
             Integer userId,
             String lastName,
             String firstName,
