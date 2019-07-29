@@ -46,7 +46,7 @@
                                         <div class="card-header" id="headingOne">
                                             <h5 class="mb-0"><a href="#!" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed" th:text="#{reg_application.filters}"></a></h5>
                                         </div>
-                                        <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                        <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
                                             <form class="row">
                                                 <div class="form-group col-sm-2">
                                                     <label for="tin" class="control-label" th:text="#{sys_tin}">ИНН</label>
@@ -56,10 +56,10 @@
                                                     <label for="name" class="control-label" th:text="#{sys_legal_entity_name}">Наименование предприятия</label>
                                                     <input type="text" class="form-control" id="name">
                                                 </div>
-                                                <div class="form-group col-sm-2">
+                                                <!--<div class="form-group col-sm-2">
                                                     <label for="contractNumber" class="control-label" th:text="#{sys_contract_number}">Номер договора</label>
                                                     <input type="text" class="form-control" id="contractNumber">
-                                                </div>
+                                                </div>-->
                                                 <div class="form-group col-sm-2">
                                                     <label for="applicationId" class="control-label" th:text="#{reg_application.number}">№ id</label>
                                                     <input type="text" class="form-control" id="applicationId">
@@ -72,7 +72,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group col-sm-2" >
+                                                <div class="form-group col-sm-4" >
                                                     <label for="regDateBegin" class="control-label" th:text="#{reg_application.regdate}"></label>
                                                     <div class="row">
                                                         <div class="col-sm-6">
@@ -126,7 +126,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-sm-12 text-center">
+                                                <div class="form-group col-sm-12 text-right">
                                                     <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
                                                         <i class="feather icon-search mr-1"></i>
                                                         <span th:text="#{sys_search}">Search</span>
@@ -236,7 +236,7 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
                 dataToSend.tin = $('#tin').val();
                 dataToSend.name = $('#name').val();
-                dataToSend.contractNumber = $('#contractNumber').val();
+                dataToSend.contractNumber = "";
                 dataToSend.applicationId = $('#applicationId').val();
                 dataToSend.regionId = $('#regionId').val();
                 dataToSend.subRegionId = $('#subRegionId').val();

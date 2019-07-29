@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     List<User> findByTin(Integer tin);
 
+    List<User> findAllByDepartmentIdNotNull();
+
 }

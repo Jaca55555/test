@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getEmployeeList() {
+        return userRepository.findAllByDepartmentIdNotNull();
+    }
+
+    @Override
     public User findById(Integer id) {
         return userRepository.getOne(id);
     }
@@ -61,6 +66,21 @@ public class UserServiceImpl implements UserService {
             Pageable pageable
     ) {
         return userRepository.findAll(getFilteringSpecification(userId,userName,lastName,firstName,middleName,organizationId,departmentId,positionId),pageable);
+    }
+
+    @Override
+    public Page<User> findFilteredForEmployee(
+            Integer userId,
+            String lastName,
+            String firstName,
+            String middleName,
+            String username,
+            Integer organizationId,
+            Integer departmentId,
+            Integer positionId,
+            Pageable pageable
+    ) {
+        return userRepository.findAll(getFilteringForEmployeeSpecification(userId,username,lastName,firstName,middleName,organizationId,departmentId,positionId),pageable);
     }
 
     private static Specification<User> getFilteringSpecification(
@@ -101,6 +121,64 @@ public class UserServiceImpl implements UserService {
                 if (departmentId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
                 }
+                if (positionId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("positionId"), positionId));
+                }
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
+
+    private static Specification<User> getFilteringForEmployeeSpecification(
+            final Integer userId,
+            final String userName,
+            final String lastName,
+            final String firstName,
+            final String middleName,
+            final Integer organizationId,
+            final Integer departmentId,
+            final Integer positionId
+    ) {
+        return new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                System.out.println("userId="+userId);
+                System.out.println("userName="+userName);
+                System.out.println("lastName="+lastName);
+                System.out.println("firstName="+firstName);
+                System.out.println("middleName="+middleName);
+                System.out.println("organizationId="+organizationId);
+                System.out.println("departmentId="+departmentId);
+                System.out.println("positionId="+positionId);
+                if (userId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), userId));
+                }
+                if (userName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("username"), "%" + userName + "%"));
+                }
+                if (lastName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("lastname"), "%" + lastName + "%"));
+                }
+                if (firstName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("firstname"), "%" + firstName + "%"));
+                }
+                if (middleName != null) {
+                    predicates.add(criteriaBuilder.like(root.get("middlename"), "%" + middleName + "%"));
+                }
+
+                if (organizationId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
+                }
+
+                if (departmentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+                }else{
+                    predicates.add(criteriaBuilder.isNotNull(root.get("departmentId")));
+                }
+
                 if (positionId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("positionId"), positionId));
                 }

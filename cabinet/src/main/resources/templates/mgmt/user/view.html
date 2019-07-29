@@ -181,6 +181,26 @@
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
+                                                                        </br>
+                                                                        <h4 class="text-center" th:text="#{mntr_user_evidence}"></h4>
+                                                                        <div class="table-responsive" th:if="${userEvidenceList!=null}">
+                                                                            <table class="table info-table" >
+                                                                                <tbody th:each="userEvidence:${userEvidenceList}" th:if="${elem['tableHistoryId']!=null and userEvidence.tableHistoryId==elem['tableHistoryId']}">
+                                                                                    <tr>
+                                                                                        <th style="width: 50%;" class="text-right"><span th:text="#{mntr_user_evidence.reason}"></span></th>
+                                                                                        <td style="width: 50%;" class="text-left"><span  th:text="${userEvidence.reason}"></span></td>
+                                                                                    </tr>
+                                                                                <tr>
+                                                                                    <th class="text-right"><span th:text="#{mntr_user_evidence.files}"></span></th>
+                                                                                    <td class="text-left">
+                                                                                        <p class="mt-2 mb-0" th:each="file:${userEvidence.documentFiles}" th:if="${userEvidence.documentFiles!=null}">
+                                                                                            <a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEvidenceFileDownload + '?file_id=' + file.id}"><i class="fas fa-download"></i><span class="ml-2" th:text="${file.name}"></span></a>
+                                                                                        </p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
                                                                     <br>
                                                                     <h5 class="text-center">UserAdditional info</h5>

@@ -310,6 +310,14 @@
         return html;
     }
 
+    function renderFormatAmount(data, type, row, meta) {
+        var html = '';
+        if (row[3]!=null && row[3]!=""){
+            html+=formatMoney(row[3]);
+        }
+        return html;
+    }
+
     function datatableConnect() {
         dataDatatableSelector.DataTable({
             processing: true,
@@ -350,6 +358,9 @@
                 {data: 2, name: 'organizationName', orderable:false},
                 {data: 3, name: 'amount'},
                 {render: renderStatusColumn, orderable:false},
+                {render: renderFormatAmount,  name: 'amount'},
+                // {data: 3,},
+                {data: 4, name: 'status'},
                 {render: renderActionsColumn, orderable:false}
             ],
             language: {

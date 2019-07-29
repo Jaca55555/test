@@ -76,6 +76,7 @@ public class TableHistoryServiceImpl implements TableHistoryService {
             HashMap<String,Object> stringCategoryHashMap = new HashMap<>();
             List<Object> objectList = gson.fromJson("["+tableHistory.getChangesSerialized()+"]",type);
             stringCategoryHashMap.put("before",objectList.get(0));
+            stringCategoryHashMap.put("tableHistoryId",tableHistory.getId());
             stringCategoryHashMap.put("after",objectList.get(1));
             stringCategoryHashMap.put("userName",userService.findById(tableHistory.getUserId()).getUsername());
             stringCategoryHashMap.put("registeredDate", tableHistory.getRegisteredDate()!=null? Common.uzbekistanDateFormat.format(tableHistory.getRegisteredDate()) : "");
