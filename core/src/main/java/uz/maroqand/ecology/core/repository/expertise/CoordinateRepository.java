@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.expertise;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.Coordinate;
 
@@ -10,7 +11,7 @@ import uz.maroqand.ecology.core.entity.expertise.Coordinate;
  * (ru)
  */
 @Repository
-public interface CoordinateRepository extends JpaRepository<Coordinate, Integer> {
+public interface CoordinateRepository extends JpaRepository<Coordinate, Integer>, JpaSpecificationExecutor<Coordinate> {
 
 
 }

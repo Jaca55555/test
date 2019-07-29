@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <style>
+        table.dataTable.nowrap th, table.dataTable.nowrap td {
+            white-space: pre-line;
+        }
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        .btn-active{
+            color: #fff;
+            background-color: #748892;
+            border-color: #748892;
+        }
+    </style>
+</head>
+<body>
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{coordinate_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" class="row">
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">ID</label><br/>
+                                                <input type="text" class="form-control" id="id" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_tin}"></label><br/>
+                                                <input type="text" class="form-control" id="tin" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_company_name}"></label><br/>
+                                                <input type="text" class="form-control" id="name" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{coordinate.conclusion_number}"></label><br/>
+                                                <input type="text" class="form-control" id="number" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
+                                                <input type="text" class="form-control datepicker" id="dateBegin" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
+                                                <input type="text" class="form-control datepicker" id="dateEnd" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_region}"></label>
+                                                <select id="regionId" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:each="region : ${regionsList}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_sub_region}"></label>
+                                                <select id="subRegionId" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <div class="col-sm-12 text-right">
+                                                <label class="control-label">&nbsp;</label><br/>
+                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}">Поиск</span>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th th:text="#{coordinate.conclusion_number}"></th>
+                                                    <th th:text="#{coordinate.conclusion_date}"></th>
+                                                    <th th:text="#{sys_tin}"></th>
+                                                    <th th:text="#{sys_company_name}"></th>
+                                                    <th th:text="#{sys_region}"></th>
+                                                    <th th:text="#{sys_sub_region}"></th>
+                                                    <th style="max-width: 50px;"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+
+<script th:inline="javascript">
+
+    var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CoordinateListAjax}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CoordinateView}]];
+    var labelView = [[#{sys_view}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+
+    var dataDatatableSelector;
+    var thead;
+
+    function renderActionsColumn(data, type, row, meta) {
+        var currentViewLink = viewLink + '?id=' + row[0];
+        var html = '';
+        html += '<div class="btn-group"><a href="'+currentViewLink+'" class="btn btn-outline-info btn-sm" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+
+                dataToSend.id = $("#id").val();
+                dataToSend.tin = $("#tin").val();
+                dataToSend.name = $("#name").val();
+                dataToSend.number = $("#number").val();
+                dataToSend.dateBegin = $("#dateBegin").val();
+                dataToSend.dateEnd = $("#dateEnd").val();
+                dataToSend.regionId = $("#regionId").val();
+                dataToSend.subRegionId = $("#subRegionId").val();
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post(ajaxLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'number'},
+                {data: 2, name: 'date'},
+                {data: 3, name: 'tin'},
+                {data: 4, name: 'name'},
+                {data: 5, name: 'region'},
+                {data: 6, name: 'subregion'},
+                {render: renderActionsColumn, orderable:false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
+        dataDatatableSelector = $('#data-table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
+    });
+
+    $('#data-table').css("width", "100%");
+
+    /*]]>*/
+</script>
+</body>
+</html>

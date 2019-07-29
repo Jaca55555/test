@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Draw Features</title>
+    <link rel="stylesheet" href="/static/ol/ol.css">
+</head>
+<body>
+<div id="map" class="map"></div>
+<script src="/static/ol/ol.js"></script>
+<script>
+    var Map = ol.Map;
+    var View = ol.View;
+    var Draw = ol.interaction.Draw;
+    var TileLayer = ol.layer.Tile;
+    var VectorLayer = ol.layer.Vector;
+    var OSM = ol.source.OSM;
+    var VectorSource = ol.source.Vector;
+
+    var raster = new TileLayer({
+        source: new OSM()
+    });
+
+    var source = new VectorSource({wrapX: false});
+
+    var vector = new VectorLayer({
+        source: source
+    });
+
+    var map = new Map({
+        layers: [raster, vector],
+        target: 'map',
+        view: new View({
+            center: ol.proj.fromLonLat([69.27977, 41.31117]),
+            zoom: 16
+        })
+    });
+
+    var draw = new Draw({
+        source: source,
+        type: "Polygon"
+    });
+    map.addInteraction(draw);
+
+    map.on("click", function () {
+        var features = vector.getSource().getFeatures();
+        features.forEach(function (feature) {
+            console.log(feature.getGeometry().getCoordinates()[0][0]);
+            var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
+            console.log(lonlat[0]);
+            console.log(lonlat[1]);
+        })
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.which == 8)
+            vector.getSource().clear();
+    });
+
+</script>
+</body>
+</html>

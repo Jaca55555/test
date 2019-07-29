@@ -65,4 +65,10 @@ public class ExpertiseUrls {
     public static final String RegApplications= RegApplication + "s";
     public static final String RegApplicationList = RegApplication + "/list";
 
+    //Coordinate
+    private static final String Coordinate = Prefix + "/coordinate";
+    public static final String CoordinateList = Coordinate + "/list";
+    public static final String CoordinateListAjax = Coordinate + "/list_ajax";
+    public static final String CoordinateView = Coordinate + "/view";
+
 }

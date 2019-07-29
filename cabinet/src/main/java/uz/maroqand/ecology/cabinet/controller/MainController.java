@@ -41,6 +41,12 @@ public class MainController {
         return "dashboard";
     }
 
+    @RequestMapping("/map")
+    public String getMap(){
+        return "mapTest";
+    }
+
+    /*@RequestMapping(SysUrls.ErrorInternalServerError)
     @RequestMapping(SysUrls.ErrorInternalServerError)
     public String getError500Page() {
         return SysTemplates.ErrorInternalServerError;

@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.ErrorNotFound).permitAll()
                 .antMatchers(SysUrls.ErrorForbidden).permitAll()
                 .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
+                .antMatchers("/static*/**", "/map").permitAll()
                 .antMatchers("/dashboard/**").authenticated()
                 .antMatchers("/sys/appeal_admin/**").authenticated()
                 .antMatchers("/mgmt/translations/**").authenticated()
