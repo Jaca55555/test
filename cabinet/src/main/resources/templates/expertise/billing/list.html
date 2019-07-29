@@ -45,69 +45,79 @@
                         <div class="row">
                             <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header" id="headingOne">
+                                            <h5 class="mb-0"><a href="#!" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed" th:text="#{invoice.filters}">Collapsible Group Item #1</a></h5>
+                                        </div>
+                                        <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                            <form id="regIndividual" method="post" class="row">
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
+                                                    <input type="text" class="form-control datepicker" id="dateBegin" />
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
+                                                    <input type="text" class="form-control datepicker" id="dateEnd" />
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">&nbsp;</label><br/>
+                                                    <button type="button" class="btn btn-outline-secondary" th:text="#{sys_today}" onclick="todayClick()" id="today" style="width: 100%"></button>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">&nbsp;</label><br/>
+                                                    <button type="button" class="btn btn-outline-secondary" th:text="#{sys_this_month}" onclick="thisMonthClick()" id="thisMonth" style="width: 100%"></button>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label" th:text="#{invoice_status}"></label>
+                                                    <select id="status" class="form-control">
+                                                        <option value="" th:text="#{sys_all}"></option>
+                                                        <option value="Initial" th:text="#{invoice_status.initial}"></option>
+                                                        <option value="Success" th:text="#{invoice_status.success}"></option>
+                                                        <option value="Canceled" th:text="#{invoice_status.canceled}"></option>
+                                                        <option value="Error" th:text="#{invoice_status.error}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label" th:text="#{invoice_number}"></label>
+                                                    <input type="text" class="form-control" id="invoice">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{invoice_detail}"></label>
+                                                    <input type="text" class="form-control" id="detail">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label" th:text="#{sys_region}"></label>
+                                                    <select id="regionId" class="form-control">
+                                                        <option value="" th:text="#{sys_all}"></option>
+                                                        <option th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:each="region : ${regionsList}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label" th:text="#{sys_sub_region}"></label>
+                                                    <select id="subRegionId" class="form-control">
+                                                        <option value="" th:text="#{sys_all}"></option>
+                                                        <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="clearfix"></div>
+
+                                                <div class="col-sm-12 text-right">
+                                                    <label class="control-label">&nbsp;</label><br/>
+                                                    <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
+                                                        <span th:text="#{sys_search}">Поиск</span>
+                                                    </a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 th:text="#{invoice_list}"></h5>
                                     </div>
                                     <div class="card-body">
-                                        <form id="regIndividual" method="post" class="row">
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
-                                                <input type="text" class="form-control datepicker" id="dateBegin" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
-                                                <input type="text" class="form-control datepicker" id="dateEnd" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label">&nbsp;</label><br/>
-                                                <button type="button" class="btn btn-outline-secondary" th:text="#{sys_today}" onclick="todayClick()" id="today" style="width: 100%"></button>
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label">&nbsp;</label><br/>
-                                                <button type="button" class="btn btn-outline-secondary" th:text="#{sys_this_month}" onclick="thisMonthClick()" id="thisMonth" style="width: 100%"></button>
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{invoice_status}"></label>
-                                                <select id="status" class="form-control">
-                                                    <option value="" th:text="#{sys_all}"></option>
-                                                    <option value="Initial" th:text="#{invoice_status.initial}"></option>
-                                                    <option value="Success" th:text="#{invoice_status.success}"></option>
-                                                    <option value="Canceled" th:text="#{invoice_status.canceled}"></option>
-                                                    <option value="Error" th:text="#{invoice_status.error}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{invoice_number}"></label>
-                                                <input type="text" class="form-control" id="invoice">
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label" th:text="#{invoice_detail}"></label>
-                                                <input type="text" class="form-control" id="detail">
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{sys_region}"></label>
-                                                <select id="regionId" class="form-control">
-                                                    <option value="" th:text="#{sys_all}"></option>
-                                                    <option th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:each="region : ${regionsList}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{sys_sub_region}"></label>
-                                                <select id="subRegionId" class="form-control">
-                                                    <option value="" th:text="#{sys_all}"></option>
-                                                    <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="clearfix"></div>
 
-                                            <div class="col-sm-12 text-right">
-                                                <label class="control-label">&nbsp;</label><br/>
-                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
-                                                    <span th:text="#{sys_search}">Поиск</span>
-                                                </a>
-                                            </div>
-                                        </form>
                                         <div class="table-responsive">
                                             <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
                                                 <thead>
@@ -264,6 +274,10 @@
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingListAjax}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
     var labelView = [[#{sys_view}]];
+    var statusInitial = [[#{invoice_status.initial}]];
+    var statusSuccess = [[#{invoice_status.success}]];
+    var statusCanceled = [[#{invoice_status.canceled}]];
+    var statusError = [[#{invoice_status.error}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -280,6 +294,19 @@
         // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><button class="btn btn-outline-info btn-sm" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+        return html;
+    }
+
+    function renderStatusColumn(data, type, row, meta) {
+        var html = '';
+        if(row[4] == "Initial")
+            html += '<button type="button" class="btn btn-info btn-sm">'+statusInitial+'</button>';
+        if(row[4] == "Success")
+            html += '<button type="button" class="btn btn-success btn-sm">'+statusSuccess+'</button>';
+        if(row[4] == "Canceled")
+            html += '<button type="button" class="btn btn-warning btn-sm">'+statusCanceled+'</button>';
+        if(row[4] == "Error")
+            html += '<button type="button" class="btn btn-danger btn-sm">'+statusError+'</button>';
         return html;
     }
 
@@ -322,7 +349,7 @@
                 {data: 1, name: 'invoice'},
                 {data: 2, name: 'organizationName', orderable:false},
                 {data: 3, name: 'amount'},
-                {data: 4, name: 'status'},
+                {render: renderStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable:false}
             ],
             language: {
