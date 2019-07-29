@@ -156,7 +156,7 @@
                                                             <div class="col-md-6">
                                                                 <select class="form-control"  th:field="*{objectId}" required="" onclick="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.name}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -169,7 +169,7 @@
                                                             <div class="col-md-6">
                                                                 <select class="form-control" th:field="*{activityId}" required="" onclick="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.name}" th:selected="${regApplication.activityId==activity.id}"></option>
+                                                                    <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
