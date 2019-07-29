@@ -121,7 +121,7 @@ public class PerformerController {
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterialId() != null ?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",

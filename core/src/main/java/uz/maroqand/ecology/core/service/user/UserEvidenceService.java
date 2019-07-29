@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.service.user;
 
-import javafx.scene.effect.SepiaTone;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.entity.sys.File;

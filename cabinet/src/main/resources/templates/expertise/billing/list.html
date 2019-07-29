@@ -356,11 +356,8 @@
             columns: [
                 {data: 1, name: 'invoice'},
                 {data: 2, name: 'organizationName', orderable:false},
-                {data: 3, name: 'amount'},
-                {render: renderStatusColumn, orderable:false},
                 {render: renderFormatAmount,  name: 'amount'},
-                // {data: 3,},
-                {data: 4, name: 'status'},
+                {render: renderStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable:false}
             ],
             language: {

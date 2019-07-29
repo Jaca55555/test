@@ -60,6 +60,6 @@ public class MainController {
     @RequestMapping(SysUrls.ErrorForbidden)
     public String getError403Page() {
         return SysTemplates.ErrorForbidden;
-    }
+    }*/
 
 }

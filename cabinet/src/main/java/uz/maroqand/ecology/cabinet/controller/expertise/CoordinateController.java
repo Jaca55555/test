@@ -123,7 +123,7 @@ public class CoordinateController {
 
         if(regApplication != null){
             model.addAttribute("object_expertise", helperService.getObjectExpertise(regApplication.getObjectId(), locale));
-            model.addAttribute("materials_type", helperService.getMaterial(regApplication.getMaterialId(), locale));
+            model.addAttribute("materials_type", helperService.getMaterials(regApplication.getMaterials(), locale));
             model.addAttribute("category", helperService.getCategory(regApplication.getCategory() != null ? regApplication.getCategory().getId() : null, locale));
             model.addAttribute("activity", helperService.getActivity(regApplication.getActivityId(), locale));
             model.addAttribute("object_name", regApplication.getName());

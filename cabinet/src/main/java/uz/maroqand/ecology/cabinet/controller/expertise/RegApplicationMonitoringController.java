@@ -79,7 +79,7 @@ public class RegApplicationMonitoringController {
                     convenientForJSONArray.add(new Object[]{
                             regApplication.getId(),
                             regApplication.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                            regApplication.getMaterialId()!=null?helperService.getMaterial(regApplication.getMaterialId(),locale):"",
+                            regApplication.getMaterials()!=null?helperService.getMaterials(regApplication.getMaterials(),locale):"",
                             regApplication.getDeadlineDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                             user.getFullName()
                     });
