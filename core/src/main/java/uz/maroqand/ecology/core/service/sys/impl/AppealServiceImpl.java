@@ -92,6 +92,11 @@ public class AppealServiceImpl implements AppealService {
         return appealRepository.findAll(getFilteringSpecification( appealId, appealType, title, dateBegin, dateEnd, status,createdBy), pageable);
     }
 
+    @Override
+    public Appeal findById(Integer id) {
+        return appealRepository.findById(id).orElse(null);
+    }
+
     private static Specification<Appeal> getFilteringSpecification(
             final Integer appealId,
             final Integer appealType,

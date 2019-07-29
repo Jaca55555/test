@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,12 @@ public class MainController {
     public String getDashboardPage() {
         System.out.println("--dashboard");
         return "dashboard";
+    }
+    
+    @RequestMapping("/logout")
+    public String logout(){
+        SecurityContextHolder.clearContext();
+        return "redirect:/";
     }
 
     @RequestMapping(SysUrls.ErrorInternalServerError)

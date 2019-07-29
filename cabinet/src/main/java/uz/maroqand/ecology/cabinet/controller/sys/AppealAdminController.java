@@ -65,7 +65,7 @@ public class AppealAdminController {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Page<Appeal> appealPage = appealService.findFiltered(null,type,title,dateBegin,dateEnd,status,user.getId(), pageable);
+        Page<Appeal> appealPage = appealService.findFiltered(null,type,title,dateBegin,dateEnd,status,null, pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", appealPage.getTotalElements()); //Total elements
@@ -94,8 +94,7 @@ public class AppealAdminController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        User user = userService.getCurrentUserFromContext();
-        Appeal appeal = appealService.getById(id, user.getId());
+        Appeal appeal = appealService.findById(id);
         if(appeal==null){
             return "redirect:" + SysUrls.AppealAdminList;
         }
@@ -103,21 +102,10 @@ public class AppealAdminController {
         AppealSub appealSub = new AppealSub();
         List<AppealSub> appealSubList = appealSubService.getById(appeal.getId());
 
-        if(appeal.getShowUserCommentCount()!=null && appeal.getShowUserCommentCount()>0){
-            appeal.setShowUserCommentCount(0);
-            appealService.updateCommentCount(appeal);
-        }
-
         //UPDATE MAP
         appealService.updateByUserId(appeal.getCreatedById());
-        /*List<User>appealSubCreatedUserList = new ArrayList<>();
-        for (AppealSub appealSub1 : appealSubList){
-            User appealSubCreatedUser = userService.findById(appealSub1.getCreatedById());
-            System.out.println(appealSubCreatedUser.getId() + "userId");
-            appealSubCreatedUserList.add(appealSubCreatedUser);
-        }*/
+
         model.addAttribute("createdBy",userService.findById(appeal.getCreatedById()));
-//        model.addAttribute("appealSubCreatedUserList",appealSubCreatedUserList);
         model.addAttribute("appealSub", appealSub);
         model.addAttribute("appealSubList", appealSubList);
         model.addAttribute("appeal",appeal);
@@ -136,7 +124,7 @@ public class AppealAdminController {
     ) {
         System.out.println("appealId == " + id);
         User user = userService.getCurrentUserFromContext();
-        Appeal appeal = appealService.getById(id, user.getId());
+        Appeal appeal = appealService.findById(id);
         if(appeal==null){
             return "redirect:" + SysUrls.AppealAdminList;
         }

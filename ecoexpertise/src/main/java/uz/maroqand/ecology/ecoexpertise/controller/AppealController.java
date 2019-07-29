@@ -86,7 +86,7 @@ public class AppealController {
                     appeal.getTitle(),
                     appeal.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(appeal.getCreatedAt()):"",
                     appeal.getAppealStatus(),
-                    appeal.getShowUserCommentCount()
+                    appeal.getShowAdminCommentCount()
             });
         }
 
@@ -174,11 +174,6 @@ public class AppealController {
 
         AppealSub appealSub = new AppealSub();
         List<AppealSub> appealSubList = appealSubService.getById(appeal.getId());
-
-        if(appeal.getShowUserCommentCount()!=null && appeal.getShowUserCommentCount()>0){
-            appeal.setShowUserCommentCount(0);
-            appealService.updateCommentCount(appeal);
-        }
 
         //UPDATE MAP
         appealService.updateByUserId(appeal.getCreatedById());
