@@ -3,6 +3,100 @@
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/select2.min.css}">
+    <style>
+
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 35px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .file p {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            font-size: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
+        }
+
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -173,8 +267,54 @@
                                                             <div id="userPasswordConfirmationStatus" style="margin-top: 3px;"></div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="col-md-12 text-center">
+                                                        <h4 th:text="#{mntr_user_evidence}"></h4>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="lastname" class="control-label" >
+                                                                <span th:text="#{mntr_user_evidence.reason}"></span>
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <textarea id="reason" required="required" class="form-control" rows="4" style="width: 100%; resize: none;" type="text" name="reason" maxlength="1000" minlength="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12  row" style="padding: 15px;" id="files-div">
+                                                        <h4 class="col-md-12" th:text="mntr_user_evidence.files"></h4>
+                                                       <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                                                           <div class="add-file">
+                                                               <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                                               <span id="percentage"><span id="percentage-num"></span>%</span>
+                                                               <i class="feather icon-plus" id="plus-icon"></i>
+                                                           </div>
+                                                       </a>
+                                                        <!--<div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+                                                            <div class="file">
+                                                                <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDownload + '?file_id=' + file.id}">
+                                                                    <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                                                    <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                                                    <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                                                    <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                                                    <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                                                    <span th:text="${file.description}"></span>
+                                                                    <p th:text="${file.name}"></p>
+                                                                </a>
+                                                                <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                                                                    <i class="feather icon-x"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>-->
 
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="userEvidenceId" id="userEvidenceId"/>
                                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                 <input type="hidden" name="id" th:value="*{id}"/>
                                                 <div class=" col-md-12 text-center mt-3">
@@ -195,6 +335,42 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="file-name">
+                        <span th:text="#{sys_file_name}"></span>
+                        <span class="required">*</span>
+                    </label>
+                    <input class="form-control" type="text" id="file-name" required="" />
+                </div>
+                <div class="input-group">
+                      <span class="input-group-btn">
+                        <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                           <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                        </span>
+                        <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                      </span>
+                    <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px"></span>
+                </div>
+            </div>
+            <div class="modal-footer" style="text-align: center;">
+                <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- [ Main Content ] end -->
 
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
@@ -204,8 +380,10 @@
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 <script th:inline="javascript">
     var url = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentGetByOrganization}]];
+    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEvidenceFileUpload}]];
+    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEvidenceFileDelete}]];
     var locale = getCurrentLanguage();
-    var departmentId=[[${departmentId}]]
+    var departmentId=[[${departmentId}]];
     $(document).ready(function () {
         var organizationId = $('#organizationId').val();
         console.log(organizationId);
@@ -340,6 +518,109 @@
             $("#userPasswordConfirmationStatus").html('<span style="color: #721c24"> <i class="fa fa-times" style="font-size: 1rem;"></i>  Parol va tasdiqlash uchun parol bir biriga mos kelmadi.</span>');
         }
     }
+
+    //file upload
+    function openInputFile() {
+        document.getElementById("file-input").click();
+    };
+
+    function openModalFile() {
+        $('#upload-file-modal').modal('show');
+    }
+
+    function uploadFile(){
+        $('#file-name').parsley().validate();
+        if(!$('#file-name').val() || !$('#file-input').val()){
+            $('#fileDescription').addClass('is-invalid');
+            return;
+        }
+
+        $('#upload-file-modal').modal('hide');
+
+        var form = new FormData();
+        form.append("id", $('#userEvidenceId').val());
+        form.append("file", $('#file-input').prop('files')[0]);
+        form.append("file_name", $('#file-name').val());
+        form.append("_csrf", $('#global_csrf').val());
+
+        $.ajax({
+            url: uploadFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if(response.status == 1) {
+
+                    $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                        '                                                    <div class="file">\n' +
+                        '                                                        <a href="'+response.link+'">\n' +
+                        '                                                            <i class="feather icon-file file-icon"></i>\n' +
+                        '                                                            <span>'+response.name+'</span>\n' +
+                        '                                                        </a>\n' +
+                        '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
+                        '                                                            <i class="feather icon-x"></i>\n' +
+                        '                                                        </button>\n' +
+                        '                                                    </div>\n' +
+                        '                                                </div>');
+                    $('#userEvidenceId').val(response.id);
+                    $('#file-name').val('');
+                    $('#file-input').val('');
+                    $('#fileDescription').text('');
+                }
+            },
+            beforeSend: function () {
+                $('#plus-icon').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#plus-icon').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+
+        });
+    }
+
+    function deleteFile(fileId) {
+        var form = new FormData();
+        form.append("id", $('#userEvidenceId').val());
+        form.append("fileId", fileId);
+        form.append("_csrf", $('#global_csrf').val());
+
+        $.ajax({
+            url: deleteFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if(response.status == 1) {
+                    $('#file-block-' + fileId).remove();
+                }
+            }
+        });
+    }
+
+    function uploadProgressHandler(event){
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
 </script>
 </body>
 </html>
