@@ -145,7 +145,7 @@
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
                                             <div class="row" >
-                                                <div class="form-group col-md-12 text-center" >
+                                                <div class="form-group col-md-12" >
                                                     <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
 
                                                         <div class="form-group row">
@@ -154,14 +154,14 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  th:field="*{objectId}" required="" onclick="getMaterialList()">
+                                                                <select class="form-control"  th:field="*{objectId}" required="" onclick="getActivityList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row">
+                                                        <div class="form-group row" id="activityIdDiv">
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
                                                                 <span class="required">*</span>
@@ -169,18 +169,18 @@
                                                             <div class="col-md-6">
                                                                 <select class="form-control" th:field="*{activityId}" required="" onclick="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>
+                                                                    <option th:if="${regApplication.activityId}" th:value="${regApplication.activityId}" th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></option>
+                                                                    <!--<option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>-->
                                                                 </select>
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row">
+                                                        <div class="form-group row" id="categoryDiv">
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label"  th:text="#{sys_about.category}" >Категория</label>
-                                                                <span class="required">*</span>
+                                                                <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" th:value="*{category}" readonly id="category"/>
+                                                                <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
                                                             </div>
                                                         </div>
 
@@ -189,11 +189,11 @@
                                                                 <label class="col-form-label" th:text="#{sys_about.material}">Вид материалов</label>
                                                                 <span class="required">*</span>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <select class="form-control" id="requirementId" required="" th:field="*{requirementId}">
-                                                                    <option value="" th:text="#{sys_select}"></option>
-                                                                    <option style="display: none" th:each="requirement : ${requirementList}" th:value="${requirement.id}" th:text="${@helperService.getMaterial(requirement.materialId,#locale)}" th:selected="${regApplication.materialId==requirement.materialId}"></option>
-                                                                </select>
+                                                            <div class="col-md-6" id="materialDiv">
+                                                                <div class="custom-control custom-checkbox" th:if="${regApplication.materials}" th:each="material : ${regApplication.materials}">
+                                                                   <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked >
+                                                                   <label class="custom-control-label" th:for="${'materials'+material}" th:text="${@helperService.getMaterial(material,#locale)}"></label>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -336,6 +336,7 @@
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
+            getActivityList();
         });
         function openInputFile() {
             document.getElementById("file-input").click();
@@ -349,6 +350,47 @@
             }
         });
 
+        function getActivityList() {
+            var form = new FormData();
+            form.append("objectId", $("#objectId").val());
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: '/reg/application/activity',
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
+                    $("#materialDiv").text("");
+
+                    if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
+                        $("#activityIdDiv").hide();
+                        $("#activityId").removeAttr('required');
+                        $("#categoryDiv").hide();
+                        materialDiv(response.requirementList[0].materials);
+                    }else {
+                        $("#activityIdDiv").show();
+                        $("#activityId").prop('required',true);
+                        $("#categoryDiv").show();
+
+                        $.each(response.activityList, function (key, value) {
+                            var name = '';
+                            switch (getCurrentLanguage()){
+                                case 'uz':name=value.name;break;
+                                case 'oz':name=value.nameOz;break;
+                                case 'ru':name=value.nameRu;break;
+                                default :name=value.nameRu;break;
+                            }
+                            $('#activityId').append(new Option(name, value.id));
+                        });
+                    }
+                }
+            });
+        }
+
         function getMaterialList() {
             var form = new FormData();
             form.append("objectId", $("#objectId").val());
@@ -357,26 +399,48 @@
             var srSelector = $('#requirementId');
             srSelector.find('option:selected').prop('selected',false);
             srSelector.find('option').hide();
-            var html = '';
             $.ajax({
-                url: '/reg/application/material',
+                url: '/reg/application/materials',
                 type: "POST",
                 data: form,
                 processData: false,
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log(response);
-                    $('#category').val(response.category);
-                    console.log(response.requirementList.length);
+                    $('#categoryName').text(response.category);
+                    $("#materialDiv").text("");
                     if (response.requirementList.length>0){
                         $.each(response.requirementList, function (index, value) {
-                            $('#requirementId option[value="'+value.id+'"]').show();
+                            materialDiv(value.materials);
                         });
                     }
                 }
             });
         }
+        
+        function materialDiv(list) {
+            $.each(list, function (key, value) {
+                console.log('material-value'+value);
+                getMaterial(value);
+                $("#materialDiv").append(
+                    '<div class="custom-control custom-checkbox" >\n' +
+                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  >\n' +
+                    '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
+                    '</div>');
+            });
+        }
+
+        function getMaterial(id) {
+            $.post('/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
+                $.each(response, function (key, value) {
+                    if(value.id===id){
+                        $('#materials-'+id+'-label').text(value.name);
+                    }
+                });
+            });
+        }
+
+        /*th:checked="${requirement.materials!=null? #lists.contains(requirement.materials, material.id): false}"*/
 
         function openModalFile() {
             $('#upload-file-modal').modal('show');
@@ -469,6 +533,10 @@
             var percent = (event.loaded / event.total) * 100;
             var progress = Math.round(percent);
             $('#percentage-num').html(progress);
+        }
+
+        function getCurrentLanguage() {
+            return [[__${#locale}__]];
         }
 
     </script>

@@ -11,6 +11,8 @@ public class RegUrls {
     public static final String RegApplicationApplicantCancel = RegApplication + "/cancel";
     public static final String RegApplicationApplicant = RegApplication + "/applicant";
     public static final String RegApplicationAbout = RegApplication + "/about";
+    public static final String RegApplicationGetActivity = RegApplication + "/activity";
+    public static final String RegApplicationGetMaterials = RegApplication + "/materials";
     public static final String RegApplicationGetMaterial = RegApplication + "/material";
     public static final String RegApplicationFileUpload = RegApplication + "/file_upload";
     public static final String RegApplicationFileDownload = RegApplication + "/file_download";

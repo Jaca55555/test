@@ -18,6 +18,7 @@ public interface MaterialService {
     Page<Material> getAll(Pageable pageable);
 
     Material save(Material material);
+
     List<Material> getList();
 
 }

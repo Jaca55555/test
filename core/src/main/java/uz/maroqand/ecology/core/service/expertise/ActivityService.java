@@ -11,6 +11,8 @@ public interface ActivityService {
 
     List<Activity> getList();
 
+    List<Activity> getByInCategory(List<Category> categories);
+
     Activity getById(Integer id);
 
     Page<Activity> findFiltered(Integer id, Category category , String name,String locale, Pageable pageable);

@@ -45,7 +45,7 @@
                                                 <div class="col-md-4">
                                                     <select class="form-control" required="" th:field="*{objectExpertiseId}">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}"  th:text="${@helperService.getObjectExpertise(objectExpertise.id,#locale)}" th:selected="${requirement.objectExpertiseId!=null and requirement.objectExpertiseId==objectExpertise.id}"></option>
+                                                        <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}"  th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${requirement.objectExpertiseId!=null and requirement.objectExpertiseId==objectExpertise.id}"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -65,21 +65,20 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
+                                            <!--<div class="form-group row">
                                                 <div class="col-md-4 text-right">
                                                     <label class="col-form-label">
                                                         <span th:text="#{mntr_expertise_requirement.material}"></span>
-                                                        <span class="required">*</span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <select class="form-control" required="" th:field="*{materialId}">
+                                                    <select class="form-control" th:field="*{materialId}">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="material : ${materialList}" th:value="${material.id}" th:text="${@helperService.getMaterial(material.id,#locale)}" th:selected="${requirement.materialId!=null and requirement.materialId==material.id}"></option>
+                                                        <option th:each="material : ${materialList}" th:value="${material.id}" th:text="${material.getNameTranslation(#locale)}" th:selected="${requirement.materialId!=null and requirement.materialId==material.id}"></option>
                                                     </select>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
+                                            </div>-->
+                                            <!--<div class="form-group row">
                                                 <div class="col-md-4 text-right">
                                                     <label class="col-form-label">
                                                         <span th:text="#{mntr_expertise_requirement.organization}"></span>
@@ -92,7 +91,7 @@
                                                         <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${@helperService.getOrganizationName(organization.id,#locale)}" th:selected="${requirement.reviewId!=null and requirement.reviewId==organization.id}"></option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                             <div class="form-group row">
                                                 <div class="col-md-4 text-right">
@@ -114,6 +113,35 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <input required="required" class="form-control" type="text" th:field="*{deadline}" data-parsley-type="digits"  />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-right">
+                                                    <label class="col-form-label">
+                                                        <span th:text="#{mntr_expertise_requirement.materialName}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input required="required" class="form-control" type="text" th:field="*{materialName}" maxlength="255" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-12 text-center">
+                                                    <span th:text="#{mntr_expertise_requirement.materials}"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-8 offset-md-4" >
+
+                                                    <div class="custom-control custom-checkbox" th:each="material : ${materialList}">
+                                                        <input type="checkbox" class="custom-control-input" th:id="${'materials'+material.id}" th:value="${material.id}" name="materials" th:checked="${requirement.materials!=null? #lists.contains(requirement.materials, material.id): false}" >
+                                                        <label class="custom-control-label" th:for="${'materials'+material.id}" th:text="${material.getNameTranslation(#locale)}"></label>
+                                                    </div>
+
                                                 </div>
                                             </div>
 

@@ -18,6 +18,8 @@ public interface RequirementService {
 
     List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category);
 
+    List<Requirement> getRequirementExpertise(Integer objectExpertiseId);
+
     List<Requirement> getAllList();
 
     Page<Requirement> findFiltered(

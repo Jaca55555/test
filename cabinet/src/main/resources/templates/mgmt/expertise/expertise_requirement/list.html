@@ -3,6 +3,11 @@
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <style>
+        .white-space-td{
+            white-space: inherit !important;
+        }
+    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -90,7 +95,7 @@
                                                     <th th:text="#{mntr_expertise_requirement.objectExpertise}">name</th>
                                                     <th th:text="#{mntr_expertise_requirement.category}">name</th>
                                                     <th th:text="#{mntr_expertise_requirement.material}">name</th>
-                                                    <th th:text="#{mntr_expertise_requirement.organization}">name</th>
+                                                    <!--<th th:text="#{mntr_expertise_requirement.organization}">name</th>-->
                                                     <th th:text="#{mntr_expertise_requirement.qty}">name</th>
                                                     <th th:text="#{mntr_expertise_requirement.deadline}">name</th>
                                                     <th></th>
@@ -190,12 +195,12 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'objectExpertiseId'},
+                {data: 1, name: 'objectExpertiseId', className: 'white-space-td'},
                 {data: 2, name: 'category'},
-                {data: 3, name: 'materialId'},
-                {data: 4, name: 'reviewId'},
-                {data: 5, name: 'qty'},
-                {data: 6, name: 'deadline'},
+                {data: 3, name: 'materialId', className: 'white-space-td'},
+                /*{data: 4, name: 'reviewId'},*/
+                {data: 4, name: 'qty', className: 'text-center'},
+                {data: 5, name: 'deadline', className: 'text-center'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

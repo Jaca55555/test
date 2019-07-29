@@ -2,9 +2,9 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.Category;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -37,23 +37,9 @@ public class Requirement {
     @Column(name = "category")
     private Category category;
 
-
-    //ekspertizaga taqdim etiladigan materiallar
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", insertable = false, updatable = false)
-    private Material material;*/
-
-    @Column(name = "material_id")
-    private Integer materialId;
-
-
-    //ekspertizadan o'tkazuvchi organ
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", insertable = false, updatable = false)
-    private Organization review;*/
-
-    @Column(name = "review_id")
-    private Integer reviewId;
+    //markaz ko'rib chiqadi
+    @Column(name = "deleted", columnDefinition = "boolean DEFAULT false")
+    private Boolean reviewMainOrganization = false;
 
     //miqdori (MRZP da bo'lishi, summada bo'lishi mumkin)
     @Column(name = "qty", precision = 20, scale = 2)
@@ -61,5 +47,30 @@ public class Requirement {
 
     // muddati (kun)
     private Integer deadline;
+
+    @Column(name = "material_name")
+    private String materialName;
+
+    @ElementCollection(targetClass = Integer.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "expertise_requirement_jt_material",
+            joinColumns = @JoinColumn(name = "expertise_requirement_id"))
+    @Column(name = "material_id")
+    private Set<Integer> materials;
+
+    //ekspertizadan o'tkazuvchi organ
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", insertable = false, updatable = false)
+    private Organization review;*/
+
+    @Column(name = "review_id")
+    private Integer reviewId = 1;
+
+    //ekspertizaga taqdim etiladigan materiallar
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id", insertable = false, updatable = false)
+    private Material material;*/
+
+    /*@Column(name = "material_id")
+    private Integer materialId;*/
 
 }

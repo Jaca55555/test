@@ -26,6 +26,8 @@ import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
+import java.util.Set;
+
 /**
  * Created by Utkirbek Boltaev on 26.05.2019.
  * (uz)
@@ -158,6 +160,15 @@ public class HelperService {
         if(id==null) return "";
         Material material = materialService.getById(id);
         return material!=null? material.getNameTranslation(locale):"";
+    }
+
+    public String getMaterials(Set<Integer> ids, String locale) {
+        if(ids==null) return "";
+        String result = "";
+        for (Integer id:ids){
+            result += getMaterial(id,locale)+", ";
+        }
+        return result.length()>2? result.substring(0,result.length()-2):result;
     }
 
     @Cacheable(value = "getOrganizationName", key = "#id",condition="#id != null",unless="#result == ''")

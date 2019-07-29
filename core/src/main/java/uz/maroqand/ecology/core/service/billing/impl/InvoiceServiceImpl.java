@@ -6,11 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
-import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.MinWage;
-import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
@@ -21,6 +19,7 @@ import uz.maroqand.ecology.core.service.billing.MinWageService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -41,14 +40,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final PaymentService paymentService;
     private final MaterialService materialService;
     private final OrganizationService organizationService;
+    private final HelperService helperService;
 
     @Autowired
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MinWageService minWageService, PaymentService paymentService, MaterialService materialService, OrganizationService organizationService) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MinWageService minWageService, PaymentService paymentService, MaterialService materialService, OrganizationService organizationService, HelperService helperService) {
         this.invoiceRepository = invoiceRepository;
         this.minWageService = minWageService;
         this.paymentService = paymentService;
         this.materialService = materialService;
         this.organizationService = organizationService;
+        this.helperService = helperService;
     }
 
     public Invoice create(RegApplication regApplication, Requirement requirement) {
@@ -82,11 +83,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setDeleted(false);
         invoice.setRegisteredAt(new Date());
 
-        Material material = materialService.getById(requirement.getMaterialId());
+        String materials = helperService.getMaterials(regApplication.getMaterials(),"oz");
 
         invoice.setDetail(
                 "ID:" + invoice.getInvoice() +
-                        ", " + material.getNameTranslation("ru") +
+                        ", " + materials +
                         ", " + invoice.getPayerName() +
                         ", " + invoice.getPayeeName());
         invoiceRepository.save(invoice);

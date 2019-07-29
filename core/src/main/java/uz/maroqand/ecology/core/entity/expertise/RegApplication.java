@@ -66,9 +66,14 @@ public class RegApplication {
     @JoinColumn(name = "material_id", insertable = false, updatable = false)
     private Material material;*/
 
-    @Column(name = "material_id")
-    private Integer materialId;
+    /*@Column(name = "material_id")
+    private Integer materialId;*/
 
+    @ElementCollection(targetClass = Integer.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "reg_application_jt_material",
+            joinColumns = @JoinColumn(name = "reg_application_id"))
+    @Column(name = "material_id")
+    private Set<Integer> materials;
 
     //Наименование объекта
     private String name;

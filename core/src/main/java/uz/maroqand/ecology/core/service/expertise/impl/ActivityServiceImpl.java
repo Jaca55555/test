@@ -33,6 +33,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<Activity> getByInCategory(List<Category> categories){
+        return activityRepository.findByCategoryIn(categories);
+    }
+
+    @Override
     public Activity getById(Integer id){
         return activityRepository.findById(id).get();
     }

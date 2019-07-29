@@ -96,8 +96,7 @@ public class ExpertiseRequirementController {
                     requirement.getId(),
                     requirement.getObjectExpertiseId()!=null?helperService.getObjectExpertise(requirement.getObjectExpertiseId(),locale):"",
                     requirement.getCategory()!=null?helperService.getCategory(requirement.getCategory().getId(),locale):"",
-                    requirement.getMaterialId()!=null?helperService.getMaterial(requirement.getMaterialId(),locale):"",
-                    requirement.getReviewId()!=null?helperService.getOrganizationName(requirement.getReviewId(),locale):"",
+                    helperService.getMaterials(requirement.getMaterials(),locale),
                     requirement.getQty(),
                     requirement.getDeadline()
             });
@@ -131,7 +130,8 @@ public class ExpertiseRequirementController {
         Requirement requirement1 = new Requirement();
         requirement1.setObjectExpertiseId(requirement.getObjectExpertiseId());
         requirement1.setCategory(Category.getCategory(categoryId));
-        requirement1.setMaterialId(requirement.getMaterialId());
+        requirement1.setMaterialName(requirement.getMaterialName());
+        requirement1.setMaterials(requirement.getMaterials());
         requirement1.setReviewId(requirement.getReviewId());
         requirement1.setQty(requirement.getQty());
         requirement1.setDeadline(requirement.getDeadline());
@@ -196,7 +196,8 @@ public class ExpertiseRequirementController {
         System.out.println(categoryId);
         requirement1.setObjectExpertiseId(requirement.getObjectExpertiseId());
         requirement1.setCategory(Category.getCategory(categoryId));
-        requirement1.setMaterialId(requirement.getMaterialId());
+        requirement1.setMaterialName(requirement.getMaterialName());
+        requirement1.setMaterials(requirement.getMaterials());
         requirement1.setReviewId(requirement.getReviewId());
         requirement1.setQty(requirement.getQty());
         requirement1.setDeadline(requirement.getDeadline());

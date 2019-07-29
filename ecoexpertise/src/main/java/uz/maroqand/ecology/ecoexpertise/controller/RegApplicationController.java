@@ -57,6 +57,7 @@ public class RegApplicationController {
     private final ClientService clientService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
+    private final MaterialService materialService;
     private final ProjectDeveloperService projectDeveloperService;
     private final OfferService offerService;
     private final PaymentService paymentService;
@@ -81,7 +82,7 @@ public class RegApplicationController {
             ClientService clientService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            ProjectDeveloperService projectDeveloperService,
+            MaterialService materialService, ProjectDeveloperService projectDeveloperService,
             OfferService offerService,
             PaymentService paymentService,
             RequirementService requirementService,
@@ -103,6 +104,7 @@ public class RegApplicationController {
         this.clientService = clientService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
+        this.materialService = materialService;
         this.projectDeveloperService = projectDeveloperService;
         this.offerService = offerService;
         this.paymentService = paymentService;
@@ -146,7 +148,7 @@ public class RegApplicationController {
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     helperService.getObjectExpertise(regApplication.getObjectId(),locale),
-                    helperService.getMaterial(regApplication.getMaterialId(),locale),
+                    helperService.getMaterials(regApplication.getMaterials(),locale),
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():""
@@ -333,53 +335,111 @@ public class RegApplicationController {
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.POST)
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-            RegApplication regApplication,
-            ProjectDeveloper projectDeveloper
+            @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "activityId", required = false) Integer activityId,
+            @RequestParam(name = "materials", required = false) Set<Integer> materials,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "tin") String projectDeveloperTin,
+            @RequestParam(name = "projectDeveloperName") String projectDeveloperName
     ){
+        System.out.println("id="+id);
+        System.out.println("objectId="+objectId);
+        System.out.println("activityId="+activityId);
+        System.out.println("materials="+materials);
+        System.out.println("name="+name);
+        System.out.println("projectDeveloperTin="+projectDeveloperTin);
+        System.out.println("projectDeveloperName="+projectDeveloperName);
+
+
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication1 = regApplicationService.getById(id, user.getId());
-        if(regApplication1 == null){
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-
-        ProjectDeveloper projectDeveloper1 = regApplication1.getDeveloperId()!=null?projectDeveloperService.getById(regApplication1.getDeveloperId()):new ProjectDeveloper();
+        ProjectDeveloper projectDeveloper1 = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
-        projectDeveloper1.setTin(projectDeveloper.getTin());
+        projectDeveloper1.setTin(projectDeveloperTin);
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
-        regApplication1.setDeveloperId(projectDeveloper1.getId());
+        regApplication.setDeveloperId(projectDeveloper1.getId());
 
-        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-        regApplication1.setRequirementId(requirement.getId());
-        regApplication1.setReviewId(requirement.getReviewId());
-        regApplication1.setDeadline(requirement.getDeadline());
+        Activity activity = null;
+        if(activityId!=null){
+            activity = activityService.getById(activityId);
+        }
+        List<Requirement> requirementList;
+        Requirement requirement = null;
+        if(activity!=null){
+            requirementList = requirementService.getRequirementMaterials(objectId, activity.getCategory());
+        }else {
+            requirementList = requirementService.getRequirementExpertise(objectId);
+        }
+        if(requirementList.size()==0){
+            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=1";
+        }else if(requirementList.size()==1){
+            requirement = requirementList.get(0);
+        }
 
-        regApplication1.setObjectId(regApplication.getObjectId());
-        regApplication1.setActivityId(regApplication.getActivityId());
-        regApplication1.setName(regApplication.getName());
-        regApplication1.setCategory(activityService.getById(regApplication.getActivityId()).getCategory());
-        regApplication1.setMaterialId(requirement.getMaterialId());
+        if(requirement==null){
+            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=2";
+        }
+        regApplication.setRequirementId(requirement.getId());
+        regApplication.setReviewId(requirement.getReviewId());
+        regApplication.setDeadline(requirement.getDeadline());
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication1,LogType.Confirm,"",user);
-        regApplication1.setConfirmLogId(regApplicationLog.getId());
+        regApplication.setObjectId(objectId);
+        regApplication.setName(name);
+        regApplication.setMaterials(materials);
 
-        regApplication1.setStep(RegApplicationStep.ABOUT);
-        regApplicationService.update(regApplication1);
+        regApplication.setActivityId(activityId);
+        regApplication.setCategory(activity!=null? activity.getCategory():null);
 
+        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
+        regApplication.setConfirmLogId(regApplicationLog.getId());
+
+        regApplication.setStep(RegApplicationStep.ABOUT);
+        regApplicationService.update(regApplication);
 
         return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationGetMaterial, method = RequestMethod.POST)
+    @RequestMapping(value = RegUrls.RegApplicationGetActivity, method = RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> getRegApplicationGetMaterial(
-            @RequestParam(name = "objectId") Integer objectId,
-            @RequestParam(name = "activityId") Integer activityId
+    public HashMap<String, Object> getActivity(
+            @RequestParam(name = "objectId") Integer objectId
     ) {
-        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> result = new HashMap<>();
+        if(objectId == null){
+            return result;
+        }
+
+        List<Category> categoryList = new LinkedList<>();
+        List<Requirement> requirementList = requirementService.getRequirementExpertise(objectId);
+        for(Requirement requirement: requirementList){
+            categoryList.add(requirement.getCategory());
+        }
+        List<Activity> activityList = activityService.getByInCategory(categoryList);
+
+        result.put("activityList", activityList);
+        result.put("activityListSize", activityList.size());
+        result.put("requirementList", requirementList);
+        result.put("requirementListSize", requirementList.size());
+        result.put("categoryList", categoryList);
+        return result;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationGetMaterials, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> getMaterialList(
+            @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "activityId", required = false) Integer activityId
+    ) {
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        if(objectId == null || activityId == null){
+            return result;
+        }
 
         Activity activity = activityService.getById(activityId);
         List<Requirement> requirementList = requirementService.getRequirementMaterials(objectId,activity.getCategory());
@@ -387,6 +447,14 @@ public class RegApplicationController {
         result.put("category", helperService.getCategory(activity.getId(),locale));
         result.put("requirementList", requirementList);
         return result;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationGetMaterial, method = RequestMethod.POST)
+    @ResponseBody
+    public List<Material> getMaterial(
+            @RequestParam(name = "materialId") Integer materialId
+    ) {
+        return materialService.getList();
     }
 
     //fileUpload
