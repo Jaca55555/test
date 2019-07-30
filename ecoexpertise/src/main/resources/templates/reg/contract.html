@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/plugins/ViewerJS/viewer.css">
 
 </head>
-<body>
+<body style="overflow:auto;">
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -25,7 +25,7 @@
     <object th:include="fragments/header :: head" th:remove="tag" ></object>
 
     <!-- [ Main Content ] start -->
-    <div class="pcoded-main-container">
+    <div class="pcoded-main-container" style="overflow:auto;">
         <div class="pcoded-wrapper">
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
@@ -48,8 +48,8 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12 text-center" >
-                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
-                                                        <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 20px; margin-bottom: 10px" >
+                                                    <form th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="">
+                                                        <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
                                                             <iframe src="http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/application/contract/offer_download&amp;embedded=true" style="width: 100%;height: 100%;"></iframe>
                                                         </div>
 
@@ -63,16 +63,18 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="confirmAction" style="display: none" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                        <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
                                                             <div class="row">
-                                                                <div class="col-md-7  offset-1 text-left " style="color: #2f9c0a;">
+                                                                <div class="col-md-7 offset-1 text-left " style="color: #2f9c0a;">
                                                                     <span class="hei-50 wid-50 d-inline-block mr-4">
                                                                         <img src="/static/images/check.png" style="width: 100%; height: 100%">
                                                                     </span>
-                                                                    <span class="f-20 font-weight-bold" style="vertical-align: middle"> Документ успешно подписан и принят на обработку </span>
+                                                                    <span class="f-20 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.digitalSignatureComplete}"> Документ успешно подписан и принят на обработку </span>
+
+                                                                    <p style="color: black;margin-top: 15px;"><span th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span> <span th:text="${regApplication.contractNumber}">392</span>, <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>  <span th:text="#{sys_year}">г.</span> </p>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <button type="button" class="btn btn-secondary">Скачать электронную версию договора</button>
+                                                                <div class="col-md-3 text-right">
+                                                                    <button type="button" class="btn btn-secondary" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</button>
                                                                 </div>
                                                                 <div class="clearfix"></div>
                                                                 <div class="col-md-11 text-right mt-4 mr-0">
