@@ -76,6 +76,33 @@
         .file a:hover {
             color: #5CB85C;
         }
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -152,7 +179,7 @@
                                     <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                                     </div>
                                     <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
-
+                                        <object th:include="expertise/fragment/sender :: sender" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
 
