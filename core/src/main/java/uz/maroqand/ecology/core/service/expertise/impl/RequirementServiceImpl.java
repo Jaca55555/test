@@ -82,7 +82,7 @@ public class RequirementServiceImpl implements RequirementService {
                     predicates.add(criteriaBuilder.equal(root.get("objectExpertiseId"), objectExpertiseId));
                 }
                 if (materialId != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("materialId"), materialId));
+                    predicates.add(criteriaBuilder.in(root.join("materials").in(materialId)));
                 }
                 if (reviewId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("reviewId"), reviewId));

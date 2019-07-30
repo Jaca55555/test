@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
@@ -26,6 +27,7 @@ import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -72,6 +74,7 @@ public class RegApplicationController {
     private final OKEDService okedService;
     private final GnkService gnkService;
     private final MIPIndividualsPassportInfoService mipIndividualsPassportInfoService;
+    private final ToastrService toastrService;
 
     @Autowired
     public RegApplicationController(
@@ -95,7 +98,8 @@ public class RegApplicationController {
             CountryService countryService,
             OKEDService okedService,
             GnkService gnkService,
-            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService
+            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
+            ToastrService toastrService
     ) {
         this.userService = userService;
         this.soatoService = soatoService;
@@ -120,6 +124,7 @@ public class RegApplicationController {
         this.okedService = okedService;
         this.gnkService = gnkService;
         this.mipIndividualsPassportInfoService = mipIndividualsPassportInfoService;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -183,6 +188,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
@@ -202,12 +208,9 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer regApplicationId,
             @RequestParam(name = "message") String message
     ){
-        System.out.println("id==" + regApplicationId);
-        System.out.println("message=" + message);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regApplicationId,user.getId());
         if (regApplication==null){
-            System.out.println("null");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
@@ -226,12 +229,16 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
-
-        /*if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()== LogStatus.Approved){
-            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
-        }*/
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Denied){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
+        }
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         Client applicant = regApplication.getApplicant();
@@ -279,11 +286,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
         Client applicant = regApplication.getApplicant();
-
         switch (applicantType){
             case "LegalEntity":applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());break;
             case "Individual":applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());break;
@@ -298,7 +305,6 @@ public class RegApplicationController {
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
-
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.GET)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
@@ -307,12 +313,17 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        /*if (regApplication.getConfirmStatus()!=null && regApplication.getConfirmStatus()== LogStatus.Approved){
-            return "redirect:" + Urls.RegApplicationWaiting + "?id=" + id;
-        }*/
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Denied){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
+        }
 
         if (regApplication.getInvoiceId()!=null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
@@ -342,18 +353,10 @@ public class RegApplicationController {
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName
     ){
-        System.out.println("id="+id);
-        System.out.println("objectId="+objectId);
-        System.out.println("activityId="+activityId);
-        System.out.println("materials="+materials);
-        System.out.println("name="+name);
-        System.out.println("projectDeveloperTin="+projectDeveloperTin);
-        System.out.println("projectDeveloperName="+projectDeveloperName);
-
-
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
@@ -554,6 +557,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
@@ -582,6 +586,13 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Approved){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlari tasdiqlanmagan.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
+        }
 
         return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
     }
@@ -595,6 +606,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
@@ -602,34 +614,87 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
-        Offer offer = offerService.getOffer(locale);
+        Offer offer;
+        if(regApplication.getOfferId()!=null){
+            //offerta tasdiqlangan
+            offer = offerService.getById(regApplication.getOfferId());
+            model.addAttribute("action_url", RegUrls.RegApplicationContract);
+        }else {
+            //offerta tasdiqlanmagan
+            offer = offerService.getOffer(locale);
+            model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
+        }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
-        model.addAttribute("back_url", RegUrls.RegApplicationWaiting + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
         return RegTemplates.RegApplicationContract;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.POST)
-    public String regApplicationContract(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "offerId") Integer offerId
+    @RequestMapping(value = RegUrls.RegApplicationContractConfirm,method = RequestMethod.POST)
+    public String regApplicationContractConfirm(
+            @RequestParam(name = "id") Integer id
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
-
-
+        if(regApplication.getOfferId()!=null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
         Offer offer = offerService.getOffer(locale);
         regApplication.setOfferId(offer.getId());
 
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
         regApplication.setContractDate(new Date());
+        regApplication.setStep(RegApplicationStep.CONTRACT);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+    }
+
+    @RequestMapping(RegUrls.RegApplicationContractOfferDownload)
+    public ResponseEntity<Resource> getOfferDownload(
+            @RequestParam(name = "offer_id", required = false) Integer offerId
+    ){
+        Offer offer;
+        if(offerId!=null){
+            offer = offerService.getById(offerId);
+        }else {
+            offer = offerService.getOffer("uz");
+        }
+
+        Integer fileId=16;
+        File file = fileService.findById(fileId);
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.POST)
+    public String regApplicationContract(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        if(regApplication.getOfferId()!=null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
+
         regApplication.setStep(RegApplicationStep.PAYMENT);
         regApplicationService.update(regApplication);
 

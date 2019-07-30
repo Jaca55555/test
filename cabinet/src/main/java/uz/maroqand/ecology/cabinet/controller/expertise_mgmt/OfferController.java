@@ -68,7 +68,7 @@ public class OfferController {
                     offer.getId(),
                     offer.getName(),
                     offer.getLanguage(),
-                    offer.getDescription(),
+                    /*offer.getDescription(),*/
                     offer.getMainId()
             });
         }

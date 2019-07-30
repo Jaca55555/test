@@ -10,6 +10,7 @@ public class RegUrls {
     public static final String RegApplicationStart = RegApplication + "/start";
     public static final String RegApplicationApplicantCancel = RegApplication + "/cancel";
     public static final String RegApplicationApplicant = RegApplication + "/applicant";
+
     public static final String RegApplicationAbout = RegApplication + "/about";
     public static final String RegApplicationGetActivity = RegApplication + "/activity";
     public static final String RegApplicationGetMaterials = RegApplication + "/materials";
@@ -17,8 +18,12 @@ public class RegUrls {
     public static final String RegApplicationFileUpload = RegApplication + "/file_upload";
     public static final String RegApplicationFileDownload = RegApplication + "/file_download";
     public static final String RegApplicationFileDelete = RegApplication + "/file_delete";
+
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
+    public static final String RegApplicationContractConfirm = RegApplication + "/contract/confirm";
+    public static final String RegApplicationContractOfferDownload = RegApplication + "/contract/offer_download";
+
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
