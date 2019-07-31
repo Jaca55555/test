@@ -14,8 +14,9 @@ public enum RegApplicationStatus {
 
     Initial(0,"sys_regApplication.statusInitial","label label-secondary"), //ispolnitel  natijani kiritishni boshlagan
     New(1,"sys_regApplication.newSuccess","label label-info"), //ispolnitel natijani kiritgandan
-    Approved(2,"sys_regApplication.statusSuccess","label label-success"), //rais tasdiqlasa
-    Denied(3,"sys_regApplication.statusError","label label-danger"); //rais rad javobi bersa
+    Revision(2,"sys_regApplication.statusError","label label-danger"), //dorabotka, qayta ko'rib chiqish
+    Approved(3,"sys_regApplication.statusSuccess","label label-success"), //rais tasdiqlasa
+    NotConfirmed(4,"sys_regApplication.statusError","label label-danger"); //rais rad javobi bersa
 
     private Integer id;
     private String name;

@@ -620,7 +620,7 @@ public class RegApplicationController {
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
         }else {
             //offerta tasdiqlanmagan
-            offer = offerService.getOffer();
+            offer = offerService.getOffer(regApplication.getBudget());
             model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
         }
 
@@ -645,7 +645,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
         }
 
-        Offer offer = offerService.getOffer();
+        Offer offer = offerService.getOffer(regApplication.getBudget());
         regApplication.setOfferId(offer.getId());
 
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
@@ -665,7 +665,7 @@ public class RegApplicationController {
         if(offerId!=null){
             offer = offerService.getById(offerId);
         }else {
-            offer = offerService.getOffer();
+            offer = offerService.getOffer(false);
         }
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 

@@ -23,7 +23,6 @@ import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
-import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -71,7 +70,8 @@ public class ConfirmController {
             HelperService helperService,
             FileService fileService,
             RegApplicationLogService regApplicationLogService,
-            ProjectDeveloperService projectDeveloperService){
+            ProjectDeveloperService projectDeveloperService
+    ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -172,7 +172,8 @@ public class ConfirmController {
     @RequestMapping(value = ExpertiseUrls.ConfirmApproved,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "comment")String comment
+            @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -183,13 +184,17 @@ public class ConfirmController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
+        regApplication.setBudget(budget);
+        regApplicationService.update(regApplication);
+
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmDenied,method = RequestMethod.POST)
     public String notConfirmApplication(
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "comment")String comment
+            @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -199,6 +204,9 @@ public class ConfirmController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
+
+        regApplication.setBudget(budget);
+        regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }

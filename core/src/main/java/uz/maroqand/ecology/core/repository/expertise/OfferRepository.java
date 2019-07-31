@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
-    Offer findTop1ByActiveTrueOrderByIdDesc();
+    Offer findTop1ByActiveTrueAndByudjetOrderByIdDesc(Boolean budget);
 
     Page<Offer> findAllByActiveTrueAndDeletedFalse(Pageable pageable);
 
