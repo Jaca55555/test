@@ -35,6 +35,10 @@ public class Offer {
     @Column(name = "file_ru")
     private Integer fileRuId;
 
+    //true - byudjet tashkilot
+    @Column(name = "byudjet",columnDefinition = "boolean DEFAULT false")
+    private Boolean byudjet = false;
+
     /*
      * Technical Fields
      */
