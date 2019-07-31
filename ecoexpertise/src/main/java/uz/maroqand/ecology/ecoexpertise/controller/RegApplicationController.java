@@ -689,7 +689,7 @@ public class RegApplicationController {
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        if(regApplication.getOfferId()!=null){
+        if(regApplication.getOfferId()==null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
         }
