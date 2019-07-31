@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.user.Permissions;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.user.UserRepository;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -198,5 +200,21 @@ public class UserServiceImpl implements UserService {
 
     public List<User> findPerformerList(){
         return userRepository.findAll();
+    }
+
+    public LogType getUserLogType(User user){
+        if(user.getRole()!=null){
+            for (Permissions permission:user.getRole().getPermissions()){
+                switch (permission){
+                    case EXPERTISE_CONFIRM: return LogType.Confirm;
+                    case EXPERTISE_FORWARDING: return LogType.Forwarding;
+                    case EXPERTISE_PERFORMER: return LogType.Performer;
+                    case EXPERTISE_AGREEMENT: return LogType.Agreement;
+                    case EXPERTISE_AGREEMENT_COMPLETE: return LogType.AgreementComplete;
+                    default: return null;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface OfferService {
 
-    Offer getOffer(String language);
+    Offer getOffer();
 
     Page<Offer> getAll(Pageable pageable);
 
@@ -21,6 +21,8 @@ public interface OfferService {
 
     Offer save(Offer offer);
 
-    List<Offer> getAllByLanguage(String language);
+    List<Offer> getAllByLanguage();
+
+    Integer getOfferFileIdByLanguage(Offer offer,String locale);
 
 }

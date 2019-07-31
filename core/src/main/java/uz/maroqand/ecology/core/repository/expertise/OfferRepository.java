@@ -16,10 +16,10 @@ import java.util.List;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
 
-    Offer findTop1ByActiveTrueAndLanguageOrderByIdDesc(String language);
+    Offer findTop1ByActiveTrueOrderByIdDesc();
 
     Page<Offer> findAllByActiveTrueAndDeletedFalse(Pageable pageable);
 
-    List<Offer> findAllByLanguageAndActiveTrueAndDeletedFalse(String language);
+    List<Offer> findAllByActiveTrueAndDeletedFalse();
 
 }

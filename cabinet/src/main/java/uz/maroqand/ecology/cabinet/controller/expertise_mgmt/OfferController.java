@@ -67,9 +67,9 @@ public class OfferController {
             convenientForJSONArray.add(new Object[]{
                     offer.getId(),
                     offer.getName(),
-                    offer.getLanguage(),
+                    "",
                     /*offer.getDescription(),*/
-                    offer.getMainId()
+                    ""
             });
         }
         result.put("data",convenientForJSONArray);
@@ -88,7 +88,7 @@ public class OfferController {
 
         model.addAttribute("offer", offer);
         model.addAttribute("action_url", ExpertiseMgmtUrls.OfferEdit);
-        model.addAttribute("uzOfferList", offerService.getAllByLanguage("uz"));
+        model.addAttribute("uzOfferList", offerService.getAllByLanguage());
         return ExpertiseMgmtTemplates.OfferNew;
     }
 
@@ -107,9 +107,6 @@ public class OfferController {
         }
 
         oldOffer.setName(offer.getName());
-        oldOffer.setLanguage(offer.getLanguage());
-        oldOffer.setDescription(offer.getDescription());
-        oldOffer.setMainId(offer.getMainId());
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
         oldOffer = offerService.save(oldOffer);
@@ -140,7 +137,7 @@ public class OfferController {
         Offer offer = new Offer();
         model.addAttribute("offer", offer);
         model.addAttribute("action_url", ExpertiseMgmtUrls.OfferNew);
-        model.addAttribute("uzOfferList", offerService.getAllByLanguage("uz"));
+        model.addAttribute("uzOfferList", offerService.getAllByLanguage());
         return ExpertiseMgmtTemplates.OfferNew;
     }
 

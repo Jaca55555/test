@@ -34,6 +34,7 @@ import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.*;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.util.Common;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -120,7 +121,8 @@ public class UserController {
                     user.getDepartmentId()!=null? departmentService.getById(user.getDepartmentId()).getName():"",
                     user.getPositionId()!=null? positionService.getById(user.getPositionId()).getName():"",
                     user.getPhone(),
-                    user.getEnabled()
+                    user.getEnabled(),
+                    user.getLastEvent()!=null? Common.uzbekistanDateAndTimeFormat.format(user.getLastEvent()):""
             });
         }
 

@@ -112,6 +112,7 @@
                                                     <th th:text="#{mntr_user.position}"></th>
                                                     <th th:text="#{mntr_user.phone}"></th>
                                                     <th th:text="#{mntr_user.status}"></th>
+                                                    <th th:text="#{mntr_user.lastEvent}"></th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -218,6 +219,7 @@
                 {data: 5, name: 'positionId'},
                 {data: 6, name: 'phone'},
                 {render: renderStatusColumn, name: 'enable'},
+                {data: 8, name: 'lastEvent'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
