@@ -8,19 +8,23 @@ import org.springframework.stereotype.Component;
 import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
+import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private final UserAdditionalService userAdditionalService;
+    private final UserService userService;
 
-    public CustomSuccessHandler(UserAdditionalService userAdditionalService) {
+    public CustomSuccessHandler(UserAdditionalService userAdditionalService, UserService userService) {
         this.userAdditionalService = userAdditionalService;
+        this.userService = userService;
     }
 
     @Override
@@ -52,6 +56,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
 
         userAdditionalService.updateUserAdditional(user, LoginType.EcoExpertiseLogin, request);
+        user.setLastEvent(new Date());
+        userService.updateUser(user);
         return "/dashboard";
     }
 
