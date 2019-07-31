@@ -17,4 +17,6 @@ public interface ChangeDeadlineDateRepository extends JpaRepository<ChangeDeadli
 
     List<ChangeDeadlineDate> findByRegApplicationId(Integer id);
 
+    ChangeDeadlineDate findTop1ByRegApplicationIdOrderByIdDesc(Integer regApplicationId);
+
 }

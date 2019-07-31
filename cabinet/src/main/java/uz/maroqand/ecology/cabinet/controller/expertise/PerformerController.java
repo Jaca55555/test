@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -54,6 +56,7 @@ public class PerformerController {
     private final ObjectExpertiseService objectExpertiseService;
     private final RegApplicationLogService regApplicationLogService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final ChangeDeadlineDateService changeDeadlineDateService;
 
     @Autowired
     public PerformerController(
@@ -67,8 +70,8 @@ public class PerformerController {
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
             RegApplicationLogService regApplicationLogService,
-            ProjectDeveloperService projectDeveloperService
-    ) {
+            ProjectDeveloperService projectDeveloperService,
+            ChangeDeadlineDateService changeDeadlineDateService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -80,6 +83,7 @@ public class PerformerController {
         this.objectExpertiseService = objectExpertiseService;
         this.regApplicationLogService = regApplicationLogService;
         this.projectDeveloperService = projectDeveloperService;
+        this.changeDeadlineDateService = changeDeadlineDateService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -157,12 +161,45 @@ public class PerformerController {
             model.addAttribute("legalEntity", new LegalEntityDto(client));
         }
 
+        List<ChangeDeadlineDate> changeDeadlineDateList = changeDeadlineDateService.getListByRegApplicationId(regApplicationId);
+
+        model.addAttribute("changeDeadlineDateList",changeDeadlineDateList);
+        model.addAttribute("changeDeadlineDate",changeDeadlineDateService.getByRegApplicationId(regApplicationId));
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant",client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
         return ExpertiseTemplates.PerformerView;
+    }
+
+    @RequestMapping(ExpertiseUrls.PerformerChangeDeadlineDate)
+    @ResponseBody
+    public HashMap<String,Object> getMethod(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "reason") String reason
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        Integer status=1;
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            status=0;
+            result.put("status",status);
+            return result;
+        }
+
+        ChangeDeadlineDate changeDeadlineDate = new ChangeDeadlineDate();
+        changeDeadlineDate.setRegApplicationId(id);
+        changeDeadlineDate.setBeforeDeadlineDate(regApplication.getDeadlineDate());
+        changeDeadlineDate.setReason(reason);
+        changeDeadlineDate.setStatus(ChangeDeadlineDateStatus.Initial);
+        changeDeadlineDateService.save(changeDeadlineDate);
+
+        result.put("status",status);
+        result.put("beforeDate",regApplication.getDeadlineDate()!=null?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"");
+        return result;
+
     }
 
 }

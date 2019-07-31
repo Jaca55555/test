@@ -13,9 +13,11 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus;
 import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.expertise.ChangeDeadlineDateService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -26,10 +28,12 @@ public class ChangeDeadlineDateController {
 
     private final ChangeDeadlineDateService changeDeadlineDateService;
     private final RegApplicationService regApplicationService;
+    private final UserService userService;
 
-    public ChangeDeadlineDateController(ChangeDeadlineDateService changeDeadlineDateService, RegApplicationService regApplicationService) {
+    public ChangeDeadlineDateController(ChangeDeadlineDateService changeDeadlineDateService, RegApplicationService regApplicationService, UserService userService) {
         this.changeDeadlineDateService = changeDeadlineDateService;
         this.regApplicationService = regApplicationService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ChangeDeadlineDateList)
@@ -86,26 +90,29 @@ public class ChangeDeadlineDateController {
     public String getChangeDeadlineDateConfigPage(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "status") Integer statusChange,
-            @RequestParam(name = "beforeDeadlineDate",required = false) String dateStr
+            @RequestParam(name = "afterDeadlineDate",required = false) String dateStr
 
     ){
+        User user = userService.getCurrentUserFromContext();
         ChangeDeadlineDate changeDeadlineDate = changeDeadlineDateService.getById(id);
         if (changeDeadlineDate==null){
             return "redirect:" + ExpertiseUrls.ChangeDeadlineDateList;
         }
 
+        changeDeadlineDate.setCreatedById(user.getId());
+
         if (statusChange==1){
-            Date beforeDate = DateParser.TryParse(dateStr,Common.uzbekistanDateFormat);
-            changeDeadlineDate.setBeforeDeadlineDate(beforeDate);
+            Date afterDate = DateParser.TryParse(dateStr,Common.uzbekistanDateFormat);
+            changeDeadlineDate.setAfterDeadlineDate(afterDate);
             changeDeadlineDate.setStatus(ChangeDeadlineDateStatus.Approved);
             changeDeadlineDate = changeDeadlineDateService.save(changeDeadlineDate);
             RegApplication regApplication = regApplicationService.getById(changeDeadlineDate.getRegApplicationId());
-            regApplication.setDeadlineDate(changeDeadlineDate.getBeforeDeadlineDate());
+            regApplication.setDeadlineDate(changeDeadlineDate.getAfterDeadlineDate());
             regApplicationService.update(regApplication);
             return "redirect:" + ExpertiseUrls.ChangeDeadlineDateView + "?id=" + changeDeadlineDate.getId();
         }
 
-            changeDeadlineDate.setStatus(ChangeDeadlineDateStatus.Denied);
+        changeDeadlineDate.setStatus(ChangeDeadlineDateStatus.Denied);
         changeDeadlineDate = changeDeadlineDateService.save(changeDeadlineDate);
 
         return "redirect:" + ExpertiseUrls.ChangeDeadlineDateView + "?id=" + changeDeadlineDate.getId();

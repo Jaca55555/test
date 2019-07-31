@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="sender">
+        <div class="row">
+
+            <div class="col-md-6 pr-0">
+                <div class="form-group col-md-10 offset-1" id="historyChangeDeadlineDate">
+                    <h4 th:text="#{history_change_deadline_date}" th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"></h4>
+                    <div class="card" th:each="deadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0}">
+                        <div class="card-block" style="padding: 10px 25px;">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial}" class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" class="mdi mdi-checkbox-multiple-marked-outline f-30" style="color: #14cc9e"></i>
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Denied}" class="mdi mdi-close-box-outline f-30" style="color: #f22012"></i>
+                                </div>
+                                <div class="col">
+                                    <h5 class="mb-3" th:text="${deadlineDate.reason}"></h5>
+                                    <h6 class="m-b-0"><span th:if="${deadlineDate.beforeDeadlineDate!=null}" th:text="${#dates.format(deadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span><span th:if="${deadlineDate.afterDeadlineDate!=null}" th:text="${' - '+#dates.format(deadlineDate.afterDeadlineDate, 'dd.MM.yyyy')}"></span></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-10 offset-1" id="sendForm" th:if="${changeDeadlineDate==null || (changeDeadlineDate!=null and changeDeadlineDate.status!=T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial)}">
+                    <label th:text="#{change_deadline_date_query}"></label>
+                    <input type="text" class="form-control" placeholder="change_deadline_date_reason" minlength="3" id="reason" required="required">
+                    <button type="button" class="btn btn-primary float-right mt-1 mr-0" id="submitButton">
+                        <i  class="mdi mdi-telegram"></i>
+                        <span th:text="#{sys_send}"></span>
+                    </button>
+                    </br>
+                </div>
+
+                <div class="form-group col-md-10 offset-1">
+                    <label>Результат заключения</label>
+                    <input type="text" class="form-control" value="Согласовано" readonly>
+                </div>
+                <div class="col-md-10 offset-1">
+                    <div class="card-block task-attachment" >
+                        <p style="font-weight: bold; color: black;margin-left: 10px;" >Добавить сканированная копия заключения</p>
+                        <ul class="media-list p-0">
+                            <li class="media d-flex m-b-15">
+                                <div class="m-r-20 file-attach">
+                                    <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                                </div>
+                                <div class="media-body">
+                                    <a href="#" class="m-b-5 d-block text-secondary">
+                                        <span>Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                                    </a>
+                                    <div class="text-muted">
+                                        <span>Size: 1.2Mb</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="border-bottom: 1px solid #f4f4f4"></div>
+                <div class="col-md-10 offset-1">
+                    <h5 class="mt-lg-5">Статус согласование </h5>
+                    <table style="width: 100%">
+                        <tr style="border-bottom: 1px solid #f4f4f4">
+                            <td style="width: 15%; padding-bottom: 5px;padding-top: 10px" >
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AI</span>
+                            </td>
+                            <td style="width: 60%;">
+                                <h6 class="mb-0">Холмуратов Жахонгир</h6>
+                                <small>Исполнитель</small>
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-success">Согласовано</span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f4f4f4">
+                            <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
+                            </td>
+                            <td style="width: 60%;">
+                                <h6 class="mb-0">Акбар Сапаев</h6>
+                                <small>Директор</small>
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-danger">Возвращено</span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f4f4f4">
+                            <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >UB</span>
+                            </td>
+                            <td style="width: 60%;">
+                                <h6 class="mb-0">Уткирбек Болтаев</h6>
+                                <small>Председатель</small>
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-warning">Не завершено</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">
+                <div class="col-md-10 offset-1">
+                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message" placeholder="написать комментарий..."></textarea>
+                    <p class="mt-2 mb-0" style="color: black">Добавить файл</p>
+                    <div class="col-md-12 row" id="files-div">
+                        <a href="#upload-file-modal" class="col-md-3 pb-3 p-0" onclick="openModalFile()">
+                            <div class="add-file">
+                                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                <span id="percentage"><span id="percentage-num"></span>%</span>
+                                <i class="feather icon-plus" id="plus-icon"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-danger float-left" > Возврат</button>
+                            <button type="button" class="btn btn-primary float-right" >Согласовать</button>
+                        </div>
+                    </div>
+                    <h5 class="mt-lg-5">Последние комментарии к документу</h5>
+                    <div class="col-md-12" id="comments">
+                        <div id="comments-first"></div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AI</span>
+                            </div>
+                            <div class="col-md-10 pl-0">
+                                <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">ok</p>
+                                <p class="text-right" >03.05.2019 - 15:00</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" >AS</span>
+                            </div>
+                            <div class="col-md-10 pl-0">
+                                <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">В пункте №5 грамматическая ошибка</p>
+                                <p class="text-right">03.05.2019 - 19:11</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="file-name">
+                                <span th:text="#{sys_file_name}"></span>
+                                <span class="required">*</span>
+                            </label>
+                            <input class="form-control" type="text" id="file-name" required="" />
+                        </div>
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                            </span>
+                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                          </span>
+                            <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+
+                        </span>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>

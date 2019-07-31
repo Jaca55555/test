@@ -45,6 +45,11 @@ public class ChangeDeadlineDateServiceImpl implements ChangeDeadlineDateService 
         return changeDeadlineDateRepository.save(changeDeadlineDate);
     }
 
+    @Override
+    public ChangeDeadlineDate getByRegApplicationId(Integer id) {
+        return changeDeadlineDateRepository.findTop1ByRegApplicationIdOrderByIdDesc(id);
+    }
+
     private static Specification<ChangeDeadlineDate> getFilteringSpecifications(
             final Integer regApplicationId,
             final ChangeDeadlineDateStatus changeDeadlineDateStatus

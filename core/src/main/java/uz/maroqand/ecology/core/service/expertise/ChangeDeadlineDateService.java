@@ -18,4 +18,6 @@ public interface ChangeDeadlineDateService {
     List<ChangeDeadlineDate> getListByRegApplicationId(Integer id);
 
     ChangeDeadlineDate save(ChangeDeadlineDate changeDeadlineDate);
+
+    ChangeDeadlineDate getByRegApplicationId(Integer id);
 }
