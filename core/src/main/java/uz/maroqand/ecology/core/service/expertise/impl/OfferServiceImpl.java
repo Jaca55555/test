@@ -26,8 +26,8 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Offer getOffer(String language){
-        return offerRepository.findTop1ByActiveTrueAndLanguageOrderByIdDesc(language);
+    public Offer getOffer(){
+        return offerRepository.findTop1ByActiveTrueOrderByIdDesc();
     }
 
     @Override
@@ -46,8 +46,17 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public List<Offer> getAllByLanguage(String language){
-        return offerRepository.findAllByLanguageAndActiveTrueAndDeletedFalse(language);
+    public List<Offer> getAllByLanguage(){
+        return offerRepository.findAllByActiveTrueAndDeletedFalse();
+    }
+
+    public Integer getOfferFileIdByLanguage(Offer offer,String locale){
+        switch (locale){
+            case "uz": return offer.getFileUzId();
+            case "oz": return offer.getFileOzId();
+            case "ru": return offer.getFileRuId();
+            default: return offer.getFileRuId();
+        }
     }
 
 }

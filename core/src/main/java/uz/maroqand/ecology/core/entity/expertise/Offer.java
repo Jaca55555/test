@@ -23,16 +23,17 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @Column(name = "main_id")
-    private Integer mainId;
-
     private String name;
 
-    //language = uz,oz,ru
-    private String language;
+    //file format doc, docx
+    @Column(name = "file_uz")
+    private Integer fileUzId;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "file_oz")
+    private Integer fileOzId;
+
+    @Column(name = "file_ru")
+    private Integer fileRuId;
 
     /*
      * Technical Fields

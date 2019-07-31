@@ -602,7 +602,6 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
@@ -621,7 +620,7 @@ public class RegApplicationController {
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
         }else {
             //offerta tasdiqlanmagan
-            offer = offerService.getOffer(locale);
+            offer = offerService.getOffer();
             model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
         }
 
@@ -645,9 +644,8 @@ public class RegApplicationController {
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
         }
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Offer offer = offerService.getOffer(locale);
+        Offer offer = offerService.getOffer();
         regApplication.setOfferId(offer.getId());
 
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
@@ -667,10 +665,11 @@ public class RegApplicationController {
         if(offerId!=null){
             offer = offerService.getById(offerId);
         }else {
-            offer = offerService.getOffer("uz");
+            offer = offerService.getOffer();
         }
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Integer fileId=16;
+        Integer fileId = offerService.getOfferFileIdByLanguage(offer,locale);
         File file = fileService.findById(fileId);
 
         if (file == null) {
