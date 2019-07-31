@@ -103,8 +103,7 @@ public class RegApplicationController {
             OKEDService okedService,
             GnkService gnkService,
             MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
-            ToastrService toastrService
-            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
+            ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository
     ) {
