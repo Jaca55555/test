@@ -6,6 +6,25 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .control-label {
+            text-align: right;
+        }
+        .file-field.medium .file-path-wrapper {
+            height: 3rem; }
+        .file-field.medium .file-path-wrapper .file-path {
+            height: 2.8rem; }
+
+        .file-field.big-2 .file-path-wrapper {
+            height: 3.7rem; }
+        .file-field.big-2 .file-path-wrapper .file-path {
+            height: 3.5rem; }
+
+        .inputBorder{
+            border: 2px solid #dc3545;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 <!-- [ Pre-loader ] start -->
@@ -42,35 +61,61 @@
                                             <h5 th:text="#{offer.new}"></h5>
                                         </div>
                                         <div class="card-body">
-                                            <form th:action="${action_url}" method="post" th:object="${offer}">
-                                                <div class="form-group col-md-12">
-                                                    <label for="name" th:text="#{offer.name}"></label>
-                                                    <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                            <form th:action="${action_url}" method="post" th:object="${offer}" data-parsley-validate="" id="offerForm">
+                                                <div class="form-group row">
+                                                    <label for="name" class="col-md-4 col-form-label text-right" th:text="#{offer.name}"></label>
+                                                    <div class="col-md-4">
+                                                        <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-12">
-                                                    <label for="language" th:text="#{offer.language}"></label>
-                                                    <select id="language" th:field="*{language}" required="" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option value="uz" th:text="#{sys_uz}"></option>
-                                                        <option value="oz" th:text="#{sys_oz}"></option>
-                                                        <option value="ru" th:text="#{sys_ru}"></option>
-                                                    </select>
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-4 text-right"  th:text="#{offer.byudjet}"></label>
+                                                    <div class="col-md-4">
+                                                        <select required="" id="byudjet" name="byudjet" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option value="1" th:text="#{sys_byudjet}" th:selected="*{byudjet}"></option>
+                                                            <option value="0" th:text="#{sys_not_byudjet}" th:selected="*{!byudjet}"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-12">
-                                                    <label for="description" th:text="#{offer.description}"></label>
-                                                    <textarea type="text" rows="16" class="form-control" id="description" th:field="*{description}" required=""></textarea>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <label for="mainId" th:text="#{offer.main_id}"></label>
-                                                    <select id="mainId" th:field="*{mainId}" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:value="${offer.id}" th:text="${offer.name}" th:each="offer : ${uzOfferList}"></option>
-                                                    </select>
+                                                <div class="form-group row">
+                                                    <label for="fileUz" class="control-label col-md-4 text-right" >
+                                                        <span th:text="#{offer.file_uz}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-4">
+                                                        <input id="fileUz" name="fileUz" class="miskin-file-input miskin-file-upload-required" type="file" data-th-attr="data-download-name=${offer.fileUzId!=null? @helperService.getFileName(offer.fileUzId):''}, data-download-link=${offer.fileUzId!=null ? T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileDownload+'?file_id='+offer.fileUzId : ''}, data-url=${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileUpload}" data-parsley-required="true" required=""  data-max-file-size="20971520" data-accept=".doc,.docx" />
+                                                        <span class="custom-file-control"></span>
+                                                    </div>
                                                 </div>
 
-                                                <input type="hidden" th:field="*{id}">
-                                                <div class="form-group col-md-5">
-                                                    <button type="submit" th:text="#{sys_add}" class="btn btn-success" style="float: right; margin-right: 0;"></button>
+                                                <div class="form-group row">
+                                                    <label for="fileUz" class="control-label col-md-4 text-right" >
+                                                        <span th:text="#{offer.file_uz}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-4">
+                                                        <input id="fileOz" name="fileOz" class="miskin-file-input miskin-file-upload-required" type="file" data-th-attr="data-download-name=${offer.fileOzId!=null? @helperService.getFileName(offer.fileOzId):''}, data-download-link=${offer.fileOzId!=null ? T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileDownload+'?file_id='+offer.fileOzId : ''}, data-url=${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileUpload}" data-parsley-required="true" required=""  data-max-file-size="20971520" data-accept=".doc,.docx" />
+                                                        <span class="custom-file-control"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label  class="control-label col-md-4 text-right" >
+                                                        <span th:text="#{offer.file_uz}"></span>
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-4">
+                                                        <input id="fileRu" name="fileRu" class="miskin-file-input miskin-file-upload-required" type="file" data-th-attr="data-download-name=${offer.fileRuId!=null? @helperService.getFileName(offer.fileRuId) :''}, data-download-link=${offer.fileRuId!=null ? T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileDownload+'?file_id='+offer.fileRuId : ''}, data-url=${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferFileUpload}" data-parsley-required="true" required=""  data-max-file-size="20971520" data-accept=".doc,.docx" />
+                                                        <span class="custom-file-control"></span>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" class="miskin-file-upload-required" />
+                                                <input type="hidden" th:field="*{id}" id="offerId" class="miskin-file-upload-required"/>
+                                                <div class="form-group text-center">
+                                                    <a th:href="${back_url}" th:text="#{sys_cancel}" class="btn btn-danger"></a>
+                                                    <button type="button" th:text="#{sys_add}" class="btn btn-success" id="submitbutton"></button>
                                                 </div>
                                             </form>
                                         </div>
@@ -92,16 +137,41 @@
 </div>
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
-<!-- Ckeditor js -->
-<script src="/static/plugins/ckeditor/js/ckeditor.js"></script>
-<script type="text/javascript">
-    $(window).on('load', function() {
-        // classic editor
-        ClassicEditor.create(document.querySelector('#description'))
-            .catch(error => {
-                console.error(error);
-            });
+<script type="text/javascript" src="/static/jquery-file-upload/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/jquery-file-upload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/static/jquery-file-upload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/static/jquery-file-upload/file-upload.js"></script>
+<script th:inline="javascript">
+    $('#submitbutton').on('click',function () {
+        var inputFileOz = document.getElementById('fileOz');
+        var inputFileRU = document.getElementById('fileRu');
+        var inputFileUz = document.getElementById('fileUz');
+        $('#name').parsley().validate();
+        $('#byudjet').parsley().validate();
+        $('#fileUz').parsley().validate();
+        $('#fileOz').parsley().validate();
+        $('#fileRu').parsley().validate();
+        if (!$('#name').parsley().isValid()
+            || !$('#byudjet').parsley().isValid()
+            || !inputFileUz.classList.contains('miskin-required')
+            || !inputFileOz.classList.contains('miskin-required')
+            || !inputFileRU.classList.contains('miskin-required')
+        ){
+            if (!inputFileUz.classList.contains('miskin-required')){
+                $('#fileUz').addClass('inputBorder');
+            }
+            if (!inputFileOz.classList.contains('miskin-required')){
+                $('#fileOz').addClass('inputBorder');
+            }
+            if (!inputFileRU.classList.contains('miskin-required')){
+                $('#fileRu').addClass('inputBorder');
+            }
+        }else{
+            $('#offerForm').submit();
+        }
     });
 </script>
 </body>

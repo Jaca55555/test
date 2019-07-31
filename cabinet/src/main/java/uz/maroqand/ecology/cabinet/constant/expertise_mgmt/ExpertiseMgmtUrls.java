@@ -49,6 +49,8 @@ public class ExpertiseMgmtUrls {
     public static final String OfferListAjax = Offer + "/list_ajax";
     public static final String OfferNew = Offer + "/new";
     public static final String OfferEdit = Offer + "/edit";
+    public static final String OfferFileUpload = Offer + "/file_upload";
+    public static final String OfferFileDownload = Offer + "/file_download";
     public static final String OfferView = Offer + "/view";
 
 }

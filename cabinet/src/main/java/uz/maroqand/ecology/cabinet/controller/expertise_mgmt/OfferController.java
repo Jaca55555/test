@@ -4,31 +4,36 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
+import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class OfferController {
@@ -37,14 +42,18 @@ public class OfferController {
     private final TableHistoryService tableHistoryService;
     private final ObjectMapper objectMapper;
     private final UserAdditionalService userAdditionalService;
+    private final FileService fileService;
+    private final HelperService helperService;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService){
+    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, FileService fileService, HelperService helperService){
         this.offerService = offerService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
         this.objectMapper = objectMapper;
         this.userAdditionalService = userAdditionalService;
+        this.fileService = fileService;
+        this.helperService = helperService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.OfferList)
@@ -67,9 +76,13 @@ public class OfferController {
             convenientForJSONArray.add(new Object[]{
                     offer.getId(),
                     offer.getName(),
-                    "",
-                    /*offer.getDescription(),*/
-                    ""
+                    offer.getByudjet(),
+                    offer.getFileUzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileUzId():"",
+                    offer.getFileUzId()!=null?helperService.getFileName(offer.getFileUzId()):"",
+                    offer.getFileOzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileOzId():"",
+                    offer.getFileOzId()!=null?helperService.getFileName(offer.getFileOzId()):"",
+                    offer.getFileRuId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileRuId():"",
+                    offer.getFileRuId()!=null?helperService.getFileName(offer.getFileRuId()):"",
             });
         }
         result.put("data",convenientForJSONArray);
@@ -88,12 +101,16 @@ public class OfferController {
 
         model.addAttribute("offer", offer);
         model.addAttribute("action_url", ExpertiseMgmtUrls.OfferEdit);
+        model.addAttribute("back_url", ExpertiseMgmtUrls.OfferList);
         model.addAttribute("uzOfferList", offerService.getAllByLanguage());
         return ExpertiseMgmtTemplates.OfferNew;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.OfferEdit, method = RequestMethod.POST)
-    public String offerEditSubmit(Offer offer){
+    public String offerEditSubmit(
+            Offer offer,
+            @RequestParam(name = "byudjet") Integer byudjet
+    ){
         User user = userService.getCurrentUserFromContext();
         Offer oldOffer = offerService.getById(offer.getId());
         if(oldOffer == null){
@@ -105,8 +122,10 @@ public class OfferController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
+        oldOffer.setDeleted(Boolean.FALSE);
+        oldOffer.setActive(Boolean.TRUE);
         oldOffer.setName(offer.getName());
+        oldOffer.setByudjet(byudjet==1?Boolean.TRUE:Boolean.FALSE);
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
         oldOffer = offerService.save(oldOffer);
@@ -132,21 +151,10 @@ public class OfferController {
 
 
     @RequestMapping(ExpertiseMgmtUrls.OfferNew)
-    public String offerNew(Model model){
-
-        Offer offer = new Offer();
-        model.addAttribute("offer", offer);
-        model.addAttribute("action_url", ExpertiseMgmtUrls.OfferNew);
-        model.addAttribute("uzOfferList", offerService.getAllByLanguage());
-        return ExpertiseMgmtTemplates.OfferNew;
-    }
-
-    @RequestMapping(value = ExpertiseMgmtUrls.OfferNew, method = RequestMethod.POST)
-    public String offerNewSubmit(Offer offer){
+    public String offerNew(){
         User user = userService.getCurrentUserFromContext();
-
-        offer.setActive(true);
-        offer.setDeleted(false);
+        Offer offer = new Offer();
+        offer.setDeleted(Boolean.TRUE);
         offer.setCreatedAt(new Date());
         offer.setCreatedById(user.getId());
         offer = offerService.save(offer);
@@ -157,7 +165,7 @@ public class OfferController {
             e.printStackTrace();
         }
         tableHistoryService.create(
-                TableHistoryType.edit,
+                TableHistoryType.add,
                 TableHistoryEntity.Offer,
                 offer.getId(),
                 null,
@@ -166,7 +174,90 @@ public class OfferController {
                 user.getId(),
                 user.getUserAdditionalId()
         );
-        return "redirect:" + ExpertiseMgmtUrls.OfferList;
+
+        return "redirect:" + ExpertiseMgmtUrls.OfferEdit + "?id=" + offer.getId();
+    }
+
+    @RequestMapping(value = ExpertiseMgmtUrls.OfferFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileUz",required = false) MultipartFile fileUz,
+            @RequestParam(name = "fileOz", required = false) MultipartFile fileOz,
+            @RequestParam(name = "fileRu",required = false) MultipartFile fileRu
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+        Offer offer = offerService.getById(id);
+        if (offer == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        File file=null;
+        List<HashMap<String, Object>> filesList = new LinkedList<>();
+        HashMap<String, Object> fileMap = new HashMap<>();
+        if (fileUz!=null){
+            file = fileService.uploadFile(fileUz, user.getId(),"offerUzId="+offer.getId(),"");
+            if (file!=null){
+                offer.setFileUzId(file.getId());
+                offerService.save(offer);
+                fileMap.put("name", file.getName());
+                fileMap.put("link", ExpertiseMgmtUrls.OfferFileDownload+ "?file_id=" + offer.getFileUzId());
+                filesList.add(fileMap);
+                responseMap.put("files", filesList);
+                responseMap.put("status", 1);
+            }
+        }else{
+            if (fileOz!=null){
+                file = fileService.uploadFile(fileOz, user.getId(),"offerOzId="+offer.getId(),"");
+                if (file!=null){
+                    offer.setFileOzId(file.getId());
+                    offerService.save(offer);
+                    fileMap.put("name", file.getName());
+                    fileMap.put("link", ExpertiseMgmtUrls.OfferFileDownload+ "?file_id=" + offer.getFileOzId());
+                    filesList.add(fileMap);
+                    responseMap.put("files", filesList);
+                    responseMap.put("status", 1);
+                }
+            }else{
+                file = fileService.uploadFile(fileRu, user.getId(),"offerRuId="+offer.getId(),"");
+                if (file!=null){
+                    offer.setFileRuId(file.getId());
+                    offerService.save(offer);
+                    fileMap.put("name", file.getName());
+                    fileMap.put("link", ExpertiseMgmtUrls.OfferFileDownload+ "?file_id=" + offer.getFileRuId());
+                    filesList.add(fileMap);
+                    responseMap.put("files", filesList);
+                    responseMap.put("status", 1);
+                }
+            }
+        }
+
+        return responseMap;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.OfferFileDownload)
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(
+            Authentication authentication,
+            @RequestParam(name = "file_id") Integer fileId
+    ) {
+        if (authentication == null) {
+            return null;
+        }
+        UserDetailsImpl userDetailsAdapter = (UserDetailsImpl)authentication.getPrincipal();
+        User user = userDetailsAdapter.getUser();
+
+        File file;
+            file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
 
     @RequestMapping(ExpertiseMgmtUrls.OfferView)

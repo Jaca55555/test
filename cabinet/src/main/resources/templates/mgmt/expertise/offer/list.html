@@ -59,10 +59,11 @@
                                                     <tr>
                                                         <th th:text="#{offer.id}"></th>
                                                         <th th:text="#{offer.name}"></th>
-                                                        <th th:text="#{offer.language}"></th>
-                                                        <!--<th th:text="#{offer.description}"></th>-->
-                                                        <th th:text="#{offer.main_id}"></th>
-                                                        <th style="max-width: 50px;"></th>
+                                                        <th th:text="#{offer.byudjet}"></th>
+                                                        <th th:text="#{offer.file_uz}"></th>
+                                                        <th th:text="#{offer.file_oz}"></th>
+                                                        <th th:text="#{offer.file_ru}"></th>
+                                                        <th></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -97,6 +98,10 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+
+    var byudjet = [[#{sys_byudjet}]];
+    var notByudjet = [[#{sys_not_byudjet}]];
+
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
@@ -109,6 +114,31 @@
         var currentEditLink = ajaxRequestEditLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        return html;
+    }
+    function renderByudjetColumn(data, type, row, meta) {
+        var html='';
+        if (row[2]){
+            html+='<span class="badge badge-info">'+byudjet+'</span>';
+        }else{
+            html+='<span class="badge badge-success">'+notByudjet+'</span>';
+        }
+        return html;
+    }
+
+    function renderFileUzColumn(data, type, row, meta) {
+        var html = '';
+        html += '<a href="'+row[3]+'" class="btn btn-default btn-sm" style="border-color: #ced4db;color: #495057;"><i class="fa fa-download"></i><span style="border-right: 1px solid #ccc;">&nbsp;</span>&nbsp;<span>'+row[4]+'</span></a>';
+        return html;
+    }
+    function renderFileOzColumn(data, type, row, meta) {
+        var html = '';
+        html += '<a href="'+row[5]+'" class="btn btn-default btn-sm" style="border-color: #ced4db;color: #495057;"><i class="fa fa-download"></i><span style="border-right: 1px solid #ccc;">&nbsp;</span>&nbsp;<span>'+row[6]+'</span></a>';
+        return html;
+    }
+    function renderFileRuColumn(data, type, row, meta) {
+        var html = '';
+        html += '<a href="'+row[7]+'" class="btn btn-default btn-sm" style="border-color: #ced4db;color: #495057;"><i class="fa fa-download"></i><span style="border-right: 1px solid #ccc;">&nbsp;</span>&nbsp;<span>'+row[8]+'</span></a>';
         return html;
     }
 
@@ -138,9 +168,10 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {data: 2, name: 'language'},
-                // {data: 3, name: 'description'},
-                {data: 3, name: 'mainId'},
+                {render: renderByudjetColumn, name: 'byudjet'},
+                {render: renderFileUzColumn, orderable: false},
+                {render: renderFileOzColumn, orderable: false},
+                {render: renderFileRuColumn, orderable: false},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
