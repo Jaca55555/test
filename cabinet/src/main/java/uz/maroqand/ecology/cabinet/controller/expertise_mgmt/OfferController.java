@@ -77,11 +77,11 @@ public class OfferController {
                     offer.getId(),
                     offer.getName(),
                     offer.getByudjet(),
-                    offer.getFileUzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileUzId():"",
+                    offer.getFileUzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?file_id=" + offer.getFileUzId():"",
                     offer.getFileUzId()!=null?helperService.getFileName(offer.getFileUzId()):"",
-                    offer.getFileOzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileOzId():"",
+                    offer.getFileOzId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?file_id=" + offer.getFileOzId():"",
                     offer.getFileOzId()!=null?helperService.getFileName(offer.getFileOzId()):"",
-                    offer.getFileRuId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?id=" + offer.getFileRuId():"",
+                    offer.getFileRuId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?file_id=" + offer.getFileRuId():"",
                     offer.getFileRuId()!=null?helperService.getFileName(offer.getFileRuId()):"",
             });
         }
