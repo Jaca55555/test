@@ -18,7 +18,15 @@ public enum Permissions {
     EXPERTISE_FORWARDING(3,"sys_permissions.expertise_forwarding"),// Ariza ko'rb chiquvchini tasdilash, va natijani tasdiqalsh
     EXPERTISE_PERFORMER(4,"sys_permissions.expertise_performer"),// Ariza natijani kirituvchi (ijrochi)
     EXPERTISE_AGREEMENT(5,"sys_permissions.expertise_agreement"),// Ariza natijasini tasdiqlash
-    EXPERTISE_AGREEMENT_COMPLETE(6,"sys_permissions.expertise_agreement_complete"); // Ariza natijasini tasdiqlash va ariza tugatish
+    EXPERTISE_AGREEMENT_COMPLETE(6,"sys_permissions.expertise_agreement_complete"), // Ariza natijasini tasdiqlash va ariza tugatish
+
+    ENTERPRISE_REGISTER(7,"sys_permissions.enterprise_register"), //
+    BILLING(8,"sys_permissions.billing"), //
+    PAYMENT_FILE(9,"sys_permissions.payment_file"), //
+    COORDINATE_REGISTER(10,"sys_permissions.coordinate_register"), //
+
+    APPEAL_ADMIN(11,"sys_permissions.appeal_admin"), //
+    EMPLOYEE_CONTROL(12,"sys_permissions.employee_control"); //
 
     private Integer id;
     private String name;

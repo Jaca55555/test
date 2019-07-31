@@ -52,20 +52,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
                 .antMatchers("/static*/**", "/map").permitAll()
                 .antMatchers("/dashboard/**").authenticated()
-                .antMatchers("/sys/appeal_admin/**").authenticated()
-                .antMatchers("/mgmt/translations/**").authenticated()
 
-                .antMatchers("/mgmt/expertise/object_expertise/**").authenticated()
-                .antMatchers("/mgmt/expertise/activity/**").authenticated()
-                .antMatchers("/mgmt/expertise/material/**").authenticated()
-                .antMatchers("/mgmt/expertise/expertise_requirement/**").authenticated()
-                .antMatchers("/mgmt/expertise/offer/**").authenticated()
+                .antMatchers("/mgmt/translations/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/mgmt/expertise/object_expertise/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/mgmt/expertise/activity/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/mgmt/expertise/material/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/mgmt/expertise/expertise_requirement/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/mgmt/expertise/offer/**").hasAuthority(Permissions.ADMIN.name())
 
                 .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
                 .antMatchers("/expertise/forwarding/").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
                 .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
                 .antMatchers("/expertise/agreement/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT.name())
                 .antMatchers("/expertise/agreement_complete/**").hasAuthority(Permissions.EXPERTISE_AGREEMENT_COMPLETE.name())
+
+                .antMatchers("/expertise/applicant/**").hasAuthority(Permissions.ENTERPRISE_REGISTER.name())
+                .antMatchers("/expertise/coordinate/**").hasAuthority(Permissions.COORDINATE_REGISTER.name())
+                .antMatchers("/expertise/billing/**").hasAuthority(Permissions.BILLING.name())
+                .antMatchers("/billing/payment_file/**").hasAuthority(Permissions.PAYMENT_FILE.name())
+
+                .antMatchers("/sys/appeal_admin/**").hasAuthority(Permissions.APPEAL_ADMIN.name())
 
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()

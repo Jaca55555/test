@@ -20,39 +20,42 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_control_panel}">Navigation</label>
                 </li>
-                <li data-username="Sample Page" class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
+
+
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-clock"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
+
+
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_registry}"></label>
                 </li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
-                <li data-username="Sample Page" class="nav-item"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER')"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/reg_application/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
+
 
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_menu.billing}"></label>
                 </li>
-                <li data-username="" class="nav-item"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
-                <li data-username="" class="nav-item"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('BILLING')"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE')"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
 
                 <li data-username="Sample Page" class="nav-item"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
+                <li data-username="Sample Page" class="nav-item"><a href="/expertise/reg_application/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{reg_applicant.list}"> </span></a></li>
                 <li data-username="Sample Page" class="nav-item"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
 
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
-
-                <!--<li data-username="Sample Page" class="nav-item"><a href="/mgmt/word" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.word}"> </span></a></li>-->
-
-                <li data-username="Translations" class="nav-item pcoded-hasmenu">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('APPEAL_ADMIN')"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
+                <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
                             <i class="feather icon-file"></i>
@@ -72,6 +75,7 @@
                         <li class=""><a href="/mgmt/min_wage"  th:text="#{mgmt_min_wage}"></a></li>
                     </ul>
                 </li>
+
             </ul>
         </div>
     </div>

@@ -37,7 +37,7 @@
                 <label class="col-form-label" th:text="#{sys_about.material}"></label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" readonly="readonly" th:value="${@helperService.getMaterial(regApplication.materialId,#locale)}" >
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getMaterials(regApplication.materials,#locale)}" >
             </div>
         </div>
 

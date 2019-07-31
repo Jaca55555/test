@@ -60,7 +60,7 @@
                                                         <th th:text="#{offer.id}"></th>
                                                         <th th:text="#{offer.name}"></th>
                                                         <th th:text="#{offer.language}"></th>
-                                                        <th th:text="#{offer.description}"></th>
+                                                        <!--<th th:text="#{offer.description}"></th>-->
                                                         <th th:text="#{offer.main_id}"></th>
                                                         <th style="max-width: 50px;"></th>
                                                     </tr>
@@ -139,8 +139,8 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
                 {data: 2, name: 'language'},
-                {data: 3, name: 'description'},
-                {data: 4, name: 'mainId'},
+                // {data: 3, name: 'description'},
+                {data: 3, name: 'mainId'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

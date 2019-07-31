@@ -61,7 +61,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th class="text-right"><span th:text="#{mntr_expertise_requirement.material}"></span>:</th>
-                                                                <td class="text-left"><span th:if="*{materialId!=null}" th:text="${@helperService.getMaterial(requirement.materialId,#locale)}"></span></td>
+                                                                <td class="text-left"><span th:text="${@helperService.getMaterials(requirement.materials,#locale)}"></span></td>
                                                             </tr>
                                                             <tr>
                                                                 <th class="text-right"><span th:text="#{mntr_expertise_requirement.organization}"></span>:</th>
@@ -112,8 +112,8 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-right"><span th:text="#{mntr_expertise_requirement.material}"></span>:</td>
-                                                                                    <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].materialId!=null}" th:text="${@helperService.getMaterial(elem['before'].materialId,#locale)}"></span></td>
-                                                                                    <td class="text-center"><span th:if="${elem['after'].materialId!=null}" th:text="${@helperService.getMaterial(elem['after'].materialId,#locale)}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].materials!=null}" th:text="${@helperService.getMaterials(elem['before'].materials,#locale)}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after'].materials!=null}" th:text="${@helperService.getMaterials(elem['after'].materials,#locale)}"></span></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="text-right"><span th:text="#{mntr_expertise_requirement.organization}"></span>:</td>
