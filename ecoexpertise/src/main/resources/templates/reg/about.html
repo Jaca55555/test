@@ -8,6 +8,7 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ol/ol.css">
     <style>
         .table td, .table th{
             white-space: pre-line;
@@ -107,6 +108,14 @@
             transform: translate(-50%, -50%);
             display: none;
         }
+        .undo-btn {
+            position: absolute;
+            top: .5em;
+            right: .5em;
+        }
+        .undo-btn button {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -146,7 +155,7 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
-                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
@@ -193,6 +202,59 @@
                                                                 <div class="custom-control custom-checkbox" th:if="${regApplication.materials}" th:each="material : ${regApplication.materials}">
                                                                    <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked >
                                                                    <label class="custom-control-label" th:for="${'materials'+material}" th:text="${@helperService.getMaterial(material,#locale)}"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.coordinates}"></label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-info" th:text="#{sys_about.open_map}" data-toggle="modal" data-target="#map-modal" id="open-map-btn"></button>
+                                                                <button type="button" class="btn btn-primary" th:text="#{sys_about.write_coordinates}" id="write-coordinates-btn" onclick="writeCoordinates()"></button>
+                                                                <button type="button" class="btn btn-secondary" th:text="#{sys_about.clear_coordinates}" id="clear-coordinates-btn" disabled="" style="float: right; margin-right: 0;" onclick="clearCoordinates()"></button>
+                                                            </div>
+                                                        </div>
+                                                        <div id="coordinates-map-list" style="margin-bottom: 50px; display: none;" >
+                                                            <div class="form-group row">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#1</label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                        <input type="text" class="form-control col-md-4">
+                                                                        <input type="text" class="form-control col-md-4 offset-md-4">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#2</label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                    <input type="text" class="form-control col-md-4">
+                                                                    <input type="text" class="form-control col-md-4 offset-md-4">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="coordinates-list" style="margin-bottom: 50px; display: none;"></div>
+
+                                                        <div id="map-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="map-modal-label" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="map-modal-label" th:text="#{map.draw_location}">Modal Title</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="map" class="map" style="width: 100%; height: 600px;"></div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-info" onclick="clearPolygon()" style="position: absolute; left: 1em;" th:text="#{sys_clear}">Clear</button>
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Close</button>
+                                                                        <button type="button" class="btn btn-primary" th:text="#{sys_save}" onclick="saveCoordinates()">Save changes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -266,7 +328,7 @@
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
                                                                 <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                                <button  type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button>
+                                                                <button type="button" onclick="submitForm()" class="btn btn-primary" th:text="#{sys_next}" >Далее</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -327,6 +389,7 @@
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
     <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script src="/static/plugins/ol/ol.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
     <script th:inline="javascript">
@@ -362,7 +425,6 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log(response);
                     $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $("#materialDiv").text("");
 
@@ -420,7 +482,6 @@
         
         function materialDiv(list) {
             $.each(list, function (key, value) {
-                console.log('material-value'+value);
                 getMaterial(value);
                 $("#materialDiv").append(
                     '<div class="custom-control custom-checkbox" >\n' +
@@ -469,7 +530,6 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log(response);
                     if(response.status == 1) {
 
                         $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
@@ -539,6 +599,182 @@
             return [[__${#locale}__]];
         }
 
+    </script>
+    <script>
+        var Map = ol.Map;
+        var View = ol.View;
+        var Draw = ol.interaction.Draw;
+        var TileLayer = ol.layer.Tile;
+        var VectorLayer = ol.layer.Vector;
+        var OSM = ol.source.OSM;
+        var VectorSource = ol.source.Vector;
+
+        var raster = new TileLayer({
+            source: new OSM()
+        });
+
+        var source = new VectorSource({wrapX: false});
+
+        var vector = new VectorLayer({
+            source: source
+        });
+
+
+
+
+        var map = new Map({
+            layers: [raster, vector],
+            target: 'map',
+            view: new View({
+                center: ol.proj.fromLonLat([69.27977, 41.31117]),
+                zoom: 16
+            })
+        });
+
+
+        var draw = new Draw({
+            source: source,
+            type: "Polygon"
+        });
+        map.addInteraction(draw);
+
+        map.on("click", function () {
+            var features = vector.getSource().getFeatures();
+
+            if(features.length > 0){
+                map.removeInteraction(draw);
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.which == 8)
+                vector.getSource().clear();
+        });
+
+        $('#open-map-btn').click(function () {
+            setTimeout( function() { map.updateSize();}, 200);
+        });
+
+        function drawUndo() {
+            draw.removeLastPoint();
+        }
+
+        var button = document.createElement('button');
+        button.innerHTML = '⮌';
+        button.addEventListener("click", drawUndo);
+
+        var element = document.createElement('div');
+        element.className = 'undo-btn ol-unselectable ol-control';
+        element.appendChild(button);
+
+        var UndoControl = new ol.control.Control({
+            element: element
+        });
+
+        map.addControl(UndoControl);
+
+        function clearPolygon() {
+            var features = vector.getSource().getFeatures();
+            features.forEach((feature) => {
+                vector.getSource().removeFeature(feature);
+            });
+            map.addInteraction(draw);
+
+        }
+
+        function saveCoordinates() {
+            var features = vector.getSource().getFeatures();
+
+            if (features.length > 0) {
+                $('#coordinates-map-list').html('');
+                $('#coordinates-map-list').show();
+                features.forEach(function (feature) {
+                    var length = feature.getGeometry().getCoordinates()[0].length;
+                    for (var i = 0; i < length; i++) {
+                        var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][i]);
+                        $('#coordinates-map-list').append('<div class="form-group row">\n' +
+                            '                                                                <div class="col-md-3 text-right">\n' +
+                            '                                                                    <label class="col-form-label">#' + (i + 1) + '</label>\n' +
+                            '                                                                </div>\n' +
+                            '                                                                <div class="col-md-6 row" style="margin-left: 0;">\n' +
+                            '                                                                        <input type="text" class="form-control col-md-4 coord-input" value="' + lonlat[1] + '" readonly="">\n' +
+                            '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input" value="' + lonlat[0] + '" readonly="">\n' +
+                            '                                                                </div>\n' +
+                            '                                                            </div>');
+
+                    }
+                });
+                $('#map-modal').modal("hide");
+                $('#write-coordinates-btn').prop('disabled', true);
+                $('#clear-coordinates-btn').prop('disabled', false);
+            }
+        }
+
+        var coordinateIndex = 1;
+        function writeCoordinates() {
+            $('#write-coordinates-btn').prop('disabled', true);
+            $('#open-map-btn').prop('disabled', true);
+            $('#clear-coordinates-btn').prop('disabled', false);
+
+            addInputForCoordinates(coordinateIndex++);
+
+            $('#coordinates-list').show();
+        }
+        
+        function addInputForCoordinates(index) {
+            $('#coordinates-list').append('<div class="form-group row">\n' +
+                '                                                                <div class="col-md-3 text-right">\n' +
+                '                                                                    <label class="col-form-label">#'+index+'</label>\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-md-6 row" style="margin-left: 0;">\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 coord-input">\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input">\n' +
+                '                                                                </div>\n' +
+                '                                                            </div>');
+
+            $('#plus-btn').remove();
+            $('#coordinates-list').append('<div class="form-group row" id="plus-btn">\n' +
+                '                                                                <div class="col-md-3 text-right">\n' +
+                '                                                                    <label class="col-form-label"></label>\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-md-6">\n' +
+                '                                                                        <button class="btn btn-info btn-icon" style="float: right; margin-right: 0;" onclick="addInputForCoordinates(' + (coordinateIndex++) + ')"><i class="feather icon-plus"></i></button>\n' +
+                '                                                                </div>\n' +
+                '                                                            </div>');
+        }
+
+        function clearCoordinates() {
+            $('#clear-coordinates-btn').prop('disabled', true);
+            $('#write-coordinates-btn').prop('disabled', false);
+            $('#open-map-btn').prop('disabled', false);
+
+            $('#coordinates-list').hide();
+            $('#coordinates-list').html('');
+
+            $('#coordinates-map-list').hide();
+            $('#coordinates-map-list').html('');
+            coordinateIndex = 1;
+        }
+        
+        function submitForm() {
+            var coordinatesListForSubmit = [];
+            var count = 0;
+            var isNan = false;
+            $('.coord-input').each(function () {
+                coordinatesListForSubmit.push(parseFloat($(this).val()));
+                count++;
+                if(isNaN(parseFloat($(this).val()))){
+                    isNan = true;
+                }
+
+            });
+
+            if ($('input[name="coordinates"]').length)
+                $('input[name="coordinates"]').remove();
+            $('#about-form').append('<input type="hidden" name="coordinates" value="'+coordinatesListForSubmit+'">');
+            if(count > 6 && isNan == false)
+                $('#about-form').submit();
+        }
     </script>
 </body>
 </html>

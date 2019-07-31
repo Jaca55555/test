@@ -28,6 +28,8 @@ import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.ToastrService;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -75,6 +77,8 @@ public class RegApplicationController {
     private final GnkService gnkService;
     private final MIPIndividualsPassportInfoService mipIndividualsPassportInfoService;
     private final ToastrService toastrService;
+    private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
     @Autowired
     public RegApplicationController(
@@ -100,6 +104,9 @@ public class RegApplicationController {
             GnkService gnkService,
             MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
             ToastrService toastrService
+            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
+            CoordinateRepository coordinateRepository,
+            CoordinateLatLongRepository coordinateLatLongRepository
     ) {
         this.userService = userService;
         this.soatoService = soatoService;
@@ -125,6 +132,8 @@ public class RegApplicationController {
         this.gnkService = gnkService;
         this.mipIndividualsPassportInfoService = mipIndividualsPassportInfoService;
         this.toastrService = toastrService;
+        this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -351,7 +360,8 @@ public class RegApplicationController {
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
-            @RequestParam(name = "projectDeveloperName") String projectDeveloperName
+            @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
+            @RequestParam(name = "coordinates") List<Double> coordinates
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -359,6 +369,30 @@ public class RegApplicationController {
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
+
+        if(!coordinates.isEmpty()) {
+            Client client = regApplication.getApplicant();
+            Coordinate coordinate = new Coordinate();
+            coordinate.setRegApplicationId(regApplication.getId());
+            coordinate.setClientId(regApplication.getApplicantId());
+            coordinate.setClientName(client != null ? client.getName() : null);
+            coordinate.setRegionId(client != null ? client.getRegionId() : null);
+            coordinate.setSubRegionId(client != null ? client.getSubRegionId() : null);
+            coordinate.setName(name);
+            coordinate.setNumber(regApplication.getContractNumber());
+            coordinate.setLongitude(coordinates.get(0).toString());
+            coordinate.setLatitude(coordinates.get(1).toString());
+            Coordinate savedCoordinate = coordinateRepository.save(coordinate);
+
+            for (int i = 2; i < coordinates.size(); i++) {
+                CoordinateLatLong coordinateLatLong = new CoordinateLatLong();
+                coordinateLatLong.setCoordinateId(savedCoordinate.getId());
+                coordinateLatLong.setLongitude(coordinates.get(i++).toString());
+                coordinateLatLong.setLatitude(coordinates.get(i).toString());
+                coordinateLatLongRepository.save(coordinateLatLong);
+            }
+        }
+
 
         ProjectDeveloper projectDeveloper1 = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
