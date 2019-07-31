@@ -1,11 +1,15 @@
 package uz.maroqand.ecology.cabinet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uz.maroqand.ecology.cabinet.constant.sys.SysTemplates;
-import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 /**
@@ -16,10 +20,12 @@ import uz.maroqand.ecology.core.service.user.UserService;
 @Controller
 public class MainController {
     private final UserService userService;
+    private final RegApplicationService regApplicationService;
 
     @Autowired
-    public MainController(UserService userService) {
+    public MainController(UserService userService, RegApplicationService regApplicationService) {
         this.userService = userService;
+        this.regApplicationService = regApplicationService;
     }
 
     @RequestMapping("/")
@@ -34,10 +40,21 @@ public class MainController {
     }
 
     @RequestMapping("/dashboard")
-    public String getDashboardPage() {
+    public String getDashboardPage(Model model) {
         User user = userService.getCurrentUserFromContext();
-        System.out.println("userRole == " + user.getRole().getName());
-        System.out.println("--dashboard");
+        LogType logType = userService.getUserLogType(user);
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                null,
+                user.getOrganizationId(),
+                logType,
+                null,
+                null,
+                new PageRequest(0,2)
+        );
+
+        model.addAttribute("newElements", regApplicationPage.getTotalElements());
+        model.addAttribute("logType", logType);
         return "dashboard";
     }
 

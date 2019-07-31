@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
@@ -50,5 +51,7 @@ public interface UserService {
     public User getCurrentUserFromContext();
 
     List<User> findPerformerList();
+
+    LogType getUserLogType(User user);
 
 }
