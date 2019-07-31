@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
     <style>
         .table td, .table th{
-            white-space: pre-line;
+            white-space: unset;
         }
         .datepicker>.datepicker-days {
             display: block;
@@ -75,6 +75,33 @@
 
         .file a:hover {
             color: #5CB85C;
+        }
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
         }
     </style>
 </head>
@@ -152,7 +179,7 @@
                                     <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                                     </div>
                                     <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
-
+                                        <object th:include="expertise/performer/sender_fragment :: sender" th:remove="tag"></object>
                                     </div>
                                     <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
 
@@ -187,6 +214,7 @@
     var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
     var regApplicationId = [[${regApplicationLog.id}]];
+    var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     $(document).ready(function () {
         var srSelector = $('#materialId');
@@ -325,6 +353,46 @@
         var progress = Math.round(percent);
         $('#percentage-num').html(progress);
     }
+
+    $('#submitButton').on('click',function () {
+        $('#reason').parsley().validate();
+        if ($('#reason').parsley().isValid()){
+
+            var form = new FormData();
+            form.append("id", [[${regApplication.id}]]);
+            form.append("reason", $("#reason").val());
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: changeDeadlineDateUrl,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.status=1){
+                        var html='';
+                        html+='<div class="card" >\n' +
+                            '                        <div class="card-block" style="padding: 10px 25px;">\n' +
+                            '                            <div class="row align-items-center justify-content-center">\n' +
+                            '                                <div class="col-auto">\n' +
+                            '                                    <i  class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>\n' +
+                            '                                </div>\n' +
+                            '                                <div class="col">\n' +
+                            '                                    <h5 class="mb-3">'+$("#reason").val()+'</h5>\n' +
+                            '                                    <h6 class="m-b-0">'+response.beforeDate+'</h6>\n' +
+                            '                                </div>\n' +
+                            '                            </div>\n' +
+                            '                        </div>\n' +
+                            '                    </div>';
+                        $('#historyChangeDeadlineDate').append(html);
+                        $('#sendForm').remove();
+                    }
+                }
+            });
+        }
+    });
 
 </script>
 </body>

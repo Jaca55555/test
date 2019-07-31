@@ -43,14 +43,21 @@ public class ExpertiseTemplates {
     public static final String ApplicantList = Applicant + "/list";
     public static final String ApplicantView = Applicant + "/view";
 
-    //RegApplication
-    private static final String RegApplication= Prefix + "/reg_application";
-    public static final String RegApplications= RegApplication + "/applications";
-    public static final String RegApplicationList = RegApplication + "/list";
+    //Employee Control
+    private static final String EmployeeControl= Prefix + "/employee_control";
+    public static final String EmployeeControls= EmployeeControl + "/employes";
+    public static final String EmployeeControlList = EmployeeControl + "/list";
+
 
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";
     public static final String CoordinateList = Coordinate + "/list";
     public static final String CoordinateView = Coordinate + "/view";
+
+    //Muddat uzaytirish uchun so'rovlar
+    private static final String ChangeDeadlineDate = Prefix + "/change_deadline";
+    public static final String ChangeDeadlineDateList = ChangeDeadlineDate + "/list";
+    public static final String ChangeDeadlineDateView = ChangeDeadlineDate + "/view";
+
 
 }

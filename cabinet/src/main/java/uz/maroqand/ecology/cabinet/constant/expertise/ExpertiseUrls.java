@@ -29,6 +29,7 @@ public class ExpertiseUrls {
     public static final String PerformerList = Performer + "/list";
     public static final String PerformerListAjax = Performer + "/list_ajax";
     public static final String PerformerView = Performer + "/view";
+    public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";
 
     //Kelishish
     private static final String Agreement = Prefix + "/agreement";
@@ -60,15 +61,22 @@ public class ExpertiseUrls {
     public static final String ApplicantListAjax = Applicant + "/list_ajax";
     public static final String ApplicantView = Applicant + "/view";
 
-    //RegApplication
-    private static final String RegApplication= Prefix + "/reg_application";
-    public static final String RegApplications= RegApplication + "s";
-    public static final String RegApplicationList = RegApplication + "/list";
+    //Employee control
+    private static final String EmployeeControl= Prefix + "/employee_control";
+    public static final String EmployeeControls= EmployeeControl + "s";
+    public static final String EmployeeControlList = EmployeeControl + "/list";
 
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";
     public static final String CoordinateList = Coordinate + "/list";
     public static final String CoordinateListAjax = Coordinate + "/list_ajax";
     public static final String CoordinateView = Coordinate + "/view";
+
+    //Muddat uzaytirish uchun so'rovlar
+    private static final String ChangeDeadlineDate = Prefix + "/change_deadline";
+    public static final String ChangeDeadlineDateList = ChangeDeadlineDate + "/list";
+    public static final String ChangeDeadlineDateListAjax = ChangeDeadlineDate + "/list_ajax";
+    public static final String ChangeDeadlineDateView = ChangeDeadlineDate + "/view";
+    public static final String ChangeDeadlineDateConfig= ChangeDeadlineDate + "/config";
 
 }
