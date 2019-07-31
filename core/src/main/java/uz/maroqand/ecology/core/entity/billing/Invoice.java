@@ -84,8 +84,8 @@ public class Invoice {
     private Date closedDate;
 
     //invoice bekor qilingan sana
-    @Column(name = "Canceled_date")
-    private Date CanceledDate;
+    @Column(name = "canceled_date")
+    private Date canceledDate;
 
     @Size(max = 1000)
     @Column(columnDefinition = "TEXT")
