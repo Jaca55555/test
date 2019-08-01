@@ -45,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .successHandler(customSuccessHandler)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
                 .antMatchers("/test/login").permitAll()
                 .antMatchers("/reg/application/contract/offer_download").permitAll()
                 .antMatchers(SysUrls.ErrorNotFound).permitAll()

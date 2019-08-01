@@ -1,0 +1,374 @@
+{% set title = "index" %}
+{% extends "main.tpl" %}
+{% block content %}
+<div class="top-slider-wrapper">
+  <div class="top-slider">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <div class="item">
+          <img src="img/content/slider1.jpg" alt="">
+          <div class="container">
+            <div class="slider-text-block">
+              <div class="info">
+                <div class="title">
+                  <span>“O’zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo’mitasining interaktiv xizmatlari portali”</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="item">
+          <img src="img/content/slider2.jpg" alt="">
+          <div class="container">
+            <div class="slider-text-block">
+              <div class="info">
+                <div class="title">
+                  <span>“O’zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo’mitasining interaktiv xizmatlari portali”</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add Arrows -->
+    <div class="top-slider-button-next"></div>
+    <div class="top-slider-button-prev"></div>
+  </div>
+</div>
+<div class="services-wrapper">
+  <div class="container">
+    <div class="services-block">
+      <div class="services-title">
+        <span th:text="#{front.service-title}"> Xizmatlar</span>
+      </div>
+      <div class="services-subtitle">
+        <span th:text="#{front.service-subtitle}">“Portal orqali foydalanadigan interaktiv xizmatlar ro’yxati”</span>
+      </div>
+      <div class="services-items">
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon1.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_social_text}">Ijtimoiy sohani, rivojlantirish davlat dasturlari, konsepsiyalari va sxemalarining, shuningdek, davlat tomonidan muhofaza etiladigan tabiiy hududlarni boshqarish rejalarining loyihalarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon2.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_working_text}">Ishlab chiqarish kuchlari, iqtisodiyot tarmoqlarini joylashtirish va rivojlantirish konsepsiyalari, sxemalarining loyihalarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon3.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_all_kinds_text}">Barcha turdagi qurilish uchun yer uchastkalarini tanlash materiallarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon4.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_activities_text}">Faoliyat turlari bo’yicha loyihaoldi va loyiha hujjatlarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon5.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_natural_resources_text}">Tabiiy resurslardan foydalanish bilan bog’liq xo’jalik va boshqa faoliyatni tartibga soluvchi normativ-texnik va yo’riqnoma-uslubiy hujjatlarning loyihalarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/icon6.png" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_technique_text}">Texnika, texnologiya, materiallar, moddalar, mahsulotlarninig yangi turlarni yaratishga doir hujjatlarni davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/save.svg" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_environment_text}">Atrof tabiiy muhitga va fuqarolarning sog’ligiga salbiy ta’sir ko’rsatuvchi ishlab turgan korxonalar va boshqa ob’yektlarni davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/water-cycle.svg" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_regions_text}">Hududlarga keyinchalik muhofaza qilinadigan tabiiy hududlar, favqulodda ekologik vaziyat va ekologik ofat zonalari maqomini berish maqsadida ularni kompleks tekshirish materiallarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+        <div class="services-item">
+          <a href="#" class="services-card">
+            <div class="card-img-block">
+              <img src="img/eco-house.svg" alt="">
+            </div>
+            <div class="card-subtitle">
+              <span th:text="#{front.service_card_urban_planning_text}">Shaharsozlik hujjatlarini davlat ekologik ekspertizasidan o’tkazish</span>
+            </div>
+          </a>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="latest-articles-wrapper">
+  <div class="container">
+    <div class="latest-articles-title"><span th:text="#{front.latest_title}">“Yangiliklar”</span></div>
+<!--    <div class="latest-articles-subtitle">Lorem ipsum dolor sit amet, consectetuer. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</div>-->
+    <div class="latest-articles-slider-wrapper">
+      <div class="latest-articles-slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="latest-articles-card">
+              <div class="header">
+                <div class="header-date">April 23, 2017</div>
+                <div class="header-info">Post Formats</div>
+              </div>
+              <div class="info">
+                <div class="title">
+                  <span>Recycling basics</span>
+                </div>
+                <div class="subtitle">
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
+                </div>
+              </div>
+              <a href="#" class="learn-more">
+                <span>learn more</span>
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="latest-articles-card">
+              <div class="header">
+                <div class="header-date">April 23, 2017</div>
+                <div class="header-info">Post Formats</div>
+              </div>
+              <div class="info">
+                <div class="title">
+                  <span>Recycling basics</span>
+                </div>
+                <div class="subtitle">
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
+                </div>
+              </div>
+              <a href="#" class="learn-more">
+                <span>learn more</span>
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="latest-articles-card">
+              <div class="header">
+                <div class="header-date">April 23, 2017</div>
+                <div class="header-info">Post Formats</div>
+              </div>
+              <div class="info">
+                <div class="title">
+                  <span>Recycling basics</span>
+                </div>
+                <div class="subtitle">
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
+                </div>
+              </div>
+              <a href="#" class="learn-more">
+                <span>learn more</span>
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="latest-articles-card">
+              <div class="header">
+                <div class="header-date">April 23, 2017</div>
+                <div class="header-info">Post Formats</div>
+              </div>
+              <div class="info">
+                <div class="title">
+                  <span>Recycling basics</span>
+                </div>
+                <div class="subtitle">
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
+                </div>
+              </div>
+              <a href="#" class="learn-more">
+                <span>learn more</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="latest-articles-button-next"></div>
+        <div class="latest-articles-button-prev"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="statistic-wrapper">
+  <div class="container">
+    <div class="statistic-list">
+      <div class="statistic-item">
+        <div class="number">
+          <span>4350</span>
+        </div>
+        <div class="title">
+          <span th:text="#{front.statistic_title}">Umumiy arizalar soni</span>
+        </div>
+      </div>
+      <div class="statistic-item">
+        <div class="number">
+          <span>2200</span>
+        </div>
+        <div class="title">
+          <span th:text="#{front.statistic_title}">Ko’rib chiqilgan arizalar soni</span>
+        </div>
+      </div>
+      <div class="statistic-item">
+        <div class="number">
+          <span>700</span>
+        </div>
+        <div class="title">
+          <span th:text="#{front.statistic_title}">Jarayondagi arizalar soni</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="contact">
+  <div class="container">
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <form action="">
+          <div class="contact-form">
+            <div class="title"><span th:text="#{front.contact-form-title}">Contact Us!</span></div>
+            <div class="form-input-wrapper">
+              <div class="form-group user">
+                <input type="text" th:placeholder="#{front.user_name}">
+              </div>
+              <div class="form-group star">
+                <input type="text" th:placeholder="#{front.company_name}">
+              </div>
+              <div class="form-group message">
+                <input type="text" th:placeholder="#{front.user_mail}">
+              </div>
+              <div class="form-group phone">
+                <input type="text" th:placeholder="#{front.user_phone}">
+              </div>
+              <div class="form-group w-100">
+                <textarea name="" id="" th:placeholder="#{front.user_message}"></textarea>
+              </div>
+              <button class="form-btn"><span th:placeholder="#{front.send-contact-btn}">send</span></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="customers-items">
+  <div class="customers-slider">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="http://eco.gov.uz" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/eco.png" alt="">
+            </div>
+            <div class="text">
+              <span th:text="#{front.lexuz_title}">O'zbekiston Respublikasi qonun hujjatlari ma'lumotlari milliy bazasi</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="https://www.gov.uz/" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/2.png" alt="">
+            </div>
+            <div class="text m-b-20">
+              <span th:text="#{front.govuz_title}">Oʻzbekiston Respublikasi hukumat portali</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="https://my.gov.uz/" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/4.png" alt="">
+            </div>
+            <div class="text m-b-20">
+              <span th:text="#{front.my_govuz_title}">Yagona interaktiv davlat xizmatlari portali</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="http://strategy.uz/" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/5.png" alt="">
+            </div>
+            <div class="text m-b-20">
+              <span th:text="#{front.strategyuz_title}">Oʻzbekiston Respublikasini rivojlantirishning beshta ustuvor yoʻnalishi boʻyicha harakatlar strategiyasi</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="https://regulation.gov.uz/" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/8.png" alt="">
+            </div>
+            <div class="text">
+              <span th:text="#{front.regulation_govuz_title}">Normativ huquqiy hujjatlarining muhokamasi</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="customers-item">
+          <a href="http://lex.uz/ru/lexuz" class="item" target="_blank">
+            <div class="img-block">
+              <img src="img/1.png" alt="">
+            </div>
+            <div class="text">
+              <span th:text="#{front.lexuz_title}">O'zbekiston Respublikasi qonun hujjatlari ma'lumotlari milliy bazasi</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock%}

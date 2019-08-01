@@ -19,7 +19,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String getPage() {
-        return "redirect: login";
+        return "index";
     }
 
     @RequestMapping("/login")
