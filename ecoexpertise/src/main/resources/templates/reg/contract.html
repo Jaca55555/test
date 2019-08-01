@@ -50,7 +50,7 @@
                                                 <div class="form-group col-md-12 text-center" >
                                                     <form th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="">
                                                         <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
-                                                            <iframe src="http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/application/contract/offer_download&amp;embedded=true" style="width: 100%;height: 100%;"></iframe>
+                                                            <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/application/contract/offer_download?offer_id='+offer.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
                                                         </div>
 
                                                         <div id="checkInput" th:if="${regApplication.offerId==null}">
@@ -74,7 +74,7 @@
                                                                     <p style="color: black;margin-top: 15px;"><span th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span> <span th:text="${regApplication.contractNumber}">392</span>, <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>  <span th:text="#{sys_year}">г.</span> </p>
                                                                 </div>
                                                                 <div class="col-md-3 text-right">
-                                                                    <button type="button" class="btn btn-secondary" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</button>
+                                                                    <a type="button" class="btn btn-secondary" th:href="${'/reg/application/contract/offer_download?offer_id='+offer.id}" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</a>
                                                                 </div>
                                                                 <div class="clearfix"></div>
                                                                 <div class="col-md-11 text-right mt-4 mr-0">

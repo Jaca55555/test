@@ -156,6 +156,10 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStep step;
 
+    //true - byudjet tashkilot
+    @Column(name = "budget",columnDefinition = "boolean")
+    private Boolean budget;
+
     /*
     * oxirgi log id lar saqlanadi
     * */
