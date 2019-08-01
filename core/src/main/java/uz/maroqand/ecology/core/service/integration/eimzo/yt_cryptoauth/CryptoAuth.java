@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_cryptoauth;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -32,8 +32,8 @@ public interface CryptoAuth {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getDigest", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.GetDigest")
-    @ResponseWrapper(localName = "getDigestResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.GetDigestResponse")
+    @RequestWrapper(localName = "getDigest", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.GetDigest")
+    @ResponseWrapper(localName = "getDigestResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.GetDigestResponse")
     @Action(input = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/getDigestRequest", output = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/getDigestResponse")
     String getDigest(
             @WebParam(name = "dataB64", targetNamespace = "")
@@ -49,8 +49,8 @@ public interface CryptoAuth {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "verifyDigest", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.VerifyDigest")
-    @ResponseWrapper(localName = "verifyDigestResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.VerifyDigestResponse")
+    @RequestWrapper(localName = "verifyDigest", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.VerifyDigest")
+    @ResponseWrapper(localName = "verifyDigestResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.VerifyDigestResponse")
     @Action(input = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/verifyDigestRequest", output = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/verifyDigestResponse")
     String verifyDigest(
             @WebParam(name = "digestHex", targetNamespace = "")
@@ -70,8 +70,8 @@ public interface CryptoAuth {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "verifySignature", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.VerifySignature")
-    @ResponseWrapper(localName = "verifySignatureResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_cryptoauth.VerifySignatureResponse")
+    @RequestWrapper(localName = "verifySignature", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.VerifySignature")
+    @ResponseWrapper(localName = "verifySignatureResponse", targetNamespace = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth.VerifySignatureResponse")
     @Action(input = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/verifySignatureRequest", output = "http://v1.cryptoauth.plugin.ss.capi.yt.uz/CryptoAuth/verifySignatureResponse")
     String verifySignature(
             @WebParam(name = "textB64", targetNamespace = "")

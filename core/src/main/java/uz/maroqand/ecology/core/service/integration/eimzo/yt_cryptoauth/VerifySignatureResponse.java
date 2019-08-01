@@ -1,22 +1,23 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_tsaproxy;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for getTimeStampTokenForSignature complex type.
+ * <p>Java class for verifySignatureResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getTimeStampTokenForSignature">
+ * &lt;complexType name="verifySignatureResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="signatureHex" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +27,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getTimeStampTokenForSignature", propOrder = {
-    "signatureHex"
+@XmlType(name = "verifySignatureResponse", propOrder = {
+    "_return"
 })
-public class GetTimeStampTokenForSignature {
+public class VerifySignatureResponse {
 
-    protected String signatureHex;
+    @XmlElement(name = "return")
+    protected String _return;
 
     /**
-     * Gets the value of the signatureHex property.
+     * Gets the value of the return property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getSignatureHex() {
-        return signatureHex;
+    public String getReturn() {
+        return _return;
     }
 
     /**
-     * Sets the value of the signatureHex property.
+     * Sets the value of the return property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setSignatureHex(String value) {
-        this.signatureHex = value;
+    public void setReturn(String value) {
+        this._return = value;
     }
 
 }

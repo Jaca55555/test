@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.*;

@@ -21,13 +21,17 @@ import java.text.SimpleDateFormat;
 @Service
 public class EimzoService {
 
-    @Autowired
-    YTPkcs7 ytPkcs7;
+    private YTPkcs7 ytPkcs7;
 
     Gson gson = new Gson();
     private Logger logger = LogManager.getLogger(EimzoService.class);
 
     DateFormat ecpDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+
+    @Autowired
+    public EimzoService(YTPkcs7 ytPkcs7) {
+        this.ytPkcs7 = ytPkcs7;
+    }
 
     public VerifyPkcs7Dto checkVerifyPkcs7(String pkcs7B64) {
         logger.info(" checkVerifyPkcs7 : " + pkcs7B64);

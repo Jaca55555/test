@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_tsaproxy;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_tsaproxy;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

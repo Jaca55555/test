@@ -1,8 +1,8 @@
 package uz.maroqand.ecology.core.service.eimzo;
 
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7.Pkcs7;
-import uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7.Pkcs7Service;
+import uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.Pkcs7;
+import uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.Pkcs7Service;
 
 /**
  * Created by a.ruzmetov on 30.03.2017.

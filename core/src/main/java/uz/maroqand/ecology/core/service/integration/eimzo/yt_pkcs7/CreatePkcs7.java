@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;

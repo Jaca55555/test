@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_cryptoauth;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_cryptoauth;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.*;

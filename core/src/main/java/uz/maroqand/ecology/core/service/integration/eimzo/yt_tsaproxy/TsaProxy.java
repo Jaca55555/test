@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_tsaproxy;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_tsaproxy;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -32,8 +32,8 @@ public interface TsaProxy {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getTimeStampTokenForSignature", targetNamespace = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_tsaproxy.GetTimeStampTokenForSignature")
-    @ResponseWrapper(localName = "getTimeStampTokenForSignatureResponse", targetNamespace = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_tsaproxy.GetTimeStampTokenForSignatureResponse")
+    @RequestWrapper(localName = "getTimeStampTokenForSignature", targetNamespace = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_tsaproxy.GetTimeStampTokenForSignature")
+    @ResponseWrapper(localName = "getTimeStampTokenForSignatureResponse", targetNamespace = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_tsaproxy.GetTimeStampTokenForSignatureResponse")
     @Action(input = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/TsaProxy/getTimeStampTokenForSignatureRequest", output = "http://v1.tsaproxy.plugin.ss.capi.yt.uz/TsaProxy/getTimeStampTokenForSignatureResponse")
     String getTimeStampTokenForSignature(
             @WebParam(name = "signatureHex", targetNamespace = "")

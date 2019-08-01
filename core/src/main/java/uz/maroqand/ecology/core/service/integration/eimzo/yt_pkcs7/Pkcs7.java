@@ -1,5 +1,5 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -33,8 +33,8 @@ public interface Pkcs7 {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "createPkcs7", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_pkcs7.CreatePkcs7")
-    @ResponseWrapper(localName = "createPkcs7Response", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_pkcs7.CreatePkcs7Response")
+    @RequestWrapper(localName = "createPkcs7", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.CreatePkcs7")
+    @ResponseWrapper(localName = "createPkcs7Response", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.CreatePkcs7Response")
     @Action(input = "http://v1.pkcs7.plugin.ss.capi.yt.uz/Pkcs7/createPkcs7Request", output = "http://v1.pkcs7.plugin.ss.capi.yt.uz/Pkcs7/createPkcs7Response")
     String createPkcs7(
             @WebParam(name = "document", targetNamespace = "")
@@ -50,8 +50,8 @@ public interface Pkcs7 {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "verifyPkcs7", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_pkcs7.VerifyPkcs7")
-    @ResponseWrapper(localName = "verifyPkcs7Response", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "z.eimzo.yt_pkcs7.VerifyPkcs7Response")
+    @RequestWrapper(localName = "verifyPkcs7", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.VerifyPkcs7")
+    @ResponseWrapper(localName = "verifyPkcs7Response", targetNamespace = "http://v1.pkcs7.plugin.ss.capi.yt.uz/", className = "uz.maroqand.ecology.core.service.integration.eimzo.yt_pkcs7.VerifyPkcs7Response")
     @Action(input = "http://v1.pkcs7.plugin.ss.capi.yt.uz/Pkcs7/verifyPkcs7Request", output = "http://v1.pkcs7.plugin.ss.capi.yt.uz/Pkcs7/verifyPkcs7Response")
     String verifyPkcs7(
             @WebParam(name = "pkcs7B64", targetNamespace = "")

@@ -1,22 +1,23 @@
 
-package uz.maroqand.ecology.core.integration.eimzo.yt_pkcs7;
+package uz.maroqand.ecology.core.service.integration.eimzo.yt_tsaproxy;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for verifyPkcs7 complex type.
+ * <p>Java class for getTimeStampTokenForSignatureResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="verifyPkcs7">
+ * &lt;complexType name="getTimeStampTokenForSignatureResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="pkcs7B64" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +27,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "verifyPkcs7", propOrder = {
-    "pkcs7B64"
+@XmlType(name = "getTimeStampTokenForSignatureResponse", propOrder = {
+    "_return"
 })
-public class VerifyPkcs7 {
+public class GetTimeStampTokenForSignatureResponse {
 
-    protected String pkcs7B64;
+    @XmlElement(name = "return")
+    protected String _return;
 
     /**
-     * Gets the value of the pkcs7B64 property.
+     * Gets the value of the return property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPkcs7B64() {
-        return pkcs7B64;
+    public String getReturn() {
+        return _return;
     }
 
     /**
-     * Sets the value of the pkcs7B64 property.
+     * Sets the value of the return property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPkcs7B64(String value) {
-        this.pkcs7B64 = value;
+    public void setReturn(String value) {
+        this._return = value;
     }
 
 }
