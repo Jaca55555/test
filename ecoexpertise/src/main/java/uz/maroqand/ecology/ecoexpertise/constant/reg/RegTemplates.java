@@ -16,7 +16,7 @@ public class RegTemplates {
     public static final String RegApplicationList = RegApplication + "/list";
 
 
-    private static final String Appeal = "/appeal";
+    private static final String Appeal = "appeal";
     public static final String AppealUserList = Appeal + "/list";
     public static final String AppealNew = Appeal + "/new";
     public static final String AppealView = Appeal + "/view";
