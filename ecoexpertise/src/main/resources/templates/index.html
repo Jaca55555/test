@@ -46,9 +46,9 @@
                         </div>
                         <div class="header-top-right">
                             <ul class="header-top-nav-list">
-                                <li><a href="#"><span th:text="#{front.one_id}">One ID orqali kirish</span></a>
+                                <li><a href="/login"><span th:text="#{front.one_id}">One ID orqali kirish</span></a>
                                 </li>
-                                <li><a href="#"><span th:text="#{front.eds}">ERI orqali kirish</span></a>
+                                <li><a href="/login"><span th:text="#{front.eds}">ERI orqali kirish</span></a>
                                 </li>
                             </ul>
                             <form action="">
@@ -73,13 +73,13 @@
                         <ul class="menu-nav">
                             <li><a href="#" class="active"><span th:text="#{front.menu_home}">Bosh sahifa</span></a>
                             </li>
-                            <li><a href="#"><span th:text="#{front.menu_services}">Xizmatlar</span></a>
+                            <li><a href="#service"><span th:text="#{front.menu_services}">Xizmatlar</span></a>
                             </li>
-                            <li><a href="#"><span th:text="#{front.menu_news}">Yangiliklar</span></a>
+                            <li><a href="#news"><span th:text="#{front.menu_news}">Yangiliklar</span></a>
                             </li>
-                            <li><a href="#"><span th:text="#{front.menu_statistic}">Statistika</span></a>
+                            <li><a href="#statistic"><span th:text="#{front.menu_statistic}">Statistika</span></a>
                             </li>
-                            <li><a href="#"><span th:text="#{front.menu_connect}">Bog’lanishlar</span></a>
+                            <li><a href="#contact"><span th:text="#{front.menu_connect}">Bog’lanishlar</span></a>
                             </li>
                         </ul>
                         <div class="menu-btn"></div>
@@ -121,7 +121,7 @@
                 <div class="top-slider-button-prev"></div>
             </div>
         </div>
-        <div class="services-wrapper">
+        <div class="services-wrapper" id="service">
             <div class="container">
                 <div class="services-block">
                     <div class="services-title"><span th:text="#{front.service-title}">Xizmatlar</span>
@@ -214,7 +214,7 @@
                 </div>
             </div>
         </div>
-        <div class="latest-articles-wrapper">
+        <div class="latest-articles-wrapper" id="news">
             <div class="container">
                 <div class="latest-articles-title"><span th:text="#{front.latest_title}">“Yangiliklar”</span>
                 </div>
@@ -284,7 +284,7 @@
                 </div>
             </div>
         </div>
-        <div class="statistic-wrapper">
+        <div class="statistic-wrapper" id="statistic">
             <div class="container">
                 <div class="statistic-list">
                     <div class="statistic-item">
@@ -308,7 +308,7 @@
                 </div>
             </div>
         </div>
-        <div class="contact">
+        <div class="contact" id="contact">
             <div class="container">
                 <div class="contact-wrapper">
                     <div class="contact-info">
@@ -495,11 +495,57 @@
         </footer>
         <div class="scroll-to-top"></div>
     </div>
-    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <!--<p id="demo"></p>-->
+    <!--<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>-->
     <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
     <script src="/static/eco_fo/scripts/vendor.min.js"></script>
     <script src="/static/eco_fo/scripts/main.js"></script>
+<!--<script th:inline="javascript">
+    var apitext='';
+    $(document).ready(function () {
+        // loadDoc();
+        getAjax('http://eco.gov.uz/uz/api/post/get',function (response) {
+            console.log(response);
+        })
+    });
 
+    function getAjax(url, success) {
+        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        xhr.open('GET', url);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
+        };
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+        return xhr;
+    }
+
+    function loadDoc() {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 'http://eco.gov.uz/uz/api/post/get');
+
+        xhr.responseType = 'json';
+
+        xhr.send();
+
+// the response is {"message": "Hello, world!"}
+        xhr.onload = function() {
+            let responseObj = xhr.response;
+            alert(responseObj.message); // Hello, world!
+        };
+
+        /*var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "http://eco.gov.uz/uz/api/post/get", true);
+        xhttp.send();*/
+    }
+
+</script>-->
 </body>
 
 </html>
