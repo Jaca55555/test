@@ -8,7 +8,14 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .border-bottom-styled {
+            border-bottom: 1px solid #000;
+            width: 100%;
+            margin-top: 20px
+        }
 
+    </style>
 </head>
 <body>
     <!-- [ Pre-loader ] start -->
@@ -59,6 +66,140 @@
                                                     </div>
 
                                                 <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
+                                                <div class="container text-dark" id="accountBox">
+                                                    <div style="text-align: center">
+                                                        <h3>СЧЕТ-ФАКТУРА № 165 от 07 февраля 2019 г.</h3>
+                                                        <h4>к товарно-отгрузочным документам № 04/2019 от 04.01.2019</h4>
+                                                    </div>
+                                                    <table class="mt-5">
+                                                        <tr>
+                                                            <td>
+                                                                <span th:text="#{sys_provider}"></span>:
+                                                            </td>
+                                                            <td><b style="border-bottom: 1px solid #000000"><span th:text="${invoice.payerName}"></span></b></td>
+                                                            <td>
+                                                                <span th:text="#{sys_customer}"></span>:
+                                                            </td>
+                                                            <td>
+                                                                <b style="border-bottom: 1px solid #000000"><span th:text="${@helperService.getOrganizationName(invoice.payeeId,#locale)}">"SURHAN GAS CHEMICAL OPERATING COMPANY"</span></b>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_address}"></span>:</td>
+                                                            <td><span style="border-bottom: 1px solid #000000">100047, Яшнаабадский р-н, Ташкент, Тойтепа, дом № 2, корпус А</span></td>
+                                                            <td><span th:text="#{sys_address}"></span>:</td>
+                                                            <td> <span style="border-bottom: 1px solid #000000" th:text="${invoice.payeeAddress}">Toshkent shahri, Mirobod tumani ул.Т.Шевченко д.7</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_tin_fullname}"></span>(<span th:text="#{sys_tin}"></span>)</td>
+                                                            <td><span style="border-bottom: 1px solid #000000">200934834</span></td>
+                                                            <td><span th:text="#{sys_tin_fullname}"></span>(<span th:text="#{sys_tin}"></span>)</td>
+                                                            <td><span style="border-bottom: 1px solid #000000" th:text="${invoice.payeeTin}">304875292</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_reg_code}">Регистрационный код плательщика</span><br /><span th:text="#{sys_nds}"></span>:</td>
+                                                            <td><span style="border-bottom: 1px solid #000000">326080023231</span></td>
+                                                            <td><span th:text="#{sys_reg_code}">Регистрационный код плательщика</span><br /><span th:text="#{sys_nds}"></span>:</td>
+                                                            <td><span style="border-bottom: 1px solid #000000">326010015000</span></td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="table table-bordered mt-5">
+                                                        <tr>
+                                                            <td rowspan="3">№</td>
+                                                            <td rowspan="2"><span th:text="#{sys_name_product}">Наименование товаров (работ, услуг)</span></td>
+                                                            <td rowspan="2"><span th:text="#{sys_currency}">Ед.</span></td>
+                                                            <td rowspan="2"><span th:text="#{sys_qty}">Кол-во</span></td>
+                                                            <td rowspan="2"><span th:text="#{sys_price}">Цена</span></td>
+                                                            <td rowspan="2"><span th:text="#{sys_provisionCost}">Стоимость поставки</span></td>
+                                                            <td colspan="2" class="text-center"><span th:text="#{sys_nds}"></span></td>
+                                                            <td rowspan="2"><span th:text="#{sys_provisionCost_withNDS}">Стоимость поставки с учетом</span><span th:text="#{' ' + sys_nds}"> НДС</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_count}">Став-ка</span></td>
+                                                            <td><span th:text="#{sys_amount}">Сумма</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>2</td>
+                                                            <td>3</td>
+                                                            <td>4</td>
+                                                            <td>5</td>
+                                                            <td>6</td>
+                                                            <td>7</td>
+                                                            <td>8</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td th:text="${@helperService.getMaterial(regApplication.id,#locale)}">Проведение экологической экспертизы</td>
+                                                            <td>сум</td>
+                                                            <td> </td>
+                                                            <td> </td>
+                                                            <td class="text-right">5068250</td>
+                                                            <td>0%</td>
+                                                            <td class="text-right">Без НДС</td>
+                                                            <td class="text-right">5068250</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-right">Итого:</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="text-right">5068250</td>
+                                                            <td></td>
+                                                            <td class="text-right">Без НДС</td>
+                                                            <td class="text-right">5068250</td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div class="col-md-12">
+                                                        <b>Всего к оплате: Пять миллионов шестьдесят восемь тысяч двести пятьдесят сум 00 тийин</b>
+                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_director}">Руководитель</span>:</td>
+                                                            <td style="width: 200px">
+                                                                <div class="border-bottom-styled"></div>
+                                                            </td>
+                                                            <td>Shukurov G'.B.</td>
+                                                            <td style="width: 200px"></td>
+                                                            <td><span th:text="#{sys_recieved}">Получил</span>:</td>
+                                                            <td style="padding-top: 30px">
+                                                                <span style="border-top: 1px solid #000000;">(<span>Подпись покупателя или уполномоченного представителя</span>)</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span th:text="#{sys_accountant}">Главный бухгалтер</span>:</td>
+                                                            <td style="width: 200px">
+                                                                <div class="border-bottom-styled"></div>
+                                                            </td>
+                                                            <td><span>Matyokubov M. H.</span></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-top: 20px"><span th:text="#{sys_productSender}">Товар отпустил</span>:</td>
+                                                            <td style="width: 200px;padding-top: 20px">
+                                                                <div class="border-bottom-styled"></div>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-top: 20px">М.П.</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-md-12 text-center mb-5">
+                                                    <button type="button" class="btn btn-primary" th:text="#{sys_print}" onclick="printAccountFactor('accountBox')"></button>
+                                                </div>
 
                                                 <h3 th:text="#{sys_chat}" class="text-center"></h3>
 
@@ -142,7 +283,13 @@
             });
         }
     }
-
+    function printAccountFactor(blockname) {
+        var printContents = document.getElementById(blockname).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
 </script>
 </body>
 </html>
