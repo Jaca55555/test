@@ -838,7 +838,6 @@ public class RegApplicationController {
     @RequestMapping(value = RegUrls.RegApplicationStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "invoiceId") Integer invoiceId,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -847,9 +846,9 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         if (invoice.getStatus()!=InvoiceStatus.Success){
-            invoice = invoiceService.payTest(invoiceId);
+            invoice = invoiceService.payTest(invoice.getId());
         }
 
         if(regApplication.getForwardingLogId()==null){

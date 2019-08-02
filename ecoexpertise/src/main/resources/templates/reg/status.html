@@ -58,7 +58,7 @@
                                                                     <span class="hei-75 wid-75 d-inline-block mr-4">
                                                                         <img src="/static/images/check.png" style="width: 100%; height: 100%">
                                                                     </span>
-                                                        <span class="f-48 font-weight-bold" style="vertical-align: middle" th:text="reg_application.status_Approved"> Ваша заявка принята</span></br>
+                                                        <span class="f-48 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.status_Approved}"> Ваша заявка принята</span></br>
                                                         <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(regApplication.deadlineDate, 'dd.MM.yyyy')}"></span>
                                                         <div th:each="changeDeadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0 and changeDeadlineDate.changeDeadlineDateStatus==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" style="color: #3d8af7">
                                                             <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline_change}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(changeDeadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span>
@@ -66,7 +66,7 @@
                                                     </div>
 
                                                 <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
-                                                <div class="container text-dark" id="accountBox">
+                                                <div class="container text-dark" id="accountBox" th:if="${regApplication.}">
                                                     <div style="text-align: center">
                                                         <h3>СЧЕТ-ФАКТУРА № 165 от 07 февраля 2019 г.</h3>
                                                         <h4>к товарно-отгрузочным документам № 04/2019 от 04.01.2019</h4>
@@ -130,7 +130,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>1</td>
-                                                            <td th:text="${@helperService.getMaterial(regApplication.id,#locale)}">Проведение экологической экспертизы</td>
+                                                            <td th:text="${@helperService.getMaterials(regApplication.materials,#locale)}">Проведение экологической экспертизы</td>
                                                             <td>сум</td>
                                                             <td> </td>
                                                             <td> </td>
