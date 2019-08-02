@@ -13,8 +13,9 @@ import java.util.Map;
 public enum LogStatus {
 
     Initial(0,"sys_confirmStatus.initial","sys_forwardingStatus.initial","sys_performerStatus.initial","sys_agreementStatus.initial"),
-    Approved(1,"sys_confirmStatus.approved","sys_forwardingStatus.approved","sys_performerStatus.approved","sys_agreementStatus.approved"),
-    Denied(2,"sys_confirmStatus.denied","sys_forwardingStatus.denied","sys_performerStatus.denied","sys_agreementStatus.denied");
+    Modification(1,"sys_confirmStatus.modification","sys_forwardingStatus.modification","sys_performerStatus.modification","sys_agreementStatus.modification"),
+    Approved(2,"sys_confirmStatus.approved","sys_forwardingStatus.approved","sys_performerStatus.approved","sys_agreementStatus.approved"),
+    Denied(3,"sys_confirmStatus.denied","sys_forwardingStatus.denied","sys_performerStatus.denied","sys_agreementStatus.denied");
 
     private Integer id;
     private String confirmName;

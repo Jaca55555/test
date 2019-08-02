@@ -144,7 +144,6 @@ public class ForwardingController {
             return "redirect:" + ExpertiseUrls.ForwardingList;
         }
 
-        System.out.println("regApplication.getForwardingLogId()="+regApplication.getForwardingLogId());
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
         if(regApplication.getPerformerLogId()!=null){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());

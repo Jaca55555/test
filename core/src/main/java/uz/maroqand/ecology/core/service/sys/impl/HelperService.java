@@ -188,8 +188,8 @@ public class HelperService {
     @Cacheable(value = "getAppealType", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
     public String getAppealType(Integer id, String locale) {
         if(id==null) return "";
-        AppealType taskStep = AppealType.getAppealType(id);
-        return databaseMessageSource.resolveCodeSimply(taskStep.getName(),locale);
+        AppealType appealType = AppealType.getAppealType(id);
+        return databaseMessageSource.resolveCodeSimply(appealType.getName(),locale);
     }
 
     @Cacheable(value = "getFileName", key = "#id",condition="#id != null",unless="#result == ''")

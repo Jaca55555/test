@@ -19,7 +19,7 @@
                 <label class="col-form-label" th:text="#{sys_contractDate}"></label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" readonly="readonly" th:value="${regApplication.contractDate}" >
+                <input class="form-control" readonly="readonly" th:value="${regApplication.contractDate!=null? #dates.format(regApplication.contractDate,'dd.MM.yyyy'):''}" >
             </div>
         </div>
 
