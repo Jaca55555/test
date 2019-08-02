@@ -753,7 +753,7 @@ public class RegApplicationController {
 
             //todo vaqtinchalik
             if (invoice.getStatus()== InvoiceStatus.Success){
-                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id + "&invoiceId=" + invoice.getId();
+                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
             }
         }
         regApplication.setInvoiceId(invoice.getId());

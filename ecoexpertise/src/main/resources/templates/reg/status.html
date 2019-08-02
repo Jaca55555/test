@@ -66,7 +66,7 @@
                                                     </div>
 
                                                 <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
-                                                <div class="container text-dark" id="accountBox" th:if="${regApplication.}">
+                                                <div class="container text-dark" id="accountBox" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
                                                     <div style="text-align: center">
                                                         <h3>СЧЕТ-ФАКТУРА № 165 от 07 февраля 2019 г.</h3>
                                                         <h4>к товарно-отгрузочным документам № 04/2019 от 04.01.2019</h4>
@@ -197,7 +197,7 @@
                                                         </tr>
                                                     </table>
                                                 </div>
-                                                <div class="col-md-12 text-center mb-5">
+                                                <div class="col-md-12 text-center mb-5" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
                                                     <button type="button" class="btn btn-primary" th:text="#{sys_print}" onclick="printAccountFactor('accountBox')"></button>
                                                 </div>
 
