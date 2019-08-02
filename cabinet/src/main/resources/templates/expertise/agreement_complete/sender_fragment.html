@@ -8,7 +8,7 @@
         <div class="row">
 
             <div class="col-md-6 pr-0" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
-                <form id="form" method="post" action="/expertise/agreement_complete/list" >
+                <form id="form" method="post" action="/expertise/agreement_complete/action" >
                     <div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusionResult}">Результат заключения</label>
                         <select class="form-control" name="performerStatus">
