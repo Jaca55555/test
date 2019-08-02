@@ -5319,7 +5319,7 @@ body.layout-6 .pcoded-content {
 }
 body.layout-6 .pcoded-content .pcoded-inner-content {
   margin-top: -230px;
-  min-height: calc(100vh + 150px);
+  min-height: calc(100vh - 100px);
 }
 body.layout-6 .card {
   border-radius: 5px;
