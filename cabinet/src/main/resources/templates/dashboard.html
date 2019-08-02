@@ -10,7 +10,7 @@
         }
     </style>
 </head>
-<body>
+<body class="layout-6">
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -29,156 +29,170 @@
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
 
-                    <div class="row" th:if="${logType}">
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <div class="card-header">
-                                    <div class="header-top">
-                                        <div class="img-block">
-                                            <img src="static/images/icon/file.svg" alt="">
-                                        </div>
-                                        <div class="info">
-                                            <div class="title-count text-right">0</div>
-                                            <div class="subtitle text-right" th:utext="#{sys_dashboard.newApplication}">Количество новых заявок </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#" class="card-link" th:text="#{sys_detail}"></a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <div class="card-header bgc-orange">
-                                    <div class="header-top">
-                                        <div class="img-block">
-                                            <img src="static/images/icon/warning.svg" alt="">
-                                        </div>
-                                        <div class="info">
-                                            <div class="title-count text-right">0</div>
-                                            <div class="subtitle text-right" th:utext="#{sys_dashboard.expiringApplicationCount}">Количество заявок истекающие сроки </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#" class="card-link bgc-orange" th:text="#{sys_detail}"></a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <div class="card-header bgc-red">
-                                    <div class="header-top">
-                                        <div class="img-block">
-                                            <img src="static/images/icon/bell.svg" alt="">
-                                        </div>
-                                        <div class="info">
-                                            <div class="title-count text-right">0</div>
-                                            <div class="subtitle text-right" th:utext="#{sys_dashboard.notCompletedOnTimeApplication}">Количество заявок не выполненные в сроки </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#" class="card-link bgc-red" th:text="#{sys_detail}"></a>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body" style="min-height: calc(100vh - 130px);">
 
-                    <div class="row" sec:authorize="hasAnyAuthority('ADMIN')">
-                        <div class="col-md-4">
-                            <a href="/mgmt/expertise/object_expertise/list" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-1.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{mntr_objectExpertise_list}">Объект экспортизи</div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="/mgmt/expertise/activity/list" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-2.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{mntr_activity_list}">Вид деятослность</div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="/mgmt/expertise/material/list" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-3.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{sys_menu.materialList}">Форма экспертизы</div>
-                                </div>
-                            </a>
-                        </div>
+                                            <div class="row" th:if="${logType}">
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <div class="card-header">
+                                                            <div class="header-top">
+                                                                <div class="img-block">
+                                                                    <img src="static/images/icon/file.svg" alt="">
+                                                                </div>
+                                                                <div class="info">
+                                                                    <div class="title-count text-right">0</div>
+                                                                    <div class="subtitle text-right" th:utext="#{sys_dashboard.newApplication}">Количество новых заявок </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" class="card-link" th:text="#{sys_detail}"></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <div class="card-header bgc-orange">
+                                                            <div class="header-top">
+                                                                <div class="img-block">
+                                                                    <img src="static/images/icon/warning.svg" alt="">
+                                                                </div>
+                                                                <div class="info">
+                                                                    <div class="title-count text-right">0</div>
+                                                                    <div class="subtitle text-right" th:utext="#{sys_dashboard.expiringApplicationCount}">Количество заявок истекающие сроки </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" class="card-link bgc-orange" th:text="#{sys_detail}"></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <div class="card-header bgc-red">
+                                                            <div class="header-top">
+                                                                <div class="img-block">
+                                                                    <img src="static/images/icon/bell.svg" alt="">
+                                                                </div>
+                                                                <div class="info">
+                                                                    <div class="title-count text-right">0</div>
+                                                                    <div class="subtitle text-right" th:utext="#{sys_dashboard.notCompletedOnTimeApplication}">Количество заявок не выполненные в сроки </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#" class="card-link bgc-red" th:text="#{sys_detail}"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                        <div class="col-md-4">
-                            <a href="/mgmt/users/list" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-4.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{sys_menu.usersList}">Категория деятельности</div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="/mgmt/min_wage" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-5.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{mgmt_min_wage}">МПЗП</div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="/mgmt/expertise/offer/list" class="service-card">
-                                <div class="img-block">
-                                    <img src="/static/images/icon/icon-1.png" alt="">
-                                </div>
-                                <div class="info">
-                                    <div class="title" th:text="#{sys_menu.offerList}"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                                            <div class="row" sec:authorize="hasAnyAuthority('ADMIN')">
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/expertise/object_expertise/list" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-1.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{mntr_objectExpertise_list}">Объект экспортизи</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/expertise/activity/list" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-2.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{mntr_activity_list}">Вид деятослность</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/expertise/material/list" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-3.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{sys_menu.materialList}">Форма экспертизы</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
 
-                    <div class="row" >
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <a href="#" class="card-header-bottom">
-                                    <div class="img-block">
-                                        <img src="static/images/icon/statistic-icon.png" alt="">
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/users/list" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-4.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{sys_menu.usersList}">Категория деятельности</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/min_wage" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-5.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{mgmt_min_wage}">МПЗП</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="/mgmt/expertise/offer/list" class="service-card">
+                                                        <div class="img-block">
+                                                            <img src="/static/images/icon/icon-1.png" alt="">
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="title" th:text="#{sys_menu.offerList}"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" >
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <a href="#" class="card-header-bottom">
+                                                            <div class="img-block">
+                                                                <img src="static/images/icon/statistic-icon.png" alt="">
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title" th:text="#{sys_statistics}">Данные статистики</div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <a href="#" class="card-header-bottom">
+                                                            <div class="img-block">
+                                                                <img src="static/images/icon/play-icon.png" alt="">
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title" th:text="#{sys_video_instruction}">Video инструкция</div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card-dashboard">
+                                                        <a href="#" class="card-header-bottom">
+                                                            <div class="img-block">
+                                                                <img src="static/images/icon/pdf-icon.png" alt="">
+                                                            </div>
+                                                            <div class="info">
+                                                                <div class="title" th:text="#{sys_instruction}">Инструкция</div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="info">
-                                        <div class="title" th:text="#{sys_statistics}">Данные статистики</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <a href="#" class="card-header-bottom">
-                                    <div class="img-block">
-                                        <img src="static/images/icon/play-icon.png" alt="">
-                                    </div>
-                                    <div class="info">
-                                        <div class="title" th:text="#{sys_video_instruction}">Video инструкция</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-dashboard">
-                                <a href="#" class="card-header-bottom">
-                                    <div class="img-block">
-                                        <img src="static/images/icon/pdf-icon.png" alt="">
-                                    </div>
-                                    <div class="info">
-                                        <div class="title" th:text="#{sys_instruction}">Инструкция</div>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>

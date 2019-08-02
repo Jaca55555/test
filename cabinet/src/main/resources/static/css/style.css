@@ -3981,7 +3981,7 @@ body.layout-1 .pcoded-navbar.icon-colored .sidemenu > li:nth-child(48) > a {
   -webkit-text-fill-color: unset;
 }
 .pcoded-header.header-lightblue {
-  background: #23b7e5;
+  /*background: #23b7e5;*/
   color: rgba(255, 255, 255, 0.8);
 }
 .pcoded-header.header-lightblue .profile-notification li > a {
@@ -5238,11 +5238,12 @@ body.layout-1 .pcoded-navbar[class*="navbar-image"] .header-logo {
 }
 
 body.layout-6 {
-  background: #23b7e5;
+  /*background: #23b7e5;*/
   background-size: cover;
   background-attachment: fixed;
   background-position: top right;
   position: relative;
+  background-image: url(/static/images/cool-background.jpg);
   /* for able pro style */
   /* dark navbar */
 }
@@ -5317,7 +5318,7 @@ body.layout-6 .pcoded-content {
   margin-top: 200px;
 }
 body.layout-6 .pcoded-content .pcoded-inner-content {
-  margin-top: -200px;
+  margin-top: -230px;
   min-height: calc(100vh + 150px);
 }
 body.layout-6 .card {
