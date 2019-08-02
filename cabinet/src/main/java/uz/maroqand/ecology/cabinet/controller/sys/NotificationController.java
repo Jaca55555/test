@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,15 +26,15 @@ import java.util.List;
 @Controller
 public class NotificationController {
 
-    private UserService userService;
     private NotificationService notificationService;
     private HelperService helperService;
+    private UserService userService;
 
     @Autowired
     public NotificationController(UserService userService, NotificationService notificationService, HelperService helperService) {
-        this.userService = userService;
         this.notificationService = notificationService;
         this.helperService = helperService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = SysUrls.NotificationShow, method = RequestMethod.POST)
@@ -41,6 +42,7 @@ public class NotificationController {
     public HashMap<String, Object> getToastr(
     ) {
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         List<NotificationDto> notificationListShow = new LinkedList<>();
         List<NotificationDto> newNotificationListShow = new LinkedList<>();
@@ -66,7 +68,9 @@ public class NotificationController {
         }
 
         result.put("notificationList", notificationListShow);
+        result.put("notificationTitle", helperService.getTranslation("sys_notification.oldNotifications",locale));
         result.put("newNotificationList", newNotificationListShow);
+        result.put("newNotificationTitle", helperService.getTranslation("sys_notification.newNotifications",locale));
         return result;
     }
 

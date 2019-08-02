@@ -670,7 +670,7 @@ function getNotificationList() {
         var notification = '';
 
         if(data.newNotificationList.length>0){
-            notification = '<li class="n-title"> <p class="m-b-0" >Yangi</p></li>';
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.newNotificationTitle+'</p></li>';
             $("#noti-body").append(notification);
             $("#new-notification-count").text(data.newNotificationList.length);
             $("#new-notification-count").show();
@@ -682,7 +682,7 @@ function getNotificationList() {
         });
 
         if(data.notificationList.length>0){
-            notification = '<li class="n-title"> <p class="m-b-0" >Oldingi</p></li>';
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.notificationTitle+'</p></li>';
             $("#noti-body").append(notification);
         }
         $.each(data.notificationList, function( index, value ){

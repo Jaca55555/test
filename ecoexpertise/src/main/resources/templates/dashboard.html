@@ -37,17 +37,25 @@
                                 <div class="card-body" style="min-height: calc(100vh - 130px);">
                                     <div class="row">
                                         <div class="col-md-6 col-xl-3">
-                                            <div class="card">
+                                            <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
                                                 <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationDashboard}">
-                                                    <i class="feather icon-align-center" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
+                                                    <i class="feather icon-plus-circle" style="font-size: 40px;padding-bottom: 25px;color: #01a9ac;"></i>
                                                     <h5  style="margin-top: 25px;" th:text="#{reg_application.dashboard}">Отправить заявление</h5>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xl-3">
-                                            <div class="card">
+                                            <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationList}">
+                                                    <i class="feather icon-list" style="font-size: 40px;padding-bottom: 25px;color: #9575CD;"></i>
+                                                    <h5  style="margin-top: 25px;" th:text="#{reg_application.list}"></h5>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-3">
+                                            <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
                                                 <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealUserList}">
-                                                    <i class="feather icon-mail" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
+                                                    <i class="feather icon-mail" style="font-size: 40px;padding-bottom: 25px;color: #23b8e5;"></i>
                                                     <h5  style="margin-top: 25px;" th:text="#{sys_appeal.list}">Обрашения</h5>
                                                 </a>
                                             </div>

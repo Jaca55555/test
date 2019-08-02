@@ -49,7 +49,18 @@ public class HelperService {
     private final PositionService positionService;
     private final FileService fileService;
 
-    public HelperService(UserService userService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, MaterialService materialService, SoatoService soatoService, OrganizationService organizationService, OpfService opfService, DepartmentService departmentService, PositionService positionService, FileService fileService) {
+    public HelperService(
+            ObjectExpertiseService objectExpertiseService,
+            OrganizationService organizationService,
+            DepartmentService departmentService,
+            ActivityService activityService,
+            MaterialService materialService,
+            PositionService positionService,
+            SoatoService soatoService,
+            FileService fileService,
+            UserService userService,
+            OpfService opfService
+    ) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
@@ -71,6 +82,7 @@ public class HelperService {
         return databaseMessageSource.resolveCodeSimply(tag, locale);
     }
 
+    /*  user    */
     @Cacheable(value = "getUserById", key = "#id",condition="#id != null",unless="#result == ''")
     public String getUserById(Integer id) {
         if(id==null) return "";
@@ -85,7 +97,6 @@ public class HelperService {
         return user!=null? user.getFullName():"";
     }
 
-    //for comment
     @Cacheable(value = "getUserLastAndFirstShortById", key = "#id",condition="#id != null",unless="#result == ''")
     public String getUserLastAndFirstShortById(Integer id) {
         if(id==null) return "";
@@ -95,10 +106,71 @@ public class HelperService {
             fio_short=user.getFirstname()!=null?user.getFirstname().substring(0,1):" ";
             fio_short+=user.getLastname()!=null?user.getLastname().substring(0,1):" ";
         }
-
         return fio_short;
     }
 
+    @Cacheable(value = "getOrganizationName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getOrganizationName(Integer id, String locale) {
+        if(id==null) return "";
+        Organization organization = organizationService.getById(id);
+        return organization!=null? organization.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getDepartmentName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getDepartmentName(Integer id, String locale) {
+        if(id==null) return "";
+        Department department = departmentService.getById(id);
+        return department!=null? department.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getPositionName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getPositionName(Integer id, String locale) {
+        if(id==null) return "";
+        Position position = positionService.getById(id);
+        return position!=null? position.getNameTranslation(locale):"";
+    }
+
+
+    /*  expertise   */
+    @Cacheable(value = "getObjectExpertise", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getObjectExpertise(Integer id, String locale) {
+        if(id==null) return "";
+        ObjectExpertise objectExpertise = objectExpertiseService.getById(id);
+        return objectExpertise !=null? objectExpertise.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getActivity", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getActivity(Integer id, String locale) {
+        if(id==null) return "";
+        Activity activity = activityService.getById(id);
+        return activity !=null? activity.getNameTranslation(locale):"";
+    }
+
+    @Cacheable(value = "getCategory", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getCategory(Integer id, String locale) {
+        if(id==null) return "";
+        Category category = Category.getCategory(id);
+        return databaseMessageSource.resolveCodeSimply(category.getName(),locale);
+    }
+
+    @Cacheable(value = "getMaterial", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getMaterial(Integer id, String locale) {
+        if(id==null) return "";
+        Material material = materialService.getById(id);
+        return material!=null? material.getNameTranslation(locale):"";
+    }
+
+    public String getMaterials(Set<Integer> ids, String locale) {
+        if(ids==null) return "";
+        String result = "";
+        for (Integer id:ids){
+            result += getMaterial(id,locale)+", ";
+        }
+        return result.length()>2? result.substring(0,result.length()-2):result;
+    }
+
+
+    /*  common  */
     @Cacheable(value = "getSoatoName", key = "#id",condition="#id != null",unless="#result == ''")
     public String getSoatoName(Integer id, String locale) {
         if(id==null) return "";
@@ -142,65 +214,6 @@ public class HelperService {
         if(id==null) return "";
         ApplicantType applicantType = ApplicantType.getApplicantType(id);
         return databaseMessageSource.resolveCodeSimply(applicantType.getName(),locale);
-    }
-
-    /*  expertise   */
-    @Cacheable(value = "getObjectExpertise", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getObjectExpertise(Integer id, String locale) {
-        if(id==null) return "";
-        ObjectExpertise objectExpertise = objectExpertiseService.getById(id);
-        return objectExpertise !=null? objectExpertise.getNameTranslation(locale):"";
-    }
-
-    @Cacheable(value = "getActivity", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getActivity(Integer id, String locale) {
-        if(id==null) return "";
-        Activity activity = activityService.getById(id);
-        return activity !=null? activity.getNameTranslation(locale):"";
-    }
-
-    @Cacheable(value = "getCategory", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getCategory(Integer id, String locale) {
-        if(id==null) return "";
-        Category category = Category.getCategory(id);
-        return databaseMessageSource.resolveCodeSimply(category.getName(),locale);
-    }
-
-    @Cacheable(value = "getMaterial", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getMaterial(Integer id, String locale) {
-        if(id==null) return "";
-        Material material = materialService.getById(id);
-        return material!=null? material.getNameTranslation(locale):"";
-    }
-
-    public String getMaterials(Set<Integer> ids, String locale) {
-        if(ids==null) return "";
-        String result = "";
-        for (Integer id:ids){
-            result += getMaterial(id,locale)+", ";
-        }
-        return result.length()>2? result.substring(0,result.length()-2):result;
-    }
-
-    @Cacheable(value = "getOrganizationName", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getOrganizationName(Integer id, String locale) {
-        if(id==null) return "";
-        Organization organization = organizationService.getById(id);
-        return organization!=null? organization.getNameTranslation(locale):"";
-    }
-
-    @Cacheable(value = "getDepartmentName", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getDepartmentName(Integer id, String locale) {
-        if(id==null) return "";
-        Department department = departmentService.getById(id);
-        return department!=null? department.getNameTranslation(locale):"";
-    }
-
-    @Cacheable(value = "getPositionName", key = "#id",condition="#id != null",unless="#result == ''")
-    public String getPositionName(Integer id, String locale) {
-        if(id==null) return "";
-        Position position = positionService.getById(id);
-        return position!=null? position.getNameTranslation(locale):"";
     }
 
 }
