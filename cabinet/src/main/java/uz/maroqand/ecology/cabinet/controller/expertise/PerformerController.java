@@ -8,19 +8,18 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
+import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -57,6 +56,7 @@ public class PerformerController {
     private final RegApplicationLogService regApplicationLogService;
     private final ProjectDeveloperService projectDeveloperService;
     private final ChangeDeadlineDateService changeDeadlineDateService;
+    private final CommentService commentService;
 
     @Autowired
     public PerformerController(
@@ -71,7 +71,9 @@ public class PerformerController {
             ObjectExpertiseService objectExpertiseService,
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
-            ChangeDeadlineDateService changeDeadlineDateService) {
+            ChangeDeadlineDateService changeDeadlineDateService,
+            CommentService commentService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -84,6 +86,7 @@ public class PerformerController {
         this.regApplicationLogService = regApplicationLogService;
         this.projectDeveloperService = projectDeveloperService;
         this.changeDeadlineDateService = changeDeadlineDateService;
+        this.commentService = commentService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -152,7 +155,7 @@ public class PerformerController {
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -163,6 +166,8 @@ public class PerformerController {
 
         List<ChangeDeadlineDate> changeDeadlineDateList = changeDeadlineDateService.getListByRegApplicationId(regApplicationId);
 
+        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+        model.addAttribute("commentList", commentList);
         model.addAttribute("changeDeadlineDateList",changeDeadlineDateList);
         model.addAttribute("changeDeadlineDate",changeDeadlineDateService.getByRegApplicationId(regApplicationId));
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
@@ -171,6 +176,31 @@ public class PerformerController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
         return ExpertiseTemplates.PerformerView;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.PerformerAction,method = RequestMethod.POST)
+    public String confirmApplication(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
+            @RequestParam(name = "performerStatus")Integer performerStatus
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.PerformerList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), "", user);
+
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Agreement,"",user);
+        regApplicationLogCreate = regApplicationLogService.update(regApplicationLogCreate,LogStatus.Initial,"",user);
+
+        regApplication.setStatus(RegApplicationStatus.New);
+        regApplication.setAgreementLogId(regApplicationLogCreate.getId());
+        regApplicationService.update(regApplication);
+
+        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
     }
 
     @RequestMapping(ExpertiseUrls.PerformerChangeDeadlineDate)

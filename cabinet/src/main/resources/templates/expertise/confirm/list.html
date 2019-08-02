@@ -194,8 +194,9 @@
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
         if (row[9]===0)statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
-        if (row[9]===1)statusLabel += '<span class="badge badge-success">'+row[8]+'</span>';
-        if (row[9]===2)statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
+        if (row[9]===1)statusLabel += '<span class="badge badge-warning">'+row[8]+'</span>';
+        if (row[9]===2)statusLabel +='<span class="badge badge-success">'+row[8]+'</span>';
+        if (row[9]===3)statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
         return statusLabel;
     }
 

@@ -8,15 +8,19 @@
         <div class="row">
 
             <div class="col-md-6 pr-0" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
-                <form id="form" method="post" action="/expertise/performer/action" >
+                <form id="form" method="post" action="/expertise/agreement_complete/list" >
                     <div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusionResult}">Результат заключения</label>
                         <select class="form-control" name="performerStatus">
                             <option value="2" th:text="#{sys_performerStatus.approved}" ></option>
                             <option value="3" th:text="#{sys_performerStatus.denied}" ></option>
-                            <option value="1" th:text="#{sys_performerStatus.modification}" ></option>
                         </select>
                     </div>
+                    <div class="form-group col-md-10 offset-1">
+                        <label th:text="#{sys_reg_application.comments}"></label>
+                        <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" name="comment" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
+                    </div>
+
                     <div class="col-md-10 offset-1">
                         <div class="card-block task-attachment" >
                             <p style="font-weight: bold; color: black;margin-left: 10px;" th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</p>
@@ -115,39 +119,6 @@
                 </table>
             </div>-->
 
-            <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">
-                <div class="col-md-10 offset-1">
-
-                    <div class="form-group col-md-10 offset-1" id="historyChangeDeadlineDate">
-                        <h4 th:text="#{history_change_deadline_date}" th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"></h4>
-                        <div class="card" th:each="deadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0}">
-                            <div class="card-block" style="padding: 10px 25px;">
-                                <div class="row align-items-center justify-content-center">
-                                    <div class="col-auto">
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial}" class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" class="mdi mdi-checkbox-multiple-marked-outline f-30" style="color: #14cc9e"></i>
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Denied}" class="mdi mdi-close-box-outline f-30" style="color: #f22012"></i>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="mb-3" th:text="${deadlineDate.reason}"></h5>
-                                        <h6 class="m-b-0"><span th:if="${deadlineDate.beforeDeadlineDate!=null}" th:text="${#dates.format(deadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span><span th:if="${deadlineDate.afterDeadlineDate!=null}" th:text="${' - '+#dates.format(deadlineDate.afterDeadlineDate, 'dd.MM.yyyy')}"></span></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-10 offset-1" id="sendForm" th:if="${changeDeadlineDate==null || (changeDeadlineDate!=null and changeDeadlineDate.status!=T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial)}">
-                        <label th:text="#{change_deadline_date_query}"></label>
-                        <input type="text" class="form-control" placeholder="change_deadline_date_reason" minlength="3" id="reason" required="required">
-                        <button type="button" class="btn btn-primary float-right mt-1 mr-0" id="submitButton">
-                            <i  class="mdi mdi-telegram"></i>
-                            <span th:text="#{sys_send}"></span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
         </div>
 
 

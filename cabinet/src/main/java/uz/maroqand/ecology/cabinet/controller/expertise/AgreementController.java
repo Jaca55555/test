@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
@@ -15,6 +16,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -147,7 +149,7 @@ public class AgreementController {
             return "redirect:" + ExpertiseUrls.AgreementList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -164,4 +166,28 @@ public class AgreementController {
         return ExpertiseTemplates.AgreementView;
     }
 
+    @RequestMapping(value = ExpertiseUrls.AgreementAction,method = RequestMethod.POST)
+    public String confirmApplication(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
+            @RequestParam(name = "performerStatus")Integer performerStatus,
+            @RequestParam(name = "comment")String comment
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.AgreementList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user);
+
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
+
+        regApplication.setStatus(RegApplicationStatus.New);
+        regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+        regApplicationService.update(regApplication);
+
+        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId();
+    }
 }
