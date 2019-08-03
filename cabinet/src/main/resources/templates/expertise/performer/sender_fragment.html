@@ -203,7 +203,8 @@
                     $('#fileDescriptionRegLog').addClass('is-invalid');
                     return;
                 }
-                $('#upload-file-modal-regApp_log').modal('hide');
+                $('#upload-file-regApp_log').modal('hide');
+
                 var form = new FormData();
                 form.append("id", regApplicationId);
                 form.append("file", $('#file-input-reg-log').prop('files')[0]);
@@ -221,7 +222,7 @@
                         console.log(response);
                         if(response.status == 1) {
 
-                            $('#files-div-reg-log').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                            $('#files-div-reg-log').append('<div class="col-md-3 pb-3 p-0 ml-1" id="file-block-'+response.fileId+'">\n' +
                                 '                                                    <div class="file">\n' +
                                 '                                                        <a href="'+response.link+'">\n' +
                                 '                                                            <i class="feather icon-file file-icon"></i>\n' +
