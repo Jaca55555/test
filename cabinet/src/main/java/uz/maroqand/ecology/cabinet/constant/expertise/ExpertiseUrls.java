@@ -29,6 +29,7 @@ public class ExpertiseUrls {
     public static final String PerformerList = Performer + "/list";
     public static final String PerformerListAjax = Performer + "/list_ajax";
     public static final String PerformerView = Performer + "/view";
+    public static final String PerformerAction = Performer + "/action";
     public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";
 
     //Kelishish
@@ -36,12 +37,14 @@ public class ExpertiseUrls {
     public static final String AgreementList = Agreement + "/list";
     public static final String AgreementListAjax = Agreement + "/list_ajax";
     public static final String AgreementView = Agreement + "/view";
+    public static final String AgreementAction = Agreement + "/action";
 
     //Oxirgi kelishuv
     private static final String AgreementComplete = Prefix + "/agreement_complete";
     public static final String AgreementCompleteList = AgreementComplete + "/list";
     public static final String AgreementCompleteListAjax = AgreementComplete + "/list_ajax";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
+    public static final String AgreementCompleteAction = AgreementComplete + "/action";
 
     //File
     public static final String FileUpload = Prefix + "/file/upload";

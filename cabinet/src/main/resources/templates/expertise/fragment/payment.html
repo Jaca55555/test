@@ -24,9 +24,7 @@
                 </tr>
                 <tr>
                     <td th:text="#{sys_invoice_createdAt}"></td>
-                    <td class="text-right">
-                        <span th:text="*{#dates.format(createdDate,'dd.MM.yyyy HH:mm:ss')}"></span>
-                    </td>
+                    <td class="text-right"> <span th:text="*{#dates.format(createdDate,'dd.MM.yyyy HH:mm:ss')}"></span> </td>
                 </tr>
                 <tr>
                     <td th:text="#{sys_payment_detail}"></td>

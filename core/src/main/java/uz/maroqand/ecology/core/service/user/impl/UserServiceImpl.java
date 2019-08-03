@@ -211,7 +211,6 @@ public class UserServiceImpl implements UserService {
                     case EXPERTISE_PERFORMER: return LogType.Performer;
                     case EXPERTISE_AGREEMENT: return LogType.Agreement;
                     case EXPERTISE_AGREEMENT_COMPLETE: return LogType.AgreementComplete;
-                    default: return null;
                 }
             }
         }

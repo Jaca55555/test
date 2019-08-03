@@ -11,7 +11,7 @@
             <label class="col-form-label" th:text="#{sys_applicant_type}"></label>
         </div>
         <div class="col-md-6">
-            <input class="form-control" readonly="readonly" th:value="${@helperService.getAppealType(applicant.type,#locale)}">
+            <input class="form-control" readonly="readonly" th:value="${applicant.type!=null? @helperService.getApplicantType(applicant.type.id,#locale):''}">
         </div>
     </div>
 

@@ -495,7 +495,15 @@
             $.post('/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
                 $.each(response, function (key, value) {
                     if(value.id===id){
-                        $('#materials-'+id+'-label').text(value.name);
+                        var name = '';
+                        switch (getCurrentLanguage()){
+                            case 'uz':name=value.name;break;
+                            case 'oz':name=value.nameOz;break;
+                            case 'ru':name=value.nameRu;break;
+                            default :name=value.nameRu;break;
+                        }
+                        console.log('material='+name);
+                        $('#materials-'+id+'-label').text(name);
                     }
                 });
             });
