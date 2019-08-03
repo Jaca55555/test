@@ -39,17 +39,17 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 th:text="${'change_deadline_date: ' + changeDeadlineDate.id}"></h5>
+                                        <h5 ><span th:text="#{change_deadline_date}"></span>:<span  th:text="${changeDeadlineDate.id}"></span></h5>
                                     </div>
                                     <div class="card-block">
                                         <div class="m-b-20 text-center">
                                             <h6 th:text="#{change_deadline_date.info}"></h6>
                                             <hr>
                                             <div class="alert alert-success" role="alert" th:if="${changeDeadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}">
-                                                <SPAN th:text="#{changeDeadlineDate.status}" ></SPAN>
+                                                <SPAN th:text="#{changeDeadlineDate.status_Approved}" ></SPAN>
                                             </div>
                                             <div class="alert alert-danger" role="alert" th:if="${changeDeadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Denied}">
-                                                <SPAN th:text="#{changeDeadlineDate.status}" ></SPAN>
+                                                <SPAN th:text="#{changeDeadlineDate.status_Denied}" ></SPAN>
                                             </div>
                                         </div>
                                         <form method="post" th:action="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ChangeDeadlineDateConfig}" data-parsley-validate="" id="deadlineForm">
