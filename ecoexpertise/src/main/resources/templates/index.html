@@ -18,7 +18,7 @@
                 <div class="container">
                     <div class="header-top">
                         <div class="header-top-left">
-                            <div class="contact-number">+99871) 207-07-70 (1001</div>
+                            <div class="contact-number"><span th:text="#{front_phone_for_info}">+99871) 207-07-70 (1001</span></div>
                             <div class="flex-center media-w-100">
                                 <ul>
                                     <li>
@@ -290,19 +290,19 @@
                     <div class="statistic-item">
                         <div class="number"><span>4350</span>
                         </div>
-                        <div class="title"><span th:text="#{front.statistic_title}">Umumiy arizalar soni</span>
+                        <div class="title"><span th:text="#{front.all_statistic_title}">Umumiy arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
                         <div class="number"><span>2200</span>
                         </div>
-                        <div class="title"><span th:text="#{front.statistic_title}">Ko’rib chiqilgan arizalar soni</span>
+                        <div class="title"><span th:text="#{front.in_closed_statistic_title}">Ko’rib chiqilgan arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
                         <div class="number"><span>700</span>
                         </div>
-                        <div class="title"><span th:text="#{front.statistic_title}">Jarayondagi arizalar soni</span>
+                        <div class="title"><span th:text="#{front.in_progress_statistic_title}">Jarayondagi arizalar soni</span>
                         </div>
                     </div>
                 </div>
@@ -332,7 +332,7 @@
                                     <div class="form-group w-100">
                                         <textarea name="" th:placeholder="#{front.user_message}"></textarea>
                                     </div>
-                                    <button class="form-btn"><span th:placeholder="#{front.send-contact-btn}">send</span>
+                                    <button class="form-btn"><i class="mdi mdi-telegram mr-2"></i><span th:text="#{front.send-contact-btn}">send</span>
                                     </button>
                                 </div>
                             </div>

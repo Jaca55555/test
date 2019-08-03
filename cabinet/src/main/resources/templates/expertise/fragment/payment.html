@@ -36,7 +36,9 @@
 
         <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;">
             <p class="text-center" th:text="#{sys_payment_amount}" style="font-size: 22px;"> Сумма к оплате </p>
-            <p class="text-center text-summa" th:text="*{amount}" style="font-size: 22px;"> 101 365.00 </p>
+            <p class="text-center text-summa"style="font-size: 22px;">
+                <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+            </p>
         </div>
         <div class="col-md-3 col-12">
             <p class="text-center">
