@@ -172,6 +172,7 @@
             }, false);
 
             bindSubRegionSelectToRegionSelect('#individualSubRegionId', '#individualRegionId');
+            bindSubRegionSelectToRegionSelect('#entrepreneurSubRegionId', '#entrepreneurRegionId');
             bindSubRegionSelectToRegionSelect('#legalEntitySubRegionId', '#legalEntityRegionId');
             var checkVal=$("input[name='applicantType']:checked").val();
             selectForm(checkVal);
@@ -182,7 +183,7 @@
                 // startDate: '-130y',
                 // endDate: '-5y'
             });
-            $('#legalEntityOpfId').select2();
+            // $('#legalEntityOpfId').select2();
             $('#foreignCountryId').select2();
 
             if ($('#oked').val()!=''){
