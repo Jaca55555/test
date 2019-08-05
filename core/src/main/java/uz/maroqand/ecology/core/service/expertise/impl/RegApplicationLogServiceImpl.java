@@ -35,6 +35,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     public RegApplicationLog getById(Integer id){
+        if(id==null){
+            return null;
+        }
         return regApplicationLogRepository.getOne(id);
     }
 

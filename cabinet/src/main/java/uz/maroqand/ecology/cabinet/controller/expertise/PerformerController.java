@@ -156,6 +156,8 @@ public class PerformerController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        RegApplicationLog agreementLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
+        RegApplicationLog agreementCompleteLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -165,16 +167,19 @@ public class PerformerController {
         }
 
         List<ChangeDeadlineDate> changeDeadlineDateList = changeDeadlineDateService.getListByRegApplicationId(regApplicationId);
-
         List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+
         model.addAttribute("commentList", commentList);
-        model.addAttribute("changeDeadlineDateList",changeDeadlineDateList);
-        model.addAttribute("changeDeadlineDate",changeDeadlineDateService.getByRegApplicationId(regApplicationId));
-        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant",client);
+        model.addAttribute("changeDeadlineDateList", changeDeadlineDateList);
+        model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("applicant", client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("regApplication", regApplication);
+
+        model.addAttribute("regApplicationLog", regApplicationLog);
+        model.addAttribute("agreementLog", agreementLog);
+        model.addAttribute("agreementCompleteLog", agreementCompleteLog);
         return ExpertiseTemplates.PerformerView;
     }
 
