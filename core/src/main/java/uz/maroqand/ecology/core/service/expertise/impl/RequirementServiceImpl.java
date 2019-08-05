@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -38,6 +39,7 @@ public class RequirementServiceImpl implements RequirementService {
     }
 
     @Override
+    @Cacheable(value = "getCategory", key = "{#objectExpertiseId,#category}",condition="#objectExpertiseId!= null",unless="#result == ''")
     public List<Requirement> getRequirementMaterials(Integer objectExpertiseId, Category category){
         return requirementRepository.findByObjectExpertiseIdAndCategory(objectExpertiseId,category);
     }

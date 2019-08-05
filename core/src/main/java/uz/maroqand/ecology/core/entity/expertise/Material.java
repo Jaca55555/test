@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -9,7 +11,7 @@ import javax.persistence.*;
  * (uz)
  * (ru)
  */
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "material")
 public class Material {
