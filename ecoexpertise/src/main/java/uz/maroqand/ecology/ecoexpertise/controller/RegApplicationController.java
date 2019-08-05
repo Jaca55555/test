@@ -325,16 +325,23 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        if (regApplication.getConfirmLogId()!=null){
+        /*if (regApplication.getConfirmLogId()!=null){
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             if(regApplicationLog.getStatus()!=LogStatus.Denied){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
                 return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
             }
-        }
+        }*/
 
         if (regApplication.getInvoiceId()!=null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
         ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
