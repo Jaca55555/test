@@ -26,8 +26,15 @@ public class AccountController {
     private final OrganizationService organizationService;
     private final DepartmentService departmentService;
     private final Gson gson;
+
     @Autowired
-    public AccountController(UserService userService, TableHistoryService tableHistoryService, OrganizationService organizationService, DepartmentService departmentService, Gson gson) {
+    public AccountController(
+            UserService userService,
+            TableHistoryService tableHistoryService,
+            OrganizationService organizationService,
+            DepartmentService departmentService,
+            Gson gson
+    ) {
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
         this.organizationService = organizationService;
@@ -38,13 +45,10 @@ public class AccountController {
     @RequestMapping("/profile")
     public String getProfilePage(Model model){
         User user = userService.getCurrentUserFromContext();
-        if (user.getOrganizationId() != null && user.getDepartmentId() != null){
-            Organization organization = organizationService.getById(user.getOrganizationId());
-            Department department = departmentService.getById(user.getDepartmentId());
-            model.addAttribute("organization",organization!=null?organization:"");
-            model.addAttribute("department",department!=null?department:"");
-        }
+
         model.addAttribute("user",user);
+        model.addAttribute("organization",organizationService.getById(user.getOrganizationId()));
+        model.addAttribute("department",departmentService.getById(user.getDepartmentId()));
         model.addAttribute("action_url","/profile/psw_update");
         return "/profile";
     }

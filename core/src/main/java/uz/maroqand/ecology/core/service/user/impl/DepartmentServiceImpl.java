@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    @Cacheable(value = "departmentGetById", key = "#id",unless="#result == ''")
+    @Cacheable(value = "departmentGetById", key = "{#id}",condition="#id != null",unless="#result == ''")
     public Department getById(Integer id) {
         return departmentRepository.findByIdAndDeletedFalse(id);
     }
