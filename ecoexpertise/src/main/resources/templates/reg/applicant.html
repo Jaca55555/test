@@ -183,8 +183,17 @@
                 // startDate: '-130y',
                 // endDate: '-5y'
             });
-            // $('#legalEntityOpfId').select2();
+            $('#legalEntityOpfId').parsley().validate();
+            $('#legalEntityOpfId').select2();
+            $('#foreignCountryId').parsley().validate();
             $('#foreignCountryId').select2();
+
+            $('#legalEntityOpfId').on('change',function () {
+                $('#legalEntityOpfId').parsley().validate();
+            });
+            $('#foreignCountryId').on('change',function () {
+                $('#foreignCountryId').parsley().validate();
+            });
 
             if ($('#oked').val()!=''){
                 getOkedName();
