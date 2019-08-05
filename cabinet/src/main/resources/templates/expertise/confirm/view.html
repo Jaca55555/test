@@ -100,46 +100,42 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
-
                             <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <h5 th:text="${'reg_application: ' + regApplication.id}"></h5>
+                                        <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
                                         <hr>
-                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                                <li class="nav-item">
-                                                    <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#confirmation" role="tab" aria-controls="confirmation" aria-selected="false" th:text="#{sys_confirmation}"></a>
-                                                </li>
-                                            </ul>
-
-                                            <div class="tab-content" id="myTabContent">
-                                                <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
-                                                    <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-12 text-center" id="tab-control-buttons">
-                                                            <a class="btn btn-danger text-white" href="/expertise/confirm/list" th:text="#{sys_back}"></a>
-                                                            <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
-                                                        </div>
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#confirmation" role="tab" aria-controls="confirmation" aria-selected="false" th:text="#{sys_confirmation}"></a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                                <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                                <div class="form-group row">
+                                                    <div class="col-md-12 text-center" id="tab-control-buttons">
+                                                        <a class="btn btn-danger text-white" href="/expertise/confirm/list" th:text="#{sys_back}"></a>
+                                                        <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
-                                                    <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
-                                                </div>
-                                                <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
-                                                    <object th:include="expertise/confirm/action :: action" th:remove="tag"></object>
-                                                </div>
                                             </div>
-
+                                            <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
+                                                <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
+                                                <object th:include="expertise/confirm/action :: action" th:remove="tag"></object>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                             <!-- [ sample-page ] end -->
                         </div>
