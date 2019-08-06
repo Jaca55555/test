@@ -360,7 +360,7 @@ public class RegApplicationController {
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-            @RequestParam(name = "coordinates") List<Double> coordinates
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -369,7 +369,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        if(!coordinates.isEmpty()) {
+        if(coordinates!=null && !coordinates.isEmpty()) {
             Client client = regApplication.getApplicant();
             Coordinate coordinate = new Coordinate();
             coordinate.setRegApplicationId(regApplication.getId());

@@ -33,10 +33,11 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" >
+                <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" data-parsley-errors-container="#legalEntityOpf-error">
                     <option value="" th:text="#{sys_select}"></option>
                     <option th:each="opf : ${opfLegalEntityList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${opf.parentId==null}"></option>
                 </select>
+                <div id="legalEntityOpf-error"></div>
             </div>
         </div>
 
@@ -118,7 +119,7 @@
                 <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" placeholder="+998 ( -- ) --- -- --">
             </div>
             <div class="col-md-2">
-                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode()"> Tasdiqlash</button>
+                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode()" th:text="#{sys_phone.confirm}"> Tasdiqlash</button>
             </div>
         </div>
 
