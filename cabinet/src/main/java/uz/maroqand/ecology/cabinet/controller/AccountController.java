@@ -38,7 +38,7 @@ public class AccountController {
 
         model.addAttribute("user",user);
         model.addAttribute("action_url","/profile/psw_update");
-        return "/profile";
+        return "profile";
     }
 
     @RequestMapping(value = "/profile/psw_update",method = RequestMethod.POST)
