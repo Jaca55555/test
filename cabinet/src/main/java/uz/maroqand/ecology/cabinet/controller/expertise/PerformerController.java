@@ -18,11 +18,10 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
-import uz.maroqand.ecology.core.entity.expertise.Comment;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -57,6 +56,8 @@ public class PerformerController {
     private final ProjectDeveloperService projectDeveloperService;
     private final ChangeDeadlineDateService changeDeadlineDateService;
     private final CommentService commentService;
+    private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
     @Autowired
     public PerformerController(
@@ -72,7 +73,9 @@ public class PerformerController {
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
             ChangeDeadlineDateService changeDeadlineDateService,
-            CommentService commentService
+            CommentService commentService,
+            CoordinateRepository coordinateRepository,
+            CoordinateLatLongRepository coordinateLatLongRepository
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -87,6 +90,8 @@ public class PerformerController {
         this.projectDeveloperService = projectDeveloperService;
         this.changeDeadlineDateService = changeDeadlineDateService;
         this.commentService = commentService;
+        this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -165,6 +170,13 @@ public class PerformerController {
         }
 
         List<ChangeDeadlineDate> changeDeadlineDateList = changeDeadlineDateService.getListByRegApplicationId(regApplicationId);
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+        }
 
         List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
         model.addAttribute("commentList", commentList);

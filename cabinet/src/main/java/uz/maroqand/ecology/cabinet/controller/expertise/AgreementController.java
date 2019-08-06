@@ -21,9 +21,13 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.Coordinate;
+import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -55,6 +59,8 @@ public class AgreementController {
     private final RegApplicationLogService regApplicationLogService;
     private final InvoiceService invoiceService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
     @Autowired
     public AgreementController(
@@ -68,7 +74,9 @@ public class AgreementController {
             HelperService helperService,
             RegApplicationLogService regApplicationLogService,
             InvoiceService invoiceService,
-            ProjectDeveloperService projectDeveloperService
+            ProjectDeveloperService projectDeveloperService,
+            CoordinateRepository coordinateRepository,
+            CoordinateLatLongRepository coordinateLatLongRepository
     ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
@@ -81,6 +89,8 @@ public class AgreementController {
         this.regApplicationLogService = regApplicationLogService;
         this.invoiceService = invoiceService;
         this.projectDeveloperService = projectDeveloperService;
+        this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -156,6 +166,13 @@ public class AgreementController {
             model.addAttribute("individual", new IndividualDto(client));
         }else {
             model.addAttribute("legalEntity", new LegalEntityDto(client));
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
