@@ -2,17 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63b686bf-bb91-4d31-8bad-46c43762ff8b" name="Default Changelist" comment="fixed material lang">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/AgreementCompleteController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/AgreementCompleteController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/AgreementController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/AgreementController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ApplicantController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ApplicantController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ConfirmController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ConfirmController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ForwardingController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/ForwardingController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/PerformerController.java" afterPath="$PROJECT_DIR$/cabinet/src/main/java/uz/maroqand/ecology/cabinet/controller/expertise/PerformerController.java" />
-      <change beforePath="$PROJECT_DIR$/cabinet/src/main/resources/templates/expertise/fragment/expertise.html" afterPath="$PROJECT_DIR$/cabinet/src/main/resources/templates/expertise/fragment/expertise.html" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/reg/RegUrls.java" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/constant/reg/RegUrls.java" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/RegApplicationController.java" />
-      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/about.html" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/about.html" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/home.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/printer.svg" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/images/pinfl_ru.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/images/pinfl_uz.png" />
+      <change beforePath="$PROJECT_DIR$/cabinet/src/main/resources/templates/fragments/navigation_menu.html" afterPath="$PROJECT_DIR$/cabinet/src/main/resources/templates/fragments/navigation_menu.html" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/content-1.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/content-2.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/slider1.jpg" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/slider1.jpg" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/slider2.jpg" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/slider2.jpg" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/tab-1.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/tab-2.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/tab-3.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user-1.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user-2.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user-3.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user-4.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user1.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/content/user2.jpg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/img/recycle-logo.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/scripts/main.js" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/scripts/main.js" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/styles/main.css" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/styles/main.css" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/tpl/layouts/components/search.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/tpl/layouts/main.tpl" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/static/eco_fo/tpl/pages/index.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/index.html" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/index.html" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant.html" />
+      <change beforePath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html" afterPath="$PROJECT_DIR$/ecoexpertise/src/main/resources/templates/reg/applicant_individual_fragment.html" />
     </list>
     <ignored path="$PROJECT_DIR$/ecoexpertise/target/" />
     <ignored path="$PROJECT_DIR$/rest/target/" />
@@ -74,11 +90,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccountController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AccountController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ecoexpertise/src/main/java/uz/maroqand/ecology/ecoexpertise/controller/AccountController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="472">
               <caret line="40" column="25" lean-forward="false" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="navigation_menu.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cabinet/src/main/resources/templates/fragments/navigation_menu.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="40" column="85" lean-forward="false" selection-start-line="40" selection-start-column="85" selection-end-line="40" selection-end-column="85" />
               <folding />
             </state>
           </provider>
@@ -514,7 +540,7 @@
       <workItem from="1564761879615" duration="27740000" />
       <workItem from="1564984327765" duration="17084000" />
       <workItem from="1565015713120" duration="11510000" />
-      <workItem from="1565065737527" duration="18641000" />
+      <workItem from="1565065737527" duration="18737000" />
     </task>
     <task id="LOCAL-00001" summary="default iml files">
       <created>1564432022315</created>
@@ -754,18 +780,26 @@
       <option name="project" value="LOCAL" />
       <updated>1565099539417</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="merge">
+      <created>1565099623827</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1565099623827</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="159228000" />
+    <option name="totallyTimeSpent" value="159324000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="3520" y="-4" width="1920" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51446944" sideWeight="0.5053305" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19370331" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19370331" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23853868" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -779,8 +813,8 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6041885" sideWeight="0.49733475" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33507854" sideWeight="0.4946695" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38010472" sideWeight="0.49733475" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43246073" sideWeight="0.4946695" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2620064" sideWeight="0.4921191" order="0" side_tool="false" content_ui="combo" />
@@ -841,7 +875,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="contract" />
     <MESSAGE value="dashboard" />
     <MESSAGE value="user list add lastEvent" />
     <MESSAGE value="edit offer" />
@@ -866,7 +899,8 @@
     <MESSAGE value="oked add param" />
     <MESSAGE value="fixed" />
     <MESSAGE value="fixed profile" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed profile" />
+    <MESSAGE value="merge" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1004,9 +1038,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="28" column="305" lean-forward="false" selection-start-line="28" selection-start-column="305" selection-end-line="28" selection-end-column="305" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#form#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1163,7 +1195,7 @@
         <state relative-caret-position="300">
           <caret line="149" column="116" lean-forward="false" selection-start-line="149" selection-start-column="91" selection-end-line="149" selection-end-column="116" />
           <folding>
-            <marker date="1565088526950" expanded="true" signature="13349:13355" ph="&amp;nbsp;" />
+            <marker date="1565099638767" expanded="true" signature="14678:14684" ph="&amp;nbsp;" />
           </folding>
         </state>
       </provider>
@@ -1222,14 +1254,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
           <caret line="133" column="16" lean-forward="false" selection-start-line="133" selection-start-column="16" selection-end-line="133" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cabinet/src/main/resources/templates/fragments/navigation_menu.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="40" column="85" lean-forward="false" selection-start-line="40" selection-start-column="85" selection-end-line="40" selection-end-column="85" />
           <folding />
         </state>
       </provider>
@@ -1304,6 +1328,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="472">
           <caret line="40" column="25" lean-forward="false" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cabinet/src/main/resources/templates/fragments/navigation_menu.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="40" column="85" lean-forward="false" selection-start-line="40" selection-start-column="85" selection-end-line="40" selection-end-column="85" />
           <folding />
         </state>
       </provider>
