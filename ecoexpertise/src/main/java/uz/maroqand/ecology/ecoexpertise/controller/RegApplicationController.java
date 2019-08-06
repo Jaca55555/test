@@ -358,6 +358,39 @@ public class RegApplicationController {
         return RegTemplates.RegApplicationAbout;
     }
 
+    @RequestMapping(value = RegUrls.RegApplicationClearCoordinates, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> clearCoordinates(
+            @RequestParam(name = "regApplicationId") Integer regApplicationId
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", 0);
+        if(regApplicationId == null){
+            return result;
+        }
+
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId, user.getId());
+        if(regApplication == null){
+            return result;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        if(coordinate == null){
+            return result;
+        }
+        List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+        for(CoordinateLatLong coordinateLatLong : coordinateLatLongList){
+            coordinateLatLong.setDeleted(true);
+            coordinateLatLongRepository.save(coordinateLatLong);
+        }
+        coordinate.setDeleted(true);
+        coordinateRepository.save(coordinate);
+
+        result.put("status", 1);
+        return result;
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.POST)
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,

@@ -17,8 +17,12 @@ import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.Coordinate;
+import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientAuditService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -49,8 +53,10 @@ public class ApplicantController {
     private final ClientAuditService clientAuditService;
     private final RegApplicationService regApplicationService;
     private final InvoiceService invoiceService;
+    private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
-    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService) {
+    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository) {
         this.clientService = clientService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -58,6 +64,8 @@ public class ApplicantController {
         this.clientAuditService = clientAuditService;
         this.regApplicationService = regApplicationService;
         this.invoiceService = invoiceService;
+        this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(value = ExpertiseUrls.ApplicantList)
@@ -150,6 +158,13 @@ public class ApplicantController {
                 });
             }
         }
+
+        /*Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+        }*/
 
         model.addAttribute("contractList",contractList);
         //TODO Client RegApplication.status=RegApplicationStatus.Approved

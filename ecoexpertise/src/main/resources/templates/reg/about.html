@@ -415,6 +415,7 @@
     <script th:inline="javascript">
         var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileUpload}]];
         var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDelete}]];
+        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
         $(document).ready(function () {
@@ -784,16 +785,30 @@
         }
 
         function clearCoordinates() {
-            $('#clear-coordinates-btn').prop('disabled', true);
-            $('#write-coordinates-btn').prop('disabled', false);
-            $('#open-map-btn').prop('disabled', false);
+            var form = new FormData();
+            form.append("regApplicationId", regApplicationId);
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: clearCoordinatesAjaxUrl,
+                method: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    $('#clear-coordinates-btn').prop('disabled', true);
+                    $('#write-coordinates-btn').prop('disabled', false);
+                    $('#open-map-btn').prop('disabled', false);
 
-            $('#coordinates-list').hide();
-            $('#coordinates-list').html('');
+                    $('#coordinates-list').hide();
+                    $('#coordinates-list').html('');
 
-            $('#coordinates-map-list').hide();
-            $('#coordinates-map-list').html('');
-            coordinateIndex = 1;
+                    $('#coordinates-map-list').hide();
+                    $('#coordinates-map-list').html('');
+                    coordinateIndex = 1;
+                }
+
+            });
         }
         
         function submitForm() {
