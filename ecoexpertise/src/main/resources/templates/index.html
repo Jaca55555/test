@@ -450,6 +450,7 @@
     <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
     <script th:inline="javascript">
         var apitext=JSON.parse([[${element}]]);
+        var moreText = [[#{sys_more}]];
 
         function getId(id,lang) {
             var newsData=apitext['data'][id];
@@ -486,7 +487,7 @@
                             '                   <span>' + val.descriptionUZ + '</span>\n' +
                             '               </div>\n' +
                             '           </div>' +
-                            '           <button class="learn-more" onclick="getId('+item+',\'uz\')"><span th:text="#{sys_more}"> davomi...</span></button>' +
+                            '           <button class="learn-more" onclick="getId('+item+',\'uz\')"><span>'+moreText+'</span></button>' +
                             '      </div>\n' +
                             ' </div>';
                     }
