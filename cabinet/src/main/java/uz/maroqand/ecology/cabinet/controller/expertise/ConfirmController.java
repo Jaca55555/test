@@ -124,7 +124,7 @@ public class ConfirmController {
                 regApplication.getId(),
                 client.getTin(),
                 client.getName(),
-                client.getType()!=null?helperService.getAppealType(client.getType().getId(),locale):"",
+                client.getType()!=null?helperService.getApplicantType(client.getType().getId(),locale):"",
                 client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"",
                 client.getOked()!=null?client.getOked():"",
                 client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale):"",
