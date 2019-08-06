@@ -8,7 +8,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
     <link rel="stylesheet" href="/static/eco_fo/styles/vendor.css">
+    <link rel="stylesheet" th:href="@{/static/eco_fo/styles/vendor.css}">
     <link rel="stylesheet" href="/static/eco_fo/styles/main.css">
+    <link rel="stylesheet" th:href="@{/static/eco_fo/styles/main.css}">
 </head>
 
 <body>
@@ -220,63 +222,8 @@
                 </div>
                 <div class="latest-articles-slider-wrapper">
                     <div class="latest-articles-slider">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="latest-articles-card">
-                                    <div class="header">
-                                        <div class="header-date">April 23, 2017</div>
-                                        <div class="header-info">Post Formats</div>
-                                    </div>
-                                    <div class="info">
-                                        <div class="title"><span>Recycling basics</span>
-                                        </div>
-                                        <div class="subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
-                                        </div>
-                                    </div><a href="#" class="learn-more"><span>learn more</span></a>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="latest-articles-card">
-                                    <div class="header">
-                                        <div class="header-date">April 23, 2017</div>
-                                        <div class="header-info">Post Formats</div>
-                                    </div>
-                                    <div class="info">
-                                        <div class="title"><span>Recycling basics</span>
-                                        </div>
-                                        <div class="subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
-                                        </div>
-                                    </div><a href="#" class="learn-more"><span>learn more</span></a>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="latest-articles-card">
-                                    <div class="header">
-                                        <div class="header-date">April 23, 2017</div>
-                                        <div class="header-info">Post Formats</div>
-                                    </div>
-                                    <div class="info">
-                                        <div class="title"><span>Recycling basics</span>
-                                        </div>
-                                        <div class="subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
-                                        </div>
-                                    </div><a href="#" class="learn-more"><span>learn more</span></a>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="latest-articles-card">
-                                    <div class="header">
-                                        <div class="header-date">April 23, 2017</div>
-                                        <div class="header-info">Post Formats</div>
-                                    </div>
-                                    <div class="info">
-                                        <div class="title"><span>Recycling basics</span>
-                                        </div>
-                                        <div class="subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque...</span>
-                                        </div>
-                                    </div><a href="#" class="learn-more"><span>learn more</span></a>
-                                </div>
-                            </div>
+                        <div class="swiper-wrapper" id="sliders">
+
                         </div>
                         <div class="latest-articles-button-next"></div>
                         <div class="latest-articles-button-prev"></div>
@@ -430,7 +377,7 @@
                             <div class="title"><span th:text="#{front.footer_menu_title}">MENU</span>
                             </div>
                             <ul class="footer-nav">
-                                <li><a href="#"><span th:text="#{front.menu_home}"></span>BOSH SAHIFA</a>
+                                <li><a href="#"><span th:text="#{front.menu_home}">BOSH SAHIFA</span></a>
                                 </li>
                                 <li><a href="#"><span th:text="#{front.menu_services}">XIZMATLAR</span></a>
                                 </li>
@@ -495,57 +442,59 @@
         </footer>
         <div class="scroll-to-top"></div>
     </div>
-    <!--<p id="demo"></p>-->
-    <!--<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>-->
     <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
-    <script src="/static/eco_fo/scripts/vendor.min.js"></script>
-    <script src="/static/eco_fo/scripts/main.js"></script>
-<!--<script th:inline="javascript">
-    var apitext='';
+    <script th:src="@{/static/eco_fo/scripts/vendor.min.js}"></script>
+    <script th:src="@{/static/eco_fo/scripts/main.js}"></script>
+<script th:inline="javascript">
+    var apitext=JSON.parse([[${element}]]);
+
     $(document).ready(function () {
-        // loadDoc();
-        getAjax('http://eco.gov.uz/uz/api/post/get',function (response) {
-            console.log(response);
-        })
-    });
-
-    function getAjax(url, success) {
-        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        xhr.open('GET', url);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState>3 && xhr.status==200) success(xhr.responseText);
-        };
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.send();
-        return xhr;
-    }
-
-    function loadDoc() {
-        let xhr = new XMLHttpRequest();
-
-        xhr.open('GET', 'http://eco.gov.uz/uz/api/post/get');
-
-        xhr.responseType = 'json';
-
-        xhr.send();
-
-// the response is {"message": "Hello, world!"}
-        xhr.onload = function() {
-            let responseObj = xhr.response;
-            alert(responseObj.message); // Hello, world!
-        };
-
-        /*var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.status == 200) {
-                console.log(this.responseText);
+        console.log(apitext['status']);
+        console.log(apitext['data']);
+        if (apitext['status']){
+            var html='';
+            /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
+            $.each(apitext['data'],function (item,val) {
+                console.log("item= " + item + " val=" + val);
+            });
+            if (val.titleUZ!=''){
+                html+='<div class="swiper-slide">' +
+                    '       <div class="latest-articles-card">' +
+                    '           <div class="header">' +
+                    '                 <div class="header-date">'+val.created_at+'</div>' +
+                    '           </div>' +
+                    '           <div class="info">' +
+                    '               <div class="title"><span>'+val.titleUZ+'</span></div>' +
+                    '               <div class="subtitle">' +
+                    '                   <span>'+val.descriptionUZ.substr(0,val.descriptionUZ.length>200?200:val.descriptionUZ.length)+'</span>\n' +
+                    '               </div>\n' +
+                    '           </div>' +
+                    '           <a href="/news?title='+val.titleUZ+'&create='+val.created_at+'&content='+val.contentUZ+'&image='+val.image+'" class="learn-more"><span> davomi...</span></a>' +
+                    '      </div>\n' +
+                    ' </div>';
             }
-        };
-        xhttp.open("POST", "http://eco.gov.uz/uz/api/post/get", true);
-        xhttp.send();*/
-    }
+            /*else{
+                html+='<div class="swiper-slide">' +
+                    '       <div class="latest-articles-card">' +
+                    '           <div class="header">' +
+                    '                 <div class="header-date">'+val.created_at+'</div>' +
+                    '           </div>' +
+                    '           <div class="info">' +
+                    '               <div class="title"><span>'+val.titleRU+'</span></div>' +
+                    '               <div class="subtitle">' +
+                    '                   <span>'+val.descriptionRU.substr(0,val.descriptionRU.length>200?200:val.descriptionRU.length)+'</span>\n' +
+                    '               </div>\n' +
+                    '           </div>' +
+                    '           <a href="/news?title='+val.titleRU+'&create='+val.created_at+'&content='+val.contentRU+'&image='+val.image+'" class="learn-more"><span> davomi...</span></a>' +
+                    '      </div>\n' +
+                    ' </div>';
+            }*/
+            console.log(html);
+           $('#sliders').append(html)
+        }
+    })
 
-</script>-->
+</script>
 </body>
 
 </html>
