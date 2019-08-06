@@ -26,11 +26,11 @@
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM,EXPERTISE_FORWARDING,EXPERTISE_PERFORMER,EXPERTISE_AGREEMENT,EXPERTISE_AGREEMENT_COMPLETE')">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-email-plus-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-file-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-pen"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-lead-pencil"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
 
 
@@ -52,7 +52,7 @@
                     <label th:text="#{mgmt_control}"></label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('APPEAL_ADMIN')"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-email-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-map-marker"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-map-pin"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
                 <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
