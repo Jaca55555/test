@@ -10668,3 +10668,8 @@ div .dt-buttons{
   padding: 5px 5px;
   vertical-align: middle;
 }
+
+.badge {
+  padding: 8px 15px !important;
+  width: 100% !important;
+}

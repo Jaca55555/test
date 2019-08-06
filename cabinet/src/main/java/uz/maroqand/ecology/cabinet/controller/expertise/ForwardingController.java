@@ -189,7 +189,7 @@ public class ForwardingController {
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Performer,comment,user);
 
-        regApplication.setStatus(RegApplicationStatus.New);
+        regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setPerformerId(performerId);
         regApplication.setPerformerLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);

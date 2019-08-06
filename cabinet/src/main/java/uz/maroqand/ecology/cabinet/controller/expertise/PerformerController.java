@@ -201,7 +201,7 @@ public class PerformerController {
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Agreement,"",user);
         regApplicationLogCreate = regApplicationLogService.update(regApplicationLogCreate,LogStatus.Initial,"",user);
 
-        regApplication.setStatus(RegApplicationStatus.New);
+        regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
 

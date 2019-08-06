@@ -184,7 +184,7 @@ public class AgreementController {
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
 
-        regApplication.setStatus(RegApplicationStatus.New);
+        regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
 

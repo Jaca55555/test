@@ -127,7 +127,7 @@ public class EmployeeController {
                 userPermissionCount.put(regApplication.getPerformerId()+"_0",1);
             }
 
-            if(regApplication.getStatus()!=null && regApplication.getStatus().equals(RegApplicationStatus.New)){
+            if(regApplication.getStatus()!=null && regApplication.getStatus().equals(RegApplicationStatus.Process)){
                 if(userPermissionCount.containsKey(regApplication.getPerformerId().toString()+"_1")){
                     userPermissionCount.put(regApplication.getPerformerId()+"_1",userPermissionCount.get(regApplication.getPerformerId().toString()+"_1")+1);
                 }else {
@@ -195,7 +195,7 @@ public class EmployeeController {
         Date deedlineThree = calendar.getTime();
         if (count>0){
             for (RegApplication regApplication: regApplicationList) {
-                if (regApplication.getStatus()!=null && regApplication.getStatus().equals(RegApplicationStatus.New))inProgress++;
+                if (regApplication.getStatus()!=null && regApplication.getStatus().equals(RegApplicationStatus.Process))inProgress++;
                 if (regApplication.getDeadlineDate()!=null && (regApplication.getDeadlineDate().after(deedlineThree) && regApplication.getDeadlineDate().before(new Date())))deelineNow++;
                 if (regApplication.getDeadlineDate()!=null && regApplication.getDeadlineDate().before(new Date()))deeline++;
             }
