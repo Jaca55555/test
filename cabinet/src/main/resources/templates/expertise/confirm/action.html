@@ -9,7 +9,7 @@
             <h5 th:text="#{sys_reg_application.result}"></h5>
        </div>
 
-       <form method="post" action="" id="form">
+       <form method="post" action="" id="form" data-parsley-validate="">
 
            <div class="form-group row">
                <div class="col-md-3 text-right">
@@ -17,11 +17,11 @@
                </div>
                <div class="col-md-6">
                    <div class="custom-control custom-radio">
-                       <input type="radio" id="budgetFalse" name="budget" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" th:disabled="${regApplication.budget!=null}" >
+                       <input type="radio" id="budgetFalse" name="budget" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" th:disabled="${regApplication.budget!=null}" required="required" >
                        <label class="custom-control-label" for="budgetFalse" th:text="#{sys_budget.false}"> </label>
                    </div>
                    <div class="custom-control custom-radio">
-                       <input type="radio" id="budgetTrue" name="budget" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" th:disabled="${regApplication.budget!=null}" >
+                       <input type="radio" id="budgetTrue" name="budget" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" th:disabled="${regApplication.budget!=null}" required="required" >
                        <label class="custom-control-label" for="budgetTrue" th:text="#{sys_budget.true}"> </label>
                    </div>
                </div>

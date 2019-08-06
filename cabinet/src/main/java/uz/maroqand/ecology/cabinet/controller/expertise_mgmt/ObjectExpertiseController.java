@@ -21,7 +21,6 @@ import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
-import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.lang.reflect.Type;
@@ -36,16 +35,18 @@ public class ObjectExpertiseController {
     private final TableHistoryService tableHistoryService;
     private final UserService userService;
     private final ObjectMapper objectMapper;
-    private final UserAdditionalService userAdditionalService;
-
 
     @Autowired
-    public ObjectExpertiseController(ObjectExpertiseService objectExpertiseService, TableHistoryService tableHistoryService, UserService userService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
+    public ObjectExpertiseController(
+            ObjectExpertiseService objectExpertiseService,
+            TableHistoryService tableHistoryService,
+            UserService userService,
+            ObjectMapper objectMapper
+    ) {
         this.objectExpertiseService = objectExpertiseService;
         this.tableHistoryService = tableHistoryService;
         this.userService = userService;
         this.objectMapper = objectMapper;
-        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseList,method = RequestMethod.GET)
@@ -63,7 +64,6 @@ public class ObjectExpertiseController {
             @RequestParam(name = "nameRu",required = false) String nameRu,
             Pageable pageable
     ){
-        System.out.println("keldi");
         name = StringUtils.trimToNull(name);
         nameOz = StringUtils.trimToNull(nameOz);
         nameEn = StringUtils.trimToNull(nameEn);
@@ -75,7 +75,6 @@ public class ObjectExpertiseController {
         result.put("recordsFiltered", objectExpertisePage.getTotalElements()); //Filtered elements
 
         List<ObjectExpertise> objectExpertiseList = objectExpertisePage.getContent();
-
         List<Object[]> convenientForJSONArray = new ArrayList<>(objectExpertiseList.size());
 
         for(ObjectExpertise objectExpertise: objectExpertiseList) {
@@ -88,7 +87,6 @@ public class ObjectExpertiseController {
             });
         }
         result.put("data", convenientForJSONArray);
-
         return result;
     }
 
@@ -99,7 +97,6 @@ public class ObjectExpertiseController {
         model.addAttribute("objectExpertise",objectExpertise);
         model.addAttribute("action_url",ExpertiseMgmtUrls.ObjectExpertiseCreate);
         model.addAttribute("back_url",ExpertiseMgmtUrls.ObjectExpertiseList);
-
         return ExpertiseMgmtTemplates.ObjectExpertiseNew;
     }
 

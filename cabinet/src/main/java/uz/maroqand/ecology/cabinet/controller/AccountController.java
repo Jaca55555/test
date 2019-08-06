@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.ecoexpertise.controller;
+package uz.maroqand.ecology.cabinet.controller;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;

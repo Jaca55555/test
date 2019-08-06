@@ -129,7 +129,7 @@ public class ConfirmController {
                 client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale):"",
                 client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale):"",
                 regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
-                regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getConfirmName():"",
+                regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
                 regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getId():""
             });
         }

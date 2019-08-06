@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,6 +34,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    @Cacheable(value = "getActivityList", key = "{#categories}",condition="#categories!= null",unless="#result == ''")
     public List<Activity> getByInCategory(List<Category> categories){
         return activityRepository.findByCategoryIn(categories);
     }

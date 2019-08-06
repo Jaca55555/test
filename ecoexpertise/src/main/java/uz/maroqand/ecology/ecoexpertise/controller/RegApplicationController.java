@@ -480,7 +480,7 @@ public class RegApplicationController {
         Activity activity = activityService.getById(activityId);
         List<Requirement> requirementList = requirementService.getRequirementMaterials(objectId,activity.getCategory());
 
-        result.put("category", helperService.getCategory(activity.getId(),locale));
+        result.put("category", helperService.getCategory(activity.getCategory().getId(),locale));
         result.put("requirementList", requirementList);
         return result;
     }

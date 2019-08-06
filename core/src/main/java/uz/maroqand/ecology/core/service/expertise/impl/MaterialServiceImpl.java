@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    @Cacheable(value = "getMaterialById", key = "{#id}",condition="#id!= null",unless="#result == ''")
     public Material getById(Integer id){
         return materialRepository.getOne(id);
     }
@@ -42,6 +44,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    @Cacheable(value = "getMaterialList")
     public List<Material> getList() {
         return materialRepository.findAll();
     }
