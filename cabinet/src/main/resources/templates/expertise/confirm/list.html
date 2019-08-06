@@ -56,10 +56,10 @@
                                                     <label for="name" class="control-label" th:text="#{sys_legal_entity_name}">Наименование предприятия</label>
                                                     <input type="text" class="form-control" id="name">
                                                 </div>
-                                                <div class="form-group col-sm-2">
+                                                <!--<div class="form-group col-sm-2">
                                                     <label for="contractNumber" class="control-label" th:text="#{sys_contract_number}">Номер договора</label>
                                                     <input type="text" class="form-control" id="contractNumber">
-                                                </div>
+                                                </div>-->
                                                 <div class="form-group col-sm-2">
                                                     <label for="applicationId" class="control-label" th:text="#{reg_application.number}">№ id</label>
                                                     <input type="text" class="form-control" id="applicationId">
@@ -72,7 +72,7 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group col-sm-2" >
+                                                <div class="form-group col-sm-4" >
                                                     <label for="dateBegin" class="control-label" th:text="#{reg_application_log.createdAt}"></label>
                                                     <div class="row">
                                                         <div class="col-sm-6">
@@ -115,7 +115,8 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group col-sm-12 text-center">
+                                                <div class="form-group col-sm-2 text-right">
+                                                    <label class="control-label">&nbsp;</label></br>
                                                     <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
                                                         <i class="feather icon-search mr-1"></i>
                                                         <span th:text="#{sys_search}">Search</span>
@@ -139,6 +140,7 @@
                                                     <th th:text="#{reg_application.number}"></th>
                                                     <th th:text="#{sys_tin}"></th>
                                                     <th th:text="#{sys_legal_entity_name}"></th>
+                                                    <th th:text="#{reg_application.type}"></th>
                                                     <th th:text="#{sys_opf}"></th>
                                                     <th th:text="#{sys_oked}"></th>
                                                     <th th:text="#{sys_region}"></th>
@@ -193,10 +195,10 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[9]===0)statusLabel += '<span class="badge badge-secondary">'+row[8]+'</span>';
-        if (row[9]===1)statusLabel += '<span class="badge badge-warning">'+row[8]+'</span>';
-        if (row[9]===2)statusLabel +='<span class="badge badge-success">'+row[8]+'</span>';
-        if (row[9]===3)statusLabel +='<span class="badge badge-danger">'+row[8]+'</span>';
+        if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===1)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
+        if (row[10]===2)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===3)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
         return statusLabel;
     }
 
@@ -223,7 +225,7 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
                 dataToSend.tin = $('#tin').val();
                 dataToSend.name = $('#name').val();
-                dataToSend.contractNumber = $('#contractNumber').val();
+                dataToSend.contractNumber = "";
                 dataToSend.applicationId = $('#applicationId').val();
                 dataToSend.regionId = $('#regionId').val();
                 dataToSend.subRegionId = $('#subRegionId').val();
@@ -250,13 +252,14 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'tin'},
                 {data: 2, name: 'name'},
-                {data: 3, name: 'opf'},
-                {data: 4, name: 'oked'},
-                {data: 5, name: 'region'},
-                {data: 6, name: 'subregion'},
-                {data: 7, name: 'createdAt'},
+                {data: 3, name: 'type'},
+                {data: 4, name: 'opf'},
+                {data: 5, name: 'oked'},
+                {data: 6, name: 'region'},
+                {data: 7, name: 'subregion'},
+                {data: 8, name: 'createdAt'},
                 {
-                    data: 8, name: 'status',
+                    data: 9, name: 'status',
                     render:renderStatusColumn, orderable:false
                 },
                 {render: renderActionsColumn, orderable: false}

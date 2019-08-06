@@ -20,23 +20,25 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label th:text="#{sys_control_panel}">Navigation</label>
                 </li>
-                <li class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-home-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
 
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM,EXPERTISE_FORWARDING,EXPERTISE_PERFORMER,EXPERTISE_AGREEMENT,EXPERTISE_AGREEMENT_COMPLETE')">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-email-plus-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-file-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-pen"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-lead-pencil"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
 
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER,EMPLOYEE_CONTROL')">
                     <label th:text="#{sys_expertise_registry}"></label>
                 </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER')"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-format-list-checkbox"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER')"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
 
@@ -45,34 +47,36 @@
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('BILLING','PAYMENT_FILE')">
                     <label th:text="#{sys_menu.billing}"></label>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('BILLING')"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE')"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('BILLING')"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-credit-card"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE')"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-cash-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
 
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('ADMIN')">
                     <label th:text="#{mgmt_control}"></label>
                 </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('APPEAL_ADMIN')"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-email-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-map-marker"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('APPEAL_ADMIN')"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-menu"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
 
                 <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
-                            <i class="feather icon-file"></i>
+                            <i class="mdi mdi-medical-bag"></i>
                         </span>
                         <span class="pcoded-mtext" th:text="#{mgmt_admin_panel}"></span></a>
                     <ul class="pcoded-submenu" style="display: none;">
-                        <li class=""><a href="/mgmt/translations"  th:text="#{mgmt_translations}"> </a></li>
-                        <li class=""><a href="/mgmt/expertise/object_expertise/list"  th:text="#{mntr_objectExpertise_list}"> </a></li>
-                        <li class=""><a href="/mgmt/expertise/activity/list" th:text="#{mntr_activity_list}"> </a></li>
-                        <li class=""><a href="/mgmt/expertise/material/list" th:text="#{sys_menu.materialList}"> </a></li>
-                        <li class=""><a href="/mgmt/expertise/expertise_requirement/list"  th:text="#{mntr_expertise_requirement_list}"></a></li>
-                        <li class=""><a href="/mgmt/expertise/offer/list"  th:text="#{sys_menu.offerList}"></a></li>
-                        <li class=""><a href="/mgmt/roles/list"  th:text="#{sys_menu.roleList}"></a></li>
-                        <li class=""><a href="/mgmt/users/list"  th:text="#{sys_menu.usersList}"></a></li>
-                        <li class=""><a href="/mgmt/position/list"  th:text="#{sys_menu.positionList}"></a></li>
-                        <li class=""><a href="/mgmt/department/list"  th:text="#{sys_menu.departmentList}"></a></li>
-                        <li class=""><a href="/mgmt/min_wage"  th:text="#{mgmt_min_wage}"></a></li>
+                        <li class=""><a href="/mgmt/translations"><i class="mdi mdi-globe-model mr-2"></i><span th:text="#{mgmt_translations}"></span></a></li>
+                        <li class=""><a href="/mgmt/expertise/object_expertise/list"><i class="mdi mdi-grid-large mr-2"></i><span th:text="#{mntr_objectExpertise_list}"></span></a></li>
+                        <li class=""><a href="/mgmt/expertise/activity/list"><i class="mdi mdi-track-light mr-2"></i><span th:text="#{mntr_activity_list}"></span></a></li>
+                        <li class=""><a href="/mgmt/expertise/material/list"><i class="mdi mdi-server mr-2"></i><span th:text="#{sys_menu.materialList}"></span></a></li>
+                        <li class=""><a href="/mgmt/expertise/expertise_requirement/list"><i class="mdi mdi-book-open-page-variant mr-2"></i><span th:text="#{mntr_expertise_requirement_list}"></span></a></li>
+                        <li class=""><a href="/mgmt/expertise/offer/list"><i class="mdi mdi-file-document-outline mr-2"></i><span th:text="#{sys_menu.offerList}"></span></a></li>
+                        <li class=""><a href="/mgmt/roles/list"><i class="feather icon-user-check mr-2"></i><span th:text="#{sys_menu.roleList}"></span></a></li>
+                        <li class=""><a href="/mgmt/users/list"><i class="feather icon-user mr-2"></i><span th:text="#{sys_menu.usersList}"></span></a></li>
+                        <li class=""><a href="/mgmt/position/list"><i class="mdi mdi-account-card-details mr-2"></i><span th:text="#{sys_menu.positionList}"></span></a></li>
+                        <li class=""><a href="/mgmt/department/list"><i class="mdi mdi-office-building mr-2"></i><span th:text="#{sys_menu.departmentList}"></span></a></li>
+                        <li class=""><a href="/mgmt/min_wage"><i class="mdi mdi-currency-usd mr-2"></i><span th:text="#{mgmt_min_wage}"></span></a></li>
                     </ul>
                 </li>
 

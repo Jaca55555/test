@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>News</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+    <link rel="stylesheet" href="/static/eco_fo/styles/vendor.css">
+    <link rel="stylesheet" href="/static/eco_fo/styles/main.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-top-wrapper">
+                <div class="container">
+                    <div class="header-top">
+                        <div class="header-top-left">
+                            <div class="contact-number"><span th:text="#{front_phone_for_info}">+99871) 207-07-70 (1001</span></div>
+                            <div class="flex-center media-w-100">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="lang-wrapper">
+                                    <div class="current-lang">Uzb</div>
+                                    <div class="lang-list"><a class="lang-item" href="#">Pyc</a>  <a class="lang-item" href="#">Eng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-top-right">
+                            <ul class="header-top-nav-list">
+                                <li><a href="/login"><span th:text="#{front.one_id}">One ID orqali kirish</span></a>
+                                </li>
+                                <li><a href="/login"><span th:text="#{front.eds}">ERI orqali kirish</span></a>
+                                </li>
+                            </ul>
+                            <form action="">
+                                <div class="form-block">
+                                    <input type="text" th:placeholder="#{front.placeholder}">
+                                    <button></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom-wrapper">
+                <div class="container">
+                    <div class="menu-wrapper">
+                        <a href="#" class="logo">
+                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
+                            <div class="info">
+                                <span th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            </div>
+                        </a>
+                        <ul class="menu-nav">
+                            <li><a href="/" class="active"><span th:text="#{front.menu_home}">Bosh sahifa</span></a>
+                            </li>
+                            <li><a href="/"><span th:text="#{front.menu_services}">Xizmatlar</span></a>
+                            </li>
+                            <li><a href="/"><span th:text="#{front.menu_news}">Yangiliklar</span></a>
+                            </li>
+                            <li><a href="/"><span th:text="#{front.menu_statistic}">Statistika</span></a>
+                            </li>
+                            <li><a href="/"><span th:text="#{front.menu_connect}">Bog’lanishlar</span></a>
+                            </li>
+                        </ul>
+                        <div class="menu-btn"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="news-wrapper">
+            <div class="container">
+                <div class="news-header">
+                    <ul class="breadcrumb">
+                        <li><a href="/"><span th:text="#{front.menu_home}">Главная</span></a>
+                        </li>
+                        <li><a href="#"><span th:text="${title}">waste collection today</span></a>
+                        </li>
+                    </ul>
+                    <a href="#" class="print"></a>
+                </div>
+                <div class="news-content">
+                    <div class="news-img-block">
+                        <img th:src="${img_source}" alt="">
+                    </div>
+                    <div class="news-info">
+                        <div class="news-date">
+                            <div class="news-item-color-green"><span th:text="${create}">MARCH 13, 2017</span>
+                            </div>
+                            <!--<div class="news-item-default"><span>IN RECYCLING</span></div>-->
+                        </div>
+                        <div class="news-title"><span th:text="${title}">Waste Collection Today</span></div>
+                        <!--<div class="news-subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque elit tortor, ullamcorper quis ultrices vitae, mattis non est. Aliquam erat volutpat.</span></div>-->
+                        <div class="news-description"><span th:utext="${newsText}">Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="footer-center">
+                <div class="container">
+                    <div class="footer-center-list">
+                        <div class="footer-center-item">
+                            <div class="img-block">
+                                <img src="/static/eco_fo/img/logo.png" alt="">
+                            </div>
+                            <div class="site-title"><span th:text="#{front.footer_logo_title}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            </div>
+                            <div class="link-site"><a href="http://eco.gov.uz"><span th:text="#{front.footer_logo_info}">Veb saytga o'tish</span></a>
+                            </div>
+                        </div>
+                        <div class="footer-center-item">
+                            <div class="title"><span th:text="#{front.footer_menu_title}">MENU</span>
+                            </div>
+                            <ul class="footer-nav">
+                                <li><a href="/"><span th:text="#{front.menu_home}">BOSH SAHIFA</span></a>
+                                </li>
+                                <li><a href="/"><span th:text="#{front.menu_services}">XIZMATLAR</span></a>
+                                </li>
+                                <li><a href="/"><span th:text="#{front.menu_news}">YANGILIKLAR</span></a>
+                                </li>
+                                <li><a href="/"><span th:text="#{front.menu_statistic}">STATISTIKA</span></a>
+                                </li>
+                                <li><a href="/"><span th:text="#{front.menu_connect}">BOG’LANISH</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-center-item">
+                            <div class="title"><span th:text="#{front.footer_address_title}">“Bog’lanish”</span>
+                            </div>
+                            <div class="address icon">
+                                <div class="address-title"><span th:text="#{front.footer_address_subtitle}">Manzil:</span>
+                                </div>
+                                <div class="address-subtitle"><span th:text="#{front.footer_address}">100047, Toshkent shahar, Yashnоbod tumani, To'y-tepa ko'chasi 2A uy</span>
+                                </div>
+                            </div>
+                            <div class="phone icon">
+                                <div class="item"><span th:text="#{front.footer_phone}">(99871) 207-07-70 (ichki: 1001#),</span>
+                                </div>
+                                <div class="item"><span th:text="#{front.footer_phone}">(99871) 207-07-70 (ichki: 5015#)</span>
+                                </div>
+                            </div>
+                            <div class="email icon">
+                                <div class="item">info@uznature.uz</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="footer-bottom-wrapper">
+                        <a href="#" class="logo">
+                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
+                            <div class="info"><span th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            </div>
+                        </a>
+                        <ul class="social-list">
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="scroll-to-top"></div>
+    </div>
+    <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
+    <script src="/static/eco_fo/scripts/vendor.min.js"></script>
+    <script src="/static/eco_fo/scripts/main.js"></script>
+</body>
+
+</html>
