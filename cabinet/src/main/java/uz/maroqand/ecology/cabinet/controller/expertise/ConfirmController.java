@@ -22,11 +22,11 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Comment;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -58,6 +58,8 @@ public class ConfirmController {
     private final FileService fileService;
     private final RegApplicationLogService regApplicationLogService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
     @Autowired
     public ConfirmController(
@@ -70,7 +72,9 @@ public class ConfirmController {
             HelperService helperService,
             FileService fileService,
             RegApplicationLogService regApplicationLogService,
-            ProjectDeveloperService projectDeveloperService
+            ProjectDeveloperService projectDeveloperService,
+            CoordinateRepository coordinateRepository,
+            CoordinateLatLongRepository coordinateLatLongRepository
     ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
@@ -83,6 +87,8 @@ public class ConfirmController {
         this.fileService = fileService;
         this.regApplicationLogService = regApplicationLogService;
         this.projectDeveloperService = projectDeveloperService;
+        this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -122,13 +128,13 @@ public class ConfirmController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             convenientForJSONArray.add(new Object[]{
                 regApplication.getId(),
-                client.getTin(),
-                client.getName(),
-                client.getType()!=null?helperService.getApplicantType(client.getType().getId(),locale):"",
-                client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"",
-                client.getOked()!=null?client.getOked():"",
-                client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale):"",
-                client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale):"",
+                client != null ? client.getTin() : "",
+                client != null ? client.getName() : "",
+                client != null ? helperService.getApplicantType(client.getType().getId(),locale):"",
+                client != null ? client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"" : "",
+                client != null ? client.getOked() : "",
+                client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
+                client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
                 regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
                 regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getId():""
@@ -162,6 +168,13 @@ public class ConfirmController {
 
         Comment comment = commentService.getByRegApplicationId(regApplication.getId());
         model.addAttribute("comment",comment!=null?comment:new Comment());
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+        }
 
         model.addAttribute("applicant",client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));

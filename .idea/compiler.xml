@@ -13,12 +13,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cabinet" target="1.8" />
-      <module name="core" target="1.8" />
       <module name="ecoekspertiza" target="1.5" />
-      <module name="ecoexpertise" target="1.8" />
       <module name="ecology" target="1.8" />
-      <module name="rest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

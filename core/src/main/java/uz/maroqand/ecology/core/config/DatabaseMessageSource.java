@@ -50,7 +50,7 @@ public class DatabaseMessageSource extends AbstractMessageSource {
         if(translation!=null) {
             return translation.getNameTranslation(locale);
         }
-        return "";
+        return tag;
     }
 
 }

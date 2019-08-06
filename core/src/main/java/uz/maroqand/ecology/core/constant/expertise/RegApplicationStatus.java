@@ -12,11 +12,15 @@ import java.util.Map;
  */
 public enum RegApplicationStatus {
 
-    Initial(0,"sys_regApplication.statusInitial","label label-secondary"), //ispolnitel  natijani kiritishni boshlagan
-    New(1,"sys_regApplication.newSuccess","label label-info"), //ispolnitel natijani kiritgandan
-    Revision(2,"sys_regApplication.statusError","label label-danger"), //dorabotka, qayta ko'rib chiqish
-    Approved(3,"sys_regApplication.statusSuccess","label label-success"), //rais tasdiqlasa
-    NotConfirmed(4,"sys_regApplication.statusError","label label-danger"); //rais rad javobi bersa
+    Initial(0,"sys_regApplication.statusInitial","badge badge-secondary"), //ispolnitel  natijani kiritishni boshlagan
+    CheckSent(1,"sys_regApplication.newSuccess","badge badge-info"), //ispolnitel natijani kiritgandan
+    CheckConfirmed(2,"sys_regApplication.newSuccess","badge badge-success"), //ispolnitel natijani kiritgandan
+    CheckNotConfirmed(3,"sys_regApplication.newSuccess","badge badge-danger"), //ispolnitel natijani kiritgandan
+
+    Process(4,"sys_regApplication.newProcess","badge badge-info"), //ispolnitel natijani kiritgandan
+    Revision(5,"sys_regApplication.statusRevision","badge badge-warning"), //dorabotka, qayta ko'rib chiqish
+    Approved(6,"sys_regApplication.statusApproved","badge badge-success"), //ispolnitel tasdiqlash yozsa va rais tasdiqlasa
+    NotConfirmed(7,"sys_regApplication.statusNotConfirmed","badge badge-danger"); //ispolnitel rad javobi yozsa va rais tasdiqlasa
 
     private Integer id;
     private String name;

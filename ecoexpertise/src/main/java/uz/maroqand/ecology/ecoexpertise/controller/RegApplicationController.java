@@ -325,16 +325,23 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        if (regApplication.getConfirmLogId()!=null){
+        /*if (regApplication.getConfirmLogId()!=null){
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             if(regApplicationLog.getStatus()!=LogStatus.Denied){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
                 return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
             }
-        }
+        }*/
 
         if (regApplication.getInvoiceId()!=null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
         ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
@@ -349,6 +356,39 @@ public class RegApplicationController {
         model.addAttribute("back_url", RegUrls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return RegTemplates.RegApplicationAbout;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationClearCoordinates, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> clearCoordinates(
+            @RequestParam(name = "regApplicationId") Integer regApplicationId
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", 0);
+        if(regApplicationId == null){
+            return result;
+        }
+
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId, user.getId());
+        if(regApplication == null){
+            return result;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        if(coordinate == null){
+            return result;
+        }
+        List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+        for(CoordinateLatLong coordinateLatLong : coordinateLatLongList){
+            coordinateLatLong.setDeleted(true);
+            coordinateLatLongRepository.save(coordinateLatLong);
+        }
+        coordinate.setDeleted(true);
+        coordinateRepository.save(coordinate);
+
+        result.put("status", 1);
+        return result;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.POST)
