@@ -24,9 +24,13 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <div class="input-group">
-                    <input class="form-control col-md-4 mr-3" required="" id="passportSerial" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-type="alphanum" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA">
-                    <input class="form-control col-md-8" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001">
+                <div class="input-group" style="background: #ffffff">
+                    <input class="form-control col-md-4 mr-3" required="" id="passportSerial" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-type="alphanum" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA" data-parsley-errors-container="#passportSerialError">
+                    <input class="form-control col-md-8" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001" data-parsley-errors-container="#passportNumberError">
+                </div>
+                <div class="row">
+                    <div class="col-md-4" id="passportSerialError"></div>
+                    <div class="col-md-8" id="passportNumberError"></div>
                 </div>
             </div>
         </div>

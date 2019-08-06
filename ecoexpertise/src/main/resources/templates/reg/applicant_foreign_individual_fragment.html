@@ -23,9 +23,13 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <div class="input-group">
-                    <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA">
-                    <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498">
+                <div class="input-group" style="background: #ffffff">
+                    <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA" data-parsley-errors-container="#foreignPassportSerialError">
+                    <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498" data-parsley-errors-container="#foreignPassportNumberError">
+                </div>
+                <div class="row">
+                    <div class="col-md-4" id="foreignPassportSerialError"></div>
+                    <div class="col-md-8" id="foreignPassportNumberError"></div>
                 </div>
             </div>
         </div>
@@ -65,10 +69,11 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="foreignCountryId" name="foreignCountryId" >
+                <select class="form-control" required="" id="foreignCountryId" name="foreignCountryId" data-parsley-errors-container="#foreignCountryError" >
                     <option value="" th:text="#{sys_select}"></option>
                     <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.getNameTranslation(#locale)}" th:selected="${foreignIndividual.foreignCountryId==country.id}"></option>
                 </select>
+                <div id="foreignCountryError"></div>
             </div>
         </div>
 
