@@ -451,49 +451,49 @@
     $(document).ready(function () {
         console.log(apitext['status']);
         console.log(apitext['data']);
-        if (apitext['status']){
-            var html='';
-            /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
-            $.each(apitext['data'],function (item,val) {
-                console.log("item= " + item + " val=" + val);
-            });
-            if (val.titleUZ!=''){
-                html+='<div class="swiper-slide">' +
-                    '       <div class="latest-articles-card">' +
-                    '           <div class="header">' +
-                    '                 <div class="header-date">'+val.created_at+'</div>' +
-                    '           </div>' +
-                    '           <div class="info">' +
-                    '               <div class="title"><span>'+val.titleUZ+'</span></div>' +
-                    '               <div class="subtitle">' +
-                    '                   <span>'+val.descriptionUZ.substr(0,val.descriptionUZ.length>200?200:val.descriptionUZ.length)+'</span>\n' +
-                    '               </div>\n' +
-                    '           </div>' +
-                    '           <a href="/news?title='+val.titleUZ+'&create='+val.created_at+'&content='+val.contentUZ+'&image='+val.image+'" class="learn-more"><span> davomi...</span></a>' +
-                    '      </div>\n' +
-                    ' </div>';
-            }
-            /*else{
-                html+='<div class="swiper-slide">' +
-                    '       <div class="latest-articles-card">' +
-                    '           <div class="header">' +
-                    '                 <div class="header-date">'+val.created_at+'</div>' +
-                    '           </div>' +
-                    '           <div class="info">' +
-                    '               <div class="title"><span>'+val.titleRU+'</span></div>' +
-                    '               <div class="subtitle">' +
-                    '                   <span>'+val.descriptionRU.substr(0,val.descriptionRU.length>200?200:val.descriptionRU.length)+'</span>\n' +
-                    '               </div>\n' +
-                    '           </div>' +
-                    '           <a href="/news?title='+val.titleRU+'&create='+val.created_at+'&content='+val.contentRU+'&image='+val.image+'" class="learn-more"><span> davomi...</span></a>' +
-                    '      </div>\n' +
-                    ' </div>';
-            }*/
-            console.log(html);
-           $('#sliders').append(html)
-        }
-    })
 
+        /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
+        if (apitext['status']) {
+            var html = '';
+            $.each(apitext['data'], function (item, val) {
+                console.log("item= " + item + " val=" + val);
+                if (val.titleUZ != '') {
+                    html += '<div class="swiper-slide">' +
+                        '       <div class="latest-articles-card">' +
+                        '           <div class="header">' +
+                        '                 <div class="header-date">' + val.created_at + '</div>' +
+                        '           </div>' +
+                        '           <div class="info">' +
+                        '               <div class="title"><span>' + val.titleUZ + '</span></div>' +
+                        '               <div class="subtitle">' +
+                        '                   <span>' + val.descriptionUZ.substr(0, val.descriptionUZ.length > 200 ? 200 : val.descriptionUZ.length) + '</span>\n' +
+                        '               </div>\n' +
+                        '           </div>' +
+                        '           <a href="/news?title=' + val.titleUZ + '&create=' + val.created_at + '&content=' + val.contentUZ + '&image=' + val.image + '" class="learn-more"><span> davomi...</span></a>' +
+                        '      </div>\n' +
+                        ' </div>';
+                }
+                /*else{
+        html+='<div class="swiper-slide">' +
+            '       <div class="latest-articles-card">' +
+            '           <div class="header">' +
+            '                 <div class="header-date">'+val.created_at+'</div>' +
+            '           </div>' +
+            '           <div class="info">' +
+            '               <div class="title"><span>'+val.titleRU+'</span></div>' +
+            '               <div class="subtitle">' +
+            '                   <span>'+val.descriptionRU.substr(0,val.descriptionRU.length>200?200:val.descriptionRU.length)+'</span>\n' +
+            '               </div>\n' +
+            '           </div>' +
+            '           <a href="/news?title='+val.titleRU+'&create='+val.created_at+'&content='+val.contentRU+'&image='+val.image+'" class="learn-more"><span> davomi...</span></a>' +
+            '      </div>\n' +
+            ' </div>';
+    }*/
+            });
+            console.log(html);
+            $('#sliders').append(html);
+        }
+    });
 </script>
 </body>
 
