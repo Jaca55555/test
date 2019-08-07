@@ -21,15 +21,15 @@ public class GNKSoato {
     private Integer id;
 
     @Column(name = "soato_id")
-    private Long soatoId;
+    private Integer soatoId;
 
     @Column(name = "gnk_soato_id")
     private Integer gnkSoatoId;
 
     @Column(name = "soato_name")
-    private Integer soatoName;
+    private String soatoName;
 
     @Column(name = "gnk_soato_name")
-    private Integer gnkSoatoName;
+    private String gnkSoatoName;
 
 }

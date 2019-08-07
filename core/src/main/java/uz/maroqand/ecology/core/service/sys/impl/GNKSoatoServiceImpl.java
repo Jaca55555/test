@@ -22,8 +22,9 @@ public class GNKSoatoServiceImpl implements GNKSoatoService {
         this.gNKSoatoRepository = gNKSoatoRepository;
     }
 
-    public GNKSoato getSoato(Integer gnkSoatoId){
-        return gNKSoatoRepository.findByGnkSoatoId(gnkSoatoId);
+    public Integer getSoatoId(Integer gnkSoatoId){
+        GNKSoato gnkSoato = gNKSoatoRepository.findByGnkSoatoId(gnkSoatoId);
+        return gnkSoato!=null? gnkSoato.getSoatoId():null;
     }
 
 }

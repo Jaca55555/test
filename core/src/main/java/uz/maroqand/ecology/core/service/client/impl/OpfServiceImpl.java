@@ -49,4 +49,9 @@ public class OpfServiceImpl implements OpfService {
         return opfRepository.getOne(id);
     }
 
+    public Integer getByNameRu(String nameRu){
+        Opf opf = opfRepository.findFirstByNameRu(nameRu.trim());
+        return opf!=null? opf.getId():null;
+    }
+
 }

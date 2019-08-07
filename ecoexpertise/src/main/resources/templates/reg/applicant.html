@@ -309,7 +309,15 @@
                     console.log("response.err_code="+response.err_code);
                     if(response.err_code==='0'){
                         var val = response.root[0];
-                        $("#legalEntityName").val(val.aname);
+                        $("#legalEntityName").val(val.name);
+
+                        $("#legalEntityRegionId").val("17" + val.obl_code.padStart(2, "0"));
+                        $("#legalEntityRegionId").change();
+                        $("#legalEntitySubRegionId").val(val.subRegioId);
+                        $("#legalEntitySubRegionId").change();
+
+                        $("#legalEntityOpfId").val(val.opfId);
+                        $("#legalEntityOpfId").change();
 
                         $("#directorFullName").val(val.director);
 
@@ -322,6 +330,22 @@
                         $("#legalEntityMfo").val(val.mfo);
                         $("#legalEntityBankAccount").val(val.account);
                         $("#legalEntityBankName").val(val.bankname);
+                    }else {
+                        $("#legalEntityName").val("");
+                        $("#legalEntityRegionId").val("");
+                        $("#legalEntityRegionId").change();
+                        $("#legalEntitySubRegionId").val("");
+                        $("#legalEntitySubRegionId").change();
+                        $("#legalEntityOpfId").val("");
+                        $("#legalEntityOpfId").change();
+                        $("#directorFullName").val("");
+                        $("#oked").val("");
+                        $("#legalEntityPhone").val("");
+                        $("#legalEntityEmail").val("");
+                        $("#legalEntityAddress").val("");
+                        $("#legalEntityMfo").val("");
+                        $("#legalEntityBankAccount").val("");
+                        $("#legalEntityBankName").val("");
                     }
                 },
                 error: function () {
