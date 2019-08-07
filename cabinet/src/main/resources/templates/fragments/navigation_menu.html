@@ -38,7 +38,8 @@
                     <label th:text="#{sys_expertise_registry}"></label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER')"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-format-list-checkbox"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-map-pin"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
+
 
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('BILLING','PAYMENT_FILE')">
@@ -52,7 +53,8 @@
                     <label th:text="#{mgmt_control}"></label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('APPEAL_ADMIN')"><a href="/sys/appeal_admin/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-email-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-map-pin"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
+
                 <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a href="#!" class="nav-link">
                         <span class="pcoded-micon">
