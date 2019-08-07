@@ -206,7 +206,7 @@
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script type="text/javascript" th:inline="javascript">
-
+    var regApplicationIdCommont = [[${regApplication.id}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
     });

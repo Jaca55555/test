@@ -2,15 +2,18 @@ package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
@@ -19,6 +22,7 @@ import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -31,9 +35,7 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -248,6 +250,157 @@ public class PerformerController {
         result.put("beforeDate",regApplication.getDeadlineDate()!=null?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"");
         return result;
 
+    }
+
+    @RequestMapping(value = ExpertiseUrls.CommentAdd)
+    @ResponseBody
+    public HashMap<String,Object> addComment(
+            @RequestParam(name = "id", required = false) Integer commentId,
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "message") String message
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        Comment comment;
+        if (commentId!=null){
+            comment = commentService.getById(commentId);
+            if (comment==null){
+                result.put("status",0);
+                return result;
+            }
+        }else{
+            comment = new Comment();
+        }
+        comment.setRegApplicationId(regApplicationId);
+        comment.setCreatedAt(new Date());
+        comment.setCreatedById(user.getId());
+        comment.setDeleted(Boolean.FALSE);
+        comment.setMessage(message);
+        comment = commentService.createComment(comment);
+        result.put("status",1);
+        result.put("message",message);
+        result.put("createdAt",Common.uzbekistanDateFormat.format(comment.getCreatedAt()));
+        result.put("userShorName",helperService.getUserLastAndFirstShortById(user.getId()));
+        result.put("commentFiles",comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+
+        return result;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.CommentFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "file") MultipartFile multipartFile,
+            @RequestParam(name = "file_name") String fileName
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        System.out.println("keldi");
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment;
+        if (id!=null){
+            comment = commentService.getById(id);
+            if (comment==null || (comment!=null && regApplicationId!=comment.getRegApplicationId())){
+                if (regApplication == null) {
+                    responseMap.put("message", "Object not found.");
+                    return responseMap;
+                }
+            }
+        }else{
+            comment = new Comment();
+            comment.setDeleted(Boolean.TRUE);
+            comment.setCreatedById(user.getId());
+            comment.setCreatedAt(new Date());
+            comment.setRegApplicationId(regApplicationId);
+            comment = commentService.createComment(comment);
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            comment.setDocumentFiles(fileSet);
+            commentService.updateComment(comment);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
+            responseMap.put("link", ExpertiseUrls.CommentFileDownload + "?file_id=" + file.getId() + "&comment_id=" + comment.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("commentId", comment.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(ExpertiseUrls.CommentFileDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "comment_id") Integer commentId
+    ){
+        Comment comment = commentService.getById(commentId);
+        if (comment==null){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            if (comment.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
+        }
+    }
+
+    @RequestMapping(value = ExpertiseUrls.CommentFileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (id==null){
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment = commentService.getById(id);
+        if (comment == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                comment.setDocumentFiles(fileSet);
+                commentService.updateComment(comment);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
 }

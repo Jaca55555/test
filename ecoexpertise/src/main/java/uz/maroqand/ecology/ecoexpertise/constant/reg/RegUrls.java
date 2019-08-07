@@ -30,6 +30,9 @@ public class RegUrls {
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
     public static final String RegApplicationCommentAdd = RegApplication + "/comment_add";
+    public static final String RegApplicationCommentFileUpload = Prefix + "/comment/file/upload";
+    public static final String RegApplicationCommentDownload = Prefix + "/comment/file/download";
+    public static final String RegApplicationCommentDelete = Prefix + "/comment/file/delete";
     public static final String RegApplicationGetOkedName = RegApplication + "/get_oked_name";
 
     public static final String RegApplicationList = RegApplication + "/list";

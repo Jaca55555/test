@@ -1,11 +1,13 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 16.06.2019.
@@ -35,6 +37,12 @@ public class Comment {
     @Size(max = 500)
     @Column(columnDefinition = "TEXT")
     private String message;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "comment_jt_document_files",
+            joinColumns = { @JoinColumn(name = "comment_id") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> documentFiles;
 
     /*
      * Technical Fields
