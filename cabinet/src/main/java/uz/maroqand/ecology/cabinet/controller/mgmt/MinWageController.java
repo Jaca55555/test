@@ -94,15 +94,12 @@ public class MinWageController {
     @RequestMapping(value = MgmtUrls.MinWageCreate,method = RequestMethod.POST)
     public String createMinWage(
             @RequestParam(name = "beginDate",required = false)String beginDate,
-            @RequestParam(name = "registeredAt",required = false)String regDate,
             MinWage minWage
     ){
 
         System.out.println("beginDate == " + beginDate);
-        System.out.println("registeredAt == " + regDate);
         User user = userService.getCurrentUserFromContext();
         Date beginDateMinWage = DateParser.TryParse(beginDate,Common.uzbekistanDateFormat);
-        Date regDateMinWage = DateParser.TryParse(regDate,Common.uzbekistanDateFormat);
         String after = "";
         try {
             after = objectMapper.writeValueAsString(minWage);
@@ -110,7 +107,7 @@ public class MinWageController {
             e.printStackTrace();
         }
         minWage.setBeginDate(beginDateMinWage);
-        minWage.setRegisteredAt(regDateMinWage);
+        minWage.setRegisteredAt(new Date());
         minWageService.createMinWage(minWage);
         tableHistoryService.create(
                 TableHistoryType.add,
@@ -134,7 +131,7 @@ public class MinWageController {
             return "redirect:" + MgmtUrls.MinWageList;
         }
         model.addAttribute("minWage",minWage);
-        model.addAttribute("action_url",MgmtUrls.MinWageCreate);
+        model.addAttribute("action_url",MgmtUrls.MinWageUpdate);
         return MgmtTemplates.MinWageNew;
     }
 
@@ -142,12 +139,10 @@ public class MinWageController {
     public String updateMinWage(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "beginDate",required = false)String beginDate,
-            @RequestParam(name = "registeredAt",required = false)String regDate,
             MinWage minWage
     ){
         User user = userService.getCurrentUserFromContext();
         Date beginDateMinWage = DateParser.TryParse(beginDate,Common.uzbekistanDateFormat);
-        Date regDateMinWage = DateParser.TryParse(regDate,Common.uzbekistanDateFormat);
         String before = "";
         String after = "";
         MinWage oldMinWage = minWageService.getById(id);
@@ -160,7 +155,7 @@ public class MinWageController {
             e.printStackTrace();
         }
         minWage.setBeginDate(beginDateMinWage);
-        minWage.setRegisteredAt(regDateMinWage);
+        minWage.setRegisteredAt(new Date());
         minWageService.updateMinWage(minWage);
         try {
             after = objectMapper.writeValueAsString(minWage);

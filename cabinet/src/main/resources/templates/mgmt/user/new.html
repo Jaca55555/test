@@ -214,7 +214,7 @@
                                                             </label>
                                                             <select id="enabled" class="form-control" required="" name="enabled">
                                                                 <option value="" th:text="#{sys_select}"></option>
-                                                                <option value="1" th:text="#{status_avtive}" th:selected="*{enabled!=null and enabled}"></option>
+                                                                <option value="1" th:text="#{status_active}" th:selected="*{enabled!=null and enabled}"></option>
                                                                 <option value="0" th:text="#{status_not_active}" th:selected="*{enabled!=null and !enabled}"></option>
                                                             </select>
                                                         </div>
@@ -280,7 +280,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12  row" style="padding: 15px;" id="files-div">
-                                                        <h4 class="col-md-12" th:text="mntr_user_evidence.files"></h4>
+                                                        <h4 class="col-md-12" th:text="#{mntr_user_evidence.files}"></h4>
                                                        <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
                                                            <div class="add-file">
                                                                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
