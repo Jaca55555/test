@@ -290,17 +290,20 @@
                 console.log(response);
                 if(response.status == 1) {
 
-                    $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                    $('#files-div-documentFiles').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
                         '                                                    <div class="file">\n' +
                         '                                                        <a href="'+response.link+'">\n' +
-                        '                                                            <i class="feather icon-file file-icon"></i>\n' +
-                        '                                                            <span>'+response.name+'</span>\n' +
+                        '                                                            <i class="feather icon-file file-icon"></i>' +
+                        '                                                            <span>'+response.description+'</span>'+
+                        '                                                            <p>'+response.name+'</p>\n' +
                         '                                                        </a>\n' +
                         '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
                         '                                                            <i class="feather icon-x"></i>\n' +
                         '                                                        </button>\n' +
                         '                                                    </div>\n' +
                         '                                                </div>');
+                    $('#file-input').val('');
+                    $('#file-name').val('');
                 }
             },
             beforeSend: function () {

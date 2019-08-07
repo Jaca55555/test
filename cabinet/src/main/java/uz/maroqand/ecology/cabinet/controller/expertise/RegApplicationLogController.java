@@ -65,6 +65,7 @@ public class RegApplicationLogController {
             regApplicationLogService.updateDocument(regApplicationLog, user);
 
             responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
             responseMap.put("link", ExpertiseUrls.FileDownload + "?file_id=" + file.getId());
             responseMap.put("fileId", file.getId());
             responseMap.put("status", 1);
