@@ -14,4 +14,6 @@ public interface OpfRepository extends JpaRepository<Opf, Integer> {
 
     List<Opf> findByOrderByIdAsc();
 
+    Opf findFirstByNameRu(String nameRu);
+
 }

@@ -12,13 +12,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
-import uz.maroqand.ecology.core.util.HttpRequestHelper;
+import uz.maroqand.ecology.core.dto.gnk.GnkRootResponseObject;
+import uz.maroqand.ecology.core.service.client.OpfService;
+import uz.maroqand.ecology.core.service.sys.GNKSoatoService;
+import uz.maroqand.ecology.core.util.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,9 +29,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Utkirbek Boltaev on 17.07.2019.
@@ -38,12 +39,21 @@ import java.util.Map;
 @Service
 public class GnkService {
 
+    private GNKSoatoService gnkSoatoService;
+    private OpfService opfService;
+
     private static final String url_getIndividualInfo = "https://api.soliq.uz/iservices/wsgnkapi2?action=get_Recvisits&tin=";
     private final String username        = "u4mobile";
     private final String password    = "u4$mgnk";
 
     private Gson gson = new Gson();
     private Logger logger = LogManager.getLogger(GnkService.class);
+
+    @Autowired
+    public GnkService(GNKSoatoService gnkSoatoService, OpfService opfService) {
+        this.gnkSoatoService = gnkSoatoService;
+        this.opfService = opfService;
+    }
 
     public GnkResponseObject getLegalEntityByTin( Integer tin ) {
 
@@ -53,6 +63,23 @@ public class GnkService {
         }catch (Exception e){e.printStackTrace();}
 
         logger.info("GNK response result=", result);
+
+        if(result!=null && result.getRoot()!=null){
+            for (GnkRootResponseObject object: result.getRoot()){
+                String subRegion;
+                if(object.getRayon_code().length()==2){
+                    subRegion = object.getObl_code()+""+object.getRayon_code();
+                }else {
+                    subRegion = object.getObl_code()+"0"+object.getRayon_code();
+                }
+                object.setSubRegioId(gnkSoatoService.getSoatoId(Parser.stringToInteger(subRegion)));
+                if(!object.getAname().equals("-")){
+                    String[] aname = object.getAname().split("\"");
+                    object.setName(aname[1]);
+                    object.setOpfId(opfService.getByNameRu(aname[0].substring(0, 1)+aname[0].substring(1, aname[0].length()).toLowerCase()));
+                }
+            }
+        }
         return result;
     }
 

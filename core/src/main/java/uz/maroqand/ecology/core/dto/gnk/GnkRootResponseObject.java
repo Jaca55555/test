@@ -44,4 +44,8 @@ public class GnkRootResponseObject {
 
     private String okednameru;
 
+    private String regioId;
+    private Integer subRegioId;
+    private String name;
+    private Integer opfId;
 }
