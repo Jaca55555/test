@@ -178,6 +178,8 @@
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
+                                                <button class="btn btn-danger" id="test12"></button>
+                                                <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
                                                 <object th:include="expertise/performer/sender_fragment :: sender" th:remove="tag"></object>
@@ -205,6 +207,46 @@
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+
+<!-- Ckeditor js -->
+<script src="/static/plugins/ckeditor/js/document/ckeditor.js"></script>
+<script src="/static/plugins/ckeditor/js/document/FileSaver.js"></script>
+<script src="/static/plugins/ckeditor/js/document/jquery.wordexport.js"></script>
+
+<!-- Ckeditor js -->
+<script>
+    DecoupledEditor
+        .create(document.querySelector('.document-editor__editable'))
+        .then(editor => {
+            const toolbarContainer = document.querySelector('#document-editor');
+            toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+        })
+        .catch(error => {
+        });
+
+    $("#test12").click(function (events) {
+        $('.document-editor__editable').wordExport();
+    });
+
+    function exportHTML(){
+        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+            "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+            "xmlns='http://www.w3.org/TR/REC-html40'>"+
+            "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+        var footer = "</body></html>";
+        var sourceHTML = header+document.getElementById("document-editor").innerHTML+footer;
+
+        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        var fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = 'document.doc';
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+
+</script>
+
 <script type="text/javascript" th:inline="javascript">
 
     $('.btnNext').click(function() {
