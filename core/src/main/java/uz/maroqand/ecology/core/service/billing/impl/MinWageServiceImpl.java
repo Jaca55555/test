@@ -39,7 +39,7 @@ public class MinWageServiceImpl implements MinWageService {
 
     @Override
     public MinWage getById(Integer id) {
-        return minWageRepository.getOne(id);
+        return minWageRepository.findById(id).get();
     }
 
     @Override

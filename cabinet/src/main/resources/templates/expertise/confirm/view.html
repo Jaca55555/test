@@ -152,11 +152,12 @@
 
     function setAction(actionNumber) {
         if (actionNumber == 1){
-            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApproved}]]);
+            $('#cofirm-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApproved}]]);
         }
         if (actionNumber == 2) {
-            $('#form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDenied}]]);
+            $('#cofirm-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDenied}]]);
         }
+        $('#cofirm-form').submit();
     }
 
     $('.btnNext').click(function() {

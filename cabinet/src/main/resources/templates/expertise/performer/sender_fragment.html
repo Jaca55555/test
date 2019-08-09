@@ -131,7 +131,7 @@
                 <div class="col-md-10 offset-1">
 
                     <div class="form-group col-md-10 offset-1" id="historyChangeDeadlineDate">
-                        <h4 th:text="#{history_change_deadline_date}" th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"></h4>
+                        <h4 th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"><span th:text="#{history_change_deadline_date}"></span></h4>
                         <div class="card" th:each="deadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0}">
                             <div class="card-block" style="padding: 10px 25px;">
                                 <div class="row align-items-center justify-content-center">
@@ -151,7 +151,7 @@
 
                     <div class="form-group col-md-10 offset-1" id="sendForm" th:if="${changeDeadlineDate==null || (changeDeadlineDate!=null and changeDeadlineDate.status!=T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial)}">
                         <label th:text="#{change_deadline_date_query}"></label>
-                        <input type="text" class="form-control" placeholder="change_deadline_date_reason" minlength="3" id="reason" required="required">
+                        <input type="text" class="form-control" th:placeholder="#{change_deadline_date_reason}" minlength="3" id="reason" required="required">
                         <button type="button" class="btn btn-primary float-right mt-1 mr-0" id="submitButton">
                             <i  class="mdi mdi-telegram"></i>
                             <span th:text="#{sys_send}"></span>

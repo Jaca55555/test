@@ -913,31 +913,158 @@ public class RegApplicationController {
     @ResponseBody
     public HashMap<String,Object> createCommet(
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "comment") String message
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "message") String message
     ){
         User user =userService.getCurrentUserFromContext();
         Integer status=1;
         HashMap<String,Object> result = new HashMap<>();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication==null){
             status = 0;
             result.put("status",status);
             return result;
         }
-
-        Comment comment = new Comment();
-        comment.setMessage(message);
-        comment.setRegApplicationId(regApplication.getId());
+        Comment comment;
+        if (id!=null){
+            comment = commentService.getById(id);
+            if (comment==null){
+                result.put("status",0);
+                return result;
+            }
+        }else{
+            comment = new Comment();
+        }
+        comment.setRegApplicationId(regApplicationId);
         comment.setCreatedAt(new Date());
         comment.setCreatedById(user.getId());
+        comment.setDeleted(Boolean.FALSE);
+        comment.setMessage(message);
         comment = commentService.createComment(comment);
 
         result.put("status", status);
-        result.put("created",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
-        result.put("fioShort",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
+        result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
+        result.put("userShorName",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
         result.put("message",comment.getMessage());
+        result.put("commentFiles",comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
 
         return result;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationCommentFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadCommentFile(
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "file") MultipartFile multipartFile,
+            @RequestParam(name = "file_name") String fileName
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment;
+        if (id!=null){
+            comment = commentService.getById(id);
+            if (comment==null || (comment!=null && regApplicationId!=comment.getRegApplicationId())){
+                if (regApplication == null) {
+                    responseMap.put("message", "Object not found.");
+                    return responseMap;
+                }
+            }
+        }else{
+            comment = new Comment();
+            comment.setDeleted(Boolean.TRUE);
+            comment.setCreatedById(user.getId());
+            comment.setCreatedAt(new Date());
+            comment.setRegApplicationId(regApplicationId);
+            comment = commentService.createComment(comment);
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            comment.setDocumentFiles(fileSet);
+            commentService.updateComment(comment);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
+            responseMap.put("link", RegUrls.RegApplicationCommentDownload + "?file_id=" + file.getId() + "&comment_id=" + comment.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("commentId", comment.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(RegUrls.RegApplicationCommentDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "comment_id") Integer commentId
+    ){
+        Comment comment = commentService.getById(commentId);
+        if (comment==null){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            if (comment.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
+        }
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationCommentDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteCommentFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (id==null){
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment = commentService.getById(id);
+        if (comment == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                comment.setDocumentFiles(fileSet);
+                commentService.updateComment(comment);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationGetOkedName)

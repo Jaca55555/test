@@ -132,7 +132,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <h5 th:text="${'reg_application: ' + regApplication.id}"></h5>
+                                        <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
@@ -248,7 +248,7 @@
 </script>
 
 <script type="text/javascript" th:inline="javascript">
-
+    var regApplicationIdCommont = [[${regApplication.id}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
     });

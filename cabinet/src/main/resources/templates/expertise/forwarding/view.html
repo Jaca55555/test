@@ -135,7 +135,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <h5 th:text="${'reg_application: ' + regApplication.id}"></h5>
+                                        <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
@@ -290,17 +290,20 @@
                 console.log(response);
                 if(response.status == 1) {
 
-                    $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                    $('#files-div-documentFiles').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
                         '                                                    <div class="file">\n' +
                         '                                                        <a href="'+response.link+'">\n' +
-                        '                                                            <i class="feather icon-file file-icon"></i>\n' +
-                        '                                                            <span>'+response.name+'</span>\n' +
+                        '                                                            <i class="feather icon-file file-icon"></i>' +
+                        '                                                            <span>'+response.description+'</span>'+
+                        '                                                            <p>'+response.name+'</p>\n' +
                         '                                                        </a>\n' +
                         '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
                         '                                                            <i class="feather icon-x"></i>\n' +
                         '                                                        </button>\n' +
                         '                                                    </div>\n' +
                         '                                                </div>');
+                    $('#file-input').val('');
+                    $('#file-name').val('');
                 }
             },
             beforeSend: function () {

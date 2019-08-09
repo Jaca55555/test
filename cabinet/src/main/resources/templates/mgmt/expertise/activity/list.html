@@ -44,7 +44,7 @@
                                                 <label class="control-label" th:text="#{mntr_activity.category}"></label><br/>
                                                 <select id="categoryId" class="form-control">
                                                     <option value="" th:text="sys_select_category"></option>
-                                                    <option th:each="category : ${categoryList}" th:value="${category}" th:text="${category.name}"></option>
+                                                    <option th:each="category : ${categoryList}" th:value="${category}" th:text="${@helperService.getCategory(category.id,#locale)}"></option>
                                                 </select>
                                             </div>
 

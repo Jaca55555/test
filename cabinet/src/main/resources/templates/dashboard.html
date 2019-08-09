@@ -41,7 +41,7 @@
                                                         <div class="card-header">
                                                             <div class="header-top">
                                                                 <div class="img-block">
-                                                                    <img src="static/images/icon/file.svg" alt="">
+                                                                    <img src="/static/images/icon/file.svg" alt="">
                                                                 </div>
                                                                 <div class="info">
                                                                     <div class="title-count text-right">0</div>
@@ -57,7 +57,7 @@
                                                         <div class="card-header bgc-orange">
                                                             <div class="header-top">
                                                                 <div class="img-block">
-                                                                    <img src="static/images/icon/warning.svg" alt="">
+                                                                    <img src="/static/images/icon/warning.svg" alt="">
                                                                 </div>
                                                                 <div class="info">
                                                                     <div class="title-count text-right">0</div>
@@ -73,7 +73,7 @@
                                                         <div class="card-header bgc-red">
                                                             <div class="header-top">
                                                                 <div class="img-block">
-                                                                    <img src="static/images/icon/bell.svg" alt="">
+                                                                    <img src="/static/images/icon/bell.svg" alt="">
                                                                 </div>
                                                                 <div class="info">
                                                                     <div class="title-count text-right">0</div>
@@ -87,108 +87,83 @@
                                             </div>
 
                                             <div class="row" sec:authorize="hasAnyAuthority('ADMIN')">
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/expertise/object_expertise/list" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-1.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{mntr_objectExpertise_list}">Объект экспортизи</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/expertise/activity/list" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-2.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{mntr_activity_list}">Вид деятослность</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/expertise/material/list" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-3.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{sys_menu.materialList}">Форма экспертизы</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
 
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/users/list" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-4.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{sys_menu.usersList}">Категория деятельности</div>
-                                                        </div>
-                                                    </a>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseList}">
+                                                            <i class="mdi mdi-adobe" style="font-size: 40px;padding-bottom: 25px;color: #23b8e5;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{mntr_objectExpertise_list}"></h5>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/min_wage" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-5.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{mgmt_min_wage}">МПЗП</div>
-                                                        </div>
-                                                    </a>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ActivityList}">
+                                                            <i class="mdi mdi-stack-overflow" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{mntr_activity_list}"></h5>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <a href="/mgmt/expertise/offer/list" class="service-card">
-                                                        <div class="img-block">
-                                                            <img src="/static/images/icon/icon-1.png" alt="">
-                                                        </div>
-                                                        <div class="info">
-                                                            <div class="title" th:text="#{sys_menu.offerList}"></div>
-                                                        </div>
-                                                    </a>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialList}">
+                                                            <i class="mdi mdi-file-compare" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.materialList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersList}">
+                                                            <i class="feather icon-users" style="font-size: 60px;padding-bottom: 25px;color: #f4c22b"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.usersList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).MinWageList}">
+                                                            <i class="mdi mdi-currency-usd" style="font-size: 40px;padding-bottom: 25px;color: #ff3823;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{mgmt_min_wage}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).OfferList}">
+                                                            <i class="mdi mdi-book-open" style="font-size: 40px;padding-bottom: 25px;color: #000000;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.offerList}"></h5>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="row" >
-                                                <div class="col-md-4">
-                                                    <div class="card-dashboard">
-                                                        <a href="#" class="card-header-bottom">
-                                                            <div class="img-block">
-                                                                <img src="static/images/icon/statistic-icon.png" alt="">
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title" th:text="#{sys_statistics}">Данные статистики</div>
-                                                            </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" href="#!">
+                                                            <i class="mdi mdi-chart-pie" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_statistics}"></h5>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="card-dashboard">
-                                                        <a href="#" class="card-header-bottom">
-                                                            <div class="img-block">
-                                                                <img src="static/images/icon/play-icon.png" alt="">
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title" th:text="#{sys_video_instruction}">Video инструкция</div>
-                                                            </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" href="#!">
+                                                            <i class="mdi mdi-presentation-play" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_video_instruction}"></h5>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="card-dashboard">
-                                                        <a href="#" class="card-header-bottom">
-                                                            <div class="img-block">
-                                                                <img src="static/images/icon/pdf-icon.png" alt="">
-                                                            </div>
-                                                            <div class="info">
-                                                                <div class="title" th:text="#{sys_instruction}">Инструкция</div>
-                                                            </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" href="#!">
+                                                            <i class="mdi mdi-file-pdf" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_instruction}"></h5>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

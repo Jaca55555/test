@@ -8,18 +8,19 @@
         <div class="row">
             <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">
                 <div class="col-md-10 offset-1">
-                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
+                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
                     <p class="mt-2 mb-0" style="color: black" th:text="#{sys_comment.addFile}">Добавить файл</p>
-                    <div class="col-md-12 row" id="files-div">
-                        <a href="#upload-file-modal" class="col-md-3 pb-3 p-0" onclick="openModalFile()">
+                    <div class="col-md-12 row" id="files-div-comment">
+                        <a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">
                             <div class="add-file">
                                 <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                                 <span id="percentage"><span id="percentage-num"></span>%</span>
                                 <i class="feather icon-plus" id="plus-icon"></i>
                             </div>
                         </a>
+
                     </div>
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-md-12">
                             <button class="btn btn-primary pl-lg-3 pr-lg-3 mr-0" onclick="addComment()">
                                 <i class="mdi mdi-telegram"></i>
@@ -27,16 +28,34 @@
                             </button>
                         </div>
                     </div>
+                    <input type="hidden" id="commentId" name="commentId"/>
                     <h5 class="mt-lg-5" th:text="#{sys_comment.lastComments}">Последние комментарии к документу</h5>
                     <div class="col-md-12" id="comments">
                         <div id="comments-first"></div>
                         <div class="row" th:each="comment : ${commentList}" th:if="${#lists.size(commentList)>0}">
                             <div class="col-md-2">
-                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 25%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
                             </div>
                             <div class="col-md-10 pl-0">
                                 <p class="p-2 mb-1 mt-lg-4" th:text="${comment.message}" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px"></p>
                                 <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                <div style="border-bottom: black 1px dashed">
+                                    <ul class="media-list p-0" th:if="${#lists.size(comment.documentFiles)>0}" th:each="files : ${comment.documentFiles}">
+                                        <li class="media d-flex m-b-15">
+                                            <div class="m-r-20 file-attach">
+                                                <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDownload + '?file_id=' + files.id + '&comment_id=' + comment.id}" class="m-b-5 d-block text-secondary">
+                                                    <span th:text="${files.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                                                </a>
+                                                <div class="text-muted">
+                                                    <span th:text="${'Size: '+files.size+ ' byte'}">Size: 1.2Mb</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -45,41 +64,221 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="upload-file-modal-comment" tabindex="-1" role="dialog" aria-labelledby="upload-file-modal-commentTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                        <h5 class="modal-title" th:text="#{sys_comment.upload_files}" style="float: left">Modal title</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="file-name">
+                            <label for="file-name-comment">
                                 <span th:text="#{sys_file_name}"></span>
                                 <span class="required">*</span>
                             </label>
-                            <input class="form-control" type="text" id="file-name" required="" />
+                            <input class="form-control" type="text" id="file-name-comment" required=""  />
                         </div>
                         <div class="input-group">
                           <span class="input-group-btn">
                             <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
                                <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
                             </span>
-                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                            <input name="uploaded_file" id="file-input-comment" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
                           </span>
-                            <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+                            <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="commentFileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" >
 
                         </span>
                         </div>
                     </div>
                     <div class="modal-footer" style="text-align: center;">
-                        <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+                        <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadCommentFile()"></button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <script type="text/javascript" th:inline="javascript">
+
+            var uploadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileUpload}]];
+            var deleteCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDelete}]];
+            var downloadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDownload}]];
+            var addCommentAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentAdd}]];
+
+
+            function openCommentModalFile() {
+                $('#upload-file-modal-comment').modal('show');
+            }
+
+            function uploadCommentFile(){
+                $('#file-name-comment').parsley().validate();
+                if(!$('#file-name-comment').val() || !$('#file-input-comment').val()){
+                    $('#commentFileDescription').addClass('is-invalid');
+                    return;
+                }
+
+                $('#upload-file-modal-comment').modal('hide');
+
+                var form = new FormData();
+                form.append("id", $('#commentId').val());
+                form.append("regApplicationId", regApplicationIdCommont);
+                form.append("file", $('#file-input-comment').prop('files')[0]);
+                form.append("file_name", $('#file-name-comment').val());
+                form.append("_csrf", $('#global_csrf').val());
+
+                $.ajax({
+                    url: uploadCommentFileAjaxUrl,
+                    type: "POST",
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log(response);
+                        if(response.status == 1) {
+
+                            $('#files-div-comment').append('<div class="col-md-3 pb-3 p-0 ml-1" id="file-block-'+response.fileId+'">\n' +
+                                '                                                    <div class="file">\n' +
+                                '                                                        <a href="'+response.link+'">\n' +
+                                '                                                            <i class="feather icon-file file-icon"></i>\n' +
+                                '                                                            <span>'+response.description+'</span>\n' +
+                                '                                                            <p>'+response.name+'</p>\n' +
+                                '                                                        </a>\n' +
+                                '                                                        <button type="button" class="file-delete-btn" onclick="deleteCommentFile('+response.fileId+')">\n' +
+                                '                                                            <i class="feather icon-x"></i>\n' +
+                                '                                                        </button>\n' +
+                                '                                                    </div>\n' +
+                                '                                                </div>');
+                            $('#commentId').val(response.commentId);
+                            cleareAfterUploadFile();
+                        }
+                    },
+                    beforeSend: function () {
+                        $('#plus-icon').hide();
+                        $('#upload-gif').show();
+                        $('#percentage').show();
+                    },
+                    complete: function () {
+                        $('#upload-gif').hide();
+                        $('#percentage').hide();
+                        $('#plus-icon').show();
+                    },
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress",
+                            uploadProgressHandler,
+                            false
+                        );
+
+                        return xhr;
+                    }
+
+                });
+            }
+
+            function  clearAfterCommetAdd() {
+                $('#commentId').val('');
+                $('#message').val('');
+                $('#files-div-comment').html('');
+                $('#files-div-comment').append('<a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">\n' +
+                    '                            <div class="add-file">\n' +
+                    '                                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">\n' +
+                    '                                <span id="percentage"><span id="percentage-num"></span>%</span>\n' +
+                    '                                <i class="feather icon-plus" id="plus-icon"></i>\n' +
+                    '                            </div>\n' +
+                    '                        </a>');
+            }
+
+            function cleareAfterUploadFile() {
+                $('#file-input-comment').val('');
+                $('#file-name-comment').val('');
+                $('#commentFileDescription').text('');
+            }
+
+            function deleteCommentFile(fileId) {
+                var form = new FormData();
+                form.append("id", $('#commentId').val());
+                form.append("regApplicationId", regApplicationIdCommont);
+                form.append("fileId", fileId);
+                form.append("_csrf", $('#global_csrf').val());
+
+                $.ajax({
+                    url: deleteCommentFileAjaxUrl,
+                    type: "POST",
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        if(response.status == 1) {
+                            $('#file-block-' + fileId).remove();
+                        }
+                    }
+                });
+            }
+
+            function uploadProgressHandler(event){
+                var percent = (event.loaded / event.total) * 100;
+                var progress = Math.round(percent);
+                $('#percentage-num').html(progress);
+            }
+
+            function addComment() {
+                $('#message').parsley().validate();
+                if ($('#message').parsley().isValid()){
+                    var form = new FormData();
+                    form.append("id",$('#commentId').val());
+                    form.append("message",$('#message').val());
+                    form.append("_csrf", $('#global_csrf').val());
+                    $.ajax({
+                        url: addCommentAjaxUrl,
+                        type: "POST",
+                        data: form,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (response) {
+                            if(response.status == 1) {
+                                var html='<div class="row" >' +
+                                    '           <div class="col-md-2">\n' +
+                                    '               <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3">'+response.userShorName+'</span>\n' +
+                                    '           </div>\n' +
+                                    '           <div class="col-md-10 pl-0">\n' +
+                                    '               <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">'+response.message+'</p>' +
+                                    '               <p class="text-right">'+response.createdAt+'</p>'+
+                                    '               <div style="border-bottom: black 1px dashed">';
+
+                                if (response.commentFiles!=""){
+                                    $.each(response.commentFiles,function (item,val) {
+                                        var downloadUrl = downloadCommentFileAjaxUrl + '?file_id=' + val.id + '&comment_id=' + $('#commentId').val();
+                                        html+='<ul class="media-list p-0">\n' +
+                                            '       <li class="media d-flex m-b-15">\n' +
+                                            '           <div class="m-r-20 file-attach">\n' +
+                                            '               <i class="mdi mdi-file-pdf f-28 text-muted"></i>\n' +
+                                            '           </div>\n' +
+                                            '           <div class="media-body">\n' +
+                                            '               <a href="'+downloadUrl+'" class="m-b-5 d-block text-secondary">\n' +
+                                            '                   <span>'+val.name+'</span>\n' +
+                                            '               </a>\n' +
+                                            '               <div class="text-muted">' +
+                                            '                   <span>'+val.size+'</span>' +
+                                            '               </div>' +
+                                            '           </div>' +
+                                            '       </li>' +
+                                            '   </ul>';
+                                    });
+                                }
+
+                                html+='</div></div></div>';
+                                $('#comments').append(html);
+                                clearAfterCommetAdd();
+                            }
+                        }
+                    });
+                }
+            }
+        </script>
 </body>
 </html>
