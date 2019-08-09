@@ -14,4 +14,6 @@ public interface OpfService {
 
     Opf getById(Integer id);
 
+    Integer getByNameRu(String nameRu);
+
 }
