@@ -31,9 +31,9 @@ public class Coordinate {
     @Column(name = "reg_application_id")
     private Integer regApplicationId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+   /* @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", updatable = false, insertable = false)
-    private Client client;
+    private Client client;*/
 
     @Column(name = "client_id")
     private Integer clientId;

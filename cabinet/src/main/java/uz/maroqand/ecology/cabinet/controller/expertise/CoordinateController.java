@@ -19,6 +19,7 @@ import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.CoordinateService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -41,16 +42,18 @@ public class CoordinateController {
     private final SoatoService soatoService;
     private final RegApplicationService regApplicationService;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ClientService clientService;
 
 
     @Autowired
-    public CoordinateController(UserService userService, CoordinateService coordinateService, HelperService helperService, SoatoService soatoService, RegApplicationService regApplicationService, CoordinateLatLongRepository coordinateLatLongRepository){
+    public CoordinateController(UserService userService, CoordinateService coordinateService, HelperService helperService, SoatoService soatoService, RegApplicationService regApplicationService, CoordinateLatLongRepository coordinateLatLongRepository, ClientService clientService){
         this.userService = userService;
         this.coordinateService = coordinateService;
         this.helperService = helperService;
         this.soatoService = soatoService;
         this.regApplicationService = regApplicationService;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.clientService = clientService;
     }
 
     @RequestMapping(ExpertiseUrls.CoordinateList)
@@ -90,7 +93,7 @@ public class CoordinateController {
         List<Coordinate> coordinateList = coordinatePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(coordinateList.size());
         for (Coordinate coordinate : coordinateList){
-            Client client = coordinate.getClient();
+            Client client = clientService.getById(coordinate.getClientId());
             convenientForJSONArray.add(new Object[]{
                     coordinate.getId(),
                     coordinate.getNumber(),
