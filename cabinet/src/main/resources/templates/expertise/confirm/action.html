@@ -9,8 +9,7 @@
             <h5 th:text="#{sys_reg_application.result}"></h5>
        </div>
 
-       <form method="post" action="" id="cofirm-form" data-parsley-validate="">
-
+       <form method="post" action="" id="cofirm-form" data-parsley-validate="" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
            <div class="form-group row">
                <div class="col-md-3 text-right">
                    <label class="col-form-label"></label>
@@ -26,7 +25,6 @@
                    </div>
                </div>
            </div>
-
            <div class="form-group row">
                <div class="col-md-3 text-right">
                    <label class="col-form-label" th:text="#{sys_reg_application.comments}"></label>
@@ -37,7 +35,37 @@
            </div>
            <input type="hidden" name="id" th:value="${regApplication.id}">
            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+           <div class="row">
+               <div class="form-group col-md-12 text-center" id="buttons-1">
+                   <button class="btn btn-danger" type="button" onclick="setAction(2)" th:text="#{sys_notConfirm}"></button>
+                   <button class="btn btn-primary" type="button" onclick="setAction(1)" th:text="#{sys_confirm}"></button>
+               </div>
+           </div>
+       </form>
 
+
+       <div th:if="${regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+           <div class="form-group row">
+               <div class="col-md-3 text-right"> <label class="col-form-label"></label> </div>
+               <div class="col-md-6">
+                   <div class="custom-control custom-radio">
+                       <input type="radio" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" required="" disabled="disabled" >
+                       <label class="custom-control-label" th:text="#{sys_budget.false}"> </label>
+                   </div>
+                   <div class="custom-control custom-radio">
+                       <input type="radio" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" required="" disabled="disabled" >
+                       <label class="custom-control-label" th:text="#{sys_budget.true}"> </label>
+                   </div>
+               </div>
+           </div>
+           <div class="form-group row">
+               <div class="col-md-3 text-right">
+                   <label class="col-form-label" th:text="#{sys_reg_application.comments}"></label>
+               </div>
+               <div class="col-md-6">
+                   <textarea class="form-control" rows="8" th:field="${regApplicationLog.comment}" readonly="readonly" maxlength="1000"></textarea>
+               </div>
+           </div>
            <div class="form-group row">
                <div class="col-md-3 text-right">
                    <label class="col-form-label"></label>
@@ -47,19 +75,64 @@
                    <div th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved || status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" class="alert alert-success" th:text="#{sys_message_application_approved}"></div>
                </div>
            </div>
-
+           <input type="hidden" name="id" th:value="${regApplication.id}">
+           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
            <div class="row">
-               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" id="buttons-1">
-                   <button class="btn btn-danger" type="button" onclick="setAction(2)" th:text="#{sys_notConfirm}"></button>
-                   <button class="btn btn-primary" type="button" onclick="setAction(1)" th:text="#{sys_confirm}"></button>
-               </div>
-
-               <div class="form-group col-md-12 text-center" th:if="${regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
-                   <button class="btn btn-danger" type="submit" th:text="#{sys_change_status}"></button>
+               <div class="form-group col-md-12 text-center" >
+                   <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalLive" th:text="#{sys_change_status}"></button>
                    <a class="btn btn-primary" href="/expertise/confirm/list" th:text="#{sys_home_url}"></a>
                </div>
-
            </div>
-       </form>
+
+           <div id="exampleModalLive" class="modal bd-example-modal-lg fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true" style="display: none;">
+               <div class="modal-dialog modal-lg" role="document">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <h5 class="modal-title" id="exampleModalLiveLabel" th:text="#{sys_change_status}"></h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                       </div>
+                       <div class="modal-body">
+
+                           <form method="post" action="" id="cofirm-edit-form" data-parsley-validate="">
+                               <div class="form-group row">
+                                   <div class="col-md-3 text-right">
+                                       <label class="col-form-label"></label>
+                                   </div>
+                                   <div class="col-md-9">
+                                       <div class="custom-control custom-radio">
+                                           <input type="radio" id="budgetFalse" name="budget" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" required="" >
+                                           <label class="custom-control-label" for="budgetFalse" th:text="#{sys_budget.false}"> </label>
+                                       </div>
+                                       <div class="custom-control custom-radio">
+                                           <input type="radio" id="budgetTrue" name="budget" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" required="" >
+                                           <label class="custom-control-label" for="budgetTrue" th:text="#{sys_budget.true}"> </label>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="form-group row">
+                                   <div class="col-md-3 text-right">
+                                       <label class="col-form-label" th:text="#{sys_reg_application.comments}"></label>
+                                   </div>
+                                   <div class="col-md-9">
+                                       <textarea class="form-control" rows="8" th:field="${regApplicationLog.comment}" maxlength="1000"></textarea>
+                                   </div>
+                               </div>
+                               <input type="hidden" name="id" th:value="${regApplication.id}">
+                               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                           </form>
+
+                       </div>
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_closeModal}"></button>
+
+                           <button class="btn btn-danger" type="button" onclick="setActionEdit(2)" th:text="#{sys_notConfirm}"></button>
+                           <button class="btn btn-primary" type="button" onclick="setActionEdit(1)" th:text="#{sys_confirm}"></button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+       </div>
+
 </body>
 </html>

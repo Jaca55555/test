@@ -151,13 +151,23 @@
 <script type="text/javascript" th:inline="javascript">
 
     function setAction(actionNumber) {
-        if (actionNumber == 1){
+        if (actionNumber === 1){
             $('#cofirm-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApproved}]]);
         }
-        if (actionNumber == 2) {
+        if (actionNumber === 2) {
             $('#cofirm-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDenied}]]);
         }
         $('#cofirm-form').submit();
+    }
+
+    function setActionEdit(actionNumber) {
+        if (actionNumber === 1){
+            $('#cofirm-edit-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmApprovedEdit}]]);
+        }
+        if (actionNumber === 2) {
+            $('#cofirm-edit-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDeniedEdit}]]);
+        }
+        $('#cofirm-edit-form').submit();
     }
 
     $('.btnNext').click(function() {

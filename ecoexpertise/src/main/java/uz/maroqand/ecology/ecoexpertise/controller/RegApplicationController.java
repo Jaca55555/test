@@ -682,9 +682,18 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        if (regApplication.getInvoiceId()!=null){
-            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Approved){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
         }
+        if (regApplication.getConfirmLogId()==null){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
+            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+        }
+
 
         Offer offer;
         if(regApplication.getOfferId()!=null){
