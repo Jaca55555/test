@@ -281,7 +281,7 @@ public class PerformerController {
         result.put("message",message);
         result.put("createdAt",Common.uzbekistanDateFormat.format(comment.getCreatedAt()));
         result.put("userShorName",helperService.getUserLastAndFirstShortById(user.getId()));
-        result.put("commentFiles",comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+        result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
 
         return result;
     }

@@ -955,7 +955,7 @@ public class RegApplicationController {
         result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
         result.put("userShorName",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
         result.put("message",comment.getMessage());
-        result.put("commentFiles",comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+        result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
 
         return result;
     }
