@@ -182,6 +182,7 @@ public class AgreementCompleteController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
 
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLog", regApplicationLogService.getById(regApplication.getAgreementLogId()));
         model.addAttribute("agreementCompleteLog", regApplicationLog);

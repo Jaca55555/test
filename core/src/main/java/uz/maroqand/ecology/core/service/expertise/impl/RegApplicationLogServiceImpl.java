@@ -31,7 +31,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     public List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId){
-        return regApplicationLogRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        return regApplicationLogRepository.findByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
     }
 
     public RegApplicationLog getById(Integer id){

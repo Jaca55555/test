@@ -14,6 +14,6 @@ import java.util.List;
 @Repository
 public interface RegApplicationLogRepository extends JpaRepository<RegApplicationLog, Integer> {
 
-    List<RegApplicationLog> findByRegApplicationIdAndDeletedFalse(Integer regApplicationId);
+    List<RegApplicationLog> findByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer regApplicationId);
 
 }
