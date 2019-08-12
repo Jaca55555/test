@@ -156,13 +156,25 @@
                                                     </div>
 
                                                 <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
-                                                <div class="container text-dark" id="accountBox" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
-                                                    <object th:include="reg/fragments/facture :: facture" th:remove="tag" ></object>
+                                                <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
+                                                    <div class="col-md-12 text-center mb-5" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
+                                                        <div class="col-md-12 text-right">
+                                                            <button type="button" class="btn btn-primary" onclick="printAccountFactor('accountBox')">
+                                                                <i class="mdi mdi-printer"></i>
+                                                                <span th:text="#{sys_print}" ></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div  id="accountBox">
+                                                        <object th:include="reg/fragments/facture :: facture" th:remove="tag" ></object>
+                                                    </div>
+                                                    <div class="col-md-12 text-right">
+                                                        <button class="btn btn-primary" onclick="confirmFacture()"><i class="mdi mdi-check-circle"></i><span th:text="#{facture_confirm}"></span></button>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-12 text-center mb-5" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Revision)}">
-                                                    <button type="button" class="btn btn-primary" th:text="#{sys_print}" onclick="printAccountFactor('accountBox')"></button>
+                                                <div class="col-md-12 text-center" style="padding: 0px 38px" th:if="${regApplication.facture!=null && regApplication.facture}">
+                                                    <a class="btn btn-success btn-block" href="#"><i class="mdi mdi-download"></i> <span th:text="#{sys_download_conclusion}"></span></a>
                                                 </div>
-
                                                 <h3 th:text="#{sys_chat}" class="text-center"></h3>
 
                                                 <div class="col-md-6 offset-3">
@@ -282,6 +294,11 @@
         var deleteCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentDelete}]];
         var downloadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentDownload}]];
         var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentAdd}]];
+        var confirmfactureUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationConfirmFacture}]];
+
+        function confirmFacture() {
+            window.location.href = confirmfactureUrl + "?id=" + regApplicationId;
+        }
 
         function openCommentModalFile() {
             $('#upload-file-modal-comment').modal('show');

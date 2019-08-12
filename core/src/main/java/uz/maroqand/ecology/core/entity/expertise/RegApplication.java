@@ -186,6 +186,9 @@ public class RegApplication {
     private String message;
 
 
+    @Column(name = "facture",columnDefinition = "boolean DEFAULT false")
+    private Boolean facture = false;
+
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
 
