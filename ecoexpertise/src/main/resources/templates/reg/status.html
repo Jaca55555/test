@@ -168,7 +168,7 @@
                                                     <div  id="accountBox">
                                                         <object th:include="reg/fragments/facture :: facture" th:remove="tag" ></object>
                                                     </div>
-                                                    <div class="col-md-12 text-right">
+                                                    <div class="col-md-12 text-right" th:if="${regApplication.facture==null || !regApplication.facture}">
                                                         <button class="btn btn-primary" onclick="confirmFacture()"><i class="mdi mdi-check-circle"></i><span th:text="#{facture_confirm}"></span></button>
                                                     </div>
                                                 </div>
