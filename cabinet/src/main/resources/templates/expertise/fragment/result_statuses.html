@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="statuses">
+
+    <div class="form-group col-md-10 offset-1">
+        <h5 class="" th:text="#{sys_performer.conclusionResult}">Результат заключения</h5>
+        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.approved}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" />
+        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.denied}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" />
+        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.modification}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Modification}" />
+    </div>
+    <div class="col-md-10 offset-1">
+        <div class="task-attachment" >
+            <h5 class="mt-lg-5"  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
+            <ul class="media-list p-0">
+                <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">
+                    <div class="m-r-20 file-attach">
+                        <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                    </div>
+                    <div class="media-body">
+                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload + '?file_id=' + documentFile.id}" class="m-b-5 d-block text-secondary">
+                            <span th:text="${documentFile.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                        </a>
+                        <div class="text-muted">
+                            <span th:text="*{#numbers.formatDecimal(documentFile.size/1000.0, 1, 'WHITESPACE', 1, 'POINT')}">1.2</span>
+                            <span th:text="#{documentFile.KB}">KB</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="border-bottom: 1px solid #f4f4f4"></div>
+    <div class="col-md-10 offset-1">
+        <h5 class="mt-lg-5" th:text="#{reg_application.approvalStatuses}">Статус согласование </h5>
+        <table style="width: 100%">
+            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${performerLog!=null}">
+                <td style="width: 15%; padding-bottom: 5px;padding-top: 10px" >
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AI</span>
+                </td>
+                <td style="width: 60%;">
+                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(performerLog.updateById)}">Холмуратов Жахонгир</h6>
+                    <small th:text="#{sys_logType.performer}">Исполнитель</small>
+                </td>
+                <td>
+                    <span th:if="${performerLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLog!=null}">
+                <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
+                </td>
+                <td style="width: 60%;">
+                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}">Акбар Сапаев</h6>
+                    <small th:text="#{sys_logType.agreement}">Директор</small>
+                </td>
+                <td>
+                    <span th:if="${agreementLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementCompleteLog!=null}">
+                <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >UB</span>
+                </td>
+                <td style="width: 60%;">
+                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementCompleteLog.updateById)}">Уткирбек Болтаев</h6>
+                    <small th:text="#{sys_logType.agreementComplete}">Председатель</small>
+                </td>
+                <td>
+                    <span th:if="${agreementCompleteLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
