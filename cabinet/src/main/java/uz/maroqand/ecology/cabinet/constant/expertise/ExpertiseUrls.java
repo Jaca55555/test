@@ -15,6 +15,8 @@ public class ExpertiseUrls {
     public static final String ConfirmView = Confirm + "/view";
     public static final String ConfirmApproved = Confirm + "/approved";
     public static final String ConfirmDenied = Confirm + "/denied";
+    public static final String ConfirmApprovedEdit = Confirm + "/approved/edit";
+    public static final String ConfirmDeniedEdit = Confirm + "/denied/edit";
     public static final String ConfirmFileDownload = Confirm + "/download";
 
     //Boshqaruv

@@ -656,10 +656,10 @@ function getToastrList() {
     $.post('/sys/toastr', {_csrf: $('#global_csrf').val()}, function (data) {
         $.each(data.toastrList, function( index, value ){
             switch(value.toastrType) {
-                case 'Success': toastr.success(value.title, value.message);break;
-                case 'Info': toastr.info(value.title, value.message);break;
-                case 'Warning': toastr.warning(value.title, value.message);break;
-                case 'Error': toastr.error(value.title, value.message);break;
+                case 'Success': toastr.success(value.message, value.title);break;
+                case 'Info': toastr.info(value.message, value.title);break;
+                case 'Warning': toastr.warning(value.message, value.title);break;
+                case 'Error': toastr.error(value.message, value.title);break;
             }
         });
     });

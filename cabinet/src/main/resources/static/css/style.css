@@ -2409,6 +2409,7 @@ p.text-muted {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  padding-bottom: 50px;
 }
 .pcoded-navbar .pcoded-inner-navbar li {
   position: relative;
@@ -10798,4 +10799,10 @@ div .dt-buttons{
 }
 .service-card:hover .img-block img{
   transform: scale(1.09);
+}
+
+
+.badge {
+  padding: 8px 15px !important;
+  width: 100% !important;
 }

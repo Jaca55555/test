@@ -18,6 +18,8 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
+import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -32,6 +34,8 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -60,6 +64,8 @@ public class ConfirmController {
     private final ProjectDeveloperService projectDeveloperService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ToastrService toastrService;
+    private final NotificationService notificationService;
 
     @Autowired
     public ConfirmController(
@@ -67,15 +73,17 @@ public class ConfirmController {
             SoatoService soatoService,
             UserService userService,
             ClientService clientService,
-            ActivityService activityService, ObjectExpertiseService objectExpertiseService,
+            ActivityService activityService,
+            ObjectExpertiseService objectExpertiseService,
             CommentService commentService,
             HelperService helperService,
             FileService fileService,
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
-    ){
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            ToastrService toastrService,
+            NotificationService notificationService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -89,6 +97,8 @@ public class ConfirmController {
         this.projectDeveloperService = projectDeveloperService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.toastrService = toastrService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -201,6 +211,7 @@ public class ConfirmController {
         regApplication.setBudget(budget);
         regApplicationService.update(regApplication);
 
+        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -222,6 +233,61 @@ public class ConfirmController {
         regApplication.setBudget(budget);
         regApplicationService.update(regApplication);
 
+        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ConfirmApprovedEdit,method = RequestMethod.POST)
+    public String confirmEditLog(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "budget")Boolean budget
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if (regApplication.getOfferId() != null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
+
+        regApplication.setConfirmLogId(regApplicationLog.getId());
+        regApplication.setBudget(budget);
+        regApplicationService.update(regApplication);
+
+        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ConfirmDeniedEdit,method = RequestMethod.POST)
+    public String confirmDeniedEdit(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "budget")Boolean budget
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if (regApplication.getOfferId() != null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
+
+        regApplication.setConfirmLogId(regApplicationLog.getId());
+        regApplication.setBudget(budget);
+        regApplicationService.update(regApplication);
+
+        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 

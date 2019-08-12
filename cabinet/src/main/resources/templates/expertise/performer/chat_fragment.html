@@ -101,7 +101,7 @@
         </div>
 
         <script type="text/javascript" th:inline="javascript">
-
+            var regApplicationIdCommont = [[${regApplication.id}]];
             var uploadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileUpload}]];
             var deleteCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDelete}]];
             var downloadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDownload}]];
@@ -232,6 +232,7 @@
                     form.append("id",$('#commentId').val());
                     form.append("message",$('#message').val());
                     form.append("_csrf", $('#global_csrf').val());
+                    form.append("regApplicationId", regApplicationIdCommont);
                     $.ajax({
                         url: addCommentAjaxUrl,
                         type: "POST",
