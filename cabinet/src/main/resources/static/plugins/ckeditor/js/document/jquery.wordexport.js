@@ -62,11 +62,17 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             mhtmlBottom += "--NEXT.ITEM-BOUNDARY--";
 
             //TODO: load css from included stylesheet
-            var styles = "";
+            var styles = "p{font-size: 1.1em};\n" +//13px
+                "h2{font-size: 1.85em; font-weight: bold}; \n" +//16px
+                "h3{font-size: 1.15em; font-weight: bold};\n" +//14px
+                "h4{font-size: 1em; font-weight: bold;border-bottom: 2px double black;};\n" +//12px
+                "h5{font-size: 8px; font-weight: bold};\n" +//9px
+                "table{font-size: 1.1em;};\n" +
+                "table tr th,td{text-align:left;}";
 
             // Aggregate parts of the file together
             var fileContent = static.mhtml.top.replace("_html_", static.mhtml.head.replace("_styles_", styles) + static.mhtml.body.replace("_body_", markup.html())) + mhtmlBottom;
-
+            console.log(fileContent);
             // Create a Blob with the file contents
             var blob = new Blob([fileContent], {
                 type: "application/msword;charset=utf-8"
