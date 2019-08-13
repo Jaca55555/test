@@ -139,8 +139,6 @@ public class PerformerController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
                     regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getPerformerName():"",
                     regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
             });

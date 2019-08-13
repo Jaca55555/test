@@ -10673,3 +10673,16 @@ div .dt-buttons{
   padding: 8px 15px !important;
   width: 100% !important;
 }
+
+.badge-notification {
+  width: auto !important;
+  display: inline-block;
+  padding: .25em .4em !important;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}

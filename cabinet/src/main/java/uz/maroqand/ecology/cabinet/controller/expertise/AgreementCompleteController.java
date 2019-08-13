@@ -128,7 +128,8 @@ public class AgreementCompleteController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            RegApplicationLog agreementCompleteLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -137,10 +138,10 @@ public class AgreementCompleteController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getAgreementName():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
+                    performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog.getStatus() != null ? performerLog.getStatus().getId():"",
+                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getAgreementName():"",
+                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():""
             });
         }
 
