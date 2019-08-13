@@ -90,4 +90,10 @@ public class ExpertiseUrls {
     public static final String ChangeDeadlineDateView = ChangeDeadlineDate + "/view";
     public static final String ChangeDeadlineDateConfig= ChangeDeadlineDate + "/config";
 
+    //Conclusion
+    private static final String  Conclusion = Prefix + "/conclusion";
+    public static final String ConclusionList = Conclusion + "/list";
+    public static final String ConclusionListAjax = Conclusion + "/list_ajax";
+    public static final String ConclusionView = Conclusion + "/view";
+
 }

@@ -1,8 +1,11 @@
 package uz.maroqand.ecology.core.repository.expertise;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 09.07.2019.
@@ -10,7 +13,12 @@ import uz.maroqand.ecology.core.entity.expertise.Conclusion;
  * (ru)
  */
 @Repository
-public interface ConclusionRepository extends JpaRepository<Conclusion, Integer> {
+public interface ConclusionRepository extends JpaRepository<Conclusion, Integer>, JpaSpecificationExecutor<Conclusion> {
 
+    Conclusion findByIdAndDeletedFalse(Integer id);
 
+    Conclusion findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer id);
+
+    @Override
+    List<Conclusion> findAll();
 }
