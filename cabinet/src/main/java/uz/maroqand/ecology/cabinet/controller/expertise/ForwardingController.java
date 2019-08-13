@@ -132,8 +132,8 @@ public class ForwardingController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog.getStatus()!=null? performerLog.getStatus().getPerformerName():"",
-                    performerLog.getStatus()!=null? performerLog.getStatus().getId():"",
+                    performerLog!=null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog!=null ? performerLog.getStatus().getId():"",
                     forwardingLog.getStatus()!=null? forwardingLog.getStatus().getForwardingName():"",
                     forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():""
             });
