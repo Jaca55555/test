@@ -180,6 +180,11 @@ public class AgreementController {
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
+
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+        model.addAttribute("agreementLog", regApplicationLog);
+        model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         return ExpertiseTemplates.AgreementView;
     }
 
@@ -187,7 +192,7 @@ public class AgreementController {
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "logId")Integer logId,
-            @RequestParam(name = "performerStatus")Integer performerStatus,
+            @RequestParam(name = "agreementStatus")Integer agreementStatus,
             @RequestParam(name = "comment")String comment
     ){
         User user = userService.getCurrentUserFromContext();
@@ -197,13 +202,15 @@ public class AgreementController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
 
-        regApplication.setStatus(RegApplicationStatus.Process);
-        regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
-        regApplicationService.update(regApplication);
+        if(agreementStatus==2){
+            regApplication.setStatus(RegApplicationStatus.Process);
+            regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+            regApplicationService.update(regApplication);
+        }
 
         return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId();
     }

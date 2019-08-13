@@ -9,100 +9,6 @@
         .table td, .table th{
             white-space: unset;
         }
-        .datepicker>.datepicker-days {
-            display: block;
-        }
-
-        .add-file {
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-        }
-
-        .add-file i {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file {
-            position: relative;
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-            color: #748892;
-        }
-
-        .file-icon {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file span {
-            position: absolute;
-            bottom: 35px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .file p {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            font-size: 10px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        .file a{
-            color: #748892;
-        }
-
-        .file a:hover {
-            color: #5CB85C;
-        }
-        .file-delete-btn {
-            color: red;
-            position: absolute;
-            right: 0;
-            border: none;
-            margin: 5px;
-        }
-        .file-delete-btn:hover {
-            color:darkred;
-        }
-
-        #upload-gif{
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 125px;
-        }
-
-        #percentage {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
     </style>
 </head>
 <body class="layout-6">
@@ -184,7 +90,7 @@
                                                 <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
-                                                <object th:include="expertise/performer/sender_fragment :: sender" th:remove="tag"></object>
+                                                <object th:include="expertise/performer/result :: result" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                                 <object th:include="expertise/performer/chat_fragment :: chat" th:remove="tag"></object>
@@ -261,7 +167,7 @@
 
     var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
-    var regApplicationId = [[${regApplicationLog.id}]];
+    var regApplicationId = [[${performerLog.id}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     $(document).ready(function () {

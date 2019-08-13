@@ -162,9 +162,7 @@ public class PerformerController {
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-        RegApplicationLog agreementLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
-        RegApplicationLog agreementCompleteLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -191,10 +189,11 @@ public class PerformerController {
         model.addAttribute("applicant", client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog",performerLog);
 
-        model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("agreementLog", agreementLog);
-        model.addAttribute("agreementCompleteLog", agreementCompleteLog);
+        model.addAttribute("performerLog", performerLog);
+        model.addAttribute("agreementLog", regApplicationLogService.getById(regApplication.getAgreementLogId()));
+        model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         return ExpertiseTemplates.PerformerView;
     }
 
@@ -214,7 +213,6 @@ public class PerformerController {
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), "", user);
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Agreement,"",user);
-        regApplicationLogCreate = regApplicationLogService.update(regApplicationLogCreate,LogStatus.Initial,"",user);
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementLogId(regApplicationLogCreate.getId());
