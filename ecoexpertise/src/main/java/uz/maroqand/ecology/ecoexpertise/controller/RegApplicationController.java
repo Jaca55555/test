@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
@@ -27,9 +28,12 @@ import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.entity.user.UserAdditional;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
+import uz.maroqand.ecology.core.service.user.UserAdditionalService;
+import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -55,6 +59,7 @@ import java.util.*;
 public class RegApplicationController {
 
     private final UserService userService;
+    private final UserAdditionalService userAdditionalService;
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
@@ -83,7 +88,7 @@ public class RegApplicationController {
     @Autowired
     public RegApplicationController(
             UserService userService,
-            SoatoService soatoService,
+            UserAdditionalService userAdditionalService, SoatoService soatoService,
             OpfService opfService,
             RegApplicationService regApplicationService,
             ClientService clientService,
@@ -108,6 +113,7 @@ public class RegApplicationController {
             CoordinateLatLongRepository coordinateLatLongRepository
     ) {
         this.userService = userService;
+        this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
@@ -916,6 +922,27 @@ public class RegApplicationController {
         model.addAttribute("back_url", RegUrls.RegApplicationList);
         model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
         return RegTemplates.RegApplicationStatus;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationConfirmFacture)
+    public String getConfirmFacture(@RequestParam(name = "id")Integer id){
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        User user = userService.getCurrentUserFromContext();
+        UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
+        if (userAdditional==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        if (userAdditional.getLoginType()== LoginType.EcoExpertiseIgGovUz){
+            regApplication.setFacture(Boolean.TRUE);
+            regApplicationService.update(regApplication);
+            return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+        }else{
+            return "redirect:" + SysUrls.EDSLogin;
+        }
     }
 
     @RequestMapping(value = RegUrls.RegApplicationCommentAdd,method = RequestMethod.POST)
