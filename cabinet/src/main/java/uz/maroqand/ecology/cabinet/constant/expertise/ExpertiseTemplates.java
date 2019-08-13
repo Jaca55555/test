@@ -59,5 +59,10 @@ public class ExpertiseTemplates {
     public static final String ChangeDeadlineDateList = ChangeDeadlineDate + "/list";
     public static final String ChangeDeadlineDateView = ChangeDeadlineDate + "/view";
 
+    //Conclusion
+    private static final String Conclusion = Prefix + "/conclusion";
+    public static final String ConclusionList = Conclusion + "/list";
+    public static final String ConclusionView = Conclusion + "/view";
+
 
 }

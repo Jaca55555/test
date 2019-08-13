@@ -1,9 +1,11 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 09.07.2019.
@@ -44,6 +46,13 @@ public class Conclusion {
     /*
      * Technical Fields
      */
+
+    //ilova fayllar
+    @ManyToMany
+    @JoinTable(name = "conclusion_jt_files",
+            joinColumns = { @JoinColumn(name = "files") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> files;
 
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
