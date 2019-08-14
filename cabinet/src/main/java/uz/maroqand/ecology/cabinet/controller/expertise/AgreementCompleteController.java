@@ -206,8 +206,13 @@ public class AgreementCompleteController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
 
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
         if(agreementStatus==2){
-            regApplication.setStatus(RegApplicationStatus.Approved);
+            switch (performerLog.getStatus()){
+                case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
+                case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
+                case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
+            }
             regApplicationService.update(regApplication);
         }
         return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();

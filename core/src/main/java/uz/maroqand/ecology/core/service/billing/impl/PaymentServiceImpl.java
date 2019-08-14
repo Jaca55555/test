@@ -61,13 +61,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> findAllByInvoiceId(Integer invoiceId){
-        return paymentRepository.findAllByInvoiceIdAndDeletedFalse(invoiceId);
-    }
-
-    @Override
-    public Payment getByInvoiceId(Integer id) {
-        return paymentRepository.findByInvoiceId(id);
+    public List<Payment> getByInvoiceId(Integer id) {
+        return paymentRepository.findByInvoiceIdAndDeletedFalse(id);
     }
 
 

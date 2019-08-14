@@ -17,9 +17,7 @@ public interface PaymentService {
 
     Payment pay(Integer invoiceId, Double amount, Date paymentDate, String detail, PaymentType paymentType);
 
-    Payment getByInvoiceId(Integer id);
-
-    List<Payment> findAllByInvoiceId(Integer invoiceId);
+    List<Payment> getByInvoiceId(Integer id);
 
     Map<String,Object> sendSmsPaymentAndGetResponseMap(
             Invoice invoice,

@@ -29,6 +29,9 @@ public class RegUrls {
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
     public static final String RegApplicationStatus = RegApplication + "/status";
+    public static final String RegApplicationResend = RegApplication + "/resend";
+
+    public static final String RegApplicationConclusionDownload = Prefix + "/conclusion_file/download";
     public static final String RegApplicationConfirmFacture = RegApplication + "/confirm/facture";
     public static final String RegApplicationCommentAdd = RegApplication + "/comment_add";
     public static final String RegApplicationCommentFileUpload = Prefix + "/comment/file/upload";

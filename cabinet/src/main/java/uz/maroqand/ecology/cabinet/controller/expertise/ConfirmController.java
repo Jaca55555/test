@@ -57,7 +57,6 @@ public class ConfirmController {
     private final UserService userService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
-    private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
     private final RegApplicationLogService regApplicationLogService;
@@ -75,7 +74,6 @@ public class ConfirmController {
             ClientService clientService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            CommentService commentService,
             HelperService helperService,
             FileService fileService,
             RegApplicationLogService regApplicationLogService,
@@ -90,7 +88,6 @@ public class ConfirmController {
         this.clientService = clientService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
-        this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
         this.regApplicationLogService = regApplicationLogService;
@@ -175,9 +172,6 @@ public class ConfirmController {
         }else {
             model.addAttribute("legalEntity", new LegalEntityDto(client));
         }
-
-        Comment comment = commentService.getByRegApplicationId(regApplication.getId());
-        model.addAttribute("comment",comment!=null?comment:new Comment());
 
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
         if(coordinate != null){

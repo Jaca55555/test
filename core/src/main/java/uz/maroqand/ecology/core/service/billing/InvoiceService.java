@@ -18,6 +18,8 @@ public interface InvoiceService {
 
     Invoice create(RegApplication regApplication, Requirement requirement);
 
+    Invoice modification(RegApplication regApplication, Invoice invoice, Requirement requirement);
+
     Invoice getInvoice(Integer id);
 
     Invoice getInvoice(String invoice);

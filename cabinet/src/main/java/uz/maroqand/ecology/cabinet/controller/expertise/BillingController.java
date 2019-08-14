@@ -126,10 +126,11 @@ public class BillingController {
         HashMap<String,Object> result = new HashMap<>();
 
         Invoice invoice = invoiceService.getInvoice(id);
-        Client client = clientService.getById(invoice.getClientId());
-        if(invoice == null)
+        if(invoice == null){
             return null;
-        List<Payment> paymentList = paymentService.findAllByInvoiceId(id);
+        }
+        Client client = clientService.getById(invoice.getClientId());
+        List<Payment> paymentList = paymentService.getByInvoiceId(id);
 
         Double paymentTotal = 0.0;
         Double invoiceLeft = invoice.getAmount();

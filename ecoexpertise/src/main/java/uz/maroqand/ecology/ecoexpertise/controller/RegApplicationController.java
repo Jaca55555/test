@@ -235,6 +235,7 @@ public class RegApplicationController {
         return "redirect:" + RegUrls.RegApplicationList;
     }
 
+
     @RequestMapping(value = RegUrls.RegApplicationApplicant,method = RequestMethod.GET)
     public String getApplicantPage(
             @RequestParam(name = "id") Integer id,
@@ -242,17 +243,11 @@ public class RegApplicationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+        String check = check(regApplication,user);
+        if(check!=null){
+            return check;
         }
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus() != LogStatus.Denied){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
-                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-            }
-        }
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         //client begin
@@ -301,9 +296,9 @@ public class RegApplicationController {
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+        String check = check(regApplication,user);
+        if(check!=null){
+            return check;
         }
 
         Client applicant = regApplication.getApplicant();
@@ -328,17 +323,9 @@ public class RegApplicationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Denied){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
-                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-            }
+        String check = check(regApplication,user);
+        if(check!=null){
+            return check;
         }
 
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
@@ -373,9 +360,9 @@ public class RegApplicationController {
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+        String check = check(regApplication,user);
+        if(check!=null){
+            return check;
         }
 
         if(coordinates!=null && !coordinates.isEmpty()) {
@@ -439,14 +426,555 @@ public class RegApplicationController {
         regApplication.setActivityId(activityId);
         regApplication.setCategory(activity!=null? activity.getCategory():null);
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
-        regApplication.setConfirmLogId(regApplicationLog.getId());
+        RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
+            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
+            regApplication.setConfirmLogId(regApplicationLog.getId());
+        }
 
         regApplication.setStep(RegApplicationStep.ABOUT);
         regApplicationService.update(regApplication);
-
         return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
     }
+
+    @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.GET)
+    public String getWaitingPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        if (regApplicationLog==null){
+            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
+        }
+        if (regApplication.getForwardingLogId() != null){
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
+
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
+        model.addAttribute("back_url", RegUrls.RegApplicationAbout + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
+        return RegTemplates.RegApplicationWaiting;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.POST)
+    public String regApplicationWaiting(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Approved){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlari tasdiqlanmagan.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
+        }
+
+        return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.GET)
+    public String getContractPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        if (regApplication.getConfirmLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus()!=LogStatus.Approved){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+            }
+        }
+        if (regApplication.getConfirmLogId()==null){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
+            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
+        }
+
+        if (regApplication.getPerformerLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            if(regApplicationLog.getStatus() != LogStatus.Modification){
+                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+            }
+        }
+
+        Offer offer;
+        if(regApplication.getOfferId()!=null){
+            //offerta tasdiqlangan
+            offer = offerService.getById(regApplication.getOfferId());
+            model.addAttribute("action_url", RegUrls.RegApplicationContract);
+        }else {
+            //offerta tasdiqlanmagan
+            offer = offerService.getOffer(regApplication.getBudget());
+            model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
+        }
+
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("offer", offer);
+        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
+        return RegTemplates.RegApplicationContract;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationContractConfirm,method = RequestMethod.POST)
+    public String regApplicationContractConfirm(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        if(regApplication.getOfferId() != null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
+
+        Offer offer = offerService.getOffer(regApplication.getBudget());
+        regApplication.setOfferId(offer.getId());
+
+        String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
+        regApplication.setContractNumber(contractNumber);
+        regApplication.setContractDate(new Date());
+        regApplication.setStep(RegApplicationStep.CONTRACT);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.POST)
+    public String regApplicationContract(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        if(regApplication.getOfferId()==null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
+
+        regApplication.setStep(RegApplicationStep.PAYMENT);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationPrepayment)
+    public String getPrepaymentPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        System.out.println("prepayment---1---");
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        System.out.println("prepayment---2---");
+        if(regApplication.getOfferId() == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
+        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+        System.out.println("prepayment---3---");
+        Invoice invoice;
+        if (regApplication.getInvoiceId()==null){
+            invoice = invoiceService.create(regApplication,requirement);
+            regApplication.setInvoiceId(invoice.getId());
+            regApplicationService.update(regApplication);
+        }else{
+            invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+            invoice = invoiceService.modification(regApplication, invoice, requirement);
+            if (invoice.getStatus()== InvoiceStatus.Success){
+                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+            }
+        }
+        System.out.println("prepayment---4---");
+        model.addAttribute("invoice", invoice);
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("upay_url", RegUrls.RegApplicationStatus+ "?id=" + id);
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
+        return RegTemplates.RegApplicationPrepayment;
+    }
+
+
+    @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
+    @ResponseBody
+    public Map<String,Object> sendSmsPayment(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "telephone") String telephone,
+            @RequestParam(name = "cardNumber") String cardNumber,
+            @RequestParam(name = "cardMonth") String cardMonth,
+            @RequestParam(name = "cardYear") String cardYear
+    ) {
+        String failUrl = RegUrls.RegApplicationPaymentSendSms;
+        String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+
+        return paymentService.sendSmsPaymentAndGetResponseMap(
+                invoice,
+                telephone,
+                cardNumber,
+                cardMonth,
+                cardYear,
+                successUrl,
+                failUrl
+        );
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
+    @ResponseBody
+    public Map<String, Object> confirmSmsPayment(
+            @RequestParam(name = "id") Integer applicationId,
+            @RequestParam(name = "trId") Integer trId,
+            @RequestParam(name = "paymentId") Integer paymentId,
+            @RequestParam(name = "confirmSms") String confirmSms
+    ) {
+        String successUrl = RegUrls.RegApplicationStatus+ "?id=" + applicationId;
+        String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
+
+        return paymentService.confirmSmsAndGetResponseAsMap(
+                applicationId,
+                paymentId,
+                trId,
+                confirmSms,
+                successUrl,
+                failUrl
+        );
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationStatus)
+    public String getStatusPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if(regApplication == null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        //testPay
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+        if(invoice == null){
+            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        }
+        if (invoice.getStatus()!=InvoiceStatus.Success){
+            invoice = invoiceService.payTest(invoice.getId());
+        }
+
+        if(regApplication.getForwardingLogId()==null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+            regApplication.setForwardingLogId(regApplicationLog.getId());
+            regApplication.setStatus(RegApplicationStatus.Process);
+            regApplication.setRegistrationDate(new Date());
+            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
+            regApplicationService.update(regApplication);
+        }
+
+        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("invoice", invoice);
+        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+        model.addAttribute("back_url", RegUrls.RegApplicationList);
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
+        return RegTemplates.RegApplicationStatus;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationResend)
+    public String getResendMethod(
+            @RequestParam(name = "id") Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if (regApplication==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        if(!regApplication.getStatus().equals(RegApplicationStatus.Modification)){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","");
+            return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
+        }
+
+        RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+        regApplication.setForwardingLogId(forwardingLog.getId());
+        regApplication.setPerformerLogId(null);
+        regApplication.setAgreementLogId(null);
+        regApplication.setAgreementCompleteLogId(null);
+
+        regApplication.setStatus(RegApplicationStatus.Process);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
+    }
+
+
+    @RequestMapping(value = RegUrls.RegApplicationConfirmFacture)
+    public String getConfirmFacture(@RequestParam(name = "id")Integer id){
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        User user = userService.getCurrentUserFromContext();
+        UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
+        if (userAdditional==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        if (userAdditional.getLoginType()== LoginType.EcoExpertiseIgGovUz){
+            regApplication.setFacture(Boolean.TRUE);
+            regApplicationService.update(regApplication);
+            return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+        }else{
+            return "redirect:" + SysUrls.EDSLogin;
+        }
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationCommentAdd,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> createCommet(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "message") String message
+    ){
+        User user =userService.getCurrentUserFromContext();
+        Integer status=1;
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication==null){
+            status = 0;
+            result.put("status",status);
+            return result;
+        }
+        Comment comment;
+        if (id!=null){
+            comment = commentService.getById(id);
+            if (comment==null){
+                result.put("status",0);
+                return result;
+            }
+        }else{
+            comment = new Comment();
+        }
+        comment.setRegApplicationId(regApplicationId);
+        comment.setCreatedAt(new Date());
+        comment.setCreatedById(user.getId());
+        comment.setDeleted(Boolean.FALSE);
+        comment.setMessage(message);
+        comment = commentService.createComment(comment);
+
+        result.put("status", status);
+        result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
+        result.put("userShorName",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
+        result.put("message",comment.getMessage());
+        result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+
+        return result;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationCommentFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadCommentFile(
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "file") MultipartFile multipartFile,
+            @RequestParam(name = "file_name") String fileName
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment;
+        if (id!=null){
+            comment = commentService.getById(id);
+            if (comment==null || (comment!=null && regApplicationId!=comment.getRegApplicationId())){
+                if (regApplication == null) {
+                    responseMap.put("message", "Object not found.");
+                    return responseMap;
+                }
+            }
+        }else{
+            comment = new Comment();
+            comment.setDeleted(Boolean.TRUE);
+            comment.setCreatedById(user.getId());
+            comment.setCreatedAt(new Date());
+            comment.setRegApplicationId(regApplicationId);
+            comment = commentService.createComment(comment);
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            comment.setDocumentFiles(fileSet);
+            commentService.updateComment(comment);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
+            responseMap.put("link", RegUrls.RegApplicationCommentDownload + "?file_id=" + file.getId() + "&comment_id=" + comment.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("commentId", comment.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(RegUrls.RegApplicationCommentDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "comment_id") Integer commentId
+    ){
+        Comment comment = commentService.getById(commentId);
+        if (comment==null){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            if (comment.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
+        }
+    }
+
+    @RequestMapping(RegUrls.RegApplicationConclusionDownload)
+    public ResponseEntity<Resource> getConclusionDownload(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ){
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null){
+            return null;
+        }
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        if (performerLog==null){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            if (performerLog.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
+        }
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationCommentDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteCommentFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (id==null){
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        Comment comment = commentService.getById(id);
+        if (comment == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = comment.getDocumentFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                comment.setDocumentFiles(fileSet);
+                commentService.updateComment(comment);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationGetOkedName)
+    @ResponseBody
+    public HashMap<String,Object> getOkedName(
+            @RequestParam(name = "okedCode") String okedCode
+    ){
+        Integer status=1;
+        HashMap<String,Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        OKED oked = okedService.getOkedFromOkedV1Code(okedCode);
+        if (oked==null){
+            status=0;
+            result.put("status",status);
+            return result;
+        }
+        result.put("status",status);
+        result.put("okedName",oked.getNameTranslation(locale));
+        return result;
+    }
+
+
+    @RequestMapping(value = RegUrls.GetLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public GnkResponseObject getLegalEntityTaxPayerInfo(
+            @RequestParam(name = "tin") Integer tin
+    ) {
+        return gnkService.getLegalEntityByTin(tin);
+    }
+
+    @RequestMapping(value = RegUrls.GetIndividualByPinfl, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public IndividualPassportInfoResponse getIndividualInfo(
+            @RequestParam(name = "tin", required = false) String tin,
+            @RequestParam(name = "p_serial") String serial,
+            @RequestParam(name = "pinfl") String pinfl
+    ) {
+        System.out.println("serial="+serial);
+        System.out.println("pinfl="+pinfl);
+        return  mipIndividualsPassportInfoService.getPassportInfoBy(serial,pinfl);
+    }
+
 
     @RequestMapping(value = RegUrls.RegApplicationClearCoordinates, method = RequestMethod.POST)
     @ResponseBody
@@ -620,123 +1148,6 @@ public class RegApplicationController {
         return responseMap;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.GET)
-    public String getWaitingPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-        if (regApplicationLog==null){
-            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
-        }
-
-        if (regApplication.getInvoiceId()!=null){
-            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
-        }
-
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", RegUrls.RegApplicationAbout + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
-        return RegTemplates.RegApplicationWaiting;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.POST)
-    public String regApplicationWaiting(
-            @RequestParam(name = "id") Integer id
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Approved){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlari tasdiqlanmagan.");
-                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-            }
-        }
-
-        return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.GET)
-    public String getContractPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Approved){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
-                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-            }
-        }
-        if (regApplication.getConfirmLogId()==null){
-            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
-            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-        }
-
-
-        Offer offer;
-        if(regApplication.getOfferId()!=null){
-            //offerta tasdiqlangan
-            offer = offerService.getById(regApplication.getOfferId());
-            model.addAttribute("action_url", RegUrls.RegApplicationContract);
-        }else {
-            //offerta tasdiqlanmagan
-            offer = offerService.getOffer(regApplication.getBudget());
-            model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
-        }
-
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("offer", offer);
-        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
-        return RegTemplates.RegApplicationContract;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationContractConfirm,method = RequestMethod.POST)
-    public String regApplicationContractConfirm(
-            @RequestParam(name = "id") Integer id
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-        if(regApplication.getOfferId() != null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
-            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
-        }
-
-        Offer offer = offerService.getOffer(regApplication.getBudget());
-        regApplication.setOfferId(offer.getId());
-
-        String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
-        regApplication.setContractNumber(contractNumber);
-        regApplication.setContractDate(new Date());
-        regApplication.setStep(RegApplicationStep.CONTRACT);
-        regApplicationService.update(regApplication);
-
-        return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
-    }
-
     @RequestMapping(RegUrls.RegApplicationContractOfferDownload)
     public ResponseEntity<Resource> getOfferDownload(
             @RequestParam(name = "offer_id", required = false) Integer offerId
@@ -759,361 +1170,28 @@ public class RegApplicationController {
         }
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.POST)
-    public String regApplicationContract(
-            @RequestParam(name = "id") Integer id
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+    private String check(RegApplication regApplication, User user){
         if(regApplication == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        if(regApplication.getOfferId()==null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
-        }
-
-        regApplication.setStep(RegApplicationStep.PAYMENT);
-        regApplicationService.update(regApplication);
-
-        return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationPrepayment)
-    public String getPrepaymentPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-        if(regApplication.getOfferId() == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
-        }
-        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-
-        Invoice invoice;
-        if (regApplication.getInvoiceId()==null){
-            invoice = invoiceService.create(regApplication,requirement);
-            regApplication.setInvoiceId(invoice.getId());
-            regApplicationService.update(regApplication);
-        }else{
-            invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            if (invoice.getStatus()== InvoiceStatus.Success){
-                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+        Boolean modification = true;
+        if (regApplication.getPerformerLogId()!=null){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            if(regApplicationLog.getStatus() != LogStatus.Modification){
+                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
+            }else {
+                modification = false;
             }
         }
-
-        model.addAttribute("invoice", invoice);
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", RegUrls.RegApplicationStatus+ "?id=" + id);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
-        return RegTemplates.RegApplicationPrepayment;
-    }
-
-
-    @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
-    @ResponseBody
-    public Map<String,Object> sendSmsPayment(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "telephone") String telephone,
-            @RequestParam(name = "cardNumber") String cardNumber,
-            @RequestParam(name = "cardMonth") String cardMonth,
-            @RequestParam(name = "cardYear") String cardYear
-    ) {
-        String failUrl = RegUrls.RegApplicationPaymentSendSms;
-        String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-
-        return paymentService.sendSmsPaymentAndGetResponseMap(
-                invoice,
-                telephone,
-                cardNumber,
-                cardMonth,
-                cardYear,
-                successUrl,
-                failUrl
-        );
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
-    @ResponseBody
-    public Map<String, Object> confirmSmsPayment(
-            @RequestParam(name = "id") Integer applicationId,
-            @RequestParam(name = "trId") Integer trId,
-            @RequestParam(name = "paymentId") Integer paymentId,
-            @RequestParam(name = "confirmSms") String confirmSms
-    ) {
-        String successUrl = RegUrls.RegApplicationStatus+ "?id=" + applicationId;
-        String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
-
-        return paymentService.confirmSmsAndGetResponseAsMap(
-                applicationId,
-                paymentId,
-                trId,
-                confirmSms,
-                successUrl,
-                failUrl
-        );
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationStatus)
-    public String getStatusPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-
-        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-        if (invoice.getStatus()!=InvoiceStatus.Success){
-            invoice = invoiceService.payTest(invoice.getId());
-        }
-
-        if(regApplication.getForwardingLogId()==null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-            regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.Initial);
-            regApplication.setRegistrationDate(new Date());
-            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-            regApplicationService.update(regApplication);
-        }
-
-        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("commentList", commentList);
-        model.addAttribute("invoice", invoice);
-        model.addAttribute("back_url", RegUrls.RegApplicationList);
-        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
-        return RegTemplates.RegApplicationStatus;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationConfirmFacture)
-    public String getConfirmFacture(@RequestParam(name = "id")Integer id){
-        RegApplication regApplication = regApplicationService.getById(id);
-        if (regApplication==null){
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-        User user = userService.getCurrentUserFromContext();
-        UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
-        if (userAdditional==null){
-            return "redirect:" + RegUrls.RegApplicationList;
-        }
-
-        if (userAdditional.getLoginType()== LoginType.EcoExpertiseIgGovUz){
-            regApplication.setFacture(Boolean.TRUE);
-            regApplicationService.update(regApplication);
-            return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
-        }else{
-            return "redirect:" + SysUrls.EDSLogin;
-        }
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationCommentAdd,method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String,Object> createCommet(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "regApplicationId") Integer regApplicationId,
-            @RequestParam(name = "message") String message
-    ){
-        User user =userService.getCurrentUserFromContext();
-        Integer status=1;
-        HashMap<String,Object> result = new HashMap<>();
-        RegApplication regApplication = regApplicationService.getById(regApplicationId);
-        if (regApplication==null){
-            status = 0;
-            result.put("status",status);
-            return result;
-        }
-        Comment comment;
-        if (id!=null){
-            comment = commentService.getById(id);
-            if (comment==null){
-                result.put("status",0);
-                return result;
-            }
-        }else{
-            comment = new Comment();
-        }
-        comment.setRegApplicationId(regApplicationId);
-        comment.setCreatedAt(new Date());
-        comment.setCreatedById(user.getId());
-        comment.setDeleted(Boolean.FALSE);
-        comment.setMessage(message);
-        comment = commentService.createComment(comment);
-
-        result.put("status", status);
-        result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
-        result.put("userShorName",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
-        result.put("message",comment.getMessage());
-        result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
-
-        return result;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationCommentFileUpload, method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public HashMap<String, Object> uploadCommentFile(
-            @RequestParam(name = "id",required = false) Integer id,
-            @RequestParam(name = "regApplicationId") Integer regApplicationId,
-            @RequestParam(name = "file") MultipartFile multipartFile,
-            @RequestParam(name = "file_name") String fileName
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        HashMap<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", 0);
-
-        RegApplication regApplication = regApplicationService.getById(regApplicationId);
-        if (regApplication == null) {
-            responseMap.put("message", "Object not found.");
-            return responseMap;
-        }
-
-        Comment comment;
-        if (id!=null){
-            comment = commentService.getById(id);
-            if (comment==null || (comment!=null && regApplicationId!=comment.getRegApplicationId())){
-                if (regApplication == null) {
-                    responseMap.put("message", "Object not found.");
-                    return responseMap;
-                }
-            }
-        }else{
-            comment = new Comment();
-            comment.setDeleted(Boolean.TRUE);
-            comment.setCreatedById(user.getId());
-            comment.setCreatedAt(new Date());
-            comment.setRegApplicationId(regApplicationId);
-            comment = commentService.createComment(comment);
-        }
-
-        File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);
-        if (file != null) {
-            Set<File> fileSet = comment.getDocumentFiles();
-            if (fileSet==null) fileSet = new HashSet<>();
-            fileSet.add(file);
-            comment.setDocumentFiles(fileSet);
-            commentService.updateComment(comment);
-
-            responseMap.put("name", file.getName());
-            responseMap.put("description", file.getDescription());
-            responseMap.put("link", RegUrls.RegApplicationCommentDownload + "?file_id=" + file.getId() + "&comment_id=" + comment.getId());
-            responseMap.put("fileId", file.getId());
-            responseMap.put("commentId", comment.getId());
-            responseMap.put("status", 1);
-        }
-        return responseMap;
-    }
-
-    @RequestMapping(RegUrls.RegApplicationCommentDownload)
-    public ResponseEntity<Resource> downloadFile(
-            @RequestParam(name = "file_id") Integer fileId,
-            @RequestParam(name = "comment_id") Integer commentId
-    ){
-        Comment comment = commentService.getById(commentId);
-        if (comment==null){
-            return null;
-        }
-        File file = fileService.findById(fileId);
-        if (file == null) {
-            return null;
-        } else {
-            if (comment.getDocumentFiles().contains(file)){
-                return fileService.getFileAsResourceForDownloading(file);
-            }else{
-                return  null;
+        if (regApplication.getConfirmLogId()!=null && modification){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(regApplicationLog.getStatus() != LogStatus.Denied){
+                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
             }
         }
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationCommentDelete, method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public HashMap<String, Object> deleteCommentFile(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "fileId") Integer fileId
-    ) {
-        User user = userService.getCurrentUserFromContext();
-
-        HashMap<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", 0);
-
-        if (id==null){
-            responseMap.put("message", "Object not found.");
-            return responseMap;
-        }
-
-        Comment comment = commentService.getById(id);
-        if (comment == null) {
-            responseMap.put("message", "Object not found.");
-            return responseMap;
-        }
-        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
-
-        if (file != null) {
-            Set<File> fileSet = comment.getDocumentFiles();
-            if(fileSet.contains(file)) {
-                fileSet.remove(file);
-                comment.setDocumentFiles(fileSet);
-                commentService.updateComment(comment);
-
-                file.setDeleted(true);
-                file.setDateDeleted(new Date());
-                file.setDeletedById(user.getId());
-                fileService.save(file);
-
-                responseMap.put("status", 1);
-            }
-        }
-        return responseMap;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationGetOkedName)
-    @ResponseBody
-    public HashMap<String,Object> getOkedName(
-            @RequestParam(name = "okedCode") String okedCode
-    ){
-        Integer status=1;
-        HashMap<String,Object> result = new HashMap<>();
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        OKED oked = okedService.getOkedFromOkedV1Code(okedCode);
-        if (oked==null){
-            status=0;
-            result.put("status",status);
-            return result;
-        }
-        result.put("status",status);
-        result.put("okedName",oked.getNameTranslation(locale));
-        return result;
-    }
-
-
-    @RequestMapping(value = RegUrls.GetLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public GnkResponseObject getLegalEntityTaxPayerInfo(
-            @RequestParam(name = "tin") Integer tin
-    ) {
-        return gnkService.getLegalEntityByTin(tin);
-    }
-
-    @RequestMapping(value = RegUrls.GetIndividualByPinfl, method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public IndividualPassportInfoResponse getIndividualInfo(
-            @RequestParam(name = "tin", required = false) String tin,
-            @RequestParam(name = "p_serial") String serial,
-            @RequestParam(name = "pinfl") String pinfl
-    ) {
-        System.out.println("serial="+serial);
-        System.out.println("pinfl="+pinfl);
-        return  mipIndividualsPassportInfoService.getPassportInfoBy(serial,pinfl);
+        return null;
     }
 
 }
