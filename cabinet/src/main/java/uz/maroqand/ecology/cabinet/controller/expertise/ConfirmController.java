@@ -18,6 +18,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
@@ -203,6 +204,7 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
         notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
@@ -225,6 +227,7 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
 
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
         notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
@@ -252,6 +255,7 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
         notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
@@ -279,6 +283,7 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
         notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
