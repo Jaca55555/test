@@ -248,36 +248,38 @@ public class RegApplicationController {
         }
         if (regApplication.getConfirmLogId()!=null){
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Denied){
+            if(regApplicationLog.getStatus() != LogStatus.Denied){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
                 return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
             }
         }
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
+        //client begin
         Client applicant = regApplication.getApplicant();
         if(applicant==null || applicant.getType()==null){
             applicant = new Client();
             applicant.setType(ApplicantType.LegalEntity);
         }
 
-        model.addAttribute("individual", new IndividualDto());
-        model.addAttribute("legalEntity", new LegalEntityDto());
-        model.addAttribute("foreignIndividual", new ForeignIndividualDto());
-        model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto());
+        IndividualDto individualDto = new IndividualDto();
+        LegalEntityDto legalEntityDto = new LegalEntityDto();
+        ForeignIndividualDto foreignIndividualDto = new ForeignIndividualDto();
+        IndividualEntrepreneurDto individualEntrepreneurDto = new IndividualEntrepreneurDto();
 
         switch (applicant.getType()){
-            case Individual:
-            model.addAttribute("individual", new IndividualDto(applicant));break;
-            case LegalEntity:
-            model.addAttribute("legalEntity", new LegalEntityDto(applicant));break;
-            case ForeignIndividual:
-            model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant));break;
-            case IndividualEnterprise:
-                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant));break;
+            case Individual: individualDto = new IndividualDto(applicant);break;
+            case LegalEntity: legalEntityDto = new LegalEntityDto(applicant);break;
+            case ForeignIndividual: foreignIndividualDto = new ForeignIndividualDto(applicant);break;
+            case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }
-
         model.addAttribute("applicant", applicant);
+        model.addAttribute("individual", individualDto);
+        model.addAttribute("legalEntity", legalEntityDto);
+        model.addAttribute("foreignIndividual", foreignIndividualDto);
+        model.addAttribute("individualEntrepreneur", individualEntrepreneurDto);
+        //client end
+
         model.addAttribute("opfLegalEntityList", opfService.getOpfLegalEntityList());
         model.addAttribute("opfIndividualList", opfService.getOpfIndividualList());
         model.addAttribute("countriesList", countryService.getCountriesList(locale));
@@ -292,10 +294,10 @@ public class RegApplicationController {
     public String createRegApplication(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "applicantType") String applicantType,
-            LegalEntityDto legalEntityDto,
-            IndividualDto individualDto,
+            IndividualEntrepreneurDto individualEntrepreneurDto,
             ForeignIndividualDto foreignIndividualDto,
-            IndividualEntrepreneurDto individualEntrepreneurDto
+            LegalEntityDto legalEntityDto,
+            IndividualDto individualDto
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -339,62 +341,23 @@ public class RegApplicationController {
             }
         }
 
-        if (regApplication.getInvoiceId()!=null){
-            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
-        }
-
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
         if(coordinate != null){
-            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
             model.addAttribute("coordinate", coordinate);
-            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
         }
 
-        ProjectDeveloper projectDeveloper = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):null;
-        Integer categoryId=regApplication.getCategory()!=null?regApplication.getCategory().getId():null;
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("categoryId", categoryId);
-        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
-        model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("projectDeveloper",projectDeveloper!=null ? projectDeveloper : new ProjectDeveloper());
-        model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
+        model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
+
+        model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return RegTemplates.RegApplicationAbout;
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationClearCoordinates, method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String, Object> clearCoordinates(
-            @RequestParam(name = "regApplicationId") Integer regApplicationId
-    ) {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("status", 0);
-        if(regApplicationId == null){
-            return result;
-        }
-
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(regApplicationId, user.getId());
-        if(regApplication == null){
-            return result;
-        }
-
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
-        if(coordinate == null){
-            return result;
-        }
-        List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
-        for(CoordinateLatLong coordinateLatLong : coordinateLatLongList){
-            coordinateLatLong.setDeleted(true);
-            coordinateLatLongRepository.save(coordinateLatLong);
-        }
-        coordinate.setDeleted(true);
-        coordinateRepository.save(coordinate);
-
-        result.put("status", 1);
-        return result;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.POST)
@@ -485,6 +448,39 @@ public class RegApplicationController {
         return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
     }
 
+    @RequestMapping(value = RegUrls.RegApplicationClearCoordinates, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> clearCoordinates(
+            @RequestParam(name = "regApplicationId") Integer regApplicationId
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", 0);
+        if(regApplicationId == null){
+            return result;
+        }
+
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId, user.getId());
+        if(regApplication == null){
+            return result;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        if(coordinate == null){
+            return result;
+        }
+        List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+        for(CoordinateLatLong coordinateLatLong : coordinateLatLongList){
+            coordinateLatLong.setDeleted(true);
+            coordinateLatLongRepository.save(coordinateLatLong);
+        }
+        coordinate.setDeleted(true);
+        coordinateRepository.save(coordinate);
+
+        result.put("status", 1);
+        return result;
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationGetActivity, method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getActivity(
@@ -557,10 +553,6 @@ public class RegApplicationController {
             responseMap.put("message", "Object not found.");
             return responseMap;
         }
-        /*if (regApplication.getStatus() != regApplication.Initial) {
-            responseMap.put("message", "Object will not able to update.");
-            return responseMap;
-        }*/
 
         File file = fileService.uploadFile(multipartFile, user.getId(),"regApplication="+regApplication.getId(),fileNname);
         if (file != null) {
@@ -728,7 +720,7 @@ public class RegApplicationController {
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        if(regApplication.getOfferId()!=null){
+        if(regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
         }
@@ -798,73 +790,56 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
+        if(regApplication.getOfferId() == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
+            return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
+        }
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
 
-        Invoice invoice = null;
+        Invoice invoice;
         if (regApplication.getInvoiceId()==null){
             invoice = invoiceService.create(regApplication,requirement);
+            regApplication.setInvoiceId(invoice.getId());
+            regApplicationService.update(regApplication);
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-
-            //todo vaqtinchalik
             if (invoice.getStatus()== InvoiceStatus.Success){
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
             }
         }
-        regApplication.setInvoiceId(invoice.getId());
-        regApplicationService.update(regApplication);
+
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", RegUrls.RegApplicationStatus+ "?id=" + id);//todo to`grilash kerak
-
+        model.addAttribute("upay_url", RegUrls.RegApplicationStatus+ "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
         return RegTemplates.RegApplicationPrepayment;
     }
 
-    /*@RequestMapping(value = Urls.RegApplicationPayment)
-    public String getPaymentPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + Urls.RegApplicationList;
-        }
-
-
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("step_id", 4);
-        return Templates.RegApplicationPayment;
-    }*/
 
     @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
     @ResponseBody
     public Map<String,Object> sendSmsPayment(
-            @RequestParam(name = "id") Integer applicationId,
+            @RequestParam(name = "id") Integer id,
             @RequestParam(name = "telephone") String telephone,
             @RequestParam(name = "cardNumber") String cardNumber,
             @RequestParam(name = "cardMonth") String cardMonth,
-            @RequestParam(name = "cardYear") String cardYear,
-            @RequestParam(name = "paymentId") Integer paymentId,
-            @RequestParam(name = "serial") String serial
+            @RequestParam(name = "cardYear") String cardYear
     ) {
-
         String failUrl = RegUrls.RegApplicationPaymentSendSms;
         String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
 
-        /*return paymentService.sendSmsPaymentS2ServiceRegistryAndGetResponseMap(
-                applicationId,
-                cardNumber,
+        return paymentService.sendSmsPaymentAndGetResponseMap(
+                invoice,
                 telephone,
+                cardNumber,
                 cardMonth,
                 cardYear,
-                paymentId,
-                serial,
                 successUrl,
                 failUrl
-        );*/
-        return null;
+        );
     }
 
     @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
@@ -875,19 +850,17 @@ public class RegApplicationController {
             @RequestParam(name = "paymentId") Integer paymentId,
             @RequestParam(name = "confirmSms") String confirmSms
     ) {
-
         String successUrl = RegUrls.RegApplicationStatus+ "?id=" + applicationId;
         String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
 
-        /*return paymentService.confirmSmsAndGetResponseAsMap(
+        return paymentService.confirmSmsAndGetResponseAsMap(
                 applicationId,
                 paymentId,
                 trId,
                 confirmSms,
                 successUrl,
                 failUrl
-        );*/
-        return null;
+        );
     }
 
     @RequestMapping(value = RegUrls.RegApplicationStatus)

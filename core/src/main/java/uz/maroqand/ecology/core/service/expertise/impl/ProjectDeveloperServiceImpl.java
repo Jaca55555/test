@@ -25,7 +25,10 @@ public class ProjectDeveloperServiceImpl implements ProjectDeveloperService {
 
     @Override
     public ProjectDeveloper getById(Integer id) {
-        return projectDeveloperRepository.findById(id).get();
+        if(id==null){
+            return new ProjectDeveloper();
+        }
+        return projectDeveloperRepository.getOne(id);
     }
 
     @Override

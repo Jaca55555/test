@@ -26,7 +26,6 @@ public class OpfServiceImpl implements OpfService {
         Set<Integer> ids = new HashSet<>();
         ids.add(100);
         ids.add(200);
-        ids.add(400);
         ids.add(1000);
         ids.add(2000);
         return opfRepository.findByIdInOrParentIdInOrderByIdAsc(ids,ids);

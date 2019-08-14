@@ -15,4 +15,12 @@ public class Parser {
         }
     }
 
+    public static Double stringToDouble(String val){
+        try {
+            return Double.parseDouble(val);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 }
