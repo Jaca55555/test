@@ -27,7 +27,13 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" id="individualEntrepreneurPinfl" name="individualEntrepreneurPinfl" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14">
+                <div class="input-group ">
+                    <input class="form-control mr-1" required="" style="border-radius: 5px" id="individualEntrepreneurPinfl" name="individualEntrepreneurPinfl" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" data-parsley-errors-container="#individualEntrepreneurPinflError">
+                    <div class="input-group-append">
+                        <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#pinflModal" style="border-radius: 5px"><i class="feather icon-alert-triangle"></i><span th:text="#{pinfl_info}">info</span></button>
+                    </div>
+                </div>
+                <div id="individualEntrepreneurPinflError"></div>
             </div>
         </div>
 
