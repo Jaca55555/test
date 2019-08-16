@@ -116,9 +116,23 @@
         .undo-btn button {
             cursor: pointer;
         }
+        #loader_box {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 999999;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(255, 255, 255, 0.8);
+            background-image: url("/static/images/uploading.gif");
+            background-repeat: no-repeat;
+            background-position: center center;
+            display: none;
+        }
     </style>
 </head>
 <body class="layout-6">
+<div style="display: none;" id="loader_box"></div>
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -295,7 +309,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control only-number" th:field="${projectDeveloper.tin}" required="" minlength="9" maxlength="9"/>
+                                                                <input class="form-control only-number" th:field="${projectDeveloper.tin}" id="projectDeveloperTin" required="" minlength="9" maxlength="9"/>
                                                             </div>
                                                         </div>
 
@@ -305,7 +319,8 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" name="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
+                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
+                                                                <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
                                                             </div>
                                                         </div>
                                                         </br>
@@ -413,6 +428,7 @@
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
     <script th:inline="javascript">
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
         var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileUpload}]];
         var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDelete}]];
         var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
@@ -824,6 +840,38 @@
             $('#about-form').append('<input type="hidden" name="coordinates" value="'+coordinatesListForSubmit+'">');
             $('#about-form').submit();
         }
+
+        $('#projectDeveloperTin').change(function () {
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+            $('#projectDeveloperNameNotification').hide();
+            $("#loader_box").css("display", "block");
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    $("#loader_box").css("display", "none");
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#projectDeveloperName").val(val.name);
+
+                    }else{
+                            $('#projectDeveloperNameNotification').show();
+                    }
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
     </script>
 </body>
 </html>
