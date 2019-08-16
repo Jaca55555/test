@@ -229,13 +229,19 @@
             selectForm($(this).val());
         });
 
-        function getSMSCode() {
-            $('#legalEntityMobilePhone').parsley().validate();
-            if ($('#legalEntityMobilePhone').parsley().isValid()){
-                $('#sms_code').show();
-                $('#allow').attr("hidden", true);
-                $('#notAllow').attr("hidden", false);
+        function getSMSCode(id) {
+            $('#'+id).parsley().validate();
+            if ($('#'+id).parsley().isValid()){
+                $('#sms_code_'+id).show();
+                $('#allow_'+id).attr("hidden", true);
+                $('#notAllow_'+id).attr("hidden", false);
             }
+        }
+
+        function confirmSmsCode(id) {
+            $('#allow_'+id).attr("hidden", false);
+            $('#notAllow_'+id).attr("hidden", true);
+            $('#code_'+id).prop('readonly',true);
         }
         
         function getOkedName() {
