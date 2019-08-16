@@ -290,13 +290,11 @@ public class ConfirmController {
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(ExpertiseUrls.ConfirmFileDownload)
+    @RequestMapping(ExpertiseUrls.ExpertiseFileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "file_id") Integer fileId){
-        User user = userService.getCurrentUserFromContext();
 
-        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
-
+        File file = fileService.findById(fileId);
         if (file == null) {
             return null;
         } else {

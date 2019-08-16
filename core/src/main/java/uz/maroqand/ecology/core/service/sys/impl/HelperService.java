@@ -160,6 +160,13 @@ public class HelperService {
         return material!=null? material.getNameTranslation(locale):"";
     }
 
+    @Cacheable(value = "getMaterialShortName", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
+    public String getMaterialShortName(Integer id, String locale) {
+        if(id==null) return "";
+        Material material = materialService.getById(id);
+        return material!=null? material.getNameShortTranslation(locale):"";
+    }
+
     public String getMaterials(Set<Integer> ids, String locale) {
         if(ids==null) return "";
         String result = "";
@@ -169,6 +176,14 @@ public class HelperService {
         return result.length()>2? result.substring(0,result.length()-2):result;
     }
 
+    public String getMaterialShortNames(Set<Integer> ids, String locale) {
+        if(ids==null) return "";
+        String result = "";
+        for (Integer id:ids){
+            result += getMaterialShortName(id,locale)+", ";
+        }
+        return result.length()>2? result.substring(0,result.length()-2):result;
+    }
 
     /*  common  */
     @Cacheable(value = "getSoatoName", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")

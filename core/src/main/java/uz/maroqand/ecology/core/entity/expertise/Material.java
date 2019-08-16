@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

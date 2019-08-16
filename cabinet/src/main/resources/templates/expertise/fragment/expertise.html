@@ -68,26 +68,6 @@
             </div>
         </div>
 
-        <div class="col-md-3 text-right">
-            <label class="col-form-label" th:text="#{sys_reg_application.documents}"></label>
-        </div>
-        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
-
-            <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
-                <div class="file">
-                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmFileDownload + '?file_id=' + file.id}">
-                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
-                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
-                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
-                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
-                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
-                        <span th:text="${file.description}"></span>
-                        <p th:text="${file.name}"></p>
-                    </a>
-                </div>
-            </div>
-        </div>
-
         <div th:if="${coordinate}">
             <div class="form-group row">
                 <div class="col-md-3 text-right">
@@ -115,6 +95,26 @@
                 <div class="col-md-6 row" style="margin-left: 0;">
                     <input type="text" class="form-control col-md-4" th:value="${coordinateLatLong.longitude}" readonly="">
                     <input type="text" class="form-control col-md-4 offset-md-4" th:value="${coordinateLatLong.latitude}" readonly="">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-right">
+            <label class="col-form-label" th:text="#{sys_reg_application.documents}"></label>
+        </div>
+        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+
+            <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+                <div class="file">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseFileDownload + '?file_id=' + file.id}">
+                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                        <span th:text="${file.description}"></span>
+                        <p th:text="${file.name}"></p>
+                    </a>
                 </div>
             </div>
         </div>

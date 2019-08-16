@@ -133,7 +133,7 @@ public class AgreementController {
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",

@@ -17,7 +17,6 @@ public class ExpertiseUrls {
     public static final String ConfirmDenied = Confirm + "/denied";
     public static final String ConfirmApprovedEdit = Confirm + "/approved/edit";
     public static final String ConfirmDeniedEdit = Confirm + "/denied/edit";
-    public static final String ConfirmFileDownload = Confirm + "/download";
 
     //Boshqaruv
     private static final String Forwarding = Prefix + "/forwarding";
@@ -47,6 +46,10 @@ public class ExpertiseUrls {
     public static final String AgreementCompleteListAjax = AgreementComplete + "/list_ajax";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
     public static final String AgreementCompleteAction = AgreementComplete + "/action";
+
+
+    public static final String ExpertiseFileDownload = Prefix + "/document/download";
+
 
     //File
     public static final String FileUpload = Prefix + "/file/upload";

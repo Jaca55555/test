@@ -119,7 +119,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private Invoice createInvoice(RegApplication regApplication, Invoice invoice, Requirement requirement) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 60);
-        String materials = helperService.getMaterials(regApplication.getMaterials(),"oz");
+        String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
         Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication);
         invoice.setAmount(contract.getAmount());
