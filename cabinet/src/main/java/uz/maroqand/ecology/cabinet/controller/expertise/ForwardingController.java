@@ -177,7 +177,7 @@ public class ForwardingController {
 
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant",client);
-        model.addAttribute("userList",userService.findPerformerList());
+        model.addAttribute("userList",userService.getEmployeesForForwarding());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
