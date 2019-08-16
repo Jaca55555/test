@@ -685,9 +685,11 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
         }
 
-        if(invoice.getAmount().equals(0.0)){
+        //todo invoice amount 0 bo'lishi kerak
+        invoiceService.payTest(invoice.getId());
+        /*if(invoice.getAmount().equals(0.0)){
             invoiceService.payTest(invoice.getId());
-        }
+        }*/
         return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
     }
 
