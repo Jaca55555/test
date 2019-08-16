@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
+import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
@@ -584,19 +585,17 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        System.out.println("prepayment---1---");
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        System.out.println("prepayment---2---");
+
         if(regApplication.getOfferId() == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
         }
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-        System.out.println("prepayment---3---");
         Invoice invoice;
         if (regApplication.getInvoiceId()==null){
             invoice = invoiceService.create(regApplication,requirement);
@@ -605,14 +604,13 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
-            if (invoice.getStatus()== InvoiceStatus.Success){
+            /*if (invoice.getStatus()== InvoiceStatus.Success){
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
-            }
+            }*/
         }
-        System.out.println("prepayment---4---");
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", RegUrls.RegApplicationStatus+ "?id=" + id);
+        model.addAttribute("upay_url", RegUrls.RegApplicationPaymentFree+ "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
         return RegTemplates.RegApplicationPrepayment;
     }
@@ -665,6 +663,34 @@ public class RegApplicationController {
         );
     }
 
+    @RequestMapping(value = RegUrls.RegApplicationPaymentFree)
+    public String getPaymentFreeMethod(
+            @RequestParam(name = "id") Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if (regApplication == null) {
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+        if (regApplication.getInvoiceId() == null){
+            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        }
+
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+        if (invoice == null){
+            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
+        }
+
+        if(invoice.getStatus().equals(InvoiceStatus.Success)){
+            return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+        }
+
+        if(invoice.getAmount().equals(0.0)){
+            invoiceService.payTest(invoice.getId());
+        }
+        return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
@@ -681,8 +707,8 @@ public class RegApplicationController {
         if(invoice == null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
-        if (invoice.getStatus()!=InvoiceStatus.Success){
-            invoice = invoiceService.payTest(invoice.getId());
+        if (invoice.getStatus() != InvoiceStatus.Success){
+            return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
         if(regApplication.getForwardingLogId()==null){
