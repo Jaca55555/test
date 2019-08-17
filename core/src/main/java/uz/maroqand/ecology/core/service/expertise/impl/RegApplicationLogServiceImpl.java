@@ -66,7 +66,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             RegApplication regApplication,
             LogType logType,
             String comment,
-            User user
+            User createdBy
     ){
         RegApplicationLog regApplicationLog = new RegApplicationLog();
         regApplicationLog.setRegApplicationId(regApplication.getId());
@@ -75,7 +75,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         regApplicationLog.setType(logType);
         regApplicationLog.setStatus(LogStatus.Initial);
         regApplicationLog.setCreatedAt(new Date());
-        regApplicationLog.setCreatedById(user.getId());
+        regApplicationLog.setCreatedById(createdBy.getId());
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
@@ -83,14 +83,14 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             RegApplicationLog regApplicationLog,
             LogStatus logStatus,
             String comment,
-            User user
+            User updateBy
     ){
 
         regApplicationLog.setStatus(logStatus);
         regApplicationLog.setComment(comment);
 
         regApplicationLog.setUpdateAt(new Date());
-        regApplicationLog.setUpdateById(user.getId());
+        regApplicationLog.setUpdateById(updateBy.getId());
         return regApplicationLogRepository.save(regApplicationLog);
     }
 

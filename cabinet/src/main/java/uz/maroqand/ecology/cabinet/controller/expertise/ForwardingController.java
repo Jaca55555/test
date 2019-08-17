@@ -221,4 +221,87 @@ public class ForwardingController {
         return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
     }
 
+    @RequestMapping(value = ExpertiseUrls.ForwardingAgreementAdd,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getAddAgreementMethod(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "agreementUserId")Integer agreementUserId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            result.put("status", "1");
+            return result;
+        }
+        Set<Integer> agreementLogs = regApplication.getAgreementLogs();
+        if(agreementLogs == null){
+            agreementLogs = new HashSet<>();
+        }
+        Boolean isAgreementUser = false;
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByIds(agreementLogs);
+        for (RegApplicationLog regApplicationLog:regApplicationLogList){
+            if(regApplicationLog.getUpdateById().equals(agreementUserId)){
+                isAgreementUser = true;
+            }
+        }
+        if (isAgreementUser){
+            result.put("status", "2");
+            return result;
+        }
+
+        User agreementUser = userService.findById(agreementUserId);
+
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+
+        agreementLogs.add(regApplicationLogCreate.getId());
+        regApplication.setAgreementLogs(agreementLogs);
+        regApplicationService.update(regApplication);
+
+        result.put("status", "0");
+        result.put("shorName", helperService.getUserLastAndFirstShortById(agreementUser.getId()));
+        result.put("fullName", helperService.getUserFullNameById(agreementUser.getId()));
+        return result;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ForwardingAgreementDelete,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getDeleteAgreementMethod(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            result.put("status", "1");
+            return result;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if(regApplicationLog == null || !regApplicationLog.getType().equals(LogType.Agreement)){
+            result.put("status", "2");
+            return result;
+        }
+
+        if(!regApplicationLog.getStatus().equals(LogStatus.Initial)){
+            result.put("status", "2");
+            return result;
+        }
+
+        Set<Integer> agreementLogs = regApplication.getAgreementLogs();
+        if(!agreementLogs.contains(logId)){
+            result.put("status", "2");
+            return result;
+        }
+
+        agreementLogs.remove(logId);
+        regApplication.setAgreementLogs(agreementLogs);
+        regApplicationService.update(regApplication);
+
+        result.put("status", "0");
+        return result;
+    }
+
 }

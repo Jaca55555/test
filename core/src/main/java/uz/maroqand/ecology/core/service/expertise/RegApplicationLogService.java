@@ -26,9 +26,9 @@ public interface RegApplicationLogService {
 
     List<RegApplicationLog> getByIds(Set<Integer> ids);
 
-    RegApplicationLog create(RegApplication regApplication, LogType logType, String comment, User user);
+    RegApplicationLog create(RegApplication regApplication, LogType logType, String comment, User createdBy);
 
-    RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, User user);
+    RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, User updateBy);
 
     RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user);
 

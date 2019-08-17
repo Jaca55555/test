@@ -100,7 +100,7 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
-
+    var sysLogTypeAgreement = [[#{sys_logType.agreement}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
     });
@@ -121,6 +121,50 @@
         $("#agreements").select2();
 
     });
+
+
+
+
+
+    function addAgreementUser() {
+        var form = new FormData();
+        form.append("id", $("#regApplicationId").val());
+        form.append("agreementUserId", $("#agreements").val());
+        form.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: '/expertise/forwarding/agreement/add',
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if(response.status === '0'){
+                    $('#agreementsTable').append(
+                        '<tr >' +
+                        '   <td class="text-right">' +
+                        '       <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" >'+response.shorName+'</span>' +
+                        '   </td>' +
+                        '   <td style="width: 80%;">' +
+                        '       <h6 class="mb-0">'+response.fullName+'</h6>' +
+                        '       <small >'+sysLogTypeAgreement+'</small>' +
+                        '   </td>' +
+                        '</tr>'
+                    );
+                }else {
+                    alert('Kelishish uchun yuborishda muammo yuzaga keldi, yuborib bo\'lmadi');
+                }
+
+            }
+        });
+    }
+
+
+
+
+
+
     function openInputFile() {
         document.getElementById("file-input").click();
     };

@@ -32,31 +32,29 @@
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <select class="form-control" id="agreements" name="agreements">
                     <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
                         <option th:each="user : ${userList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
                     </optgroup>
                 </select>
             </div>
+            <div class="col-md-1 text-left">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" th:text="#{sys_add}" onclick="addAgreementUser()">Qo'shish</button>
+                </div>
+            </div>
         </div>
         <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
         <div class="col-md-10 offset-1">
-            <h5 class="mt-lg-5" th:text="#{reg_application.approvalStatuses}"></h5>
-            <table style="width: 100%">
-                <tr style="border-bottom: 1px solid #f4f4f4" th:each="agreementLog : ${agreementLogList}">
-                    <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
-                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
+            <table style="width: 100%" id="agreementsTable">
+                <tr th:each="agreementLog : ${agreementLogList}">
+                    <td class="text-right" >
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
                     </td>
-                    <td style="width: 60%;">
-                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}">Акбар Сапаев</h6>
-                        <small th:text="#{sys_logType.agreement}">Директор</small>
-                    </td>
-                    <td>
-                        <span th:if="${agreementLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                        <span th:if="${agreementLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                        <span th:if="${agreementLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                        <span th:if="${agreementLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <td style="width: 80%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
+                        <small th:text="#{sys_logType.agreement}"></small>
                     </td>
                 </tr>
             </table>
@@ -88,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="id" th:value="${regApplication.id}">
+        <input type="hidden" id="regApplicationId" name="id" th:value="${regApplication.id}">
         <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="form-group row">
