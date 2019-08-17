@@ -135,7 +135,6 @@ public class AgreementController {
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
             convenientForJSONArray.add(new Object[]{
-                    regApplicationLog.getId(),
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
@@ -146,7 +145,8 @@ public class AgreementController {
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName() : "",
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
                     regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getAgreementName() : "",
-                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId() : ""
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId() : "",
+                    regApplicationLog.getId()
             });
         }
 

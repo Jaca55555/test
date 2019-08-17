@@ -46,13 +46,13 @@
             </div>
         </div>
         <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
-        <div class="col-md-10 offset-1">
+        <div class="col-md-6 offset-3">
             <table style="width: 100%" id="agreementsTable">
                 <tr th:each="agreementLog : ${agreementLogList}">
-                    <td class="text-right" >
+                    <td style="padding-bottom: 5px;padding-top: 20px;">
                         <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
                     </td>
-                    <td style="width: 80%;">
+                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">
                         <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
                         <small th:text="#{sys_logType.agreement}"></small>
                     </td>
