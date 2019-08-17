@@ -170,6 +170,7 @@
 
     <script th:inline="javascript">
         var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
+        var sendSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationSendSMSCode}]];
         var oked_name_text = [[#{sys_oked_name}]];
         var oked_not_name_text = [[#{sys_not_oked_name}]];
         var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
@@ -235,6 +236,25 @@
                 $('#sms_code_'+id).show();
                 $('#allow_'+id).attr("hidden", true);
                 $('#notAllow_'+id).attr("hidden", false);
+                $.ajax({
+                    url: sendSMSCodeLink,
+                    data: {
+                        mobilePhone: $('#'+id).val(),
+                        _csrf: $('#global_csrf').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    cache: true,
+                    success: function (response) {
+                        if (response){
+                            console.log("ketdi");
+                        }else{
+                            console.log("ketmadi");
+                        }
+                    },
+                    error: function () {
+                    }
+                });
             }
         }
 

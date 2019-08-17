@@ -18,6 +18,7 @@ import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
@@ -53,6 +54,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
+    }
+
+    @Override
+    public Boolean sendSMSCode(String mobilePhone) {
+        String code = createSMSCode();
+        System.out.println(code);
+        return true;
     }
 
     public void update(RegApplication regApplication){
@@ -130,4 +138,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         };
     }
 
+    private String createSMSCode() {
+        return String.valueOf(100000L + (long) (new Random().nextDouble() * 899999L));
+    }
 }

@@ -316,6 +316,12 @@ public class RegApplicationController {
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
+    @RequestMapping(value = RegUrls.RegApplicationSendSMSCode,method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean regApplicationSendSMSCode(@RequestParam(name = "mobilePhone") String mobilePhone){
+        return regApplicationService.sendSMSCode(mobilePhone);
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.GET)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
