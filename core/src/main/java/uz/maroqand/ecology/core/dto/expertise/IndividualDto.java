@@ -37,6 +37,7 @@ public class IndividualDto {
     public IndividualDto(Client applicant){
         this.id = applicant.getId();
         this.individualName = applicant.getName();
+        this.individualPinfl = applicant.getPinfl();
 
         this.passportSerial = applicant.getPassportSerial();
         this.passportNumber = applicant.getPassportNumber();

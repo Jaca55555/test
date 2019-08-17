@@ -210,6 +210,7 @@ public class RegApplicationController {
         switch (regApplication.getStep()){
             case APPLICANT: return "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + regApplication.getId();
             case ABOUT: return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + regApplication.getId();
+            case WAITING: return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
             case CONTRACT: return "redirect:" + RegUrls.RegApplicationContract + "?id=" + regApplication.getId();
             case PAYMENT: return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + regApplication.getId();
             case STATUS: return "redirect:" + RegUrls.RegApplicationStatus+ "?id=" + regApplication.getId();
@@ -434,7 +435,7 @@ public class RegApplicationController {
             regApplication.setStatus(RegApplicationStatus.CheckSent);
         }
 
-        regApplication.setStep(RegApplicationStep.ABOUT);
+        regApplication.setStep(RegApplicationStep.WAITING);
         regApplicationService.update(regApplication);
         return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
     }
@@ -750,7 +751,7 @@ public class RegApplicationController {
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerLogId(null);
-        regApplication.setAgreementLogId(null);
+        regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
 
         regApplication.setStatus(RegApplicationStatus.Process);

@@ -107,8 +107,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                             predicates.add(criteriaBuilder.isNotNull(root.get("forwardingLogId")));break;
                         case Performer:
                             predicates.add(criteriaBuilder.isNotNull(root.get("performerLogId")));break;
-                        case Agreement:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementLogId")));break;
+                        /*case Agreement:
+                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementLogId")));break;*/
                         case AgreementComplete:
                             predicates.add(criteriaBuilder.isNotNull(root.get("agreementCompleteLogId")));break;
                     }

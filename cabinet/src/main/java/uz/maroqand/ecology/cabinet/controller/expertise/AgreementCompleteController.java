@@ -185,7 +185,7 @@ public class AgreementCompleteController {
 
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
-        model.addAttribute("agreementLog", regApplicationLogService.getById(regApplication.getAgreementLogId()));
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLog);
         return ExpertiseTemplates.AgreementCompleteView;
     }

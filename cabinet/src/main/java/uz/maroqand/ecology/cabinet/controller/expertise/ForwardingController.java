@@ -33,6 +33,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -58,6 +59,7 @@ public class ForwardingController {
     private final ProjectDeveloperService projectDeveloperService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final DepartmentService departmentService;
 
     @Autowired
     public ForwardingController(
@@ -72,8 +74,8 @@ public class ForwardingController {
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
-    ) {
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            DepartmentService departmentService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -86,6 +88,7 @@ public class ForwardingController {
         this.projectDeveloperService = projectDeveloperService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.departmentService = departmentService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -150,6 +153,7 @@ public class ForwardingController {
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {
+        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ForwardingList;
@@ -158,8 +162,9 @@ public class ForwardingController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
         if(regApplication.getPerformerLogId()!=null){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            model.addAttribute("performerLog",performerLog);
+            model.addAttribute("performerLog", performerLog);
         }
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -175,12 +180,13 @@ public class ForwardingController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant",client);
-        model.addAttribute("userList",userService.getEmployeesForForwarding());
+        model.addAttribute("applicant", client);
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("userList", userService.getEmployeesForForwarding(user.getOrganizationId()));
+        model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
         return ExpertiseTemplates.ForwardingView;
     }
 

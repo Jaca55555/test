@@ -172,8 +172,14 @@ public class RegApplication {
     @Column(name = "performer_log_id")
     private Integer performerLogId;
 
-    @Column(name = "agreement_log_id")
-    private Integer agreementLogId;
+    /*@Column(name = "agreement_log_id")
+    private Integer agreementLogId;*/
+
+    @ElementCollection(targetClass = Integer.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "reg_application_jt_agreement_logs",
+            joinColumns = @JoinColumn(name = "reg_application_id"))
+    @Column(name = "log_id")
+    private Set<Integer> agreementLogs;
 
     @Column(name = "agreement_complete_log_id")
     private Integer agreementCompleteLogId;

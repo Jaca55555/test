@@ -198,8 +198,8 @@ public class UserServiceImpl implements UserService {
         return ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
-    public List<User> getEmployeesForForwarding(){
-        return userRepository.findAllByDepartmentIdNotNull();
+    public List<User> getEmployeesForForwarding(Integer organizationId){
+        return userRepository.findByOrganizationId(organizationId);
     }
 
     public LogType getUserLogType(User user){

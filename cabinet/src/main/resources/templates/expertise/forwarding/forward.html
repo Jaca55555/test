@@ -13,7 +13,9 @@
             </div>
             <div class="col-md-6">
                 <select class="form-control" id="performerId" name="performerId">
-                    <option th:each="user : ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" th:selected="${regApplication.performerId}"></option>
+                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
+                        <option th:each="user : ${userList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                    </optgroup>
                 </select>
             </div>
         </div>
@@ -22,9 +24,44 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.performer_text}" th:selected="${regApplication}"></label>
             </div>
             <div class="col-md-6">
-                <textarea class="form-control" name="comment" rows="8" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
+                <textarea class="form-control" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
             </div>
         </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" id="agreements" name="agreements">
+                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
+                        <option th:each="user : ${userList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
+        <div class="col-md-10 offset-1">
+            <h5 class="mt-lg-5" th:text="#{reg_application.approvalStatuses}"></h5>
+            <table style="width: 100%">
+                <tr style="border-bottom: 1px solid #f4f4f4" th:each="agreementLog : ${agreementLogList}">
+                    <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
+                    </td>
+                    <td style="width: 60%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}">Акбар Сапаев</h6>
+                        <small th:text="#{sys_logType.agreement}">Директор</small>
+                    </td>
+                    <td>
+                        <span th:if="${agreementLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                        <span th:if="${agreementLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                        <span th:if="${agreementLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                        <span th:if="${agreementLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}"></h4>
         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div-documentFiles">
             <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">

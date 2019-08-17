@@ -14,9 +14,9 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" >
+                <select class="form-control" required="" id="individualEntrepreneurOpfId" name="individualEntrepreneurOpfId" >
                     <option value="" th:text="#{sys_select}"></option>
-                    <option th:each="opf : ${opfIndividualList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${opf.parentId==null}"></option>
+                    <option th:each="opf : ${opfIndividualList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${individualEntrepreneur.individualEntrepreneurOpfId==opf.id}" th:disabled="${opf.parentId==null}"></option>
                 </select>
             </div>
         </div>

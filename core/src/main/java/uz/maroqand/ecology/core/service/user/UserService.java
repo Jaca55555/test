@@ -50,7 +50,7 @@ public interface UserService {
 
     public User getCurrentUserFromContext();
 
-    List<User> getEmployeesForForwarding();
+    List<User> getEmployeesForForwarding(Integer organizationId);
 
     LogType getUserLogType(User user);
 

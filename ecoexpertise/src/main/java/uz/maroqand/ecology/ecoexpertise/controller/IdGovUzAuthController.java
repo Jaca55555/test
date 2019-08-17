@@ -376,6 +376,10 @@ public class IdGovUzAuthController {
 
         user.setUserAdditionalId(userAdditionalService.createUserAdditional(user));
 
+        if(!userIdGov.getIsValidatedUsingEDS()){
+            return "redirect:"+"/login?error";
+        }
+
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
