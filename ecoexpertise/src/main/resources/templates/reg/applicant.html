@@ -215,13 +215,13 @@
             $('#legalEntityOpfId').select2();
             $('#foreignCountryId').parsley().validate();
             $('#foreignCountryId').select2();
-
             $('#legalEntityOpfId').on('change',function () {
                 $('#legalEntityOpfId').parsley().validate();
             });
             $('#foreignCountryId').on('change',function () {
                 $('#foreignCountryId').parsley().validate();
             });
+            $('#foreignCitizenshipId').select2();
 
             if ($('#oked').val()!=''){
                 getOkedName();

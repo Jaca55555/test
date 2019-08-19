@@ -62,7 +62,7 @@ public class Client {
     private String passportSerial;
 
     //Номер паспорта;
-    @Size(max = 10)
+    @Size(max = 20)
     @Column(name = "passport_number")
     private String passportNumber;
 
@@ -92,6 +92,11 @@ public class Client {
 
     @Column(name = "country_id")
     private Integer countryId;
+
+    //Гражданство. Country.id
+    @Column(name = "citizenship_id")
+    private Integer citizenshipId;
+
 
     //Регион
     /*@OneToOne(fetch = FetchType.LAZY)

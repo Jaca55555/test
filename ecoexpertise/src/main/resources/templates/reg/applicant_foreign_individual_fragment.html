@@ -23,44 +23,27 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <div class="input-group" style="background: #ffffff">
-                    <input class="form-control col-md-4 mr-3" required="" id="foreignPassportSerial" name="foreignPassportSerial" th:value="${foreignIndividual.foreignPassportSerial}" maxlength="3" placeholder="AA" data-parsley-errors-container="#foreignPassportSerialError">
-                    <input class="form-control col-md-8" required="" id="foreignPassportNumber" name="foreignPassportNumber" th:value="${foreignIndividual.foreignPassportNumber}" maxlength="10" placeholder="12365498" data-parsley-errors-container="#foreignPassportNumberError">
-                </div>
+                    <input class="form-control" required="" id="foreignPassportSerialNumber" name="foreignPassportSerialNumber" th:value="${foreignIndividual.foreignPassportSerialNumber}" maxlength="20" minlength="3"  data-parsley-errors-container="#foreignPassportSerialNumberError">
                 <div class="row">
-                    <div class="col-md-2" id="foreignPassportSerialError"></div>
-                    <div class="col-md-10" id="foreignPassportNumberError"></div>
+                    <div class="col-md-4" id="foreignPassportSerialNumberError"></div>
                 </div>
             </div>
         </div>
 
-        <div class="form-group row" >
+        <div class="form-group row">
             <div class="col-md-3 text-right">
-                <label class="col-form-label " th:text="#{sys_passport.dateOfIssue}" >Дата выдачи паспорта</label>
+                <label class="col-form-label" th:text="#{sys_foreign_individual_citizenship_id}"></label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control datepicker" required="" id="foreignPassportDateOfIssue" name="foreignPassportDateOfIssue" th:value="${foreignIndividual.foreignPassportDateOfIssue}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+                <select class="form-control" required="" id="foreignCitizenshipId" name="foreignCitizenshipId" data-parsley-errors-container="#foreignCitizenshipIdError" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.getNameTranslation(#locale)}" th:selected="${foreignIndividual.foreignCitizenshipId==country.id}"></option>
+                </select>
+                <div id="foreignCitizenshipIdError"></div>
             </div>
         </div>
-        <div class="form-group row" >
-            <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_passport.dateOfExpiry}">Действителен до</label>
-                <span class="required">*</span>
-            </div>
-            <div class="col-md-6">
-                <input class="form-control datepicker" required="" id="foreignPassportDateOfExpiry" name="foreignPassportDateOfExpiry" th:value="${foreignIndividual.foreignPassportDateOfExpiry}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
-            </div>
-        </div>
-        <div class="form-group row" >
-            <div class="col-md-3 text-right">
-                <label class="col-form-label" th:text="#{sys_passport.IssuedBy}">Кем выдан</label>
-                <span class="required">*</span>
-            </div>
-            <div class="col-md-6">
-                <input class="form-control" required="" id="foreignPassportIssuedBy" name="foreignPassportIssuedBy" th:value="${foreignIndividual.foreignPassportIssuedBy}" >
-            </div>
-        </div>
+
 
         <p class="text-center" th:text="#{sys_foreign_individual_address}">Yashash manzili</p>
         <div class="form-group row">
