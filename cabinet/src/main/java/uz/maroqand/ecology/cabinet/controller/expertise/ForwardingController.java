@@ -33,6 +33,8 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -58,6 +60,8 @@ public class ForwardingController {
     private final ProjectDeveloperService projectDeveloperService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final DepartmentService departmentService;
+    private final ToastrService toastrService;
 
     @Autowired
     public ForwardingController(
@@ -72,7 +76,9 @@ public class ForwardingController {
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            DepartmentService departmentService,
+            ToastrService toastrService
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -86,6 +92,8 @@ public class ForwardingController {
         this.projectDeveloperService = projectDeveloperService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.departmentService = departmentService;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -122,19 +130,20 @@ public class ForwardingController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getForwardingName():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
+                    performerLog!=null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog!=null ? performerLog.getStatus().getId():"",
+                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getForwardingName():"",
+                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():""
             });
         }
 
@@ -149,6 +158,7 @@ public class ForwardingController {
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {
+        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ForwardingList;
@@ -157,8 +167,9 @@ public class ForwardingController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
         if(regApplication.getPerformerLogId()!=null){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            model.addAttribute("performerLog",performerLog);
+            model.addAttribute("performerLog", performerLog);
         }
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -174,12 +185,15 @@ public class ForwardingController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant",client);
-        model.addAttribute("userList",userService.findPerformerList());
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
+        model.addAttribute("applicant", client);
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("userList", userService.getEmployeesForForwarding(user.getOrganizationId()));
+        model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
         return ExpertiseTemplates.ForwardingView;
     }
 
@@ -212,6 +226,89 @@ public class ForwardingController {
         regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ForwardingAgreementAdd,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getAddAgreementMethod(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "agreementUserId")Integer agreementUserId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            result.put("status", "1");
+            return result;
+        }
+        Set<Integer> agreementLogs = regApplication.getAgreementLogs();
+        if(agreementLogs == null){
+            agreementLogs = new HashSet<>();
+        }
+        Boolean isAgreementUser = false;
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByIds(agreementLogs);
+        for (RegApplicationLog regApplicationLog:regApplicationLogList){
+            if(regApplicationLog.getUpdateById().equals(agreementUserId)){
+                isAgreementUser = true;
+            }
+        }
+        if (isAgreementUser){
+            result.put("status", "2");
+            return result;
+        }
+
+        User agreementUser = userService.findById(agreementUserId);
+
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+
+        agreementLogs.add(regApplicationLogCreate.getId());
+        regApplication.setAgreementLogs(agreementLogs);
+        regApplicationService.update(regApplication);
+
+        result.put("status", "0");
+        result.put("shorName", helperService.getUserLastAndFirstShortById(agreementUser.getId()));
+        result.put("fullName", helperService.getUserFullNameById(agreementUser.getId()));
+        return result;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ForwardingAgreementDelete,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getDeleteAgreementMethod(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            result.put("status", "1");
+            return result;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if(regApplicationLog == null || !regApplicationLog.getType().equals(LogType.Agreement)){
+            result.put("status", "2");
+            return result;
+        }
+
+        if(!regApplicationLog.getStatus().equals(LogStatus.Initial)){
+            result.put("status", "2");
+            return result;
+        }
+
+        Set<Integer> agreementLogs = regApplication.getAgreementLogs();
+        if(!agreementLogs.contains(logId)){
+            result.put("status", "2");
+            return result;
+        }
+
+        agreementLogs.remove(logId);
+        regApplication.setAgreementLogs(agreementLogs);
+        regApplicationService.update(regApplication);
+
+        result.put("status", "0");
+        return result;
     }
 
 }

@@ -17,7 +17,6 @@ public class ExpertiseUrls {
     public static final String ConfirmDenied = Confirm + "/denied";
     public static final String ConfirmApprovedEdit = Confirm + "/approved/edit";
     public static final String ConfirmDeniedEdit = Confirm + "/denied/edit";
-    public static final String ConfirmFileDownload = Confirm + "/download";
 
     //Boshqaruv
     private static final String Forwarding = Prefix + "/forwarding";
@@ -25,6 +24,8 @@ public class ExpertiseUrls {
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
     public static final String ForwardingView = Forwarding + "/view";
     public static final String ForwardingAction = Forwarding + "/action";
+    public static final String ForwardingAgreementAdd = Forwarding + "/agreement/add";
+    public static final String ForwardingAgreementDelete = Forwarding + "/agreement/delete";
 
     //Natijani kiritish
     private static final String Performer = Prefix + "/performer";
@@ -47,6 +48,10 @@ public class ExpertiseUrls {
     public static final String AgreementCompleteListAjax = AgreementComplete + "/list_ajax";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
     public static final String AgreementCompleteAction = AgreementComplete + "/action";
+
+
+    public static final String ExpertiseFileDownload = Prefix + "/document/download";
+
 
     //File
     public static final String FileUpload = Prefix + "/file/upload";
@@ -89,5 +94,11 @@ public class ExpertiseUrls {
     public static final String ChangeDeadlineDateListAjax = ChangeDeadlineDate + "/list_ajax";
     public static final String ChangeDeadlineDateView = ChangeDeadlineDate + "/view";
     public static final String ChangeDeadlineDateConfig= ChangeDeadlineDate + "/config";
+
+    //Conclusion
+    private static final String  Conclusion = Prefix + "/conclusion";
+    public static final String ConclusionList = Conclusion + "/list";
+    public static final String ConclusionListAjax = Conclusion + "/list_ajax";
+    public static final String ConclusionView = Conclusion + "/view";
 
 }

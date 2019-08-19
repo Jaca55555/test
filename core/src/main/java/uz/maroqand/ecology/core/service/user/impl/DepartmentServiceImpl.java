@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.core.service.user.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,21 +39,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> getListByOrganizationId(Integer id) {
-        return departmentRepository.findByOrganizationIdAndDeletedFalse(id);
+    public List<Department> getByOrganizationId(Integer organizationId) {
+        return departmentRepository.findByOrganizationIdAndDeletedFalse(organizationId);
     }
 
-    //getAll
     @Override
     @Cacheable("departmentGetAll")
     public List<Department> getAll() {
-        return departmentRepository.findAll();
-    }
-
-    //RemoveAllFromCache
-    @Override
-    @CacheEvict(value = "departmentGetAll", allEntries = true)
-    public List<Department> removeStatusActive() {
         return departmentRepository.findAll();
     }
 
@@ -74,16 +65,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department save(Department department) {
         return  departmentRepository.save(department);
-    }
-
-    @Override
-    public List<Department> findList() {
-        return departmentRepository.findAllByDeletedFalseOrderByIdAsc();
-    }
-
-    @Override
-    public List<Department> findListChild() {
-        return departmentRepository.findByParentIdIsNull();
     }
 
     @Override

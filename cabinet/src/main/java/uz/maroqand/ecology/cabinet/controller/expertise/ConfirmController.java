@@ -18,11 +18,10 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
-import uz.maroqand.ecology.core.dto.expertise.FilterDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -57,7 +56,6 @@ public class ConfirmController {
     private final UserService userService;
     private final ActivityService activityService;
     private final ObjectExpertiseService objectExpertiseService;
-    private final CommentService commentService;
     private final HelperService helperService;
     private final FileService fileService;
     private final RegApplicationLogService regApplicationLogService;
@@ -75,7 +73,6 @@ public class ConfirmController {
             ClientService clientService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            CommentService commentService,
             HelperService helperService,
             FileService fileService,
             RegApplicationLogService regApplicationLogService,
@@ -90,7 +87,6 @@ public class ConfirmController {
         this.clientService = clientService;
         this.activityService = activityService;
         this.objectExpertiseService = objectExpertiseService;
-        this.commentService = commentService;
         this.helperService = helperService;
         this.fileService = fileService;
         this.regApplicationLogService = regApplicationLogService;
@@ -118,26 +114,26 @@ public class ConfirmController {
             FilterDto filterDto,
             Pageable pageable
     ){
-        User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+        Page<RegApplicationLog> regApplicationLogPage = regApplicationLogService.findFiltered(
                 filterDto,
-                user.getOrganizationId(),
-                LogType.Confirm,
                 null,
+                null,
+                LogType.Confirm,
                 null,
                 pageable
         );
 
-        List<RegApplication> regApplicationList = regApplicationPage.getContent();
-        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
-        for (RegApplication regApplication : regApplicationList){
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
+        for (RegApplicationLog regApplicationLog : regApplicationLogList){
+            RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
             Client client = regApplication.getApplicant();
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+
             convenientForJSONArray.add(new Object[]{
-                regApplication.getId(),
+                regApplicationLog.getRegApplicationId(),
                 client != null ? client.getTin() : "",
                 client != null ? client.getName() : "",
                 client != null ? helperService.getApplicantType(client.getType().getId(),locale):"",
@@ -147,37 +143,49 @@ public class ConfirmController {
                 client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
                 regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
-                regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getId():""
+                regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getId():"",
+                regApplicationLog.getId()
             });
         }
 
-        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", regApplicationLogPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationLogPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
     }
 
     @RequestMapping(ExpertiseUrls.ConfirmView)
     public String getCheckingPage(
-            @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "id")Integer logId,
             Model model
     ) {
-        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        System.out.println("type="+regApplicationLog.getType());
+        if(!regApplicationLog.getType().equals(LogType.Confirm)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-
-        Client client = clientService.getById(regApplication.getApplicantId());
-        if(client.getType().equals(ApplicantType.Individual)){
-            model.addAttribute("individual", new IndividualDto(client));
-        }else {
-            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        Client applicant = regApplication.getApplicant();
+        switch (applicant.getType()){
+            case Individual:
+                model.addAttribute("individual", new IndividualDto(applicant)); break;
+            case LegalEntity:
+                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
+            case ForeignIndividual:
+                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
+            case IndividualEnterprise:
+                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
-
-        Comment comment = commentService.getByRegApplicationId(regApplication.getId());
-        model.addAttribute("comment",comment!=null?comment:new Comment());
 
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
         if(coordinate != null){
@@ -186,10 +194,10 @@ public class ConfirmController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        model.addAttribute("applicant",client);
+        model.addAttribute("applicant", applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
         return ExpertiseTemplates.ConfirmView;
     }
 
@@ -209,9 +217,17 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani tasqinlandi",
+                "Sizning " + regApplication.getId() + " raqamli arizangiz tasdiqlandi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -231,9 +247,17 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
 
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani rad javobi berildi",
+                "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -258,9 +282,17 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani tasqinlandi",
+                "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -285,19 +317,24 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(ExpertiseUrls.ConfirmFileDownload)
+    @RequestMapping(ExpertiseUrls.ExpertiseFileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "file_id") Integer fileId){
-        User user = userService.getCurrentUserFromContext();
 
-        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
-
+        File file = fileService.findById(fileId);
         if (file == null) {
             return null;
         } else {

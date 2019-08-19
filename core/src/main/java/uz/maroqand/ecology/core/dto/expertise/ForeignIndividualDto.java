@@ -17,11 +17,8 @@ public class ForeignIndividualDto {
     //Ф.И.О.
     private String foreignIndividualName;
 
-    private String foreignPassportSerial;
-    private String foreignPassportNumber;
-    private String foreignPassportDateOfIssue;
-    private String foreignPassportDateOfExpiry;
-    private String foreignPassportIssuedBy;
+    private String foreignPassportSerialNumber;
+    private Integer foreignCitizenshipId;
 
     private Integer foreignCountryId;
     private String foreignAddress;
@@ -36,11 +33,8 @@ public class ForeignIndividualDto {
         this.id = applicant.getId();
         this.foreignIndividualName = applicant.getName();
 
-        this.foreignPassportSerial = applicant.getPassportSerial();
-        this.foreignPassportNumber = applicant.getPassportNumber();
-        this.foreignPassportDateOfIssue = applicant.getPassportDateOfIssue()!=null?Common.uzbekistanDateFormat.format(applicant.getPassportDateOfIssue()):"";
-        this.foreignPassportDateOfExpiry = applicant.getPassportDateOfExpiry()!=null?Common.uzbekistanDateFormat.format(applicant.getPassportDateOfExpiry()):"";
-        this.foreignPassportIssuedBy = applicant.getPassportIssuedBy();
+        this.foreignPassportSerialNumber = applicant.getPassportNumber();
+        this.foreignCitizenshipId = applicant.getCitizenshipId();
 
         this.foreignCountryId = applicant.getCountryId();
         this.foreignAddress = applicant.getAddress();

@@ -10,6 +10,8 @@ public class RegUrls {
     public static final String RegApplicationStart = RegApplication + "/start";
     public static final String RegApplicationApplicantCancel = RegApplication + "/cancel";
     public static final String RegApplicationApplicant = RegApplication + "/applicant";
+    public static final String RegApplicationSendSMSCode = RegApplication + "/send_sms_code";
+    public static final String RegApplicationGetSMSCode = RegApplication + "/get_sms_code";
 
     public static final String RegApplicationAbout = RegApplication + "/about";
     public static final String RegApplicationClearCoordinates = RegApplication + "/clear_coordinates";
@@ -28,7 +30,12 @@ public class RegUrls {
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
     public static final String RegApplicationPaymentSendSms = RegApplication + "/payment/send_sms";
     public static final String RegApplicationPaymentConfirmSms = RegApplication + "/payment/confirm_sms";
+    public static final String RegApplicationPaymentFree = RegApplication + "/payment/free";
     public static final String RegApplicationStatus = RegApplication + "/status";
+    public static final String RegApplicationResend = RegApplication + "/resend";
+
+    public static final String RegApplicationConclusionDownload = Prefix + "/conclusion_file/download";
+    public static final String RegApplicationConfirmFacture = RegApplication + "/confirm/facture";
     public static final String RegApplicationCommentAdd = RegApplication + "/comment_add";
     public static final String RegApplicationCommentFileUpload = Prefix + "/comment/file/upload";
     public static final String RegApplicationCommentDownload = Prefix + "/comment/file/download";

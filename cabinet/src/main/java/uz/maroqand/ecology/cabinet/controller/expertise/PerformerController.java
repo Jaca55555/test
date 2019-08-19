@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -32,6 +33,7 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -60,6 +62,7 @@ public class PerformerController {
     private final CommentService commentService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ToastrService toastrService;
 
     @Autowired
     public PerformerController(
@@ -77,7 +80,8 @@ public class PerformerController {
             ChangeDeadlineDateService changeDeadlineDateService,
             CommentService commentService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            ToastrService toastrService
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -94,6 +98,7 @@ public class PerformerController {
         this.commentService = commentService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -135,12 +140,10 @@ public class PerformerController {
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
                     regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getPerformerName():"",
                     regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
             });
@@ -180,9 +183,8 @@ public class PerformerController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+        model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 
-        model.addAttribute("commentList", commentList);
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateList);
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
@@ -191,16 +193,18 @@ public class PerformerController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("regApplicationLog",performerLog);
 
+        model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);
-        model.addAttribute("agreementLog", regApplicationLogService.getById(regApplication.getAgreementLogId()));
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.PerformerView;
     }
 
     @RequestMapping(value = ExpertiseUrls.PerformerAction,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "logId")Integer logId,
+            @RequestParam(name = "comment")String comment,
             @RequestParam(name = "performerStatus")Integer performerStatus
     ){
         User user = userService.getCurrentUserFromContext();
@@ -209,13 +213,18 @@ public class PerformerController {
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), "", user);
+        if (!regApplication.getPerformerId().equals(user.getId())){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Sizda ariza ijrochi uchun ruxsat yo'q.");
+            return "redirect:" + ExpertiseUrls.PerformerList;
+        }
 
-        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Agreement,"",user);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user);
+        if(comment!=null && !comment.isEmpty()){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
 
         regApplication.setStatus(RegApplicationStatus.Process);
-        regApplication.setAgreementLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
@@ -260,27 +269,23 @@ public class PerformerController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         Comment comment;
-        if (commentId!=null){
+        if (commentId != null){
             comment = commentService.getById(commentId);
-            if (comment==null){
+            if (comment == null){
                 result.put("status",0);
                 return result;
             }
-        }else{
-            comment = new Comment();
+            comment.setMessage(message);
+            comment = commentService.updateComment(comment);
+        }else {
+            comment = commentService.create(regApplicationId, CommentType.CHAT, message, user.getId());
         }
-        comment.setRegApplicationId(regApplicationId);
-        comment.setCreatedAt(new Date());
-        comment.setCreatedById(user.getId());
-        comment.setDeleted(Boolean.FALSE);
-        comment.setMessage(message);
-        comment = commentService.createComment(comment);
+
         result.put("status",1);
         result.put("message",message);
         result.put("createdAt",Common.uzbekistanDateFormat.format(comment.getCreatedAt()));
         result.put("userShorName",helperService.getUserLastAndFirstShortById(user.getId()));
         result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
-
         return result;
     }
 
@@ -306,19 +311,12 @@ public class PerformerController {
         Comment comment;
         if (id!=null){
             comment = commentService.getById(id);
-            if (comment==null || (comment!=null && regApplicationId!=comment.getRegApplicationId())){
-                if (regApplication == null) {
-                    responseMap.put("message", "Object not found.");
-                    return responseMap;
-                }
+            if (comment==null || !comment.getRegApplicationId().equals(regApplicationId)){
+                responseMap.put("message", "Object not found.");
+                return responseMap;
             }
         }else{
-            comment = new Comment();
-            comment.setDeleted(Boolean.TRUE);
-            comment.setCreatedById(user.getId());
-            comment.setCreatedAt(new Date());
-            comment.setRegApplicationId(regApplicationId);
-            comment = commentService.createComment(comment);
+            comment = commentService.create(regApplicationId, CommentType.CHAT, "", user.getId());
         }
 
         File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);

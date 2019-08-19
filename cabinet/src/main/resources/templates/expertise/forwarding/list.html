@@ -227,8 +227,7 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[8]===0)statusLabel += '<span class="badge badge-secondary">'+row[7]+'</span>';
-        if (row[8]===1)statusLabel += '<span class="badge badge-info">'+row[7]+'</span>';
+        if (row[8]===1)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
         if (row[8]===2)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
         if (row[8]===3)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
         return statusLabel;
@@ -279,19 +278,18 @@
                     callback(data);
                 });
             },
-                columns: [
-                    {data: 0, name: 'id'},
-                    {data: 1, name: 'applicant.tin'},
-                    {data: 2, name: 'applicant.name'},
-                    {data: 3, orderable:false},
-                    {data: 4, name: 'category'},
-                    {data: 5, name: 'registrationDate'},
-                    // {data: 6, name: 'deadlineDate'},
-                    {render:renderDeadlineDateColumn, name: 'deadlineDate'},
-                    {data: 7, render:renderStatusColumn, orderable:false},
-                    {data: 9, render:renderLogStatusColumn, orderable:false},
-                    {render: renderActionsColumn, orderable: false}
-                ],
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'applicant.tin'},
+                {data: 2, name: 'applicant.name'},
+                {data: 3, orderable:false},
+                {data: 4, name: 'category'},
+                {data: 5, name: 'registrationDate'},
+                {render:renderDeadlineDateColumn, name: 'deadlineDate'},
+                {data: 7, render:renderStatusColumn, orderable:false},
+                {data: 9, render:renderLogStatusColumn, orderable:false},
+                {render: renderActionsColumn, orderable: false}
+            ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }

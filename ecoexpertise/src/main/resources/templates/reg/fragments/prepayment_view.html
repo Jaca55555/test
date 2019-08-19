@@ -49,10 +49,10 @@
                 </div>
                 <div class="col-md-5 ">
                     <div class="row  text-center">
-                        <div class="col-md-12 m-40">
+                        <div class="col-md-12 m-20">
                             <h1 class="display-4" th:text="#{sys_invoice.amount}"> Сумма к оплате </h1>
                         </div>
-                        <div class="col-md-12 m-40">
+                        <div class="col-md-12 m-20">
                             <h1 class="display-4">
                                 <strong th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}"> </strong>&nbsp;<span th:text="#{sys_currency.sum}"></span>
                             </h1>

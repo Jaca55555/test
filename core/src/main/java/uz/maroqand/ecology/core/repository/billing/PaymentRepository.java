@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
-    List<Payment> findAllByInvoiceIdAndDeletedFalse(Integer invoiceId);
+    List<Payment> findByInvoiceIdAndDeletedFalse(Integer invoiceId);
 
     Payment findByInvoiceId(Integer id);
 }

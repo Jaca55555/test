@@ -11,12 +11,16 @@ import java.util.List;
 
 public interface RegApplicationService {
 
+    Integer sendSMSCode(String mobilePhone,Integer regApplicationId);
+
     void update(RegApplication regApplication);
 
     RegApplication create(User user);
 
     List<RegApplication> getByClientId(Integer id);
+
     List<RegApplication> getAllByDeletedFalse();
+
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);

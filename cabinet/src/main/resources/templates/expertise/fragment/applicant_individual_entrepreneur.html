@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="individual_entrepreneur">
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_opf}">Организационно правовая форма предприятия</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getOpfName(individualEntrepreneur.individualEntrepreneurOpfId,#locale)}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_pinfl}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group" style="background: #ffffff">
+                    <input class="form-control col-md-4 mr-3" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" >
+                    <input class="form-control col-md-8" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" >
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_tin_individual}">СТИР</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control only-number" readonly="readonly" th:value="${individualEntrepreneur.individualEntrepreneurTin}">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${individualEntrepreneur.individualEntrepreneurName}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_passport.dateOfIssue}" >Дата выдачи паспорта</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPassportDateOfIssue}" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.dateOfExpiry}">Действителен до</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPassportDateOfExpiry}" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.IssuedBy}">Кем выдан</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPassportIssuedBy}" >
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_individual_entrepreneur_address}">Faoliyatini amalga manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getSoatoName(individualEntrepreneur.entrepreneurRegionId, #locale)}" >
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_subregion}">Туман</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getSoatoName(individualEntrepreneur.entrepreneurSubRegionId, #locale)}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurAddress}" >
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_individual_entrepreneur_contact}"></p>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurPhone}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurMobilePhone}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" readonly="readonly" th:value="${individualEntrepreneur.entrepreneurEmail}" >
+            </div>
+        </div>
+
+</body>
+</html>

@@ -196,7 +196,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0] + '&logId=' + row[11];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
@@ -231,8 +231,7 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[8]===0)statusLabel += '<span class="badge badge-secondary">'+row[7]+'</span>';
-        if (row[8]===1)statusLabel += '<span class="badge badge-info">'+row[7]+'</span>';
+        if (row[8]===1)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
         if (row[8]===2)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
         if (row[8]===3)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
         return statusLabel;
@@ -290,7 +289,6 @@
                 {data: 3, orderable:false},
                 {data: 4, name: 'category'},
                 {data: 5, name: 'registrationDate'},
-                // {data: 6, name: 'deadlineDate'},
                 {render: renderDeadlineDateColumn, name: 'deadlineDate'},
                 {data: 7, render:renderStatusColumn, orderable:false},
                 {data: 9, render:renderLogStatusColumn, orderable:false},

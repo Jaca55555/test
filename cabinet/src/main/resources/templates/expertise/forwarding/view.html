@@ -6,107 +6,7 @@
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/select2.min.css}">
-    <style>
-        .table td, .table th{
-            white-space: pre-line;
-        }
-        .datepicker>.datepicker-days {
-            display: block;
-        }
 
-
-        .add-file {
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-        }
-
-        .add-file i {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file {
-            position: relative;
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-            color: #748892;
-        }
-
-        .file-icon {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file span {
-            position: absolute;
-            bottom: 35px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .file p {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            font-size: 10px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        .file a{
-            color: #748892;
-        }
-
-        .file a:hover {
-            color: #5CB85C;
-        }
-
-        .file-delete-btn {
-            color: red;
-            position: absolute;
-            right: 0;
-            border: none;
-            margin: 5px;
-        }
-        .file-delete-btn:hover {
-            color:darkred;
-        }
-
-        #upload-gif{
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 125px;
-        }
-
-        #percentage {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-    </style>
 </head>
 <body class="layout-6">
 <!-- [ Pre-loader ] start -->
@@ -153,6 +53,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content" id="myTabContent">
@@ -177,6 +80,9 @@
                                             <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
                                                 <object th:include="expertise/forwarding/forward :: forward" th:remove="tag"></object>
                                             </div>
+                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
+                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -200,7 +106,7 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
-
+    var sysLogTypeAgreement = [[#{sys_logType.agreement}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
     });
@@ -218,7 +124,53 @@
         srSelector.find('option:selected').show();
 
         $('#performerId').select2();
+        $("#agreements").select2();
+
     });
+
+
+
+
+
+    function addAgreementUser() {
+        var form = new FormData();
+        form.append("id", $("#regApplicationId").val());
+        form.append("agreementUserId", $("#agreements").val());
+        form.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: '/expertise/forwarding/agreement/add',
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if(response.status === '0'){
+                    $('#agreementsTable').append(
+                        '<tr >' +
+                        '   <td style="padding-bottom: 5px;padding-top: 20px;">' +
+                        '       <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" >'+response.shorName+'</span>' +
+                        '   </td>' +
+                        '   <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">' +
+                        '       <h6 class="mb-0">'+response.fullName+'</h6>' +
+                        '       <small >'+sysLogTypeAgreement+'</small>' +
+                        '   </td>' +
+                        '</tr>'
+                    );
+                }else {
+                    alert('Kelishish uchun yuborishda muammo yuzaga keldi, yuborib bo\'lmadi');
+                }
+
+            }
+        });
+    }
+
+
+
+
+
+
     function openInputFile() {
         document.getElementById("file-input").click();
     };

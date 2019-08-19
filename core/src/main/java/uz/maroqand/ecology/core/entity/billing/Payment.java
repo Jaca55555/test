@@ -36,6 +36,9 @@ public class Payment {
 
 
     /*  Card     */
+    @Column(name = "card_phone")
+    private String cardPhone;
+
     @Column(name = "card_number")
     private String cardNumber;
 

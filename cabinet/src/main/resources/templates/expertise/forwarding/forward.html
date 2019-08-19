@@ -13,7 +13,9 @@
             </div>
             <div class="col-md-6">
                 <select class="form-control" id="performerId" name="performerId">
-                    <option th:each="user : ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" th:selected="${regApplication.performerId}"></option>
+                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
+                        <option th:each="user : ${userList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                    </optgroup>
                 </select>
             </div>
         </div>
@@ -22,9 +24,42 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.performer_text}" th:selected="${regApplication}"></label>
             </div>
             <div class="col-md-6">
-                <textarea class="form-control" name="comment" rows="8" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
+                <textarea class="form-control" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
             </div>
         </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" id="agreements" name="agreements">
+                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
+                        <option th:each="user : ${userList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-md-1 text-left">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" th:text="#{sys_add}" onclick="addAgreementUser()">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
+        <div class="col-md-6 offset-3">
+            <table style="width: 100%" id="agreementsTable">
+                <tr th:each="agreementLog : ${agreementLogList}">
+                    <td style="padding-bottom: 5px;padding-top: 20px;">
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
+                    </td>
+                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
+                        <small th:text="#{sys_logType.agreement}"></small>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}"></h4>
         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div-documentFiles">
             <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
@@ -51,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="id" th:value="${regApplication.id}">
+        <input type="hidden" id="regApplicationId" name="id" th:value="${regApplication.id}">
         <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="form-group row">
@@ -84,7 +119,7 @@
         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;">
             <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">
                 <div class="file">
-                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmFileDownload + '?file_id=' + file.id}">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseFileDownload + '?file_id=' + file.id}">
                         <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
                         <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
                         <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>

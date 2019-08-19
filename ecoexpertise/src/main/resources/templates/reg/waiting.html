@@ -59,6 +59,7 @@
 
                                                         <div class="alert alert-danger col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
                                                             <p th:text="#{reg_application.confirmStatusDenied}">Данная заявка отказано. Пожалуйста, устраните причины отказа и заново отправьте. </br>Причины: </p>
+                                                            <p ><span th:text="#{sys_comment}"></span>: <span th:text="${regApplicationLog.comment}"></span></p>
                                                         </div>
 
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" >

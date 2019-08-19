@@ -60,7 +60,10 @@
                                                 <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false" th:text="#{sys_chat_by_applicant}"></a>
+                                                <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
                                             </li>
                                         </ul>
 
@@ -84,14 +87,19 @@
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
-                                                <button class="btn btn-danger" id="test12"></button>
+                                                <div class="text-right">
+                                                    <button class="btn btn-primary btn-sm" id="test12"><i class="mdi mdi-file-word f-20"></i><span th:text="#{sys_word_download}"></span></button>
+                                                </div>
                                                 <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
                                                 <object th:include="expertise/performer/result :: result" th:remove="tag"></object>
                                             </div>
-                                            <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                            <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                                                 <object th:include="expertise/performer/chat_fragment :: chat" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
+                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>
                                             </div>
                                         </div>
 
@@ -113,7 +121,7 @@
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
-
+<script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
 <!-- Ckeditor js -->
 <script src="/static/plugins/ckeditor/js/document/ckeditor.js"></script>
 <script src="/static/plugins/ckeditor/js/document/FileSaver.js"></script>
@@ -171,6 +179,10 @@
     $(document).ready(function () {
         var srSelector = $('#materialId');
         srSelector.find('option:selected').show();
+
+        $('textarea.max-textarea').maxlength({
+            alwaysShow: true
+        });
     });
     function openInputFile() {
         document.getElementById("file-input").click();

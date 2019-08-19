@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
@@ -45,7 +46,7 @@ public class MainController {
         LogType logType = userService.getUserLogType(user);
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
-                null,
+                new FilterDto(),
                 user.getOrganizationId(),
                 logType,
                 null,

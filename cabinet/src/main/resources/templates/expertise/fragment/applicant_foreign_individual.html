@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="foreign_individual">
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${foreignIndividual.foreignIndividualName}" >
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group" style="background: #ffffff">
+                    <input class="form-control col-md-4 mr-3" readonly="readonly" th:value="${foreignIndividual.foreignPassportSerial}" >
+                    <input class="form-control col-md-8" readonly="readonly" th:value="${foreignIndividual.foreignPassportNumber}" >
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_passport.dateOfIssue}" >Дата выдачи паспорта</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" readonly="readonly" th:value="${foreignIndividual.foreignPassportDateOfIssue}" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.dateOfExpiry}">Действителен до</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" readonly="readonly" th:value="${foreignIndividual.foreignPassportDateOfExpiry}" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.IssuedBy}">Кем выдан</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${foreignIndividual.foreignPassportIssuedBy}" >
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_foreign_individual_address}">Yashash manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_country}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getCountry(foreignIndividual.foreignCountryId, #locale)}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control" rows="4" readonly="readonly" th:text="${foreignIndividual.foreignAddress}"></textarea>
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_foreign_individual_contact}"></p>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" readonly="readonly" th:value="${foreignIndividual.foreignPhone}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" readonly="readonly" th:value="${foreignIndividual.foreignMobilePhone}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" readonly="readonly" th:value="${foreignIndividual.foreignEmail}" >
+            </div>
+        </div>
+
+</body>
+</html>

@@ -74,9 +74,17 @@ public class GnkService {
                 }
                 object.setSubRegioId(gnkSoatoService.getSoatoId(Parser.stringToInteger(subRegion)));
                 if(!object.getAname().equals("-")){
-                    String[] aname = object.getAname().split("\"");
-                    object.setName(aname[1]);
-                    object.setOpfId(opfService.getByNameRu(aname[0].substring(0, 1)+aname[0].substring(1, aname[0].length()).toLowerCase()));
+                    try {
+                        String[] aname = object.getAname().split("\"");
+                        if(aname.length>1){
+                            object.setName(aname[1]);
+                            object.setOpfId(opfService.getByNameRu(aname[0].substring(0, 1)+aname[0].substring(1, aname[0].length()).toLowerCase()));
+                        }else {
+                            object.setName(aname[0]);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }

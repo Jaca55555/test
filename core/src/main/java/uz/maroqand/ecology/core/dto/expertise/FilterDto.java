@@ -13,7 +13,7 @@ public class FilterDto {
     private Integer tin;
     private String name;
     private String contractNumber;
-    private String applicationId;
+    private Integer applicationId;
     private Long regionId;
     private Long subRegionId;
     private String regDateBegin;

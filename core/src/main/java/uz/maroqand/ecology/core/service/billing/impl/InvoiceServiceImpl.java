@@ -5,19 +5,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.billing.ContractType;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
+import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
+import uz.maroqand.ecology.core.entity.billing.Contract;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.MinWage;
-import uz.maroqand.ecology.core.entity.expertise.Material;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.repository.billing.InvoiceRepository;
+import uz.maroqand.ecology.core.service.billing.ContractService;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.MinWageService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
-import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
@@ -36,29 +39,65 @@ import java.util.*;
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final MinWageService minWageService;
     private final PaymentService paymentService;
-    private final MaterialService materialService;
+    private final ContractService contractService;
     private final OrganizationService organizationService;
     private final HelperService helperService;
+    private final MinWageService minWageService;
 
     @Autowired
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MinWageService minWageService, PaymentService paymentService, MaterialService materialService, OrganizationService organizationService, HelperService helperService) {
+    public InvoiceServiceImpl(
+            InvoiceRepository invoiceRepository,
+            PaymentService paymentService,
+            ContractService contractService,
+            OrganizationService organizationService,
+            HelperService helperService,
+            MinWageService minWageService
+    ) {
         this.invoiceRepository = invoiceRepository;
-        this.minWageService = minWageService;
         this.paymentService = paymentService;
-        this.materialService = materialService;
+        this.contractService = contractService;
         this.organizationService = organizationService;
         this.helperService = helperService;
+        this.minWageService = minWageService;
     }
 
+    @Override
     public Invoice create(RegApplication regApplication, Requirement requirement) {
         Invoice invoice = new Invoice();
-        /*  payer   */
-        invoice.setClientId(regApplication.getApplicantId());
-        invoice.setPayerName(regApplication.getApplicant().getName());
+        invoice = createPayer(regApplication, invoice);
+        invoice = createPayee(invoice, requirement);
+        invoice = invoiceRepository.save(invoice);
 
-        /*  payee */
+        invoice = createInvoice(regApplication, invoice, requirement);
+        invoice.setRegisteredAt(new Date());
+        invoice = invoiceRepository.save(invoice);
+        return invoice;
+    }
+
+    @Override
+    public Invoice modification(RegApplication regApplication, Invoice invoice, Requirement requirement){
+        invoice = createPayer(regApplication, invoice);
+        invoice = createPayee(invoice, requirement);
+
+        MinWage minWage = minWageService.getMinWage();
+        Double amountAfter = requirement.getQty() * minWage.getAmount();
+        System.out.println("invoice.getAmount()="+invoice.getAmount());
+        System.out.println("amountAfter="+amountAfter);
+        if(!invoice.getAmount().equals(amountAfter)){
+            Double amount = amountAfter - invoice.getAmount();
+            Contract contract = contractService.createByAmount(invoice, requirement, amount, ContractType.ModificationApplication);
+            invoice.setAmount(amountAfter);
+            invoice.setQty(amountAfter/minWage.getAmount());
+        }
+        invoice = checkInvoiceStatus(invoice);
+        invoice.setUpdatedAt(new Date());
+        invoice = invoiceRepository.save(invoice);
+        return invoice;
+    }
+
+    /*  payee */
+    private Invoice createPayee(Invoice invoice, Requirement requirement) {
         Organization review = organizationService.getById(requirement.getReviewId());
         invoice.setPayeeId(requirement.getReviewId());
         invoice.setPayeeName(review.getNameRu());
@@ -66,33 +105,61 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPayeeTin(review.getTin());
         invoice.setPayeeAddress(review.getAddress());
         invoice.setPayeeMfo(review.getMfo());
+        return invoice;
+    }
 
-        /* invoice  */
-        invoice.setInvoice(createInvoiceSerial());
-        MinWage minWage = minWageService.getMinWage();
-        invoice.setAmount(requirement.getQty() * minWage.getAmount());
-        invoice.setQty(requirement.getQty());
+    /*  payer   */
+    private Invoice createPayer(RegApplication regApplication, Invoice invoice) {
+        invoice.setClientId(regApplication.getApplicantId());
+        invoice.setPayerName(regApplication.getApplicant().getName());
+        return invoice;
+    }
 
+    /* invoice  */
+    private Invoice createInvoice(RegApplication regApplication, Invoice invoice, Requirement requirement) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 60);
+        String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
+        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication);
+        invoice.setAmount(contract.getAmount());
+        invoice.setQty(contract.getCost());
+
+        invoice.setInvoice(createInvoiceSerial());
         invoice.setCreatedDate(new Date());
         invoice.setExpireDate(calendar.getTime());
+        invoice.setDetail(
+                "ID:" + invoice.getInvoice() +
+                ", " + materials +
+                ", " + invoice.getPayerName() +
+                ", " + invoice.getPayeeName()
+        );
 
         invoice.setStatus(InvoiceStatus.Initial);
         invoice.setDeleted(false);
-        invoice.setRegisteredAt(new Date());
-
-        String materials = helperService.getMaterials(regApplication.getMaterials(),"oz");
-
-        invoice.setDetail(
-                "ID:" + invoice.getInvoice() +
-                        ", " + materials +
-                        ", " + invoice.getPayerName() +
-                        ", " + invoice.getPayeeName());
-        invoiceRepository.save(invoice);
         return invoice;
     }
+
+    /* check */
+    private Invoice checkInvoiceStatus(Invoice invoice) {
+        Double paymentAmount = 0.0;
+        List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
+        for (Payment payment:paymentList){
+            if(payment.getStatus().equals(PaymentStatus.Success)){
+                paymentAmount += payment.getAmount();
+            }
+        }
+        if(invoice.getAmount() <= paymentAmount){
+            invoice.setStatus(InvoiceStatus.Success);
+        }else {
+            invoice.setStatus(InvoiceStatus.Initial);
+        }
+
+        return invoice;
+    }
+
+
+
 
     public Invoice payTest(Integer id) {
         Invoice invoice = getInvoice(id);

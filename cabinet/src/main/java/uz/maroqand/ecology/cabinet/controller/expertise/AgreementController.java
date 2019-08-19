@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -33,6 +31,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -61,6 +60,7 @@ public class AgreementController {
     private final ProjectDeveloperService projectDeveloperService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ToastrService toastrService;
 
     @Autowired
     public AgreementController(
@@ -76,8 +76,8 @@ public class AgreementController {
             InvoiceService invoiceService,
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
-    ){
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            ToastrService toastrService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -91,6 +91,7 @@ public class AgreementController {
         this.projectDeveloperService = projectDeveloperService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -114,37 +115,40 @@ public class AgreementController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+        Page<RegApplicationLog> regApplicationLogs = regApplicationLogService.findFiltered(
                 filterDto,
-                user.getOrganizationId(),
-                LogType.Agreement,
                 null,
+                user.getId(),
+                LogType.Agreement,
                 null,
                 pageable
         );
 
-        List<RegApplication> regApplicationList = regApplicationPage.getContent();
-        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
-        for (RegApplication regApplication : regApplicationList){
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogs.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
+        for (RegApplicationLog regApplicationLog : regApplicationLogList){
+            RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getName():"",
-                    regApplication.getStatus() != null ?regApplication.getStatus().getId():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getAgreementName():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
+                    performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName() : "",
+                    performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getAgreementName() : "",
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId() : "",
+                    regApplicationLog.getId()
             });
         }
 
-        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", regApplicationLogs.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationLogs.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
     }
@@ -152,14 +156,24 @@ public class AgreementController {
     @RequestMapping(ExpertiseUrls.AgreementView)
     public String getAgreementViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "logId")Integer logId,
             Model model
     ) {
+        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AgreementList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementLogId());
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if(
+            !regApplicationLog.getRegApplicationId().equals(regApplicationId) ||
+            !regApplicationLog.getUpdateById().equals(user.getId()) ||
+            !regApplicationLog.getType().equals(LogType.Agreement)
+        ){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kelishish bo'yicha ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.AgreementList;
+        }
 
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
@@ -175,16 +189,17 @@ public class AgreementController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant",client);
+        model.addAttribute("applicant", client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("regApplicationLog", regApplicationLog);
 
-        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+        model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
-        model.addAttribute("agreementLog", regApplicationLog);
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementView;
     }
 
@@ -203,15 +218,22 @@ public class AgreementController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
 
-        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
-
-        if(agreementStatus==2){
-            regApplication.setStatus(RegApplicationStatus.Process);
+        Boolean createAgreementComplete = true;
+        List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+        for(RegApplicationLog agreementLog :agreementLogList){
+            if(!agreementLog.getStatus().equals(LogStatus.Approved)){
+                createAgreementComplete = false;
+            }
+        }
+        if(createAgreementComplete){
+            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
             regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+            regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;
     }
 }

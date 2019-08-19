@@ -47,7 +47,23 @@
 
                                             <object th:include="reg/fragments/prepayment_view :: prepayment" th:remove="tag"></object>
 
-                                            <div class="row">
+                                            <div class="row" th:if="${invoice.amount == 0}">
+                                                <div class="col-md-12 text-right" >
+                                                    <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: black;">
+                                                        <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentFreeMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" th:if="${invoice.amount != 0 && invoice.status == T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
+                                                <div class="col-md-12 text-right" >
+                                                    <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: #fff;">
+                                                        <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentPaidMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" th:if="${invoice.amount != 0 && invoice.status != T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
                                                 <div class="col-md-4">
                                                     <a href="#bank-for-print" id="bank">
                                                         <div class="card theme-bg">

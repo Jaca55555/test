@@ -11,6 +11,7 @@ import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
+import uz.maroqand.ecology.core.entity.sys.Country;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
@@ -21,6 +22,7 @@ import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.sys.CountryService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -48,6 +50,7 @@ public class HelperService {
     private final DepartmentService departmentService;
     private final PositionService positionService;
     private final FileService fileService;
+    private final CountryService countryService;
 
     public HelperService(
             ObjectExpertiseService objectExpertiseService,
@@ -59,8 +62,8 @@ public class HelperService {
             SoatoService soatoService,
             FileService fileService,
             UserService userService,
-            OpfService opfService
-    ) {
+            OpfService opfService,
+            CountryService countryService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
@@ -71,6 +74,7 @@ public class HelperService {
         this.departmentService = departmentService;
         this.positionService = positionService;
         this.fileService = fileService;
+        this.countryService = countryService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -160,6 +164,13 @@ public class HelperService {
         return material!=null? material.getNameTranslation(locale):"";
     }
 
+    @Cacheable(value = "getMaterialShortName", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
+    public String getMaterialShortName(Integer id, String locale) {
+        if(id==null) return "";
+        Material material = materialService.getById(id);
+        return material!=null? material.getNameShortTranslation(locale):"";
+    }
+
     public String getMaterials(Set<Integer> ids, String locale) {
         if(ids==null) return "";
         String result = "";
@@ -169,8 +180,23 @@ public class HelperService {
         return result.length()>2? result.substring(0,result.length()-2):result;
     }
 
+    public String getMaterialShortNames(Set<Integer> ids, String locale) {
+        if(ids==null) return "";
+        String result = "";
+        for (Integer id:ids){
+            result += getMaterialShortName(id,locale)+", ";
+        }
+        return result.length()>2? result.substring(0,result.length()-2):result;
+    }
 
     /*  common  */
+    @Cacheable(value = "getCountry", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
+    public String getCountry(Integer id, String locale) {
+        if(id==null) return "";
+        Country country = countryService.getById(id);
+        return country!=null? country.getNameTranslation(locale):"";
+    }
+
     @Cacheable(value = "getSoatoName", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
     public String getSoatoName(Integer id, String locale) {
         if(id==null) return "";

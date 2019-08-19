@@ -15,6 +15,7 @@ import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.Parser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -107,7 +108,7 @@ public class BankAPIController {
         }
 
         if(invoice!=null){
-            paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.BANK);
+            paymentService.pay(invoice.getId(), Parser.stringToDouble(paymentFile.getAmount()), new Date(), paymentFile.getDetails(), PaymentType.BANK);
         }
 
         paymentResponse.setCode("0");

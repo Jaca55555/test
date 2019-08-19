@@ -227,7 +227,7 @@ public class DepartmentController {
         Organization organization = organizationService.getById(organizationId);
         if (organization==null) return null;
 
-        List<Department> departmentList = departmentService.getListByOrganizationId(organization.getId());
+        List<Department> departmentList = departmentService.getByOrganizationId(organization.getId());
         return departmentList;
     }
 

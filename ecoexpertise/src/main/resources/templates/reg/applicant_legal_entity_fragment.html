@@ -116,24 +116,33 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-4">
-                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" placeholder="+998 ( -- ) --- -- --">
+                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_legalEntityMobilePhone"></span>
             </div>
-            <div class="col-md-2">
-                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode()" th:text="#{sys_phone.confirm}"> Tasdiqlash</button>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_legalEntityMobilePhone" disabled="disabled" onclick="getSMSCode('legalEntityMobilePhone')" >
+                    <span id="timer_legalEntityMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
             </div>
         </div>
 
-        <div class="form-group row" id="sms_code" style="display: none">
+        <div class="form-group row" id="sms_code_legalEntityMobilePhone" style="display: none">
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
                 <span class="required">*</span>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="code" id="code"/>
+                <input type="text" class="form-control only-number" placeholder="000000" minlength="6" maxlength="6" name="code" id="code_legalEntityMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
             </div>
-            <div class="col-md-2">
-                <i class=" fa fa-check-square fa-2x" id="allow" style="margin-top: 6px;color: green;" hidden=""></i>
-                <i class="fa fa-times fa-2x" id="notAllow" style="margin-top: 6px;color: red;" hidden=""></i>
+            <div class="col-md-2 row pr-0">
+                <div class="col-md-2">
+                    <i class="mdi mdi-check-outline" id="allow_legalEntityMobilePhone" style="color: green;font-size: 30px" hidden=""></i>
+                    <i class="mdi mdi-close-outline" id="notAllow_legalEntityMobilePhone" style="color: red;font-size: 30px" hidden=""></i>
+                </div>
+                <div class="col-md-10 pr-0">
+                    <button type="button" class="btn btn-success btn-block p-0" onclick="confirmSmsCode('legalEntityMobilePhone')"><i class="mdi mdi-telegram mr-0" style="font-size: 25px"></i></button>
+                </div>
             </div>
         </div>
 
