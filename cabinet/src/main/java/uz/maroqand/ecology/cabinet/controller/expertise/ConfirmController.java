@@ -220,7 +220,14 @@ public class ConfirmController {
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani tasqinlandi",
+                "Sizning " + regApplication.getId() + " raqamli arizangiz tasdiqlandi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -243,7 +250,14 @@ public class ConfirmController {
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani rad javobi berildi",
+                "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -271,7 +285,14 @@ public class ConfirmController {
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani tasqinlandi", "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani tasqinlandi",
+                "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 
@@ -299,7 +320,13 @@ public class ConfirmController {
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
-        notificationService.create(regApplication.getCreatedById(), NotificationType.Expertise, "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi", user.getId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
         return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
     }
 

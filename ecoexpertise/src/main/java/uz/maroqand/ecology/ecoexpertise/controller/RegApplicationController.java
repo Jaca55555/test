@@ -18,10 +18,7 @@ import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
-import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
-import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -156,7 +153,7 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,null,user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getId(),pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
