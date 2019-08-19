@@ -243,7 +243,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
-        if(check!=null){
+        if(check != null){
             return check;
         }
 
@@ -299,28 +299,19 @@ public class RegApplicationController {
         if(check!=null){
             return check;
         }
-        SmsSend smsSend = smsSendService.getRegApplicationId(id);
-        if (smsSend==null){
-            //todo notification add
-            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
-        }
-        System.out.println(smsSend.getPhone());
+
         Client applicant = regApplication.getApplicant();
         switch (applicantType){
             case "LegalEntity":
-                legalEntityDto.setLegalEntityMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "Individual":
-                individualDto.setIndividualMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "IndividualEnterprise":
-                individualEntrepreneurDto.setEntrepreneurMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveIndividualEntrepreneur(individualEntrepreneurDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "ForeignIndividual":
-                foreignIndividualDto.setForeignMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveForeignIndividual(foreignIndividualDto, user, "regApplicationId="+regApplication.getId());
                 break;
         }
@@ -329,6 +320,14 @@ public class RegApplicationController {
         regApplication.setApplicantId(applicant.getId());
         regApplication.setStep(RegApplicationStep.ABOUT);
         regApplicationService.update(regApplication);
+
+        /*SmsSend smsSend = smsSendService.getById(regApplication.getCheckedSmsId());
+        if (smsSend==null){
+            toastrService.create(user.getId(), ToastrType.Error, "Telefon raqam tasdiqlanmagan.","Telefon raqam tasdiqlanmagan.");
+            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
+        }
+        applicant.setMobilePhone("");*/
+
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
@@ -372,6 +371,8 @@ public class RegApplicationController {
         }
         String phoneNumber = smsSendService.getPhoneNumber(phone);
         if (smsSend.getMessage().equals(code.toString()) && (!phoneNumber.isEmpty() && smsSend.getPhone().equals(phoneNumber))){
+            regApplication.setCheckedSmsId(smsSend.getId());
+            regApplicationService.update(regApplication);
             return result;
         }else{
             result.put("status",4);

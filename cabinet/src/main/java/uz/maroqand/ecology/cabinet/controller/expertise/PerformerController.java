@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
@@ -33,6 +35,7 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -63,6 +66,7 @@ public class PerformerController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
+    private final NotificationService notificationService;
 
     @Autowired
     public PerformerController(
@@ -81,7 +85,8 @@ public class PerformerController {
             CommentService commentService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            ToastrService toastrService
+            ToastrService toastrService,
+            NotificationService notificationService
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -99,6 +104,7 @@ public class PerformerController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -144,8 +150,8 @@ public class PerformerController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getPerformerName():"",
-                    regApplicationLog.getStatus() != null ?regApplicationLog.getStatus().getId():""
+                    regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
             });
         }
 
@@ -220,13 +226,27 @@ public class PerformerController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user);
-        if(comment!=null && !comment.isEmpty()){
+        if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplicationService.update(regApplication);
 
+        List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+        for (RegApplicationLog agreementLog:agreementLogs){
+            agreementLog.setStatus(LogStatus.New);
+            regApplicationLogService.updateDocument(agreementLog, user);
+
+            notificationService.create(
+                    agreementLog.getUpdateById(),
+                    NotificationType.Expertise,
+                    "Kelishish uchun ariza yuborildi",
+                    id + " raqamli ariza kelishish uchun yuborildi.",
+                    "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
+                    user.getId()
+            );
+        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
     }
 

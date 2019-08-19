@@ -48,12 +48,13 @@
                 </td>
                 <td>
                     <span th:if="${performerLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==1}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==2}" class="badge badge-pill badge-warning" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==3}" class="badge badge-pill badge-success" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog.status.getId()==4}" class="badge badge-pill badge-danger" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
                 </td>
             </tr>
-            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLog!=null}">
+            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLogList!=null}" th:each="agreementLog :${agreementLogList}">
                 <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
                     <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
                 </td>
@@ -63,9 +64,10 @@
                 </td>
                 <td>
                     <span th:if="${agreementLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                    <span th:if="${agreementLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                    <span th:if="${agreementLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
-                    <span th:if="${agreementLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==1}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==2}" class="badge badge-pill badge-warning" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==3}" class="badge badge-pill badge-success" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
+                    <span th:if="${agreementLog.status.getId()==4}" class="badge badge-pill badge-danger" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementCompleteLog!=null}">
@@ -78,9 +80,10 @@
                 </td>
                 <td>
                     <span th:if="${agreementCompleteLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
-                    <span th:if="${agreementCompleteLog.status.getId()==1}" class="badge badge-pill badge-warning" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
-                    <span th:if="${agreementCompleteLog.status.getId()==2}" class="badge badge-pill badge-success" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
-                    <span th:if="${agreementCompleteLog.status.getId()==3}" class="badge badge-pill badge-danger" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==1}" class="badge badge-pill badge-secondary" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==2}" class="badge badge-pill badge-warning" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==3}" class="badge badge-pill badge-success" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
+                    <span th:if="${agreementCompleteLog.status.getId()==4}" class="badge badge-pill badge-danger" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>
                 </td>
             </tr>
         </table>

@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -135,9 +136,9 @@ public class AgreementCompleteController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
                     performerLog.getStatus() != null ? performerLog.getStatus().getId():"",
-                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getAgreementName():"",
+                    agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():""
             });
         }
@@ -203,7 +204,9 @@ public class AgreementCompleteController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
-        commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        if(StringUtils.trimToNull(comment) != null){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
 
         if(agreementStatus==2){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());

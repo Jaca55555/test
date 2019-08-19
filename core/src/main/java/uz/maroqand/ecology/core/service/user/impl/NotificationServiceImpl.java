@@ -35,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationMap = new ConcurrentHashMap<>();
         newNotificationMap = new ConcurrentHashMap<>();
 
-        List<Notification> notificationList = notificationRepository.findByStatus(NotificationStatus.New);
+        List<Notification> notificationList = notificationRepository.findByStatusAndDeletedFalse(NotificationStatus.New);
         for (Notification notification:notificationList){
             if (notification.getStatus().equals(NotificationStatus.Reviewed)){
                 if (!notificationMap.containsKey(notification.getReviewerId())) {

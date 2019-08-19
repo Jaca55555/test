@@ -160,6 +160,9 @@ public class RegApplication {
     @Column(name = "budget",columnDefinition = "boolean")
     private Boolean budget;
 
+    @Column(name = "checked_sms_id")
+    private Integer checkedSmsId;
+
     /*
     * oxirgi log id lar saqlanadi
     * */

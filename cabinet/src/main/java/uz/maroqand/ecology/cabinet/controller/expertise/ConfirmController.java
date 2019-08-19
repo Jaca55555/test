@@ -143,7 +143,7 @@ public class ConfirmController {
                 client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
                 regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
-                regApplicationLog.getStatus()!=null?regApplicationLog.getStatus().getId():"",
+                regApplicationLog.getStatus()!=null? regApplicationLog.getStatus().getId():"",
                 regApplicationLog.getId()
             });
         }
@@ -156,7 +156,7 @@ public class ConfirmController {
 
     @RequestMapping(ExpertiseUrls.ConfirmView)
     public String getCheckingPage(
-            @RequestParam(name = "id")Integer logId,
+            @RequestParam(name = "logId")Integer logId,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -164,7 +164,6 @@ public class ConfirmController {
         if (regApplicationLog == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
-        System.out.println("type="+regApplicationLog.getType());
         if(!regApplicationLog.getType().equals(LogType.Confirm)){
             toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
             return "redirect:" + ExpertiseUrls.ConfirmList;
@@ -203,17 +202,25 @@ public class ConfirmController {
 
     @RequestMapping(value = ExpertiseUrls.ConfirmApproved,method = RequestMethod.POST)
     public String confirmApplication(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if(!regApplicationLog.getType().equals(LogType.Confirm)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
         regApplication.setBudget(budget);
@@ -228,22 +235,30 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmDenied,method = RequestMethod.POST)
     public String notConfirmApplication(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if(!regApplicationLog.getType().equals(LogType.Confirm)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
 
         regApplication.setBudget(budget);
@@ -258,29 +273,38 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmApprovedEdit,method = RequestMethod.POST)
     public String confirmEditLog(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if(!regApplicationLog.getType().equals(LogType.Confirm)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
         if (regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
-            return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
+        RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
+        regApplicationLogService.update(newRegApplicationLog, LogStatus.Approved, comment, user);
 
-        regApplication.setConfirmLogId(regApplicationLog.getId());
+        regApplication.setConfirmLogId(newRegApplicationLog.getId());
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
@@ -293,29 +317,38 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + newRegApplicationLog.getId();
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmDeniedEdit,method = RequestMethod.POST)
     public String confirmDeniedEdit(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog == null){
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+        if(!regApplicationLog.getType().equals(LogType.Confirm)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Tasdiqlash uchun ariza topilmadi");
+            return "redirect:" + ExpertiseUrls.ConfirmList;
+        }
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
         if (regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
-            return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
+        RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
+        regApplicationLogService.update(newRegApplicationLog, LogStatus.Denied, comment, user);
 
-        regApplication.setConfirmLogId(regApplicationLog.getId());
+        regApplication.setConfirmLogId(newRegApplicationLog.getId());
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
@@ -327,7 +360,7 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + newRegApplicationLog.getId();
     }
 
     @RequestMapping(ExpertiseUrls.ExpertiseFileDownload)

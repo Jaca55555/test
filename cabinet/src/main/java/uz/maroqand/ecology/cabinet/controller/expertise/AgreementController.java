@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -139,9 +140,9 @@ public class AgreementController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName() : "",
+                    performerLog != null && performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale) : "",
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
-                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getAgreementName() : "",
+                    regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getAgreementName(),locale) : "",
                     regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId() : "",
                     regApplicationLog.getId()
             });
@@ -218,7 +219,9 @@ public class AgreementController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
-        commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        if(StringUtils.trimToNull(comment) != null){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
 
         Boolean createAgreementComplete = true;
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());

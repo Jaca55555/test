@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -13,18 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Coordinate;
-import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -34,6 +30,7 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -62,6 +59,8 @@ public class ForwardingController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final DepartmentService departmentService;
     private final ToastrService toastrService;
+    private final NotificationService notificationService;
+    private final CommentService commentService;
 
     @Autowired
     public ForwardingController(
@@ -78,7 +77,9 @@ public class ForwardingController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             DepartmentService departmentService,
-            ToastrService toastrService
+            ToastrService toastrService,
+            NotificationService notificationService,
+            CommentService commentService
     ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -94,6 +95,8 @@ public class ForwardingController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.departmentService = departmentService;
         this.toastrService = toastrService;
+        this.notificationService = notificationService;
+        this.commentService = commentService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -140,9 +143,9 @@ public class ForwardingController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog!=null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
                     performerLog!=null ? performerLog.getStatus().getId():"",
-                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getForwardingName():"",
+                    forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
                     forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():""
             });
         }
@@ -218,12 +221,18 @@ public class ForwardingController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
 
-        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Performer,comment,user);
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Performer, comment,user);
+        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial, comment, performer);
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setPerformerId(performerId);
         regApplication.setPerformerLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
+
+        if(StringUtils.trimToNull(comment) != null){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
+        notificationService.create(performerId, NotificationType.Expertise, "Ijro uchun ariza yuborildi",id + " raqamli ariza ijro uchun sizga yuborildi","/expertise/performer/view/?id=" + id, user.getId());
 
         return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
     }
