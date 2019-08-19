@@ -135,7 +135,7 @@ public class PerformerController {
                     regApplication.getId(),
                     client.getTin(),
                     client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterials(regApplication.getMaterials(),locale):"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
@@ -190,7 +190,7 @@ public class PerformerController {
         model.addAttribute("regApplicationLog",performerLog);
 
         model.addAttribute("performerLog", performerLog);
-        model.addAttribute("agreementLog", regApplicationLogService.getById(regApplication.getAgreementLogId()));
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         return ExpertiseTemplates.PerformerView;
     }
@@ -213,7 +213,7 @@ public class PerformerController {
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.Agreement,"",user);
 
         regApplication.setStatus(RegApplicationStatus.Process);
-        regApplication.setAgreementLogId(regApplicationLogCreate.getId());
+//        regApplication.setAgreementLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();

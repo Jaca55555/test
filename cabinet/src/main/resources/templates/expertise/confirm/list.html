@@ -187,7 +187,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[11];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
@@ -213,8 +213,8 @@
             processing: true,
             serverSide: true,
             scrollX: true,
-            pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            pageLength: 20,
+            lengthMenu: [ [20, 50, 100], [20, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
@@ -222,7 +222,7 @@
                 var jqTable = $(api.table().node());
 
                 dataToSend.page = api != undefined ? api.page() : 0;
-                dataToSend.size = api != undefined ? api.page.len() : 25;
+                dataToSend.size = api != undefined ? api.page.len() : 20;
                 dataToSend.tin = $('#tin').val();
                 dataToSend.name = $('#name').val();
                 dataToSend.contractNumber = "";

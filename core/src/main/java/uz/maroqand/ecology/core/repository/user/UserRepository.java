@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     List<User> findAllByDepartmentIdNotNull();
 
+    List<User> findByOrganizationId(Integer organizationId);
+
 }

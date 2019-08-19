@@ -196,7 +196,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0] + '&logId=' + row[11];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;

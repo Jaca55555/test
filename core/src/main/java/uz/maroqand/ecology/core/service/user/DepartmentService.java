@@ -15,7 +15,7 @@ public interface DepartmentService {
 
     Department getById(Integer id);
 
-    List<Department> getListByOrganizationId(Integer id);
+    List<Department> getByOrganizationId(Integer organizationId);
 
     Page<Department> findFiltered(
             Integer departmentId,
@@ -30,14 +30,8 @@ public interface DepartmentService {
 
     Department save(Department department);
 
-    List<Department> findList();
-
-    List<Department> findListChild();
-
     List<Department> findByParentId(Integer parentId);
 
     List<Department> getAll();
-
-    List<Department> removeStatusActive();
 
 }

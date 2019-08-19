@@ -3,7 +3,6 @@ package uz.maroqand.ecology.core.entity.client;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.entity.sys.Soato;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

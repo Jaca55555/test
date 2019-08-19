@@ -13,6 +13,7 @@ import uz.maroqand.ecology.core.util.Common;
 public class IndividualEntrepreneurDto {
 
     private Integer id;
+    private Integer individualEntrepreneurOpfId;
 
     private String individualEntrepreneurPinfl;
     //Ф.И.О.
@@ -38,6 +39,7 @@ public class IndividualEntrepreneurDto {
 
     public IndividualEntrepreneurDto(Client applicant){
         this.id = applicant.getId();
+        this.individualEntrepreneurOpfId = applicant.getOpfId();
         this.individualEntrepreneurPinfl = applicant.getPinfl();
         this.individualEntrepreneurName = applicant.getName();
         this.individualEntrepreneurTin = applicant.getTin();
