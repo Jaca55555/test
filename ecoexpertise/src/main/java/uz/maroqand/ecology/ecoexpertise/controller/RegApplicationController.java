@@ -729,7 +729,7 @@ public class RegApplicationController {
             regApplicationService.update(regApplication);
         }
 
-        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+        List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
@@ -811,15 +811,12 @@ public class RegApplicationController {
                 result.put("status",0);
                 return result;
             }
-        }else{
-            comment = new Comment();
+            comment.setMessage(message);
+            commentService.updateComment(comment);
+        }else {
+            comment = commentService.create(regApplicationId, CommentType.CHAT, message, user.getId());
         }
-        comment.setRegApplicationId(regApplicationId);
-        comment.setCreatedAt(new Date());
-        comment.setCreatedById(user.getId());
-        comment.setDeleted(Boolean.FALSE);
-        comment.setMessage(message);
-        comment = commentService.createComment(comment);
+
 
         result.put("status", status);
         result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
@@ -858,12 +855,7 @@ public class RegApplicationController {
                 }
             }
         }else{
-            comment = new Comment();
-            comment.setDeleted(Boolean.TRUE);
-            comment.setCreatedById(user.getId());
-            comment.setCreatedAt(new Date());
-            comment.setRegApplicationId(regApplicationId);
-            comment = commentService.createComment(comment);
+            comment = commentService.create(regApplicationId, CommentType.CHAT, "",user.getId());
         }
 
         File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);
