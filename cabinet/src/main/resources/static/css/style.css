@@ -3044,7 +3044,7 @@ p.text-muted {
   float: unset;
   right: 0;
   margin-left: 264px;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
@@ -4747,7 +4747,7 @@ body.layout-1 .pcoded-navbar.active-dark .sidemenu li.active:after {
 }
 .pcoded-navbar.menupos-static .scroll-div.navbar-content {
   height: calc(100% - 70px);
-  min-height: 100vh;
+  /*min-height: 100vh;*/
 }
 
 /* ====== [ menu static end ] ======== */
@@ -10926,7 +10926,4 @@ div .dt-buttons{
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .25rem;
-}
-.bg-color{
-  background-color: #229970 !important;
 }
