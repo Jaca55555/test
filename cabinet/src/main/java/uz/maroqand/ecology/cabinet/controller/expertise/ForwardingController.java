@@ -34,6 +34,7 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -60,6 +61,7 @@ public class ForwardingController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final DepartmentService departmentService;
+    private final ToastrService toastrService;
 
     @Autowired
     public ForwardingController(
@@ -75,7 +77,9 @@ public class ForwardingController {
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            DepartmentService departmentService) {
+            DepartmentService departmentService,
+            ToastrService toastrService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -89,6 +93,7 @@ public class ForwardingController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.departmentService = departmentService;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -179,6 +184,8 @@ public class ForwardingController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
+
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
 
         model.addAttribute("applicant", client);
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

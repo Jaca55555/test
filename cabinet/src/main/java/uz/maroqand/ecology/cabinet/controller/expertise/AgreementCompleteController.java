@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -183,10 +180,11 @@ public class AgreementCompleteController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
 
-        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+        model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLog);
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementCompleteView;
     }
 
@@ -205,9 +203,10 @@ public class AgreementCompleteController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
 
-        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
         if(agreementStatus==2){
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
                 case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;

@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
@@ -178,8 +175,6 @@ public class AgreementController {
             return "redirect:" + ExpertiseUrls.AgreementList;
         }
 
-        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
-
         Client client = clientService.getById(regApplication.getApplicantId());
         if(client.getType().equals(ApplicantType.Individual)){
             model.addAttribute("individual", new IndividualDto(client));
@@ -194,16 +189,17 @@ public class AgreementController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
-        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant", client);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("regApplicationLog", regApplicationLog);
 
-        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+        model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
-        model.addAttribute("agreementLogList", regApplicationLogList);
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementView;
     }
 
@@ -222,15 +218,22 @@ public class AgreementController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
 
-        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
-
-        if(agreementStatus==2){
-            regApplication.setStatus(RegApplicationStatus.Process);
+        Boolean createAgreementComplete = true;
+        List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+        for(RegApplicationLog agreementLog :agreementLogList){
+            if(!agreementLog.getStatus().equals(LogStatus.Approved)){
+                createAgreementComplete = false;
+            }
+        }
+        if(createAgreementComplete){
+            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
             regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+            regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;
     }
 }

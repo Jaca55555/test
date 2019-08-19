@@ -1,8 +1,8 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.CommentType;
 import uz.maroqand.ecology.core.entity.sys.File;
-import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -27,12 +27,12 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reg_application_id", insertable = false, updatable = false)
-    private RegApplication regApplication;*/
-
     @Column(name = "reg_application_id")
     private Integer regApplicationId;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.ORDINAL)
+    private CommentType type;
 
     @Size(max = 500)
     @Column(columnDefinition = "TEXT")
@@ -49,10 +49,6 @@ public class Comment {
      */
     @Column(name = "deleted", columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
-
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by",insertable = false,updatable = false)
-    private User createdBy;*/
 
     @Column(name = "created_by")
     private Integer createdById;
