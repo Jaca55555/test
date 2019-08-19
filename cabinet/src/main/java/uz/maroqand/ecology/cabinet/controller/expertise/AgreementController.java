@@ -237,6 +237,21 @@ public class AgreementController {
             regApplicationService.update(regApplication);
         }
 
+        if(agreementStatus == 4){
+            regApplication.setAgreementStatus(LogStatus.Denied);
+            regApplicationService.update(regApplication);
+
+            for(RegApplicationLog agreementLog :agreementLogList){
+                if(agreementLog.getStatus().equals(LogStatus.New)){
+                    agreementLog.setStatus(LogStatus.Initial);
+                }else {
+                    RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+                    User agreementUser = userService.findById(agreementLog.getUpdateById());
+                    regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+                }
+            }
+        }
+
         return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;
     }
 }

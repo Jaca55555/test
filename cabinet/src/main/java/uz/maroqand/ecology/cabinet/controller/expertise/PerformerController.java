@@ -150,6 +150,8 @@ public class PerformerController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    regApplication.getAgreementStatus() != null ? helperService.getTranslation(regApplication.getAgreementStatus().getAgreementName(),locale):"",
+                    regApplication.getAgreementStatus() != null ? regApplication.getAgreementStatus().getId():"",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
                     regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
             });
@@ -231,6 +233,7 @@ public class PerformerController {
         }
 
         regApplication.setStatus(RegApplicationStatus.Process);
+        regApplication.setAgreementStatus(LogStatus.Initial);
         regApplicationService.update(regApplication);
 
         List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());

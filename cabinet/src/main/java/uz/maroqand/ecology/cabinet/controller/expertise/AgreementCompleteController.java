@@ -208,15 +208,29 @@ public class AgreementCompleteController {
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
 
-        if(agreementStatus==2){
+        if(agreementStatus == 3){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
                 case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
                 case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
             }
+            regApplication.setAgreementStatus(LogStatus.Approved);
             regApplicationService.update(regApplication);
         }
+
+        if(agreementStatus == 4){
+            regApplication.setAgreementStatus(LogStatus.Denied);
+            regApplicationService.update(regApplication);
+
+            List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+            for(RegApplicationLog agreementLog :agreementLogList){
+                RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+                User agreementUser = userService.findById(agreementLog.getUpdateById());
+                regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+            }
+        }
+
         return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();
     }
 

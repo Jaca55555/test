@@ -152,6 +152,10 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStatus status;
 
+    @Column(name = "agreement_status")
+    @Enumerated(EnumType.ORDINAL)
+    private LogStatus agreementStatus;
+
     @Column(name = "step")
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStep step;

@@ -154,6 +154,7 @@
                                                     <th th:text="#{sys_about.activity}"></th>
                                                     <th th:text="#{sys_list.registration_date}"></th>
                                                     <th th:text="#{sys_list.deadline_date}"></th>
+                                                    <th th:text="#{sys_agreement.status}"></th>
                                                     <th th:text="#{sys_conclusion_status}"></th>
                                                     <th ></th>
                                                 </tr>
@@ -229,6 +230,16 @@
 
     function renderLogStatusColumn(data, type, row, meta) {
         var statusLabel = '';
+        if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===1)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===2)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
+        if (row[10]===3)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===4)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        return statusLabel;
+    }
+
+    function renderAgreementStatusColumn(data, type, row, meta) {
+        var statusLabel = '';
         if (row[8]===0)statusLabel += '<span class="badge badge-secondary">'+row[7]+'</span>';
         if (row[8]===1)statusLabel += '<span class="badge badge-secondary">'+row[7]+'</span>';
         if (row[8]===2)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
@@ -281,7 +292,8 @@
                 {data: 4, name: 'category'},
                 {data: 5, name: 'registrationDate'},
                 {render: renderDeadlineDateColumn, name: 'deadlineDate'},
-                {data: 7, render:renderLogStatusColumn, orderable:false},
+                {data: 7, render:renderAgreementStatusColumn, orderable:false},
+                {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
