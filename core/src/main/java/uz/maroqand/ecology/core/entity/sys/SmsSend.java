@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.entity.sys;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +19,13 @@ public class SmsSend {
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reg_application_id", updatable = false, insertable = false)
+    private RegApplication regApplication;
+
+    @Column(name = "reg_application_id")
+    private Integer regApplicationId;
 
     @Column(name = "full_name")
     private String fullName;

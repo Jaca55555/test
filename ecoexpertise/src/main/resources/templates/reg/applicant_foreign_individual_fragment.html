@@ -102,8 +102,35 @@
                 <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
                 <span class="required">*</span>
             </div>
-            <div class="col-md-6">
-                <input class="form-control phone" required="" id="foreignMobilePhone" name="foreignMobilePhone" th:value="${foreignIndividual.foreignMobilePhone}" placeholder="+998 ( -- ) --- -- --">
+            <div class="col-md-4">
+                <input class="form-control phone" required="" id="foreignMobilePhone" name="foreignMobilePhone" th:value="${foreignIndividual.foreignMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_foreignMobilePhone"></span>
+            </div>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_foreignMobilePhone" onclick="getSMSCode('foreignMobilePhone')" >
+                    <span id="timer_foreignMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group row" id="sms_code_foreignMobilePhone" style="display: none">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control only-number" name="code" placeholder="000000" minlength="6" maxlength="6" id="code_foreignMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
+            </div>
+
+            <div class="col-md-2 row pr-0">
+                <div class="col-md-4">
+                    <i class="mdi mdi-check-outline" id="allow_foreignMobilePhone" style="color: green;font-size: 30px" hidden=""></i>
+                    <i class="mdi mdi-close-outline" id="notAllow_foreignMobilePhone" style="color: red;font-size: 30px" hidden=""></i>
+                </div>
+                <div class="col-md-8 pr-0">
+                    <button type="button" class="btn btn-success btn-block p-0" onclick="confirmSmsCode('foreignMobilePhone')"><i class="mdi mdi-telegram mr-0" style="font-size: 25px"></i></button>
+                </div>
             </div>
         </div>
 

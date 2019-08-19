@@ -169,12 +169,17 @@
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
 
     <script th:inline="javascript">
+        var regApplicationId = [[${regApplication.id}]];
         var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
         var sendSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationSendSMSCode}]];
+        var confirmSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetSMSCode}]];
         var oked_name_text = [[#{sys_oked_name}]];
         var oked_not_name_text = [[#{sys_not_oked_name}]];
         var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
         var individualByPinfl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetIndividualByPinfl}]];
+        var notFoundRegApplication = [[#{not_found_reg_application}]];//arizachi topilmadi
+        var notSendSMSThisNumber= [[#{not_send_sms_this_number}]];//bu raqamga sms jo'natib bo'lmaydi
+        var sendSMSThisNumber= [[#{send_sms_this_number}]];//bu raqamga sms jo'natildi
 
         $(document).ready(function () {
             (function () {
@@ -230,26 +235,40 @@
             selectForm($(this).val());
         });
 
+
+        //1 --> yuborildi
+        //2 --> arizachi topilmadi
+        //3 --> bu raqamga jo'natib bo'lmaydi
         function getSMSCode(id) {
             $('#'+id).parsley().validate();
             if ($('#'+id).parsley().isValid()){
-                $('#sms_code_'+id).show();
-                $('#allow_'+id).attr("hidden", true);
-                $('#notAllow_'+id).attr("hidden", false);
+
                 $.ajax({
                     url: sendSMSCodeLink,
                     data: {
                         mobilePhone: $('#'+id).val(),
+                        id: regApplicationId,
                         _csrf: $('#global_csrf').val()
                     },
                     type: 'post',
                     dataType: 'json',
                     cache: true,
                     success: function (response) {
-                        if (response){
-                            console.log("ketdi");
+                        console.log(response.status);
+                        if (response.status==1){
+                            $('#errorPhone_'+id).html(sendSMSThisNumber);
+                            $('#sms_code_'+id).show();
+                            $('#allow_'+id).attr("hidden", true);
+                            $('#notAllow_'+id).attr("hidden", false);
+                            timerAdd(id);
                         }else{
-                            console.log("ketmadi");
+                            if (response.status==2){
+                                $('#errorPhone_'+id).html(notFoundRegApplication);
+                            }else{
+                                if (response.status==3){
+                                    $('#errorPhone_'+id).html(notSendSMSThisNumber);
+                                }
+                            }
                         }
                     },
                     error: function () {
@@ -259,9 +278,39 @@
         }
 
         function confirmSmsCode(id) {
-            $('#allow_'+id).attr("hidden", false);
-            $('#notAllow_'+id).attr("hidden", true);
-            $('#code_'+id).prop('readonly',true);
+            $('#code_'+id).parsley().validate();
+            $('#'+id).parsley().validate();
+            if ($('#code_'+id).parsley().isValid() && $('#'+id).parsley().isValid()){
+                $.ajax({
+                    url: confirmSMSCodeLink,
+                    data: {
+                        code: $('#code_'+id).val(),
+                        phone: $('#'+id).val(),
+                        id: regApplicationId,
+                        _csrf: $('#global_csrf').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    cache: true,
+                    success: function (response) {
+                        console.log(response.status);
+                        if (response.status==1){
+                            $('#allow_'+id).attr("hidden", false);
+                            $('#notAllow_'+id).attr("hidden", true);
+                            $('#code_'+id).prop('readonly',true);
+                        }else{
+                            $('#allow_'+id).attr("hidden", true);
+                            $('#notAllow_'+id).attr("hidden", false);
+                            $('#code_'+id).prop('readonly',false);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }else{
+                console.log("error");
+            }
+
         }
         
         function getOkedName() {
@@ -421,6 +470,26 @@
                 }
             });
         });
+
+        function timerAdd(id) {
+            var now = new Date().getTime();
+            var deadline = now+90000;
+            $("#send_code_button_"+id).prop("disabled",true);
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var t = deadline - now;
+                var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((t % (1000 * 60)) / 1000);
+                if (seconds<10) seconds="0"+seconds;
+                document.getElementById("timer_"+id).innerHTML = "0" + minutes + ":" + seconds + " ";
+                if (t < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer_"+id).innerHTML = "";
+                    $("#send_code_button_"+id).prop("disabled",false);
+                }
+            }, 1000);
+        }
+
 
     </script>
 </body>

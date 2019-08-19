@@ -13,5 +13,6 @@ import uz.maroqand.ecology.core.entity.sys.SmsSend;
 @Repository
 public interface SmsSendRepository extends JpaRepository<SmsSend, Integer>, JpaSpecificationExecutor<SmsSend> {
 
+    SmsSend findTop1ByRegApplicationIdOrderByIdDesc(Integer id);
 
 }
