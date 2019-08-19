@@ -32,7 +32,7 @@ public class Country {
     @Column(name = "name_full_uz")
     private String fullNameUz;
 
-    @Column(name = "name_short_on")
+    @Column(name = "name_short_oz")
     private String shortNameOz;
 
     @Column(name = "name_full_oz")

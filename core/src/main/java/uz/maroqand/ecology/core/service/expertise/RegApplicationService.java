@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface RegApplicationService {
 
-    Boolean sendSMSCode(String mobilePhone);
+    Integer sendSMSCode(String mobilePhone,Integer regApplicationId);
 
     void update(RegApplication regApplication);
 

@@ -132,9 +132,13 @@
             </div>
             <div class="col-md-4">
                 <input class="form-control phone" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_individualMobilePhone"></span>
             </div>
-            <div class="col-md-2">
-                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode('individualMobilePhone')" th:text="#{sys_phone.confirm}"> Tasdiqlash</button>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_individualMobilePhone" onclick="getSMSCode('individualMobilePhone')" >
+                    <span id="timer_individualMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
             </div>
         </div>
 
@@ -144,7 +148,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="code" id="code_individualMobilePhone"/>
+                <input type="text" class="form-control only-number" name="code" placeholder="000000" minlength="6" maxlength="6" id="code_individualMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
             </div>
 
             <div class="col-md-2 row pr-0">

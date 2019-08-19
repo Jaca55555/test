@@ -9,11 +9,16 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
+import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -26,11 +31,15 @@ import java.util.Random;
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
 
-    private RegApplicationRepository regApplicationRepository;
+    private final RegApplicationRepository regApplicationRepository;
+    private final SmsSendService smsSendService;
+    private final SmsSendOauth2Service smsSendOauth2Service;
 
     @Autowired
-    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository) {
+    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service) {
         this.regApplicationRepository = regApplicationRepository;
+        this.smsSendService = smsSendService;
+        this.smsSendOauth2Service = smsSendOauth2Service;
     }
 
     public RegApplication create(User user){
@@ -59,11 +68,38 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
 
+    //1 --> yuborildi
+    //2 --> arizachi topilmadi
+    //3 --> bu raqamga jo'natib bo'lmaydi
     @Override
-    public Boolean sendSMSCode(String mobilePhone) {
+    public Integer sendSMSCode(String mobilePhone,Integer regApplicationId) {
+        RegApplication regApplication = getById(regApplicationId);
+        if (regApplication==null){
+            return 2;
+        }
+
+        String phoneNumber = smsSendService.getPhoneNumber(mobilePhone);
+        if (phoneNumber.isEmpty()){
+            return 3;
+        }
+
         String code = createSMSCode();
-        System.out.println(code);
-        return true;
+        System.out.println("code=" + code);
+        SmsSend smsSend = new SmsSend();
+        smsSend.setMessage(code);
+        smsSend.setFullName(regApplication.getName());
+        smsSend.setStatus(SmsSendStatus.SCHEDLD);
+        smsSend.setDeleted(Boolean.FALSE);
+        smsSend.setPhone(phoneNumber);
+        smsSend.setRegApplicationId(regApplicationId);
+        smsSendService.save(smsSend);
+        System.out.println("sms ketdi");
+        AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck(null);
+        authTokenInfo = smsSendOauth2Service.getAccessTokenCheck(authTokenInfo);
+        smsSendOauth2Service.createContact(authTokenInfo,smsSend);
+        SmsSend smsSendSent = smsSendOauth2Service.createSendTask(authTokenInfo,smsSend);
+        smsSendService.update(smsSendSent);
+        return 1;
     }
 
     public void update(RegApplication regApplication){

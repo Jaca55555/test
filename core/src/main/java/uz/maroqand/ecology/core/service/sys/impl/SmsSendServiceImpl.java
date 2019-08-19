@@ -29,9 +29,14 @@ public class SmsSendServiceImpl implements SmsSendService {
     }
 
     @Override
-    public SmsSend save(SmsSend smsSend, Integer userId) {
+    public SmsSend save(SmsSend smsSend) {
         smsSend.setCreatedAt(new Date());
         return smsSendRepository.save(smsSend);
+    }
+
+    @Override
+    public SmsSend getRegApplicationId(Integer id) {
+        return smsSendRepository.findTop1ByRegApplicationIdOrderByIdDesc(id);
     }
 
     @Override

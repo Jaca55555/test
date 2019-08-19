@@ -25,8 +25,10 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.user.UserAdditional;
+import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -41,10 +43,6 @@ import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.gnk.GnkService;
 import uz.maroqand.ecology.ecoexpertise.mips.MIPIndividualsPassportInfoService;
-import uz.maroqand.ecology.core.service.sys.CountryService;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
-import uz.maroqand.ecology.core.service.sys.SoatoService;
-import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -82,6 +80,7 @@ public class RegApplicationController {
     private final ToastrService toastrService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final SmsSendService smsSendService;
 
     @Autowired
     public RegApplicationController(
@@ -108,8 +107,8 @@ public class RegApplicationController {
             MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
-    ) {
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            SmsSendService smsSendService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -137,6 +136,7 @@ public class RegApplicationController {
         this.toastrService = toastrService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.smsSendService = smsSendService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -299,13 +299,30 @@ public class RegApplicationController {
         if(check!=null){
             return check;
         }
-
+        SmsSend smsSend = smsSendService.getRegApplicationId(id);
+        if (smsSend==null){
+            //todo notification add
+            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
+        }
+        System.out.println(smsSend.getPhone());
         Client applicant = regApplication.getApplicant();
         switch (applicantType){
-            case "LegalEntity":applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());break;
-            case "Individual":applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());break;
-            case "IndividualEnterprise":applicant = clientService.saveIndividualEntrepreneur(individualEntrepreneurDto, user, "regApplicationId="+regApplication.getId());break;
-            case "ForeignIndividual":applicant = clientService.saveForeignIndividual(foreignIndividualDto, user, "regApplicationId="+regApplication.getId());break;
+            case "LegalEntity":
+                legalEntityDto.setLegalEntityMobilePhone(smsSend.getPhone());
+                applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());
+                break;
+            case "Individual":
+                individualDto.setIndividualMobilePhone(smsSend.getPhone());
+                applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());
+                break;
+            case "IndividualEnterprise":
+                individualEntrepreneurDto.setEntrepreneurMobilePhone(smsSend.getPhone());
+                applicant = clientService.saveIndividualEntrepreneur(individualEntrepreneurDto, user, "regApplicationId="+regApplication.getId());
+                break;
+            case "ForeignIndividual":
+                foreignIndividualDto.setForeignMobilePhone(smsSend.getPhone());
+                applicant = clientService.saveForeignIndividual(foreignIndividualDto, user, "regApplicationId="+regApplication.getId());
+                break;
         }
 
         regApplication.setApplicantType(applicant.getType());
@@ -315,10 +332,52 @@ public class RegApplicationController {
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
+    //1 --> yuborildi
+    //2 --> arizachi topilmadi
+    //3 --> bu raqamga jo'natib bo'lmaydi
     @RequestMapping(value = RegUrls.RegApplicationSendSMSCode,method = RequestMethod.POST)
     @ResponseBody
-    public Boolean regApplicationSendSMSCode(@RequestParam(name = "mobilePhone") String mobilePhone){
-        return regApplicationService.sendSMSCode(mobilePhone);
+    public HashMap<String,Object> regApplicationSendSMSCode(
+            @RequestParam(name = "mobilePhone") String mobilePhone,
+            @RequestParam(name = "id") Integer id
+            ){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",regApplicationService.sendSMSCode(mobilePhone,id));
+        return result;
+    }
+
+    //status==1 confirm
+    //status==2 regApplication == null
+    //status==3 smssend == null
+    //status==4 notConfirm
+    @RequestMapping(value = RegUrls.RegApplicationGetSMSCode,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationGetSMSCode(
+            @RequestParam(name = "code") Integer code,
+            @RequestParam(name = "phone") String phone,
+            @RequestParam(name = "id") Integer id
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null){
+            result.put("status",2);
+            return  result;
+        }
+        SmsSend smsSend = smsSendService.getRegApplicationId(id);
+        if (smsSend==null){
+            result.put("status",3);
+            return  result;
+        }
+        String phoneNumber = smsSendService.getPhoneNumber(phone);
+        if (smsSend.getMessage().equals(code.toString()) && (!phoneNumber.isEmpty() && smsSend.getPhone().equals(phoneNumber))){
+            return result;
+        }else{
+            result.put("status",4);
+            return  result;
+        }
+
     }
 
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.GET)

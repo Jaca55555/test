@@ -179,7 +179,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message) {
 
-        Client client = clientRepository.findTop1ByPassportSerialAndPassportNumberAndDeletedFalseOrderByIdDesc(foreignIndividualDto.getForeignPassportSerial(), foreignIndividualDto.getForeignPassportNumber());
+        Client client = clientRepository.findTop1ByPassportNumberAndDeletedFalseOrderByIdDesc(foreignIndividualDto.getForeignPassportSerialNumber());
         if(client==null){
             client = new Client();
             client.setCreatedAt(new Date());
@@ -190,16 +190,11 @@ public class ClientServiceImpl implements ClientService {
 
         client.setType(ApplicantType.ForeignIndividual);
 
-        Date passportDateOfIssue = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfIssue(), Common.uzbekistanDateFormat);
-        Date passportDateOfExpiry = DateParser.TryParse(foreignIndividualDto.getForeignPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
         client.setName(foreignIndividualDto.getForeignIndividualName());
 
-        client.setPassportSerial(foreignIndividualDto.getForeignPassportSerial());
-        client.setPassportNumber(foreignIndividualDto.getForeignPassportNumber());
-        client.setPassportDateOfIssue(passportDateOfIssue);
-        client.setPassportDateOfExpiry(passportDateOfExpiry);
-        client.setPassportIssuedBy(foreignIndividualDto.getForeignPassportIssuedBy());
+        client.setPassportNumber(foreignIndividualDto.getForeignPassportSerialNumber());
+        client.setCitizenshipId(foreignIndividualDto.getForeignCitizenshipId());
 
         client.setCountryId(foreignIndividualDto.getForeignCountryId());
         client.setAddress(foreignIndividualDto.getForeignAddress());

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/ol/ol.css">
+    <style>
+        .pad-top{
+            padding-top: calc(.375rem + 1px);
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                            <!-- [ sample-page ] start -->
+                            <!--<div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                        <h5 th:text="${'№: ' + coordinate.number}"></h5>
+                                        <hr>
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="coordinate-tab" data-toggle="tab" href="#coordinates" role="tab" aria-controls="coordinates" aria-selected="false" th:text="#{sys_coordinates}"></a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                                <div class="container col-md-12">
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.conclusion_number}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${coordinate.number}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.conclusion_date}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${#dates.format(coordinate.date, 'dd.MM.yyyy')}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{sys_company_name}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${coordinate.clientName}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.object_expertise}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${object_expertise}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.materials_type}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${materials_type}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.category}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${category}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.activity}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${activity}" readonly="">
+                                                    </div>
+
+                                                    <div class="form-group col-md-12 row">
+                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.object_name}"></label>
+                                                        <input type="text" class="form-control col-md-6" th:value="${object_name}" readonly="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="coordinates" role="tabpanel" aria-labelledby="coordinate-tab">
+                                                <div id="map" class="map" style="width: 100%; height: 600px;"></div>
+                                                <br>
+                                                <h3 class="text-center" th:text="#{geographical_coordinates}"></h3>
+                                                <div id="coordinate-list" class="col-md-12 container">
+                                                    &lt;!&ndash;<div class="col-md-12 row">
+                                                        <div class="col-md-2">
+                                                            <label class="col-form-label">&nbsp;</label>
+                                                            <h4 class="text-right pad-top">#1</h4>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label class="col-form-label" th:text="#{coordinate_long}"></label>
+                                                            <input type="text" class="form-control" readonly="">
+                                                        </div>
+                                                        <div class="col-md-3 offset-md-2">
+                                                            <label class="col-form-label" th:text="#{coordinate_lat}"></label>
+                                                            <input type="text" class="form-control" readonly="">
+                                                        </div>
+                                                    </div>&ndash;&gt;
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>-->
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script src="/static/ol/ol.js"></script>
+<script th:inline="javascript">
+    var coordinateLatLongList = [[${coordinateLatLongList}]];
+    var coordinateLat = [[${coordinate.latitude}]];
+    var coordinateLong = [[${coordinate.longitude}]];
+
+    var coordinateLongText = [[#{coordinate_long}]];
+    var coordinateLatText = [[#{coordinate_lat}]];
+</script>
+<script>
+    var Map = ol.Map;
+    var View = ol.View;
+    var Draw = ol.interaction.Draw;
+    var TileLayer = ol.layer.Tile;
+    var VectorLayer = ol.layer.Vector;
+    var OSM = ol.source.OSM;
+    var VectorSource = ol.source.Vector;
+
+    var raster = new TileLayer({
+        source: new OSM()
+    });
+
+    var source = new VectorSource({wrapX: false});
+
+    var vector = new VectorLayer({
+        source: source
+    });
+
+    var polyCoords = [];
+    // var coords = "41.30881,69.28178 41.30860,69.28136 41.30790,69.28209 41.30812,69.28250".split(' ');
+    // var coords = "69.28178,41.30881 69.28136,41.30860 69.28209,41.30790 69.28250,41.30812".split(' ');
+    var coords = [];
+
+    coords.push(coordinateLat + "," + coordinateLong);
+    for(var i in coordinateLatLongList){
+        coords.push(coordinateLatLongList[i].latitude + "," + coordinateLatLongList[i].longitude);
+    }
+
+    for (var i in coords) {
+        var c = coords[i].split(',');
+        polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
+
+        $('#coordinate-list').append('<div class="col-md-12 row form-group">\n' +
+            '                                                <div class="col-md-2">\n' +
+            '                                                    <h4 class="text-right pad-top">#'+(parseInt(i)+1)+'</h4>\n' +
+            '                                                </div>\n' +
+            '                                                <div class="col-md-3">\n' +
+            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[1])+'">\n' +
+            '                                                </div>\n' +
+            '                                                <div class="col-md-3 offset-md-2">\n' +
+            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[0])+'">\n' +
+            '                                                </div>\n' +
+            '                                            </div>')
+    }
+
+    var feature = new ol.Feature({
+        geometry: new ol.geom.Polygon([polyCoords])
+    });
+
+    var layer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [feature]
+        })
+    });
+
+
+    var map = new Map({
+        layers: [raster, vector, layer],
+        target: 'map',
+        view: new View({
+            // center: ol.proj.fromLonLat([coordinateLat, coordinateLong]),
+            center: ol.proj.transform([parseFloat(coordinateLat), parseFloat(coordinateLong)], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 16
+        })
+    });
+
+    var draw = new Draw({
+        source: source,
+        type: "Polygon"
+    });
+    // map.addInteraction(draw);
+
+    map.on("click", function () {
+        var features = vector.getSource().getFeatures();
+        features.forEach(function (feature) {
+            console.log(feature.getGeometry().getCoordinates()[0][0]);
+            var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
+            console.log(lonlat[0]);
+            console.log(lonlat[1]);
+        })
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.which == 8)
+            vector.getSource().clear();
+    });
+    
+    $('#coordinate-tab').click(function () {
+        setTimeout( function() { map.updateSize();}, 200);
+    })
+
+</script>
+</body>
+</html>

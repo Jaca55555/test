@@ -124,7 +124,7 @@ public class SmsSendOauth2Service {
             contactDto.setNumber(contactNumberDto);
             contactDto.setTag("XXX");
 //            contactDto.setGender("M");
-            contactDto.setOccupation("Hunarmaqnd");
+            contactDto.setOccupation("Eco");
 //            contactDto.setAge(30);
 //            contactDto.setNote("Tuman nomi");
 
@@ -162,7 +162,7 @@ public class SmsSendOauth2Service {
             RestTemplate restTemplate = restTemplate();
             SmsSendDto smsSendDto = new SmsSendDto();
             smsSendDto.setDestAddr(smsSend.getPhone());
-            smsSendDto.setText(smsSend.getMessage());
+            smsSendDto.setText("Tasdiqlash kod: "+smsSend.getMessage());
             HttpEntity<SmsSendDto> request = new HttpEntity<>(smsSendDto, getHeadersWithAccessToken(authTokenInfo.getAccess_token()));
             System.out.println("URL_SEND_TASKS="+URL_SEND_TASKS);
             ResponseEntity<Object> response = restTemplate.exchange(URL_SEND_TASKS, HttpMethod.POST, request, Object.class);

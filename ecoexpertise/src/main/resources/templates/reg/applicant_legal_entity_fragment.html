@@ -117,9 +117,13 @@
             </div>
             <div class="col-md-4">
                 <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_legalEntityMobilePhone"></span>
             </div>
-            <div class="col-md-2">
-                <button class="btn btn-info btn-block" type="button" id="send_code_button" onclick="getSMSCode('legalEntityMobilePhone')" th:text="#{sys_phone.confirm}"> Tasdiqlash</button>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_legalEntityMobilePhone" disabled="disabled" onclick="getSMSCode('legalEntityMobilePhone')" >
+                    <span id="timer_legalEntityMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
             </div>
         </div>
 
@@ -129,7 +133,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="code" id="code_legalEntityMobilePhone"/>
+                <input type="text" class="form-control only-number" placeholder="000000" minlength="6" maxlength="6" name="code" id="code_legalEntityMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
             </div>
             <div class="col-md-2 row pr-0">
                 <div class="col-md-2">
