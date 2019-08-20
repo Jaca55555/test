@@ -157,7 +157,11 @@
         if (actionNumber === 2) {
             $('#cofirm-form').attr('action',[[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmDenied}]]);
         }
-        $('#cofirm-form').submit();
+        if($('#budgetTrue').is(':checked') || $('#budgetFalse').is(':checked')) {
+            $('#cofirm-form').submit();
+        }else {
+            alert("Tashkilot turi tanlanmagan");
+        }
     }
 
     function setActionEdit(actionNumber) {
