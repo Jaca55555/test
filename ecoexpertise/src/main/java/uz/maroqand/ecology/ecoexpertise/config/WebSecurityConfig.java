@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.IdGovUzAccessToken).permitAll()
                 .antMatchers(SysUrls.EDSLogin).permitAll()
                 .antMatchers("/static*/**").permitAll()
+                .antMatchers("/login*/**").permitAll()
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
