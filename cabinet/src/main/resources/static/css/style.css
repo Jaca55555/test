@@ -1733,6 +1733,8 @@ p.text-muted {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  justify-content: flex-start;
+  max-width: 224px;
 }
 .b-brand .b-bg {
   background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
@@ -1757,6 +1759,8 @@ p.text-muted {
   font-weight: 600;
   color: #fff;
   font-size: 14px;
+  word-break: break-word;
+  display: block;
 }
 
 .navbar-collapsed .b-brand .b-title {
@@ -3040,7 +3044,7 @@ p.text-muted {
   float: unset;
   right: 0;
   margin-left: 264px;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
@@ -4743,7 +4747,7 @@ body.layout-1 .pcoded-navbar.active-dark .sidemenu li.active:after {
 }
 .pcoded-navbar.menupos-static .scroll-div.navbar-content {
   height: calc(100% - 70px);
-  min-height: 100vh;
+  /*min-height: 100vh;*/
 }
 
 /* ====== [ menu static end ] ======== */
@@ -10677,6 +10681,9 @@ div .dt-buttons{
 .card-dashboard{
 
 }
+.min-h-125{
+  min-height: 125px !important;
+}
 .card-dashboard .card-header{
   padding: 10px;
   background-color: #4DD7FA;
@@ -10715,6 +10722,7 @@ div .dt-buttons{
   font-size: 14px;
   color: #fff;
   font-weight: bold;
+  word-break: break-word;
 }
 .card-dashboard .card-link{
   display: block;

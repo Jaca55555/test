@@ -33,7 +33,7 @@
                    <textarea class="form-control" rows="8" th:field="${regApplicationLog.comment}" maxlength="1000"></textarea>
                </div>
            </div>
-           <input type="hidden" name="id" th:value="${regApplication.id}">
+           <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
            <div class="row">
                <div class="form-group col-md-12 text-center" id="buttons-1">
@@ -117,7 +117,7 @@
                                        <textarea class="form-control" rows="8" th:field="${regApplicationLog.comment}" maxlength="1000"></textarea>
                                    </div>
                                </div>
-                               <input type="hidden" name="id" th:value="${regApplication.id}">
+                               <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                            </form>
 

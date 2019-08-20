@@ -32,7 +32,7 @@
                     <h5 class="mt-lg-5" th:text="#{sys_comment.lastComments}">Последние комментарии к документу</h5>
                     <div class="col-md-12" id="comments">
                         <div id="comments-first"></div>
-                        <div class="row" th:each="comment : ${commentList}" th:if="${#lists.size(commentList)>0}">
+                        <div class="row" th:each="comment : ${chatList}" th:if="${#lists.size(chatList)>0}">
                             <div class="col-md-2">
                                 <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
                             </div>

@@ -201,6 +201,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
                 if(type!=null){
                     predicates.add(criteriaBuilder.equal(root.get("type"), type.getId()));
+                    if(type==LogType.Agreement){
+                        predicates.add(criteriaBuilder.notEqual(root.get("status"), 0));
+                    }
                 }
                 if(status!=null){
                     predicates.add(criteriaBuilder.equal(root.get("status"), status.getId()));

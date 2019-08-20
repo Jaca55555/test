@@ -23,6 +23,7 @@ public interface NotificationService {
             NotificationType type,
             String title,
             String message,
+            String url,
             Integer userId
     );
 

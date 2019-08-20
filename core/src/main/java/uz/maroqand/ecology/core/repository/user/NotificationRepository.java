@@ -15,6 +15,6 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
-    List<Notification> findByStatus(NotificationStatus status);
+    List<Notification> findByStatusAndDeletedFalse(NotificationStatus status);
 
 }

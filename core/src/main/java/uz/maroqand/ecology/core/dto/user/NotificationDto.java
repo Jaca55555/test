@@ -14,13 +14,17 @@ import uz.maroqand.ecology.core.util.Common;
 public class NotificationDto {
 
     private Integer id;
+    private String url;
     private String title;
+    private String message;
     private String createdAt;
     private String createdBy;
 
     public NotificationDto(Notification notification, HelperService helperService){
         this.id = notification.getId();
+        this.url = notification.getUrl();
         this.title = notification.getTitle();
+        this.message = notification.getMessage();
         this.createdAt = notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"";
         this.createdBy = helperService.getUserFullNameById(notification.getCreatedById());
     }

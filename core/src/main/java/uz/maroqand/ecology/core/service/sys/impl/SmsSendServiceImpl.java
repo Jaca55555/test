@@ -35,6 +35,12 @@ public class SmsSendServiceImpl implements SmsSendService {
     }
 
     @Override
+    public SmsSend getById(Integer id) {
+        if(id == null) return null;
+        return smsSendRepository.getOne(id);
+    }
+
+    @Override
     public SmsSend getRegApplicationId(Integer id) {
         return smsSendRepository.findTop1ByRegApplicationIdOrderByIdDesc(id);
     }

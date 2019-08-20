@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -13,13 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
-import uz.maroqand.ecology.core.dto.expertise.FilterDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Coordinate;
 import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
@@ -138,9 +134,9 @@ public class AgreementCompleteController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog.getStatus() != null ? performerLog.getStatus().getPerformerName():"",
+                    performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
                     performerLog.getStatus() != null ? performerLog.getStatus().getId():"",
-                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getAgreementName():"",
+                    agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():""
             });
         }
@@ -163,11 +159,16 @@ public class AgreementCompleteController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
 
-        Client client = clientService.getById(regApplication.getApplicantId());
-        if(client.getType().equals(ApplicantType.Individual)){
-            model.addAttribute("individual", new IndividualDto(client));
-        }else {
-            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        Client applicant = clientService.getById(regApplication.getApplicantId());
+        switch (applicant.getType()){
+            case Individual:
+                model.addAttribute("individual", new IndividualDto(applicant)); break;
+            case LegalEntity:
+                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
+            case ForeignIndividual:
+                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
+            case IndividualEnterprise:
+                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
 
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
@@ -178,15 +179,16 @@ public class AgreementCompleteController {
         }
 
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant",client);
+        model.addAttribute("applicant",applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLog",regApplicationLog);
 
-        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+        model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLog);
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementCompleteView;
     }
 
@@ -205,16 +207,33 @@ public class AgreementCompleteController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        if(StringUtils.trimToNull(comment) != null){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
 
-        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-        if(agreementStatus==2){
+        if(agreementStatus == 3){
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
                 case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
                 case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
             }
+            regApplication.setAgreementStatus(LogStatus.Approved);
             regApplicationService.update(regApplication);
         }
+
+        if(agreementStatus == 4){
+            regApplication.setAgreementStatus(LogStatus.Denied);
+            regApplicationService.update(regApplication);
+
+            List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+            for(RegApplicationLog agreementLog :agreementLogList){
+                RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+                User agreementUser = userService.findById(agreementLog.getUpdateById());
+                regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+            }
+        }
+
         return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();
     }
 

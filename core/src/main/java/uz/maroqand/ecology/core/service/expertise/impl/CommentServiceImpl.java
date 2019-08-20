@@ -2,10 +2,12 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.CommentType;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.repository.expertise.CommentRepository;
 import uz.maroqand.ecology.core.service.expertise.CommentService;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,12 +26,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getByRegApplicationId(Integer id) {
-        return commentRepository.getByRegApplicationId(id);
-    }
+    public Comment create(Integer regApplicationId, CommentType type, String message, Integer createdById) {
+        Comment comment = new Comment();
+        comment.setRegApplicationId(regApplicationId);
+        comment.setType(type);
+        comment.setMessage(message);
 
-    @Override
-    public Comment createComment(Comment comment) {
+        comment.setCreatedById(createdById);
+        comment.setCreatedAt(new Date());
         return commentRepository.save(comment);
     }
 
@@ -39,7 +43,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getListByRegApplicationId(Integer id) {
-        return commentRepository.findByRegApplicationIdAndDeletedFalse(id);
+    public List<Comment> getByRegApplicationIdAndType(Integer id, CommentType type) {
+        return commentRepository.findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(id, type);
     }
+
 }

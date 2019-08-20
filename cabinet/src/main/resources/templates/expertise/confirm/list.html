@@ -187,7 +187,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?id=' + row[11];
+        var currentViewLink = ajaxRequestViewLink + '?logId=' + row[11];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
@@ -196,9 +196,10 @@
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
         if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
-        if (row[10]===1)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
-        if (row[10]===2)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
-        if (row[10]===3)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        if (row[10]===1)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===2)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
+        if (row[10]===3)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===4)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
         return statusLabel;
     }
 

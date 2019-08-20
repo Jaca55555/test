@@ -11,6 +11,8 @@ public interface SmsSendService {
 
     SmsSend save(SmsSend smsSend);
 
+    SmsSend getById(Integer id);
+
     SmsSend getRegApplicationId(Integer id);
 
     void update(SmsSend smsSend);

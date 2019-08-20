@@ -696,7 +696,7 @@ function appendNotification(value) {
         '<li class="notification"> <div class="media"> <div class="media-body">\n' +
         '  <p><strong>'+value.createdBy+'</strong><span class="n-time text-muted">' +
         '    <i class="icon feather icon-clock m-r-10"></i>'+value.createdAt+'</span></p>\n' +
-        '  <p>'+value.title+'</p>\n' +
+        '  <a href="'+value.url+'">'+value.message+'</a>\n' +
         '</div> </div> </li>';
     $("#noti-body").append(notification);
 }

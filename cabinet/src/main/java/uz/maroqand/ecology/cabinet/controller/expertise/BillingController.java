@@ -131,6 +131,7 @@ public class BillingController {
         }
         Client client = clientService.getById(invoice.getClientId());
         List<Payment> paymentList = paymentService.getByInvoiceId(id);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         Double paymentTotal = 0.0;
         Double invoiceLeft = invoice.getAmount();
@@ -162,7 +163,11 @@ public class BillingController {
             result.put("payeeAddress", invoice.getPayeeAddress());
 
             result.put("payerName", invoice.getPayerName());
-            result.put("payerType", client.getType());
+            if(client.getType() != null){
+                result.put("payerType", helperService.getApplicantType(client.getType().getId(),locale));
+            }else {
+                result.put("payerType","");
+            }
             result.put("payerTin", client.getTin());
             result.put("payerPassport", client.getPassportSerial() + client.getPassportNumber());
             result.put("payerPhone", client.getPhone());

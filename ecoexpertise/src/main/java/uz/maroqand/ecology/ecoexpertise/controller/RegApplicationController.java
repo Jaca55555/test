@@ -18,10 +18,7 @@ import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
-import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
-import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -156,7 +153,7 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,null,user.getId(),pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getId(),pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -246,7 +243,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
-        if(check!=null){
+        if(check != null){
             return check;
         }
 
@@ -302,28 +299,19 @@ public class RegApplicationController {
         if(check!=null){
             return check;
         }
-        SmsSend smsSend = smsSendService.getRegApplicationId(id);
-        if (smsSend==null){
-            //todo notification add
-            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
-        }
-        System.out.println(smsSend.getPhone());
+
         Client applicant = regApplication.getApplicant();
         switch (applicantType){
             case "LegalEntity":
-                legalEntityDto.setLegalEntityMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveLegalEntity(legalEntityDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "Individual":
-                individualDto.setIndividualMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveIndividual(individualDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "IndividualEnterprise":
-                individualEntrepreneurDto.setEntrepreneurMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveIndividualEntrepreneur(individualEntrepreneurDto, user, "regApplicationId="+regApplication.getId());
                 break;
             case "ForeignIndividual":
-                foreignIndividualDto.setForeignMobilePhone(smsSend.getPhone());
                 applicant = clientService.saveForeignIndividual(foreignIndividualDto, user, "regApplicationId="+regApplication.getId());
                 break;
         }
@@ -332,6 +320,14 @@ public class RegApplicationController {
         regApplication.setApplicantId(applicant.getId());
         regApplication.setStep(RegApplicationStep.ABOUT);
         regApplicationService.update(regApplication);
+
+        /*SmsSend smsSend = smsSendService.getById(regApplication.getCheckedSmsId());
+        if (smsSend==null){
+            toastrService.create(user.getId(), ToastrType.Error, "Telefon raqam tasdiqlanmagan.","Telefon raqam tasdiqlanmagan.");
+            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
+        }
+        applicant.setMobilePhone("");*/
+
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
@@ -375,6 +371,8 @@ public class RegApplicationController {
         }
         String phoneNumber = smsSendService.getPhoneNumber(phone);
         if (smsSend.getMessage().equals(code.toString()) && (!phoneNumber.isEmpty() && smsSend.getPhone().equals(phoneNumber))){
+            regApplication.setCheckedSmsId(smsSend.getId());
+            regApplicationService.update(regApplication);
             return result;
         }else{
             result.put("status",4);
@@ -788,7 +786,7 @@ public class RegApplicationController {
             regApplicationService.update(regApplication);
         }
 
-        List<Comment> commentList = commentService.getListByRegApplicationId(regApplication.getId());
+        List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
@@ -870,15 +868,12 @@ public class RegApplicationController {
                 result.put("status",0);
                 return result;
             }
-        }else{
-            comment = new Comment();
+            comment.setMessage(message);
+            commentService.updateComment(comment);
+        }else {
+            comment = commentService.create(regApplicationId, CommentType.CHAT, message, user.getId());
         }
-        comment.setRegApplicationId(regApplicationId);
-        comment.setCreatedAt(new Date());
-        comment.setCreatedById(user.getId());
-        comment.setDeleted(Boolean.FALSE);
-        comment.setMessage(message);
-        comment = commentService.createComment(comment);
+
 
         result.put("status", status);
         result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");
@@ -917,12 +912,7 @@ public class RegApplicationController {
                 }
             }
         }else{
-            comment = new Comment();
-            comment.setDeleted(Boolean.TRUE);
-            comment.setCreatedById(user.getId());
-            comment.setCreatedAt(new Date());
-            comment.setRegApplicationId(regApplicationId);
-            comment = commentService.createComment(comment);
+            comment = commentService.create(regApplicationId, CommentType.CHAT, "",user.getId());
         }
 
         File file = fileService.uploadFile(multipartFile, user.getId(),"commentId="+comment.getId(),fileName);

@@ -46,6 +46,9 @@ public class Notification {
     @Column(name = "reviewer_id")
     private Integer reviewerId;
 
+    @Column
+    private String url;
+
     /*
      * Technical Fields
      */

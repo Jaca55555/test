@@ -35,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationMap = new ConcurrentHashMap<>();
         newNotificationMap = new ConcurrentHashMap<>();
 
-        List<Notification> notificationList = notificationRepository.findByStatus(NotificationStatus.New);
+        List<Notification> notificationList = notificationRepository.findByStatusAndDeletedFalse(NotificationStatus.New);
         for (Notification notification:notificationList){
             if (notification.getStatus().equals(NotificationStatus.Reviewed)){
                 if (!notificationMap.containsKey(notification.getReviewerId())) {
@@ -56,15 +56,17 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationType type,
             String title,
             String message,
+            String url,
             Integer userId
     ){
         Notification notification = new Notification();
         notification.setType(type);
         notification.setStatus(NotificationStatus.New);
 
+        notification.setReviewerId(reviewerId);
         notification.setTitle(title);
         notification.setMessage(message);
-        notification.setReviewerId(reviewerId);
+        notification.setUrl(url);
 
         notification.setCreatedAt(new Date());
         notification.setCreatedById(userId);
