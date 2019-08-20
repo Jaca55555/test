@@ -93,7 +93,7 @@
                                                     </label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                                         <select name="category" class="form-control">
-                                                            <option value="" th:text="sys_select_category"></option>
+                                                            <option value="" th:text="#{sys_select_category}"></option>
                                                             <option th:each="category : ${categoryList}" th:value="${category}" th:text="${@helperService.getCategory(category.id,#locale)}" th:selected="${activity.category==category}"></option>                                                        </select>
                                                     </div>
                                                 </div>
