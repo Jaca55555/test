@@ -16,9 +16,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
-import uz.maroqand.ecology.core.dto.expertise.FilterDto;
-import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
-import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -174,11 +172,16 @@ public class ForwardingController {
         }
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
 
-        Client client = clientService.getById(regApplication.getApplicantId());
-        if(client.getType().equals(ApplicantType.Individual)){
-            model.addAttribute("individual", new IndividualDto(client));
-        }else {
-            model.addAttribute("legalEntity", new LegalEntityDto(client));
+        Client applicant = clientService.getById(regApplication.getApplicantId());
+        switch (applicant.getType()){
+            case Individual:
+                model.addAttribute("individual", new IndividualDto(applicant)); break;
+            case LegalEntity:
+                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
+            case ForeignIndividual:
+                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
+            case IndividualEnterprise:
+                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
 
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
@@ -190,7 +193,7 @@ public class ForwardingController {
 
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
 
-        model.addAttribute("applicant", client);
+        model.addAttribute("applicant", applicant);
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("userList", userService.getEmployeesForForwarding(user.getOrganizationId()));
         model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));

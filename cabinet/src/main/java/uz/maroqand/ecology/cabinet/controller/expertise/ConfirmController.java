@@ -174,7 +174,7 @@ public class ConfirmController {
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        Client applicant = regApplication.getApplicant();
+        Client applicant = clientService.getById(regApplication.getApplicantId());
         switch (applicant.getType()){
             case Individual:
                 model.addAttribute("individual", new IndividualDto(applicant)); break;
