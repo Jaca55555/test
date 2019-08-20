@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.cabinet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -29,6 +31,8 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 @EnableCaching(proxyTargetClass = true)
 public class CabinetStarter {
 
+    private static final Logger logger = LogManager.getLogger(CabinetStarter.class);
+
     public static void main(String[] args) throws Throwable {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(CabinetStarter.class, args);
         CabinetStarter applicationStarter = applicationContext.getBean(CabinetStarter.class);
@@ -44,6 +48,17 @@ public class CabinetStarter {
         NotificationService notificationService = applicationContext.getBean(NotificationService.class);
         notificationService.initialization();
 
+        logger.info("" +
+                "\n" +
+                "           _     _            _                                                 _          \n" +
+                "  ___ __ _| |__ (_)_ __   ___| |_       ___  ___ ___        ___  ___ _ ____   _(_) ___ ___ \n" +
+                " / __/ _` | '_ \\| | '_ \\ / _ \\ __|____ / _ \\/ __/ _ \\ _____/ __|/ _ \\ '__\\ \\ / / |/ __/ _ \\\n" +
+                "| (_| (_| | |_) | | | | |  __/ ||_____|  __/ (_| (_) |_____\\__ \\  __/ |   \\ V /| | (_|  __/\n" +
+                " \\___\\__,_|_.__/|_|_| |_|\\___|\\__|     \\___|\\___\\___/      |___/\\___|_|    \\_/ |_|\\___\\___|\n" +
+                "                                                                                           \n" +
+                " \n" +
+                " Developed by O'tkirbek Boltayev, Akmal Sadullayev \n" +
+                "");
     }
 
 }
