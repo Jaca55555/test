@@ -206,7 +206,7 @@ public class AgreementCompleteController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user.getId());
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
@@ -225,13 +225,6 @@ public class AgreementCompleteController {
         if(agreementStatus == 4){
             regApplication.setAgreementStatus(LogStatus.Denied);
             regApplicationService.update(regApplication);
-
-            List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
-            for(RegApplicationLog agreementLog :agreementLogList){
-                RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
-                User agreementUser = userService.findById(agreementLog.getUpdateById());
-                regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
-            }
         }
 
         return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();

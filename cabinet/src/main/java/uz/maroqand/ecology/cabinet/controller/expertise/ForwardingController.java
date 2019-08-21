@@ -222,10 +222,10 @@ public class ForwardingController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user.getId());
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Performer, comment,user);
-        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial, comment, performer);
+        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial, comment, performer.getId());
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setPerformerId(performerId);
@@ -270,9 +270,13 @@ public class ForwardingController {
         }
 
         User agreementUser = userService.findById(agreementUserId);
+        if (agreementUser == null){
+            result.put("status", "2");
+            return result;
+        }
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
-        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser.getId());
 
         agreementLogs.add(regApplicationLogCreate.getId());
         regApplication.setAgreementLogs(agreementLogs);

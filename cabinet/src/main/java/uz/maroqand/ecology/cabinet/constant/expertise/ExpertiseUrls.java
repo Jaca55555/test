@@ -33,6 +33,7 @@ public class ExpertiseUrls {
     public static final String PerformerListAjax = Performer + "/list_ajax";
     public static final String PerformerView = Performer + "/view";
     public static final String PerformerAction = Performer + "/action";
+    public static final String PerformerActionEdit = Performer + "/action/edit";
     public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";
 
     //Kelishish

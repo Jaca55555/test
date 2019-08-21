@@ -230,7 +230,7 @@
 
                                                 <h3 th:text="#{sys_chat}" class="text-center"></h3>
                                                 <div class="col-md-6 offset-3">
-                                                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
+                                                    <textarea class="form-control max-textarea" maxlength="255" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
                                                     <p class="mt-2 mb-0" style="color: black" th:text="#{sys_comment.addFile}">Добавить файл</p>
                                                     <div class="col-md-12 row" id="files-div-comment">
                                                         <a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">
@@ -347,6 +347,10 @@
         var downloadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentDownload}]];
         var addCommentUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentAdd}]];
         var confirmfactureUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationConfirmFacture}]];
+
+        $('textarea.max-textarea').maxlength({
+            alwaysShow: true
+        });
 
         function confirmFacture() {
             window.location.href = confirmfactureUrl + "?id=" + regApplicationId;

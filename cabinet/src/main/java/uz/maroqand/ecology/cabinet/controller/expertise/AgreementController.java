@@ -221,7 +221,7 @@ public class AgreementController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user.getId());
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
@@ -246,11 +246,7 @@ public class AgreementController {
 
             for(RegApplicationLog agreementLog :agreementLogList){
                 if(agreementLog.getStatus().equals(LogStatus.New)){
-                    agreementLog.setStatus(LogStatus.Initial);
-                }else {
-                    RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
-                    User agreementUser = userService.findById(agreementLog.getUpdateById());
-                    regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial,"", agreementUser);
+                    regApplicationLogService.update(agreementLog, LogStatus.Initial, agreementLog.getComment(), agreementLog.getUpdateById());
                 }
             }
         }

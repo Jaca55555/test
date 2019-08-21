@@ -7,8 +7,9 @@
 <body th:fragment="result">
         <div class="row">
 
-            <div class="col-md-6 pr-0" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
-                <form id="form" method="post" action="/expertise/performer/action" >
+            <div class="col-md-6 pr-0" >
+                <h5 th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="form-group col-md-10 offset-1" th:text="#{sys_performer.newConclusionResult}"></h5>
+                <form id="form" method="post" th:action="${action_url}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
                     <div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusionResult}">Результат заключения</label>
                         <select class="form-control" name="performerStatus">
@@ -44,10 +45,10 @@
                         </button>
                     </div>
                 </form>
-            </div>
 
-            <div class="col-md-6 pr-0" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
-                <object th:include="expertise/fragment/result_statuses :: statuses" th:remove="tag"></object>
+                <div th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" style="border-bottom: 1px solid #f4f4f4;margin-top: 20px;margin-bottom: 20px;"></div>
+
+                <object th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" th:include="expertise/fragment/result_statuses :: statuses" th:remove="tag"></object>
             </div>
 
 
