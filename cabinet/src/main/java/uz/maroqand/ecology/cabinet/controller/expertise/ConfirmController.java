@@ -114,22 +114,23 @@ public class ConfirmController {
             FilterDto filterDto,
             Pageable pageable
     ){
+        User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
 
-        Page<RegApplicationLog> regApplicationLogPage = regApplicationLogService.findFiltered(
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                null,
-                null,
+                user.getOrganizationId(),
                 LogType.Confirm,
+                null,
                 null,
                 pageable
         );
 
-        List<RegApplicationLog> regApplicationLogList = regApplicationLogPage.getContent();
-        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
-        for (RegApplicationLog regApplicationLog : regApplicationLogList){
-            RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             Client client = regApplication.getApplicant();
 
             convenientForJSONArray.add(new Object[]{
@@ -141,15 +142,15 @@ public class ConfirmController {
                 client != null ? client.getOked() : "",
                 client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
                 client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
-                regApplicationLog.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplicationLog.getCreatedAt()):"",
+                regApplication.getConfirmLogAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplication.getConfirmLogAt()):"",
                 regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
                 regApplicationLog.getStatus()!=null? regApplicationLog.getStatus().getId():"",
                 regApplicationLog.getId()
             });
         }
 
-        result.put("recordsTotal", regApplicationLogPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", regApplicationLogPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
     }
