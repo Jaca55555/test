@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="chat">
+
+    <h3 th:text="#{sys_chat}" class="text-center"></h3>
+    <div class="col-md-6 offset-3">
+        <textarea class="form-control max-textarea" maxlength="255" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
+        <p class="mt-2 mb-0" style="color: black" th:text="#{sys_comment.addFile}">Добавить файл</p>
+        <div class="col-md-12 row" id="files-div-comment">
+            <a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">
+                <div class="add-file">
+                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                    <i class="feather icon-plus" id="plus-icon"></i>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="col-md-12 text-center mt-2 mr-0 mb-lg-5" >
+        <button class="btn btn-primary pl-lg-3 pr-lg-3 mr-0" onclick="addComment()">
+            <i class="mdi mdi-telegram"></i>
+            <span th:text="#{sys_send}"></span>
+        </button>
+    </div>
+    <input type="hidden" id="commentId" name="commentId"/>
+    <h3 th:text="#{sys_comment}" id="comment-title" class="text-center mt-lg-5"></h3>
+    <div class="col-md-6 offset-3" id="comments">
+        <div id="comments-first"></div>
+        <div class="row" th:each="comment : ${commentList}" th:if="${#lists.size(commentList)>0}">
+            <div class="col-md-2">
+                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
+            </div>
+            <div class="col-md-10 pl-0">
+                <p class="p-2 mb-1 mt-lg-4" th:text="${comment.message}" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px"></p>
+                <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                <div style="border-bottom: black 1px dashed">
+                    <ul class="media-list p-0" th:if="${#lists.size(comment.documentFiles)>0}" th:each="files : ${comment.documentFiles}">
+                        <li class="media d-flex m-b-15">
+                            <div class="m-r-20 file-attach">
+                                <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                            </div>
+                            <div class="media-body">
+                                <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationCommentDownload + '?file_id=' + files.id + '&comment_id=' + comment.id}" class="m-b-5 d-block text-secondary">
+                                    <span th:text="${files.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                                </a>
+                                <div class="text-muted">
+                                    <span th:text="${'Size: '+files.size+ ' byte'}">Size: 1.2Mb</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 offset-4 text-center mt-2 mr-0 " th:if="${#lists.size(commentList)>5}">
+            <button class="btn btn-outline-secondary pl-lg-3 pr-lg-3 mr-0 btn-block" >
+                <span th:text="#{sys_comments_full}"></span>
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

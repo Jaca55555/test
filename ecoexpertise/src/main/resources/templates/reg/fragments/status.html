@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="status">
+
+    <!--initial-->
+    <div class="col-md-12 text-center text-success" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Process}">
+        <span class="hei-75 wid-75 d-inline-block mr-4">
+            <img src="/static/images/check.png" style="width: 100%; height: 100%">
+        </span>
+        <span class="f-48 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.status_Approved}"> Ваша заявка принята</span></br>
+        <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(regApplication.deadlineDate, 'dd.MM.yyyy')}"></span>
+        <div th:each="changeDeadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0 and changeDeadlineDate.changeDeadlineDateStatus==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" style="color: #3d8af7">
+            <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline_change}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(changeDeadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span>
+        </div>
+    </div>
+
+    <!--Approved-->
+    <div class="col-md-12 text-center text-primary" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved}">
+        <div class="alert alert-primary" role="alert" th:text="#{reg_application.approvedMsg}"> </div>
+    </div>
+
+    <!--NotConfirmed-->
+    <div class="col-md-12 text-center text-danger" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed}">
+        <div class="alert alert-danger" role="alert" ><span th:text="#{reg_application.notConfirmedMsg}"></span>: <span th:text="${performerLog.comment}"></span> </div>
+    </div>
+
+    <!--Modification-->
+    <div class="col-md-12 text-center" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification}">
+        <div class="alert alert-warning" role="alert" th:text="#{reg_application.modificationMsg}"> </div>
+    </div>
+
+    <!--Files-->
+    <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" th:if="${regApplication.facture}">
+        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/application/conclusion_file/download?id='+regApplication.id+'&fileId='+conclusionFile.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+    </div>
+    <div class="col-md-12 task-attachment" th:if="${regApplication.facture}">
+        <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
+        <ul class="media-list p-0">
+            <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">
+                <div class="m-r-20 file-attach">
+                    <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                </div>
+                <div class="media-body">
+                    <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationConclusionDownload + '?id=' + regApplication.id + '&fileId=' + documentFile.id}" class="m-b-5 d-block text-secondary">
+                        <span th:text="${documentFile.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                    </a>
+                    <div class="text-muted">
+                        <span th:text="*{#numbers.formatDecimal(documentFile.size/1000.0, 1, 'WHITESPACE', 1, 'POINT')}">1.2</span>
+                        <span th:text="#{documentFile.KB}">KB</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!--Modification-->
+    <div class="col-md-12 text-center" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification}">
+        <div class="col-md-12" >
+            <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationApplicant + '?id=' + regApplication.id}">
+                <i class="mdi mdi-backspace"></i> <span th:text="#{sys_back_to_edit}"></span>
+            </a>
+            <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationResend + '?id=' + regApplication.id}">
+                <i class="feather icon-rotate-cw"></i> <span th:text="#{sys_send_to_review}"></span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

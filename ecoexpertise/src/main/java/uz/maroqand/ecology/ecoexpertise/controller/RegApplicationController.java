@@ -222,7 +222,7 @@ public class RegApplicationController {
             @RequestParam(name = "message") String message
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(regApplicationId,user.getId());
+        RegApplication regApplication = regApplicationService.getById(regApplicationId, user.getId());
         if (regApplication==null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
@@ -788,10 +788,17 @@ public class RegApplicationController {
         }
 
         List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        File conclusionFile = new File();
+        if(performerLog!=null && performerLog.getDocumentFiles()!=null && performerLog.getDocumentFiles().size()>0){
+            conclusionFile = performerLog.getDocumentFiles().iterator().next();
+        }
+        model.addAttribute("conclusionFile", conclusionFile);
+
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
-        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+        model.addAttribute("performerLog", performerLog);
         model.addAttribute("back_url", RegUrls.RegApplicationList);
         model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
         return RegTemplates.RegApplicationStatus;
@@ -827,11 +834,11 @@ public class RegApplicationController {
 
     @RequestMapping(value = RegUrls.RegApplicationConfirmFacture)
     public String getConfirmFacture(@RequestParam(name = "id")Integer id){
-        RegApplication regApplication = regApplicationService.getById(id);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication==null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        User user = userService.getCurrentUserFromContext();
         UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
         if (userAdditional==null){
             return "redirect:" + RegUrls.RegApplicationList;
@@ -1159,7 +1166,7 @@ public class RegApplicationController {
             @RequestParam(name = "file") MultipartFile multipartFile
     ) {
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication  = regApplicationService.getById(id);
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
 
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", 0);
@@ -1207,7 +1214,7 @@ public class RegApplicationController {
             @RequestParam(name = "fileId") Integer fileId
     ) {
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
 
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", 0);
