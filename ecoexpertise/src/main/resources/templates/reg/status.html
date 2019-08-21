@@ -207,8 +207,8 @@
 
 
                                                 <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
-                                                <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification)}">
-                                                    <div class="col-md-12 text-center mb-5" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification)}">
+                                                <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+                                                    <div class="col-md-12 text-center mb-5">
                                                         <div class="col-md-12 text-right">
                                                             <button type="button" class="btn btn-primary" onclick="printAccountFactor('accountBox')">
                                                                 <i class="mdi mdi-printer"></i>

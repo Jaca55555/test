@@ -162,55 +162,55 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     }
                 }
 
+                if (filterDto!=null) {
+                    if (filterDto.getTin() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
+                    }
+                    if (StringUtils.trimToNull(filterDto.getName()) != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
+                    }
+                    if (filterDto.getApplicationId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
+                    }
 
-                if(filterDto.getTin() != null){
-                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
-                }
-                if(StringUtils.trimToNull(filterDto.getName()) != null){
-                    predicates.add(criteriaBuilder.equal(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
-                }
-                if(filterDto.getApplicationId() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
-                }
+                    if (filterDto.getRegionId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
+                    }
+                    if (filterDto.getSubRegionId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
+                    }
 
-                if(filterDto.getRegionId() != null){
-                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
-                }
-                if(filterDto.getSubRegionId() != null){
-                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
-                }
+                    Date dateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
+                    Date dateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
+                    if (dateBegin != null && dateEnd == null) {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+                    }
+                    if (dateEnd != null && dateBegin == null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+                    }
+                    if (dateBegin != null && dateEnd != null) {
+                        predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+                    }
 
-                Date dateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
-                Date dateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
-                if (dateBegin != null && dateEnd == null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
-                }
-                if (dateEnd != null && dateBegin == null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
-                }
-                if (dateBegin != null && dateEnd != null) {
-                    predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
-                }
+                    Date deadlineDateBegin = DateParser.TryParse(filterDto.getDeadlineDateBegin(), Common.uzbekistanDateFormat);
+                    Date deadlineDateEnd = DateParser.TryParse(filterDto.getDeadlineDateEnd(), Common.uzbekistanDateFormat);
+                    if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateBegin));
+                    }
+                    if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateEnd));
+                    }
+                    if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                        predicates.add(criteriaBuilder.between(root.get("deadlineDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
+                    }
 
-                Date deadlineDateBegin = DateParser.TryParse(filterDto.getDeadlineDateBegin(), Common.uzbekistanDateFormat);
-                Date deadlineDateEnd = DateParser.TryParse(filterDto.getDeadlineDateEnd(), Common.uzbekistanDateFormat);
-                if (deadlineDateBegin != null && deadlineDateEnd == null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateBegin));
+                    if (filterDto.getActivityId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
+                    }
+                    if (filterDto.getObjectId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
+                    }
                 }
-                if (deadlineDateEnd != null && deadlineDateBegin == null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateEnd));
-                }
-                if (deadlineDateBegin != null && deadlineDateEnd != null) {
-                    predicates.add(criteriaBuilder.between(root.get("deadlineDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
-                }
-
-                if(filterDto.getActivityId() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
-                }
-                if(filterDto.getObjectId() != null){
-                    predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
-                }
-
                 if(performerId!=null){
                     predicates.add(criteriaBuilder.equal(root.get("performerId"), performerId));
                 }
