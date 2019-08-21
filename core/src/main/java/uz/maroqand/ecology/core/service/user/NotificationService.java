@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.core.service.user;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Notification;
 
@@ -25,6 +27,14 @@ public interface NotificationService {
             String message,
             String url,
             Integer userId
+    );
+
+    Page<Notification> findFiltered(
+            String dateBeginStr,
+            String dateEndStr,
+            Integer reviewerId,
+            Integer createdById,
+            Pageable pageable
     );
 
 }

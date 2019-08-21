@@ -1,13 +1,23 @@
 package uz.maroqand.ecology.core.service.user.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.user.NotificationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.repository.user.NotificationRepository;
 import uz.maroqand.ecology.core.service.user.NotificationService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -100,6 +110,54 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         return notificationList;
+    }
+
+    public Page<Notification> findFiltered(
+            String dateBeginStr,
+            String dateEndStr,
+            Integer reviewerId,
+            Integer createdById,
+            Pageable pageable
+    ){
+        return notificationRepository.findAll(getFilteringSpecification(dateBeginStr, dateEndStr, reviewerId, createdById), pageable);
+    }
+
+    private static Specification<Notification> getFilteringSpecification(
+            final String dateBeginStr,
+            final String dateEndStr,
+            final Integer reviewerId,
+            final Integer createdById
+    ) {
+        return new Specification<Notification>() {
+            @Override
+            public Predicate toPredicate(Root<Notification> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
+                Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
+                if (dateBegin != null && dateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+                }
+                if (dateEnd != null && dateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+                }
+                if (dateBegin != null && dateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+                }
+
+                if(reviewerId != null){
+                    predicates.add(criteriaBuilder.equal(root.get("reviewerId"), reviewerId));
+                }
+                if(createdById != null){
+                    predicates.add(criteriaBuilder.equal(root.get("createdById"), createdById));
+                }
+
+                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
+                predicates.add( notDeleted );
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
     }
 
 }
