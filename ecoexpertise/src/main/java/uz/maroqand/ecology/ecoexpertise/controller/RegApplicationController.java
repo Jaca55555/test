@@ -785,9 +785,13 @@ public class RegApplicationController {
             regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
             regApplicationService.update(regApplication);
         }
-
         List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+
+        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("agreementCompleteLog", regApplicationLog);
         model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));

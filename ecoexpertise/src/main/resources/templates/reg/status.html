@@ -154,6 +154,9 @@
                                                     <div th:each="changeDeadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0 and changeDeadlineDate.changeDeadlineDateStatus==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" style="color: #3d8af7">
                                                         <span class="f-24" style="margin-left: 125px" th:text="#{reg_application.deadline_change}">Срок исполнение заявки:</span>&nbsp;<span class="f-24" th:text="${#dates.format(changeDeadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span>
                                                     </div>
+                                                    <div>
+                                                        <button class="btn btn-warning float-right" type="button" data-toggle="modal" data-target="#status" style="border-radius: 5px"><i class="feather icon-alert-triangle"></i><span th:text="#{status_info}">info</span></button>
+                                                    </div>
                                                 </div>
 
                                                 <!--Approved-->
@@ -331,6 +334,26 @@
                 </div>
                 <div class="modal-footer" style="text-align: center;">
                     <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadCommentFile()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pinfl -->
+    <div class="modal fade" id="status" tabindex="-1" role="dialog" aria-labelledby="statusModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalCenterTitle" th:text="#{status_modal_title}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <object th:include="reg/fragments/result_statuses :: statuses" th:remove="tag"></object>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>
                 </div>
             </div>
         </div>

@@ -6,17 +6,17 @@
 </head>
 <body th:fragment="statuses">
 
-    <div class="form-group col-md-10 offset-1">
+    <div class="form-group col-md-10 offset-1" th:if="${performerLog!=null}">
         <h5 class="" th:text="#{sys_performer.conclusionResult}">Результат заключения</h5>
         <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.approved}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" />
         <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.denied}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" />
         <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.modification}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Modification}" />
     </div>
-    <div class="col-md-10 offset-1">
+    <div class="col-md-10 offset-1" th:if="${performerLog!=null}">
         <div class="task-attachment" >
-            <h5 class="mt-lg-5"  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
+            <h5 class="mt-lg-5" th:if="${performerLog.documentFiles!=null}" th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
             <ul class="media-list p-0">
-                <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">
+                <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}" th:if="${performerLog.documentFiles!=null}">
                     <div class="m-r-20 file-attach">
                         <i class="mdi mdi-file-pdf f-28 text-muted"></i>
                     </div>
@@ -35,7 +35,7 @@
     </div>
 
     <div style="border-bottom: 1px solid #f4f4f4"></div>
-    <div class="col-md-10 offset-1">
+    <div class="col-md-10 offset-1" th:if="${performerLog!=null && agreementLog!=null && agreementCompleteLog!=null}">
         <h5 class="mt-lg-5" th:text="#{reg_application.approvalStatuses}">Статус согласование </h5>
         <table style="width: 100%">
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${performerLog!=null}">
@@ -47,11 +47,11 @@
                     <small th:text="#{sys_logType.performer}">Исполнитель</small>
                 </td>
                 <td>
-                    <span th:if="${performerLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==1}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==2}" class="badge badge-pill badge-warning" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==3}" class="badge badge-pill badge-success" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
-                    <span th:if="${performerLog.status.getId()==4}" class="badge badge-pill badge-danger" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog!=null && performerLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog!=null && performerLog.status.getId()==1}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog!=null && performerLog.status.getId()==2}" class="badge badge-pill badge-warning" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog!=null && performerLog.status.getId()==3}" class="badge badge-pill badge-success" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
+                    <span th:if="${performerLog!=null && performerLog.status.getId()==4}" class="badge badge-pill badge-danger" th:text="#{${performerLog.status.getAgreementName()}}">Согласовано</span>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLogList!=null}" th:each="agreementLog :${agreementLogList}">
@@ -59,7 +59,7 @@
                     <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
                 </td>
                 <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}">Акбар Сапаев</h6>
+                    <h6 class="mb-0" th:text="${agreementLog.updateById!=null?@helperService.getUserFullNameById(agreementLog.updateById:'')}">Акбар Сапаев</h6>
                     <small th:text="#{sys_logType.agreement}">Директор</small>
                 </td>
                 <td>
@@ -75,7 +75,7 @@
                     <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >UB</span>
                 </td>
                 <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementCompleteLog.updateById)}">Уткирбек Болтаев</h6>
+                    <h6 class="mb-0" th:text="${agreementCompleteLog.updateById!=null?@helperService.getUserFullNameById(agreementCompleteLog.updateById):''}">Уткирбек Болтаев</h6>
                     <small th:text="#{sys_logType.agreementComplete}">Председатель</small>
                 </td>
                 <td>
