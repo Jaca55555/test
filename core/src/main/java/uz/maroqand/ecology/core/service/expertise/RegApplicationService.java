@@ -19,7 +19,7 @@ public interface RegApplicationService {
 
     List<RegApplication> getByClientId(Integer id);
 
-    List<RegApplication> getAllByDeletedFalse();
+    List<RegApplication> getByInvoiceId(Integer invoiceId);
 
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 

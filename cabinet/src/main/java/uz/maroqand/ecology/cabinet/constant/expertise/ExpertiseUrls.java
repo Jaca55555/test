@@ -70,6 +70,7 @@ public class ExpertiseUrls {
     public static final String BillingList = Billing + "/list";
     public static final String BillingListAjax = Billing + "/list_ajax";
     public static final String BillingView = Billing + "/view";
+    public static final String BillingEdit = Billing + "/edit";
 
 
     //Applicant

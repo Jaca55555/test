@@ -14,23 +14,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
+import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.Activity;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.ActivityService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.RequirementService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class BillingController {
@@ -41,15 +47,23 @@ public class BillingController {
     private final SoatoService soatoService;
     private final PaymentService paymentService;
     private final ClientService clientService;
+    private final RequirementService requirementService;
+    private final RegApplicationService regApplicationService;
+    private final ActivityService activityService;
+    private final ToastrService toastrService;
 
     @Autowired
-    public BillingController(InvoiceService invoiceService, HelperService helperService, UserService userService, SoatoService soatoService, PaymentService paymentService, ClientService clientService){
+    public BillingController(InvoiceService invoiceService, HelperService helperService, UserService userService, SoatoService soatoService, PaymentService paymentService, ClientService clientService, RequirementService requirementService, RegApplicationService regApplicationService, ActivityService activityService, ToastrService toastrService){
         this.invoiceService = invoiceService;
         this.helperService = helperService;
         this.userService = userService;
         this.soatoService = soatoService;
         this.paymentService = paymentService;
         this.clientService = clientService;
+        this.requirementService = requirementService;
+        this.regApplicationService = regApplicationService;
+        this.activityService = activityService;
+        this.toastrService = toastrService;
     }
 
     @RequestMapping(ExpertiseUrls.BillingList)
@@ -175,8 +189,72 @@ public class BillingController {
             result.put("payerBank", client.getBankName());
             result.put("payerBankAccount", client.getBankAccount());
 
+            List<RegApplication> regApplicationList = regApplicationService.getByInvoiceId(invoice.getId());
+            RegApplication regApplication = regApplicationList.get(0);
+            List<Category> categoryList = new LinkedList<>();
+            List<Requirement> requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
+            for(Requirement requirement: requirementList){
+                categoryList.add(requirement.getCategory());
+            }
+            List<Activity> activityList = activityService.getByInCategory(categoryList);
+            Collections.sort(categoryList);
+            result.put("activityList", activityList);
+            result.put("activityListSize", activityList.size());
+            result.put("categoryList", categoryList);
+            result.put("regApplicationId", regApplication.getId());
+
+            result.put("nowObjectName", regApplication.getObjectId()!=null? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"");
+            result.put("nowActivityName", regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"");
+            result.put("nowCategoryName", regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"");
 
             result.put("payments",convenientForJSONArray);
             return result;
     }
+
+    @RequestMapping(ExpertiseUrls.BillingEdit)
+    public String getBillingEditMethod(
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "activityId") Integer activityId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if(regApplication == null){
+            toastrService.create(user.getId(), ToastrType.Error, "Xatolik.","Ariza ma'lumotlari topilmadi");
+            return "redirect:" + ExpertiseUrls.BillingList;
+        }
+
+        Activity activity = null;
+        if(activityId!=null){
+            activity = activityService.getById(activityId);
+        }
+        List<Requirement> requirementList;
+        Requirement requirement = null;
+        if(activity!=null){
+            requirementList = requirementService.getRequirementMaterials(regApplication.getObjectId(), activity.getCategory());
+        }else {
+            requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
+        }
+        if(requirementList.size()==0){
+            toastrService.create(user.getId(), ToastrType.Error, "Xatolik.","Ekpertiza obyektlari topilmadi");
+            return "redirect:" + ExpertiseUrls.BillingList;
+        }else if(requirementList.size()==1){
+            requirement = requirementList.get(0);
+        }
+
+        if(requirement==null){
+            toastrService.create(user.getId(), ToastrType.Error, "Xatolik.","Ekpertiza obyekti topilmadi");
+            return "redirect:" + ExpertiseUrls.BillingList;
+        }
+        regApplication.setRequirementId(requirement.getId());
+        regApplication.setActivityId(activityId);
+        regApplication.setCategory(activity.getCategory());
+
+        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+        invoice = invoiceService.modification(regApplication, invoice, requirement);
+        regApplicationService.update(regApplication);
+
+        toastrService.create(user.getId(), ToastrType.Info, "O'zgartirish muvaffaqiyatli.","O'zgartirish muvaffaqiyatli amalga oshirildi");
+        return "redirect:" + ExpertiseUrls.BillingList;
+    }
+
 }

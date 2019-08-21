@@ -59,8 +59,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public List<RegApplication> getAllByDeletedFalse() {
-        return regApplicationRepository.findAllByDeletedFalse();
+    public List<RegApplication> getByInvoiceId(Integer invoiceId) {
+        return regApplicationRepository.findByInvoiceId(invoiceId);
     }
 
     @Override
