@@ -1111,6 +1111,7 @@ public class RegApplicationController {
             categoryList.add(requirement.getCategory());
         }
         List<Activity> activityList = activityService.getByInCategory(categoryList);
+        Collections.sort(categoryList);
 
         result.put("activityList", activityList);
         result.put("activityListSize", activityList.size());
