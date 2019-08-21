@@ -357,6 +357,12 @@
                 default: $('#selectFormsLegal').show();break;
             }
         }
+        $(".only-alpha").on("input", function(){
+            var regexp = /[^a-zA-Z]/g;
+            if($(this).val().match(regexp)){
+                $(this).val( $(this).val().replace(regexp,'') );
+            }
+        });
 
         $('.only-number').keyup(function() {
             if (/\D/g.test(this.value))
