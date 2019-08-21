@@ -214,10 +214,11 @@
                                                             </div>
                                                             <div class="col-md-6" id="materialDiv">
                                                                 <div class="custom-control custom-checkbox" th:if="${regApplication.materials}" th:each="material : ${regApplication.materials}">
-                                                                   <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked >
+                                                                   <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked="checked" required="required" data-parsley-errors-container="#materialError" >
                                                                    <label class="custom-control-label" th:for="${'materials'+material}" th:text="${@helperService.getMaterial(material,#locale)}"></label>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-6 offset-3" id="materialError"></div>
                                                         </div>
 
                                                         <div id="coordinates-control" class="form-group row" style="margin-bottom: 50px; display: none;">
@@ -534,7 +535,7 @@
                 getMaterial(value);
                 $("#materialDiv").append(
                     '<div class="custom-control custom-checkbox" >\n' +
-                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  >\n' +
+                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials" required="" data-parsley-errors-container="#materialError" >\n' +
                     '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
                     '</div>');
             });
