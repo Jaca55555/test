@@ -14,7 +14,7 @@ public class SysUrls {
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationShow = Notification + "/show";
     public static final String NotificationList = Notification + "/list";
-    public static final String NotificationView = Notification + "/view";
+    public static final String NotificationListAjax = Notification + "/list_ajax";
 
     public static final String ErrorNotFound = Prefix + "/404";
     public static final String ErrorInternalServerError = Prefix + "/500";

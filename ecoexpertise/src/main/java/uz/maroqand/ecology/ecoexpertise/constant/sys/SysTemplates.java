@@ -11,4 +11,7 @@ public class SysTemplates {
     public static final String ErrorInternalServerError = Prefix + "/500";
     public static final String ErrorForbidden = Prefix + "/403";
 
+    private static final String Notification = Prefix + "/notification";
+    public static final String NotificationList = Notification + "/list";
+
 }
