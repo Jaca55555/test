@@ -216,7 +216,7 @@
             scrollX: true,
             pageLength: 20,
             lengthMenu: [ [20, 50, 100], [20, 50, 100] ],
-            order: [[0, 'desc']],
+            order: [[8, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
@@ -258,7 +258,7 @@
                 {data: 5, name: 'oked'},
                 {data: 6, name: 'region'},
                 {data: 7, name: 'subregion'},
-                {data: 8, name: 'createdAt'},
+                {data: 8, name: 'confirmLogAt'},
                 {
                     data: 9, name: 'status',
                     render:renderStatusColumn, orderable:false

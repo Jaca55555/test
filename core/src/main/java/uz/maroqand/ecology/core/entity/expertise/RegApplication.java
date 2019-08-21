@@ -170,6 +170,10 @@ public class RegApplication {
     /*
     * oxirgi log id lar saqlanadi
     * */
+    //tasdiqlashga yuborilgan sana
+    @Column(name="confirm_log_at", columnDefinition = "timestamp without time zone")
+    private Date confirmLogAt;
+
     @Column(name = "confirm_log_id")
     private Integer confirmLogId;
 

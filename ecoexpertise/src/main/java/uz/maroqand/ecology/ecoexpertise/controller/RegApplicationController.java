@@ -494,6 +494,7 @@ public class RegApplicationController {
         RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
+            regApplication.setConfirmLogAt(new Date());
             regApplication.setConfirmLogId(regApplicationLog.getId());
             regApplication.setStatus(RegApplicationStatus.CheckSent);
         }
