@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group ">
-                    <input class="form-control mr-1" required="" style="border-radius: 5px" id="individualEntrepreneurPinfl" name="individualEntrepreneurPinfl" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" data-parsley-errors-container="#individualEntrepreneurPinflError">
+                    <input class="form-control mr-1 only-number" required="" maxlength="14" minlength="14" style="border-radius: 5px" id="individualEntrepreneurPinfl" name="individualEntrepreneurPinfl" th:value="${individualEntrepreneur.individualEntrepreneurPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" data-parsley-errors-container="#individualEntrepreneurPinflError">
                     <div class="input-group-append">
                         <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#pinflModal" style="border-radius: 5px"><i class="feather icon-alert-triangle"></i><span th:text="#{pinfl_info}">info</span></button>
                     </div>
@@ -44,8 +44,8 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group" style="background: #ffffff">
-                    <input class="form-control col-md-4 mr-3" required="" id="entrepreneurPassportSerial" name="entrepreneurPassportSerial" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" maxlength="3" placeholder="AA" data-parsley-errors-container="#entrepreneurPassportSerialError">
-                    <input class="form-control col-md-8" required="" id="entrepreneurPassportNumber" name="entrepreneurPassportNumber" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" maxlength="10" placeholder="0000001" data-parsley-errors-container="#entrepreneurPassportNumberError">
+                    <input class="form-control col-md-4 mr-3 only-alpha" required="" id="entrepreneurPassportSerial" name="entrepreneurPassportSerial" data-parsley-pattern="^[A-Za-z'‘’-]*$" th:value="${individualEntrepreneur.entrepreneurPassportSerial}" maxlength="2" minlength="2" placeholder="AA" data-parsley-errors-container="#entrepreneurPassportSerialError">
+                    <input class="form-control col-md-8 only-number" required="" id="entrepreneurPassportNumber" name="entrepreneurPassportNumber" th:value="${individualEntrepreneur.entrepreneurPassportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001" maxlength="7" minlength="7" data-parsley-errors-container="#entrepreneurPassportNumberError">
                 </div>
                 <div class="row">
                     <div class="col-md-4" id="entrepreneurPassportSerialError"></div>

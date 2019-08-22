@@ -117,7 +117,7 @@
         .undo-btn button {
             cursor: pointer;
         }
-        #loader_box {
+       /* #loader_box {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -129,11 +129,11 @@
             background-repeat: no-repeat;
             background-position: center center;
             display: none;
-        }
+        }*/
     </style>
 </head>
 <body class="layout-6">
-<div style="display: none;" id="loader_box"></div>
+<!--<div style="display: none;" id="loader_box"></div>-->
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -178,7 +178,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  th:field="*{objectId}" required="" onclick="getActivityList()">
+                                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
                                                                 </select>
@@ -191,7 +191,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control" th:field="*{activityId}" required="" onclick="getMaterialList()">
+                                                                <select class="form-control" th:field="*{activityId}" required="" onchange="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:if="${regApplication.activityId}" th:value="${regApplication.activityId}" th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></option>
                                                                     <!--<option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>-->
@@ -473,6 +473,10 @@
         });
 
         function getActivityList() {
+            var idSelected = 0;
+            if ($('#activityId').val() != ""){
+                idSelected = $('#activityId').val();
+            }
             var form = new FormData();
             form.append("objectId", $("#objectId").val());
             form.append("_csrf", $("#global_csrf").val());
@@ -503,6 +507,7 @@
                             var options =  $('<optgroup label="'+valueCategory+'">');
                             $.each(response.activityList, function (key, value) {
                                 if(valueCategory === value.category){
+                                    var selected = false;
                                     var name = '';
                                     switch (getCurrentLanguage()){
                                         case 'uz':name=value.name;break;
@@ -510,12 +515,16 @@
                                         case 'ru':name=value.nameRu;break;
                                         default :name=value.nameRu;break;
                                     }
-                                    options.append(new Option(name, value.id));
+                                    if (idSelected!="" && idSelected==value.id){
+                                        selected = true;
+                                    }
+                                    options.append(new Option(name, value.id,!selected,selected));
                                 }
                             });
                             $('#activityId').append(options);
                         });
                     }
+                    $('#activityId').change();
                 }
             });
         }
@@ -536,6 +545,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    $('#categoryName').text("");
                     $('#categoryName').text(response.category);
                     $("#materialDiv").text("");
                     if (response.requirementList.length>0){
@@ -553,13 +563,14 @@
                 if(value===2){
                     materialId = true;
                 }
-                getMaterial(value);
                 $("#materialDiv").append(
                     '<div class="custom-control custom-checkbox" >\n' +
-                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials" required="" data-parsley-errors-container="#materialError" >\n' +
+                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
                     '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
                     '</div>');
+                getMaterial(value);
             });
+            checkedMaretil();
             if(materialId){ $("#coordinates-control").show(); }else { $("#coordinates-control").hide(); }
         }
 
@@ -581,6 +592,14 @@
             });
         }
 
+        function checkedMaretil() {
+            var regApplicationMaterials = [[${regApplication.materials}]];
+            if (regApplicationMaterials.length>0){
+                $.each(regApplicationMaterials,function (item,value) {
+                    $('#materials'+value).prop('checked',true);
+                })
+            }
+        }
         /*th:checked="${requirement.materials!=null? #lists.contains(requirement.materials, material.id): false}"*/
 
         function openModalFile() {
@@ -867,7 +886,7 @@
             var TIN = $(this).val();
             if(TIN.length != 9) return;
             $('#projectDeveloperNameNotification').hide();
-            $("#loader_box").css("display", "block");
+            // $("#loader_box").css("display", "block");
             $.ajax({
                 url: leInfoUrlGnk,
                 data: {
@@ -878,7 +897,7 @@
                 dataType: 'json',
                 cache: true,
                 success: function (response) {
-                    $("#loader_box").css("display", "none");
+                    // $("#loader_box").css("display", "none");
                     console.log("response="+response);
                     console.log("response.err_code="+response.err_code);
                     if(response.err_code==='0'){

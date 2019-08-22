@@ -218,13 +218,8 @@
             <div class="container">
                 <div class="latest-articles-title"><span th:text="#{front.latest_title}">“Yangiliklar”</span>
                 </div>
-                <div class="latest-articles-slider-wrapper">
-                    <div class="latest-articles-slider">
-                        <div class="swiper-wrapper" id="sliders">
+                <div class="latest-articles-slider-wrapper" id="sliders">
 
-                        </div>
-                        <div class="latest-articles-button-next"></div>
-                        <div class="latest-articles-button-prev"></div>
                     </div>
                 </div>
             </div>
@@ -468,11 +463,10 @@
     </script>
     <script>
         $(document).ready(function () {
-            console.log(apitext['status']);
-            console.log(apitext['data']);
             /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
             if (apitext['status']) {
                 var html = '';
+                 html += ' <div class="latest-articles-slider" ><div class="swiper-wrapper">';
                 $.each(apitext['data'], function (item, val) {
                     // console.log("item= " + item + " val=" + val);
                     if (val.titleUZ != '') {
@@ -508,6 +502,7 @@
                             ' </div>';
                     }*/
                 });
+                html+='</div><div class="latest-articles-button-next"></div><div class="latest-articles-button-prev"></div></div>';
                 $('#sliders').append(html);
             }
         });

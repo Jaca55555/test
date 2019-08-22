@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group ">
-                <input class="form-control mr-1" required="" id="individualPinfl" name="individualPinfl" th:value="${individual.individualPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" style="border-radius: 5px" data-parsley-errors-container="#pinflError">
+                <input class="form-control mr-1 only-number" required="" id="individualPinfl" maxlength="14" minlength="14" name="individualPinfl" th:value="${individual.individualPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" style="border-radius: 5px" data-parsley-errors-container="#pinflError">
                     <div class="input-group-append">
                         <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#pinflModal" style="border-radius: 5px"><i class="feather icon-alert-triangle"></i><span th:text="#{pinfl_info}">info</span></button>
                     </div>
@@ -31,8 +31,8 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group" style="background: #ffffff">
-                    <input class="form-control col-md-4 mr-3" required="" id="passportSerial" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-pattern="^[A-Za-z'‘’-]*$" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA" data-parsley-errors-container="#passportSerialError">
-                    <input class="form-control col-md-8" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001" data-parsley-errors-container="#passportNumberError">
+                    <input class="form-control col-md-4 mr-3 only-alpha" required="" id="passportSerial" maxlength="2" minlength="2" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-pattern="^[A-Za-z'‘’-]*$" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA" data-parsley-errors-container="#passportSerialError">
+                    <input class="form-control col-md-8 only-number" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001" maxlength="7" minlength="7" data-parsley-errors-container="#passportNumberError">
                 </div>
                 <div class="row">
                     <div class="col-md-4" id="passportSerialError"></div>

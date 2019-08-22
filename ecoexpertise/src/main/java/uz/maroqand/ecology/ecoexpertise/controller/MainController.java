@@ -28,8 +28,12 @@ public class MainController {
 
     @RequestMapping("/")
     public String getPage(Model model) {
+        String element = ecoGovService.getEcoGovApi();
+        try {
+            element = new String(element.getBytes("utf8"));
+        }catch (Exception e){}
 
-        model.addAttribute("element", ecoGovService.getEcoGovApi());
+        model.addAttribute("element", element);
         return "index";
     }
 
