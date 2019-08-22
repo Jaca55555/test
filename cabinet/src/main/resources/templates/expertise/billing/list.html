@@ -126,7 +126,7 @@
                                                     <th th:text="#{sys_organization_name}"></th>
                                                     <th th:text="#{invoice_amount}"></th>
                                                     <th th:text="#{invoice_status}"></th>
-                                                    <th style="max-width: 50px;"></th>
+                                                    <th style="max-width: 100px;"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -262,6 +262,127 @@
     </div>
 </div>
 
+<div id="billing-edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title col-md-11" ><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number"> </span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name"> </span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 row" style="font-size:24px;margin-bottom: 15px;">
+                    <div class="col-md-6" style="color: #3EBFEA;" id="status-initial-edit">
+                        <i class="feather icon-settings"></i>
+                        <span th:text="#{invoice_status.initial}">В процессе</span>
+                    </div>
+                    <div class="col-md-6" style="color: #31B79A;" id="status-success-edit">
+                        <i class="feather icon-check-circle"></i>
+                        <span th:text="#{invoice_status.success}">Инвойс оплачен</span>
+                    </div>
+                    <div class="col-md-6" style="color: #F7432C;" id="status-canceled-edit">
+                        <i class="feather icon-x-circle"></i>
+                        <span th:text="#{invoice_status.canceled}">Инвойс отменен</span>
+                    </div>
+                    <div class="col-md-6" style="color: #F7D705;" id="status-error-edit">
+                        <i class="feather icon-alert-triangle"></i>
+                        <span th:text="#{invoice_status.error}">Не успешно</span>
+                    </div>
+                    <div class="col-md-6 text-right" style="color: #937676;">
+                        <span><span th:text="#{sys_date}">Дата</span>: <span id="date-edit">27.06.2019</span></span>
+                    </div>
+                </div>
+
+                <div class="col-md-12 row" style="font-size: 12px;color:#73869A; margin-bottom: 50px;">
+                    <div class="col-md-4">
+                        <span><span th:text="#{invoice_payee}">Назначение</span> <br><b id="payee-name-edit">Центр Единого Окна</b></span><br>
+                        <span><span th:text="#{invoice_payee.tin}">ИНН</span>: <span id="payee-tin-edit">201122919</span></span><br>
+                        <span><span th:text="#{invoice_payee.account}">Аккаунт</span>: <span id="payee-account-edit">401428601274043422199255</span></span><br>
+                        <span><span th:text="#{invoice_payee.address}">Адресс</span>: <span id="payee-address-edit"></span></span><br>
+                    </div>
+
+                    <div class="col-md-4">
+                        <span th:text="#{invoice_payer}">Плательщик</span><br>
+                        <span><b class="payer-name">BEKMURODOV ORZUMURODJN ABDUMAJIT O'G'LI</b></span><br>
+                        <span><span th:text="#{invoice_payer.type}">Тип плательщика</span>: <span id="payer-type-edit">Физическое лицо</span></span><br>
+                        <span><span th:text="#{invoice_payer.tin}">ИНН</span>: <span id="payer-tin-edit">61035739</span></span><br>
+                        <span><span th:text="#{invoice_payer.passport}">Паспорт</span>: <span id="payer-passport-edit">АА83471245</span></span><br>
+                        <span><span th:text="#{invoice_payer.phone}">Телефон</span>: <span id="payer-phone-edit">949345479</span></span><br>
+                        <span><span th:text="#{invoice_payer.email}">Email</span>: <span id="payer-mail-edit">bekmurod@mail.ru</span></span><br>
+                        <span><span th:text="#{invoice_payer.bank}">Банк</span>: <span id="payer-bank-edit">Xalq Bank</span></span><br>
+                        <span><span th:text="#{invoice_payer.bank_account}">Банк</span>: <span id="payer-bank-account-edit">Xalq Bank</span></span><br>
+                    </div>
+
+                    <div class="col-md-4">
+                        <span><span th:text="#{invoice_number}">Номер инвойся</span>: <b>#<span class="invoice-number">47239949861205</span></b></span><br>
+                        <span><span th:text="#{invoice_expiryAt}">Срок истечения</span>: <span id="expiry-at-edit">21.06.2020 00:17</span></span><br>
+                    </div>
+                </div>
+
+                <form method="post" action="/expertise/billing/edit">
+
+                    <div class="form-group row" >
+                        <div class="col-md-3 text-right">
+                            <label class="col-form-label" th:text="#{sys_about.objectExpertise}"></label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label" id="nowObjectName"></label>
+                        </div>
+                    </div>
+                    <div class="form-group row" >
+                        <div class="col-md-3 text-right">
+                            <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label" id="nowActivityName"></label>
+                        </div>
+                    </div>
+                    <div class="form-group row" >
+                        <div class="col-md-3 text-right">
+                            <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label" id="nowCategoryName"></label>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row" id="activityIdDiv">
+                        <div class="col-md-3 text-right">
+                            <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control" id="activityId" name="activityId" required="" >
+
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class="form-group row" >
+                        <div class="col-md-3 text-right">
+                            <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label" id="newCategoryName"></label>
+                        </div>
+                    </div>-->
+
+                    <input type="hidden" name="regApplicationId" id="regApplicationId">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="form-group row">
+                        <div class="col-md-6 offset-3">
+                            <button type="submit" class="btn btn-info float-left" th:text="#{sys_save}"></button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
@@ -293,6 +414,7 @@
     function renderActionsColumn(data, type, row, meta) {
         // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
+        html += '<div class="btn-group"><button class="btn btn-outline-warning btn-sm" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
         html += '<div class="btn-group"><button class="btn btn-outline-info btn-sm" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
         return html;
     }
@@ -480,6 +602,69 @@
         });
     }
 
+    function billingEdit(id) {
+        $.ajax({
+            url: viewLink,
+            data: {
+                id: id
+            },
+            success: function (response) {
+                $('.invoice-number').html(response.invoiceNumber);
+                $('.payer-name').html(response.payerName);
+
+                invoiceStatusEdit(response.invoiceStatus);
+
+                $('#date-edit').html(response.invoiceDate);
+                $('#payee-name-edit').html(response.payeeName);
+                $('#payee-tin-edit').html(response.payeeTin);
+                $('#payee-account-edit').html(response.payeeAccount);
+                $('#payee-address-edit').html(response.payeeAddress);
+
+                $('#payer-type-edit').html(response.payerType);
+                $('#payer-tin-edit').html(response.payerTin);
+                $('#payer-passport-edit').html(response.payerPassport);
+                $('#payer-phone-edit').html(response.payerPhone);
+                $('#payer-mail-edit').html(response.payerEmail);
+                $('#payer-bank-edit').html(response.payerBank);
+                $('#payer-bank-account-edit').html(response.payerBankAccount);
+
+                $('#expiry-at-edit').html(response.invoiceExpiryAt);
+                $('#invoice-detail-edit').html(response.invoiceDetail);
+                $('#invoice-qty-edit').html(response.invoiceQty);
+                $('#invoice-amount-edit').html(response.invoiceAmount);
+                $('#payment-total-edit').html(response.paymentTotal.toFixed(2));
+                $('#invoice-left-edit').html(response.invoiceLeft.toFixed(2));
+
+                $('#nowObjectName').html(response.nowObjectName);
+                $('#nowCategoryName').html(response.nowCategoryName);
+                $('#nowActivityName').html(response.nowActivityName);
+                $('#regApplicationId').val(response.regApplicationId);
+
+                $('#activityId').find('option').remove();
+                $.each(response.categoryList, function (keyCategory, valueCategory) {
+                    console.log('valueCategory='+valueCategory);
+                    var options =  $('<optgroup label="'+valueCategory+'">');
+                    $.each(response.activityList, function (key, value) {
+                        if(valueCategory === value.category){
+                            var name = '';
+                            switch (getCurrentLanguage()){
+                                case 'uz':name=value.name;break;
+                                case 'oz':name=value.nameOz;break;
+                                case 'ru':name=value.nameRu;break;
+                                default :name=value.nameRu;break;
+                            }
+                            options.append(new Option(name, value.id));
+                        }
+                    });
+                    $('#activityId').append(options);
+                });
+
+
+                $('#billing-edit').modal('show');
+            }
+        });
+    }
+
     function invoiceStatus(status) {
         $('#status-initial').hide();
         $('#status-success').hide();
@@ -496,6 +681,23 @@
             $('#status-error').show();
 
     }
+    function invoiceStatusEdit(status) {
+        $('#status-initial-edit').hide();
+        $('#status-success-edit').hide();
+        $('#status-canceled-edit').hide();
+        $('#status-error-edit').hide();
+
+        if(status == "Initial")
+            $('#status-initial-edit').show();
+        if(status == "Success")
+            $('#status-success-edit').show();
+        if(status == "Canceled")
+            $('#status-canceled-edit').show();
+        if(status == "Error")
+            $('#status-error-edit').show();
+
+    }
+
     /*]]>*/
 </script>
 </body>

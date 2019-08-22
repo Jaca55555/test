@@ -193,6 +193,11 @@ public class PerformerController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
+        if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
+            model.addAttribute("action_url", ExpertiseUrls.PerformerActionEdit);
+        }else {
+            model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
+        }
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 
@@ -230,7 +235,7 @@ public class PerformerController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user.getId());
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
@@ -253,6 +258,70 @@ public class PerformerController {
                     user.getId()
             );
         }
+        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(value = ExpertiseUrls.PerformerActionEdit,method = RequestMethod.POST)
+    public String getPerformerActionEditMethod(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "performerStatus")Integer performerStatus
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.PerformerList;
+        }
+
+        if (!regApplication.getPerformerId().equals(user.getId())){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Sizda ariza ijrochi uchun ruxsat yo'q.");
+            return "redirect:" + ExpertiseUrls.PerformerList;
+        }
+
+        if (regApplication.getAgreementStatus()==null || !regApplication.getAgreementStatus().equals(LogStatus.Denied)){
+            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kelishish yoki tasdiqlash jarayonida rad javobi berilganligi xaqida ma'lumot topilmadi.");
+            return "redirect:" + ExpertiseUrls.PerformerList;
+        }
+
+        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user.getId());
+        if(StringUtils.trimToNull(comment) != null){
+            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        }
+
+        regApplication.setStatus(RegApplicationStatus.Process);
+        regApplication.setAgreementStatus(LogStatus.Initial);
+        regApplication.setPerformerLogId(regApplicationLog.getId());
+        regApplicationService.update(regApplication);
+
+        Set<Integer> agreementLogs = regApplication.getAgreementLogs();
+        List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+
+        for (RegApplicationLog agreementLog :agreementLogList){
+            if(!agreementLog.getStatus().equals(LogStatus.Initial)){
+                RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+                regApplicationLogService.update(regApplicationLogCreate, LogStatus.New,"", agreementLog.getUpdateById());
+
+                agreementLogs.remove(agreementLog.getId());
+                agreementLogs.add(regApplicationLogCreate.getId());
+            }else {
+                regApplicationLogService.update(agreementLog, LogStatus.New,"", agreementLog.getUpdateById());
+            }
+
+            notificationService.create(
+                    agreementLog.getUpdateById(),
+                    NotificationType.Expertise,
+                    "Kelishish uchun ariza yuborildi",
+                    id + " raqamli ariza kelishish uchun yuborildi.",
+                    "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
+                    user.getId()
+            );
+        }
+
+        regApplication.setAgreementCompleteLogId(null);
+        regApplication.setAgreementLogs(agreementLogs);
+        regApplicationService.update(regApplication);
+
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
     }
 

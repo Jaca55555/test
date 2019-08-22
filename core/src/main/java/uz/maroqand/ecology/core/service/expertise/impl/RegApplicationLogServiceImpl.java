@@ -83,14 +83,14 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             RegApplicationLog regApplicationLog,
             LogStatus logStatus,
             String comment,
-            User updateBy
+            Integer updateById
     ){
 
         regApplicationLog.setStatus(logStatus);
         regApplicationLog.setComment(comment);
 
         regApplicationLog.setUpdateAt(new Date());
-        regApplicationLog.setUpdateById(updateBy.getId());
+        regApplicationLog.setUpdateById(updateById);
         return regApplicationLogRepository.save(regApplicationLog);
     }
 

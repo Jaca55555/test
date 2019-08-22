@@ -222,7 +222,7 @@ public class ConfirmController {
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user.getId());
 
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
@@ -260,7 +260,7 @@ public class ConfirmController {
             return "redirect:" + ExpertiseUrls.ConfirmList;
         }
 
-        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user);
+        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user.getId());
 
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
@@ -303,7 +303,7 @@ public class ConfirmController {
         }
 
         RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(newRegApplicationLog, LogStatus.Approved, comment, user);
+        regApplicationLogService.update(newRegApplicationLog, LogStatus.Approved, comment, user.getId());
 
         regApplication.setConfirmLogId(newRegApplicationLog.getId());
         regApplication.setBudget(budget);
@@ -347,7 +347,7 @@ public class ConfirmController {
         }
 
         RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(newRegApplicationLog, LogStatus.Denied, comment, user);
+        regApplicationLogService.update(newRegApplicationLog, LogStatus.Denied, comment, user.getId());
 
         regApplication.setConfirmLogId(newRegApplicationLog.getId());
         regApplication.setBudget(budget);
