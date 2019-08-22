@@ -26,7 +26,7 @@
                     <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
                 </td>
                 <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${agreementLog.updateById!=null?@helperService.getUserFullNameById(agreementLog.updateById:'')}">Акбар Сапаев</h6>
+                    <h6 class="mb-0" th:text="${agreementLog.updateById !=null? @helperService.getUserFullNameById(agreementLog.updateById):''}">Акбар Сапаев</h6>
                     <small th:text="#{sys_logType.agreement}">Директор</small>
                 </td>
                 <td>

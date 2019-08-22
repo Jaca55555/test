@@ -796,7 +796,6 @@ public class RegApplicationController {
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
 
-        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("agreementCompleteLog", regApplicationLog);
