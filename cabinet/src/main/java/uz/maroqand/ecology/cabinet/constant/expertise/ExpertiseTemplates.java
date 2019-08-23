@@ -77,4 +77,7 @@ public class ExpertiseTemplates {
 
     public static final String ExpertiseRegApplicationList = ExpertiseReg + "/list";
 
+    public static final String ExpertiseRegApplicationMonitoringList = ExpertiseReg + "/mntr/list";
+    public static final String ExpertiseRegApplicationMonitoringView = ExpertiseReg + "/mntr/view";
+
 }

@@ -166,22 +166,6 @@
                                                         </div>
                                                         <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
                                                     </div>
-                                                    <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
-                                                        <div class="col-md-12 text-center mb-5">
-                                                            <div class="col-md-12 text-right">
-                                                                <button type="button" class="btn btn-primary" onclick="printAccountFactor('accountBox')">
-                                                                    <i class="mdi mdi-printer"></i>
-                                                                    <span th:text="#{sys_print}" ></span>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div  id="accountBox">
-                                                            <object th:include="expertise/reg/fragments/facture :: facture" th:remove="tag" ></object>
-                                                        </div>
-                                                        <div class="col-md-12 text-right" th:if="${regApplication.facture==null || !regApplication.facture}">
-                                                            <button class="btn btn-primary" onclick="confirmFacture()"><i class="mdi mdi-check-circle"></i><span th:text="#{facture_confirm}"></span></button>
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-12 text-center" style="padding: 0px 38px" th:if="${regApplication.facture!=null && regApplication.facture}">
                                                         <a class="btn btn-success btn-block" href="#"><i class="mdi mdi-download"></i> <span th:text="#{sys_download_conclusion}"></span></a>
                                                     </div>
@@ -430,13 +414,6 @@
                 }
             });
         }
-    }
-    function printAccountFactor(blockname) {
-        var printContents = document.getElementById(blockname).innerHTML;
-        var originalContents = document.body.innerHTML;
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
     }
 </script>
 </body>

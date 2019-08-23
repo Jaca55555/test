@@ -148,6 +148,11 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationList = ExpertiseRegApplication + "/list";
     public static final String ExpertiseRegApplicationListAjax = ExpertiseRegApplication + "/list_ajax";
 
+    private static final String ExpertiseRegApplicationMonitoring = ExpertiseReg + "/mntr/application";
+    public static final String ExpertiseRegApplicationMonitoringList = ExpertiseRegApplicationMonitoring + "/list";
+    public static final String ExpertiseRegApplicationMonitoringListAjax = ExpertiseRegApplicationMonitoring + "/list_ajax";
+    public static final String ExpertiseRegApplicationMonitoringView = ExpertiseRegApplicationMonitoring + "/view";
+
     public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
     public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";
 
