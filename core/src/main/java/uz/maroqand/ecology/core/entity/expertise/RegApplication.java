@@ -104,6 +104,12 @@ public class RegApplication {
     @Column(name = "contract_date")
     private Date contractDate;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reg_application_jt_contract_files",
+            joinColumns = { @JoinColumn(name = "reg_application_id") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> contractFiles;
+
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offer_id", insertable = false, updatable = false)
     private Offer offer;*/

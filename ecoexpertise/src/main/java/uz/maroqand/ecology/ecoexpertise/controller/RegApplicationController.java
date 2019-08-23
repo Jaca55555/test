@@ -593,7 +593,7 @@ public class RegApplicationController {
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
-        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
         return RegTemplates.RegApplicationContract;
     }
 
@@ -676,7 +676,7 @@ public class RegApplicationController {
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("upay_url", RegUrls.RegApplicationPaymentFree+ "?id=" + id);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return RegTemplates.RegApplicationPrepayment;
     }
 
@@ -803,7 +803,7 @@ public class RegApplicationController {
         model.addAttribute("invoice", invoice);
         model.addAttribute("performerLog", performerLog);
         model.addAttribute("back_url", RegUrls.RegApplicationList);
-        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
         return RegTemplates.RegApplicationStatus;
     }
 

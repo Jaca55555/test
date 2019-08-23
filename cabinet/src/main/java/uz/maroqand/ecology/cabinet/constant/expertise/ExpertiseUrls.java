@@ -125,8 +125,10 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationFileDelete = ExpertiseRegApplication + "/file_delete";
 
     public static final String ExpertiseRegApplicationContract = ExpertiseRegApplication + "/contract";
-    public static final String ExpertiseRegApplicationContractConfirm = ExpertiseRegApplication + "/contract/confirm";
-    public static final String ExpertiseRegApplicationContractOfferDownload = ExpertiseRegApplication + "/contract/offer_download";
+    public static final String ExpertiseRegApplicationContractSubmit = ExpertiseRegApplication + "/contract/submit";
+    public static final String ExpertiseRegApplicationContractDownload = ExpertiseRegApplication + "/contract/download";
+    public static final String ExpertiseRegApplicationContractUpload = ExpertiseRegApplication + "/contract/upload";
+    public static final String ExpertiseRegApplicationContractDelete = ExpertiseRegApplication + "/contract/delete";
 
     public static final String ExpertiseRegApplicationPrepayment = ExpertiseRegApplication + "/prepayment";
     public static final String ExpertiseRegApplicationPaymentSendSms = ExpertiseRegApplication + "/payment/send_sms";

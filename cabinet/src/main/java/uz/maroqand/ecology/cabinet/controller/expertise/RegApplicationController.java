@@ -44,6 +44,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
 
@@ -482,128 +483,141 @@ public class RegApplicationController {
 
         regApplication.setActivityId(activityId);
         regApplication.setCategory(activity!=null? activity.getCategory():null);
-
-        RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        //todo to'g'rilash kerak
+        /*RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
             regApplication.setConfirmLogAt(new Date());
             regApplication.setConfirmLogId(regApplicationLog.getId());
             regApplication.setStatus(RegApplicationStatus.CheckSent);
-        }
+        }*/
 
         regApplication.setStep(RegApplicationStep.CONTRACT);
         regApplicationService.update(regApplication);
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
     }
 
-    /*@RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationWaiting,method = RequestMethod.GET)
-    public String getExpertiseRegApplicationWaitingPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
-        }
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-        if (regApplicationLog==null){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id;
-        }
-        if (regApplication.getForwardingLogId() != null){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-        }
-
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
-        return ExpertiseTemplates.ExpertiseRegApplicationWaiting;
-    }
-
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationWaiting,method = RequestMethod.POST)
-    public String regApplicationWaiting(
-            @RequestParam(name = "id") Integer id
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
-        }
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Approved){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlari tasdiqlanmagan.");
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationWaiting + "?id=" + id;
-            }
-        }
-
-        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-    }*/
-
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContract,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContract)
     public String getExpertiseRegApplicationContractPage(
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
+        String check = check(regApplication,user);
+        if(check!=null){
+            return check;
         }
 
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal()+1);
+        model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationContractSubmit);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationContract;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContractConfirm,method = RequestMethod.POST)
-    public String expertiseRegApplicationContractConfirm(
-            @RequestParam(name = "id") Integer id
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContractSubmit)
+    public String expertiseRegApplicationContractSubmit(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "contractDate") String contractDateStr,
+            @RequestParam(name = "contractNumber") String contractNumber,
+            @RequestParam(name = "budget") Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+
+        if (regApplication==null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
-        if(regApplication.getOfferId() != null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-        }
 
-        Offer offer = offerService.getOffer(regApplication.getBudget());
-        regApplication.setOfferId(offer.getId());
-
-        String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
-        regApplication.setContractDate(new Date());
-        regApplication.setStep(RegApplicationStep.CONTRACT);
-        regApplicationService.update(regApplication);
-
-        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-    }
-
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContract,method = RequestMethod.POST)
-    public String expertiseRegApplicationContract(
-            @RequestParam(name = "id") Integer id
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
-        }
-        if(regApplication.getOfferId()==null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-        }
-
-        regApplication.setStep(RegApplicationStep.PAYMENT);
+        regApplication.setContractDate(DateParser.TryParse(contractDateStr,Common.uzbekistanDateFormat));
+        regApplication.setBudget(budget);
         regApplicationService.update(regApplication);
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContractUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> expertiseRegApplicationContractUpload(
+            @RequestParam(name = "id") Integer regApplicationId,
+            @RequestParam(name = "file") MultipartFile multipartFile,
+            @RequestParam(name = "file_name") String fileName
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"regApplicationId="+regApplicationId,fileName);
+        if (file != null) {
+            Set<File> fileSet = regApplication.getContractFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            regApplication.setContractFiles(fileSet);
+            regApplicationService.update(regApplication);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
+            responseMap.put("link", ExpertiseUrls.ExpertiseRegApplicationContractDownload + "?file_id=" + file.getId() + "&regApplicationId=" + regApplicationId);
+            responseMap.put("fileId", file.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationContractDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> expertiseRegApplicationContractDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (regApplication == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = regApplication.getContractFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                regApplicationService.update(regApplication);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
+    }
+
+    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationContractDownload)
+    public ResponseEntity<Resource> expertiseRegApplicationContractDownload(
+            @RequestParam(name = "file_id") Integer fileId
+    ){
+        File file = fileService.findById(fileId);
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPrepayment)
@@ -616,11 +630,8 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
-
-       /* if(regApplication.getOfferId() == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + id;
-        }*/
+        regApplication.setStep(RegApplicationStep.PAYMENT);
+        regApplicationService.update(regApplication);
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
         Invoice invoice;
         if (regApplication.getInvoiceId()==null){
@@ -630,17 +641,13 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
-            /*if (invoice.getStatus()== InvoiceStatus.Success){
-                return "redirect:" + ExpertiseUrls.RegApplicationStatus + "?id=" + id;
-            }*/
         }
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("upay_url", ExpertiseUrls.ExpertiseRegApplicationPaymentFree+ "?id=" + id);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
     }
-
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms)
     @ResponseBody
@@ -716,6 +723,14 @@ public class RegApplicationController {
         /*if(invoice.getAmount().equals(0.0)){
             invoiceService.payTest(invoice.getId());
         }*/
+        RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+        regApplication.setForwardingLogId(forwardingLog.getId());
+        regApplication.setPerformerLogId(null);
+        regApplication.setAgreementLogs(null);
+        regApplication.setAgreementCompleteLogId(null);
+
+        regApplication.setStatus(RegApplicationStatus.Process);
+        regApplicationService.update(regApplication);
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
     }
 
@@ -729,6 +744,8 @@ public class RegApplicationController {
         if(regApplication == null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
+        regApplication.setStep(RegApplicationStep.STATUS);
+        regApplicationService.update(regApplication);
 
         //testPay
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
@@ -764,7 +781,7 @@ public class RegApplicationController {
         model.addAttribute("invoice", invoice);
         model.addAttribute("performerLog", performerLog);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationList);
-        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationStatus;
     }
 
@@ -1206,49 +1223,22 @@ public class RegApplicationController {
         return responseMap;
     }
 
-    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationContractOfferDownload)
-    public ResponseEntity<Resource> expertiseRegApplicationContractOfferDownload(
-            @RequestParam(name = "offer_id", required = false) Integer offerId
-    ){
-        Offer offer;
-        if(offerId!=null){
-            offer = offerService.getById(offerId);
-        }else {
-            offer = offerService.getOffer(false);
-        }
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        Integer fileId = offerService.getOfferFileIdByLanguage(offer,locale);
-        File file = fileService.findById(fileId);
-
-        if (file == null) {
-            return null;
-        } else {
-            return fileService.getFileAsResourceForDownloading(file);
-        }
-    }
 
     private String check(RegApplication regApplication, User user){
         if(regApplication == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
-        Boolean modification = true;
-        if (regApplication.getPerformerLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            if(regApplicationLog.getStatus() != LogStatus.Modification){
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + regApplication.getId();
-            }else {
-                modification = false;
-            }
-        }
-        if (regApplication.getConfirmLogId()!=null && modification){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus() != LogStatus.Denied){
+        if (regApplication.getInvoiceId()!=null){
+            Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+            System.out.println("invoice status=" + invoice.getStatus());
+            if(invoice!=null && invoice.getStatus().equals(InvoiceStatus.Success)){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationContract + "?id=" + regApplication.getId();
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + regApplication.getId();
             }
         }
+
         return null;
     }
 

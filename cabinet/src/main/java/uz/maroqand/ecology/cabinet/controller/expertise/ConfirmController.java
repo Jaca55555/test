@@ -124,7 +124,7 @@ public class ConfirmController {
                 LogType.Confirm,
                 null,
                 null,
-                null,//todo shart kerak
+                RegApplicationInputType.ecoService,
                 pageable
         );
 
