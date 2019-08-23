@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="individual">
+
+    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_pinfl}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group ">
+                <input class="form-control mr-1 only-number" required="" id="individualPinfl" maxlength="14" minlength="14" name="individualPinfl" th:value="${individual.individualPinfl}" data-parsley-type="digits" data-parsley-minlength="14" data-parsley-maxlength="14" style="border-radius: 5px" data-parsley-errors-container="#pinflError">
+                    <div class="input-group-append">
+                        <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#pinflModal" style="border-radius: 5px"><i class="feather icon-alert-triangle"></i><span th:text="#{pinfl_info}">info</span></button>
+                    </div>
+                </div>
+                <div class="col-md-6" id="pinflError"></div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group" style="background: #ffffff">
+                    <input class="form-control col-md-4 mr-3 only-alpha" required="" id="passportSerial" maxlength="2" minlength="2" name="passportSerial" th:value="${individual.passportSerial}" data-parsley-pattern="^[A-Za-z'‘’-]*$" data-parsley-minlength="2" data-parsley-maxlength="2" placeholder="AA" data-parsley-errors-container="#passportSerialError">
+                    <input class="form-control col-md-8 only-number" required="" id="passportNumber" name="passportNumber" th:value="${individual.passportNumber}" data-parsley-type="digits" data-parsley-minlength="7" data-parsley-maxlength="7" placeholder="0000001" maxlength="7" minlength="7" data-parsley-errors-container="#passportNumberError">
+                </div>
+                <div class="row">
+                    <div class="col-md-4" id="passportSerialError"></div>
+                    <div class="col-md-8" id="passportNumberError"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="individualName" name="individualName" th:value="${individual.individualName}" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_passport.dateOfIssue}" >Дата выдачи паспорта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" required="" id="passportDateOfIssue" name="passportDateOfIssue" th:value="${individual.passportDateOfIssue}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.dateOfExpiry}">Действителен до</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control datepicker" required="" id="passportDateOfExpiry" name="passportDateOfExpiry" th:value="${individual.passportDateOfExpiry}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport.IssuedBy}">Кем выдан</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="passportIssuedBy" name="passportIssuedBy" th:value="${individual.passportIssuedBy}" >
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_individual_address}">Yashash manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="individualRegionId" name="individualRegionId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:selected="${individual.individualRegionId==region.id}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_subregion}">Туман</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="individualSubRegionId" name="individualSubRegionId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="sub_region : ${sub_regions}" th:value="${sub_region.id}" th:text="${sub_region.getNameTranslation(#locale)}" th:class="${'sr-'+sub_region.parentId}" th:selected="${individual.individualSubRegionId==sub_region.id}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="individualAddress" name="individualAddress" th:value="${individual.individualAddress}" data-parsley-maxlength="250">
+            </div>
+        </div>
+        <p class="text-center" th:text="#{sys_individual_contact}"></p>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" id="individualPhone" name="individualPhone" th:value="${individual.individualPhone}" placeholder="+998 ( -- ) --- -- --">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input class="form-control phone" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_individualMobilePhone"></span>
+            </div>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_individualMobilePhone" onclick="getSMSCode('individualMobilePhone')" >
+                    <span id="timer_individualMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group row" id="sms_code_individualMobilePhone" style="display: none">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control only-number" name="code" placeholder="000000" minlength="6" maxlength="6" id="code_individualMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
+            </div>
+
+            <div class="col-md-2 row pr-0">
+                <div class="col-md-4">
+                    <i class="mdi mdi-check-outline" id="allow_individualMobilePhone" style="color: green;font-size: 30px" hidden=""></i>
+                    <i class="mdi mdi-close-outline" id="notAllow_individualMobilePhone" style="color: red;font-size: 30px" hidden=""></i>
+                </div>
+                <div class="col-md-8 pr-0">
+                    <button type="button" class="btn btn-success btn-block p-0" onclick="confirmSmsCode('individualMobilePhone')"><i class="mdi mdi-telegram mr-0" style="font-size: 25px"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" id="individualEmail" name="individualEmail" th:value="${individual.individualEmail}" placeholder="example@gmail.com" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <input type="hidden" name="applicantType" value="Individual" >
+        <input type="hidden" name="id" th:value="${regApplication.id}" >
+        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="row" >
+            <div class="form-group col-md-12 text-center" >
+                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}" data-toggle="modal" data-target="#cancel_modal">Отмена</button>
+                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

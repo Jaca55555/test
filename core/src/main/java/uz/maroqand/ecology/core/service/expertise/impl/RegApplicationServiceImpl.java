@@ -13,6 +13,7 @@ import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
@@ -42,8 +43,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         this.smsSendOauth2Service = smsSendOauth2Service;
     }
 
-    public RegApplication create(User user){
+    public RegApplication create(User user,RegApplicationInputType inputType){
         RegApplication regApplication = new RegApplication();
+        regApplication.setInputType(inputType);
         regApplication.setCreatedAt(new Date());
         regApplication.setCreatedById(user.getId());
         regApplication.setStatus(RegApplicationStatus.Initial);
@@ -124,9 +126,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             LogType logType,
             Integer performerId,
             Integer userId,
+            RegApplicationInputType regApplicationInputType,
             Pageable pageable
     ) {
-        return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId),pageable);
+        return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId,regApplicationInputType),pageable);
     }
 
     private static Specification<RegApplication> getFilteringSpecification(
@@ -134,7 +137,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             final Integer reviewId,
             final LogType logType,
             final Integer performerId,
-            final Integer userId
+            final Integer userId,
+            final RegApplicationInputType regApplicationInputType
     ) {
         return new Specification<RegApplication>() {
             @Override
@@ -217,6 +221,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                 if(userId!=null){
                     predicates.add(criteriaBuilder.equal(root.get("createdById"), userId));
+                }
+
+                if(regApplicationInputType!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("inputType"), regApplicationInputType.ordinal()));
                 }
 
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);

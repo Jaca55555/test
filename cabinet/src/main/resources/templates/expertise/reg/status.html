@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .border-bottom-styled {
+            border-bottom: 1px solid #000;
+            width: 100%;
+            margin-top: 20px
+        }
+
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 35px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .file p {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            font-size: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
+        }
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 >
+                                            <span th:text="#{reg_application.number}"></span>&nbsp;
+                                            <span th:text="${regApplication.id}"></span>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <object th:include="expertise/reg/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                        <div class="container mt-lg-5">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link show active" id="status-tab" data-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="true" th:if="${regApplication.facture!=null && regApplication.facture}" th:text="#{reg_application.status}"></a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a th:class="${regApplication.facture? 'nav-link show':'nav-link show active'}" id="facture-tab" data-toggle="tab" href="#facture" role="tab" aria-controls="facture" aria-selected="true" th:text="#{reg_application.facture}"></a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat}"></a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent">
+                                                <div class="tab-pane fade active show" id="status" role="tabpanel" aria-labelledby="status-tab" th:if="${regApplication.facture}">
+                                                    <object th:include="expertise/reg/fragments/status :: status" th:remove="tag"></object>
+                                                </div>
+                                                <div th:class="${regApplication.facture? 'tab-pane fade':'tab-pane fade active show'}" id="facture" role="tabpanel" aria-labelledby="facture-tab">
+                                                    <div  th:if="${regApplication.facture!=null && regApplication.facture == false}">
+                                                        <object th:include="expertise/reg/fragments/status :: status" th:remove="tag"></object>
+                                                        <div class="col-md-12 text-center" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+                                                            <div class="alert alert-warning" role="alert" th:text="#{reg_application.factureCheckBeforeConclusionMsg}"> </div>
+                                                        </div>
+                                                        <div class="mt-lg-5 mb-lg-5" style="border-bottom: #f5f5f5 3px solid"></div>
+                                                    </div>
+                                                    <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+                                                        <div class="col-md-12 text-center mb-5">
+                                                            <div class="col-md-12 text-right">
+                                                                <button type="button" class="btn btn-primary" onclick="printAccountFactor('accountBox')">
+                                                                    <i class="mdi mdi-printer"></i>
+                                                                    <span th:text="#{sys_print}" ></span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div  id="accountBox">
+                                                            <object th:include="expertise/reg/fragments/facture :: facture" th:remove="tag" ></object>
+                                                        </div>
+                                                        <div class="col-md-12 text-right" th:if="${regApplication.facture==null || !regApplication.facture}">
+                                                            <button class="btn btn-primary" onclick="confirmFacture()"><i class="mdi mdi-check-circle"></i><span th:text="#{facture_confirm}"></span></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 text-center" style="padding: 0px 38px" th:if="${regApplication.facture!=null && regApplication.facture}">
+                                                        <a class="btn btn-success btn-block" href="#"><i class="mdi mdi-download"></i> <span th:text="#{sys_download_conclusion}"></span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                                                    <object th:include="expertise/reg/fragments/chat :: chat" th:remove="tag"></object>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="upload-file-modal-comment" tabindex="-1" role="dialog" aria-labelledby="upload-file-modal-commentTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="#{sys_comment.upload_files}" style="float: left">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="file-name-comment">
+                        <span th:text="#{sys_file_name}"></span>
+                        <span class="required">*</span>
+                    </label>
+                    <input class="form-control" type="text" id="file-name-comment" required=""  />
+                </div>
+                <div class="input-group">
+                          <span class="input-group-btn">
+                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                            </span>
+                            <input name="uploaded_file" id="file-input-comment" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                          </span>
+                    <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="commentFileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" >
+
+                        </span>
+                </div>
+            </div>
+            <div class="modal-footer" style="text-align: center;">
+                <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadCommentFile()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script th:inline="javascript">
+    var regApplicationId = [[${regApplication.id}]];
+    var uploadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationCommentFileUpload}]];
+    var deleteCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationCommentDelete}]];
+    var downloadCommentFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationCommentDownload}]];
+    var addCommentUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationCommentAdd}]];
+    var confirmfactureUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationConfirmFacture}]];
+
+    $('textarea.max-textarea').maxlength({
+        alwaysShow: true
+    });
+
+    function confirmFacture() {
+        window.location.href = confirmfactureUrl + "?id=" + regApplicationId;
+    }
+
+    function openCommentModalFile() {
+        $('#upload-file-modal-comment').modal('show');
+    }
+
+    function uploadCommentFile(){
+        $('#file-name-comment').parsley().validate();
+        if(!$('#file-name-comment').val() || !$('#file-input-comment').val()){
+            $('#commentFileDescription').addClass('is-invalid');
+            return;
+        }
+
+        $('#upload-file-modal-comment').modal('hide');
+
+        var form = new FormData();
+        form.append("id", $('#commentId').val());
+        form.append("regApplicationId", regApplicationId);
+        form.append("file", $('#file-input-comment').prop('files')[0]);
+        form.append("file_name", $('#file-name-comment').val());
+        form.append("_csrf", $('#global_csrf').val());
+
+        $.ajax({
+            url: uploadCommentFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if(response.status == 1) {
+                    $('#files-div-comment').append('<div class="col-md-3 pb-3 p-0 ml-1" id="file-block-'+response.fileId+'">\n' +
+                        '                                                    <div class="file">\n' +
+                        '                                                        <a href="'+response.link+'">\n' +
+                        '                                                            <i class="feather icon-file file-icon"></i>\n' +
+                        '                                                            <span>'+response.description+'</span>\n' +
+                        '                                                            <p>'+response.name+'</p>\n' +
+                        '                                                        </a>\n' +
+                        '                                                        <button type="button" class="file-delete-btn" onclick="deleteCommentFile('+response.fileId+')">\n' +
+                        '                                                            <i class="feather icon-x"></i>\n' +
+                        '                                                        </button>\n' +
+                        '                                                    </div>\n' +
+                        '                                                </div>');
+                    $('#commentId').val(response.commentId);
+                    cleareAfterUploadFile();
+                }
+            },
+            beforeSend: function () {
+                $('#plus-icon').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#plus-icon').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+
+        });
+    }
+
+    function  clearAfterCommetAdd() {
+        $('#commentId').val('');
+        $('#message').val('');
+        $('#files-div-comment').html('');
+        $('#files-div-comment').append('<a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">\n' +
+            '                            <div class="add-file">\n' +
+            '                                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">\n' +
+            '                                <span id="percentage"><span id="percentage-num"></span>%</span>\n' +
+            '                                <i class="feather icon-plus" id="plus-icon"></i>\n' +
+            '                            </div>\n' +
+            '                        </a>');
+    }
+
+    function cleareAfterUploadFile() {
+        $('#file-input-comment').val('');
+        $('#file-name-comment').val('');
+        $('#commentFileDescription').text('');
+    }
+
+    function deleteCommentFile(fileId) {
+        var form = new FormData();
+        form.append("id", $('#commentId').val());
+        form.append("regApplicationId", regApplicationId);
+        form.append("fileId", fileId);
+        form.append("_csrf", $('#global_csrf').val());
+
+        $.ajax({
+            url: deleteCommentFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if(response.status == 1) {
+                    $('#file-block-' + fileId).remove();
+                }
+            }
+        });
+    }
+
+    function uploadProgressHandler(event){
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    function addComment() {
+        $('#message').parsley().validate();
+        if ($('#message').parsley().isValid()){
+            var form = new FormData();
+            form.append("id", $('#commentId').val());
+            form.append("regApplicationId", regApplicationId);
+            form.append("message", $('#message').val());
+            form.append("_csrf", $('#global_csrf').val());
+            $.ajax({
+                url: addCommentUrl,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if (response.status==1){
+                        var html='<div class="row" >' +
+                            '           <div class="col-md-2">\n' +
+                            '               <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3">'+response.userShorName+'</span>\n' +
+                            '           </div>\n' +
+                            '           <div class="col-md-10 pl-0">\n' +
+                            '               <p class="p-2 mb-1 mt-lg-4" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px">'+response.message+'</p>' +
+                            '               <p class="text-right">'+response.createdAt+'</p>'+
+                            '               <div style="border-bottom: black 1px dashed">';
+
+                        if (response.commentFiles!=""){
+                            $.each(response.commentFiles,function (item,val) {
+                                var downloadUrl = downloadCommentFileAjaxUrl + '?file_id=' + val.id + '&comment_id=' + $('#commentId').val();
+                                html+='<ul class="media-list p-0">\n' +
+                                    '       <li class="media d-flex m-b-15">\n' +
+                                    '           <div class="m-r-20 file-attach">\n' +
+                                    '               <i class="mdi mdi-file-pdf f-28 text-muted"></i>\n' +
+                                    '           </div>\n' +
+                                    '           <div class="media-body">\n' +
+                                    '               <a href="'+downloadUrl+'" class="m-b-5 d-block text-secondary">\n' +
+                                    '                   <span>'+val.name+'</span>\n' +
+                                    '               </a>\n' +
+                                    '               <div class="text-muted">' +
+                                    '                   <span>'+val.size+'</span>' +
+                                    '               </div>' +
+                                    '           </div>' +
+                                    '       </li>' +
+                                    '   </ul>';
+                            });
+                        }
+
+                        html+='</div></div></div>';
+                        $('#comments').append(html);
+                        clearAfterCommetAdd();
+                    }
+                }
+            });
+        }
+    }
+    function printAccountFactor(blockname) {
+        var printContents = document.getElementById(blockname).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+</body>
+</html>

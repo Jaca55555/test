@@ -111,7 +111,7 @@ public class ApplicantController {
         for(Client client: clientList) {
             convenientForJSONArray.add(new Object[]{
                     client.getId(),//hidden
-                    client.getType()!=null? helperService.getAppealType(client.getType().getId(),locale):"",
+                    client.getType()!=null? helperService.getApplicantType(client.getType().getId(),locale):"",
                     client.getName(),
                     client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"",
                     client.getTin(),

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ol/ol.css">
+    <link rel="stylesheet" href="/static/css/select2.min.css">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+
+        .add-file {
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+        }
+
+        .add-file i {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file {
+            position: relative;
+            background-color: #F4F7FA;
+            border: 1px solid #CED4DA;
+            height: 150px;
+            width: 100%;
+            color: #748892;
+        }
+
+        .file-icon {
+            font-size: 60px;
+            position: relative;
+            float: left;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file span {
+            position: absolute;
+            bottom: 35px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .file p {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            font-size: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .file a{
+            color: #748892;
+        }
+
+        .file a:hover {
+            color: #5CB85C;
+        }
+
+        .file-delete-btn {
+            color: red;
+            position: absolute;
+            right: 0;
+            border: none;
+            margin: 5px;
+        }
+        .file-delete-btn:hover {
+            color:darkred;
+        }
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .undo-btn {
+            position: absolute;
+            top: .5em;
+            right: .5em;
+        }
+        .undo-btn button {
+            cursor: pointer;
+        }
+       /* #loader_box {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 999999;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(255, 255, 255, 0.8);
+            background-image: url("/static/images/uploading.gif");
+            background-repeat: no-repeat;
+            background-position: center center;
+            display: none;
+        }*/
+    </style>
+</head>
+<body class="layout-6">
+<!--<div style="display: none;" id="loader_box"></div>-->
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12" >
+                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.objectExpertise}">Объект экспертизы</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" id="activityIdDiv">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control" th:field="*{activityId}" required="" onchange="getMaterialList()">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:if="${regApplication.activityId}" th:value="${regApplication.activityId}" th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></option>
+                                                                    <!--<option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>-->
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" id="categoryDiv">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.material}">Вид материалов</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6" id="materialDiv">
+                                                                <div class="custom-control custom-checkbox" th:if="${regApplication.materials}" th:each="material : ${regApplication.materials}">
+                                                                   <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked="checked" required="required" data-parsley-errors-container="#materialError" >
+                                                                   <label class="custom-control-label" th:for="${'materials'+material}" th:text="${@helperService.getMaterial(material,#locale)}"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 offset-3" id="materialError"></div>
+                                                        </div>
+
+                                                        <div id="coordinates-control" class="form-group row" style="margin-bottom: 50px; display: none;">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.coordinates}"></label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-info" th:text="#{sys_about.open_map}" data-toggle="modal" data-target="#map-modal" id="open-map-btn"></button>
+                                                                <button type="button" class="btn btn-primary" th:text="#{sys_about.write_coordinates}" id="write-coordinates-btn" onclick="writeCoordinates()"></button>
+                                                                <button type="button" class="btn btn-secondary" th:text="#{sys_about.clear_coordinates}" id="clear-coordinates-btn" disabled="" style="float: right; margin-right: 0;" onclick="clearCoordinates()"></button>
+                                                            </div>
+                                                        </div>
+                                                        <div id="coordinates-map-list" style="margin-bottom: 50px; display: none;" >
+                                                            <div class="form-group row">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#1</label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                        <input type="text" class="form-control col-md-4">
+                                                                        <input type="text" class="form-control col-md-4 offset-md-4">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#2</label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                    <input type="text" class="form-control col-md-4">
+                                                                    <input type="text" class="form-control col-md-4 offset-md-4">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="coordinates-list" style="margin-bottom: 50px; display: none;">
+                                                            <div class="form-group row" th:if="${coordinate}">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#1</label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                    <input type="text" class="form-control col-md-4" th:value="${coordinate.longitude}">
+                                                                    <input type="text" class="form-control col-md-4 offset-md-4" th:value="${coordinate.latitude}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row" th:each="coordinateLatLong, iter : ${coordinateLatLongList}">
+                                                                <div class="col-md-3 text-right">
+                                                                    <label class="col-form-label">#<span th:text="${iter.index + 2}"></span></label>
+                                                                </div>
+                                                                <div class="col-md-6 row" style="margin-left: 0;">
+                                                                    <input type="text" class="form-control col-md-4" th:value="${coordinateLatLong.longitude}">
+                                                                    <input type="text" class="form-control col-md-4 offset-md-4" th:value="${coordinateLatLong.latitude}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="map-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="map-modal-label" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="map-modal-label" th:text="#{map.draw_location}">Modal Title</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="map" class="map" style="width: 100%; height: 600px;"></div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-info" onclick="clearPolygon()" style="position: absolute; left: 1em;" th:text="#{sys_clear}">Clear</button>
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Close</button>
+                                                                        <button type="button" class="btn btn-primary" th:text="#{sys_save}" onclick="saveCoordinates()">Save changes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.name}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="*{name}"required=""  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_tin}">ИНН разработчика проекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control only-number" th:field="${projectDeveloper.tin}" id="projectDeveloperTin" required="" minlength="9" maxlength="9"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.projectDeveloper_name}">Наименование разработчика проекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
+                                                                <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
+                                                            </div>
+                                                        </div>
+                                                        </br>
+                                                        <h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
+                                                        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+                                                            <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                                                                <div class="add-file">
+                                                                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                                                    <i class="feather icon-plus" id="plus-icon"></i>
+                                                                </div>
+                                                            </a>
+                                                            <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
+                                                                <div class="file">
+                                                                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFileDownload + '?file_id=' + file.id}">
+                                                                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                                                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                                                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                                                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                                                        <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                                                        <span th:text="${file.description}"></span>
+                                                                        <p th:text="${file.name}"></p>
+                                                                    </a>
+                                                                    <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                                                                        <i class="feather icon-x"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="button" onclick="submitForm()" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="file-name">
+                        <span th:text="#{sys_file_name}"></span>
+                        <span class="required">*</span>
+                        </label>
+                        <input class="form-control" type="text" id="file-name" required="" />
+                    </div>
+                    <div class="input-group">
+                          <span class="input-group-btn">
+                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                            </span>
+                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                          </span>
+                        <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script src="/static/plugins/ol/ol.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+    <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
+
+
+    <script th:inline="javascript">
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).GetLegalEntityByTin}]];
+        var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileUpload}]];
+        var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileDelete}]];
+        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationClearCoordinates}]];
+        var regApplicationId = [[${regApplication.id}]];
+        var coordinate = [[${coordinate}]];
+        $(document).ready(function () {
+            var srSelector = $('#materialId');
+            srSelector.find('option:selected').show();
+            getActivityList();
+            if(coordinate != null){
+                $('#coordinates-list').show();
+                $('#coordinates-control').show();
+                $('#write-coordinates-btn').prop('disabled', true);
+                $('#open-map-btn').prop('disabled', true);
+                $('#clear-coordinates-btn').prop('disabled', false);
+            }
+            $('#objectId').select2();
+            $('#activityId').select2();
+
+            $("#objectId").change(function(){
+                getActivityList();
+            });
+            $("#activityId").change(function(){
+                getMaterialList();
+            });
+
+        });
+        function openInputFile() {
+            document.getElementById("file-input").click();
+        };
+
+        $('.only-number').keyup(function() {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+        function getActivityList() {
+            var idSelected = 0;
+            if ($('#activityId').val() != ""){
+                idSelected = $('#activityId').val();
+            }
+            var form = new FormData();
+            form.append("objectId", $("#objectId").val());
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: '/expertise/reg/application/activity',
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
+                    $("#materialDiv").text("");
+
+                    if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
+                        $("#activityIdDiv").hide();
+                        $("#activityId").removeAttr('required');
+                        $("#categoryDiv").hide();
+                        materialDiv(response.requirementList[0].materials);
+                    }else {
+                        $("#activityIdDiv").show();
+                        $("#activityId").prop('required',true);
+                        $("#categoryDiv").show();
+
+                        console.log('response.categoryList='+response.categoryList);
+                        $.each(response.categoryList, function (keyCategory, valueCategory) {
+                            console.log('valueCategory='+valueCategory);
+                            var options =  $('<optgroup label="'+valueCategory+'">');
+                            $.each(response.activityList, function (key, value) {
+                                if(valueCategory === value.category){
+                                    var selected = false;
+                                    var name = '';
+                                    switch (getCurrentLanguage()){
+                                        case 'uz':name=value.name;break;
+                                        case 'oz':name=value.nameOz;break;
+                                        case 'ru':name=value.nameRu;break;
+                                        default :name=value.nameRu;break;
+                                    }
+                                    if (idSelected!="" && idSelected==value.id){
+                                        selected = true;
+                                    }
+                                    options.append(new Option(name, value.id,!selected,selected));
+                                }
+                            });
+                            $('#activityId').append(options);
+                        });
+                    }
+                    $('#activityId').change();
+                }
+            });
+        }
+
+        function getMaterialList() {
+            var form = new FormData();
+            form.append("objectId", $("#objectId").val());
+            form.append("activityId", $("#activityId").val());
+            form.append("_csrf", $("#global_csrf").val());
+            var srSelector = $('#requirementId');
+            srSelector.find('option:selected').prop('selected',false);
+            srSelector.find('option').hide();
+            $.ajax({
+                url: '/expertise/reg/application/materials',
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    $('#categoryName').text("");
+                    $('#categoryName').text(response.category);
+                    $("#materialDiv").text("");
+                    if (response.requirementList.length>0){
+                        $.each(response.requirementList, function (index, value) {
+                            materialDiv(value.materials);
+                        });
+                    }
+                }
+            });
+        }
+        
+        function materialDiv(list) {
+            var materialId = false;
+            $.each(list, function (key, value) {
+                if(value===2){
+                    materialId = true;
+                }
+                $("#materialDiv").append(
+                    '<div class="custom-control custom-checkbox" >\n' +
+                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
+                    '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
+                    '</div>');
+                getMaterial(value);
+            });
+            checkedMaretil();
+            if(materialId){ $("#coordinates-control").show(); }else { $("#coordinates-control").hide(); }
+        }
+
+        function getMaterial(id) {
+            $.post('/expertise/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
+                $.each(response, function (key, value) {
+                    if(value.id===id){
+                        var name = '';
+                        switch (getCurrentLanguage()){
+                            case 'uz':name=value.name;break;
+                            case 'oz':name=value.nameOz;break;
+                            case 'ru':name=value.nameRu;break;
+                            default :name=value.nameRu;break;
+                        }
+                        console.log('material='+name);
+                        $('#materials-'+id+'-label').text(name);
+                    }
+                });
+            });
+        }
+
+        function checkedMaretil() {
+            var regApplicationMaterials = [[${regApplication.materials}]];
+            if (regApplicationMaterials.length>0){
+                $.each(regApplicationMaterials,function (item,value) {
+                    $('#materials'+value).prop('checked',true);
+                })
+            }
+        }
+        /*th:checked="${requirement.materials!=null? #lists.contains(requirement.materials, material.id): false}"*/
+
+        function openModalFile() {
+            $('#upload-file-modal').modal('show');
+        }
+
+        function uploadFile(){
+            $('#file-name').parsley().validate();
+            if(!$('#file-name').val() || !$('#file-input').val()){
+                $('#fileDescription').addClass('is-invalid');
+                return;
+            }
+
+            $('#upload-file-modal').modal('hide');
+
+            var form = new FormData();
+            form.append("id", regApplicationId);
+            form.append("file", $('#file-input').prop('files')[0]);
+            form.append("file_name", $('#file-name').val());
+            form.append("_csrf", $('#global_csrf').val());
+
+            $.ajax({
+                url: uploadFileAjaxUrl,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if(response.status == 1) {
+
+                        $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                            '                                                    <div class="file">\n' +
+                            '                                                        <a href="'+response.link+'">\n' +
+                            '                                                            <i class="feather icon-file file-icon"></i>\n' +
+                            '                                                            <span>'+response.name+'</span>\n' +
+                            '                                                        </a>\n' +
+                            '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
+                            '                                                            <i class="feather icon-x"></i>\n' +
+                            '                                                        </button>\n' +
+                            '                                                    </div>\n' +
+                            '                                                </div>');
+                    }
+                },
+                beforeSend: function () {
+                    $('#plus-icon').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#plus-icon').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
+                }
+
+            });
+        }
+
+        function deleteFile(fileId) {
+            var form = new FormData();
+            form.append("id", regApplicationId);
+            form.append("fileId", fileId);
+            form.append("_csrf", $('#global_csrf').val());
+
+            $.ajax({
+                url: deleteFileAjaxUrl,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if(response.status == 1) {
+                        $('#file-block-' + fileId).remove();
+                    }
+                }
+            });
+        }
+
+        function uploadProgressHandler(event){
+            var percent = (event.loaded / event.total) * 100;
+            var progress = Math.round(percent);
+            $('#percentage-num').html(progress);
+        }
+
+        function getCurrentLanguage() {
+            return [[__${#locale}__]];
+        }
+
+    </script>
+    <script>
+        var Map = ol.Map;
+        var View = ol.View;
+        var Draw = ol.interaction.Draw;
+        var TileLayer = ol.layer.Tile;
+        var VectorLayer = ol.layer.Vector;
+        var OSM = ol.source.OSM;
+        var VectorSource = ol.source.Vector;
+
+        var raster = new TileLayer({
+            source: new OSM()
+        });
+
+        var source = new VectorSource({wrapX: false});
+
+        var vector = new VectorLayer({
+            source: source
+        });
+
+
+
+
+        var map = new Map({
+            layers: [raster, vector],
+            target: 'map',
+            view: new View({
+                center: ol.proj.fromLonLat([69.27977, 41.31117]),
+                zoom: 16
+            })
+        });
+
+
+        var draw = new Draw({
+            source: source,
+            type: "Polygon"
+        });
+        map.addInteraction(draw);
+
+        map.on("click", function () {
+            var features = vector.getSource().getFeatures();
+
+            if(features.length > 0){
+                map.removeInteraction(draw);
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.which == 8)
+                vector.getSource().clear();
+        });
+
+        $('#open-map-btn').click(function () {
+            setTimeout( function() { map.updateSize();}, 200);
+        });
+
+        function drawUndo() {
+            draw.removeLastPoint();
+        }
+
+        var button = document.createElement('button');
+        button.innerHTML = '⮌';
+        button.addEventListener("click", drawUndo);
+
+        var element = document.createElement('div');
+        element.className = 'undo-btn ol-unselectable ol-control';
+        element.appendChild(button);
+
+        var UndoControl = new ol.control.Control({
+            element: element
+        });
+
+        map.addControl(UndoControl);
+
+        function clearPolygon() {
+            var features = vector.getSource().getFeatures();
+            features.forEach((feature) => {
+                vector.getSource().removeFeature(feature);
+            });
+            map.addInteraction(draw);
+
+        }
+
+        function saveCoordinates() {
+            var features = vector.getSource().getFeatures();
+
+            if (features.length > 0) {
+                $('#coordinates-map-list').html('');
+                $('#coordinates-map-list').show();
+                features.forEach(function (feature) {
+                    var length = feature.getGeometry().getCoordinates()[0].length;
+                    for (var i = 0; i < length; i++) {
+                        var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][i]);
+                        $('#coordinates-map-list').append('<div class="form-group row">\n' +
+                            '                                                                <div class="col-md-3 text-right">\n' +
+                            '                                                                    <label class="col-form-label">#' + (i + 1) + '</label>\n' +
+                            '                                                                </div>\n' +
+                            '                                                                <div class="col-md-6 row" style="margin-left: 0;">\n' +
+                            '                                                                        <input type="text" class="form-control col-md-4 coord-input" value="' + lonlat[1] + '" readonly="">\n' +
+                            '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input" value="' + lonlat[0] + '" readonly="">\n' +
+                            '                                                                </div>\n' +
+                            '                                                            </div>');
+
+                    }
+                });
+                $('#map-modal').modal("hide");
+                $('#write-coordinates-btn').prop('disabled', true);
+                $('#clear-coordinates-btn').prop('disabled', false);
+            }
+        }
+
+        var coordinateIndex = 1;
+        function writeCoordinates() {
+            $('#write-coordinates-btn').prop('disabled', true);
+            $('#open-map-btn').prop('disabled', true);
+            $('#clear-coordinates-btn').prop('disabled', false);
+
+            addInputForCoordinates(coordinateIndex++);
+
+            $('#coordinates-list').show();
+        }
+        
+        function addInputForCoordinates(index) {
+            $('#coordinates-list').append('<div class="form-group row">\n' +
+                '                                                                <div class="col-md-3 text-right">\n' +
+                '                                                                    <label class="col-form-label">#'+index+'</label>\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-md-6 row" style="margin-left: 0;">\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 coord-input">\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input">\n' +
+                '                                                                </div>\n' +
+                '                                                            </div>');
+
+            $('#plus-btn').remove();
+            $('#coordinates-list').append('<div class="form-group row" id="plus-btn">\n' +
+                '                                                                <div class="col-md-3 text-right">\n' +
+                '                                                                    <label class="col-form-label"></label>\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-md-6">\n' +
+                '                                                                        <button class="btn btn-info btn-icon" style="float: right; margin-right: 0;" onclick="addInputForCoordinates(' + (coordinateIndex++) + ')"><i class="feather icon-plus"></i></button>\n' +
+                '                                                                </div>\n' +
+                '                                                            </div>');
+        }
+
+        function clearCoordinates() {
+            var form = new FormData();
+            form.append("regApplicationId", regApplicationId);
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: clearCoordinatesAjaxUrl,
+                method: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    $('#clear-coordinates-btn').prop('disabled', true);
+                    $('#write-coordinates-btn').prop('disabled', false);
+                    $('#open-map-btn').prop('disabled', false);
+
+                    $('#coordinates-list').hide();
+                    $('#coordinates-list').html('');
+
+                    $('#coordinates-map-list').hide();
+                    $('#coordinates-map-list').html('');
+                    coordinateIndex = 1;
+                }
+
+            });
+        }
+        
+        function submitForm() {
+            var coordinatesListForSubmit = [];
+            $('.coord-input').each(function () {
+                coordinatesListForSubmit.push(parseFloat($(this).val()));
+
+            });
+
+            if ($('input[name="coordinates"]').length)
+                $('input[name="coordinates"]').remove();
+            $('#about-form').append('<input type="hidden" name="coordinates" value="'+coordinatesListForSubmit+'">');
+            $('#about-form').submit();
+        }
+
+        $('#projectDeveloperTin').change(function () {
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+            $('#projectDeveloperNameNotification').hide();
+            // $("#loader_box").css("display", "block");
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    // $("#loader_box").css("display", "none");
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#projectDeveloperName").val(val.name);
+
+                    }else{
+                            $('#projectDeveloperNameNotification').show();
+                    }
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
+    </script>
+</body>
+</html>

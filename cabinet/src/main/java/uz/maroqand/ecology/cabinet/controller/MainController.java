@@ -51,6 +51,7 @@ public class MainController {
                 logType,
                 null,
                 null,
+                null,//todo shart kerak
                 new PageRequest(0,2)
         );
 

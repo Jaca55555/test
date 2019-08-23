@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="foreign_individual">
+
+    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_full_name}">Ф.И.О</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="foreignIndividualName" name="foreignIndividualName" th:value="${foreignIndividual.foreignIndividualName}" >
+            </div>
+        </div>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_passport_serial}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                    <input class="form-control" required="" id="foreignPassportSerialNumber" name="foreignPassportSerialNumber" th:value="${foreignIndividual.foreignPassportSerialNumber}" maxlength="20" minlength="3"  data-parsley-errors-container="#foreignPassportSerialNumberError">
+                <div class="row">
+                    <div class="col-md-4" id="foreignPassportSerialNumberError"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_foreign_individual_citizenship_id}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="foreignCitizenshipId" name="foreignCitizenshipId" data-parsley-errors-container="#foreignCitizenshipIdError" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.getNameTranslation(#locale)}" th:selected="${foreignIndividual.foreignCitizenshipId==country.id}"></option>
+                </select>
+                <div id="foreignCitizenshipIdError"></div>
+            </div>
+        </div>
+
+
+        <p class="text-center" th:text="#{sys_foreign_individual_address}">Yashash manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_country}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="foreignCountryId" name="foreignCountryId" data-parsley-errors-container="#foreignCountryError" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.getNameTranslation(#locale)}" th:selected="${foreignIndividual.foreignCountryId==country.id}"></option>
+                </select>
+                <div id="foreignCountryError"></div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control" rows="4" required="" id="foreignAddress" name="foreignAddress" th:text="${foreignIndividual.foreignAddress}"></textarea>
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_foreign_individual_contact}">Yashash manzili</p>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" id="foreignPhone" name="foreignPhone" th:value="${foreignIndividual.foreignPhone}" placeholder="+998 ( -- ) --- -- --">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label " th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input class="form-control phone" required="" id="foreignMobilePhone" name="foreignMobilePhone" th:value="${foreignIndividual.foreignMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_foreignMobilePhone"></span>
+            </div>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_foreignMobilePhone" onclick="getSMSCode('foreignMobilePhone')" >
+                    <span id="timer_foreignMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group row" id="sms_code_foreignMobilePhone" style="display: none">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control only-number" name="code" placeholder="000000" minlength="6" maxlength="6" id="code_foreignMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
+            </div>
+
+            <div class="col-md-2 row pr-0">
+                <div class="col-md-4">
+                    <i class="mdi mdi-check-outline" id="allow_foreignMobilePhone" style="color: green;font-size: 30px" hidden=""></i>
+                    <i class="mdi mdi-close-outline" id="notAllow_foreignMobilePhone" style="color: red;font-size: 30px" hidden=""></i>
+                </div>
+                <div class="col-md-8 pr-0">
+                    <button type="button" class="btn btn-success btn-block p-0" onclick="confirmSmsCode('foreignMobilePhone')"><i class="mdi mdi-telegram mr-0" style="font-size: 25px"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" id="foreignEmail" name="foreignEmail" th:value="${foreignIndividual.foreignEmail}" placeholder="example@gmail.com">
+            </div>
+        </div>
+
+        <input type="hidden" name="applicantType" value="ForeignIndividual" >
+        <input type="hidden" name="id" th:value="${regApplication.id}" >
+        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="row" >
+            <div class="form-group col-md-12 text-center" >
+                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}" data-toggle="modal" data-target="#cancel_modal">Отмена</button>
+                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

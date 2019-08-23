@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+
+</head>
+<body class="layout-6">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <object th:include="expertise/reg/fragments/prepayment_view :: prepayment" th:remove="tag"></object>
+
+                                            <div class="row" th:if="${invoice.amount == 0}">
+                                                <div class="col-md-12 text-right" >
+                                                    <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: black;">
+                                                        <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentFreeMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" th:if="${invoice.amount != 0 && invoice.status == T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
+                                                <div class="col-md-12 text-right" >
+                                                    <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: #fff;">
+                                                        <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentPaidMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" th:if="${invoice.amount != 0 && invoice.status != T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
+                                                <div class="col-md-4">
+                                                    <a href="#bank-for-print" id="bank">
+                                                        <div class="card theme-bg">
+                                                            <div class="card-block text-center">
+                                                                <i class="mdi mdi-bank f-80 text-white"></i></br>
+                                                                <h5 class="text-white font-weight-bold" th:utext="#{sys_prepayment.bank}">All Properties</h5>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="#payment_page" id="payment">
+                                                        <div class="card theme-bg">
+                                                            <div class="card-block text-center ">
+                                                                <i class="mdi mdi-credit-card f-80 text-white"></i></br>
+                                                                <h5 class="text-white font-weight-bold" th:utext="#{sys_prepayment.upay}">All Properties</h5>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="#transfer-for-print" id="transfer">
+                                                        <div class="card theme-bg">
+                                                            <div class="card-block text-center">
+                                                                <i class="mdi mdi-bank-transfer f-80 text-white"></i></br>
+                                                                <h5 class="text-white font-weight-bold" th:utext="#{sys_prepayment.transfer}">All Properties</h5>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div id="bank_check_fragment" style="display: none">
+                                                <object th:include="expertise/reg/fragments/bank_check :: bank" th:remove="tag"></object>
+                                            </div>
+                                            <div id="transfer_fragment" style="display: none">
+                                                <object th:include="expertise/reg/fragments/transfer :: transfer" th:remove="tag"></object>
+                                            </div>
+                                            <div id="payment_fragment" style="display: none">
+                                                <object th:include="expertise/reg/fragments/payment :: payment" th:remove="tag"></object>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+    <script type="text/javascript" th:src="@{/static/plugins/input-mask/jquery.mask.min.js}"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+    <script th:inline="javascript">
+            $(".tel").mask('99 999 99 99');
+            $(".card-bank").mask('9999 9999 9999 9999');
+            $(".card-exp").mask('99/99');
+        $('#bank').on('click',function () {
+           $('#bank_check_fragment').show();
+           $('#transfer_fragment').hide()
+           $('#payment_fragment').hide();
+        });
+        $('#payment').on('click',function () {
+            $('#bank_check_fragment').hide();
+            $('#transfer_fragment').hide()
+            $('#payment_fragment').show();
+        });
+        $('#transfer').on('click',function () {
+            $('#bank_check_fragment').hide();
+            $('#transfer_fragment').show()
+            $('#payment_fragment').hide();
+        });
+    </script>
+</body>
+</html>

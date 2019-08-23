@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body th:fragment="bank">
+    <style>
+        p{
+            margin-bottom: 0px
+        }
+        td > span, td > p > span{
+            color: black;
+        }
+    </style>
+<div class="col-md-10" style="float: none; margin: 15px auto;">
+
+    <div class="row mb-3">
+        <div class="col-md-6 offset-2 text-center">
+            <h3 th:text="#{sys_bank_check}">КВИТАНЦИЯ</h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <button type="button" class="btn btn-primary" onclick="$('#bank-for-print').printThis();">
+                <!--<span th:text="#{sys_print}">Распечатать квитанцию</span>-->
+                <i class="mdi mdi-printer f-26"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row mr-0 ml-0" id="bank-for-print" th:object="${invoice}">
+        <table style="width: 100%; border-top: 2px dashed black; border-right: 2px dashed black;  border-left: 2px dashed black;">
+            <tbody>
+            <tr>
+                <td style="border-right: 2px solid black; width: 15%; vertical-align: top;">
+                    <p style="text-align: center; font-size: 11px;" th:text="#{sys_bank.notification}">Уведомление</p>
+                </td>
+                <td style="vertical-align: top;">
+                    <table style="width: 99%; text-align: left; margin-left: 5px;font-size: 12px; ">
+                        <tbody>
+                        <tr>
+                            <td colspan="2" class="pt-2">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payeeName}"> ГУП "ЦЕНТР ГОСУДАРСТВЕННОЙ ЭКОЛОГИЧЕСКОЙ ЭКСПЕРТИЗЫ РЕСПУБЛИКИ УЗБЕКИСТАН"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pt-2" >
+                                <span th:text="#{sys_bank.payeeName}">Принимающий платеж:</span>
+                            </td>
+                            <td class="pt-2" style="width:80%">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payeeName}"> ГУП "ЦЕНТР ГОСУДАРСТВЕННОЙ ЭКОЛОГИЧЕСКОЙ ЭКСПЕРТИЗЫ РЕСПУБЛИКИ УЗБЕКИСТАН"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table style="width: 100%; text-align: left; font-size: 12px;">
+                                    <tbody>
+                                    <tr>
+                                        <td style="width: 20%;" class="pt-2">
+                                            <span th:text="#{sys_bank.payeeAccount}">Расчетный счет получателя</span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeAccount}">Расчетный счет получателя</span>
+                                        </td>
+                                        <td style="width: 15%;" class="pr-2 pb-0 text-right">
+                                            <span th:text="#{sys_bank.payeeTin}">ИНН</span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeTin}"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20%" class="pt-2">
+                                            <span th:text="#{sys_bank.payeeAddress}">Адрес получателя</span>
+                                        </td>
+                                        <td style=" width: 30%; border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeAddress}"></span>
+                                        </td>
+                                        <td style="width: 15%;" class="pr-2 pb-0 text-right">
+                                            <span th:text="#{sys_bank.payeeMfo}">МФО</span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeMfo}"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="pt-2">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payerName}"> ООО "151-QURILISH MONTAJ POYEZDI"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: black" class="pt-2">
+                                <span th:text="#{sys_bank.invoice}">ИНВОЙС</span>
+                            </td>
+                            <td style="font-weight: bold;text-align: center; color: black" class="pt-2 ">
+                                <span th:text="*{invoice}">87711994645926</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table style="width: 100%;" class="table table-bordered">
+                                    <tr style="border: 1px lightgrey solid">
+                                        <td style="width: 60%" class="text-left">
+                                           <span th:text="#{sys_bank.forma}">Форма оплаты</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="#{sys_bank.nowDate}">Дата</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="#{sys_bank.amount}">Сумма</span>
+                                        </td>
+                                    </tr>
+                                    <tr s>
+                                        <td style="width: 60%" class="text-left">
+                                            <span th:text="#{sys_bank.agreement}">12 на основе цифрового соглашения</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="${#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')}">03.05.2019</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 80%" class="text-left" colspan="2">
+                                            <span th:text="#{sys_bank.total}">Общая сумма</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right: 2px solid black; width: 15%; vertical-align: top; border-top: 2px solid black; border-bottom: 2px dashed black;">
+                    <p style="text-align: center; font-size: 11px;" th:text="#{sys_bank.notification}">Уведомление</p>
+                </td>
+                <td style="vertical-align: top; border-top: 2px solid black; border-bottom: 2px dashed black;">
+                    <table style="width: 99%; text-align: left; margin-left: 5px;font-size: 12px; ">
+                        <tbody>
+                        <tr>
+                            <td colspan="2" class="pt-2">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payeeName}"> ГУП "ЦЕНТР ГОСУДАРСТВЕННОЙ ЭКОЛОГИЧЕСКОЙ ЭКСПЕРТИЗЫ РЕСПУБЛИКИ УЗБЕКИСТАН"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pt-2" >
+                                <span th:text="#{sys_bank.payeeName}">Принимающий платеж:</span>
+                            </td>
+                            <td class="pt-2" style="width:80%">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payeeName}"> ГУП "ЦЕНТР ГОСУДАРСТВЕННОЙ ЭКОЛОГИЧЕСКОЙ ЭКСПЕРТИЗЫ РЕСПУБЛИКИ УЗБЕКИСТАН"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table style="width: 100%; text-align: left; font-size: 12px;">
+                                    <tbody>
+                                    <tr>
+                                        <td style="width: 20%;" class="pt-2">
+                                            <span th:text="#{sys_bank.payeeAccount}"></span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeAccount}"></span>
+                                        </td>
+                                        <td style="width: 15%;" class="pr-2 pb-0 text-right">
+                                            <span th:text="#{sys_bank.payeeTin}"></span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeTin}"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20%" class="pt-2">
+                                            <span th:text="#{sys_bank.payeeAddress}"></span>
+                                        </td>
+                                        <td style=" width: 30%; border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeAddress}"></span>
+                                        </td>
+                                        <td style="width: 15%;" class="pr-2 pb-0 text-right">
+                                            <span th:text="#{sys_bank.payeeMfo}"></span>
+                                        </td>
+                                        <td style="width: 30%;border-bottom: 2px solid rgb(0, 0, 0);">
+                                            <span th:utext="*{payeeMfo}"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="pt-2">
+                                <p style="text-align: center;  font-size: 12px; border-bottom: 2px solid rgb(0, 0, 0);">
+                                    <span th:text="*{payerName}"> ООО "151-QURILISH MONTAJ POYEZDI"</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; color: black" class="pt-2">
+                                <span th:text="#{sys_bank.invoice}">ИНВОЙС</span>
+                            </td>
+                            <td style="font-weight: bold;text-align: center; color: black" class="pt-2 ">
+                                <span th:text="*{invoice}">87711994645926</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table style="width: 100%;" class="table table-bordered">
+                                    <tr style="border: 1px lightgrey solid">
+                                        <td style="width: 60%" class="text-left">
+                                           <span th:text="#{sys_bank.forma}">Форма оплаты</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="#{sys_bank.nowDate}">Дата</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="#{sys_bank.amount}">Сумма</span>
+                                        </td>
+                                    </tr>
+                                    <tr s>
+                                        <td style="width: 60%" class="text-left">
+                                            <span th:text="#{sys_bank.agreement}">12 на основе цифрового соглашения</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="${#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')}">03.05.2019</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 80%" class="text-left" colspan="2">
+                                            <span th:text="#{sys_bank.total}">Общая сумма</span>
+                                        </td>
+                                        <td style="width: 20%" class="text-center">
+                                            <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- /top navigation -->
+</body>
+</html>
