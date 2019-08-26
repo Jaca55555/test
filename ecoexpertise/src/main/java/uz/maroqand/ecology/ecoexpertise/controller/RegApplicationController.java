@@ -794,11 +794,8 @@ public class RegApplicationController {
         }
         model.addAttribute("conclusionFile", conclusionFile);
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
 
-        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("agreementCompleteLog", regApplicationLog);
         model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
         model.addAttribute("performerLog", performerLog);
