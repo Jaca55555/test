@@ -441,7 +441,6 @@
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
-            getActivityList();
             if(coordinate != null){
                 $('#coordinates-list').show();
                 $('#coordinates-control').show();
@@ -524,7 +523,6 @@
                             $('#activityId').append(options);
                         });
                     }
-                    $('#activityId').change();
                 }
             });
         }
