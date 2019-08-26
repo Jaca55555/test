@@ -81,6 +81,7 @@
 
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringListAjax}]];
+        var ajaxViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringView}]];
 
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -125,7 +126,7 @@
                     },
                     {
                         render: function (data, type, row, meta) {
-                            return '<a href="#" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
+                            return '<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
                         }, orderable:false, className:'text-center'
                     }
                 ],
