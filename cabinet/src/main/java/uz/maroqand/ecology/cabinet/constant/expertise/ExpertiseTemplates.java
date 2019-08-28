@@ -7,6 +7,7 @@ package uz.maroqand.ecology.cabinet.constant.expertise;
  */
 public class ExpertiseTemplates {
     private static final String Prefix = "expertise";
+    private static final String  ExpertiseReg = Prefix + "/reg";
 
     //Birinchi tekshiruv
     private static final String Confirm = Prefix + "/confirm";
@@ -64,5 +65,19 @@ public class ExpertiseTemplates {
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionView = Conclusion + "/view";
 
+
+    public static final String ExpertiseRegApplicationDashboard = ExpertiseReg + "/dashboard";
+    public static final String ExpertiseRegApplicationApplicant = ExpertiseReg + "/applicant";
+    public static final String ExpertiseRegApplicationAbout = ExpertiseReg + "/about";
+    public static final String ExpertiseRegApplicationWaiting = ExpertiseReg + "/waiting";
+    public static final String ExpertiseRegApplicationContract = ExpertiseReg + "/contract";
+    public static final String ExpertiseRegApplicationPrepayment = ExpertiseReg + "/prepayment";
+    public static final String ExpertiseRegApplicationPayment = ExpertiseReg + "/payment";
+    public static final String ExpertiseRegApplicationStatus = ExpertiseReg + "/status";
+
+    public static final String ExpertiseRegApplicationList = ExpertiseReg + "/list";
+
+    public static final String ExpertiseRegApplicationMonitoringList = ExpertiseReg + "/mntr/list";
+    public static final String ExpertiseRegApplicationMonitoringView = ExpertiseReg + "/mntr/view";
 
 }

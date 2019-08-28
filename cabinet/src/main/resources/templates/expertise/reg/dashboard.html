@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
+</head>
+<body class="layout-6">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                            <div class="row">
+
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="card card-border-c-purple" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                    <div class="card-header">
+                                                        <a href="#" class="text-secondary" th:text="#{sys_dashboard.newProject}">Новий проект </a>
+                                                    </div>
+                                                    <div class="card-block card-task">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <p class="task-detail" th:utext="#{sys_dashboard.newProjectDescription}"></p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="task-board text-right">
+                                                            <a class="btn btn-square btn-primary" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationStart}" th:text="#{sys_start}">Boshlash</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+
+</body>
+</html>

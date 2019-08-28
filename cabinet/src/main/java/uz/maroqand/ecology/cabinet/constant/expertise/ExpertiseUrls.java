@@ -7,6 +7,7 @@ package uz.maroqand.ecology.cabinet.constant.expertise;
  */
 public class ExpertiseUrls {
     private static final String Prefix = "/expertise";
+    private static final String  ExpertiseReg = Prefix + "/reg";
 
     //Birinchi tekshiruv
     private static final String Confirm = Prefix + "/confirm";
@@ -102,5 +103,57 @@ public class ExpertiseUrls {
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionListAjax = Conclusion + "/list_ajax";
     public static final String ConclusionView = Conclusion + "/view";
+
+
+    private static final String ExpertiseRegApplication = ExpertiseReg + "/application";
+
+    public static final String ExpertiseRegApplicationDashboard = ExpertiseRegApplication + "/dashboard";
+    public static final String ExpertiseRegApplicationResume = ExpertiseRegApplication + "/resume";
+    public static final String ExpertiseRegApplicationStart = ExpertiseRegApplication + "/start";
+    public static final String ExpertiseRegApplicationApplicantCancel = ExpertiseRegApplication + "/cancel";
+    public static final String ExpertiseRegApplicationApplicant = ExpertiseRegApplication + "/applicant";
+    public static final String ExpertiseRegApplicationSendSMSCode = ExpertiseRegApplication + "/send_sms_code";
+    public static final String ExpertiseRegApplicationGetSMSCode = ExpertiseRegApplication + "/get_sms_code";
+
+    public static final String ExpertiseRegApplicationAbout = ExpertiseRegApplication + "/about";
+    public static final String ExpertiseRegApplicationClearCoordinates = ExpertiseRegApplication + "/clear_coordinates";
+    public static final String ExpertiseRegApplicationGetActivity = ExpertiseRegApplication + "/activity";
+    public static final String ExpertiseRegApplicationGetMaterials = ExpertiseRegApplication + "/materials";
+    public static final String ExpertiseRegApplicationGetMaterial = ExpertiseRegApplication + "/material";
+    public static final String ExpertiseRegApplicationFileUpload = ExpertiseRegApplication + "/file_upload";
+    public static final String ExpertiseRegApplicationFileDownload = ExpertiseRegApplication + "/file_download";
+    public static final String ExpertiseRegApplicationFileDelete = ExpertiseRegApplication + "/file_delete";
+
+    public static final String ExpertiseRegApplicationContract = ExpertiseRegApplication + "/contract";
+    public static final String ExpertiseRegApplicationContractSubmit = ExpertiseRegApplication + "/contract/submit";
+    public static final String ExpertiseRegApplicationContractDownload = ExpertiseRegApplication + "/contract/download";
+    public static final String ExpertiseRegApplicationContractUpload = ExpertiseRegApplication + "/contract/upload";
+    public static final String ExpertiseRegApplicationContractDelete = ExpertiseRegApplication + "/contract/delete";
+
+    public static final String ExpertiseRegApplicationPrepayment = ExpertiseRegApplication + "/prepayment";
+    public static final String ExpertiseRegApplicationPaymentSendSms = ExpertiseRegApplication + "/payment/send_sms";
+    public static final String ExpertiseRegApplicationPaymentConfirmSms = ExpertiseRegApplication + "/payment/confirm_sms";
+    public static final String ExpertiseRegApplicationPaymentFree = ExpertiseRegApplication + "/payment/free";
+    public static final String ExpertiseRegApplicationStatus = ExpertiseRegApplication + "/status";
+    public static final String ExpertiseRegApplicationResend = ExpertiseRegApplication + "/resend";
+
+    public static final String ExpertiseRegApplicationConclusionDownload = ExpertiseReg + "/conclusion_file/download";
+    public static final String ExpertiseRegApplicationConfirmFacture = ExpertiseRegApplication + "/confirm/facture";
+    public static final String ExpertiseRegApplicationCommentAdd = ExpertiseRegApplication + "/comment_add";
+    public static final String ExpertiseRegApplicationCommentFileUpload = ExpertiseReg + "/comment/file/upload";
+    public static final String ExpertiseRegApplicationCommentDownload = ExpertiseReg + "/comment/file/download";
+    public static final String ExpertiseRegApplicationCommentDelete = ExpertiseReg + "/comment/file/delete";
+    public static final String ExpertiseRegApplicationGetOkedName = ExpertiseRegApplication + "/get_oked_name";
+
+    public static final String ExpertiseRegApplicationList = ExpertiseRegApplication + "/list";
+    public static final String ExpertiseRegApplicationListAjax = ExpertiseRegApplication + "/list_ajax";
+
+    private static final String ExpertiseRegApplicationMonitoring = ExpertiseReg + "/mntr/application";
+    public static final String ExpertiseRegApplicationMonitoringList = ExpertiseRegApplicationMonitoring + "/list";
+    public static final String ExpertiseRegApplicationMonitoringListAjax = ExpertiseRegApplicationMonitoring + "/list_ajax";
+    public static final String ExpertiseRegApplicationMonitoringView = ExpertiseRegApplicationMonitoring + "/view";
+
+    public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
+    public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";
 
 }

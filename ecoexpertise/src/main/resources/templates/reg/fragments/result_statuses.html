@@ -5,47 +5,24 @@
     <title>Title</title>
 </head>
 <body th:fragment="statuses">
-
-    <div style="border-bottom: 1px solid #f4f4f4"></div>
     <div class="col-md-10 offset-1">
-        <h5 class="mt-lg-5" th:text="#{reg_application.approvalStatuses}">Статус согласование </h5>
-        <table style="width: 100%">
-            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${performerLog!=null}">
-                <td style="width: 15%; padding-bottom: 5px;padding-top: 10px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AI</span>
-                </td>
-                <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(performerLog.updateById)}">Холмуратов Жахонгир</h6>
-                    <small th:text="#{sys_logType.performer}">Исполнитель</small>
-                </td>
-                <td>
-                    <span th:if="${performerLog!=null && performerLog.status!=null}" class="badge badge-pill badge-primary" th:text="#{front_reg_application.status_init}">Согласовано</span>
-            </tr>
-            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLogList!=null}" th:each="agreementLog :${agreementLogList}">
-                <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
-                </td>
-                <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${agreementLog.updateById !=null? @helperService.getUserFullNameById(agreementLog.updateById):''}">Акбар Сапаев</h6>
-                    <small th:text="#{sys_logType.agreement}">Директор</small>
-                </td>
-                <td>
-                    <span th:if="${agreementLog.status!=null}" class="badge badge-pill badge-secondary" th:text="#{front_reg_application.status_confirm}"></span>
-                </td>
-            </tr>
-            <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementCompleteLog!=null}">
-                <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >UB</span>
-                </td>
-                <td style="width: 60%;">
-                    <h6 class="mb-0" th:text="${agreementCompleteLog.updateById!=null?@helperService.getUserFullNameById(agreementCompleteLog.updateById):''}">Уткирбек Болтаев</h6>
-                    <small th:text="#{sys_logType.agreementComplete}">Председатель</small>
-                </td>
-                <td>
-                    <span th:if="${agreementCompleteLog.status!=null}" class="badge badge-pill badge-secondary" th:text="#{front_reg_application.status_confirm}">Не завершено</span>
-                </td>
-            </tr>
-        </table>
+        <div class="alert alert-primary row" role="alert" th:if="${regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Process}" >
+            <div class="col-auto">
+                <i class="mdi mdi-email-open-outline f-30"></i>
+            </div>
+            <div class="col-auto f-25" style="padding: inherit">
+                <span th:text="#{front_reg_application.status_init}"></span>
+            </div>
+        </div>
+        <div class="alert alert-success row" role="alert" th:if="${regApplication.agreementStatus==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+            <div class="col-auto">
+                <i class="mdi mdi-pen f-30"></i>
+            </div>
+            <div class="col-auto f-25" style="padding: inherit">
+                <span  th:text="#{front_reg_application.status_confirm}"></span>
+            </div>
+
+        </div>
     </div>
 
 </body>

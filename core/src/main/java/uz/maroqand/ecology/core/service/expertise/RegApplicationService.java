@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface RegApplicationService {
 
     void update(RegApplication regApplication);
 
-    RegApplication create(User user);
+    RegApplication create(User user,RegApplicationInputType inputType);
 
     List<RegApplication> getByClientId(Integer id);
 
@@ -27,6 +28,6 @@ public interface RegApplicationService {
 
     RegApplication getById(Integer id, Integer createdBy);
 
-    Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, Pageable pageable);
+    Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, RegApplicationInputType regApplicationInputType,Pageable pageable);
 
 }

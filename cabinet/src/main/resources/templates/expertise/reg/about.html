@@ -166,7 +166,7 @@
                                         </div>
                                         <div class="card-body">
 
-                                            <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
+                                            <object th:include="expertise/reg/step_wizard :: wizard" th:remove="tag" ></object>
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
@@ -337,7 +337,7 @@
                                                             </a>
                                                             <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
                                                                 <div class="file">
-                                                                    <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDownload + '?file_id=' + file.id}">
+                                                                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFileDownload + '?file_id=' + file.id}">
                                                                         <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
                                                                         <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
                                                                         <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
@@ -432,15 +432,16 @@
 
 
     <script th:inline="javascript">
-        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
-        var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileUpload}]];
-        var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDelete}]];
-        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).GetLegalEntityByTin}]];
+        var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileUpload}]];
+        var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileDelete}]];
+        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
+            getActivityList();
             if(coordinate != null){
                 $('#coordinates-list').show();
                 $('#coordinates-control').show();
@@ -480,7 +481,7 @@
             form.append("objectId", $("#objectId").val());
             form.append("_csrf", $("#global_csrf").val());
             $.ajax({
-                url: '/reg/application/activity',
+                url: '/expertise/reg/application/activity',
                 type: "POST",
                 data: form,
                 processData: false,
@@ -523,6 +524,7 @@
                             $('#activityId').append(options);
                         });
                     }
+                    $('#activityId').change();
                 }
             });
         }
@@ -536,7 +538,7 @@
             srSelector.find('option:selected').prop('selected',false);
             srSelector.find('option').hide();
             $.ajax({
-                url: '/reg/application/materials',
+                url: '/expertise/reg/application/materials',
                 type: "POST",
                 data: form,
                 processData: false,
@@ -573,7 +575,7 @@
         }
 
         function getMaterial(id) {
-            $.post('/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
+            $.post('/expertise/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
                 $.each(response, function (key, value) {
                     if(value.id===id){
                         var name = '';

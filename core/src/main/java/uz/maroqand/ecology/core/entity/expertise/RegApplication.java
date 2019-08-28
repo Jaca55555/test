@@ -40,6 +40,10 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private ApplicantType applicantType;
 
+    @Column(name = "input_type")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationInputType inputType;
+
     //Объект экспертизы
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "object_id", insertable = false, updatable = false)
@@ -99,6 +103,12 @@ public class RegApplication {
 
     @Column(name = "contract_date")
     private Date contractDate;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reg_application_jt_contract_files",
+            joinColumns = { @JoinColumn(name = "reg_application_id") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> contractFiles;
 
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offer_id", insertable = false, updatable = false)

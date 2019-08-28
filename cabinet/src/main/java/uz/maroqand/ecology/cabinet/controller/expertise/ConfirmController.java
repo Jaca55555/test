@@ -124,6 +124,7 @@ public class ConfirmController {
                 LogType.Confirm,
                 null,
                 null,
+                RegApplicationInputType.ecoService,
                 pageable
         );
 
