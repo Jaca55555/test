@@ -836,24 +836,26 @@ public class RegApplicationController {
 
 
     @RequestMapping(value = RegUrls.RegApplicationConfirmFacture)
-    public String getConfirmFacture(@RequestParam(name = "id")Integer id){
+    public String getConfirmFacture( @RequestParam(name = "id")Integer id ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if (regApplication==null){
+        if (regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
         }
-        UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
+        /*UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
         if (userAdditional==null){
             return "redirect:" + RegUrls.RegApplicationList;
-        }
+        }*/
 
-        if (userAdditional.getLoginType()== LoginType.EcoExpertiseIgGovUz){
-            regApplication.setFacture(Boolean.TRUE);
-            regApplicationService.update(regApplication);
+        regApplication.setFacture(Boolean.TRUE);
+        regApplicationService.update(regApplication);
+
+        /*if (userAdditional.getLoginType()== LoginType.EcoExpertiseIgGovUz){
             return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
         }else{
             return "redirect:" + SysUrls.EDSLogin;
-        }
+        }*/
+        return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationCommentAdd,method = RequestMethod.POST)

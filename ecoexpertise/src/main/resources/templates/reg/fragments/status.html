@@ -39,7 +39,7 @@
 
     <!--Files-->
     <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" th:if="${regApplication.facture}">
-        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/application/conclusion_file/download?id='+regApplication.id+'&fileId='+conclusionFile.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8080/reg/conclusion_file/download?id='+regApplication.id+'&fileId='+conclusionFile.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
     </div>
     <div class="col-md-12 task-attachment" th:if="${regApplication.facture}">
         <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
