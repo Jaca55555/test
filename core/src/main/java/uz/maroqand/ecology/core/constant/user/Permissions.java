@@ -26,7 +26,10 @@ public enum Permissions {
     COORDINATE_REGISTER(10,"sys_permissions.coordinate_register"), //
 
     APPEAL_ADMIN(11,"sys_permissions.appeal_admin"), //
-    EMPLOYEE_CONTROL(12,"sys_permissions.employee_control"); //
+    EMPLOYEE_CONTROL(12,"sys_permissions.employee_control"), //
+
+    EXPERTISE_REG(13,"sys_permissions.expertise_reg"), //
+    EXPERTISE_MONITORING(14,"sys_permissions.expertise_monitoring"); //
 
     private Integer id;
     private String name;
