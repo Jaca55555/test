@@ -46,7 +46,10 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 th:text="${activity.id==null?'mntr_activity_new':'mntr_activity_edit ' + activity.id}"></h5>
+                                        <h5>
+                                            <span th:text="#{${activity.id == null? 'mntr_activity_new':'mntr_activity_edit'}}"></span>
+                                            <span th:text="${activity.id != null? activity.id:''}"></span>
+                                        </h5>
                                     </div>
                                     <div class="card-body">
                                         <form method="post" th:object="${activity}" data-parsley-validate="" th:action="${action_url}">
