@@ -88,7 +88,8 @@
                                             </div>
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                                                 <div class="text-right">
-                                                    <button class="btn btn-primary btn-sm" id="test12"><i class="mdi mdi-file-word f-20"></i><span th:text="#{sys_word_download}"></span></button>
+                                                    <button class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
+                                                    <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>
                                                 </div>
                                                 <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
                                             </div>
@@ -119,6 +120,7 @@
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script type="text/javascript" src="/static/plugins/printThis.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
@@ -142,23 +144,6 @@
         $('.document-editor__editable').wordExport();
     });
 
-    function exportHTML(){
-        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-            "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-            "xmlns='http://www.w3.org/TR/REC-html40'>"+
-            "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-        var footer = "</body></html>";
-        var sourceHTML = header+document.getElementById("document-editor").innerHTML+footer;
-
-        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-        var fileDownload = document.createElement("a");
-        document.body.appendChild(fileDownload);
-        fileDownload.href = source;
-        fileDownload.download = 'document.doc';
-        fileDownload.click();
-        document.body.removeChild(fileDownload);
-    }
-
 </script>
 
 <script type="text/javascript" th:inline="javascript">
@@ -174,6 +159,7 @@
     var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
     var regApplicationId = [[${performerLog.id}]];
+    var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     $(document).ready(function () {
@@ -221,6 +207,26 @@
                         $('#requirementId option[value="'+value.id+'"]').show();
                     });
                 }
+            }
+        });
+    }
+
+    function saveConculision() {
+        var form = new FormData();
+        form.append("regApplicationId",[[${regApplication.id}]]);
+        form.append("conclusionId",[[${conclusionId}]]);
+        form.append("htmlText",$('#document-editor__editable').html());
+        form.append("_csrf", $("#global_csrf").val());
+
+        $.ajax({
+            url: saveConculisionUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
             }
         });
     }

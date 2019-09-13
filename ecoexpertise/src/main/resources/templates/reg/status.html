@@ -184,6 +184,7 @@
                                                     </div>
                                                     <div class="col-md-12 text-center" style="padding: 0px 38px" th:if="${regApplication.facture!=null && regApplication.facture}">
                                                         <a class="btn btn-success btn-block" href="#"><i class="mdi mdi-download"></i> <span th:text="#{sys_download_conclusion}"></span></a>
+                                                        <object th:include="reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">

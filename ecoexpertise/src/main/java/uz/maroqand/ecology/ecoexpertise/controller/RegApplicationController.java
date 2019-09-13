@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
-import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
-import uz.maroqand.ecology.core.constant.user.LoginType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
@@ -27,13 +25,11 @@ import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.entity.user.UserAdditional;
 import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
-import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -81,6 +77,7 @@ public class RegApplicationController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final SmsSendService smsSendService;
+    private final ConclusionService conclusionService;
 
     @Autowired
     public RegApplicationController(
@@ -108,7 +105,7 @@ public class RegApplicationController {
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            SmsSendService smsSendService) {
+            SmsSendService smsSendService, ConclusionService conclusionService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -137,6 +134,7 @@ public class RegApplicationController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.smsSendService = smsSendService;
+        this.conclusionService = conclusionService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -794,6 +792,8 @@ public class RegApplicationController {
         }
         model.addAttribute("conclusionFile", conclusionFile);
 
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        model.addAttribute("conclusion",conclusion);
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("commentList", commentList);

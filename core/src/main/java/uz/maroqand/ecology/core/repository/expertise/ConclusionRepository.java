@@ -17,6 +17,8 @@ public interface ConclusionRepository extends JpaRepository<Conclusion, Integer>
 
     Conclusion findByIdAndDeletedFalse(Integer id);
 
+    Conclusion findByIdAndRegApplicationIdAndDeletedFalse(Integer id,Integer regApplicationId);
+
     Conclusion findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer id);
 
     @Override

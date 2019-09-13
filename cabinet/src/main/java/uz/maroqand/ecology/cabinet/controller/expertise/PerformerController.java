@@ -65,6 +65,7 @@ public class PerformerController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
     private final NotificationService notificationService;
+    private final ConclusionService conclusionService;
 
     @Autowired
     public PerformerController(
@@ -84,8 +85,8 @@ public class PerformerController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
-            NotificationService notificationService
-    ) {
+            NotificationService notificationService,
+            ConclusionService conclusionService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -103,6 +104,7 @@ public class PerformerController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
         this.notificationService = notificationService;
+        this.conclusionService = conclusionService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -199,6 +201,11 @@ public class PerformerController {
         }else {
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
+
+        model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
+        model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 
@@ -324,6 +331,48 @@ public class PerformerController {
         regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
+    }
+
+    @RequestMapping(ExpertiseUrls.PerformerConclusionSave)
+    @ResponseBody
+    public HashMap<String,Object> saveConclusion(
+            @RequestParam(name = "regApplicationId") Integer regApplicationId,
+            @RequestParam(name = "conclusionId") Integer conclusionId,
+            @RequestParam(name = "htmlText") String htmlText
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        htmlText = htmlText.replaceAll("figure","div");
+        System.out.println("keldi");
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication==null){
+            System.out.println("keldi1");
+            result.put("status",0);
+            return result;
+        }
+        Conclusion conclusionNew = null;
+        if (conclusionId!=0){
+            conclusionNew = conclusionService.getByIdAndRegApplicationId(conclusionId,regApplicationId);
+            if (conclusionNew==null){
+                System.out.println("keldi2");
+                result.put("status",0);
+                return result;
+            }
+            conclusionNew.setUpdateAt(new Date());
+            conclusionNew.setUpdateById(user.getId());
+            conclusionNew.setHtmlText(htmlText.trim());
+            conclusionService.save(conclusionNew);
+            return result;
+        }
+
+        conclusionNew = new Conclusion();
+        conclusionNew.setRegApplicationId(regApplicationId);
+        conclusionNew.setCreatedById(user.getId());
+        conclusionNew.setCreatedAt(new Date());
+        conclusionNew.setHtmlText(htmlText);
+        conclusionService.save(conclusionNew);
+        return result;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerChangeDeadlineDate)

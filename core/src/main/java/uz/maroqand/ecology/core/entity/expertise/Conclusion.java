@@ -43,6 +43,10 @@ public class Conclusion {
     @Column(name = "deadline_date")
     private Date deadlineDate;
 
+    // text conslusion
+    @Column(columnDefinition = "TEXT")
+    private String htmlText;
+
     /*
      * Technical Fields
      */

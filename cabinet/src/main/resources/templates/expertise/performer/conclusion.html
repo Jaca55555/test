@@ -28,7 +28,7 @@
         overflow-y: scroll;
     }
     .document-editor__editable-container .ck-editor__editable.ck-editor__editable_inline {
-        width: 21cm;
+        width: 30cm;
         min-height: 29.7cm;
         padding: 1cm 2cm 2cm;
         border: 1px hsl(0, 0%, 82.7%) solid;
@@ -84,7 +84,7 @@
         margin-bottom: .952em;
     }
     .document-editor .ck-content p {
-        font-size: 1em;
+        font-size: 1.2em;
         line-height: 1.63em;
         padding-top: .5em;
         margin-bottom: 1.13em;
@@ -102,15 +102,24 @@
     <div class="document-editor" id="document-editor">
         <div class="document-editor__toolbar"></div>
         <div class="document-editor__editable-container">
-            <div class="document-editor__editable">
-                    <!--<img style="text-align:center;" src="/static/images/gerb.png"/>-->
+            <div class="document-editor__editable" id="document-editor__editable" th:if="${conclusionId!=0}">
+                <p th:utext="${conclusionText}"></p>
+            </div>
+            <div class="document-editor__editable" id="document-editor__editable" th:if="${conclusionId==0}">
+                <p>&nbsp;&nbsp;</p><br>
+                <img style="text-align:center;" src="/static/images/gerb.png"/>
                 <h3 style="text-align:center;">ЎЗБЕКИСТОН РЕСПУБЛИКАСИ ЭКОЛОГИЯ ВА АТРОФ-МУҲИТНИ МУҲОФАЗА ҚИЛИШ ДАВЛАТ ҚЎМИТАСИ</h3></br>
-                <h4 style="text-align:center;"> 100047, Тошкент ш., Яшнобод т., Той-тепа кўчаси, 2a-уй. тел.: 207-11-03, факс: 236-02-32 веб-саҳифа:http://www.uznature.uz, электрон почта: info@uznature.uz </h4></br>
-                <strong > “____”_________20 __ й. </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> № ____________________	  Тошкент ш. </strong></br>
+                <h4 style="text-align:center;"> 100047, Тошкент ш., Яшнобод т., Той-тепа кўчаси, 2a-уй. тел.: 207-11-03, факс: 236-02-32 <br>веб-саҳифа:http://www.uznature.uz, электрон почта: info@uznature.uz </h4><br>&nbsp;<br>
+                <p style="text-align: center">
+                    <strong > “____”_________20 __ й. </strong>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <strong> № ____________________	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Тошкент ш. </strong></br>
+                </p>
                 <h2 style="text-align:center;">З А К Л Ю Ч Е Н И Е</h2>
                 <h3 style="text-align:center;">Государственной  экологической  экспертизы</h3>
 
-                <figure class="table ck-widget ck-widget_selectable" contenteditable="false">
+                <!--<figure class="table ck-widget ck-widget_selectable" contenteditable="false">-->
                     <table>
                         <tbody>
                         <tr>
@@ -150,14 +159,19 @@
                         </tr>
                         </tbody>
                     </table>
-                </figure>
-                <figure class="table ck-widget ck-widget_selectable" contenteditable="false">
+                <!--</figure>-->
+                <!--<figure class="table ck-widget ck-widget_selectable" contenteditable="false">-->
                     <table>
                         <tbody>
                         <tr>
+                            <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
                             <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td class="ck-editor__editable ck-editor__nested-editable " contenteditable="true" style="text-align: right">
+                            <td class="ck-editor__editable ck-editor__nested-editable " contenteditable="true" style="text-align: center">
                                 Генеральному директору
                                 ИП ООО «SURHANCEMENTINVEST»
                                 ХАМРОЕВУ О.
@@ -166,17 +180,17 @@
                         <tr>
                             <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true" width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true" width="20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;копия:</td>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true" style="text-align: right">
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true" style="text-align: center">
                                 Управлению по экологии и охране окружающей среды Сурхандарьинской области
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                </figure>
+                <!--</figure>-->
 
 
                 <p style="text-align: justify">
-                    На государственную экологическую экспертизу представлены материалы заключительного этапа оценки воздействия на окружающую среду строительства цементного завода ИП ООО «SURHANCEMENTINVEST» в Джаркурганском районе Сурхандарьинской области.
+                    На государственную экологическую эксперти зу представлены материалы заключительного этапа оценки воздействия на окружающую среду строительства цементного завода ИП ООО «SURHANCEMENTINVEST» в Джаркурганском районе Сурхандарьинской области.
                     Ранее был выполнен проект ЗВОС на строительства цементного завода, на который было получено положительное заключение экологической экспертизы № 18/467з от 13.05.2015 г.
                     Цель и место реализации намечаемой деятельности</br>
                     Целью работы является оценка изменения воздействия на окружающую среду строительства цементного завода, общей площадью 50 га, расположенного на массиве Хаудук в Джаркурганском районе Сурхандарьинской области. Производственная деятельность

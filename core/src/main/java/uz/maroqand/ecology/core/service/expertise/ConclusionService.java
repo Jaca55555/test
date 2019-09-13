@@ -13,6 +13,10 @@ public interface ConclusionService {
 
     Conclusion getByRegApplicationIdLast(Integer id);
 
+    Conclusion getByIdAndRegApplicationId(Integer id, Integer regApplicationId);
+
     Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Pageable pageable);
+
+    Conclusion save(Conclusion conclusion);
 
 }
