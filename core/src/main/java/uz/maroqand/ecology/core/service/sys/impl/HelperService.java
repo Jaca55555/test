@@ -11,6 +11,7 @@ import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.Activity;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
+import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.sys.Country;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
@@ -22,6 +23,7 @@ import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.expertise.ProjectDeveloperService;
 import uz.maroqand.ecology.core.service.sys.CountryService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
@@ -51,6 +53,7 @@ public class HelperService {
     private final PositionService positionService;
     private final FileService fileService;
     private final CountryService countryService;
+    private final ProjectDeveloperService projectDeveloperService;
 
     public HelperService(
             ObjectExpertiseService objectExpertiseService,
@@ -63,7 +66,8 @@ public class HelperService {
             FileService fileService,
             UserService userService,
             OpfService opfService,
-            CountryService countryService) {
+            CountryService countryService,
+            ProjectDeveloperService projectDeveloperService) {
         this.userService = userService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
@@ -75,6 +79,7 @@ public class HelperService {
         this.positionService = positionService;
         this.fileService = fileService;
         this.countryService = countryService;
+        this.projectDeveloperService = projectDeveloperService;
     }
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -134,6 +139,12 @@ public class HelperService {
         return position!=null? position.getNameTranslation(locale):"";
     }
 
+    @Cacheable(value = "getDeveloperName", key = "{#id}",condition="#id != null",unless="#result == ''")
+    public String getDeveloperName(Integer id) {
+        if(id==null) return "";
+        ProjectDeveloper projectDeveloper = projectDeveloperService.getById(id);
+        return projectDeveloper!=null? projectDeveloper.getName():"";
+    }
 
     /*  expertise   */
     @Cacheable(value = "getObjectExpertise", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
