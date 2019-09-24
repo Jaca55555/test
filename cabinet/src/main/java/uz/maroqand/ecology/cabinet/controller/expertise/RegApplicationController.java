@@ -77,6 +77,7 @@ public class RegApplicationController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final SmsSendService smsSendService;
+    private final ConclusionService conclusionService;
 
     @Autowired
     public RegApplicationController(
@@ -103,7 +104,7 @@ public class RegApplicationController {
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            SmsSendService smsSendService) {
+            SmsSendService smsSendService, ConclusionService conclusionService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -131,6 +132,7 @@ public class RegApplicationController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.smsSendService = smsSendService;
+        this.conclusionService = conclusionService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationList)
@@ -724,7 +726,9 @@ public class RegApplicationController {
             invoiceService.payTest(invoice.getId());
         }*/
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+        regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
         regApplication.setForwardingLogId(forwardingLog.getId());
+        regApplication.setRegistrationDate(new Date());
         regApplication.setPerformerLogId(null);
         regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
@@ -773,6 +777,9 @@ public class RegApplicationController {
         model.addAttribute("conclusionFile", conclusionFile);
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        model.addAttribute("conclusion",conclusion);
 
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("regApplication", regApplication);

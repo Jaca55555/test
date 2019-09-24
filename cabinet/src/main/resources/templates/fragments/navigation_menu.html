@@ -33,12 +33,13 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_MONITORING')"><a href="/expertise/reg/mntr/application/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.regMntrApplicationList}"> </span></a></li>
+
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER,EMPLOYEE_CONTROL')">
                     <label th:text="#{sys_expertise_registry}"></label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER')"><a href="/expertise/applicant/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-format-list-checkbox"></i></span><span class="pcoded-mtext" th:text="#{registry_applicant.list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_MONITORING')"><a href="/expertise/reg/mntr/application/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.regMntrApplicationList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_MONITORING')"><a href="/expertise/conclusion/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.conclusionList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-map-pin"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
 
