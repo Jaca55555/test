@@ -178,7 +178,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">
+                                                                <select class="form-control"  th:field="*{objectId}" required="">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
                                                                 </select>
@@ -503,7 +503,7 @@
                         console.log('response.categoryList='+response.categoryList);
                         $.each(response.categoryList, function (keyCategory, valueCategory) {
                             console.log('valueCategory='+valueCategory);
-                            var options =  $('<optgroup label="'+valueCategory+'">');
+                            var options =  $('<optgroup label="'+getCategoryName(valueCategory)+'">');
                             $.each(response.activityList, function (key, value) {
                                 if(valueCategory === value.category){
                                     var selected = false;
@@ -525,6 +525,16 @@
                     }
                 }
             });
+        }
+
+        function getCategoryName(valueCategory) {
+            switch (valueCategory){
+                case 'CategoryAll': return [[#{sys_categoryAll}]];
+                case 'Category1': return [[#{sys_category1}]];
+                case 'Category2': return [[#{sys_category2}]];
+                case 'Category3': return [[#{sys_category3}]];
+                case 'Category4': return [[#{sys_category4}]];
+            }
         }
 
         function getMaterialList() {
