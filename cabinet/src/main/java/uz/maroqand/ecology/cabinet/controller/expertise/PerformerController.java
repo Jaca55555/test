@@ -421,6 +421,17 @@ public class PerformerController {
         result.put("createdAt",Common.uzbekistanDateFormat.format(comment.getCreatedAt()));
         result.put("userShorName",helperService.getUserLastAndFirstShortById(user.getId()));
         result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "Yangi xabar",
+                "Sizning " + regApplicationId + " raqamli arizangizga habar yozildi",
+                "/reg/application/resume?id=" + regApplicationId,
+                user.getId()
+        );
+
         return result;
     }
 

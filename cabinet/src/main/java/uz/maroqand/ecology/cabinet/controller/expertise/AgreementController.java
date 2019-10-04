@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -27,6 +28,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -58,6 +60,7 @@ public class AgreementController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
     private final ConclusionService conclusionService;
+    private final NotificationService notificationService;
 
     @Autowired
     public AgreementController(
@@ -74,7 +77,7 @@ public class AgreementController {
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            ToastrService toastrService, ConclusionService conclusionService){
+            ToastrService toastrService, ConclusionService conclusionService, NotificationService notificationService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -90,6 +93,7 @@ public class AgreementController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
         this.conclusionService = conclusionService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -254,6 +258,16 @@ public class AgreementController {
             RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
             regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);
+
+            notificationService.create(
+                    regApplication.getPerformerId(),
+                    NotificationType.Expertise,
+                    "Ijrodagi ariza bo'yicha xabar",
+                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
+                    "/reg/application/resume?id=" + regApplication.getId(),
+                    user.getId()
+            );
+
         }
 
         return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;

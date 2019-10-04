@@ -16,11 +16,13 @@ import uz.maroqand.ecology.cabinet.constant.sys.SysTemplates;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.constant.sys.AppealStatus;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.sys.AppealSub;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.AppealService;
 import uz.maroqand.ecology.core.service.sys.AppealSubService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -35,12 +37,14 @@ public class AppealAdminController {
     private final AppealService appealService;
     private final AppealSubService appealSubService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public AppealAdminController(AppealService appealService, AppealSubService appealSubService, UserService userService) {
+    public AppealAdminController(AppealService appealService, AppealSubService appealSubService, UserService userService, NotificationService notificationService) {
         this.appealService = appealService;
         this.appealSubService = appealSubService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(SysUrls.AppealAdminList)
@@ -140,6 +144,16 @@ public class AppealAdminController {
         Integer count = appeal.getShowAdminCommentCount()!=null?appeal.getShowAdminCommentCount():0;
         appeal.setShowAdminCommentCount(count + 1);
         appealService.updateCommentCount(appeal);
+
+        notificationService.create(
+                appeal.getCreatedById(),
+                NotificationType.Expertise,
+                "Yangi xabar",
+                "Sizning " + appeal.getId() + " raqamli murojaatingizga izox qoldirildi.",
+                "/reg/appeal/view?id=" + appeal.getId(),
+                user.getId()
+        );
+
         return "redirect:" + SysUrls.AppealAdminView + "?id=" + appeal.getId();
     }
 }

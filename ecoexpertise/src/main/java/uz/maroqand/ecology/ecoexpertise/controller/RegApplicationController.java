@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
@@ -26,6 +27,7 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.*;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -78,6 +80,7 @@ public class RegApplicationController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final SmsSendService smsSendService;
     private final ConclusionService conclusionService;
+    private final NotificationService notificationService;
 
     @Autowired
     public RegApplicationController(
@@ -105,7 +108,10 @@ public class RegApplicationController {
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            SmsSendService smsSendService, ConclusionService conclusionService) {
+            SmsSendService smsSendService,
+            ConclusionService conclusionService,
+            NotificationService notificationService
+    ) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -135,6 +141,7 @@ public class RegApplicationController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.smsSendService = smsSendService;
         this.conclusionService = conclusionService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -890,6 +897,17 @@ public class RegApplicationController {
         result.put("userShorName",helperService.getUserLastAndFirstShortById(comment.getCreatedById()));
         result.put("message",comment.getMessage());
         result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
+
+        if(regApplication.getPerformerId()!=null){
+            notificationService.create(
+                    regApplication.getPerformerId(),
+                    NotificationType.Expertise,
+                    "Arizachidan xabar keldi",
+                    regApplication.getId() + " raqamli ariza arizachisidan chat orqali xabar yuborildi.",
+                    "/expertise/performer/view?id=" + regApplication.getId(),
+                    user.getId()
+            );
+        }
 
         return result;
     }

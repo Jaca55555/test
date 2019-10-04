@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -26,6 +27,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -55,6 +57,7 @@ public class AgreementCompleteController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ConclusionService conclusionService;
+    private final NotificationService notificationService;
 
     @Autowired
     public AgreementCompleteController(
@@ -71,7 +74,7 @@ public class AgreementCompleteController {
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            ConclusionService conclusionService) {
+            ConclusionService conclusionService, NotificationService notificationService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -86,6 +89,7 @@ public class AgreementCompleteController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.conclusionService = conclusionService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -223,6 +227,23 @@ public class AgreementCompleteController {
             }
             regApplication.setAgreementStatus(LogStatus.Approved);
             regApplicationService.update(regApplication);
+
+            notificationService.create(
+                    regApplication.getCreatedById(),
+                    NotificationType.Expertise,
+                    "Yangi xabar",
+                    "Sizning " + regApplication.getId() + " raqamli arizangizga ko'rib chiqildi",
+                    "/reg/application/resume?id=" + regApplication.getId(),
+                    user.getId()
+            );
+            notificationService.create(
+                    regApplication.getPerformerId(),
+                    NotificationType.Expertise,
+                    "Ijrodagi ariza bo'yicha xabar",
+                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlandi",
+                    "/reg/application/resume?id=" + regApplication.getId(),
+                    user.getId()
+            );
         }
 
         if(agreementStatus == 4){
@@ -230,6 +251,15 @@ public class AgreementCompleteController {
             RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
             regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);
+
+            notificationService.create(
+                    regApplication.getPerformerId(),
+                    NotificationType.Expertise,
+                    "Ijrodagi ariza bo'yicha xabar",
+                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
+                    "/reg/application/resume?id=" + regApplication.getId(),
+                    user.getId()
+            );
         }
 
         return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();
