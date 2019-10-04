@@ -266,6 +266,12 @@ public class PerformerController {
                     user.getId()
             );
         }
+        if(agreementLogs.size()==0){
+            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
+            regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+            regApplication.setStatus(RegApplicationStatus.Process);
+            regApplicationService.update(regApplication);
+        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
     }
 
