@@ -25,6 +25,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
@@ -59,6 +60,7 @@ public class ForwardingController {
     private final ToastrService toastrService;
     private final NotificationService notificationService;
     private final CommentService commentService;
+    private final SmsSendService smsSendService;
 
     @Autowired
     public ForwardingController(
@@ -77,8 +79,8 @@ public class ForwardingController {
             DepartmentService departmentService,
             ToastrService toastrService,
             NotificationService notificationService,
-            CommentService commentService
-    ) {
+            CommentService commentService,
+            SmsSendService smsSendService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -95,6 +97,7 @@ public class ForwardingController {
         this.toastrService = toastrService;
         this.notificationService = notificationService;
         this.commentService = commentService;
+        this.smsSendService = smsSendService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -237,6 +240,8 @@ public class ForwardingController {
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
         notificationService.create(performerId, NotificationType.Expertise, "Ijro uchun ariza yuborildi",id + " raqamli ariza ijro uchun sizga yuborildi","/expertise/performer/view/?id=" + id, user.getId());
+        Client client = clientService.getById(regApplication.getApplicantId());
+        smsSendService.sendSMS(client.getPhone(), "Arizangiz ko'rib chiqish uchun qabul qilindi, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
 
         return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
     }

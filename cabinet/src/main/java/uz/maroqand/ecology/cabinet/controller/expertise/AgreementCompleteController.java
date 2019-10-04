@@ -25,6 +25,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -58,6 +59,7 @@ public class AgreementCompleteController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
+    private final SmsSendService smsSendService;
 
     @Autowired
     public AgreementCompleteController(
@@ -74,7 +76,10 @@ public class AgreementCompleteController {
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            ConclusionService conclusionService, NotificationService notificationService) {
+            ConclusionService conclusionService,
+            NotificationService notificationService,
+            SmsSendService smsSendService
+    ) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -90,6 +95,7 @@ public class AgreementCompleteController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
+        this.smsSendService = smsSendService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -244,6 +250,8 @@ public class AgreementCompleteController {
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );
+            Client client = clientService.getById(regApplication.getApplicantId());
+            smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
         }
 
         if(agreementStatus == 4){

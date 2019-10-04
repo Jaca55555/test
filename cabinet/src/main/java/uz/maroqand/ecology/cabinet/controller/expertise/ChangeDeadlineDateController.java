@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ChangeDeadlineDateService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -29,11 +32,15 @@ public class ChangeDeadlineDateController {
     private final ChangeDeadlineDateService changeDeadlineDateService;
     private final RegApplicationService regApplicationService;
     private final UserService userService;
+    private final SmsSendService smsSendService;
+    private final ClientService clientService;
 
-    public ChangeDeadlineDateController(ChangeDeadlineDateService changeDeadlineDateService, RegApplicationService regApplicationService, UserService userService) {
+    public ChangeDeadlineDateController(ChangeDeadlineDateService changeDeadlineDateService, RegApplicationService regApplicationService, UserService userService, SmsSendService smsSendService, ClientService clientService) {
         this.changeDeadlineDateService = changeDeadlineDateService;
         this.regApplicationService = regApplicationService;
         this.userService = userService;
+        this.smsSendService = smsSendService;
+        this.clientService = clientService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ChangeDeadlineDateList)
@@ -109,6 +116,10 @@ public class ChangeDeadlineDateController {
             RegApplication regApplication = regApplicationService.getById(changeDeadlineDate.getRegApplicationId());
             regApplication.setDeadlineDate(changeDeadlineDate.getAfterDeadlineDate());
             regApplicationService.update(regApplication);
+
+            Client client = clientService.getById(regApplication.getApplicantId());
+            smsSendService.sendSMS(client.getPhone(), " Arizangiz muddati uzaytirildi, ariza raqami ", regApplication.getId(), client.getName());
+
             return "redirect:" + ExpertiseUrls.ChangeDeadlineDateView + "?id=" + changeDeadlineDate.getId();
         }
 

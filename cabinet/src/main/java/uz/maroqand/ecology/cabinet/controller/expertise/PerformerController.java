@@ -31,6 +31,7 @@ import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -67,6 +68,7 @@ public class PerformerController {
     private final ToastrService toastrService;
     private final NotificationService notificationService;
     private final ConclusionService conclusionService;
+    private final SmsSendService smsSendService;
 
     @Autowired
     public PerformerController(
@@ -87,7 +89,7 @@ public class PerformerController {
             CoordinateService coordinateService, CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
             NotificationService notificationService,
-            ConclusionService conclusionService) {
+            ConclusionService conclusionService, SmsSendService smsSendService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -107,6 +109,7 @@ public class PerformerController {
         this.toastrService = toastrService;
         this.notificationService = notificationService;
         this.conclusionService = conclusionService;
+        this.smsSendService = smsSendService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -422,7 +425,7 @@ public class PerformerController {
         result.put("userShorName",helperService.getUserLastAndFirstShortById(user.getId()));
         result.put("commentFiles",comment.getDocumentFiles()!=null && comment.getDocumentFiles().size()>0?comment.getDocumentFiles():"");
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
-
+        Client client = clientService.getById(regApplication.getApplicantId());
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
@@ -431,7 +434,7 @@ public class PerformerController {
                 "/reg/application/resume?id=" + regApplicationId,
                 user.getId()
         );
-
+        smsSendService.sendSMS(client.getPhone(), " Arinangiz bo'yicha xabar mavjud, ariza raqami "+regApplication.getId(), regApplication.getId(), client.getName());
         return result;
     }
 

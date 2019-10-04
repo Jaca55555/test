@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
+import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
+import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
 import uz.maroqand.ecology.core.repository.sys.SmsSendRepository;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 
@@ -22,10 +24,36 @@ import java.util.List;
 public class SmsSendServiceImpl implements SmsSendService {
 
     private final SmsSendRepository smsSendRepository;
+    private final SmsSendOauth2Service smsSendOauth2Service;
 
     @Autowired
-    public SmsSendServiceImpl(SmsSendRepository smsSendRepository) {
+    public SmsSendServiceImpl(SmsSendRepository smsSendRepository, SmsSendOauth2Service smsSendOauth2Service) {
         this.smsSendRepository = smsSendRepository;
+        this.smsSendOauth2Service = smsSendOauth2Service;
+    }
+
+    @Override
+    public Integer sendSMS(String mobilePhone, String message,Integer regApplicationId,String name) {
+        String phoneNumber = getPhoneNumber(mobilePhone);
+        if (phoneNumber.isEmpty()){
+            return 3;
+        }
+
+        SmsSend smsSend = new SmsSend();
+        smsSend.setMessage(message);
+        smsSend.setFullName(name);
+        smsSend.setStatus(SmsSendStatus.SCHEDLD);
+        smsSend.setDeleted(Boolean.FALSE);
+        smsSend.setPhone(phoneNumber);
+        smsSend.setRegApplicationId(regApplicationId);
+        save(smsSend);
+
+        AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck();
+        smsSendOauth2Service.createContact(authTokenInfo,smsSend);
+
+        SmsSend smsSendSent = smsSendOauth2Service.createSendTask(authTokenInfo,smsSend);
+        update(smsSendSent);
+        return 1;
     }
 
     @Override

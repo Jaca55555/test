@@ -26,6 +26,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
@@ -191,23 +192,44 @@ public class SmsSendOauth2Service {
         return smsSend;
     }
 
-    public AuthTokenInfo getAccessTokenCheck(AuthTokenInfo authTokenInfo) {
+    private static AuthTokenInfo authToken;
+    private static Long tokenRefreshTime = 0L;
 
-        if (authTokenInfo != null) {
-            if (authTokenInfo.getExpires_in() < 2) {
+    public AuthTokenInfo getAccessTokenCheck() {
+        Calendar calendar = Calendar.getInstance();
+        if (authToken == null) {
+            createToken();
+        } else {
+            Long difference = calendar.getTimeInMillis()/1000-tokenRefreshTime;
+            logger.info("  token expires_in: {} , difference: {} ", authToken.getExpires_in(), difference);
+            if(authToken.getExpires_in()<2 || authToken.getExpires_in()-difference<2){
                 try {
-                    // TODO : tekshirish kerak. qancha sekund
                     Thread.sleep(1000L);
-                    authTokenInfo = sendTokenRequest();
-                } catch (Exception e) {
-                    authTokenInfo = sendTokenRequest();
+                    createToken();
+                }catch (Exception e){
+                    createToken();
                 }
             }
-        } else {
-            authTokenInfo = sendTokenRequest();
         }
 
-        return authTokenInfo;
+        if(authToken == null || authToken.getResponseCode().equals("ERROR")){
+            createToken();
+        }
+
+        return authToken;
+    }
+
+    private synchronized void createToken(){
+        logger.info("       createToken     ");
+        Calendar calendar = Calendar.getInstance();
+        AuthTokenInfo authTokenInfo = sendTokenRequest();
+        if(!authTokenInfo.getResponseCode().equals("OK")){
+            authTokenInfo = sendTokenRequest();
+        }
+        if(authTokenInfo.getResponseCode().equals("OK")){
+            authToken = authTokenInfo;
+            tokenRefreshTime = calendar.getTimeInMillis()/1000;
+        }
     }
 
     private AuthTokenInfo sendTokenRequest(){

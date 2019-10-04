@@ -96,8 +96,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         smsSend.setRegApplicationId(regApplicationId);
         smsSendService.save(smsSend);
         System.out.println("sms ketdi");
-        AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck(null);
-        authTokenInfo = smsSendOauth2Service.getAccessTokenCheck(authTokenInfo);
+        AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck();
         smsSendOauth2Service.createContact(authTokenInfo,smsSend);
         SmsSend smsSendSent = smsSendOauth2Service.createSendTask(authTokenInfo,smsSend);
         smsSendService.update(smsSendSent);

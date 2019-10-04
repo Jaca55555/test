@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
@@ -31,6 +30,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -64,6 +64,7 @@ public class ConfirmController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
     private final NotificationService notificationService;
+    private final SmsSendService smsSendService;
 
     @Autowired
     public ConfirmController(
@@ -80,7 +81,7 @@ public class ConfirmController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
-            NotificationService notificationService){
+            NotificationService notificationService, SmsSendService smsSendService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -95,6 +96,7 @@ public class ConfirmController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
         this.notificationService = notificationService;
+        this.smsSendService = smsSendService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -237,6 +239,8 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
+        Client client = clientService.getById(regApplication.getApplicantId());
+        smsSendService.sendSMS(client.getPhone(), "Arizangiz tasdiqlandi keyingi bosqishga o'tishingiz mumkin, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
         return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
     }
 

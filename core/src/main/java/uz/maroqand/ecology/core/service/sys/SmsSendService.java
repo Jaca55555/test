@@ -9,6 +9,8 @@ import java.util.Date;
 
 public interface SmsSendService {
 
+    Integer sendSMS(String mobilePhone, String message, Integer regApplicationId, String name);
+
     SmsSend save(SmsSend smsSend);
 
     SmsSend getById(Integer id);
