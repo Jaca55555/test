@@ -7,10 +7,9 @@ import java.util.Map;
 
 public enum AppealType {
 
-    Payment(0,"appeal_type.payment"),
-    Payment1(1,"appeal_type.payment1"),
-    Payment2(2,"appeal_type.payment2"),
-    Payment3(3,"appeal_type.payment3");
+    Applications(0,"appeal_type.applications"),
+    Suggestions(1,"appeal_type.suggestions"),
+    Complaints(2,"appeal_type.complaints");
 
     private Integer id;
     private String name;
