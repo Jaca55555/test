@@ -17,17 +17,13 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Coordinate;
-import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
-import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -58,6 +54,7 @@ public class AgreementCompleteController {
     private final ProjectDeveloperService projectDeveloperService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ConclusionService conclusionService;
 
     @Autowired
     public AgreementCompleteController(
@@ -73,8 +70,8 @@ public class AgreementCompleteController {
             InvoiceService invoiceService,
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository
-    ) {
+            CoordinateLatLongRepository coordinateLatLongRepository,
+            ConclusionService conclusionService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -88,6 +85,7 @@ public class AgreementCompleteController {
         this.projectDeveloperService = projectDeveloperService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.conclusionService = conclusionService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -179,6 +177,10 @@ public class AgreementCompleteController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
+        model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
+        model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
+
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant",applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
@@ -225,6 +227,8 @@ public class AgreementCompleteController {
 
         if(agreementStatus == 4){
             regApplication.setAgreementStatus(LogStatus.Denied);
+            RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
+            regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);
         }
 

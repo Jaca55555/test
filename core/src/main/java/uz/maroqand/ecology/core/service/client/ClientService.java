@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.client;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.ui.Model;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
@@ -36,5 +37,7 @@ public interface ClientService {
             Date endDate,
             Pageable pageable
     );
+
+    void clientView(Integer applicantId, Model model);
 
 }

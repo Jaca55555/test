@@ -24,8 +24,8 @@
                     <div class="form-group col-md-10 offset-1">
                         <div class="task-attachment" >
                             <p th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</p>
-                            <div class="col-md-12 row" id="files-div-reg-log">
-                                <a href="#upload-file-regApp_log" class="col-md-3 pb-3 p-0" onclick="openRegLogModalFile()">
+                            <div class="col-md-12 row" id="files-div-conclusion-file">
+                                <a href="#upload-file-conclusion" class="col-md-3 pb-3 p-0" onclick="openUploadConclusionFileModal()">
                                     <div class="add-file">
                                         <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                                         <span id="percentage"><span id="percentage-num"></span>%</span>
@@ -120,7 +120,7 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="upload-file-regApp_log" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="upload-file-conclusion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -131,56 +131,56 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="file-name-reg-log">
+                            <label for="file-name-conclusion-file">
                                 <span th:text="#{sys_file_name}"></span>
                                 <span class="required">*</span>
                             </label>
-                            <input class="form-control" type="text" id="file-name-reg-log" required="" />
+                            <input class="form-control" type="text" id="file-name-conclusion-file" required="" />
                         </div>
                         <div class="input-group">
                           <span class="input-group-btn">
                             <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
                                <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
                             </span>
-                            <input name="uploaded_file" id="file-input-reg-log" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                            <input name="uploaded_file" id="file-input-conclusion-file" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
                           </span>
-                            <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescriptionRegLog" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+                            <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescriptionConclusionFile" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
 
                         </span>
                         </div>
                     </div>
                     <div class="modal-footer" style="text-align: center;">
-                        <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadRegLogFile()"></button>
+                        <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadConclusionFile()"></button>
                     </div>
                 </div>
             </div>
         </div>
 
         <script type="text/javascript" th:inline="javascript">
-            var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload}]];
+            var uploadConclusionFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
             var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
-            var regApplicationId = [[${performerLog.id}]];
+            var performerLogId = [[${performerLog.id}]];
 
-            function openRegLogModalFile() {
-                $('#upload-file-regApp_log').modal('show');
+            function openUploadConclusionFileModal() {
+                $('#upload-file-conclusion').modal('show');
             }
 
-            function uploadRegLogFile(){
-                $('#file-name-reg-log').parsley().validate();
-                if(!$('#file-name-reg-log').val() || !$('#file-input-reg-log').val()){
-                    $('#fileDescriptionRegLog').addClass('is-invalid');
+            function uploadConclusionFile(){
+                $('#file-name-conclusion-file').parsley().validate();
+                if(!$('#file-name-conclusion-file').val() || !$('#file-input-conclusion-file').val()){
+                    $('#fileDescriptionConclusionFile').addClass('is-invalid');
                     return;
                 }
-                $('#upload-file-regApp_log').modal('hide');
+                $('#upload-file-conclusion').modal('hide');
 
                 var form = new FormData();
-                form.append("id", regApplicationId);
-                form.append("file", $('#file-input-reg-log').prop('files')[0]);
-                form.append("file_name", $('#file-name-reg-log').val());
+                form.append("id", performerLogId);
+                form.append("file", $('#file-input-conclusion-file').prop('files')[0]);
+                form.append("file_name", $('#file-name-conclusion-file').val());
                 form.append("_csrf", $('#global_csrf').val());
 
                 $.ajax({
-                    url: uploadFileAjaxUrl,
+                    url: uploadConclusionFileAjaxUrl,
                     type: "POST",
                     data: form,
                     processData: false,
@@ -190,7 +190,7 @@
                         console.log(response);
                         if(response.status == 1) {
 
-                            $('#files-div-reg-log').append(
+                            $('#files-div-conclusion-file').append(
                                 '<div class="col-md-3 pb-3 p-0 ml-1" id="file-block-'+response.fileId+'">\n' +
                                 '   <div class="file">\n' +
                                 '       <a href="'+response.link+'">\n' +
@@ -227,7 +227,7 @@
 
             function deleteFile(fileId) {
                 var form = new FormData();
-                form.append("id", regApplicationId);
+                form.append("id", performerLogId);
                 form.append("fileId", fileId);
                 form.append("_csrf", $('#global_csrf').val());
 

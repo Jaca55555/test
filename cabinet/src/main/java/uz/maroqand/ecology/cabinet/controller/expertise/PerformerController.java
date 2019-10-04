@@ -62,6 +62,7 @@ public class PerformerController {
     private final ChangeDeadlineDateService changeDeadlineDateService;
     private final CommentService commentService;
     private final CoordinateRepository coordinateRepository;
+    private final CoordinateService coordinateService;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
     private final NotificationService notificationService;
@@ -83,7 +84,7 @@ public class PerformerController {
             ChangeDeadlineDateService changeDeadlineDateService,
             CommentService commentService,
             CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository,
+            CoordinateService coordinateService, CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
             NotificationService notificationService,
             ConclusionService conclusionService) {
@@ -101,6 +102,7 @@ public class PerformerController {
         this.changeDeadlineDateService = changeDeadlineDateService;
         this.commentService = commentService;
         this.coordinateRepository = coordinateRepository;
+        this.coordinateService = coordinateService;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
         this.notificationService = notificationService;
@@ -173,52 +175,30 @@ public class PerformerController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
+        clientService.clientView(regApplication.getApplicantId(), model);
+        coordinateService.coordinateView(regApplicationId, model);
 
-        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-
-        Client applicant = clientService.getById(regApplication.getApplicantId());
-        switch (applicant.getType()){
-            case Individual:
-                model.addAttribute("individual", new IndividualDto(applicant)); break;
-            case LegalEntity:
-                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
-            case ForeignIndividual:
-                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
-            case IndividualEnterprise:
-                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
-        }
-
-        List<ChangeDeadlineDate> changeDeadlineDateList = changeDeadlineDateService.getListByRegApplicationId(regApplicationId);
-
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
-        if(coordinate != null){
-            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
-            model.addAttribute("coordinate", coordinate);
-            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
-        }
         if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
+            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogIdNext()));
             model.addAttribute("action_url", ExpertiseUrls.PerformerActionEdit);
-        }else {
+        } else {
+            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
-
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
-
-        model.addAttribute("changeDeadlineDateList", changeDeadlineDateList);
+        model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
-        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant", applicant);
+
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("regApplicationLog",performerLog);
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
-        model.addAttribute("performerLog", performerLog);
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
@@ -297,7 +277,7 @@ public class PerformerController {
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogIdNext());
         regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(performerStatus), comment, user.getId());
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
@@ -306,11 +286,9 @@ public class PerformerController {
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementStatus(LogStatus.Initial);
         regApplication.setPerformerLogId(regApplicationLog.getId());
-        regApplicationService.update(regApplication);
 
         Set<Integer> agreementLogs = regApplication.getAgreementLogs();
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
-
         for (RegApplicationLog agreementLog :agreementLogList){
             if(!agreementLog.getStatus().equals(LogStatus.Initial)){
                 RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
@@ -331,9 +309,15 @@ public class PerformerController {
                     user.getId()
             );
         }
-
-        regApplication.setAgreementCompleteLogId(null);
         regApplication.setAgreementLogs(agreementLogs);
+
+        if(agreementLogs.size()==0){
+            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
+            regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
+            regApplication.setStatus(RegApplicationStatus.Process);
+        }else {
+            regApplication.setAgreementCompleteLogId(null);
+        }
         regApplicationService.update(regApplication);
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();

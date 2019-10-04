@@ -18,10 +18,7 @@ import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Coordinate;
-import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -60,6 +57,7 @@ public class AgreementController {
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
+    private final ConclusionService conclusionService;
 
     @Autowired
     public AgreementController(
@@ -76,7 +74,7 @@ public class AgreementController {
             ProjectDeveloperService projectDeveloperService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            ToastrService toastrService){
+            ToastrService toastrService, ConclusionService conclusionService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -91,6 +89,7 @@ public class AgreementController {
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
+        this.conclusionService = conclusionService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -193,6 +192,10 @@ public class AgreementController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
+        model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
+        model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
+
         model.addAttribute("applicant", applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
@@ -241,14 +244,16 @@ public class AgreementController {
         }
 
         if(agreementStatus == 4){
-            regApplication.setAgreementStatus(LogStatus.Denied);
-            regApplicationService.update(regApplication);
-
             for(RegApplicationLog agreementLog :agreementLogList){
                 if(agreementLog.getStatus().equals(LogStatus.New)){
                     regApplicationLogService.update(agreementLog, LogStatus.Initial, agreementLog.getComment(), agreementLog.getUpdateById());
                 }
             }
+
+            regApplication.setAgreementStatus(LogStatus.Denied);
+            RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
+            regApplication.setPerformerLogIdNext(performerLogNext.getId());
+            regApplicationService.update(regApplication);
         }
 
         return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;

@@ -5,7 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import uz.maroqand.ecology.core.entity.expertise.Coordinate;
+import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.expertise.CoordinateService;
 
@@ -21,10 +24,12 @@ import java.util.List;
 public class CoordinateServiceImpl implements CoordinateService {
 
     private final CoordinateRepository coordinateRepository;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
 
     @Autowired
-    public CoordinateServiceImpl(CoordinateRepository coordinateRepository){
+    public CoordinateServiceImpl(CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository){
         this.coordinateRepository = coordinateRepository;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
     public Page<Coordinate> findFiltered(Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable) {
@@ -81,5 +86,14 @@ public class CoordinateServiceImpl implements CoordinateService {
 
     public Coordinate findById(Integer id){
         return coordinateRepository.getOne(id);
+    }
+
+    public void coordinateView(Integer regApplicationId, Model model){
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        if(coordinate != null){
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
+        }
     }
 }

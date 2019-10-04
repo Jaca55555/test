@@ -193,6 +193,9 @@ public class RegApplication {
     @Column(name = "performer_log_id")
     private Integer performerLogId;
 
+    @Column(name = "performer_log_id_next")
+    private Integer performerLogIdNext;
+
     /*@Column(name = "agreement_log_id")
     private Integer agreementLogId;*/
 
