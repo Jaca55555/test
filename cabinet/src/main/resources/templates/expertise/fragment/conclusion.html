@@ -95,8 +95,8 @@
         margin-right: calc(2 * var(--ck-spacing-large));
     }
 </style>
-<div class="card-block">
-    <p th:utext="${conclusion.htmlText}"></p>
+<div class="card-block" id="conclusion-for-print">
+    <p th:utext="${conclusion!=null? conclusion.htmlText:''}"></p>
 </div>
 
 </body>

@@ -189,7 +189,7 @@ public class PerformerController {
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
+        Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
 
@@ -212,7 +212,8 @@ public class PerformerController {
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "performerStatus")Integer performerStatus
+            @RequestParam(name = "performerStatus")Integer performerStatus,
+            @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -233,6 +234,7 @@ public class PerformerController {
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementStatus(LogStatus.Initial);
+        regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
 
         List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
@@ -262,7 +264,8 @@ public class PerformerController {
     public String getPerformerActionEditMethod(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "performerStatus")Integer performerStatus
+            @RequestParam(name = "performerStatus")Integer performerStatus,
+            @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -289,6 +292,7 @@ public class PerformerController {
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementStatus(LogStatus.Initial);
         regApplication.setPerformerLogId(regApplicationLog.getId());
+        regApplication.setConclusionOnline(conclusionOnline);
 
         Set<Integer> agreementLogs = regApplication.getAgreementLogs();
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
@@ -330,41 +334,41 @@ public class PerformerController {
     @ResponseBody
     public HashMap<String,Object> saveConclusion(
             @RequestParam(name = "regApplicationId") Integer regApplicationId,
-            @RequestParam(name = "conclusionId") Integer conclusionId,
             @RequestParam(name = "htmlText") String htmlText
     ){
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
-        result.put("status",1);
-        htmlText = htmlText.replaceAll("figure","div");
-        System.out.println("keldi");
+
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
-        if (regApplication==null){
-            System.out.println("keldi1");
-            result.put("status",0);
-            return result;
-        }
-        Conclusion conclusionNew = null;
-        if (conclusionId!=0){
-            conclusionNew = conclusionService.getByIdAndRegApplicationId(conclusionId,regApplicationId);
-            if (conclusionNew==null){
-                System.out.println("keldi2");
-                result.put("status",0);
-                return result;
-            }
-            conclusionNew.setUpdateAt(new Date());
-            conclusionNew.setUpdateById(user.getId());
-            conclusionNew.setHtmlText(htmlText.trim());
-            conclusionService.save(conclusionNew);
+        if (regApplication == null || !regApplication.getPerformerId().equals(user.getId())){
+            result.put("status",1);
             return result;
         }
 
-        conclusionNew = new Conclusion();
-        conclusionNew.setRegApplicationId(regApplicationId);
-        conclusionNew.setCreatedById(user.getId());
-        conclusionNew.setCreatedAt(new Date());
-        conclusionNew.setHtmlText(htmlText);
-        conclusionService.save(conclusionNew);
+        Conclusion conclusion = null;
+        if(regApplication.getConclusionId() != null){
+            conclusion = conclusionService.getById(regApplication.getConclusionId());
+        }
+        if(conclusion == null){
+            conclusion = new Conclusion();
+            conclusion.setCreatedById(user.getId());
+            conclusion.setCreatedAt(new Date());
+        }
+
+        htmlText = htmlText.replaceAll("figure","div");
+        conclusion.setUpdateAt(new Date());
+        conclusion.setUpdateById(user.getId());
+        conclusion.setHtmlText(htmlText.trim());
+
+        conclusion.setRegApplicationId(regApplicationId);
+        conclusion.setHtmlText(htmlText);
+        conclusion = conclusionService.save(conclusion);
+
+
+        regApplication.setConclusionId(conclusion.getId());
+        regApplicationService.update(regApplication);
+
+        result.put("status",1);
         return result;
     }
 

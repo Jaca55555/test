@@ -147,7 +147,7 @@
 </script>
 
 <script type="text/javascript" th:inline="javascript">
-
+    var conclusionId= [[${conclusionId}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
     });
@@ -169,6 +169,10 @@
         $('textarea.max-textarea').maxlength({
             alwaysShow: true
         });
+
+        if(conclusionId === 0){
+            saveConculision();
+        }
     });
     function openInputFile() {
         document.getElementById("file-input").click();
@@ -214,7 +218,6 @@
     function saveConculision() {
         var form = new FormData();
         form.append("regApplicationId",[[${regApplication.id}]]);
-        form.append("conclusionId",[[${conclusionId}]]);
         form.append("htmlText",$('#document-editor__editable').html());
         form.append("_csrf", $("#global_csrf").val());
 
@@ -362,6 +365,14 @@
                 }
             });
         }
+    });
+
+    $( "#conclusionOnline" ).on( "click", function () {
+        console.log("--conclusionOnline--");
+    });
+
+    $( "#conclusionScanned" ).on( "click", function () {
+        console.log("--conclusionScanned--");
     });
 
 </script>

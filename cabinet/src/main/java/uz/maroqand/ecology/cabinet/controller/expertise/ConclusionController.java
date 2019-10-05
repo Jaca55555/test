@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;

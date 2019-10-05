@@ -56,8 +56,7 @@ public class AgreementController {
     private final RegApplicationLogService regApplicationLogService;
     private final InvoiceService invoiceService;
     private final ProjectDeveloperService projectDeveloperService;
-    private final CoordinateRepository coordinateRepository;
-    private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final CoordinateService coordinateService;
     private final ToastrService toastrService;
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
@@ -75,9 +74,11 @@ public class AgreementController {
             RegApplicationLogService regApplicationLogService,
             InvoiceService invoiceService,
             ProjectDeveloperService projectDeveloperService,
-            CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository,
-            ToastrService toastrService, ConclusionService conclusionService, NotificationService notificationService){
+            CoordinateService coordinateService,
+            ToastrService toastrService,
+            ConclusionService conclusionService,
+            NotificationService notificationService
+    ){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -89,8 +90,7 @@ public class AgreementController {
         this.regApplicationLogService = regApplicationLogService;
         this.invoiceService = invoiceService;
         this.projectDeveloperService = projectDeveloperService;
-        this.coordinateRepository = coordinateRepository;
-        this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.coordinateService = coordinateService;
         this.toastrService = toastrService;
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
@@ -177,33 +177,13 @@ public class AgreementController {
             return "redirect:" + ExpertiseUrls.AgreementList;
         }
 
-        Client applicant = clientService.getById(regApplication.getApplicantId());
-        switch (applicant.getType()){
-            case Individual:
-                model.addAttribute("individual", new IndividualDto(applicant)); break;
-            case LegalEntity:
-                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
-            case ForeignIndividual:
-                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
-            case IndividualEnterprise:
-                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
-        }
+        clientService.clientView(regApplication.getApplicantId(), model);
+        coordinateService.coordinateView(regApplicationId, model);
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
-        if(coordinate != null){
-            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
-            model.addAttribute("coordinate", coordinate);
-            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
-        }
-
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplicationId);
-        model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
-        model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
-
-        model.addAttribute("applicant", applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplicationId));
         model.addAttribute("regApplicationLog", regApplicationLog);
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));

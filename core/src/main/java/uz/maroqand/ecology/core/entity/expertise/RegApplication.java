@@ -170,6 +170,12 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStep step;
 
+    @Column(name = "conclusion_online",columnDefinition = "boolean DEFAULT true")
+    private Boolean conclusionOnline = true;
+
+    @Column(name = "conclusion_id")
+    private Integer conclusionId;
+
     //true - byudjet tashkilot
     @Column(name = "budget",columnDefinition = "boolean")
     private Boolean budget;

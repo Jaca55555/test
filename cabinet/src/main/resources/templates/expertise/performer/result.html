@@ -22,6 +22,30 @@
                         <textarea class="form-control max-textarea" maxlength="255" rows="4" id="comment" name="comment" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
                     </div>
                     <div class="form-group col-md-10 offset-1">
+                        <label th:text="#{sys_performer.conclusionType}">Xulosa turi:</label>
+                        <div class="form-group d-inline">
+                            <div class="radio d-inline">
+                                <input type="radio" name="conclusionOnline" id="conclusionOnline" value="true" th:checked="${regApplication.conclusionOnline}" required="required" />
+                                <label for="conclusionOnline" class="cr" th:text="#{sys_performer.conclusionOnlineTrue}">Onlayn</label>
+                            </div>
+                        </div>
+                        <div class="form-group d-inline">
+                            <div class="radio d-inline">
+                                <input type="radio" name="conclusionOnline" id="conclusionScanned" value="false" th:checked="${!regApplication.conclusionOnline}" required="required" />
+                                <label for="conclusionScanned" class="cr" th:text="#{sys_performer.conclusionOnlineFalse}">Sknerlangan</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group col-md-10 offset-1">
+                        <label th:text="#{sys_performer.conclusionFiles}"></label>
+                        <div class="form-group d-inline">
+                            <input id="myFile" name="myFile" class="miskin-file-input" type="file" required="required" data-parsley-required="true" data-th-attr="data-download-name=*{file!=null ? file.name : ''}, data-download-link=*{file!=null ? T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload+'?file_id='+file.id : ''}, data-url=${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}" data-accept=".pdf" data-max-file-size="20971520" />
+                            <span class="custom-file-control"></span>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group col-md-10 offset-1">
                         <div class="task-attachment" >
                             <p th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</p>
                             <div class="col-md-12 row" id="files-div-conclusion-file">
@@ -251,6 +275,8 @@
                 var progress = Math.round(percent);
                 $('#percentage-num').html(progress);
             }
+
+
 
         </script>
 </body>

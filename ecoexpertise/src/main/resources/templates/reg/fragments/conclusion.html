@@ -96,7 +96,7 @@
     }
 </style>-->
 <div class="card-block">
-    <p th:utext="${conclusion.htmlText}"></p>
+    <p th:utext="${conclusion!=null? conclusion.htmlText:''}"></p>
 </div>
 
 </body>

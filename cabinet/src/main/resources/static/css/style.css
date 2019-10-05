@@ -7221,7 +7221,7 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 
 .radio {
-  padding: 10px 0;
+  padding: 12px 0;
   min-height: auto;
   position: relative;
   margin-right: 5px;
