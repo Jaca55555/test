@@ -25,8 +25,6 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -62,9 +60,7 @@ public class PerformerController {
     private final ProjectDeveloperService projectDeveloperService;
     private final ChangeDeadlineDateService changeDeadlineDateService;
     private final CommentService commentService;
-    private final CoordinateRepository coordinateRepository;
     private final CoordinateService coordinateService;
-    private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final ToastrService toastrService;
     private final NotificationService notificationService;
     private final ConclusionService conclusionService;
@@ -85,11 +81,12 @@ public class PerformerController {
             ProjectDeveloperService projectDeveloperService,
             ChangeDeadlineDateService changeDeadlineDateService,
             CommentService commentService,
-            CoordinateRepository coordinateRepository,
-            CoordinateService coordinateService, CoordinateLatLongRepository coordinateLatLongRepository,
+            CoordinateService coordinateService,
             ToastrService toastrService,
             NotificationService notificationService,
-            ConclusionService conclusionService, SmsSendService smsSendService) {
+            ConclusionService conclusionService,
+            SmsSendService smsSendService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -103,9 +100,7 @@ public class PerformerController {
         this.projectDeveloperService = projectDeveloperService;
         this.changeDeadlineDateService = changeDeadlineDateService;
         this.commentService = commentService;
-        this.coordinateRepository = coordinateRepository;
         this.coordinateService = coordinateService;
-        this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.toastrService = toastrService;
         this.notificationService = notificationService;
         this.conclusionService = conclusionService;
@@ -257,7 +252,7 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
-        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
     @RequestMapping(value = ExpertiseUrls.PerformerActionEdit,method = RequestMethod.POST)
@@ -327,7 +322,7 @@ public class PerformerController {
         }
         regApplicationService.update(regApplication);
 
-        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
     @RequestMapping(ExpertiseUrls.PerformerConclusionSave)

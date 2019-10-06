@@ -31,7 +31,6 @@ import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
-import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.ecoexpertise.mips.i_passport_info.IndividualPassportInfoResponse;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -53,7 +52,6 @@ import java.util.*;
 public class RegApplicationController {
 
     private final UserService userService;
-    private final UserAdditionalService userAdditionalService;
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
@@ -85,13 +83,14 @@ public class RegApplicationController {
     @Autowired
     public RegApplicationController(
             UserService userService,
-            UserAdditionalService userAdditionalService, SoatoService soatoService,
+            SoatoService soatoService,
             OpfService opfService,
             RegApplicationService regApplicationService,
             ClientService clientService,
             ActivityService activityService,
             ObjectExpertiseService objectExpertiseService,
-            MaterialService materialService, ProjectDeveloperService projectDeveloperService,
+            MaterialService materialService,
+            ProjectDeveloperService projectDeveloperService,
             OfferService offerService,
             PaymentService paymentService,
             RequirementService requirementService,
@@ -113,7 +112,6 @@ public class RegApplicationController {
             NotificationService notificationService
     ) {
         this.userService = userService;
-        this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
@@ -774,7 +772,6 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationList;
         }
 
-        //testPay
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         if(invoice == null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
@@ -783,7 +780,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
-        if(regApplication.getForwardingLogId()==null){
+        if(regApplication.getForwardingLogId() == null){
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
             regApplication.setForwardingLogId(regApplicationLog.getId());
             regApplication.setStatus(RegApplicationStatus.Process);
@@ -791,21 +788,13 @@ public class RegApplicationController {
             regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
             regApplicationService.update(regApplication);
         }
-        List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
-        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-        File conclusionFile = new File();
-        if(performerLog!=null && performerLog.getDocumentFiles()!=null && performerLog.getDocumentFiles().size()>0){
-            conclusionFile = performerLog.getDocumentFiles().iterator().next();
-        }
-        model.addAttribute("conclusionFile", conclusionFile);
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        model.addAttribute("conclusion",conclusion);
+        model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplication.getId()));
+        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+        model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 
-        model.addAttribute("regApplication", regApplication);
-        model.addAttribute("commentList", commentList);
         model.addAttribute("invoice", invoice);
-        model.addAttribute("performerLog", performerLog);
+        model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationList);
         model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
         return RegTemplates.RegApplicationStatus;
@@ -890,7 +879,6 @@ public class RegApplicationController {
         }else {
             comment = commentService.create(regApplicationId, CommentType.CHAT, message, user.getId());
         }
-
 
         result.put("status", status);
         result.put("createdAt",comment.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(comment.getCreatedAt()):"");

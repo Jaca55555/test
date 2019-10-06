@@ -29,9 +29,9 @@ public class RegApplicationLog {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reg_application_id", insertable = false, updatable = false)
-    private RegApplication regApplication;
+    private RegApplication regApplication;*/
 
     @Column(name = "reg_application_id")
     private Integer regApplicationId;
@@ -40,9 +40,9 @@ public class RegApplicationLog {
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", insertable = false, updatable = false)
-    private User createdBy;
+    private User createdBy;*/
 
     @Column(name = "created_by")
     private Integer createdById;
@@ -51,9 +51,9 @@ public class RegApplicationLog {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by", insertable = false, updatable = false)
-    private User updateBy;
+    private User updateBy;*/
 
     @Column(name = "update_by")
     private Integer updateById;

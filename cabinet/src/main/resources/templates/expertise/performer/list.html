@@ -56,10 +56,6 @@
                                                     <label for="name" class="control-label" th:text="#{sys_legal_entity_name}">Наименование предприятия</label>
                                                     <input type="text" class="form-control" id="name">
                                                 </div>
-                                                <!--<div class="form-group col-sm-2">
-                                                    <label for="contractNumber" class="control-label" th:text="#{sys_contract_number}">Номер договора</label>
-                                                    <input type="text" class="form-control" id="contractNumber">
-                                                </div>-->
                                                 <div class="form-group col-sm-2">
                                                     <label for="applicationId" class="control-label" th:text="#{reg_application.number}">№ id</label>
                                                     <input type="text" class="form-control" id="applicationId">
@@ -71,7 +67,6 @@
                                                         <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
                                                     </select>
                                                 </div>
-
                                                 <div class="form-group col-sm-4" >
                                                     <label for="regDateBegin" class="control-label" th:text="#{reg_application.regdate}"></label>
                                                     <div class="row">
@@ -83,7 +78,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
 
 
                                                 <div class="form-group col-sm-3">
@@ -101,17 +95,17 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-2">
-                                                    <label for="status" class="control-label" th:text="#{sys_status}"></label>
-                                                    <select id="status" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getPerformerName()}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-2">
                                                     <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
                                                     <select id="subRegionId" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
                                                         <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label for="status" class="control-label" th:text="#{sys_status}"></label>
+                                                    <select id="status" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="${status.getPerformerName()}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-2">

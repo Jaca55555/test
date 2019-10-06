@@ -42,7 +42,7 @@
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
@@ -68,7 +68,7 @@
                                         </ul>
 
                                         <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                            <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
                                                 <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center" id="tab-control-buttons">
@@ -156,71 +156,29 @@
         $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
     });
 
-    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
-    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
-    var regApplicationId = [[${performerLog.id}]];
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     $(document).ready(function () {
-        var srSelector = $('#materialId');
-        srSelector.find('option:selected').show();
-
+        var hash = window.location.hash;
+        if (hash.length === 0) {
+            hash = '#applicant';
+        }
+        $('.nav-link[href="'+hash+'"]').addClass('active');
+        $(hash).addClass('active show');
         $('textarea.max-textarea').maxlength({
             alwaysShow: true
         });
-
         if(conclusionId === 0){
             saveConculision();
         }
     });
-    function openInputFile() {
-        document.getElementById("file-input").click();
-    };
-
-    $('.only-number').keyup(function() {
-        if (/\D/g.test(this.value))
-        {
-            // Filter non-digits from input value.
-            this.value = this.value.replace(/\D/g, '');
-        }
-    });
-
-    function getMaterialList() {
-        var form = new FormData();
-        form.append("objectId", $("#objectId").val());
-        form.append("activityId", $("#activityId").val());
-        form.append("_csrf", $("#global_csrf").val());
-        var srSelector = $('#requirementId');
-        srSelector.find('option:selected').prop('selected',false);
-        srSelector.find('option').hide();
-        var html = '';
-        $.ajax({
-            url: '/reg/application/material',
-            type: "POST",
-            data: form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                console.log(response);
-                $('#category').val(response.category);
-                console.log(response.requirementList.length);
-                if (response.requirementList.length>0){
-                    $.each(response.requirementList, function (index, value) {
-                        $('#requirementId option[value="'+value.id+'"]').show();
-                    });
-                }
-            }
-        });
-    }
 
     function saveConculision() {
         var form = new FormData();
         form.append("regApplicationId",[[${regApplication.id}]]);
         form.append("htmlText",$('#document-editor__editable').html());
         form.append("_csrf", $("#global_csrf").val());
-
         $.ajax({
             url: saveConculisionUrl,
             type: "POST",
@@ -232,99 +190,6 @@
                 console.log(response);
             }
         });
-    }
-
-    function openModalFile() {
-        $('#upload-file-modal').modal('show');
-    }
-
-    function uploadFile(){
-        $('#file-name').parsley().validate();
-        if(!$('#file-name').val() || !$('#file-input').val()){
-            $('#fileDescription').addClass('is-invalid');
-            return;
-        }
-
-        $('#upload-file-modal').modal('hide');
-
-        var form = new FormData();
-        form.append("id", regApplicationId);
-        form.append("file", $('#file-input').prop('files')[0]);
-        form.append("file_name", $('#file-name').val());
-        form.append("_csrf", $('#global_csrf').val());
-
-        $.ajax({
-            url: uploadFileAjaxUrl,
-            type: "POST",
-            data: form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                console.log(response);
-                if(response.status == 1) {
-
-                    $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
-                        '                                                    <div class="file">\n' +
-                        '                                                        <a href="'+response.link+'">\n' +
-                        '                                                            <i class="feather icon-file file-icon"></i>\n' +
-                        '                                                            <span>'+response.name+'</span>\n' +
-                        '                                                        </a>\n' +
-                        '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
-                        '                                                            <i class="feather icon-x"></i>\n' +
-                        '                                                        </button>\n' +
-                        '                                                    </div>\n' +
-                        '                                                </div>');
-                }
-            },
-            beforeSend: function () {
-                $('#plus-icon').hide();
-                $('#upload-gif').show();
-                $('#percentage').show();
-            },
-            complete: function () {
-                $('#upload-gif').hide();
-                $('#percentage').hide();
-                $('#plus-icon').show();
-            },
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress",
-                    uploadProgressHandler,
-                    false
-                );
-
-                return xhr;
-            }
-
-        });
-    }
-
-    function deleteFile(fileId) {
-        var form = new FormData();
-        form.append("id", regApplicationId);
-        form.append("fileId", fileId);
-        form.append("_csrf", $('#global_csrf').val());
-
-        $.ajax({
-            url: deleteFileAjaxUrl,
-            type: "POST",
-            data: form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                if(response.status == 1) {
-                    $('#file-block-' + fileId).remove();
-                }
-            }
-        });
-    }
-
-    function uploadProgressHandler(event){
-        var percent = (event.loaded / event.total) * 100;
-        var progress = Math.round(percent);
-        $('#percentage-num').html(progress);
     }
 
     $('#submitButton').on('click',function () {
@@ -345,21 +210,20 @@
                 success: function (response) {
                     console.log(response);
                     if (response.status=1){
-                        var html='';
-                        html+='<div class="card" >\n' +
-                            '                        <div class="card-block" style="padding: 10px 25px;">\n' +
-                            '                            <div class="row align-items-center justify-content-center">\n' +
-                            '                                <div class="col-auto">\n' +
-                            '                                    <i  class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>\n' +
-                            '                                </div>\n' +
-                            '                                <div class="col">\n' +
-                            '                                    <h5 class="mb-3">'+$("#reason").val()+'</h5>\n' +
-                            '                                    <h6 class="m-b-0">'+response.beforeDate+'</h6>\n' +
-                            '                                </div>\n' +
-                            '                            </div>\n' +
-                            '                        </div>\n' +
-                            '                    </div>';
-                        $('#historyChangeDeadlineDate').append(html);
+                        $('#historyChangeDeadlineDate').append('<div class="card" >\n' +
+                            '<div class="card-block" style="padding: 10px 25px;">\n' +
+                            '   <div class="row align-items-center justify-content-center">\n' +
+                            '       <div class="col-auto">\n' +
+                            '           <i  class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>\n' +
+                            '       </div>\n' +
+                            '       <div class="col">\n' +
+                            '           <h5 class="mb-3">'+$("#reason").val()+'</h5>\n' +
+                            '           <h6 class="m-b-0">'+response.beforeDate+'</h6>\n' +
+                            '       </div>\n' +
+                            '   </div>\n' +
+                            '</div>\n' +
+                            '</div>'
+                        );
                         $('#sendForm').remove();
                     }
                 }

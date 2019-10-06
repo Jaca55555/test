@@ -21,8 +21,6 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -247,9 +245,8 @@ public class AgreementController {
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );
-
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId;
+        return "redirect:"+ExpertiseUrls.AgreementView + "?id=" + regApplication.getId() + "&logId=" + logId + "#result";
     }
 }

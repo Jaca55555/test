@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-10 offset-1">
+    <div class="col-md-10 offset-1" th:if="${#lists.size(performerLog.documentFiles)>0}">
         <div class="task-attachment" >
             <h5 class="mt-lg-5"  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
             <ul class="media-list p-0">

@@ -50,7 +50,7 @@
                                     <span th:text="${files.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
                                 </a>
                                 <div class="text-muted">
-                                    <span th:text="${'Size: '+files.size+ ' byte'}">Size: 1.2Mb</span>
+                                    <span th:text="${'Size: ' + files.size/1024 + ' Kb'}">Size: 1.2Mb</span>
                                 </div>
                             </div>
                         </li>

@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">
                 <div class="col-md-10 offset-1">
-                    <textarea class="p-2" style="width: 100%; resize: none; border-radius: 10px" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
+                    <textarea class="form-control max-textarea" maxlength="255" rows="4" id="message" required="" minlength="3" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
                     <p class="mt-2 mb-0" style="color: black" th:text="#{sys_comment.addFile}">Добавить файл</p>
                     <div class="col-md-12 row" id="files-div-comment">
                         <a href="#upload-file-modal-comment" class="col-md-3 pb-3 p-0" onclick="openCommentModalFile()">
@@ -34,13 +34,13 @@
                         <div id="comments-first"></div>
                         <div class="row" th:each="comment : ${chatList}" th:if="${#lists.size(chatList)>0}">
                             <div class="col-md-2">
-                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
+                                <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18 last-message-user" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
                             </div>
                             <div class="col-md-10 pl-0">
-                                <p class="p-2 mb-1 mt-lg-4" th:text="${comment.message}" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px"></p>
-                                <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
-                                <div style="border-bottom: black 1px dashed">
-                                    <ul class="media-list p-0" th:if="${#lists.size(comment.documentFiles)>0}" th:each="files : ${comment.documentFiles}">
+                                <p class="p-2 mb-1 mt-lg-4 last-message-text" th:text="${comment.message}" ></p>
+                                <p class="text-right last-message-underline" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
+                                <div >
+                                    <ul class="media-list p-0" style="border-bottom: black 1px dashed" th:if="${#lists.size(comment.documentFiles)>0}" th:each="files : ${comment.documentFiles}">
                                         <li class="media d-flex m-b-15">
                                             <div class="m-r-20 file-attach">
                                                 <i class="mdi mdi-file-pdf f-28 text-muted"></i>
@@ -50,7 +50,7 @@
                                                     <span th:text="${files.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
                                                 </a>
                                                 <div class="text-muted">
-                                                    <span th:text="${'Size: '+files.size+ ' byte'}">Size: 1.2Mb</span>
+                                                    <span th:text="${'Size: ' + files.size/1024 + ' Kb'}">Size: 1.2Mb</span>
                                                 </div>
                                             </div>
                                         </li>

@@ -10927,3 +10927,21 @@ div .dt-buttons{
   vertical-align: baseline;
   border-radius: .25rem;
 }
+
+
+.last-message-user {
+  color: white;
+  padding-top: 20%;
+  background-color: #bdc0c3
+}
+
+.last-message-text {
+  width: 100%;
+  border: #7d878c 1px solid;
+  border-radius: 5px;
+  margin-top: 0px !important;
+}
+
+.last-message-underline {
+  margin-bottom: 5px;
+}

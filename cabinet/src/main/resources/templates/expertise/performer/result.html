@@ -6,13 +6,13 @@
 </head>
 <body th:fragment="result">
         <div class="row">
-
             <div class="col-md-6 pr-0" >
                 <h5 th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="form-group col-md-10 offset-1" th:text="#{sys_performer.newConclusionResult}"></h5>
-                <form id="form" method="post" th:action="${action_url}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
+                <form id="form" method="post" th:action="${action_url}" data-parsley-validate="" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
                     <div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusionResult}">Результат заключения</label>
-                        <select class="form-control" name="performerStatus">
+                        <select class="form-control" name="performerStatus" required="required">
+                            <option value="" th:text="#{sys_all}" ></option>
                             <option value="3" th:text="#{sys_performerStatus.approved}" ></option>
                             <option value="4" th:text="#{sys_performerStatus.denied}" ></option>
                             <option value="2" th:text="#{sys_performerStatus.modification}" ></option>
@@ -36,15 +36,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--<div class="form-group col-md-10 offset-1">
-                        <label th:text="#{sys_performer.conclusionFiles}"></label>
-                        <div class="form-group d-inline">
-                            <input id="myFile" name="myFile" class="miskin-file-input" type="file" required="required" data-parsley-required="true" data-th-attr="data-download-name=*{file!=null ? file.name : ''}, data-download-link=*{file!=null ? T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload+'?file_id='+file.id : ''}, data-url=${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}" data-accept=".pdf" data-max-file-size="20971520" />
-                            <span class="custom-file-control"></span>
-                        </div>
-                    </div>-->
-
                     <div class="form-group col-md-10 offset-1">
                         <div class="task-attachment" >
                             <p th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</p>
@@ -71,74 +62,41 @@
                 </form>
 
                 <div th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" style="border-bottom: 1px solid #f4f4f4;margin-top: 20px;margin-bottom: 20px;"></div>
-
                 <object th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" th:include="expertise/fragment/result_statuses :: statuses" th:remove="tag"></object>
             </div>
 
-
             <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">
-                <div class="col-md-10 offset-1">
-
-                    <div class="form-group col-md-10 offset-1" id="historyChangeDeadlineDate">
-                        <h4 th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"><span th:text="#{history_change_deadline_date}"></span></h4>
-                        <div class="card" th:each="deadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0}">
-                            <div class="card-block" style="padding: 10px 25px;">
-                                <div class="row align-items-center justify-content-center">
-                                    <div class="col-auto">
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial}" class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" class="mdi mdi-checkbox-multiple-marked-outline f-30" style="color: #14cc9e"></i>
-                                        <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Denied}" class="mdi mdi-close-box-outline f-30" style="color: #f22012"></i>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="mb-3" th:text="${deadlineDate.reason}"></h5>
-                                        <h6 class="m-b-0"><span th:if="${deadlineDate.beforeDeadlineDate!=null}" th:text="${#dates.format(deadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span><span th:if="${deadlineDate.afterDeadlineDate!=null}" th:text="${' - '+#dates.format(deadlineDate.afterDeadlineDate, 'dd.MM.yyyy')}"></span></h6>
-                                    </div>
+                <div class="form-group col-md-12" id="historyChangeDeadlineDate">
+                    <h4 th:if="${#lists.size(changeDeadlineDateList)>0}" class="text-center"><span th:text="#{history_change_deadline_date}"></span></h4>
+                    <div class="card" th:each="deadlineDate : ${changeDeadlineDateList}" th:if="${#lists.size(changeDeadlineDateList)>0}">
+                        <div class="card-block" style="padding: 10px 25px;">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial}" class="mdi mdi-telegram f-30" style="color: #e0ab0c"></i>
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Approved}" class="mdi mdi-checkbox-multiple-marked-outline f-30" style="color: #14cc9e"></i>
+                                    <i th:if="${deadlineDate.status==T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Denied}" class="mdi mdi-close-box-outline f-30" style="color: #f22012"></i>
+                                </div>
+                                <div class="col">
+                                    <h5 class="mb-3" th:text="${deadlineDate.reason}"></h5>
+                                    <h6 class="m-b-0"><span th:if="${deadlineDate.beforeDeadlineDate!=null}" th:text="${#dates.format(deadlineDate.beforeDeadlineDate, 'dd.MM.yyyy')}"></span><span th:if="${deadlineDate.afterDeadlineDate!=null}" th:text="${' - '+#dates.format(deadlineDate.afterDeadlineDate, 'dd.MM.yyyy')}"></span></h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group col-md-10 offset-1" id="sendForm" th:if="${changeDeadlineDate==null || (changeDeadlineDate!=null and changeDeadlineDate.status!=T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial)}">
-                        <label th:text="#{change_deadline_date_query}"></label>
-                        <input type="text" class="form-control" th:placeholder="#{change_deadline_date_reason}" minlength="3" id="reason" required="required">
-                        <button type="button" class="btn btn-primary float-right mt-1 mr-0" id="submitButton">
-                            <i  class="mdi mdi-telegram"></i>
-                            <span th:text="#{sys_send}"></span>
-                        </button>
-                    </div>
-
                 </div>
-
-                <h5 class="mt-lg-5" th:text="#{sys_comment.lastComments}">Последние комментарии к документу</h5>
-                <div class="col-md-12" id="comments">
-                    <div id="comments-first"></div>
-                    <div class="row" th:each="comment : ${lastCommentList}" th:if="${#lists.size(lastCommentList)>0}">
-                        <div class="col-md-2">
-                            <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 20%; background-color: #bdc0c3" th:text="${@helperService.getUserLastAndFirstShortById(comment.createdById)}">AB</span>
+                <div class="form-group col-md-12" id="sendForm" th:if="${changeDeadlineDate==null || (changeDeadlineDate!=null and changeDeadlineDate.status!=T(uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus).Initial)}">
+                    <label th:text="#{change_deadline_date_query}"></label>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control max-textarea" maxlength="255" th:placeholder="#{change_deadline_date_reason}" minlength="3" id="reason" required="required">
                         </div>
-                        <div class="col-md-10 pl-0">
-                            <p class="p-2 mb-1 mt-lg-4" th:text="${comment.message}" style="width: 100%;border: #7d878c 1px solid;border-radius: 5px"></p>
-                            <p class="text-right" th:if="${comment.createdAt!=null}" th:text="${#dates.format(comment.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></p>
-                            <div style="border-bottom: black 1px dashed">
-                                <ul class="media-list p-0" th:if="${#lists.size(comment.documentFiles)>0}" th:each="files : ${comment.documentFiles}">
-                                    <li class="media d-flex m-b-15">
-                                        <div class="m-r-20 file-attach">
-                                            <i class="mdi mdi-file-pdf f-28 text-muted"></i>
-                                        </div>
-                                        <div class="media-body">
-                                            <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CommentFileDownload + '?file_id=' + files.id + '&comment_id=' + comment.id}" class="m-b-5 d-block text-secondary">
-                                                <span th:text="${files.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
-                                            </a>
-                                            <div class="text-muted">
-                                                <span th:text="${'Size: '+files.size+ ' byte'}">Size: 1.2Mb</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="col-md-4 text-left">
+                            <button type="button" class="btn btn-primary btn-block mr-0" id="submitButton"> <i class="mdi mdi-telegram mr-0"></i><span th:text="#{sys_send}"></span> </button>
                         </div>
                     </div>
                 </div>
+
+                <object th:include="expertise/fragment/last_comments_view :: last_comments" th:remove="tag"></object>
 
             </div>
         </div>
@@ -212,8 +170,7 @@
                     cache: false,
                     success: function (response) {
                         console.log(response);
-                        if(response.status == 1) {
-
+                        if(response.status === 1) {
                             $('#files-div-conclusion-file').append(
                                 '<div class="col-md-3 pb-3 p-0 ml-1" id="file-block-'+response.fileId+'">\n' +
                                 '   <div class="file">\n' +
@@ -275,9 +232,6 @@
                 var progress = Math.round(percent);
                 $('#percentage-num').html(progress);
             }
-
-
-
         </script>
 </body>
 </html>

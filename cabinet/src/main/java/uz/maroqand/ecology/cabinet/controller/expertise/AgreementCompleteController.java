@@ -20,8 +20,6 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -164,7 +162,6 @@ public class AgreementCompleteController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
-
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
 
@@ -247,7 +244,7 @@ public class AgreementCompleteController {
             );
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId();
+        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId() + "#action";
     }
 
 }
