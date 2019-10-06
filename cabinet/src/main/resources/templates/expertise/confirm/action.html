@@ -71,8 +71,8 @@
                    <label class="col-form-label"></label>
                </div>
                <div class="col-md-6">
-                   <div th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied || status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="alert alert-danger" th:text="#{sys_message_application_denied}"></div>
-                   <div th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved || status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" class="alert alert-success" th:text="#{sys_message_application_approved}"></div>
+                   <div th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="alert alert-danger" th:text="#{sys_message_application_denied}"></div>
+                   <div th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" class="alert alert-success" th:text="#{sys_message_application_approved}"></div>
                </div>
            </div>
            <input type="hidden" name="id" th:value="${regApplication.id}">

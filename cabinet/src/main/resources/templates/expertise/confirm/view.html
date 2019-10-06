@@ -12,70 +12,6 @@
         .datepicker>.datepicker-days {
             display: block;
         }
-
-        .add-file {
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-        }
-
-        .add-file i {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file {
-            position: relative;
-            background-color: #F4F7FA;
-            border: 1px solid #CED4DA;
-            height: 150px;
-            width: 100%;
-            color: #748892;
-        }
-
-        .file-icon {
-            font-size: 60px;
-            position: relative;
-            float: left;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .file span {
-            position: absolute;
-            bottom: 35px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .file p {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            font-size: 10px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        .file a{
-            color: #748892;
-        }
-
-        .file a:hover {
-            color: #5CB85C;
-        }
     </style>
 </head>
 <body class="layout-6">
@@ -108,7 +44,7 @@
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
@@ -118,7 +54,7 @@
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                            <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
                                                 <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center" id="tab-control-buttons">
@@ -149,6 +85,15 @@
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script type="text/javascript" th:inline="javascript">
+
+    $(document).ready(function() {
+        var hash = window.location.hash;
+        if (hash.length === 0) {
+            hash = '#applicant';
+        }
+        $('.nav-link[href="'+hash+'"]').addClass('active');
+        $(hash).addClass('active show');
+    });
 
     function setAction(actionNumber) {
         if (actionNumber === 1){

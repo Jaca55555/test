@@ -241,7 +241,7 @@ public class ConfirmController {
         );
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz tasdiqlandi keyingi bosqishga o'tishingiz mumkin, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmDenied,method = RequestMethod.POST)
@@ -279,7 +279,7 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
+        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmApprovedEdit,method = RequestMethod.POST)
@@ -304,13 +304,11 @@ public class ConfirmController {
         }
         if (regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
-            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
         }
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user.getId());
 
-        RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(newRegApplicationLog, LogStatus.Approved, comment, user.getId());
-
-        regApplication.setConfirmLogId(newRegApplicationLog.getId());
+        regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
@@ -323,7 +321,8 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + newRegApplicationLog.getId();
+        toastrService.create(user.getId(), ToastrType.Success, "Muvaffaqiyatli.","Ariza statusi o'zgaririldi.");
+        return "redirect:" + ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmDeniedEdit,method = RequestMethod.POST)
@@ -348,13 +347,11 @@ public class ConfirmController {
         }
         if (regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza keyingi bosqichga o'tib bo'lgan, Shartnoma imzolangan.");
-            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId;
+            return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
         }
+        regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user.getId());
 
-        RegApplicationLog newRegApplicationLog = regApplicationLogService.create(regApplication, LogType.Confirm, comment, user);
-        regApplicationLogService.update(newRegApplicationLog, LogStatus.Denied, comment, user.getId());
-
-        regApplication.setConfirmLogId(newRegApplicationLog.getId());
+        regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
@@ -366,7 +363,8 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-        return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + newRegApplicationLog.getId();
+        toastrService.create(user.getId(), ToastrType.Success, "Muvaffaqiyatli.","Ariza statusi o'zgaririldi.");
+        return "redirect:" + ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
     }
 
     @RequestMapping(ExpertiseUrls.ExpertiseFileDownload)
