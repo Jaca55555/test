@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
+import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
 import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.persistence.*;
@@ -32,6 +34,10 @@ public class Conclusion {
     @Column(name = "reg_application_id")
     private Integer regApplicationId;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private ConclusionStatus status;
+
     // № заключения
     private String number;
 
@@ -46,6 +52,13 @@ public class Conclusion {
     // text conslusion
     @Column(columnDefinition = "TEXT")
     private String htmlText;
+
+    /*@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_repo_id", insertable = false, updatable = false)
+    private DocumentRepo documentRepo;*/
+
+    @Column(name = "document_repo_id")
+    private Integer documentRepoId;
 
     /*
      * Technical Fields

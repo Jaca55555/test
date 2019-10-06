@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+    <link rel="stylesheet" href="/static/eco_fo/styles/vendor.css">
+    <link rel="stylesheet" href="/static/eco_fo/styles/main.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-top-wrapper">
+                <div class="container">
+                    <div class="header-top">
+                        <div class="header-top-left">
+                            <div class="contact-number"><span th:text="#{front_phone_for_info}">+99871) 207-07-70 (1001</span></div>
+                            <div class="flex-center media-w-100">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="lang-wrapper">
+                                    <div class="current-lang">Uzb</div>
+                                    <div class="lang-list"><a class="lang-item" href="#">Pyc</a>  <a class="lang-item" href="#">Eng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-top-right">
+                            <ul class="header-top-nav-list">
+                                <li><a href="/login"><span th:text="#{front.one_id}">One ID orqali kirish</span></a>
+                                </li>
+                                <li><a href="/login"><span th:text="#{front.eds}">ERI orqali kirish</span></a>
+                                </li>
+                            </ul>
+                            <form action="">
+                                <div class="form-block">
+                                    <input type="text" th:placeholder="#{front.placeholder}">
+                                    <button></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="contact" id="contact">
+            <div class="container">
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <form action="" method="post">
+                            <div class="contact-form">
+                                <div class="title"><span th:text="#{front.contact-form-title}">Contact Us!</span>
+                                </div>
+                                <div class="form-input-wrapper">
+                                    <div class="form-group w-100">
+                                        <label class="control-label" ><span th:text="#{sys_search.verificationCode}">Tekshiruv kodi</span><span class="required">*</span></label>
+                                        <input type="text" name="code" />
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label class="control-label" ><span th:text="#{sys_search.verificationCode}">Tekshiruv kodi</span><span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" style="padding: 0px;">
+                                                <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetCaptcha}" class="qr-code" />
+                                            </div>
+                                            <div class="input-group-addon btn" id="refresh">
+                                                <span onclick="history.go(0)"><i class="fa fa-refresh"></i></span>
+                                            </div>
+                                            <input class="form-control" aria-describedby="question" id="answer" name="answer" type="text" required="" data-parsley-minlength="5" data-parsley-maxlength="5" th:placeholder="#{pub_information.answer}" maxlength="5" style="height: 42px;" data-parsley-errors-container="#answer-error" />
+                                        </div>
+                                        <div id="answer-error"></div>
+                                    </div>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <input type="hidden" name="uuid" th:value="${uuid}" />
+                                    <button class="form-btn" type="submit"><i class="mdi mdi-telegram mr-2"></i><span th:text="#{front.send-contact-btn}">send</span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <footer>
+            <div class="footer-center">
+                <div class="container">
+                    <div class="footer-center-list">
+                        <div class="footer-center-item">
+                            <div class="img-block">
+                                <img src="/static/eco_fo/img/logo.png" alt="">
+                            </div>
+                            <div class="site-title"><span th:text="#{front.footer_logo_title}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            </div>
+                            <div class="link-site"><a href="http://eco.gov.uz"><span th:text="#{front.footer_logo_info}">Veb saytga o'tish</span></a>
+                            </div>
+                        </div>
+                        <div class="footer-center-item">
+                            <div class="title"><span th:text="#{front.footer_menu_title}">MENU</span>
+                            </div>
+                            <ul class="footer-nav">
+                                <li><a href="#"><span th:text="#{front.menu_home}">BOSH SAHIFA</span></a>
+                                </li>
+                                <li><a href="#"><span th:text="#{front.menu_services}">XIZMATLAR</span></a>
+                                </li>
+                                <li><a href="#"><span th:text="#{front.menu_news}">YANGILIKLAR</span></a>
+                                </li>
+                                <li><a href="#"><span th:text="#{front.menu_statistic}">STATISTIKA</span></a>
+                                </li>
+                                <li><a href="#"><span th:text="#{front.menu_connect}">BOG’LANISH</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-center-item">
+                            <div class="title"><span th:text="#{front.footer_address_title}">“Bog’lanish”</span>
+                            </div>
+                            <div class="address icon">
+                                <div class="address-title"><span th:text="#{front.footer_address_subtitle}">Manzil:</span>
+                                </div>
+                                <div class="address-subtitle"><span th:text="#{front.footer_address}">100047, Toshkent shahar, Yashnоbod tumani, To'y-tepa ko'chasi 2A uy</span>
+                                </div>
+                            </div>
+                            <div class="phone icon">
+                                <div class="item"><span th:text="#{front.footer_phone}">(99871) 207-07-70 (ichki: 1001#),</span>
+                                </div>
+                                <div class="item"><span th:text="#{front.footer_phone}">(99871) 207-07-70 (ichki: 5015#)</span>
+                                </div>
+                            </div>
+                            <div class="email icon">
+                                <div class="item">info@uznature.uz</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="footer-bottom-wrapper">
+                        <a href="#" class="logo">
+                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
+                            <div class="info"><span th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            </div>
+                        </a>
+                        <ul class="social-list">
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="scroll-to-top"></div>
+    </div>
+    <form action="/news" id="newsForm"  style="display: none">
+        <input  name="image" id="image"/>
+        <input name="title" id="title"/>
+        <input name="create" id="create"/>
+        <input name="content" id="content"/>
+        <input type="submit" id="submitButton"/>
+    </form>
+    <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
+    <script th:inline="javascript">
+        var apitext=JSON.parse([[${element}]]);
+        var moreText = [[#{sys_more}]];
+
+        function getId(id,lang) {
+            var newsData=apitext['data'][id];
+            $('#image').val(newsData.image);
+            $('#create').val(newsData.created_at);
+            if (lang==='uz'){
+                $('#title').val(newsData.titleUZ);
+                $('#content').val(newsData.contentUZ);
+            }else{
+                $('#title').val(newsData.titleRU);
+                $('#content').val(newsData.contentRU);
+            }
+            $('#submitButton').click();
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
+            if (apitext['status']) {
+                var html = '';
+                 html += ' <div class="latest-articles-slider" ><div class="swiper-wrapper">';
+                $.each(apitext['data'], function (item, val) {
+                    // console.log("item= " + item + " val=" + val);
+                    if (val.titleUZ != '') {
+                        html += '<div class="swiper-slide">' +
+                            '       <div class="latest-articles-card">' +
+                            '           <div class="header">' +
+                            '                 <div class="header-date">' + val.created_at + '</div>' +
+                            '           </div>' +
+                            '           <div class="info">' +
+                            '               <div class="title" style="overflow: hidden;height: 85px;"><span>' + val.titleUZ + '</span></div>' +
+                            '               <div class="subtitle" style="height: 80px;overflow: hidden;">' +
+                            '                   <span>' + val.descriptionUZ + '</span>\n' +
+                            '               </div>\n' +
+                            '           </div>' +
+                            '           <button class="learn-more" onclick="getId('+item+',\'uz\')"><span>'+moreText+'</span></button>' +
+                            '      </div>\n' +
+                            ' </div>';
+                    }
+                    /*else{
+                        html+='<div class="swiper-slide">' +
+                            '       <div class="latest-articles-card">' +
+                            '           <div class="header">' +
+                            '                 <div class="header-date">'+val.created_at+'</div>' +
+                            '           </div>' +
+                            '           <div class="info">' +
+                            '               <div class="title"><span>'+val.titleRU+'</span></div>' +
+                            '               <div class="subtitle">' +
+                            '                   <span>'+val.descriptionRU+'</span>\n' +
+                            '               </div>\n' +
+                            '           </div>' +
+                            '           <button class="learn-more" onclick="getId('+item+',\'ru\')"><span th:text="#{sys_more}"> davomi...</span></button>' +
+                            '      </div>\n' +
+                            ' </div>';
+                    }*/
+                });
+                html+='</div><div class="latest-articles-button-next"></div><div class="latest-articles-button-prev"></div></div>';
+                $('#sliders').append(html);
+            }
+        });
+    </script>
+    <script src="/static/eco_fo/scripts/vendor.min.js"></script>
+    <script src="/static/eco_fo/scripts/main.js"></script>
+</body>
+</html>

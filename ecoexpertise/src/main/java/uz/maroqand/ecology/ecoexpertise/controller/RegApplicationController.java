@@ -23,6 +23,7 @@ import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -78,6 +79,7 @@ public class RegApplicationController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final SmsSendService smsSendService;
     private final ConclusionService conclusionService;
+    private final DocumentRepoService documentRepoService;
     private final NotificationService notificationService;
 
     @Autowired
@@ -109,6 +111,7 @@ public class RegApplicationController {
             CoordinateLatLongRepository coordinateLatLongRepository,
             SmsSendService smsSendService,
             ConclusionService conclusionService,
+            DocumentRepoService documentRepoService,
             NotificationService notificationService
     ) {
         this.userService = userService;
@@ -139,6 +142,7 @@ public class RegApplicationController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.smsSendService = smsSendService;
         this.conclusionService = conclusionService;
+        this.documentRepoService = documentRepoService;
         this.notificationService = notificationService;
     }
 
@@ -789,7 +793,10 @@ public class RegApplicationController {
             regApplicationService.update(regApplication);
         }
 
-        model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplication.getId()));
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        model.addAttribute("conclusion", conclusion);
+        model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 

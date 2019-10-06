@@ -344,21 +344,13 @@ public class PerformerController {
         if(regApplication.getConclusionId() != null){
             conclusion = conclusionService.getById(regApplication.getConclusionId());
         }
-        if(conclusion == null){
-            conclusion = new Conclusion();
-            conclusion.setCreatedById(user.getId());
-            conclusion.setCreatedAt(new Date());
-        }
-
         htmlText = htmlText.replaceAll("figure","div");
-        conclusion.setUpdateAt(new Date());
-        conclusion.setUpdateById(user.getId());
-        conclusion.setHtmlText(htmlText.trim());
 
-        conclusion.setRegApplicationId(regApplicationId);
-        conclusion.setHtmlText(htmlText);
-        conclusion = conclusionService.save(conclusion);
-
+        if(conclusion == null){
+            conclusion = conclusionService.create(regApplicationId, htmlText.trim(), user.getId());
+        }else {
+            conclusion = conclusionService.update(conclusion, htmlText.trim(), user.getId());
+        }
 
         regApplication.setConclusionId(conclusion.getId());
         regApplicationService.update(regApplication);

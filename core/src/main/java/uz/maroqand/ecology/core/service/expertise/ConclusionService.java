@@ -12,10 +12,12 @@ public interface ConclusionService {
 
     Conclusion getByRegApplicationIdLast(Integer id);
 
-    Conclusion getByIdAndRegApplicationId(Integer id, Integer regApplicationId);
-
     Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Pageable pageable);
 
-    Conclusion save(Conclusion conclusion);
+    Conclusion create(Integer regApplicationId, String text, Integer createdById);
+
+    Conclusion update(Conclusion conclusion, String text, Integer createdById);
+
+    Conclusion complete(Integer conclusionId);
 
 }

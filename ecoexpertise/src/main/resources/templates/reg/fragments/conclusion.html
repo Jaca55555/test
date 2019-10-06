@@ -1,102 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body th:fragment="conclusion">
-<!--<style>
-    .document-editor {
-        border: 1px solid var(&#45;&#45;ck-color-base-border);
-        border-radius: var(&#45;&#45;ck-border-radius);
-        max-height: 700px;
-        display: flex;
-        flex-flow: column nowrap;
-    }
-    .document-editor__toolbar {
-        z-index: 1;
-        box-shadow: 0 0 5px hsla(0, 0%, 0%, .2);
-        border-bottom: 1px solid var(&#45;&#45;ck-color-toolbar-border);
-    }
-    .document-editor__toolbar .ck-toolbar {
-        border: 0;
-        border-radius: 0;
-    }
-    .document-editor__editable-container {
-        padding: calc(2 * var(&#45;&#45;ck-spacing-large));
-        background: #eee;
-        overflow-y: scroll;
-    }
-    .document-editor__editable-container .ck-editor__editable.ck-editor__editable_inline {
-        width: 30cm;
-        min-height: 29.7cm;
-        padding: 1cm 2cm 2cm;
-        border: 1px hsl(0, 0%, 82.7%) solid;
-        border-radius: var(&#45;&#45;ck-border-radius);
-        background: white;
-        box-shadow: 0 0 5px hsla(0, 0%, 0%, .1);
-        margin: 0 auto;
-    }
-    .document-editor .ck-content,
-    .document-editor .ck-heading-dropdown .ck-list .ck-button__label {
-        font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    .document-editor .ck-heading-dropdown .ck-list .ck-button__label {
-        line-height: calc(1.7 * var(&#45;&#45;ck-line-height-base) * var(&#45;&#45;ck-font-size-base));
-        min-width: 6em;
-    }
-    .document-editor .ck-heading-dropdown .ck-list .ck-button:not(.ck-heading_paragraph) .ck-button__label {
-        transform: scale(0.8);
-        transform-origin: left;
-    }
-    .document-editor .ck-content h2,
-    .document-editor .ck-heading-dropdown .ck-heading_heading1 .ck-button__label {
-        font-size: 2.18em;
-        font-weight: normal;
-    }
-    .document-editor .ck-content h2 {
-        line-height: 1.37em;
-        padding-top: .342em;
-        margin-bottom: .142em;
-    }
-    .document-editor .ck-content h3,
-    .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
-        font-size: 1.75em;
-        font-weight: normal;
-        /*color: hsl(203, 100%, 50%);*/
-    }
-    .document-editor .ck-heading-dropdown .ck-heading_heading2.ck-on .ck-button__label {
-        color: var(&#45;&#45;ck-color-list-button-on-text);
-    }
-    .document-editor .ck-content h3 {
-        line-height: 1.86em;
-        padding-top: .171em;
-        margin-bottom: .357em;
-    }
-    .document-editor .ck-content h4,
-    .document-editor .ck-heading-dropdown .ck-heading_heading3 .ck-button__label {
-        font-size: 1.31em;
-        font-weight: bold;
-    }
-    .document-editor .ck-content h4 {
-        line-height: 1.24em;
-        padding-top: .286em;
-        margin-bottom: .952em;
-    }
-    .document-editor .ck-content p {
-        font-size: 1.2em;
-        line-height: 1.63em;
-        padding-top: .5em;
-        margin-bottom: 1.13em;
-    }
-    .document-editor .ck-content blockquote {
-        font-family: Georgia, serif;
-        margin-left: calc(2 * var(&#45;&#45;ck-spacing-large));
-        margin-right: calc(2 * var(&#45;&#45;ck-spacing-large));
-    }
-</style>-->
-<div class="card-block" id="conclusion-for-print">
-    <p th:utext="${conclusion!=null? conclusion.htmlText:''}"></p>
+
+<div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
+    <p th:utext="${conclusion.htmlText}"></p>
+
+    <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
+    <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+    <p th:if="${documentRepo}"><span th:text="#{sys_documentRepo_id}"></span> <span th:text="${documentRepo.id}"></span> </p>
+
+    <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + conclusion.documentRepoId}" class="qr-code" />
+    <p th:if="${documentRepo}"><span th:text="#{sys_documentRepo_code}"></span> <span th:text="${documentRepo.code}"></span> </p>
 </div>
 
 </body>

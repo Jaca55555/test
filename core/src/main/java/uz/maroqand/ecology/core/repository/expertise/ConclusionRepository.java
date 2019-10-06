@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 
-import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 09.07.2019.
@@ -21,6 +20,4 @@ public interface ConclusionRepository extends JpaRepository<Conclusion, Integer>
 
     Conclusion findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer id);
 
-    @Override
-    List<Conclusion> findAll();
 }

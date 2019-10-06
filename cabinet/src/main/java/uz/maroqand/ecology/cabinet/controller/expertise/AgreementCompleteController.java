@@ -208,6 +208,8 @@ public class AgreementCompleteController {
             regApplication.setAgreementStatus(LogStatus.Approved);
             regApplicationService.update(regApplication);
 
+            conclusionService.complete(regApplication.getConclusionId());
+
             notificationService.create(
                     regApplication.getCreatedById(),
                     NotificationType.Expertise,
