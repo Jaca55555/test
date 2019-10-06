@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/select2.min.css}">
-
 </head>
 <body class="layout-6">
 <!-- [ Pre-loader ] start -->
@@ -39,7 +38,7 @@
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
@@ -59,7 +58,7 @@
                                         </ul>
 
                                         <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                            <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
                                                 <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
                                                 <div class="form-group row">
                                                     <div class="col-md-12 text-center" id="tab-control-buttons">
@@ -115,22 +114,21 @@
         $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
     });
 
-    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
-    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
-    var regApplicationId = [[${regApplicationLog.id}]];
+    $('textarea.max-textarea').maxlength({
+        alwaysShow: true
+    });
 
     $(document).ready(function () {
-        var srSelector = $('#materialId');
-        srSelector.find('option:selected').show();
+        var hash = window.location.hash;
+        if (hash.length === 0) {
+            hash = '#applicant';
+        }
+        $('.nav-link[href="'+hash+'"]').addClass('active');
+        $(hash).addClass('active show');
 
         $('#performerId').select2();
         $("#agreements").select2();
-
     });
-
-
-
-
 
     function addAgreementUser() {
         var form = new FormData();
@@ -166,51 +164,10 @@
         });
     }
 
-
-
-
-
-
-    function openInputFile() {
-        document.getElementById("file-input").click();
-    };
-
-    $('.only-number').keyup(function() {
-        if (/\D/g.test(this.value))
-        {
-            // Filter non-digits from input value.
-            this.value = this.value.replace(/\D/g, '');
-        }
-    });
-
-    function getMaterialList() {
-        var form = new FormData();
-        form.append("objectId", $("#objectId").val());
-        form.append("activityId", $("#activityId").val());
-        form.append("_csrf", $("#global_csrf").val());
-        var srSelector = $('#requirementId');
-        srSelector.find('option:selected').prop('selected',false);
-        srSelector.find('option').hide();
-        var html = '';
-        $.ajax({
-            url: '/reg/application/material',
-            type: "POST",
-            data: form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                console.log(response);
-                $('#category').val(response.category);
-                console.log(response.requirementList.length);
-                if (response.requirementList.length>0){
-                    $.each(response.requirementList, function (index, value) {
-                        $('#requirementId option[value="'+value.id+'"]').show();
-                    });
-                }
-            }
-        });
-    }
+    //file upload
+    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
+    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
+    var regApplicationId = [[${regApplicationLog.id}]];
 
     function openModalFile() {
         $('#upload-file-modal').modal('show');
@@ -222,7 +179,6 @@
             $('#fileDescription').addClass('is-invalid');
             return;
         }
-
         $('#upload-file-modal').modal('hide');
 
         var form = new FormData();
@@ -239,21 +195,20 @@
             contentType: false,
             cache: false,
             success: function (response) {
-                console.log(response);
-                if(response.status == 1) {
-
-                    $('#files-div-documentFiles').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
-                        '                                                    <div class="file">\n' +
-                        '                                                        <a href="'+response.link+'">\n' +
-                        '                                                            <i class="feather icon-file file-icon"></i>' +
-                        '                                                            <span>'+response.description+'</span>'+
-                        '                                                            <p>'+response.name+'</p>\n' +
-                        '                                                        </a>\n' +
-                        '                                                        <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
-                        '                                                            <i class="feather icon-x"></i>\n' +
-                        '                                                        </button>\n' +
-                        '                                                    </div>\n' +
-                        '                                                </div>');
+                if(response.status === 1) {
+                    $('#files-div-documentFiles').append(
+                        '<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                        '   <div class="file">\n' +
+                        '       <a href="'+response.link+'">\n' +
+                        '           <i class="feather icon-file file-icon"></i>' +
+                        '           <span>'+response.description+'</span>'+
+                        '           <p>'+response.name+'</p>\n' +
+                        '       </a>\n' +
+                        '       <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
+                        '           <i class="feather icon-x"></i>\n' +
+                        '       </button>\n' +
+                        '   </div>\n' +
+                        '</div>');
                     $('#file-input').val('');
                     $('#file-name').val('');
                 }
@@ -274,10 +229,8 @@
                     uploadProgressHandler,
                     false
                 );
-
                 return xhr;
             }
-
         });
     }
 

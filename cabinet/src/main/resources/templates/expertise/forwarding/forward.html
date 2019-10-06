@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -24,7 +24,7 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.performer_text}" th:selected="${regApplication}"></label>
             </div>
             <div class="col-md-6">
-                <textarea class="form-control" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
+                <textarea class="form-control max-textarea" maxlength="255" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
             </div>
         </div>
 
@@ -60,8 +60,8 @@
             </table>
         </div>
 
-        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}"></h4>
-        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div-documentFiles">
+        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>
+        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;" id="files-div-documentFiles">
             <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
                 <div class="add-file">
                     <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
@@ -115,8 +115,22 @@
                 <textarea class="form-control" readonly="readonly" rows="8" th:text="${regApplicationLog.comment}"></textarea>
             </div>
         </div>
-        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}"></h4>
-        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;">
+        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
+        <div class="col-md-6 offset-3">
+            <table style="width: 100%" >
+                <tr th:each="agreementLog : ${agreementLogList}">
+                    <td style="padding-bottom: 5px;padding-top: 20px;">
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
+                    </td>
+                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
+                        <small th:text="#{sys_logType.agreement}"></small>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>
+        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;">
             <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">
                 <div class="file">
                     <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseFileDownload + '?file_id=' + file.id}">

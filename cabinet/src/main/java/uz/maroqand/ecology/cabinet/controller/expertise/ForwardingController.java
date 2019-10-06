@@ -20,8 +20,6 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
-import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -54,8 +52,7 @@ public class ForwardingController {
     private final ObjectExpertiseService objectExpertiseService;
     private final RegApplicationLogService regApplicationLogService;
     private final ProjectDeveloperService projectDeveloperService;
-    private final CoordinateRepository coordinateRepository;
-    private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final CoordinateService coordinateService;
     private final DepartmentService departmentService;
     private final ToastrService toastrService;
     private final NotificationService notificationService;
@@ -74,13 +71,13 @@ public class ForwardingController {
             ObjectExpertiseService objectExpertiseService,
             RegApplicationLogService regApplicationLogService,
             ProjectDeveloperService projectDeveloperService,
-            CoordinateRepository coordinateRepository,
-            CoordinateLatLongRepository coordinateLatLongRepository,
             DepartmentService departmentService,
+            CoordinateService coordinateService,
             ToastrService toastrService,
             NotificationService notificationService,
             CommentService commentService,
-            SmsSendService smsSendService) {
+            SmsSendService smsSendService
+    ) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -91,8 +88,7 @@ public class ForwardingController {
         this.objectExpertiseService = objectExpertiseService;
         this.regApplicationLogService = regApplicationLogService;
         this.projectDeveloperService = projectDeveloperService;
-        this.coordinateRepository = coordinateRepository;
-        this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.coordinateService = coordinateService;
         this.departmentService = departmentService;
         this.toastrService = toastrService;
         this.notificationService = notificationService;
@@ -169,41 +165,20 @@ public class ForwardingController {
             return "redirect:" + ExpertiseUrls.ForwardingList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
-        if(regApplication.getPerformerLogId()!=null){
-            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            model.addAttribute("performerLog", performerLog);
-        }
+        clientService.clientView(regApplication.getApplicantId(), model);
+        coordinateService.coordinateView(regApplicationId, model);
+
+        model.addAttribute("regApplicationLog", regApplicationLogService.getById(regApplication.getForwardingLogId()));
+        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
 
-        Client applicant = clientService.getById(regApplication.getApplicantId());
-        switch (applicant.getType()){
-            case Individual:
-                model.addAttribute("individual", new IndividualDto(applicant)); break;
-            case LegalEntity:
-                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
-            case ForeignIndividual:
-                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
-            case IndividualEnterprise:
-                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
-        }
-
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
-        if(coordinate != null){
-            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
-            model.addAttribute("coordinate", coordinate);
-            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
-        }
-
-        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
-
-        model.addAttribute("applicant", applicant);
-        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("userList", userService.getEmployeesForForwarding(user.getOrganizationId()));
         model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("regApplicationLog", regApplicationLog);
         return ExpertiseTemplates.ForwardingView;
     }
 
@@ -243,7 +218,7 @@ public class ForwardingController {
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz ko'rib chiqish uchun qabul qilindi, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
 
-        return "redirect:"+ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId();
+        return "redirect:" + ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId() + "#action";
     }
 
     @RequestMapping(value = ExpertiseUrls.ForwardingAgreementAdd,method = RequestMethod.POST)
