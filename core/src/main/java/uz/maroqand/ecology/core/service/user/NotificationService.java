@@ -14,11 +14,13 @@ import java.util.List;
  */
 public interface NotificationService {
 
-    void initialization();
+//    void initialization();
 
     List<Notification> getNotificationList(Integer reviewerId);
 
     List<Notification> getNewNotificationList(Integer reviewerId);
+
+    void viewNewNotificationList(Integer reviewerId);
 
     void create(
             Integer reviewerId,

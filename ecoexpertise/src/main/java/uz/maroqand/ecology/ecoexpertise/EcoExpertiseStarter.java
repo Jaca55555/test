@@ -45,8 +45,8 @@ public class EcoExpertiseStarter {
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();
 
-        NotificationService notificationService = applicationContext.getBean(NotificationService.class);
-        notificationService.initialization();
+//        NotificationService notificationService = applicationContext.getBean(NotificationService.class);
+//        notificationService.initialization();
 
         logger.info("" +
                 "\n" +

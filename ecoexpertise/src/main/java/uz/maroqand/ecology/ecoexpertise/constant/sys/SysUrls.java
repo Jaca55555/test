@@ -13,6 +13,7 @@ public class SysUrls {
 
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationShow = Notification + "/show";
+    public static final String NotificationShowAfter = Notification + "/show/after";
     public static final String NotificationList = Notification + "/list";
     public static final String NotificationListAjax = Notification + "/list_ajax";
 

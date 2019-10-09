@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer>, JpaSpecificationExecutor<Notification> {
 
-    List<Notification> findByStatusAndDeletedFalse(NotificationStatus status);
+    List<Notification> findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus status, Pageable pageable);
 
     Page<Notification> findByReviewerIdAndDeletedFalse(Integer reviewerId, Pageable pageable);
 

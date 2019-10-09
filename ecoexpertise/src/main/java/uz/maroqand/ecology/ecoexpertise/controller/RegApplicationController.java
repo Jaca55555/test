@@ -795,7 +795,9 @@ public class RegApplicationController {
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         model.addAttribute("conclusion", conclusion);
-        model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+        if(conclusion != null){
+            model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+        }
 
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
@@ -823,6 +825,8 @@ public class RegApplicationController {
         }
 
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+        forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Modification,"", user.getId());
+
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerLogId(null);
         regApplication.setAgreementLogs(null);

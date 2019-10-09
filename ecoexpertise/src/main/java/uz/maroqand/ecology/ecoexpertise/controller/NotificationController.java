@@ -82,6 +82,15 @@ public class NotificationController {
         return result;
     }
 
+    @RequestMapping(value = SysUrls.NotificationShowAfter, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> getShowAfter() {
+        User user = userService.getCurrentUserFromContext();
+        notificationService.viewNewNotificationList(user.getId());
+        HashMap<String, Object> result = new HashMap<>();
+        return result;
+    }
+
     @RequestMapping(value = SysUrls.NotificationList)
     public String getNotificationPage() {
 

@@ -690,6 +690,12 @@ function getNotificationList() {
     });
 }
 
+$(".dropdown-toggle").on('click', function() {
+    $.post('/sys/notification/show/after', {_csrf: $('#global_csrf').val()}, function (data) {
+        $("#new-notification-count").hide();
+    });
+});
+
 function appendNotification(value) {
     var notification =
         '<li class="notification"> <div class="media"> <div class="media-body">\n' +

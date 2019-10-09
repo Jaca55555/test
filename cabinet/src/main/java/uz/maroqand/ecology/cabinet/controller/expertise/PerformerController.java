@@ -187,6 +187,7 @@ public class PerformerController {
         Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
+        model.addAttribute("conclusion", conclusion);
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));

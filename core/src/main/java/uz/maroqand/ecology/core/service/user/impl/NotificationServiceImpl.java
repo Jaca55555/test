@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.service.user.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,10 @@ public class NotificationServiceImpl implements NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    private ConcurrentMap<Integer, List<Notification>> notificationMap;
-    private ConcurrentMap<Integer, List<Notification>> newNotificationMap;
+//    private ConcurrentMap<Integer, List<Notification>> notificationMap;
+//    private ConcurrentMap<Integer, List<Notification>> newNotificationMap;
 
-    public void initialization(){
+    /*public void initialization(){
         notificationMap = new ConcurrentHashMap<>();
         newNotificationMap = new ConcurrentHashMap<>();
 
@@ -59,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
                 newNotificationMap.get(notification.getReviewerId()).add(notification);
             }
         }
-    }
+    }*/
 
     public void create(
             Integer reviewerId,
@@ -82,34 +83,61 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setCreatedById(userId);
         notificationRepository.saveAndFlush(notification);
 
-        if (!newNotificationMap.containsKey(notification.getReviewerId())) {
+        /*if (!newNotificationMap.containsKey(notification.getReviewerId())) {
             newNotificationMap.put(notification.getReviewerId(), new LinkedList<>());
         }
-        newNotificationMap.get(notification.getReviewerId()).add(notification);
+        newNotificationMap.get(notification.getReviewerId()).add(notification);*/
     }
 
     public List<Notification> getNotificationList(Integer reviewerId){
-        if (notificationMap.containsKey(reviewerId)) {
+        Pageable limit = PageRequest.of(0,10);
+        return notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.Reviewed, limit);
+        /*if (notificationMap.containsKey(reviewerId)) {
             return notificationMap.get(reviewerId);
         }
-        return new LinkedList<>();
+        return new LinkedList<>();*/
     }
 
     public List<Notification> getNewNotificationList(Integer reviewerId){
+        Pageable limit = PageRequest.of(0,10);
+        return notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.New, limit);
         //get and clear
-        List<Notification> notificationList = new LinkedList<>();
+        /*List<Notification> notificationList = new LinkedList<>();
+        if (newNotificationMap.containsKey(reviewerId)) {
+            notificationList = newNotificationMap.get(reviewerId);
+        }*/
+
+        //put
+        /*if (notificationList.size()>0 && !notificationMap.containsKey(reviewerId)) {
+            notificationMap.put(reviewerId, new LinkedList<>());
+            notificationMap.get(reviewerId).addAll(notificationList);
+        }*/
+
+//        return notificationList;
+    }
+
+    public void viewNewNotificationList(Integer reviewerId){
+        Pageable limit = PageRequest.of(0,10);
+        List<Notification> notificationList = notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.New, limit);
+        for (Notification notification:notificationList){
+            notification.setStatus(NotificationStatus.Reviewed);
+            notification.setUpdateAt(new Date());
+            notificationRepository.save(notification);
+        }
+        //get and clear
+        /*List<Notification> notificationList = new LinkedList<>();
         if (newNotificationMap.containsKey(reviewerId)) {
             notificationList = newNotificationMap.get(reviewerId);
         }
-        newNotificationMap.put(reviewerId, new LinkedList<>());
+        newNotificationMap.put(reviewerId, new LinkedList<>());*/
 
         //put
-        if (notificationList.size()>0 && !notificationMap.containsKey(reviewerId)) {
+        /*if (notificationList.size()>0 && !notificationMap.containsKey(reviewerId)) {
             notificationMap.put(reviewerId, new LinkedList<>());
             notificationMap.get(reviewerId).addAll(notificationList);
-        }
+        }*/
 
-        return notificationList;
+//        return notificationList;
     }
 
     public Page<Notification> findFiltered(

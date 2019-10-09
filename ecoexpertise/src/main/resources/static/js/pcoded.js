@@ -668,7 +668,7 @@ function getToastrList() {
 function getNotificationList() {
     $.post('/sys/notification/show', {_csrf: $('#global_csrf').val()}, function (data) {
         var notification = '';
-
+        console.log('new='+data.newNotificationList.length);
         if(data.newNotificationList.length>0){
             notification = '<li class="n-title"> <p class="m-b-0" >'+data.newNotificationTitle+'</p></li>';
             $("#noti-body").append(notification);
@@ -677,6 +677,7 @@ function getNotificationList() {
         }else {
             $("#new-notification-count").hide();
         }
+
         $.each(data.newNotificationList, function( index, value ){
             appendNotification(value);
         });
@@ -690,6 +691,12 @@ function getNotificationList() {
         });
     });
 }
+
+$(".dropdown-toggle").on('click', function() {
+    $.post('/sys/notification/show/after', {_csrf: $('#global_csrf').val()}, function (data) {
+        $("#new-notification-count").hide();
+    });
+});
 
 function appendNotification(value) {
     var notification =
