@@ -46,7 +46,7 @@ public class SmsSendOauth2Service {
 
     private final String OAUTH_TOKEN_CLIENT_ID        = "clientroom";
     private final String OAUTH_TOKEN_CLIENT_SECRET    = "S3cr3tpa55w0rd";
-    private final String QPM_PASSWORD_GRANT           = "?grant_type=password&username=utkirbek.boltaev@gmail.com&password=q";
+    private final String QPM_PASSWORD_GRANT           = "?grant_type=password&username=sattarov086@gmail.com&password=FTFpmBuI";
 
     private final String RESPONSE_OK = "OK";
     private final String RESPONSE_ERROR = "ERROR";
@@ -216,6 +216,7 @@ public class SmsSendOauth2Service {
             createToken();
         }
 
+        System.out.println("expires_in="+authToken.getExpires_in());
         return authToken;
     }
 
