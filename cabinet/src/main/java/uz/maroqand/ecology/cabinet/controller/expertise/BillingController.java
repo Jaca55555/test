@@ -124,7 +124,7 @@ public class BillingController {
                     invoice.getInvoice(),
                     invoice.getPayeeId() != null ? helperService.getOrganizationName(invoice.getPayeeId(), locale) : "",
                     invoice.getAmount(),
-                    invoice.getCreatedDate(),
+                    Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
                     invoice.getStatus()
             });
         }
