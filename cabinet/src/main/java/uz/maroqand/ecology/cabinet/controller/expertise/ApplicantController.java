@@ -118,7 +118,7 @@ public class ApplicantController {
                     client.getOked(),
                     client.getRegionId()!=null? helperService.getSoatoName(client.getRegionId(),locale):"",
                     client.getSubRegionId()!=null? helperService.getSoatoName(client.getSubRegionId(),locale):"",
-                    client.getCreatedAt()
+                    client.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(client.getCreatedAt()):""
             });
         }
 
