@@ -60,16 +60,24 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
                 List<Predicate> predicates = new LinkedList<>();
 
                 if (name != null) {
-                    predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + name + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.<String>get("name")),
+                            "%" + name.toLowerCase() + "%"));
                 }
                 if (nameOz != null) {
-                    predicates.add(criteriaBuilder.like(root.<String>get("nameOz"), "%" + nameOz + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.<String>get("nameOz")),
+                            "%" + nameOz.toLowerCase() + "%"));
                 }
                 if (nameEn != null) {
-                    predicates.add(criteriaBuilder.like(root.<String>get("nameEn"), "%" + nameEn + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.<String>get("nameEn")),
+                            "%" + nameEn.toLowerCase() + "%"));
                 }
                 if (nameRu != null) {
-                    predicates.add(criteriaBuilder.like(root.<String>get("nameRu"), "%" + nameRu + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.<String>get("nameRu")),
+                            "%" + nameRu.toLowerCase() + "%"));
                 }
                 if (id != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));

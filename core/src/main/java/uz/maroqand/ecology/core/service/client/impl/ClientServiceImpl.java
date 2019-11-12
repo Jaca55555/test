@@ -255,7 +255,7 @@ public class ClientServiceImpl implements ClientService {
                 }
 
                 if(type!=null){
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"+name.toLowerCase()+"%"));
                 }
 
                 if(opfId!=null){

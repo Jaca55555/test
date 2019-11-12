@@ -106,16 +106,24 @@ public class UserServiceImpl implements UserService {
                     predicates.add(criteriaBuilder.equal(root.get("id"), userId));
                 }
                 if (userName != null) {
-                    predicates.add(criteriaBuilder.like(root.get("username"), "%" + userName + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("username")),
+                            "%" + userName.toLowerCase() + "%"));
                 }
                 if (lastName != null) {
-                    predicates.add(criteriaBuilder.like(root.get("lastname"), "%" + lastName + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("lastname")),
+                            "%" + lastName.toLowerCase() + "%"));
                 }
                 if (firstName != null) {
-                    predicates.add(criteriaBuilder.like(root.get("firstname"), "%" + firstName + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("firstname")),
+                            "%" + firstName.toLowerCase() + "%"));
                 }
                 if (middleName != null) {
-                    predicates.add(criteriaBuilder.like(root.get("middlename"), "%" + middleName + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("middlename")),
+                            "%" + middleName.toLowerCase() + "%"));
                 }
                 if (organizationId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
