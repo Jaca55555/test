@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -219,11 +220,12 @@ public class DepartmentController {
         return "redirect:" + MgmtUrls.DepartmentList;
     }
 
-    @RequestMapping(value = MgmtUrls.DepartmentGetByOrganization)
+    @PostMapping(value = MgmtUrls.DepartmentGetByOrganization)
     @ResponseBody
     public List<Department> getList(
-            @RequestParam(name = "id") Integer organizationId
+
     ){
+        int organizationId = 1;
         Organization organization = organizationService.getById(organizationId);
         if (organization==null) return null;
 
