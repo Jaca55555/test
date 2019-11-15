@@ -78,10 +78,10 @@
         <td th:text="#{currency_name}">сум</td>
         <td> </td>
         <td> </td>
-        <td class="text-right" th:text="${invoice.amount}">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'DEFAULT', 2, 'DEFAULT')}">5 068 250.00</td>
         <td>0%</td>
         <td class="text-right" th:text="#{without_VAT}">Без НДС</td>
-        <td class="text-right" th:text="${invoice.amount}">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'DEFAULT', 2, 'DEFAULT')}">5 068 250.00</td>
     </tr>
     <tr>
         <td colspan="2" class="text-right" th:text="#{total:}">Итого:</td>
@@ -132,7 +132,7 @@
         <td></td>
     </tr>
     <tr>
-        <td style="padding-top: 20px">М.П.</td>
+        <td style="padding-top: 20px" th:text="#{sys_stamp_place}">М.П.</td>
         <td></td>
         <td></td>
         <td></td>
