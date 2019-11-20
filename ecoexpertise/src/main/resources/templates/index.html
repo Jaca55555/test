@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
@@ -228,19 +228,19 @@
             <div class="container">
                 <div class="statistic-list">
                     <div class="statistic-item">
-                        <div class="number"><span>4350</span>
+                        <div class="number"><span th:text="${total}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.all_statistic_title}">Umumiy arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
-                        <div class="number"><span>2200</span>
+                        <div class="number"><span th:text="${done}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.in_closed_statistic_title}">Ko’rib chiqilgan arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
-                        <div class="number"><span>700</span>
+                        <div class="number"><span th:text="${total - done}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.in_progress_statistic_title}">Jarayondagi arizalar soni</span>
                         </div>
