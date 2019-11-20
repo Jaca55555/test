@@ -6,8 +6,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
+import uz.maroqand.ecology.core.dto.api.PaymentData;
 import uz.maroqand.ecology.core.dto.api.PaymentNew;
 import uz.maroqand.ecology.core.dto.api.PaymentResponse;
+import uz.maroqand.ecology.core.dto.api.PaymentResponseData;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -18,10 +20,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.core.util.Parser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 23.07.2019.
@@ -48,7 +47,7 @@ public class BankAPIController {
     @RequestMapping(value = "/payment/new", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public PaymentResponse newPaymentPost(
-            @RequestBody(required = false) String params,
+            @RequestBody( required = false) String params,
             HttpServletRequest request
     ) {
         Map<String, Object> parametersMap = new HashMap<>();
@@ -61,58 +60,67 @@ public class BankAPIController {
         logger.info("RequestBody="+params);
 
         PaymentResponse paymentResponse = new PaymentResponse();
-        PaymentNew paymentNew = null;
+        PaymentData paymentData = null;
         try {
             Gson gson = new Gson();
-            paymentNew = gson.fromJson(params, PaymentNew.class);
+            paymentData = gson.fromJson(params, PaymentData.class);
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        if(paymentNew==null){
+        if(paymentData==null){
             paymentResponse.setCode("1");
             paymentResponse.setMessage("Ошибка в формате JSON объекта");
             return paymentResponse;
         }
+        System.out.println(paymentData);
+        System.out.println(paymentData.getData());
+        List<PaymentResponseData> data = new LinkedList<>();
+        for (PaymentNew paymentNew:paymentData.getData()){
+            //create PaymentFile
+            PaymentFile paymentFile = new PaymentFile();
+            try {
+                paymentFile.setPayerTin(paymentNew.getPayer().getTin());
+                paymentFile.setPayerName(paymentNew.getPayer().getName());
+                paymentFile.setBankAccount(paymentNew.getBank().getAccount());
+                paymentFile.setBankMfo(paymentNew.getBank().getMfo());
 
-        //create PaymentFile
-        PaymentFile paymentFile = new PaymentFile();
-        try {
-            paymentFile.setPayerTin(paymentNew.getPayer().getTin());
-            paymentFile.setPayerName(paymentNew.getPayer().getName());
-            paymentFile.setBankAccount(paymentNew.getBank().getAccount());
-            paymentFile.setBankMfo(paymentNew.getBank().getMfo());
+                paymentFile.setBankId(paymentNew.getId());
+                paymentFile.setAmount(paymentNew.getAmount());
+                paymentFile.setDocumentNumber(paymentNew.getDocument_number());
+                Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormat);
+                paymentFile.setPaymentDate(date);
+                paymentFile.setDetails(paymentNew.getDetails());
 
-            paymentFile.setAmount(paymentNew.getAmount());
-            paymentFile.setDocumentNumber(paymentNew.getDocument_number());
-            paymentFile.setPaymentDate(Common.uzbekistanDateAndTimeFormat.parse(paymentNew.getPayment_date()));
-            paymentFile.setDetails(paymentNew.getDetails());
+                paymentFile = paymentFileService.create(paymentFile);
 
-            paymentFileService.create(paymentFile);
-        }catch (Exception e){
-            e.printStackTrace();
-            paymentResponse.setCode("2");
-            paymentResponse.setMessage("Ошибка при преобразовании данных");
-            return paymentResponse;
-        }
-
-        //get Invoice
-        Invoice invoice = null;
-        String invoiceStr = paymentFile.getDetails();
-        String[] parts = invoiceStr.split(" ");
-        for (String invoiceCheck : parts) {
-            if(invoiceCheck.length()==14){
-                invoice = invoiceService.getInvoice(invoiceCheck);
-                if(invoice!=null) break;
+                data.add(new PaymentResponseData(paymentNew.getId(), paymentFile.getId()));
+            }catch (Exception e){
+                e.printStackTrace();
+                paymentResponse.setCode("2");
+                paymentResponse.setMessage("Ошибка при преобразовании данных");
+                return paymentResponse;
             }
-        }
 
-        if(invoice!=null){
-            paymentService.pay(invoice.getId(), Parser.stringToDouble(paymentFile.getAmount()), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+            //get Invoice
+            Invoice invoice = null;
+            String invoiceStr = paymentFile.getDetails();
+            String[] parts = invoiceStr.split(" ");
+            for (String invoiceCheck : parts) {
+                if(invoiceCheck.length()==14){
+                    invoice = invoiceService.getInvoice(invoiceCheck);
+                    if(invoice!=null) break;
+                }
+            }
+            if(invoice!=null){
+                paymentService.pay(invoice.getId(), Parser.stringToDouble(paymentFile.getAmount()), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+            }
+
         }
 
         paymentResponse.setCode("0");
         paymentResponse.setMessage("Успешно");
+        paymentResponse.setData(data);
         return paymentResponse;
     }
 

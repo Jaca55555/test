@@ -33,6 +33,8 @@ public class PaymentFile {
     @Column(name = "invoice")
     private String invoice;
 
+    @Column(name = "bank_id")
+    private Integer bankId;
 
     //Тўловчини СТИРИ
     @Column(name = "payer_tin")
