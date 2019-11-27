@@ -10,8 +10,7 @@ import java.util.List;
  * (ru)
  */
 @Data
-public class PaymentResponse {
-    private String code;
-    private String message;
-    private List<PaymentResponseData> data;
+public class PaymentData {
+
+    private List<PaymentNew> data;
 }
