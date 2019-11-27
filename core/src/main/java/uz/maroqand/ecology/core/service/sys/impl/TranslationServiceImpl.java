@@ -82,19 +82,29 @@ public class TranslationServiceImpl implements TranslationService {
                 List<Predicate> predicates = new LinkedList<>();
 
                 if (translationTag != null) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + translationTag + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + translationTag.toLowerCase() + "%"));
                 }
                 if (translationRu != null) {
-                    predicates.add(criteriaBuilder.like(root.get("russian"), "%" + translationRu + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("russian")),
+                            "%" + translationRu.toLowerCase() + "%"));
                 }
                 if (translationUz != null) {
-                    predicates.add(criteriaBuilder.like(root.get("uzbek"), "%" + translationUz + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("uzbek")),
+                            "%" + translationUz.toLowerCase() + "%"));
                 }
                 if (translationEn != null) {
-                    predicates.add(criteriaBuilder.like(root.get("english"), "%" + translationEn + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("english")),
+                            "%" + translationEn.toLowerCase() + "%"));
                 }
                 if (translationOz != null) {
-                    predicates.add(criteriaBuilder.like(root.get("ozbek"), "%" + translationOz + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("ozbek")),
+                            "%" + translationOz.toLowerCase() + "%"));
                 }
 
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
