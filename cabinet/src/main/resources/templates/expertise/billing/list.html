@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
@@ -125,6 +125,7 @@
                                                     <th th:text="#{invoice_number}"></th>
                                                     <th th:text="#{sys_organization_name}"></th>
                                                     <th th:text="#{invoice_amount}"></th>
+                                                    <th th:text="#{invoice_create_date}"></th>
                                                     <th th:text="#{invoice_status}"></th>
                                                     <th style="max-width: 100px;"></th>
                                                 </tr>
@@ -421,13 +422,13 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var html = '';
-        if(row[4] == "Initial")
+        if(row[5] == "Initial")
             html += '<button type="button" class="btn btn-info btn-sm">'+statusInitial+'</button>';
-        if(row[4] == "Success")
+        if(row[5] == "Success")
             html += '<button type="button" class="btn btn-success btn-sm">'+statusSuccess+'</button>';
-        if(row[4] == "Canceled")
+        if(row[5] == "Canceled")
             html += '<button type="button" class="btn btn-warning btn-sm">'+statusCanceled+'</button>';
-        if(row[4] == "Error")
+        if(row[5] == "Error")
             html += '<button type="button" class="btn btn-danger btn-sm">'+statusError+'</button>';
         return html;
     }
@@ -479,6 +480,7 @@
                 {data: 1, name: 'invoice'},
                 {data: 2, name: 'organizationName', orderable:false},
                 {render: renderFormatAmount,  name: 'amount'},
+                {data: 4, name: 'createdDate'},
                 {render: renderStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable:false}
             ],
