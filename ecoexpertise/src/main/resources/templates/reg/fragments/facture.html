@@ -78,20 +78,20 @@
         <td th:text="#{currency_name}">сум</td>
         <td> </td>
         <td> </td>
-        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'DEFAULT', 2, 'DEFAULT')}">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'DEFAULT')}">5 068 250.00</td>
         <td>0%</td>
         <td class="text-right" th:text="#{without_VAT}">Без НДС</td>
-        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'DEFAULT', 2, 'DEFAULT')}">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'DEFAULT')}">5 068 250.00</td>
     </tr>
     <tr>
         <td colspan="2" class="text-right" th:text="#{total:}">Итого:</td>
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-right">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'DEFAULT')}">5 068 250.00</td>
         <td></td>
         <td class="text-right" th:text="#{without_VAT}">Без НДС</td>
-        <td class="text-right">5 068 250.00</td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'DEFAULT')}">5 068 250.00</td>
     </tr>
 </table>
 

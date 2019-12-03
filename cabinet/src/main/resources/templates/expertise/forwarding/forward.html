@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body th:fragment="forward">
 
-    <form id="form" method="post" action="/expertise/forwarding/action" th:if="${regApplication.forwardingLogId!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+    <form id="form" method="post" action="/expertise/forwarding/action" th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New)}">
         <div class="form-group row">
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>
@@ -98,7 +98,7 @@
     </form>
 
 
-    <form th:if="${regApplication.forwardingLogId!=null && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+    <form th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New)}">
         <div class="form-group row">
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>

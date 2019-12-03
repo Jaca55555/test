@@ -825,14 +825,14 @@ public class RegApplicationController {
         }
 
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-        forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Modification,"", user.getId());
+        forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.New,"", user.getId());
 
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerLogId(null);
         regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
 
-        regApplication.setStatus(RegApplicationStatus.Process);
+        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
         return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
