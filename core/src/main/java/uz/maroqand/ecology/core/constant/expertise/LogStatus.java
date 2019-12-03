@@ -13,7 +13,7 @@ import java.util.Map;
 public enum LogStatus {
 
     Initial(0,"sys_confirmStatus.initial","sys_forwardingStatus.initial","sys_performerStatus.initial","sys_agreementStatus.initial"),
-    New(1,"sys_confirmStatus.returned","sys_forwardingStatus.returned","sys_performerStatus.returned","sys_agreementStatus.initial"),
+    New(1,"sys_confirmStatus.returned","sys_forwardingStatus.returned","sys_performerStatus.returned","sys_agreementStatus.returned"),
     Modification(2,"sys_confirmStatus.modification","sys_forwardingStatus.modification","sys_performerStatus.modification","sys_agreementStatus.modification"),
     Approved(3,"sys_confirmStatus.approved","sys_forwardingStatus.approved","sys_performerStatus.approved","sys_agreementStatus.approved"),
     Denied(4,"sys_confirmStatus.denied","sys_forwardingStatus.denied","sys_performerStatus.denied","sys_agreementStatus.denied");
