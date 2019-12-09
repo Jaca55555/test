@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
@@ -30,6 +31,18 @@ public class ObjectExpertise {
 
     @Column(name = "name_ru")
     private String nameRu;
+
+    @Column(name="deleted")
+    private Boolean deleted;
+
+    @Column(name="update_at")
+    private Date updateAt;
+
+    @Column(name="update_by")
+    private Integer updateBy;
+
+    @Column(name="upd_msg")
+    private String updateMessage;
 
     public String getNameTranslation(String locale) {
         switch (locale) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
@@ -90,6 +90,28 @@
 </div>
 <!-- [ Main Content ] end -->
 
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" th:text="#{mntr_objectExpertise.deleteReason}">Причина удаления</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" id="objExpertiseId" data-href="">
+                    <textarea class="form-control" name="msg" id="deleteMessage" cols="30" rows="10"
+                              th:placeholder="#{mntr_objectExpertise.deleteMessage}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        th:text="#{mntr_objectExpertise.cancelDelete}">Отмена</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete"
+                        th:text="#{mntr_objectExpertise.confirmDelete}">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</div>
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
@@ -98,6 +120,7 @@
 <script th:inline="javascript">
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseEdit}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseView}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).ObjectExpertiseDelete}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -111,6 +134,7 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
         var currentViewLink = viewLink + '?id=' + row[0];
+        var currentDeleteLink = deleteLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
             '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
@@ -118,6 +142,9 @@
             '            </a>\n' +
             '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
             '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '            <a href="'+currentDeleteLink+'"  class="btn btn-sm btn-outline-danger delete" data-id="' + row[0] + '">\n' +
+            '                   <i class="feather icon-delete" style="margin: 0px"></i>\n' +
             '            </a>\n' +
             '      </div>';
         return html;
@@ -176,6 +203,28 @@
         dataDatatableSelector = $('#object_expertise_table');
         thead = dataDatatableSelector.html();
         datatableConnect();
+
+        dataDatatableSelector.on('click', '.delete', function (e) {
+            e.preventDefault();
+            let ID = $(this).data('id');
+            $('#deleteModal')
+                .modal('show')
+                .find('#objExpertiseId')
+                .attr('data-href', $(this).attr('href'))
+                .val(ID);
+        });
+
+        $('#confirmDelete').on('click', function () {
+            let ID = $('#deleteModal #objExpertiseId').val();
+            let msg = $('#deleteModal #deleteMessage').val();
+            $.ajax({
+                url: $('#deleteModal #objExpertiseId').data('href'),
+                data: {id: ID, msg: msg},
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+        })
     });
 
     $('#object_expertise_table').css("width", "100%");

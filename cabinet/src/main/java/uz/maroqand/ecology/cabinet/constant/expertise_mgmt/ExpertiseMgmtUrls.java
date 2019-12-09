@@ -15,6 +15,7 @@ public class ExpertiseMgmtUrls {
     public static final String ObjectExpertiseCreate = ObjectExpertise + "/create";
     public static final String ObjectExpertiseUpdate = ObjectExpertise + "/update";
     public static final String ObjectExpertiseView = ObjectExpertise + "/view";
+    public static final String ObjectExpertiseDelete = ObjectExpertise + "/delete";
 
     //Activity
     private static final String Activity = Prefix + "/activity";
