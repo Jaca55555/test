@@ -6,14 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.repository.expertise.ObjectExpertiseRepository;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,5 +90,14 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
                 return overAll;
             }
         };
+    }
+
+    @Override
+    public ObjectExpertise delete(ObjectExpertise objectExpertise, Integer userId, String msg) {
+        objectExpertise.setDeleted(true);
+        objectExpertise.setUpdateBy(userId);
+        objectExpertise.setUpdateAt(new Date());
+        objectExpertise.setUpdateMessage(msg);
+        return objectExpertiseRepository.save(objectExpertise);
     }
 }

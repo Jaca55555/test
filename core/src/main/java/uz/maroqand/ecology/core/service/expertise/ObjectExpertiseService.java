@@ -16,4 +16,6 @@ public interface ObjectExpertiseService {
 
     Page<ObjectExpertise> findFiltered(Integer id, String name, String nameOz,String nameEn,String nameRu, Pageable pageable);
 
+    ObjectExpertise delete(ObjectExpertise objectExpertise, Integer userId, String msg);
+
 }

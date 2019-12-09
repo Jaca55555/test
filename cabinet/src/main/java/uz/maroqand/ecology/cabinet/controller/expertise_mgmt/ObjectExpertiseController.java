@@ -9,10 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
@@ -24,9 +21,8 @@ import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class ObjectExpertiseController {
@@ -165,6 +161,9 @@ public class ObjectExpertiseController {
         objectExpertise1.setNameOz(objectExpertise.getNameOz());
         objectExpertise1.setNameEn(objectExpertise.getNameEn());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
+        objectExpertise1.setUpdateBy(user.getId());
+        objectExpertise1.setUpdateAt(new Date());
+
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
         String after = "";
         try {
@@ -200,5 +199,17 @@ public class ObjectExpertiseController {
         model.addAttribute("objectExpertise",objectExpertise);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
         return ExpertiseMgmtTemplates.ObjectExpertiseView;
+    }
+
+    @RequestMapping(ExpertiseMgmtUrls.ObjectExpertiseDelete)
+    public String deleteObjectExpertise(@RequestBody Map<String, String> param)
+    {
+        User user = userService.getCurrentUserFromContext();
+        ObjectExpertise objectExpertise = objectExpertiseService.getById(Integer.valueOf(param.get("id")));
+        if (objectExpertise!=null){
+            HashMap<String, Object> response = new HashMap<>();
+            objectExpertiseService.delete(objectExpertise, user.getId(), param.get("msg"));
+        }
+        return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
     }
 }
