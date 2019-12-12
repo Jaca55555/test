@@ -134,7 +134,7 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
         var currentViewLink = viewLink + '?id=' + row[0];
-        var currentDeleteLink = deleteLink + '?id=' + row[0];
+        var currentDeleteLink = deleteLink;
         var html = '';
         html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
             '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
@@ -219,10 +219,13 @@
             let msg = $('#deleteModal #deleteMessage').val();
             $.ajax({
                 url: $('#deleteModal #objExpertiseId').data('href'),
+                method: 'get',
                 data: {id: ID, msg: msg},
                 success: function (data) {
                     console.log(data);
                 }
+            }).done(function () {
+                $('#deleteModal').modal('hide');
             })
         })
     });

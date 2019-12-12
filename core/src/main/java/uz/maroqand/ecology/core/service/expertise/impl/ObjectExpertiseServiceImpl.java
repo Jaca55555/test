@@ -44,8 +44,8 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
     }
 
     @Override
-    public Page<ObjectExpertise> findFiltered(Integer id,String name, String nameOz,String nameEn,String nameRu, Pageable pageable) {
-        return objectExpertiseRepository.findAll(getFilteringSpecification(id,name,nameOz,nameEn,nameRu),pageable);
+    public Page<ObjectExpertise> findFiltered(Integer id,String name, String nameOz,String nameEn,String nameRu, Pageable pageable, Boolean deleted) {
+        return objectExpertiseRepository.findAll(getFilteringSpecification(id,name,nameOz,nameEn,nameRu, deleted),pageable);
     }
 
     private static Specification<ObjectExpertise> getFilteringSpecification(
@@ -53,7 +53,8 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
             final String name,
             final String nameOz,
             final String nameEn,
-            final String nameRu
+            final String nameRu,
+            final Boolean deleted
     ) {
         return new Specification<ObjectExpertise>() {
             @Override
@@ -83,11 +84,10 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
                 if (id != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));
                 }
-
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), deleted));
                 /*Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
                 predicates.add( notDeleted );*/
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }

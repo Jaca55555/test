@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.entity.sys;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Organization {
     private String mfo;
 
     //Регион
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", updatable = false, insertable = false)
     private Soato region;
@@ -45,6 +47,7 @@ public class Organization {
     private Integer regionId;
 
     //Район
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_region_id", updatable = false, insertable = false)
     private Soato subRegion;

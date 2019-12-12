@@ -32,7 +32,7 @@ public class ObjectExpertise {
     @Column(name = "name_ru")
     private String nameRu;
 
-    @Column(name="deleted")
+    @Column(name="deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
     @Column(name="update_at")

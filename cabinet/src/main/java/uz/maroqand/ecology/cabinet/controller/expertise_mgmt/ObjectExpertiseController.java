@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,6 @@ import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -65,7 +65,7 @@ public class ObjectExpertiseController {
         nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
         HashMap<String, Object> result = new HashMap<>();
-        Page<ObjectExpertise> objectExpertisePage = objectExpertiseService.findFiltered(id,name,nameOz,nameEn,nameRu,pageable);
+        Page<ObjectExpertise> objectExpertisePage = objectExpertiseService.findFiltered(id,name,nameOz,nameEn,nameRu,pageable, false);
 
         result.put("recordsTotal", objectExpertisePage.getTotalElements()); //Total elements
         result.put("recordsFiltered", objectExpertisePage.getTotalElements()); //Filtered elements
@@ -201,15 +201,19 @@ public class ObjectExpertiseController {
         return ExpertiseMgmtTemplates.ObjectExpertiseView;
     }
 
-    @RequestMapping(ExpertiseMgmtUrls.ObjectExpertiseDelete)
-    public String deleteObjectExpertise(@RequestBody Map<String, String> param)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseDelete, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, Object> deleteObjectExpertise(@RequestParam("id") String id, @RequestParam("msg") String msg)
     {
         User user = userService.getCurrentUserFromContext();
-        ObjectExpertise objectExpertise = objectExpertiseService.getById(Integer.valueOf(param.get("id")));
+        ObjectExpertise objectExpertise = objectExpertiseService.getById(Integer.valueOf(id));
+        HashMap<String, Object> response = new HashMap<>();
         if (objectExpertise!=null){
-            HashMap<String, Object> response = new HashMap<>();
-            objectExpertiseService.delete(objectExpertise, user.getId(), param.get("msg"));
+            objectExpertiseService.delete(objectExpertise, user.getId(), msg);
+            response.put("status", "Success");
+            return response;
         }
-        return "redirect:" + ExpertiseMgmtUrls.ObjectExpertiseList;
+        response.put("status", "error");
+        return response;
     }
 }
