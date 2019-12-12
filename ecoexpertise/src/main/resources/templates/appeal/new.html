@@ -101,7 +101,16 @@
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script src="/static/plugins/ckeditor/js/ckeditor.js"></script>
 <script type="text/javascript">
-    ClassicEditor.create(document.querySelector( '#description' )).catch( error => {console.error( error )});
+    ClassicEditor
+        .create(document.querySelector( '#description' ), {
+            simpleUpload: {
+                uploadUrl: '[[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).AppealFileUpload}]]',
+                headers: {
+                    'X-CSRF-TOKEN': $('#global_csrf').val()
+                }
+            }
+        })
+        .catch( error => {console.error( error )});
 </script>
 </body>
 </html>

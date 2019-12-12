@@ -55,6 +55,7 @@ public class RegUrls {
     public static final String AppealDelete = Appeal + "/delete";
     public static final String AppealUserView = Appeal + "/view";
     public static final String AppealSubCreate = Appeal + "/sub_create";
+    public static final String AppealFileUpload = Appeal + "/file";
 
     public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
     public static final String GetIndividualByPinfl = Prefix + "/get_individual";

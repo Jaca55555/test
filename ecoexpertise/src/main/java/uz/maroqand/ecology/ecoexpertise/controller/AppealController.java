@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.sys.AppealStatus;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
@@ -213,4 +214,12 @@ public class AppealController {
         return "redirect:" + RegUrls.AppealUserView + "?id=" + appeal.getId();
     }
 
+    @RequestMapping(value = RegUrls.AppealFileUpload, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(@RequestParam(name = "upload")MultipartFile file) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("url", "/static/images/logo.png");
+        return response;
+    }
 }
