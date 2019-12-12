@@ -201,7 +201,7 @@ public class ObjectExpertiseController {
         return ExpertiseMgmtTemplates.ObjectExpertiseView;
     }
 
-    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseDelete, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = ExpertiseMgmtUrls.ObjectExpertiseDelete, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public HashMap<String, Object> deleteObjectExpertise(@RequestParam("id") String id, @RequestParam("msg") String msg)
     {
@@ -210,10 +210,11 @@ public class ObjectExpertiseController {
         HashMap<String, Object> response = new HashMap<>();
         if (objectExpertise!=null){
             objectExpertiseService.delete(objectExpertise, user.getId(), msg);
-            response.put("status", "Success");
-            return response;
+            response.put("status", "success");
+            response.put("id", id);
+        } else {
+            response.put("status", "error");
         }
-        response.put("status", "error");
         return response;
     }
 }

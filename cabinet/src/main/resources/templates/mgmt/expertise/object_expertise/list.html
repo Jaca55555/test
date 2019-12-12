@@ -94,20 +94,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" th:text="#{mntr_objectExpertise.deleteReason}">Причина удаления</h4>
+                <h4 class="modal-title" th:text="#{mgmt.deleteReason}">Причина удаления</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <input type="hidden" id="objExpertiseId" data-href="">
                     <textarea class="form-control" name="msg" id="deleteMessage" cols="30" rows="10"
-                              th:placeholder="#{mntr_objectExpertise.deleteMessage}"></textarea>
+                              th:placeholder="#{mgmt.deleteMessage}"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"
-                        th:text="#{mntr_objectExpertise.cancelDelete}">Отмена</button>
+                        th:text="#{mgmt.cancelDelete}">Отмена</button>
                 <button type="button" class="btn btn-danger" id="confirmDelete"
-                        th:text="#{mntr_objectExpertise.confirmDelete}">Подтвердить удаление</button>
+                        th:text="#{mgmt.confirmDelete}">Подтвердить удаление</button>
             </div>
         </div>
     </div>
@@ -189,6 +189,9 @@
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            },
+            rowId: function (r) {
+                return r[0];
             }
         });
     }
@@ -219,10 +222,16 @@
             let msg = $('#deleteModal #deleteMessage').val();
             $.ajax({
                 url: $('#deleteModal #objExpertiseId').data('href'),
-                method: 'get',
-                data: {id: ID, msg: msg},
+                method: 'post',
+                data: {
+                    id: ID,
+                    msg: msg,
+                    _csrf: $("#global_csrf").val()
+                },
                 success: function (data) {
-                    console.log(data);
+                    if (data.status === 'success') {
+                        $('#object_expertise_table #' + ID).fadeOut();
+                    }
                 }
             }).done(function () {
                 $('#deleteModal').modal('hide');
