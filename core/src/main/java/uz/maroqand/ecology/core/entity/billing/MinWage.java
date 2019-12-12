@@ -35,4 +35,16 @@ public class MinWage {
     @DateTimeFormat(pattern="dd.MM.yyyy")
     private Date registeredAt;
 
+    @Column(name="deleted", columnDefinition = "boolean default false")
+    private Boolean deleted;
+
+    @Column(name="update_at")
+    private Date updateAt;
+
+    @Column(name="update_by")
+    private Integer updateBy;
+
+    @Column(name="upd_msg")
+    private String updateMessage;
+
 }

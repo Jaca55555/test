@@ -174,4 +174,21 @@ public class MinWageController {
         );
         return "redirect:" + MgmtUrls.MinWageList;
     }
+
+    @RequestMapping(value = MgmtUrls.MinWageDelete, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> deleteWage(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "msg")String msg) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> response = new HashMap<>();
+        MinWage wage = minWageService.getById(id);
+        if (wage != null) {
+            minWageService.delete(wage, user.getId(), msg);
+            response.put("status", "success");
+        } else {
+            response.put("status", "error");
+        }
+        return response;
+    }
 }

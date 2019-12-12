@@ -44,7 +44,11 @@ public class MinWageServiceImpl implements MinWageService {
 
     @Override
     public Page<MinWage> findFiltered(Integer id,Pageable pageable) {
-        return minWageRepository.findAll(getFilteringSpecifications(id),pageable);
+        return this.findFiltered(id, false, pageable);
+    }
+
+    public Page<MinWage> findFiltered(Integer id, Boolean deleted, Pageable pageable) {
+        return minWageRepository.findAll(getFilteringSpecifications(id, deleted),pageable);
     }
 
     @Override
@@ -58,7 +62,8 @@ public class MinWageServiceImpl implements MinWageService {
     }
 
     private static Specification<MinWage> getFilteringSpecifications(
-            final Integer id
+            final Integer id,
+            final Boolean deleted
     ){
         return new Specification<MinWage>() {
             @Override
@@ -67,9 +72,19 @@ public class MinWageServiceImpl implements MinWageService {
                 if (id!=null){
                     predicates.add(criteriaBuilder.equal(root.get("id"),id));
                 }
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+                predicates.add(criteriaBuilder.equal(root.get("deleted"),deleted));
+
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
+    }
+
+    @Override
+    public MinWage delete(MinWage minWage, Integer userId, String msg) {
+        minWage.setDeleted(true);
+        minWage.setUpdateAt(new Date());
+        minWage.setUpdateBy(userId);
+        minWage.setUpdateMessage(msg);
+        return minWageRepository.save(minWage);
     }
 }

@@ -21,4 +21,6 @@ public interface MinWageService {
 
     MinWage updateMinWage(MinWage minWage);
 
+    MinWage delete(MinWage minWage, Integer userId, String msg);
+
 }

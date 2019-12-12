@@ -21,6 +21,7 @@ public class MgmtUrls {
     public static final String MinWageEdit = MinWage + "/edit";
     public static final String MinWageCreate = MinWage + "/create";
     public static final String MinWageUpdate = MinWage + "/update";
+    public static final String MinWageDelete = MinWage + "/delete";
 
     //Roles
     private static final String Roles = Prefix + "/roles";
