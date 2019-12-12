@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.repository.expertise;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 
@@ -10,7 +11,7 @@ import uz.maroqand.ecology.core.entity.expertise.Material;
  * (ru)
  */
 @Repository
-public interface MaterialRepository extends JpaRepository<Material, Integer> {
+public interface MaterialRepository extends JpaRepository<Material, Integer>, JpaSpecificationExecutor<Material> {
 
 
 }

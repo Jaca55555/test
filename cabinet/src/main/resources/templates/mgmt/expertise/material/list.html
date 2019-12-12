@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
@@ -78,6 +78,30 @@
     </div>
 </div>
 <!-- [ Main Content ] end -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" th:text="#{mgmt.deleteReason}">Причина удаления</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" id="objExpertiseId" data-href="">
+                    <textarea class="form-control" name="msg" id="deleteMessage" cols="30" rows="10"
+                              th:placeholder="#{mgmt.deleteMessage}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        th:text="#{mgmt.cancelDelete}">Отмена</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete"
+                        th:text="#{mgmt.confirmDelete}">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
@@ -87,6 +111,7 @@
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialListAjax}]];
     var ajaxRequestEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialEdit}]];
     var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialView}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).MaterialDelete}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -108,6 +133,9 @@
             '            </a>\n' +
             '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
             '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
+            '            </a>\n' +
+            '            <a href="'+deleteLink+'"  class="btn btn-sm btn-outline-danger delete" data-id="' + row[0] + '">\n' +
+            '                   <i class="feather icon-delete" style="margin: 0px"></i>\n' +
             '            </a>\n' +
             '      </div>';
         return html;
@@ -146,6 +174,9 @@
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            },
+                rowId: function (r) {
+                    return r[0];
             }
         });
     }
@@ -161,6 +192,36 @@
         thead = dataDatatableSelector.html();
         datatableConnect();
 
+        dataDatatableSelector.on('click', '.delete', function (e) {
+            e.preventDefault();
+            let ID = $(this).data('id');
+            $('#deleteModal')
+                .modal('show')
+                .find('#objExpertiseId')
+                .attr('data-href', $(this).attr('href'))
+                .val(ID);
+        });
+
+        $('#confirmDelete').on('click', function () {
+            let ID = $('#deleteModal #objExpertiseId').val();
+            let msg = $('#deleteModal #deleteMessage').val();
+            $.ajax({
+                url: $('#deleteModal #objExpertiseId').data('href'),
+                method: 'post',
+                data: {
+                    id: ID,
+                    msg: msg,
+                    _csrf: $("#global_csrf").val()
+                },
+                success: function (data) {
+                    if (data.status === 'success') {
+                        $('#data-table #' + ID).fadeOut();
+                    }
+                }
+            }).done(function () {
+                $('#deleteModal').modal('hide');
+            })
+        })
     });
 
     /*]]>*/

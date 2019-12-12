@@ -17,7 +17,11 @@ public interface MaterialService {
 
     Page<Material> getAll(Pageable pageable);
 
+    Page<Material> getAll(Pageable pageable, Boolean deleted);
+
     Material save(Material material);
+
+    Material delete(Material material, Integer userId, String msg);
 
     List<Material> getList();
 

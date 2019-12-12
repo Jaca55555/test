@@ -34,6 +34,7 @@ public class ExpertiseMgmtUrls {
     public static final String MaterialNew = Material + "/new";
     public static final String MaterialEdit = Material + "/edit";
     public static final String MaterialView = Material + "/view";
+    public static final String MaterialDelete = Material + "/delete";
 
     //ExpertiseRequirement
     private static final String ExpertiseRequirement = Prefix + "/expertise_requirement";

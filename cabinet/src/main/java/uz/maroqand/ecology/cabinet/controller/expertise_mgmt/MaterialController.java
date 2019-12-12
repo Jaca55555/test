@@ -171,4 +171,26 @@ public class MaterialController {
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
         return ExpertiseMgmtTemplates.MaterialView;
     }
+
+    @RequestMapping(
+            value = ExpertiseMgmtUrls.MaterialDelete,
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public HashMap<String, String> deleteMaterial(
+        @RequestParam(name = "id") Integer id,
+        @RequestParam(name = "msg") String msg
+    ){
+        User user = userService.getCurrentUserFromContext();
+        Material material = materialService.getById(id);
+        HashMap<String, String> response = new HashMap<>();
+        if (material!=null && !material.getDeleted()){
+            materialService.delete(material, user.getId(), msg);
+            response.put("status", "success");
+            response.put("id", String.valueOf(id));
+        } else {
+            response.put("status", "error");
+        }
+        return response;
+    }
 }

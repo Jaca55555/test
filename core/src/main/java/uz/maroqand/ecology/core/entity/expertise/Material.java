@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
@@ -45,6 +46,18 @@ public class Material {
 
     @Column(name = "name_short_ru")
     private String nameShortRu;
+
+    @Column(name="deleted", columnDefinition = "boolean default false")
+    private Boolean deleted;
+
+    @Column(name="update_at")
+    private Date updateAt;
+
+    @Column(name="update_by")
+    private Integer updateBy;
+
+    @Column(name="upd_msg")
+    private String updateMessage;
 
     public String getNameTranslation(String locale) {
         switch (locale) {
