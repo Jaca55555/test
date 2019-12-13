@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <style>
@@ -49,7 +49,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <a href="#" class="card-link" th:text="#{sys_detail}"></a>
+                                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmList}" class="card-link" th:text="#{sys_detail}"></a>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -65,7 +65,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <a href="#" class="card-link bgc-orange" th:text="#{sys_detail}"></a>
+                                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmList}" class="card-link bgc-orange" th:text="#{sys_detail}"></a>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -81,7 +81,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <a href="#" class="card-link bgc-red" th:text="#{sys_detail}"></a>
+                                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConfirmList}" class="card-link bgc-red" th:text="#{sys_detail}"></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,32 +138,32 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row" >
-                                                <div class="col-md-4 col-xl-4">
-                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
-                                                        <a class="card-block text-center" href="#!">
-                                                            <i class="mdi mdi-chart-pie" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>
-                                                            <h5  style="margin-top: 25px;" th:text="#{sys_statistics}"></h5>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 col-xl-4">
-                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
-                                                        <a class="card-block text-center" href="#!">
-                                                            <i class="mdi mdi-presentation-play" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
-                                                            <h5  style="margin-top: 25px;" th:text="#{sys_video_instruction}"></h5>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 col-xl-4">
-                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
-                                                        <a class="card-block text-center" href="#!">
-                                                            <i class="mdi mdi-file-pdf" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b;"></i>
-                                                            <h5  style="margin-top: 25px;" th:text="#{sys_instruction}"></h5>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
+<!--                                            <div class="row" >-->
+<!--                                                <div class="col-md-4 col-xl-4">-->
+<!--                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">-->
+<!--                                                        <a class="card-block text-center" href="#!">-->
+<!--                                                            <i class="mdi mdi-chart-pie" style="font-size: 40px;padding-bottom: 25px;color: #3d8af7;"></i>-->
+<!--                                                            <h5  style="margin-top: 25px;" th:text="#{sys_statistics}"></h5>-->
+<!--                                                        </a>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-md-4 col-xl-4">-->
+<!--                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">-->
+<!--                                                        <a class="card-block text-center" href="#!">-->
+<!--                                                            <i class="mdi mdi-presentation-play" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>-->
+<!--                                                            <h5  style="margin-top: 25px;" th:text="#{sys_video_instruction}"></h5>-->
+<!--                                                        </a>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-md-4 col-xl-4">-->
+<!--                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">-->
+<!--                                                        <a class="card-block text-center" href="#!">-->
+<!--                                                            <i class="mdi mdi-file-pdf" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b;"></i>-->
+<!--                                                            <h5  style="margin-top: 25px;" th:text="#{sys_instruction}"></h5>-->
+<!--                                                        </a>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
