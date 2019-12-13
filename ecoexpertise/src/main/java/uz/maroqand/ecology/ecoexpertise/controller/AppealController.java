@@ -3,8 +3,10 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +18,11 @@ import uz.maroqand.ecology.core.constant.sys.AppealStatus;
 import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.sys.AppealSub;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.AppealService;
 import uz.maroqand.ecology.core.service.sys.AppealSubService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -38,13 +42,15 @@ public class AppealController {
     private final AppealSubService appealSubService;
     private final UserService userService;
     private final HelperService helperService;
+    private final FileService fileService;
 
     @Autowired
-    public AppealController(AppealService appealService, AppealSubService appealSubService, UserService userService, HelperService helperService) {
+    public AppealController(AppealService appealService, AppealSubService appealSubService, UserService userService, HelperService helperService, FileService fileService) {
         this.appealService = appealService;
         this.appealSubService = appealSubService;
         this.userService = userService;
         this.helperService = helperService;
+        this.fileService = fileService;
     }
 
 
@@ -216,10 +222,28 @@ public class AppealController {
 
     @RequestMapping(value = RegUrls.AppealFileUpload, method = RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> uploadFile(@RequestParam(name = "upload")MultipartFile file) {
+    public HashMap<String, Object> uploadFile(@RequestParam(name = "upload")MultipartFile uploadFile) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> response = new HashMap<>();
-        response.put("url", "/static/images/logo.png");
+        File file = fileService.uploadFile(uploadFile, user.getId(), "appealContent_"+uploadFile.getName(), uploadFile.getName());
+        if (file != null) {
+            response.put("url", RegUrls.AppealImages + "?id=" + file.getId());
+        } else {
+            response.put("error", "{'message': 'failed to upload'}");
+        }
         return response;
+    }
+
+    @RequestMapping(RegUrls.AppealImages)
+    public ResponseEntity<Resource> getImage(@RequestParam(name = "id") Integer id) {
+
+        User user = userService.getCurrentUserFromContext();
+        File file = fileService.findByIdAndUploadUserId(id, user.getId());
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
 }
