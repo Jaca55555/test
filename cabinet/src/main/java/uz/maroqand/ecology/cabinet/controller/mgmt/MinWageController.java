@@ -108,6 +108,7 @@ public class MinWageController {
         }
         minWage.setBeginDate(beginDateMinWage);
         minWage.setRegisteredAt(new Date());
+        minWage.setDeleted(false);
         minWageService.createMinWage(minWage);
         tableHistoryService.create(
                 TableHistoryType.add,

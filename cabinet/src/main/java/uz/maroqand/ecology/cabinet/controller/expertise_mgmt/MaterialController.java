@@ -124,6 +124,7 @@ public class MaterialController {
                 e.printStackTrace();
             }
 
+            material.setDeleted(false);
             material = materialService.save(material);
 
             try {
