@@ -26,8 +26,8 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 @Configuration
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 @ComponentScan("uz.maroqand.ecology")
-@EnableJpaRepositories(basePackages = "uz.maroqand.ecology.core.repository", repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
-@EntityScan(basePackages = {"uz.maroqand.ecology.core.entity"})
+@EnableJpaRepositories(basePackages = {"uz.maroqand.ecology.core.repository","uz.maroqand.ecology.docmanagment.repository"}, repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
+@EntityScan(basePackages = {"uz.maroqand.ecology.core.entity","uz.maroqand.ecology.docmanagment.entity"})
 @EnableCaching(proxyTargetClass = true)
 public class CabinetStarter {
 

@@ -33,7 +33,7 @@ import java.util.Set;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "uz.maroqand.ecology.cabinet")
+@ComponentScan(basePackages = "uz.maroqand.ecology")
 public class WebMVCConfigs implements WebMvcConfigurer {
 
     private final DatabaseMessageSource databaseMessageSource;
