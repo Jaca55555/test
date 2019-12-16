@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagment.entity;
 
 import lombok.Data;
+import uz.maroqand.ecology.docmanagment.constant.DocumentSubType;
 
 import javax.persistence.*;
 
@@ -30,12 +31,15 @@ public class DocumentSub {
     @Column(name = "document_id")
     private Integer documentId;
 
-    //CommunicationTool.ID
+    @Column(name = "type")
+    private DocumentSubType type;
+
     //Хатни жўнатиш усули (почта орқали, e-mail, факс, етказиб бериш ва х.к.)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "communication_tool_id", insertable = false, updatable = false)
     private CommunicationTool communicationTool;
 
+    //CommunicationTool.ID
     @Column(name = "communication_tool_id")
     private Integer communicationToolId;
 

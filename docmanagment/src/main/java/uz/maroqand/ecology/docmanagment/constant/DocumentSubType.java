@@ -5,5 +5,5 @@ package uz.maroqand.ecology.docmanagment.constant;
  * (uz)
  * (ru)
  */
-public enum DocumentOrganizationType {
+public enum DocumentSubType {
 }
