@@ -104,6 +104,7 @@ public class ObjectExpertiseController {
         objectExpertise1.setNameOz(objectExpertise.getNameOz());
         objectExpertise1.setNameEn(objectExpertise.getNameEn());
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
+        objectExpertise1.setDeleted(false);
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
         String after = "";
         try {
