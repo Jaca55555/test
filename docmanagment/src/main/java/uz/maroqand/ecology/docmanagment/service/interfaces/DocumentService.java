@@ -1,7 +1,8 @@
 package uz.maroqand.ecology.docmanagment.service.interfaces;
 
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.docmanagment.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagment.entity.Document;
 
 import java.util.List;
@@ -13,5 +14,5 @@ import java.util.List;
  */
 public interface DocumentService {
 
-
+    public Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
 }
