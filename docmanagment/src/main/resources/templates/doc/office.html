@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Chikuvchi Hatlar Ruhyati</title>
+</head>
+<body>
+    <div class="background"></div>
+
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="col-xl-12 col-md-12">
+            <div class="card parent-card">
+                <div class="card-header flex-space-between-nowrap">
+                    <h5 class="mb-0" style="align-self:center">
+                        <a href="" class="card-header-a collapsed" data-toggle="collapse"
+                           data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
+                            Девонхона хужжатлар иш столи
+                        </a>
+                    </h5>
+                    <div>
+                        <input type="text" class="form-control">
+                        <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
+                    </div>
+                </div>
+                <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
+                <div class="responsive">
+                    <div class="office-card">
+                        <div class="card dashboard-card border-primary-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">10</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-danger-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_deleted.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">20</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-warning-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_warning.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">30</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">40</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">40</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title">40</h4>
+                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapseTopContainer" class="col-xl-12 card-body collapse show" style="padding: 0;">
+                    <h5 class="office-h5 default-color">Ички хужжатлар статистикаси</h5>
+                    <div class="responsive">
+                        <div class="office-card">
+                            <div class="card dashboard-card border-primary-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">10</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-danger-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_deleted.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">20</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-warning-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_warning.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">30</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="office-h5 default-color">Муррожатлар статистикаси</h5>
+                    <div class="responsive">
+                        <div class="office-card">
+                            <div class="card dashboard-card border-primary-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">10</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-danger-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_deleted.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">20</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-warning-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_warning.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">30</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="office-h5 default-color">Чикувчи хатлар статистикаси</h5>
+                    <div class="responsive">
+                        <div class="office-card">
+                            <div class="card dashboard-card border-primary-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">10</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-danger-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_deleted.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">20</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-warning-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_warning.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">30</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="office-card">
+                            <div class="card dashboard-card border-green-shadow">
+                                <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
+                                <div class="card-body" style="display: inline-block;text-align: center;">
+                                    <h4 class="card-title">40</h4>
+                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+            <!-- filters card begins here -->
+            <div class="card" style="border-radius: 5px">
+                <div class="card-header flex-space-between-nowrap" id="headingOne">
+                    <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">Саралаш фильтри</a></h5>
+                    <div style="display: flex;"><button class="btn-icon"><i
+                            class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i
+                            class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>
+                </div>
+                <div class="row p10">
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="tin" class="control-label">Корреспондент</label>
+                        <div class="col-sm-12 p0">
+                            <select id="tin" class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
+                                    aria-hidden="true">
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="WY">Coming</option>
+                                <option value="WY">Hanry Die</option>
+                                <option value="WY">John Doe</option>
+                            </select>
+                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="applicationId" class="control-label">Руйхатга олиш раками</label>
+                        <input type="text" class="form-control" id="applicationId">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="dateBegin" class="control-label">Келиб тушган сана</label>
+                        <div class="row">
+                            <div class="col-6" style="padding-left: 0;">
+                                <input class="form-control datepicker date" id="dateBegin" placeholder="Дан">
+                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                            </div>
+                            <div class="col-6" style="padding-right:0;">
+                                <input class="form-control datepicker date" id="dateEnd" placeholder="гача">
+                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="regionId" class="control-label">Назорат карточкаси</label>
+                        <div class="col-sm-12 p0">
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
+                                    id="regionId" aria-hidden="true">
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="WY">Coming</option>
+                                <option value="WY">Hanry Die</option>
+                                <option value="WY">John Doe</option>
+                            </select>
+                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="row">
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label for="activityId" class="control-label">Хужжат тури</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        id="activityId" tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="objectId" class="control-label">Корреспондент категорияси</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="subRegionId" class="control-label">Хатнинг қисқача мазмуни</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas fa-search  color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label">Рахбарият</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label">Ижрочилар</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Қўйилган топшириқ (резолюция)</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-search color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Ижро йуналиши</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Хужжатнинг ижро ҳолати</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="dateBegin" class="control-label">Ижро муддати</label>
+                            <div class="row">
+                                <div class="col-6" style="padding-left: 0;">
+                                    <input class="form-control datepicker date" id="dateBegin" placeholder="Дан">
+                                    <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                                </div>
+                                <div class="col-6" style="padding-right:0;">
+                                    <input class="form-control datepicker date" id="dateEnd" placeholder="гача">
+                                    <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Ижро назорати холати</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">ХДФУ холати</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Хамкор ижрочилар холати</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label">Хужжатга йўлланган жавоблар</label>
+                            <div class="col-sm-12 p0">
+                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                        tabindex="-1" aria-hidden="true">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Coming</option>
+                                    <option value="WY">Hanry Die</option>
+                                    <option value="WY">John Doe</option>
+                                </select>
+                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="parent-card col-xl-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home"
+                       role="tab" aria-controls="home" aria-selected="true">Жами</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile"
+                       role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact"
+                       role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab"
+                       aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1"
+                       role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1"
+                       role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2"
+                       role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="table-responsive">
+                        <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="responsive-table-model"
+                                           class="display table dt-responsive dataTable no-footer dtr-inline collapsed"
+                                           style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                        <thead>
+                                        <tr role="row">
+                                            <th class="sorting_asc" tabindex="0"
+                                                aria-controls="responsive-table-model" rowspan="1" colspan="1"
+                                                style="width: 0px;" aria-sort="ascending"
+                                                aria-label="First name: activate to sort column descending">
+                                                Регистрация
+
+                                                рақами</th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 0px;"
+                                                aria-label="Last name: activate to sort column ascending">
+                                                Регистрация
+
+                                                санаси</th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 350px;"
+                                                aria-label="Position: activate to sort column ascending">Кирувчи хат
+                                                маълумотлари</th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 82px;"
+                                                aria-label="Office: activate to sort column ascending">Хужжат
+
+                                                санаси</th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 110px;"
+                                                aria-label="Age: activate to sort column ascending">Ижро муддати
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 140px; display: none;"
+                                                aria-label="Start date: activate to sort column ascending">Жорий
+                                                ҳолати</th>
+                                            <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
+                                                rowspan="1" colspan="1" style="width: 300px; display: none;"
+                                                aria-label="Salary: activate to sort column ascending">Резолюция ва
+                                                иштирокчилар</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <button type="button" style="width:160px" class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0">Кўрилмаган
+                                                </button>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 red-color">IN-00114</td>
+                                            <td class="red-color">08.10.2019</td>
+                                            <td><span class="red-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="red-color">06.10.2019</td>
+                                            <td class="red-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="red-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0" class="sorting_1">IN-00114</td>
+                                            <td class="">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="">07.10.2019</td>
+                                            <td class="">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 orange-color">IN-00114</td>
+                                            <td class="orange-color">09.10.2019</td>
+                                            <td><span class="orange-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="orange-color">08.10.2019</td>
+                                            <td class="orange-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="orange-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="odd">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        <tr role="row" class="even">
+                                            <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
+                                            <td class="blue-color">08.10.2019</td>
+                                            <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
+                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
+                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
+                                                ҳақида</td>
+                                            <td class="blue-color">05.10.2019</td>
+                                            <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
+                                            <td class="blue-color">
+                                                <div class="btn-group mb-2 mr-2">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#!">Action</a>
+                                                        <a class="dropdown-item" href="#!">Another action</a>
+                                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#!">Separated link</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
+                                                Биохилмахиллик ва муҳофаза этиладиган
+                                                табиий ҳудудлар масаласи, Молия бўлими,
+                                                Хужжатларни назорат қилиш бўлими</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <p class="mb-0">Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee
+                        squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan
+                        four loko
+                        farm-to-table
+                        craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+                        ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus
+                        mollit.
+                        Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack
+                        odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry
+                        richardson
+                        biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus
+                        tattooed echo park.</p>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <p class="mb-0">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's
+                        organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
+                        tattooed
+                        craft beer,
+                        iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy
+                        irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free,
+                        carles
+                        pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard
+                        of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+    <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+</body>
+</html>
