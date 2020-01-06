@@ -18,6 +18,6 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
                                             JpaRepository<Document, Integer>,
                                             JpaSpecificationExecutor<Document>
 {
-
+    Document findByIdAndDeletedFalse(Integer id);
 
 }

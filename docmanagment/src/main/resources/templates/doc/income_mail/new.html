@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between">
+                <h5 class="mb-0" th:if="doc.id==null" th:text="#{doc.income_reg}">Кирувчи хатни рўйхатга олиш - IN-123456-MRQ</h5>
+                <h5 class="mb-0" th:if="doc.id!=null" th:text="#{doc.income_edit}">Кирувчи хатни тахрирлаш - IN-123456-MRQ</h5>
+                <div>
+                    <div>
+                        <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
+                        <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
+                    </div>
+                </div>
+            </div>
+            <form th:action="${action_url}" th:object="${doc}" class="card-block">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label" th:for="${#ids.next('journal')}"
+                               th:text="#{doc.income_reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{journal}">
+                            <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Хат рўйхатга олинган сана
+
+                        </label>
+                        <div class="col-sm-12 p0">
+                            <input class="form-control datepicker date" id="dateBegin" placeholder="Дан"
+                                   data-dtp="dtp_lq7TC">
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-map color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-map color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                            aria-hidden="true">
+                        <option value="AL">Мароканд умумий хатлар</option>
+                        <option value="WY">Wyoming</option>
+                        <option value="WY">Coming</option>
+                        <option value="WY">Hanry Die</option>
+                        <option value="WY">John Doe</option>
+                    </select>
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                    <textarea class="form-control" name="validation-text"></textarea>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label for="name" class="control-label">Хужжат раками</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="m30-vertical">
+                <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <div class="row p20">
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>Письмо.pdf</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-blue"><span
+                                class="fas fa-file-word"></span></div>
+                        <div class="text-center">
+                            <span>Письмо.docx</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-green"><span
+                                class="fas fa-file-excel"></span></div>
+                        <div class="text-center">
+                            <span>Таблица.xlsx</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-blue"><span
+                                class="fas fa-file-image"></span></div>
+                        <div class="text-center">
+                            <span>Image.img</span>
+                        </div>
+                    </div>
+                    <div class="file-block flex-center">
+                        <div class="text-center file-icon-container align-self-center color-gray"><span
+                                class="fas fa-plus"></span></div>
+                    </div>
+                </div>
+                <div class="border-danger m20 p20">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                        <label class="custom-control-label" for="customCheck1">Хужжат фақат хизмат доирасида
+                            фойдаланиш учун мулжалланган (Гриф ХДФУ)</label>
+                    </div>
+                    <div class="m20-vertical">
+                        <span>Диккат:</span>
+                        <br>
+                        <span>Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки
+                                девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                    </div>
+
+                </div>
+                <hr class="m30-vertical">
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true">
+                            <option value="AL">Мароканд умумий хатлар</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="WY">Coming</option>
+                            <option value="WY">Hanry Die</option>
+                            <option value="WY">John Doe</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Хатнинг ижроси шакли</label>
+                        <br>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline1">Ижро учун</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2">Маълумот учун</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Назорат карточкасининг шакли</label>
+                        <br>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline3" name="customRadioInline2"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline3">Йўқ</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline4" name="customRadioInline2"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline4">1А шакл</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline5" name="customRadioInline2"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline5">2А шакл</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline6" name="customRadioInline2"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline6">3А шакл</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadioInline7" name="customRadioInline2"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline7">4А шакл</label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="m30-vertical">
+                <div class="row">
+                    <div class="flex-center w100 row-wrap">
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор қилиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="button">Рўйхатга
+                            олиш</button>
+                        <button type="button" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга олиш ва
+                            ижрочиларни белгилаш</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/footer :: scripts" th:remove="tag"></object>
+
+
+</body>
+</html>
