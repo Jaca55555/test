@@ -24,9 +24,9 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
-                <h5 class="mb-0"><a href="" class="card-header-a" data-toggle="collapse"
+                <h5 class="mb-0"><a href="" class="card-header-a collapsed" data-toggle="collapse"
                                     data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne"
-                                    class="collapsed">Кирувчи хатни рўйхатга олиш - IN-123456-MRQ</a></h5>
+                                    >Кирувчи хатни рўйхатга олиш - IN-123456-MRQ</a></h5>
                 <div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-block">
+            <form th:action="${action_url}" class="card-block">
                 <div class="row">
                     <div class="col-sm-6 col-lg-3 form-group">
                         <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
@@ -72,7 +72,7 @@
                         <div class="col-sm-12 p0">
                             <input class="form-control datepicker date" id="dateBegin" placeholder="Дан"
                                    data-dtp="dtp_lq7TC">
-                            <img class="calendar-img2" src="../images/calendar.svg" alt="">
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                     </div>
                 </div>
@@ -320,7 +320,7 @@
                             ижрочиларни белгилаш</button>
                     </div>
                 </div>
-            </div>
+            </form>
 
         </div>
     </div>

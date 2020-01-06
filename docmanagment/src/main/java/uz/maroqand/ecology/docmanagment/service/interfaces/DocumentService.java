@@ -15,4 +15,8 @@ import java.util.List;
 public interface DocumentService {
 
     public Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
+
+    public Document getById(Integer id);
+
+    public Document createDoc(Document document);
 }

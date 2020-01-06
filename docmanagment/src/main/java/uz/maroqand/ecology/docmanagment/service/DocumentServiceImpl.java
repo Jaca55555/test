@@ -35,6 +35,17 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public Document getById(Integer id) {
+        return documentRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public Document createDoc(Document document) {
+        documentRepository.save(document);
+        return document;
+    }
+
+    @Override
     public Page<Document> findFiltered(
             DocFilterDTO filterDTO,
             Pageable pageable
