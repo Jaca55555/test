@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagment.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import uz.maroqand.ecology.docmanagment.constant.DocUrls;
 import uz.maroqand.ecology.docmanagment.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagment.entity.Document;
 import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagment.service.interfaces.JournalService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,13 +33,20 @@ import java.util.List;
 @Controller
 public class IncomeMailController {
     private final DocumentService documentService;
+    private final JournalService journalService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
 
-    public IncomeMailController(DocumentService documentService, ObjectMapper objectMapper, UserService userService) {
+    public IncomeMailController(
+            DocumentService documentService,
+            ObjectMapper objectMapper,
+            UserService userService,
+            JournalService journalService
+    ) {
         this.documentService = documentService;
         this.objectMapper = objectMapper;
         this.userService = userService;
+        this.journalService = journalService;
     }
 
     @RequestMapping(DocUrls.IncomeMailList)
@@ -84,8 +93,12 @@ public class IncomeMailController {
     @RequestMapping(DocUrls.IncomeMailNew)
     public String newDocument(@org.jetbrains.annotations.NotNull Model model) {
         User user = userService.getCurrentUserFromContext();
-        model.addAttribute("document", new Document());
+        if (user == null) {
+            return "redirect: " + DocUrls.IncomeMailList;
+        }
+        model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailCreate);
+        model.addAttribute("journal", journalService.getAll(new DataTablesInput()));
         return DocTemplates.IncomeMailNew;
     }
 
@@ -97,7 +110,19 @@ public class IncomeMailController {
 
     @RequestMapping(DocUrls.IncomeMailEdit)
     public String editDocument(@RequestParam(name = "id")Integer id, Model model) {
-        return DocTemplates.IncomeMailEdit;
+        User user = userService.getCurrentUserFromContext();
+        String response = DocTemplates.IncomeMailEdit;
+        if (user == null) {
+            response = "redirect: " + DocUrls.IncomeMailList;
+        }
+        Document document = documentService.getById(id);
+        if (document == null) {
+            response = "redirect: " + DocUrls.IncomeMailList;
+        }
+        model.addAttribute("action_url", DocUrls.IncomeMailEdit);
+        model.addAttribute("doc", document);
+
+        return response;
     }
 
     @RequestMapping(value = DocUrls.IncomeMailEdit, method = RequestMethod.POST)
