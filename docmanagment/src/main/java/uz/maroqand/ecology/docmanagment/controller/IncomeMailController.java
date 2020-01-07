@@ -15,9 +15,12 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
+import uz.maroqand.ecology.docmanagment.constant.DocumentSubType;
 import uz.maroqand.ecology.docmanagment.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagment.entity.Document;
+import uz.maroqand.ecology.docmanagment.service.interfaces.CommunicationToolService;
 import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentTypeService;
 import uz.maroqand.ecology.docmanagment.service.interfaces.JournalService;
 
 import java.util.ArrayList;
@@ -34,16 +37,22 @@ import java.util.List;
 public class IncomeMailController {
     private final DocumentService documentService;
     private final JournalService journalService;
+    private final DocumentTypeService documentTypeService;
+    private final CommunicationToolService communicationToolService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
 
     public IncomeMailController(
             DocumentService documentService,
+            DocumentTypeService documentTypeService,
+            CommunicationToolService communicationToolService,
             ObjectMapper objectMapper,
             UserService userService,
             JournalService journalService
     ) {
         this.documentService = documentService;
+        this.documentTypeService = documentTypeService;
+        this.communicationToolService = communicationToolService;
         this.objectMapper = objectMapper;
         this.userService = userService;
         this.journalService = journalService;
@@ -98,7 +107,10 @@ public class IncomeMailController {
         }
         model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailCreate);
-        model.addAttribute("journal", journalService.getAll(new DataTablesInput()));
+        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        model.addAttribute("doc_sub_types", DocumentSubType.getDocumentSubTypeList());
+        model.addAttribute("communication_list", communicationToolService.getStatusActive());
         return DocTemplates.IncomeMailNew;
     }
 
@@ -121,6 +133,10 @@ public class IncomeMailController {
         }
         model.addAttribute("action_url", DocUrls.IncomeMailEdit);
         model.addAttribute("doc", document);
+        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        model.addAttribute("doc_sub_types", DocumentSubType.getDocumentSubTypeList());
+        model.addAttribute("communication_list", communicationToolService.getStatusActive());
 
         return response;
     }
