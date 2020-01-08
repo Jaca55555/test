@@ -49,7 +49,8 @@ public class Document {
     @Column(name = "document_view_id")
     private Integer documentViewId;
 
-
+    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DocumentSub documentSub;
 
     //registratsiya sanasi
     @Column(name = "registration_date", columnDefinition = "timestamp without time zone")
@@ -79,7 +80,9 @@ public class Document {
     @Column(name = "answer_document_id")
     private Integer answerDocumentId;
 
-
+    //Для внутренного использования
+    @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
+    private Boolean insidePurpose;
 
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")

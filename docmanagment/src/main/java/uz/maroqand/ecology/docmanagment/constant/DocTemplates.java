@@ -6,8 +6,16 @@ package uz.maroqand.ecology.docmanagment.constant;
  * (ru)
  */
 public class DocTemplates {
-    private static final String Prefix = "";
+    private static final String Prefix = "doc";
 
-    public static final String Dashboard = Prefix + "";
+    public static final String Dashboard = Prefix + "/office";
+
+    private static final String IncomeMail = Prefix + "/income_mail";
+    public static final String IncomeMailList = IncomeMail + "/list";
+    public static final String IncomeMailListAjax = IncomeMail + "/list_ajax";
+    public static final String IncomeMailView = IncomeMail + "/view";
+    public static final String IncomeMailNew = IncomeMail + "/new";
+    public static final String IncomeMailEdit = IncomeMail + "/new";
+    public static final String IncomeMailExecuteEdit = IncomeMail + "/execute_edit";
 
 }

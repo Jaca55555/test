@@ -1,0 +1,183 @@
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="menu">
+<!-- [ navigation menu ] start -->
+<nav class="pcoded-navbar">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a class="logo_a" href="#">
+                <img alt="" src="/static/doc/images/logo.png">
+                <span class="b-title">ЭКОЭКСПЕРТИЗА</span>
+            </a>
+            <!-- <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span>
+</a> -->
+        </div>
+        <div class="navbar-content scroll-div">
+            <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Навигация</label>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-th-list color-primary"></i></span>
+                        <span class="pcoded-mtext">Хужжатлар иш столи</span>
+                    </a>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="feather icon-package color-red"></i></span>
+                        <span class="pcoded-mtext">Кирувчи хатлар</span>
+                    </a>
+                    <ul class="pcoded-submenu" style="display: none;">
+                        <li class=""><a href="">Хужжатлар тури 1</a></li>
+                        <li class=""><a href="">Хужжатлар тури 2</a></li>
+                        <li class=""><a href="">Хужжатлар тури 3</a></li>
+                        <li class=""><a href="">Хужжатлар тури 4</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-upload color-green"></i></span>
+                        <span class="pcoded-mtext">Чикувчи хатлар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-shopping-basket color-yellow"></i></span>
+                        <span class="pcoded-mtext">Ички хужжатлар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-clipboard-list color-purple"></i></span>
+                        <span class="pcoded-mtext">Муррожатлар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
+                        <span class="pcoded-mtext">Буйруклар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon color-gray"><i class="fas fa-sitemap"></i></span>
+                        <span class="pcoded-mtext">Журналлар буйича</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon "><i class="fas fa-book color-yellow"></i></span>
+                        <span class="pcoded-mtext">Кутубхона</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
+                        <span class="pcoded-mtext">Кирувчи хатларни руйхатга олиш</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
+                        <span class="pcoded-mtext">Чикувчи хатларни руйхатга олиш</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-find color-purple"></i></span>
+                        <span class="pcoded-mtext">Ички хужжатларни руйхатга олиш</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
+                        <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-green"></i></span>
+                        <span class="pcoded-mtext">Ижрога тушмаган</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-primary"></i></span>
+                        <span class="pcoded-mtext">Чикиб кетмаган</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Менинг хужжатларим</label>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-folder-open color-green"></i></span>
+                        <span class="pcoded-mtext">Ижро учун</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-cloud-upload-alt color-primary"></i></span>
+                        <span class="pcoded-mtext">Муддати яқинлар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-red"></i></span>
+                        <span class="pcoded-mtext">Муддати ўтган</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-checkbox-marked-circle-outline color-yellow"></i></span>
+                        <span class="pcoded-mtext">Назоратдаги</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-alert-circle-outline color-purple"></i></span>
+                        <span class="pcoded-mtext">Маълумот учун</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-folder color-gray"></i></span>
+                        <span class="pcoded-mtext">Якунланган</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-monitor color-primary"></i></span>
+                        <span class="pcoded-mtext">Мониторинг ва статистика</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-network-strength-4 color-purple"></i></span>
+                        <span class="pcoded-mtext">Хисоботлар</span>
+                    </a>
+                </li>
+                <hr>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="fas fa-user-alt color-green"></i></span>
+                        <span class="pcoded-mtext">Менинг маълумотларим</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="mdi mdi-account-remove color-red"></i></span>
+                        <span class="pcoded-mtext">Тизимдан чиқиш</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- [ navigation menu ] end -->
+
+</body>
+</html>
