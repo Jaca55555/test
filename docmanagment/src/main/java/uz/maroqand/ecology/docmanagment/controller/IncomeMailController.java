@@ -75,7 +75,7 @@ public class IncomeMailController {
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate(),
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
