@@ -19,4 +19,6 @@ public interface DocumentService {
     public Document getById(Integer id);
 
     public Document createDoc(Document document);
+
+    public void update(Document document);
 }

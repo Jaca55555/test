@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +43,15 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document createDoc(Document document) {
         documentRepository.save(document);
+        document.getDocumentSub().setDocumentId(document.getId());
+        documentRepository.save(document);
         return document;
+    }
+
+    @Override
+    public void update(Document document) {
+        document.setUpdateAt(new Date());
+        documentRepository.save(document);
     }
 
     @Override

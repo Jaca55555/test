@@ -8,11 +8,15 @@ $(document).ready(function() {
     $('.select2InsideModal').select2({
       dropdownParent: $(".modal")
     });
-    $('.singleSelect').select2();
+    $('.singleSelect').select2({
+        placeholder: "Танланг",
+        allowClear: true
+    });
     $(".multiselect").select2({
       maximumSelectionLength: 3
       });
     $('.date').bootstrapMaterialDatePicker({
+                    format: 'DD.MM.YYYY',
                     weekStart: 0,
                     time: false
                 });
