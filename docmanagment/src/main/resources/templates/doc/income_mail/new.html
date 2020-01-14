@@ -34,21 +34,18 @@
                 </div>
             </div>
             <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagment.entity.Document"*/-->
-            <form th:action="${action_url}" th:object="${doc}" class="card-block">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
+            <form th:action="${action_url}" th:object="${doc}" th:method="post" class="card-block">
+                <input type="hidden" th:if="doc.id != null" th:field="*{id}" th:value="*{id}"/>
+                <input type="hidden" th:if="doc.id != null" th:field="*{documentSub.id}" th:value="*{documentSub.id}"/>
+                <input type="hidden" th:if="doc.id != null" th:field="*{documentSub.documentId}" th:value="*{documentSub.documentId}"/>
                 <div class="row">
                     <div class="col-sm-6 col-lg-3 form-group">
                         <label class="control-label" th:for="${#ids.next('journal')}"
                                th:text="#{doc.income_reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{journalId}">
+                            <option value=""></option>
                             <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-3 form-group">
@@ -62,19 +59,15 @@
                                th:for="${#ids.next('documentType')}">Кирувчи хатларни тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentTypeId}">
+                            <option value=""></option>
                             <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-3 form-group">
                         <label class="control-label" th:text="#{doc.income_reg_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" placeholder="Дан"
-                                   data-dtp="dtp_lq7TC" th:field="*{registrationDate}"  th:value="${doc.registrationDate!=null? #dates.format(doc.registrationDate,'dd.MM.yyyy'):''}">
+                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc.income_reg_date}"
+                                   data-dtp="dtp_lq7TC" name="registrationDateStr"  th:value="${doc.registrationDate!=null? #dates.format(doc.registrationDate,'dd.MM.yyyy'):''}">
                             <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                     </div>
@@ -97,14 +90,16 @@
                     <div class="col-sm-6 col-lg-3 form-group">
                         <label class="control-label" th:text="#{doc.income_author_type}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.type}">
-                            <option th:each="i: ${doc_sub_types}" th:value="${i.id}" th:text="${i.name}"></option>
+                                aria-hidden="true" name="documentSubType" th:value="*{documentSub.type}">
+                            <option value=""></option>
+                            <option th:each="type : ${doc_sub_types}" th:value="${type}" th:text="#{${type.name}}" th:attrappend="selected=${type == doc.documentSub.type}?@{selected}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-3 form-group">
                         <label class="control-label" th:text="#{doc.income_author_organization}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentSub.organizationId}">
+                            <option value=""></option>
                             <option value="AL">Мароканд умумий хатлар</option>
                             <option value="WY">Wyoming</option>
                             <option value="WY">Coming</option>
@@ -118,12 +113,8 @@
                         <label class="control-label" th:text="#{doc.income_communication_type}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentSub.communicationToolId}">
+                            <option value=""></option>
                             <option th:each="i: ${communication_list}" th:value="${i.id}" th:text="${i.name}"></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
@@ -138,6 +129,7 @@
 <!--                    <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>-->
 <!--                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"-->
 <!--                            aria-hidden="true">-->
+<!--                        <option value=""></option>-->
 <!--                        <option value="AL">Мароканд умумий хатлар</option>-->
 <!--                        <option value="WY">Wyoming</option>-->
 <!--                        <option value="WY">Coming</option>-->
@@ -219,6 +211,7 @@
                         <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true">
+                            <option value=""></option>
                             <option value="AL">Мароканд умумий хатлар</option>
                             <option value="WY">Wyoming</option>
                             <option value="WY">Coming</option>
@@ -230,6 +223,7 @@
                         <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true">
+                            <option value=""></option>
                             <option value="AL">Мароканд умумий хатлар</option>
                             <option value="WY">Wyoming</option>
                             <option value="WY">Coming</option>
