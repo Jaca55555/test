@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagment.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import uz.maroqand.ecology.docmanagment.entity.CommunicationTool;
@@ -22,6 +24,8 @@ public interface CommunicationToolService {
     void removeCacheableStatusActive();
 
     List<CommunicationTool> getList();
+
+    Page<CommunicationTool> findFiltered(Integer id, String service, Pageable pageAble);
 
     void removeList();
 
