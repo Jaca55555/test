@@ -100,7 +100,7 @@ public class IncomeMailController {
     }
 
     @RequestMapping(DocUrls.IncomeMailNew)
-    public String newDocument(@org.jetbrains.annotations.NotNull Model model) {
+    public String newDocument(Model model) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
             return "redirect: " + DocUrls.IncomeMailList;
