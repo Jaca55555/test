@@ -68,6 +68,22 @@
     </div>
 
 </div>
+    <div class="btn-group mb-2 mr-2">
+        <button type="button"
+                class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+        <button type="button"
+                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">изменить</a>
+            <!--    <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-divider"></div>
+               <a class="dropdown-item" href="#">Separated link</a>-->
+        </div>
+    </div>
+</div>
 <!--main content end-->
 
 
@@ -77,11 +93,13 @@
 
     var editLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsEdit}]];
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsListAjax}]];
-
+    var editStatusLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsEditStatus}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
 
+    var statusTrue = [[#{communication_tool_status_true}]];
+    var statusFalse = [[#{communication_tool_status_false}]];
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
@@ -89,12 +107,38 @@
     var dataDatatableSelector;
     var thead;
 
+    function changeStatusFunc(url, row){
+        fetch(url).then(data =>{return data; })
+            .then(res => console.log(res));
+        getDatatableConnect();
+    }
+
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-rounded btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
         return html;
     }
+    function renderChangeColumn(data, type, row, meta) {
+        var currentEditStatusLink = editStatusLink + "?id=" + row[0];
+        var html = '';
+        x = data ? 'on' : 'false';
+        html += ` <div class="btn-group mb-2 mr-2">
+        <button style="width: 72.61px" type="button"
+                class="btn btn-outline-primary left-radius table-modal-button">${x}</button>
+        <button type="button"
+                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"><span class="sr-only">Toggle
+                                                                Dropdown</span></button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item"  onclick="changeStatusFunc('${currentEditStatusLink}', ${row})">изменить</button>
+
+        </div>
+    </div>`;
+        return html;
+    }
+
 
     function datatableConnect() {
         cDataTable = dataDatatableSelector.DataTable({
@@ -125,7 +169,7 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {data: 2, name: 'status'},
+                {render: renderChangeColumn, orderable: false},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

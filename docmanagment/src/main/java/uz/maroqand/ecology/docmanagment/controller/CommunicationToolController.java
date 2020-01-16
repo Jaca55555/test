@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagment.controller;
 
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,8 +84,6 @@ public class CommunicationToolController {
         return "redirect:" + DocUrls.CommunicationToolsList;
     }
 
-
-
     @RequestMapping(value = DocUrls.CommunicationToolsEdit, method = RequestMethod.GET)
     public String communicationToolsEdit(@RequestParam(name = "id")Integer id, Model model) {
         CommunicationTool tool = communicationToolService.getById(id);
@@ -113,6 +112,18 @@ public class CommunicationToolController {
         communicationToolService.update(updatedTool);
         return "redirect:" + DocUrls.CommunicationToolsList;
     }
+    @RequestMapping(value = DocUrls.CommunicationToolsEditStatus, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public String communicationToolService(@RequestParam(name = "id")Integer id){
+        CommunicationTool tool = communicationToolService.getById(id);
+        System.out.println("change status");
 
+        if(tool != null){
+            tool.setStatus(!tool.getStatus());
+            communicationToolService.update(tool);
+            return "success";
+        }
+        else return "false";
+    }
 
 }
