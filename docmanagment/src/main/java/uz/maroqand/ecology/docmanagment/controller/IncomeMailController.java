@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,7 @@ public class IncomeMailController {
     private final ObjectMapper objectMapper;
     private final UserService userService;
 
+    @Autowired
     public IncomeMailController(
             DocumentService documentService,
             DocumentTypeService documentTypeService,
@@ -61,14 +63,19 @@ public class IncomeMailController {
 
     @RequestMapping(DocUrls.IncomeMailList)
     public String getIncomeListPage(Model model) {
+        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+
         return DocTemplates.IncomeMailList;
     }
 
-    @RequestMapping(DocUrls.IncomeMailListAjax)
+    @RequestMapping(value = DocUrls.IncomeMailListAjax, produces = "application/json")
     @ResponseBody
-    public HashMap<String, Object> getIncomeList(Pageable pageable) {
+    public HashMap<String, Object> getIncomeList(
+            DocFilterDTO filterDTO,
+            Pageable pageable
+    ) {
         HashMap<String, Object> result = new HashMap<>();
-        Page<Document> documentPage = documentService.findFiltered(new DocFilterDTO(), pageable);
+        Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
         for (Document document : documentList) {

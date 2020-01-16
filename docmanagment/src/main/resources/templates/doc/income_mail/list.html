@@ -145,10 +145,10 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="journalId" class="control-label">Назорат карточкаси</label>
+                    <label for="controlCard" class="control-label">Назорат карточкаси</label>
                     <div class="col-sm-12 p0">
                         <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
-                                id="journalId" aria-hidden="true">
+                                id="controlCard" aria-hidden="true" disabled="disabled">
                             <option value="" th:text="#{sys_select}"></option>
                             <option value="AL">Alabama</option>
                             <option value="WY">Wyoming</option>
@@ -162,17 +162,13 @@
             </div>
             <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne"
                  data-parent="#accordionExample">
-                <div class="row">
+                <form class="row" id="filter">
                     <div class="form-group col-md-2 col-sm-12">
                         <label for="docType" class="control-label">Хужжат тури</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple=""
                                     id="docType" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                                <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
                             <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
                         </div>
@@ -181,7 +177,7 @@
                         <label for="correspondentType" class="control-label">Корреспондент категорияси</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="correspondentType" tabindex="-1" aria-hidden="true">
+                                    id="correspondentType" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -194,14 +190,7 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label for="description" class="control-label">Хатнинг қисқача мазмуни</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="description" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
+                            <input type="text" class="form-control" id="description">
                             <i class="gray-arrow fas fa-search  color-gray"></i>
                         </div>
                     </div>
@@ -209,7 +198,7 @@
                         <label class="control-label" for="chiefId">Рахбарият</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="chiefId" tabindex="-1" aria-hidden="true">
+                                    id="chiefId" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -223,7 +212,7 @@
                         <label class="control-label" for="executorId">Ижрочилар</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executorId" tabindex="-1" aria-hidden="true">
+                                    id="executorId" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -237,7 +226,7 @@
                         <label class="control-label" for="resolution">Қўйилган топшириқ (резолюция)</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="resolution" tabindex="-1" aria-hidden="true">
+                                    id="resolution" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -251,7 +240,7 @@
                         <label class="control-label" for="executeType">Ижро йуналиши</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeType" tabindex="-1" aria-hidden="true">
+                                    id="executeType" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -265,7 +254,7 @@
                         <label class="control-label" for="executeStatus">Хужжатнинг ижро ҳолати</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeStatus" tabindex="-1" aria-hidden="true">
+                                    id="executeStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -292,7 +281,7 @@
                         <label class="control-label" for="executeControlStatus">Ижро назорати холати</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeControlStatus" tabindex="-1" aria-hidden="true">
+                                    id="executeControlStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -305,10 +294,11 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="isInternal">ХДФУ холати</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                     id="isInternal" tabindex="-1" aria-hidden="true">
-                                <option value="0" th:text="#{sys_yes}"></option>
-                                <option value="1" th:text="#{sys_no}"></option>
+                                <option></option>
+                                <option value="0" th:text="#{sys_no}"></option>
+                                <option value="1" th:text="#{sys_yes}"></option>
                             </select>
                             <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
                         </div>
@@ -317,7 +307,7 @@
                         <label class="control-label" for="coexecutorStatus">Хамкор ижрочилар холати</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="coexecutorStatus" tabindex="-1" aria-hidden="true">
+                                    id="coexecutorStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -331,7 +321,7 @@
                         <label class="control-label" for="response">Хужжатга йўлланган жавоблар</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="response" tabindex="-1" aria-hidden="true">
+                                    id="response" tabindex="-1" aria-hidden="true" disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -341,7 +331,7 @@
                             <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -501,25 +491,25 @@
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
                 dataToSend.correspondent = $('#correspondent').val();
-                dataToSend.docId = $('#docId').val();
-                dataToSend.regId = $('#regId').val();
-                dataToSend.incomeDateBegin = $('#incomeDateBegin').val();
-                dataToSend.incomeDateEnd = $('#incomeDateEnd').val();
-                dataToSend.journalId = $('#journalId').val();
-                dataToSend.docType = $('#docType').val();
+                dataToSend.documentId = $('#docId').val();
+                dataToSend.registrationNumber = $('#regId').val();
+                dataToSend.regsitrationDateBegin = $('#incomeDateBegin').val();
+                dataToSend.regsitrationDateEnd = $('#incomeDateEnd').val();
+                dataToSend.controlCard = $('#controlCard').val();
+                dataToSend.documentType = $('#docType').val();
                 dataToSend.correspondentType = $('#correspondentType').val();
-                dataToSend.description = $('#description').val();
-                dataToSend.chiefId = $('#chiefId').val();
-                dataToSend.executorId = $('#executorId').val();
+                dataToSend.content = $('#description').val();
+                dataToSend.chief = $('#chiefId').val();
+                dataToSend.executors = $('#executorId').val();
                 dataToSend.resolution = $('#resolution').val();
-                dataToSend.executeType = $('#executeType').val();
+                dataToSend.executePath = $('#executeType').val();
                 dataToSend.executeStatus = $('#executeStatus').val();
                 dataToSend.executeDateBegin = $('#executeDateBegin').val();
                 dataToSend.executeDateEnd = $('#executeDateEnd').val();
                 dataToSend.executeControlStatus = $('#executeControlStatus').val();
-                dataToSend.isInternal = $('#isInternal').val();
+                dataToSend.insidePurposeStatus = $('#isInternal').val();
                 dataToSend.coexecutorStatus = $('#coexecutorStatus').val();
-                dataToSend.response = $('#response').val();
+                dataToSend.replies = $('#response').val();
 
                 $.get(ajaxListLink, dataToSend, function(data){
                     callback(data);
@@ -546,6 +536,9 @@
         thead = dataDatatableSelector.html();
         datatableConnect();
 
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        })
     })
 </script>
 </body>
