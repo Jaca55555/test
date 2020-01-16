@@ -107,7 +107,7 @@
     var dataDatatableSelector;
     var thead;
 
-    function changeStatusFunc(url, row){
+    function changeStatusFunc(url){
         fetch(url).then(data =>{return data; })
             .then(res => console.log(res));
         getDatatableConnect();
@@ -132,7 +132,7 @@
                 aria-expanded="false"><span class="sr-only">Toggle
                                                                 Dropdown</span></button>
         <div class="dropdown-menu">
-            <button class="dropdown-item"  onclick="changeStatusFunc('${currentEditStatusLink}', ${row})">изменить</button>
+            <button class="dropdown-item"  onclick="changeStatusFunc('${currentEditStatusLink}')">изменить</button>
 
         </div>
     </div>`;
