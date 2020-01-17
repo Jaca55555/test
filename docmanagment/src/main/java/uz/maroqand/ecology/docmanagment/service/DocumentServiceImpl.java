@@ -76,7 +76,8 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     if (filterDTO.getRegistrationNumber() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("registrationNumber"), filterDTO.getRegistrationNumber()));
+                        System.out.println(filterDTO.getRegistrationNumber());
+                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
                     }
 
                     Date dateBegin = DateParser.TryParse(filterDTO.getRegsitrationDateBegin(), Common.uzbekistanDateFormat);
@@ -104,7 +105,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     if (filterDTO.getContent() != null) {
-                        predicates.add(criteriaBuilder.equal(root.<String>get("content"), "%" + filterDTO.getContent() + "%"));
+                        predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + filterDTO.getContent() + "%"));
                     }
 
                     if (filterDTO.getChief() != null) {

@@ -96,7 +96,7 @@
     </div>
     <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
         <!-- filters card begins here -->
-        <div class="card" style="border-radius: 5px">
+        <form class="card" style="border-radius: 5px" id="filter">
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
                     <a class="card-header-a" href="/static/doc/" data-toggle="collapse" data-target="#collapseOne"
@@ -162,7 +162,7 @@
             </div>
             <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne"
                  data-parent="#accordionExample">
-                <form class="row" id="filter">
+                <div class="row" >
                     <div class="form-group col-md-2 col-sm-12">
                         <label for="docType" class="control-label">Хужжат тури</label>
                         <div class="col-sm-12 p0">
@@ -197,8 +197,8 @@
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label" for="chiefId">Рахбарият</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="chiefId" tabindex="-1" aria-hidden="true" disabled="disabled">
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple=""
+                                    id="chiefId" tabindex="-1" aria-hidden="true" th:disabled="disabled">
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -331,9 +331,9 @@
                             <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     <div class="parent-card col-xl-12">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
