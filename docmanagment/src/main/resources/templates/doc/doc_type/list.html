@@ -80,11 +80,11 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var html = '<div class="btn-group">';
-        html += '<a class="btn btn-outline-info btn-sm" href="'+editLink+'?id='+row[0]+'" title="view">'
+        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+data+'" title="view">'
+            + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
+        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+data+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
-            + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+data+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }

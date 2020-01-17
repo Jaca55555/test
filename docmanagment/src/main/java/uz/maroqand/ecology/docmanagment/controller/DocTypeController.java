@@ -79,7 +79,12 @@ public class DocTypeController {
     }
 
     @RequestMapping(value = DocUrls.DocTypeView)
-    public String getDocType(Model model, @RequestParam(name = "id")String id) {
+    public String getDocType(Model model, @RequestParam(name = "id")Integer id) {
+        DocumentType documentType = documentTypeService.getById(id);
+        if (documentType == null) {
+            return "redirect:" + DocUrls.DocTypeList;
+        }
+        model.addAttribute("docType", documentType);
         return DocTemplates.DocTypeView;
     }
 

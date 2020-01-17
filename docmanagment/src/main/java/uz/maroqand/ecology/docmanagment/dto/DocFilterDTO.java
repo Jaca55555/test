@@ -2,7 +2,6 @@ package uz.maroqand.ecology.docmanagment.dto;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import uz.maroqand.ecology.docmanagment.constant.DocumentSubType;
 
 /**
  * Created by Namazov Jamshid
