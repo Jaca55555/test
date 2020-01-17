@@ -12,18 +12,20 @@ import java.util.Map;
  */
 public enum LogType {
 
-    Confirm(0,"sys_logType.confirm"),
-    Forwarding(1,"sys_logType.forwarding"),
-    Performer(2,"sys_logType.performer"),
-    Agreement(3,"sys_logType.agreement"),
-    AgreementComplete(4,"sys_logType.agreementComplete");
+    Confirm(0,"sys_logType.confirm","sys_logType.confirmHistory"),
+    Forwarding(1,"sys_logType.forwarding","sys_logType.forwardingHistory"),
+    Performer(2,"sys_logType.performer","sys_logType.performerHistory"),
+    Agreement(3,"sys_logType.agreement","sys_logType.agreementHistory"),
+    AgreementComplete(4,"sys_logType.agreementComplete","sys_logType.agreementCompleteHistory");
 
     private Integer id;
     private String name;
+    private String historyName;
 
-    LogType(Integer id, String name) {
+    LogType(Integer id, String name, String historyName) {
         this.id = id;
         this.name = name;
+        this.historyName = historyName;
     }
 
     private static Map<Integer, LogType> logTypeMap;
@@ -52,5 +54,9 @@ public enum LogType {
 
     public String getName() {
         return name;
+    }
+
+    public String getHistoryName() {
+        return historyName;
     }
 }

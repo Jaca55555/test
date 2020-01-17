@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.repository.user;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,8 +17,6 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer>, JpaSpecificationExecutor<Notification> {
 
-    List<Notification> findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus status, Pageable pageable);
-
-    Page<Notification> findByReviewerIdAndDeletedFalse(Integer reviewerId, Pageable pageable);
+    List<Notification> findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(Integer reviewerId, NotificationStatus status, Pageable pageable);
 
 }

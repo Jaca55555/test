@@ -108,7 +108,11 @@ public class IncomeMailController {
     }
 
     @RequestMapping(value = DocUrls.IncomeMailNew, method = RequestMethod.GET)
-    public String newDocument(@org.jetbrains.annotations.NotNull Model model) {
+    public String newDocument(Model model) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect: " + DocUrls.IncomeMailList;
+        }
         model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailNew);
         model.addAttribute("journal", journalService.getStatusActive());

@@ -28,7 +28,7 @@
                             <p th:text="${@helperService.getUserFullNameById(regApplicationLog.updateById)}" style="margin-bottom: 0;"></p>
                             <p th:text="${regApplicationLog.updateAt!=null? #dates.format(regApplicationLog.updateAt,'dd.MM.yyyy HH:mm'):''}"></p>
                         </td>
-                        <td ><span th:text="${regApplicationLog.type.getName()}"></span></td>
+                        <td ><span th:text="#{${regApplicationLog.type.getHistoryName()}}"></span></td>
                         <td >
                             <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>

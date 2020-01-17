@@ -91,7 +91,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     public List<Notification> getNotificationList(Integer reviewerId){
         Pageable limit = PageRequest.of(0,10);
-        return notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.Reviewed, limit);
+        return notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.Reviewed, limit);
         /*if (notificationMap.containsKey(reviewerId)) {
             return notificationMap.get(reviewerId);
         }
@@ -100,7 +100,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     public List<Notification> getNewNotificationList(Integer reviewerId){
         Pageable limit = PageRequest.of(0,10);
-        return notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.New, limit);
+        return notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New, limit);
         //get and clear
         /*List<Notification> notificationList = new LinkedList<>();
         if (newNotificationMap.containsKey(reviewerId)) {
@@ -118,7 +118,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     public void viewNewNotificationList(Integer reviewerId){
         Pageable limit = PageRequest.of(0,10);
-        List<Notification> notificationList = notificationRepository.findByStatusAndDeletedFalseOrderByIdDesc(NotificationStatus.New, limit);
+        List<Notification> notificationList = notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New, limit);
         for (Notification notification:notificationList){
             notification.setStatus(NotificationStatus.Reviewed);
             notification.setUpdateAt(new Date());

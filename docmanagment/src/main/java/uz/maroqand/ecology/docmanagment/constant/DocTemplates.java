@@ -18,4 +18,12 @@ public class DocTemplates {
     public static final String IncomeMailEdit = IncomeMail + "/new";
     public static final String IncomeMailExecuteEdit = IncomeMail + "/execute_edit";
 
+    public static final String CommunicationToolsPrefix = "/communication_tools";
+    public static final String CommunicationToolsList = CommunicationToolsPrefix + "/list";
+    public static final String CommunicationToolsNew = CommunicationToolsPrefix + "/new";
+    public static final String CommunicationToolsEdit = CommunicationToolsPrefix + "/edit";
+
+
+
+
 }
