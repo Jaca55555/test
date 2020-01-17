@@ -45,6 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document createDoc(Document document) {
         documentRepository.save(document);
+        document.setDeleted(Boolean.FALSE);
         document.getDocumentSub().setDocumentId(document.getId());
         documentRepository.save(document);
         return document;

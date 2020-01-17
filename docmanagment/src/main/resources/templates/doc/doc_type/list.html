@@ -106,7 +106,7 @@
                 {data: 'name'},
                 {data: 'nameRu'},
                 {data: 'createdAt', render: function (data) {
-                        return moment.unix(data/1000).format("MM.DD.YYYY");
+                        return moment.unix(data/1000).format("DD.MM.YYYY");
                     }},
                 {data: 'status'},
                 {data: 'id', render: renderActionsColumn, orderable: false}

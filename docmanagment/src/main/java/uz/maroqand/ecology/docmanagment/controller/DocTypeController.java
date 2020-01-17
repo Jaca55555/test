@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
 import uz.maroqand.ecology.docmanagment.constant.DocumentTypeEnum;
@@ -60,21 +62,52 @@ public class DocTypeController {
 
     @RequestMapping(value = DocUrls.DocTypeNew)
     public String getNewDocType(Model model) {
+        model.addAttribute("action_url", DocUrls.DocTypeNew);
+        model.addAttribute("docType", new DocumentType());
+        model.addAttribute("doc_type", DocumentTypeEnum.getList());
         return DocTemplates.DocTypeNew;
     }
 
     @RequestMapping(value = DocUrls.DocTypeNew, method = RequestMethod.POST)
-    public String createNewDocType() {
+    public String createNewDocType(DocumentType docType) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.DocTypeList;
+        }
+        docType.setCreatedById(user.getId());
+        documentTypeService.create(docType);
         return "redirect:" + DocUrls.DocTypeList;
     }
 
     @RequestMapping(value = DocUrls.DocTypeEdit)
-    public String getEditDocType(Model model, @RequestParam(name = "id")String id) {
-        return DocTemplates.DocTypeNew;
+    public String getEditDocType(
+            Model model,
+            @RequestParam(name = "id")Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.DocTypeList;
+        }
+        DocumentType docType = documentTypeService.getById(id);
+        if (docType == null) {
+            return "redirect:" + DocUrls.DocTypeList;
+        }
+        model.addAttribute("action_url", DocUrls.DocTypeEdit);
+        model.addAttribute("docType", docType);
+        model.addAttribute("doc_type", DocumentTypeEnum.getList());
+
+        return DocTemplates.DocTypeEdit;
     }
 
     @RequestMapping(value = DocUrls.DocTypeEdit, method = RequestMethod.POST)
-    public String editDocType(@RequestParam(name = "id")String id) {
+    public String editDocType(
+            @RequestParam(name = "id")String id,
+            @RequestParam(name = "createDate")String date,
+            DocumentType docType
+    ) {
+        docType.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
+        docType.setCreatedById(userService.getCurrentUserFromContext().getId());
+        documentTypeService.update(docType);
         return "redirect:" + DocUrls.DocTypeList;
     }
 
