@@ -33,4 +33,5 @@ public class DocUrls {
     public static final String DocTypeView = DocType + "/view";
     public static final String DocTypeNew = DocType + "/new";
     public static final String DocTypeEdit = DocType + "/edit";
+    public static final String DocTypeDelete = DocType + "/delete";
 }

@@ -102,23 +102,15 @@
                     <a class="card-header-a" href="/static/doc/" data-toggle="collapse" data-target="#collapseOne"
                        aria-expanded="true" aria-controls="collapseOne">Саралаш фильтри</a>
                 </h5>
-                <div>
-                    <button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button>
-                    <button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button>
-                </div>
             </div>
             <div class="row p10">
                 <div class="form-group col-md-3 col-sm-12">
                     <label for="correspondent" class="control-label">Корреспондент</label>
                     <div class="col-sm-12 p0">
-                        <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
-                                id="correspondent" aria-hidden="true">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                id="correspondent" aria-hidden="true" disabled="disabled">
+                            <option></option>
                             <option value="" th:text="#{sys_select}"></option>
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
                         </select>
                         <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
                     </div>
@@ -166,8 +158,9 @@
                     <div class="form-group col-md-2 col-sm-12">
                         <label for="docType" class="control-label">Хужжат тури</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple=""
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                     id="docType" tabindex="-1" aria-hidden="true">
+                                <option></option>
                                 <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
                             <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
@@ -448,7 +441,7 @@
 </div>
 <!-- [ Main Content ] end -->
 
-<object th:include="fragments/footer :: scripts" th:remove="tag"></object>
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 
