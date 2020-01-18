@@ -30,9 +30,13 @@ public interface RegApplicationLogService {
 
     RegApplicationLog update(RegApplicationLog regApplicationLog, LogStatus logStatus, String comment, Integer updateById);
 
-    RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user);
+    RegApplicationLog updateDocument(RegApplicationLog regApplicationLog);
 
     Date getDeadlineDate(Integer deadline, Date beginDate);
+
+    RegApplicationLog getByIndex(Integer regApplicationId, LogType type, Integer index);
+
+    List<RegApplicationLog> getAllByIndex(Integer regApplicationId, LogType type, Integer index);
 
     Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,

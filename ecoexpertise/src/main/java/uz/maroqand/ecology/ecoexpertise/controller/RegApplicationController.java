@@ -785,6 +785,7 @@ public class RegApplicationController {
         }
 
         if(regApplication.getForwardingLogId() == null){
+            regApplication.setLogIndex(1);
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
             regApplication.setForwardingLogId(regApplicationLog.getId());
             regApplication.setStatus(RegApplicationStatus.Process);
@@ -824,11 +825,14 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
         }
 
+        regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-        forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.New,"", user.getId());
+        forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
 
         regApplication.setForwardingLogId(forwardingLog.getId());
+        regApplication.setPerformerId(null);
         regApplication.setPerformerLogId(null);
+        regApplication.setPerformerLogIdNext(null);
         regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
 

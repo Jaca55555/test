@@ -114,7 +114,7 @@ public class AgreementCompleteController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+        /*Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 user.getOrganizationId(),
                 LogType.AgreementComplete,
@@ -122,14 +122,23 @@ public class AgreementCompleteController {
                 null,
                 null,//todo shart kerak
                 pageable
+        );*/
+
+        Page<RegApplicationLog> regApplicationLogPage = regApplicationLogService.findFiltered(
+                filterDto,
+                null,
+                null,
+                LogType.AgreementComplete,
+                null,
+                pageable
         );
 
-        List<RegApplication> regApplicationList = regApplicationPage.getContent();
-        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
-        for (RegApplication regApplication : regApplicationList){
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
+        for (RegApplicationLog agreementCompleteLog : regApplicationLogList){
+            RegApplication regApplication = regApplicationService.getById(agreementCompleteLog.getRegApplicationId());
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            RegApplicationLog agreementCompleteLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+            RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -141,27 +150,29 @@ public class AgreementCompleteController {
                     performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
                     performerLog.getStatus() != null ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
-                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():""
+                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
+                    agreementCompleteLog.getId()
             });
         }
 
-        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", regApplicationLogPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationLogPage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
     }
 
     @RequestMapping(ExpertiseUrls.AgreementCompleteView)
     public String getAgreementCompleteViewPage(
-            @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "id")Integer logId,
             Model model
     ) {
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        Integer regApplicationId = regApplicationLog.getRegApplicationId();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AgreementCompleteList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
 
@@ -171,9 +182,12 @@ public class AgreementCompleteController {
         model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplicationId));
         model.addAttribute("regApplicationLog",regApplicationLog);
 
+        RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
+        List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
-        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
-        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
+        model.addAttribute("performerLog", performerLog);
+        model.addAttribute("agreementLogList", agreementLogList);
         model.addAttribute("agreementCompleteLog", regApplicationLog);
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementCompleteView;
@@ -198,7 +212,7 @@ public class AgreementCompleteController {
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
 
-        if(agreementStatus == 3){
+        if(agreementStatus.equals(LogStatus.Approved.getId())){
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
@@ -230,8 +244,9 @@ public class AgreementCompleteController {
             smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
         }
 
-        if(agreementStatus == 4){
+        if(agreementStatus.equals(LogStatus.Denied.getId())){
             regApplication.setAgreementStatus(LogStatus.Denied);
+            regApplication.setLogIndex(regApplication.getLogIndex()+1);
             RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
             regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);

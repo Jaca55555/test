@@ -70,12 +70,22 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     ){
         RegApplicationLog regApplicationLog = new RegApplicationLog();
         regApplicationLog.setRegApplicationId(regApplication.getId());
+        regApplicationLog.setIndex(regApplication.getLogIndex());
         regApplicationLog.setComment(comment);
 
         regApplicationLog.setType(logType);
         regApplicationLog.setStatus(LogStatus.Initial);
         regApplicationLog.setCreatedAt(new Date());
         regApplicationLog.setCreatedById(createdBy.getId());
+
+        if(logType.equals(LogType.AgreementComplete)){
+            List<RegApplicationLog> regApplicationLogList = regApplicationLogRepository.findByRegApplicationIdAndTypeAndShowTrueAndDeletedFalseOrderByIdDesc(regApplication.getId(), logType);
+            for (RegApplicationLog olgAgreementComplete: regApplicationLogList){
+                olgAgreementComplete.setShow(false);
+                regApplicationLogRepository.save(olgAgreementComplete);
+            }
+            regApplicationLog.setShow(true);
+        }
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
@@ -94,9 +104,8 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
-    public RegApplicationLog updateDocument(RegApplicationLog regApplicationLog, User user){
+    public RegApplicationLog updateDocument(RegApplicationLog regApplicationLog){
         regApplicationLog.setUpdateAt(new Date());
-        regApplicationLog.setUpdateById(user.getId());
         return regApplicationLogRepository.save(regApplicationLog);
     }
 
@@ -107,6 +116,13 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         return calendar.getTime();
     }
 
+    public RegApplicationLog getByIndex(Integer regApplicationId, LogType type, Integer index){
+        return regApplicationLogRepository.findTopByRegApplicationIdAndTypeAndIndexAndDeletedFalseOrderByIdDesc(regApplicationId, type, index);
+    }
+
+    public List<RegApplicationLog> getAllByIndex(Integer regApplicationId, LogType type, Integer index){
+        return regApplicationLogRepository.findByRegApplicationIdAndTypeAndIndexAndDeletedFalseOrderByIdDesc(regApplicationId, type, index);
+    }
 
     @Override
     public Page<RegApplicationLog> findFiltered(
@@ -138,6 +154,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                 System.out.println("status1="+filterDto.getStatus());
                 System.out.println("type="+type);
                 System.out.println("status="+status);
+                System.out.println("updateById="+updateById);
 
                 if(filterDto.getTin() != null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("tin"), filterDto.getTin()));
@@ -193,10 +210,10 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                     predicates.add(criteriaBuilder.equal(root.get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
                 }
                 if(createdById!=null){
-                    criteriaBuilder.equal(root.get("createdById"), createdById);
+                    predicates.add(criteriaBuilder.equal(root.get("createdById"), createdById));
                 }
                 if(updateById!=null){
-                    criteriaBuilder.equal(root.get("updateById"), updateById);
+                    predicates.add(criteriaBuilder.equal(root.get("updateById"), updateById));
                 }
 
                 if(type!=null){
@@ -209,8 +226,8 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                     predicates.add(criteriaBuilder.equal(root.get("status"), status.getId()));
                 }
 
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
+                predicates.add(criteriaBuilder.equal(root.get("show"), true));
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }

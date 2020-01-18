@@ -129,8 +129,7 @@ public class AgreementController {
         for (RegApplicationLog regApplicationLog : regApplicationLogList){
             RegApplication regApplication = regApplicationService.getById(regApplicationLog.getRegApplicationId());
             Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-
+            RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -138,7 +137,7 @@ public class AgreementController {
                     regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    regApplication.getDeadlineDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                     performerLog != null && performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale) : "",
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getAgreementName(),locale) : "",
@@ -178,6 +177,10 @@ public class AgreementController {
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
 
+        RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
+        RegApplicationLog agreementCompleteLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.AgreementComplete, regApplicationLog.getIndex());
+        List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
@@ -185,9 +188,9 @@ public class AgreementController {
         model.addAttribute("regApplicationLog", regApplicationLog);
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
-        model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
-        model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
-        model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
+        model.addAttribute("performerLog", performerLog);
+        model.addAttribute("agreementLogList", agreementLogList);
+        model.addAttribute("agreementCompleteLog", agreementCompleteLog);
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
         return ExpertiseTemplates.AgreementView;
     }
@@ -219,13 +222,14 @@ public class AgreementController {
             }
         }
         if(createAgreementComplete){
-            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
+            //yangi log ni ko'rsatamiz
+            RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.AgreementComplete, comment, user);
             regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
 
-        if(agreementStatus == 4){
+        if(agreementStatus.equals(LogStatus.Denied.getId())){
             for(RegApplicationLog agreementLog :agreementLogList){
                 if(agreementLog.getStatus().equals(LogStatus.New)){
                     regApplicationLogService.update(agreementLog, LogStatus.Initial, agreementLog.getComment(), agreementLog.getUpdateById());
@@ -233,6 +237,7 @@ public class AgreementController {
             }
 
             regApplication.setAgreementStatus(LogStatus.Denied);
+            regApplication.setLogIndex(regApplication.getLogIndex()+1);
             RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
             regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);

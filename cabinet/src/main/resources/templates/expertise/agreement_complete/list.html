@@ -196,7 +196,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[11];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
@@ -230,9 +230,9 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[8]===2)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
-        if (row[8]===3)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
-        if (row[8]===4)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
+        if (row[8]===3)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
+        if (row[8]===4)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
+        if (row[8]===5)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
         return statusLabel;
     }
 
@@ -241,8 +241,9 @@
         if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
         if (row[10]===1)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
         if (row[10]===2)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
-        if (row[10]===3)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
-        if (row[10]===4)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        if (row[10]===3)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
+        if (row[10]===4)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===5)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
         return statusLabel;
     }
 
@@ -284,13 +285,13 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'applicant.tin'},
-                {data: 2, name: 'applicant.name'},
+                {data: 1, name: 'regApplication.applicant.tin'},
+                {data: 2, name: 'regApplication.applicant.name'},
                 {data: 3, orderable:false},
-                {data: 4, name: 'category'},
-                {data: 5, name: 'registrationDate'},
-                {render: renderDeadlineDateColumn, name: 'deadlineDate'},
-                {data: 7, render:renderStatusColumn, name: 'status'},
+                {data: 4, name: 'regApplication.category'},
+                {data: 5, name: 'regApplication.registrationDate'},
+                {render: renderDeadlineDateColumn, name: 'regApplication.deadlineDate'},
+                {data: 7, render:renderStatusColumn, name: 'regApplication.status'},
                 {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
             ],
