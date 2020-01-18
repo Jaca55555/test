@@ -6,10 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
-import uz.maroqand.ecology.core.dto.api.PaymentData;
-import uz.maroqand.ecology.core.dto.api.PaymentNew;
-import uz.maroqand.ecology.core.dto.api.PaymentResponse;
-import uz.maroqand.ecology.core.dto.api.PaymentResponseData;
+import uz.maroqand.ecology.core.dto.api.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -17,6 +14,7 @@ import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.HttpRequestHelper;
 import uz.maroqand.ecology.core.util.Parser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +48,7 @@ public class BankAPIController {
             @RequestBody( required = false) String params,
             HttpServletRequest request
     ) {
+        Gson gson = new Gson();
         Map<String, Object> parametersMap = new HashMap<>();
         Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
@@ -62,7 +61,6 @@ public class BankAPIController {
         PaymentResponse paymentResponse = new PaymentResponse();
         PaymentData paymentData = null;
         try {
-            Gson gson = new Gson();
             paymentData = gson.fromJson(params, PaymentData.class);
         }catch (Exception e){
             e.printStackTrace();
@@ -121,6 +119,10 @@ public class BankAPIController {
         paymentResponse.setCode("0");
         paymentResponse.setMessage("Успешно");
         paymentResponse.setData(data);
+
+        String response = HttpRequestHelper.makePostRequestWithJSON("http://172.25.43.81:9999/eco/tobank", gson.toJson(paymentResponse));
+        logger.info("Response /eco/tobank="+response);
+
         return paymentResponse;
     }
 
