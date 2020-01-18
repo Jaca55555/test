@@ -19,4 +19,12 @@ public class DocUrls {
     public static final String IncomeMailEdit = IncomeMail + "/edit";
     public static final String IncomeMailExecuteEdit = IncomeMail + "/execute_edit";
 
+    private static final String CommunicationTools = Prefix +  "/communication_tools";
+    public static final String CommunicationToolsList = CommunicationTools + "/list";
+    public static final String CommunicationToolsListAjax = CommunicationToolsList + "/ajax";
+    public static final String CommunicationToolsNew = CommunicationTools + "/new";
+    public static final String CommunicationToolsEdit = CommunicationTools + "/edit";
+    public static final String CommunicationToolsEditStatus = CommunicationToolsEdit + "/status";
+    public static final String CommunicationToolsEditSubmit = CommunicationToolsEdit + "/submit";
+
 }
