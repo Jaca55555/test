@@ -285,14 +285,14 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'applicant.tin'},
-                {data: 2, name: 'applicant.name'},
+                {data: 1, name: 'regApplication.applicant.tin'},
+                {data: 2, name: 'regApplication.applicant.name'},
                 {data: 3, orderable:false},
-                {data: 4, name: 'category'},
-                {data: 5, name: 'registrationDate'},
-                {render: renderDeadlineDateColumn, name: 'deadlineDate'},
-                {data: 7, render:renderStatusColumn, orderable:false},
-                {data: 9, render:renderLogStatusColumn, orderable:false},
+                {data: 4, name: 'regApplication.category'},
+                {data: 5, name: 'regApplication.registrationDate'},
+                {render: renderDeadlineDateColumn, name: 'regApplication.deadlineDate'},
+                {data: 7, render:renderStatusColumn, name: 'regApplication.status'},
+                {data: 9, render:renderLogStatusColumn, name: 'status'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

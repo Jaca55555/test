@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
@@ -78,6 +80,33 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
         return communicationToolRepository.save(communicationTool);
     }
 
+
+    @Override
+    public Page<CommunicationTool> findFiltered(
+            Integer id,
+            String name,
+            Pageable pageAble
+    ){
+        return communicationToolRepository.findAll(getFilteringSpecification2(id, name), pageAble);
+    }
+
+    private static Specification<CommunicationTool> getFilteringSpecification2(Integer id, String name) {
+        return new Specification<CommunicationTool>() {
+            @Override
+            public Predicate toPredicate(Root<CommunicationTool> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+                if (id != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), id));
+                }
+                if (name != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("name"), name));
+                }
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
     public CommunicationTool update(CommunicationTool communicationTool) {
         return communicationToolRepository.save(communicationTool);
     }
