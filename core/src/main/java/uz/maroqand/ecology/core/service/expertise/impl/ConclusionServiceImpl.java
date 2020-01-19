@@ -74,8 +74,8 @@ public class ConclusionServiceImpl implements ConclusionService {
         DocumentRepo documentRepo = documentRepoService.create(DocumentRepoType.Conclusion, conclusion.getId());
         conclusion.setDocumentRepoId(documentRepo.getId());
         conclusion.setStatus(ConclusionStatus.Active);
-//        conclusion.setNumber();
-//        conclusion.setDate();
+        conclusion.setNumber(conclusion.getId().toString()); //todo xulosa raqami ketma ket ketadimi prefix suffix bo’lmaydimi?
+        conclusion.setDate(new Date());
 //        conclusion.setDeadlineDate();
 //        conclusion.setFiles();
 
