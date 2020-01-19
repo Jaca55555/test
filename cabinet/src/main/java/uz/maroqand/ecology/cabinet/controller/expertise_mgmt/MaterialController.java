@@ -104,6 +104,7 @@ public class MaterialController {
             }
 
             material = materialService.save(material);
+            materialService.updateList();
 
             tableHistoryService.create(
                     TableHistoryType.add,
@@ -126,6 +127,7 @@ public class MaterialController {
 
             material.setDeleted(false);
             material = materialService.save(material);
+            materialService.updateList();
 
             try {
                 after = objectMapper.writeValueAsString(material);
@@ -187,6 +189,7 @@ public class MaterialController {
         HashMap<String, String> response = new HashMap<>();
         if (material!=null && !material.getDeleted()){
             materialService.delete(material, user.getId(), msg);
+            materialService.updateList();
             response.put("status", "success");
             response.put("id", String.valueOf(id));
         } else {

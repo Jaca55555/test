@@ -32,9 +32,10 @@
                         <td >
                             <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
-                            <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-info" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
-                            <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-success" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
-                            <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-warning" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-info" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-success" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==5}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                         </td>
                     </tr>
                     </tbody>

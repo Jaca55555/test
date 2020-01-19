@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 
+import java.util.List;
+
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
  * (uz)
@@ -13,5 +15,6 @@ import uz.maroqand.ecology.core.entity.expertise.Material;
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Integer>, JpaSpecificationExecutor<Material> {
 
+    List<Material> findByDeletedFalse();
 
 }
