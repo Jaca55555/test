@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-6 pr-0" >
                 <h5 th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="form-group col-md-10 offset-1" th:text="#{sys_performer.newConclusionResult}"></h5>
-                <form id="form" method="post" th:action="${action_url}" data-parsley-validate="" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
+                <form id="form" method="post" th:action="${action_url}" data-parsley-validate="" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
                     <div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusionResult}">Результат заключения</label>
                         <select class="form-control" name="performerStatus" required="required">
@@ -62,7 +62,7 @@
                 </form>
 
                 <div th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" style="border-bottom: 1px solid #f4f4f4;margin-top: 20px;margin-bottom: 20px;"></div>
-                <object th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" th:include="expertise/fragment/result_statuses :: statuses" th:remove="tag"></object>
+                <object th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}" th:include="expertise/fragment/result_statuses :: statuses" th:remove="tag"></object>
             </div>
 
             <div class="col-md-6" style="border-left: 1px solid #f4f4f4;">

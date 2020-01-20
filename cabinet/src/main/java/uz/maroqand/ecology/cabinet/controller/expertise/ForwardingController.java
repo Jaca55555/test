@@ -202,10 +202,14 @@ public class ForwardingController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        LogStatus performerStatus = LogStatus.Initial;
+        if(regApplicationLog.getStatus().equals(LogStatus.Resend)){
+            performerStatus = LogStatus.Resend;
+        }
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, commentStr, user.getId());
 
         RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Performer, commentStr,user);
-        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial, commentStr, performer.getId());
+        regApplicationLogService.update(regApplicationLogCreate, performerStatus, commentStr, performer.getId());
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setPerformerId(performerId);
