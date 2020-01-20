@@ -7,7 +7,7 @@
 <body th:fragment="conclusion">
 
 <div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
-    <p th:utext="${conclusion.htmlText}"></p>
+    <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
 
     <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
     <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
