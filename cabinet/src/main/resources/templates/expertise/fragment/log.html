@@ -29,13 +29,37 @@
                             <p th:text="${regApplicationLog.updateAt!=null? #dates.format(regApplicationLog.updateAt,'dd.MM.yyyy HH:mm'):''}"></p>
                         </td>
                         <td ><span th:text="#{${regApplicationLog.type.getHistoryName()}}"></span></td>
-                        <td >
+                        <td th:if="${regApplicationLog.type.getId()==0}">
+                            <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-warning" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-info" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-success" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==5}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getConfirmName()}}"></span>
+                        </td>
+                        <td th:if="${regApplicationLog.type.getId()==1}">
+                            <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-warning" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-info" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-success" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==5}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getForwardingName()}}"></span>
+                        </td>
+                        <td th:if="${regApplicationLog.type.getId()==2}">
                             <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-warning" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-info" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-success" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
                             <span th:if="${regApplicationLog.status.getId()==5}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getPerformerName()}}"></span>
+                        </td>
+                        <td th:if="${regApplicationLog.type.getId()==3 || regApplicationLog.type.getId()==4}">
+                            <span th:if="${regApplicationLog.status.getId()==0}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==1}" class="badge badge-secondary" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==2}" class="badge badge-warning" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==3}" class="badge badge-info" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==4}" class="badge badge-success" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
+                            <span th:if="${regApplicationLog.status.getId()==5}" class="badge badge-danger" th:text="#{${regApplicationLog.status.getAgreementName()}}"></span>
                         </td>
                     </tr>
                     </tbody>
