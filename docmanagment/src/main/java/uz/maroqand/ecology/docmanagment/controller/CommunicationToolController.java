@@ -114,9 +114,8 @@ public class CommunicationToolController {
     }
     @RequestMapping(value = DocUrls.CommunicationToolsEditStatus, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public String communicationToolService(@RequestParam(name = "id")Integer id){
+    public String editStatus(@RequestParam(name = "id")Integer id){
         CommunicationTool tool = communicationToolService.getById(id);
-        System.out.println("change status");
 
         if(tool != null){
             tool.setStatus(!tool.getStatus());

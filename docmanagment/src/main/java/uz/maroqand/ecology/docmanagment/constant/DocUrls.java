@@ -27,4 +27,11 @@ public class DocUrls {
     public static final String CommunicationToolsEditStatus = CommunicationToolsEdit + "/status";
     public static final String CommunicationToolsEditSubmit = CommunicationToolsEdit + "/submit";
 
+    private static final String DocumentView = Prefix + "/document_view";
+    public static final String DocumentViewList = DocumentView + "/list";
+    public static final String DocumentViewListAjax = DocumentViewList + "/ajax";
+    public static final String DocumentViewNew = DocumentView + "/new";
+    public static final String DocumentViewEdit = DocumentView + "/edit";
+    public static final String DocumentViewEditStatus = DocumentViewEdit + "/status";
+
 }
