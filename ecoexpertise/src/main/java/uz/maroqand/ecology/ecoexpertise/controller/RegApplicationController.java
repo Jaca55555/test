@@ -836,7 +836,7 @@ public class RegApplicationController {
         regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
 
-        regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
+        regApplication.setStatus(RegApplicationStatus.Process);
         regApplicationService.update(regApplication);
 
         return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
