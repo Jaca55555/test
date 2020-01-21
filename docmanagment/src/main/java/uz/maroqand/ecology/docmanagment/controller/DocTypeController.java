@@ -3,15 +3,10 @@ package uz.maroqand.ecology.docmanagment.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -20,12 +15,10 @@ import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
 import uz.maroqand.ecology.docmanagment.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagment.entity.DocumentType;
-import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentTypeService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,17 +29,14 @@ import java.util.List;
 
 @Controller
 public class DocTypeController {
-    private final DocumentService documentService;
     private final DocumentTypeService documentTypeService;
     private final UserService userService;
 
     @Autowired
     public DocTypeController(
-            DocumentService documentService,
             DocumentTypeService documentTypeService,
             UserService userService
     ) {
-        this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.userService = userService;
     }
@@ -67,9 +57,8 @@ public class DocTypeController {
     ) {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentType> documentTypePage = documentTypeService.getFiltered(typeEnum, name, status, pageable);
-        List<DocumentType> documentTypes = documentTypePage.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentTypes.size());
-        for (DocumentType docType : documentTypes) {
+        List<Object[]> JSONArray = new ArrayList<>(documentTypePage.getContent().size());
+        for (DocumentType docType : documentTypePage.getContent()) {
             JSONArray.add(new Object[]{
                     docType.getId(),
                     docType.getType(),

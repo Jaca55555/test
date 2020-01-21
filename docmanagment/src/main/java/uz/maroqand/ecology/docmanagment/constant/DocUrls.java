@@ -34,4 +34,12 @@ public class DocUrls {
     public static final String DocTypeNew = DocType + "/new";
     public static final String DocTypeEdit = DocType + "/edit";
     public static final String DocTypeDelete = DocType + "/delete";
+
+    private static final String Journal = Prefix + "/journal";
+    public static final String JournalList = Journal + "/list";
+    public static final String JournalListAjax = Journal + "/list_ajax";
+    public static final String JournalView = Journal + "/view";
+    public static final String JournalNew = Journal + "/new";
+    public static final String JournalEdit = Journal + "/edit";
+    public static final String JournalDelete = Journal + "/delete";
 }
