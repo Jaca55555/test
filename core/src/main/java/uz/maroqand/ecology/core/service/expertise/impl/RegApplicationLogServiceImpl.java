@@ -39,10 +39,17 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         this.regApplicationLogRepository = regApplicationLogRepository;
     }
 
+    @Override
     public List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId){
         return regApplicationLogRepository.findByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
     }
 
+    @Override
+    public List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type){
+        return regApplicationLogRepository.findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(regApplicationId, type);
+    }
+
+    @Override
     public List<RegApplicationLog> getByIds(Set<Integer> ids){
         return regApplicationLogRepository.findByIdInOrderByIdDesc(ids);
     }

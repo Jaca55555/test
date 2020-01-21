@@ -24,6 +24,8 @@ public interface RegApplicationLogService {
 
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
 
+    List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type);
+
     List<RegApplicationLog> getByIds(Set<Integer> ids);
 
     RegApplicationLog create(RegApplication regApplication, LogType logType, String comment, User createdBy);

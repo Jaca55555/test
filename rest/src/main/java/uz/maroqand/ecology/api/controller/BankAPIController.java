@@ -120,8 +120,8 @@ public class BankAPIController {
         paymentResponse.setMessage("Успешно");
         paymentResponse.setData(data);
 
-        String response = HttpRequestHelper.makePostRequestWithJSON("http://172.25.43.81:9999/eco/tobank", gson.toJson(paymentResponse));
-        logger.info("Response /eco/tobank="+response);
+        /*String response = HttpRequestHelper.makePostRequestWithJSON("http://172.25.43.81:9999/eco/tobank", gson.toJson(paymentResponse));
+        logger.info("Response /eco/tobank="+response);*/
 
         return paymentResponse;
     }

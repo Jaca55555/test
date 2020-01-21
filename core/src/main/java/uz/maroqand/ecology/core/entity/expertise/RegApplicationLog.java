@@ -50,6 +50,10 @@ public class RegApplicationLog {
     @Column(name = "created_by")
     private Integer createdById;
 
+    //ko'rib chiqish uchun yubril
+    @Column(name="send_at", columnDefinition = "timestamp without time zone")
+    private Date sendAt;
+
     //ko'rib chiqilgan sana
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;

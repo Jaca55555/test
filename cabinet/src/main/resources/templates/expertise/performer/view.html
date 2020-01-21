@@ -87,18 +87,18 @@
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
-                                                <div class="text-right" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
+                                                <div class="text-right" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
                                                     <button class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
                                                     <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>
                                                 </div>
-                                                <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
+                                                <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
 
-                                                <div class="text-right" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+                                                <div class="text-right" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}">
                                                     <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
                                                         <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
                                                     </button>
                                                 </div>
-                                                <div style="border: 1px solid #c5c5c4;" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+                                                <div style="border: 1px solid #c5c5c4;" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}">
                                                     <object th:include="expertise/fragment/conclusion_view :: conclusion" th:remove="tag"></object>
                                                 </div>
                                             </div>

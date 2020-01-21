@@ -233,10 +233,14 @@ public class PerformerController {
         regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
 
+        //kelishiluvchilar bor bo'lsa yuboramiz
+        Set<Integer> agreements = new LinkedHashSet<>();
         List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
         for (RegApplicationLog agreementLog:agreementLogs){
+            if(agreementLog.getUpdateById()!=null) agreements.add(agreementLog.getUpdateById());
             agreementLog.setStatus(LogStatus.New);
             agreementLog.setShow(true);
+            agreementLog.setSendAt(new Date());
             regApplicationLogService.updateDocument(agreementLog);
 
             notificationService.create(
@@ -248,6 +252,18 @@ public class PerformerController {
                     user.getId()
             );
         }
+
+        //agar kelishiuvchiga ushbu ariza oldinxam yuborilgan bo'lsa, ularni show=false qilamiz(bitta ariza ikki marta chiqib qolmasligi uchun)
+        if(agreements.size()>0){
+            List<RegApplicationLog> agreementLogList = regApplicationLogService.getByRegApplicationIdAndType(regApplication.getId(), LogType.Agreement);
+            for (RegApplicationLog agreementLog:agreementLogList){
+                if(agreementLog.getUpdateById()!=null && agreements.contains(agreementLog.getUpdateById()) && (agreementLog.getStatus().equals(LogStatus.Denied) || agreementLog.getStatus().equals(LogStatus.Approved))){
+                    agreementLog.setShow(false);
+                    regApplicationLogService.updateDocument(agreementLog);
+                }
+            }
+        }
+
         if(agreementLogs.size()==0){
             RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication,LogType.AgreementComplete,comment,user);
             regApplication.setAgreementCompleteLogId(regApplicationLogCreate.getId());
@@ -297,6 +313,7 @@ public class PerformerController {
             if(!agreementLog.getStatus().equals(LogStatus.Initial)){
                 RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
                 regApplicationLogCreate.setShow(true);
+                regApplicationLogCreate.setSendAt(new Date());
                 regApplicationLogService.update(regApplicationLogCreate, LogStatus.New,"", agreementLog.getUpdateById());
 
                 agreementLog.setShow(false);
@@ -306,6 +323,7 @@ public class PerformerController {
                 agreementLogs.add(regApplicationLogCreate.getId());
             }else {
                 agreementLog.setShow(true);
+                agreementLog.setSendAt(new Date());
                 agreementLog.setStatus(LogStatus.New);
                 agreementLog.setIndex(regApplication.getLogIndex());
                 regApplicationLogService.updateDocument(agreementLog);
