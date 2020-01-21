@@ -101,12 +101,16 @@ public class ConfirmController {
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
     public String getConfirmListPage(Model model) {
+        List<LogStatus> logStatusList = new ArrayList<>();
+        logStatusList.add(LogStatus.Initial);
+        logStatusList.add(LogStatus.Approved);
+        logStatusList.add(LogStatus.Denied);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", LogStatus.getLogStatusList());
+        model.addAttribute("statusList", logStatusList);
         return ExpertiseTemplates.ConfirmList;
     }
 

@@ -99,12 +99,16 @@ public class ForwardingController {
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
     public String getForwardingListPage(Model model){
+        List<LogStatus> logStatusList = new ArrayList<>();
+        logStatusList.add(LogStatus.Initial);
+        logStatusList.add(LogStatus.Resend);
+        logStatusList.add(LogStatus.Approved);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", LogStatus.getLogStatusList());
+        model.addAttribute("statusList", logStatusList);
         return ExpertiseTemplates.ForwardingList;
     }
 

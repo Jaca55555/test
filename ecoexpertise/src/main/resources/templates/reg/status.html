@@ -147,7 +147,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link show active" id="status-tab" data-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="true" th:if="${regApplication.status!=null}" th:text="#{reg_application.status}"></a>
                                                 </li>
-                                                <li class="nav-item" th:if="${regApplication.facture!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+                                                <li class="nav-item" th:if="${regApplication.facture!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
                                                     <a class="nav-link show" id="facture-tab" data-toggle="tab" href="#facture" role="tab" aria-controls="facture" aria-selected="true" th:text="#{reg_application.facture}"></a>
                                                 </li>
                                                 <li class="nav-item">
@@ -159,7 +159,7 @@
                                                     <object th:include="reg/fragments/status :: status" th:remove="tag"></object>
                                                 </div>
                                                 <div class="tab-pane fade" id="facture" role="tabpanel" aria-labelledby="facture-tab">
-                                                    <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+                                                    <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
                                                         <div class="col-md-12 text-center mb-5">
                                                             <div class="col-md-12 text-right">
                                                                 <button type="button" class="btn btn-primary" onclick="printAccountFactor('accountBox')">
