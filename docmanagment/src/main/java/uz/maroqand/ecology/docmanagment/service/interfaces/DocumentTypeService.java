@@ -1,7 +1,10 @@
 package uz.maroqand.ecology.docmanagment.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import uz.maroqand.ecology.docmanagment.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagment.entity.DocumentType;
 
 import java.util.List;
@@ -20,6 +23,8 @@ public interface DocumentTypeService {
     List<DocumentType> getStatusActive();
 
     List<DocumentType> removeStatusActive();
+
+    Page<DocumentType> getFiltered(DocumentTypeEnum type, String name, Boolean status, Pageable pageable);
 
     DataTablesOutput<DocumentType> getAll(DataTablesInput input);
 

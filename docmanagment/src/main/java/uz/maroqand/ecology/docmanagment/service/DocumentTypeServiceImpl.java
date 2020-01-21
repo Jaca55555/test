@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagment.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagment.entity.DocumentType;
 import uz.maroqand.ecology.docmanagment.repository.DocumentTypeRepository;
 import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentTypeService;
@@ -66,19 +69,33 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     }
 
     @Override
-    public DataTablesOutput<DocumentType> getAll(DataTablesInput input) {
-        return documentTypeRepository.findAll(input,getFilteringSpecification());
+    public Page<DocumentType> getFiltered(DocumentTypeEnum type, String name, Boolean status , Pageable pageable) {
+        return documentTypeRepository.findAll(getFilteringSpecification(type, name, status), pageable);
     }
 
-    private static Specification<DocumentType> getFilteringSpecification() {
+    @Override
+    public DataTablesOutput<DocumentType> getAll(DataTablesInput input) {
+        return documentTypeRepository.findAll(input);
+    }
+
+    private static Specification<DocumentType> getFilteringSpecification(DocumentTypeEnum type, String name, Boolean status) {
         return new Specification<DocumentType>() {
             @Override
             public Predicate toPredicate(Root<DocumentType> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+                if (type != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                }
+                if (status != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                }
+                if (name != null) {
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + name.toLowerCase() + "%"));
+                }
+                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }

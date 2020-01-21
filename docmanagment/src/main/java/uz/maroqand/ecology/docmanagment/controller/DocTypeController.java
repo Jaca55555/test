@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import uz.maroqand.ecology.docmanagment.service.interfaces.DocumentTypeService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,13 +53,34 @@ public class DocTypeController {
 
     @RequestMapping(value = DocUrls.DocTypeList)
     public String getDocTypeList(Model model) {
+        model.addAttribute("doc_type", DocumentTypeEnum.getList());
         return DocTemplates.DocTypeList;
     }
 
     @RequestMapping(value = DocUrls.DocTypeListAjax,  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public DataTablesOutput<DocumentType> getDocTypeListAjax(DataTablesInput input) {
-        return documentTypeService.getAll(input);
+    public HashMap<String, Object> getDocTypeListAjax(
+            Pageable pageable,
+            @RequestParam(name = "type")DocumentTypeEnum typeEnum,
+            @RequestParam(name = "name")String name,
+            @RequestParam(name = "status")Boolean status
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        Page<DocumentType> documentTypePage = documentTypeService.getFiltered(typeEnum, name, status, pageable);
+        List<DocumentType> documentTypes = documentTypePage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTypes.size());
+        for (DocumentType docType : documentTypes) {
+            JSONArray.add(new Object[]{
+                    docType.getId(),
+                    docType.getType(),
+                    docType.getName(),
+                    docType.getStatus()
+            });
+        }
+        result.put("recordsTotal", documentTypePage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentTypePage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
     }
 
     @RequestMapping(value = DocUrls.DocTypeNew)
