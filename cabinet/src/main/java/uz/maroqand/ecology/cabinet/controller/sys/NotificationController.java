@@ -58,19 +58,19 @@ public class NotificationController {
         List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId());
 
         int count = 0;
-        for (int i = newNotificationList.size() - 1; i >= 0 ; i--) {
+        for (Notification notification:newNotificationList) {
             if(count>6){
                 continue;
             }
-            newNotificationListShow.add(new NotificationDto(newNotificationList.get(i), helperService));
+            newNotificationListShow.add(new NotificationDto(notification, helperService));
             count++;
         }
 
-        for (int i = notificationList.size() - 1; i >= 0 ; i--) {
+        for (Notification notification:notificationList) {
             if(count>6){
                 continue;
             }
-            notificationListShow.add(new NotificationDto(notificationList.get(i), helperService));
+            notificationListShow.add(new NotificationDto(notification, helperService));
             count++;
         }
 
