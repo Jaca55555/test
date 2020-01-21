@@ -106,6 +106,8 @@ public class ObjectExpertiseController {
         objectExpertise1.setNameRu(objectExpertise.getNameRu());
         objectExpertise1.setDeleted(false);
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
+        objectExpertiseService.updateList();
+
         String after = "";
         try {
             after = objectMapper.writeValueAsString(objectExpertise1);
@@ -166,6 +168,8 @@ public class ObjectExpertiseController {
         objectExpertise1.setUpdateAt(new Date());
 
         objectExpertise1 = objectExpertiseService.save(objectExpertise1);
+        objectExpertiseService.updateList();
+
         String after = "";
         try {
             after = objectMapper.writeValueAsString(objectExpertise1);
@@ -211,6 +215,7 @@ public class ObjectExpertiseController {
         HashMap<String, Object> response = new HashMap<>();
         if (objectExpertise!=null){
             objectExpertiseService.delete(objectExpertise, user.getId(), msg);
+            objectExpertiseService.updateList();
             response.put("status", "success");
             response.put("id", id);
         } else {

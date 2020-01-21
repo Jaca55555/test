@@ -47,12 +47,13 @@ public class SmsSendServiceImpl implements SmsSendService {
         smsSend.setPhone(phoneNumber);
         smsSend.setRegApplicationId(regApplicationId);
         save(smsSend);
+        try {
+            AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck();
+            smsSendOauth2Service.createContact(authTokenInfo,smsSend);
+            SmsSend smsSendSent = smsSendOauth2Service.createSendTask(authTokenInfo,smsSend);
+            update(smsSendSent);
+        }catch (Exception e){ e.printStackTrace(); }
 
-        AuthTokenInfo authTokenInfo = smsSendOauth2Service.getAccessTokenCheck();
-        smsSendOauth2Service.createContact(authTokenInfo,smsSend);
-
-        SmsSend smsSendSent = smsSendOauth2Service.createSendTask(authTokenInfo,smsSend);
-        update(smsSendSent);
         return 1;
     }
 

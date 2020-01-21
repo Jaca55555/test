@@ -1,17 +1,16 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.Material;
-import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.repository.expertise.MaterialRepository;
 import uz.maroqand.ecology.core.service.expertise.MaterialService;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -30,7 +29,6 @@ import java.util.List;
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository materialRepository;
-    EntityManager em;
 
     @Autowired
     public MaterialServiceImpl(MaterialRepository materialRepository) {
@@ -48,7 +46,6 @@ public class MaterialServiceImpl implements MaterialService {
         return this.getAll(pageable, false);
     }
 
-    @Override
     public Page<Material> getAll(Pageable pageable, Boolean deleted){
         Specification spec = new Specification<Material>() {
             @Override
@@ -71,7 +68,13 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Cacheable(value = "getMaterialList")
     public List<Material> getList() {
-        return materialRepository.findAll();
+        return materialRepository.findByDeletedFalse();
+    }
+
+    @Override
+    @CachePut(value = "getMaterialList")
+    public List<Material> updateList() {
+        return materialRepository.findByDeletedFalse();
     }
 
     @Override

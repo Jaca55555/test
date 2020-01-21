@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.repository.expertise.ObjectExpertiseRepository;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,8 +30,15 @@ public class ObjectExpertiseServiceImpl implements ObjectExpertiseService {
     }
 
     @Override
+    @Cacheable(value = "getObjectExpertiseList")
     public List<ObjectExpertise> getList() {
-        return objectExpertiseRepository.findAll();
+        return objectExpertiseRepository.findByDeletedFalse();
+    }
+
+    @Override
+    @CachePut(value = "getObjectExpertiseList")
+    public List<ObjectExpertise> updateList() {
+        return objectExpertiseRepository.findByDeletedFalse();
     }
 
     @Override

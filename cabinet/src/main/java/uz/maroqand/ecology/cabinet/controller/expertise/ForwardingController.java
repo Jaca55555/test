@@ -19,6 +19,7 @@ import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -187,7 +188,7 @@ public class ForwardingController {
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "performerId")Integer performerId,
-            @RequestParam(name = "comment")String comment
+            @RequestParam(name = "comment")String commentStr
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -201,19 +202,36 @@ public class ForwardingController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user.getId());
+        LogStatus performerStatus = LogStatus.Initial;
+        if(regApplicationLog.getStatus().equals(LogStatus.Resend)){
+            performerStatus = LogStatus.Resend;
+        }
+        regApplicationLogService.update(regApplicationLog, LogStatus.Approved, commentStr, user.getId());
 
-        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Performer, comment,user);
-        regApplicationLogService.update(regApplicationLogCreate, LogStatus.Initial, comment, performer.getId());
+        RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Performer, commentStr,user);
+        regApplicationLogService.update(regApplicationLogCreate, performerStatus, commentStr, performer.getId());
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setPerformerId(performerId);
         regApplication.setPerformerLogId(regApplicationLogCreate.getId());
         regApplicationService.update(regApplication);
 
-        if(StringUtils.trimToNull(comment) != null){
-            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        Comment comment = null;
+        if(StringUtils.trimToNull(commentStr) != null){
+            comment = commentService.create(id, CommentType.CONFIDENTIAL, commentStr, user.getId());
         }
+        if(regApplicationLog.getDocumentFiles()!=null){
+            if(comment == null){
+                comment = commentService.create(id, CommentType.CONFIDENTIAL, "", user.getId());
+            }
+            Set<File> fileSet = new LinkedHashSet<>();
+            for (File file:regApplicationLog.getDocumentFiles()){
+                fileSet.add(file);
+            }
+            comment.setDocumentFiles(fileSet);
+            commentService.updateComment(comment);
+        }
+
         notificationService.create(performerId, NotificationType.Expertise, "Ijro uchun ariza yuborildi",id + " raqamli ariza ijro uchun sizga yuborildi","/expertise/performer/view/?id=" + id, user.getId());
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz ko'rib chiqish uchun qabul qilindi, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());

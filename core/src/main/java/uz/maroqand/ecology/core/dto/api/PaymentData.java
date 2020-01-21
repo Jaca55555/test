@@ -13,4 +13,5 @@ import java.util.List;
 public class PaymentData {
 
     private List<PaymentNew> data;
+
 }

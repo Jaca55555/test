@@ -36,6 +36,9 @@ public class RegApplicationLog {
     @Column(name = "reg_application_id")
     private Integer regApplicationId;
 
+    @Column(name = "index")
+    private Integer index;
+
     //kelib tushgan sana
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
@@ -70,6 +73,9 @@ public class RegApplicationLog {
     @Column(name = "comment",columnDefinition = "TEXT")
     private String comment;
 
+    //todo agreement list da ko'rinish ko'rinmasligi
+    @Column(name = "show",columnDefinition = "boolean DEFAULT false")
+    private Boolean show;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reg_application_log_jt_document_files",
