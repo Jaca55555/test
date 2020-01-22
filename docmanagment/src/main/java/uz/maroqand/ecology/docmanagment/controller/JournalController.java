@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
@@ -75,5 +76,24 @@ public class JournalController {
         result.put("recordsFiltered", journalPage.getTotalElements());
         result.put("data", JSONArray);
         return result;
+    }
+
+    @GetMapping(DocUrls.JournalNew)
+    public String getNewJournalPage(Model model) {
+        model.addAttribute("docType", documentTypeService.getStatusActive());
+        model.addAttribute("action_url", DocUrls.JournalNew);
+        model.addAttribute("journal", new Journal());
+        return DocTemplates.JournalNew;
+    }
+
+    @PostMapping(DocUrls.JournalNew)
+    public String createJournal(Journal journal) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.JournalList;
+        }
+        journal.setCreatedById(user.getId());
+        journalService.create(journal);
+        return "redirect:" + DocUrls.JournalList;
     }
 }

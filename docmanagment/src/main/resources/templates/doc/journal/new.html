@@ -24,50 +24,64 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12 parent-card">
         <div class="card">
-            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagment.entity.DocumentType"*/-->
             <div class="card-header flex-space-between-nowrap" id="headingOne">
-                <h5 class="mb-0" th:if="${docType.id==null}" th:text="#{doc.doc_type_create}">Кирувчи хатни рўйхатга олиш</h5>
-                <h5 class="mb-0" th:if="${docType.id!=null}" th:text="#{doc.doc_type_edit}"> - <span th:text="${docType.name}"></span></h5>
+                <h5 class="mb-0" th:if="${journal.id==null}" th:text="#{doc.journal_create}"></h5>
+                <h5 class="mb-0" th:if="${journal.id!=null}" th:text="#{doc.journal_edit}"> - <span th:text="${journal.name}"></span></h5>
             </div>
             <div class="card-body">
-                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${docType}">
-                    <input type="hidden" th:if="${docType.id != null}" th:field="*{id}" th:value="*{id}"/>
-                    <input type="hidden" th:if="${docType.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}"/>
+                <!--/*@thymesVar id="journal" type="uz.maroqand.ecology.docmanagment.entity.Journal"*/-->
+                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${journal}">
+                    <input type="hidden" th:if="${journal.id != null}" th:field="*{id}" th:value="*{id}"/>
+                    <input type="hidden" th:if="${journal.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}"/>
                     <div class="row">
                         <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('name')}" th:text="#{doc.doc_type_name}"></label>
-                            <div class="col-sm-12 p0">
-                                <input type="text" class="form-control" th:field="*{name}">
-                                <i class="gray-arrow fas  fa-map color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('nameRu')}" th:text="#{doc.doc_type_name_ru}"></label>
-                            <div class="col-sm-12 p0">
-                                <input type="text" class="form-control" th:field="*{nameRu}">
-                                <i class="gray-arrow fas  fa-map color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type_name_ru}"></label>
+                            <label class="control-label" th:for="${#ids.next('documentTypeId')}" th:text="#{doc.journal_doc_type}"></label>
                             <div class="col-sm-12 p0">
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
-                                        tabindex="-1" aria-hidden="true" th:field="*{type}">
+                                        tabindex="-1" aria-hidden="true" th:field="*{documentTypeId}">
                                     <option value=""></option>
-                                    <option th:each="type: ${doc_type}" th:value="${type}" th:text="#{${type.name}}"></option>
+                                    <option th:each="type: ${docType}" th:value="${type.id}" th:text="#{${type.name}}"></option>
                                 </select>
                                 <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
                             </div>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('status')}" th:text="#{doc.doc_type_name_ru}"></label>
-                            <input type="checkbox" class="form-control checkbox" th:field="*{status}">
+                            <label class="control-label" th:for="${#ids.next('name')}" th:text="#{doc.journal_name}"></label>
+                            <input type="text" class="form-control" th:field="*{name}">
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('numbering')}" th:text="#{doc.journal_numbering}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{numbering}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('prefix')}" th:text="#{doc.journal_prefix}"></label>
+                            <div class="col-sm-12 p0">
+                                <input class="form-control checkbox" th:field="*{prefix}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('suffix')}" th:text="#{doc.journal_suffix}"></label>
+                            <input class="form-control checkbox" th:field="*{suffix}">
+                        </div>
+                        <div class="col-sm-6 col-md-3 mt-md-5">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" th:field="*{restricted}">
+                                <label class="custom-control-label" th:for="${#ids.prev('restricted')}" th:text="#{doc.journal_restricted}"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mt-md-5">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" th:field="*{status}">
+                                <label class="custom-control-label" th:for="${#ids.prev('status')}" th:text="#{doc.journal_status}"></label>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <button th:text="#{doc.doc_type_reset_btn}" class="btn btn-dark"></button>
-                            <button th:text="#{doc.doc_type_create_btn}" class="btn btn-success"></button>
+                        <div class="col align-self-center">
+                            <button th:text="#{doc.journal_reset_btn}" class="btn btn-dark"></button>
+                            <button th:text="#{doc.journal_save_btn}" class="btn btn-success"></button>
                         </div>
                     </div>
                 </form>
