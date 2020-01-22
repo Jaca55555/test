@@ -725,16 +725,19 @@ public class RegApplicationController {
         /*if(invoice.getAmount().equals(0.0)){
             invoiceService.payTest(invoice.getId());
         }*/
-        RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-        regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-        regApplication.setForwardingLogId(forwardingLog.getId());
-        regApplication.setRegistrationDate(new Date());
-        regApplication.setPerformerLogId(null);
-        regApplication.setAgreementLogs(null);
-        regApplication.setAgreementCompleteLogId(null);
+        if(regApplication.getForwardingLogId() == null){
+            regApplication.setLogIndex(1);
+            RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
+            regApplication.setForwardingLogId(forwardingLog.getId());
+            regApplication.setRegistrationDate(new Date());
+            regApplication.setPerformerLogId(null);
+            regApplication.setAgreementLogs(null);
+            regApplication.setAgreementCompleteLogId(null);
+            regApplication.setStatus(RegApplicationStatus.Process);
+            regApplicationService.update(regApplication);
+        }
 
-        regApplication.setStatus(RegApplicationStatus.Process);
-        regApplicationService.update(regApplication);
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
     }
 
@@ -761,6 +764,7 @@ public class RegApplicationController {
         }
 
         if(regApplication.getForwardingLogId()==null){
+            regApplication.setLogIndex(1);
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
             regApplication.setForwardingLogId(regApplicationLog.getId());
             regApplication.setStatus(RegApplicationStatus.Process);
@@ -807,6 +811,7 @@ public class RegApplicationController {
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + regApplication.getId();
         }
 
+        regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerLogId(null);

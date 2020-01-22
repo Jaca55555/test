@@ -62,7 +62,7 @@ public class RegApplicationLogController {
         if (file != null) {
             Set<File> fileSet = regApplicationLog.getDocumentFiles();
             fileSet.add(file);
-            regApplicationLogService.updateDocument(regApplicationLog, user);
+            regApplicationLogService.updateDocument(regApplicationLog);
 
             responseMap.put("name", file.getName());
             responseMap.put("description", file.getDescription());
@@ -107,7 +107,7 @@ public class RegApplicationLogController {
             Set<File> fileSet = regApplicationLog.getDocumentFiles();
             if(fileSet.contains(file)) {
                 fileSet.remove(file);
-                regApplicationLogService.updateDocument(regApplicationLog, user);
+                regApplicationLogService.updateDocument(regApplicationLog);
 
                 file.setDeleted(true);
                 file.setDateDeleted(new Date());

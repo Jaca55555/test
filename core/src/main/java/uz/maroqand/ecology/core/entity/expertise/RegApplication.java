@@ -150,6 +150,10 @@ public class RegApplication {
     @Column(name = "review_id")
     private Integer reviewId;
 
+    //
+    @Column(name = "log_index")
+    private Integer logIndex;
+
     //Исполнитель
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performer_id", insertable = false, updatable = false)

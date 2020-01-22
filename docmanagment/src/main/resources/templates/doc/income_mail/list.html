@@ -100,7 +100,7 @@
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
                     <a class="card-header-a" href="/static/doc/" data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="true" aria-controls="collapseOne">Саралаш фильтри</a>
+                       aria-expanded="true" aria-controls="collapseOne" th:text="#{doc.doc_filter_header}">Саралаш фильтри</a>
                 </h5>
             </div>
             <div class="row p10">
@@ -116,15 +116,15 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="docId" class="control-label">Хужжат раками</label>
+                    <label for="docId" class="control-label" th:text="#{doc.doc_id}">Хужжат раками</label>
                     <input type="text" class="form-control" id="docId">
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="regId" class="control-label">Руйхатга олиш раками</label>
+                    <label for="regId" class="control-label" th:text="#{doc.doc_reg_date}">Руйхатга олиш раками</label>
                     <input type="text" class="form-control" id="regId">
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
-                    <label class="control-label">Келиб тушган сана</label>
+                    <label class="control-label" th:text="#{doc.income_date}">Келиб тушган сана</label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
                             <input class="form-control datepicker date" id="incomeDateBegin" placeholder="Дан">
@@ -156,7 +156,7 @@
                  data-parent="#accordionExample">
                 <div class="row" >
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="docType" class="control-label">Хужжат тури</label>
+                        <label for="docType" class="control-label" th:text="#{doc.doc_type}">Хужжат тури</label>
                         <div class="col-sm-12 p0">
                             <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                     id="docType" tabindex="-1" aria-hidden="true">
@@ -181,7 +181,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="description" class="control-label">Хатнинг қисқача мазмуни</label>
+                        <label for="description" class="control-label" th:text="#{doc.doc_description}">Хатнинг қисқача мазмуни</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" id="description">
                             <i class="gray-arrow fas fa-search  color-gray"></i>

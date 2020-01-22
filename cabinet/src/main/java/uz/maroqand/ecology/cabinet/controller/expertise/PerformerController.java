@@ -236,7 +236,8 @@ public class PerformerController {
         List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
         for (RegApplicationLog agreementLog:agreementLogs){
             agreementLog.setStatus(LogStatus.New);
-            regApplicationLogService.updateDocument(agreementLog, user);
+            agreementLog.setShow(true);
+            regApplicationLogService.updateDocument(agreementLog);
 
             notificationService.create(
                     agreementLog.getUpdateById(),
@@ -295,12 +296,19 @@ public class PerformerController {
         for (RegApplicationLog agreementLog :agreementLogList){
             if(!agreementLog.getStatus().equals(LogStatus.Initial)){
                 RegApplicationLog regApplicationLogCreate = regApplicationLogService.create(regApplication, LogType.Agreement,"", user);
+                regApplicationLogCreate.setShow(true);
                 regApplicationLogService.update(regApplicationLogCreate, LogStatus.New,"", agreementLog.getUpdateById());
+
+                agreementLog.setShow(false);
+                regApplicationLogService.updateDocument(agreementLog);
 
                 agreementLogs.remove(agreementLog.getId());
                 agreementLogs.add(regApplicationLogCreate.getId());
             }else {
-                regApplicationLogService.update(agreementLog, LogStatus.New,"", agreementLog.getUpdateById());
+                agreementLog.setShow(true);
+                agreementLog.setStatus(LogStatus.New);
+                agreementLog.setIndex(regApplication.getLogIndex());
+                regApplicationLogService.updateDocument(agreementLog);
             }
 
             notificationService.create(
