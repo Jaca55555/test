@@ -7,9 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
 import uz.maroqand.ecology.docmanagment.dto.JournalFilterDTO;
@@ -94,6 +97,37 @@ public class JournalController {
         }
         journal.setCreatedById(user.getId());
         journalService.create(journal);
+        return "redirect:" + DocUrls.JournalList;
+    }
+
+    @GetMapping(DocUrls.JournalEdit)
+    public String getEditJournalPage(
+            Model model,
+            @RequestParam(name = "id")Integer id
+    ) {
+        Journal journal = journalService.getById(id);
+        if (journal == null) {
+            return "redirect:" + DocUrls.JournalList;
+        }
+        model.addAttribute("docType", documentTypeService.getStatusActive());
+        model.addAttribute("action_url", DocUrls.JournalNew);
+        model.addAttribute("journal", journal);
+        return DocTemplates.JournalEdit;
+    }
+
+    @PostMapping(DocUrls.JournalEdit)
+    public String editJournal(
+            Journal journal,
+            @RequestParam(name = "id")String id,
+            @RequestParam(name = "createDate")String date
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.JournalList;
+        }
+        journal.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
+        journal.setCreatedById(user.getId());
+        journalService.update(journal);
         return "redirect:" + DocUrls.JournalList;
     }
 }

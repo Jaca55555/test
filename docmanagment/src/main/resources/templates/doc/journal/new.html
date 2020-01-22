@@ -32,7 +32,7 @@
                 <!--/*@thymesVar id="journal" type="uz.maroqand.ecology.docmanagment.entity.Journal"*/-->
                 <form th:action="${action_url}" th:method="post" class="card-block" th:object="${journal}">
                     <input type="hidden" th:if="${journal.id != null}" th:field="*{id}" th:value="*{id}"/>
-                    <input type="hidden" th:if="${journal.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}"/>
+                    <input type="hidden" th:if="${journal.id != null}" name="createDate" th:value="${#dates.format(journal.createdAt,'dd.MM.yyyy')}"/>
                     <div class="row">
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('documentTypeId')}" th:text="#{doc.journal_doc_type}"></label>
@@ -47,23 +47,23 @@
                         </div>
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('name')}" th:text="#{doc.journal_name}"></label>
-                            <input type="text" class="form-control" th:field="*{name}">
+                            <input class="form-control" th:field="*{name}">
                         </div>
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('numbering')}" th:text="#{doc.journal_numbering}"></label>
                             <div class="col-sm-12 p0">
-                                <input type="text" class="form-control" th:field="*{numbering}">
+                                <input class="form-control" th:field="*{numbering}">
                             </div>
                         </div>
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('prefix')}" th:text="#{doc.journal_prefix}"></label>
                             <div class="col-sm-12 p0">
-                                <input class="form-control checkbox" th:field="*{prefix}">
+                                <input class="form-control" th:field="*{prefix}">
                             </div>
                         </div>
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('suffix')}" th:text="#{doc.journal_suffix}"></label>
-                            <input class="form-control checkbox" th:field="*{suffix}">
+                            <input class="form-control" th:field="*{suffix}">
                         </div>
                         <div class="col-sm-6 col-md-3 mt-md-5">
                             <div class="custom-control custom-checkbox">
