@@ -83,13 +83,22 @@ public class JournalServiceImpl implements JournalService {
                     predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
                 }
                 if (filterDTO.getName() != null) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + filterDTO.getName() + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filterDTO.getName().toLowerCase() + "%"
+                    ));
                 }
                 if (filterDTO.getPrefix() != null) {
-                    predicates.add(criteriaBuilder.like(root.get("prefix"), "%" + filterDTO.getPrefix() + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("prefix")),
+                            "%" + filterDTO.getPrefix().toLowerCase() + "%"
+                    ));
                 }
                 if (filterDTO.getSuffix() != null) {
-                    predicates.add(criteriaBuilder.like(root.get("suffix"), "%" + filterDTO.getSuffix() + "%"));
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("suffix")),
+                            "%" + filterDTO.getSuffix().toLowerCase() + "%"
+                    ));
                 }
                 if (filterDTO.getStatus() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));

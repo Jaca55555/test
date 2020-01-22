@@ -36,28 +36,28 @@
                         <div class="col-sm-12 p0">
                             <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                     id="docType" tabindex="-1" th:field="*{docTypeId}" aria-hidden="true">
-                                <option></option>
+                                <option value=""></option>
                                 <option th:each="i: ${docTypes}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
                             <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
-                        <label for="name" class="control-label"></label>
+                        <label for="name" class="control-label" th:text="#{doc.journal_name}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{name}" id="name">
                             <i class="gray-arrow fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
-                        <label for="prefix" class="control-label"></label>
+                        <label for="prefix" class="control-label" th:text="#{doc.journal_prefix}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{prefix}" id="prefix">
                             <i class="gray-arrow fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
-                        <label for="suffix" class="control-label"></label>
+                        <label for="suffix" class="control-label" th:text="#{doc.journal_suffix}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{suffix}" id="suffix">
                             <i class="gray-arrow fas fa-search  color-gray"></i>
@@ -68,7 +68,7 @@
                         <div class="col-sm-12 p0">
                             <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                     id="status" tabindex="-1" th:field="*{status}" aria-hidden="true">
-                                <option></option>
+                                <option value=""></option>
                                 <option th:value="0" th:text="#{doc.doc_status_inactive}"></option>
                                 <option th:value="1" th:text="#{doc.doc_status_active}"></option>
                             </select>
@@ -119,7 +119,7 @@
         return [[__${#locale}__]];
     }
 </script>
-<script th:inline="none">
+<script th:inline="javascript">
     let dataDatatableSelector;
     let thead;
 
@@ -148,8 +148,10 @@
             scrollX: true,
             pageLength: 25,
             dom: 'lrtip',
-            lengthMenu: [[25, 50, 100], [25, 50, 100]],
-            order: [[0, 'desc']],
+            lengthMenu: [
+                [25, 50, 100], [25, 50, 100]
+            ],
+            order: [ [0, 'desc'] ],
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'type'},
@@ -166,11 +168,14 @@
 
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
-                dataToSend.type = $('#docType').val();
+                dataToSend.docTypeId = $('#docType').val();
                 dataToSend.name = $('#name').val();
+                dataToSend.prefix = $('#prefix').val();
+                dataToSend.suffix = $('#suffix').val();
                 dataToSend.status = $('#status').val();
+                dataToSend.[(${_csrf.parameterName})] = [[${_csrf.token}]];
 
-                $.get(ajaxListLink, dataToSend, function(data){
+                $.post(ajaxListLink, dataToSend, function(data){
                     callback(data);
                 });
             },

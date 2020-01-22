@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagment.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagment.constant.DocUrls;
@@ -48,7 +50,8 @@ public class JournalController {
         return DocTemplates.JournalList;
     }
 
-    @GetMapping(DocUrls.JournalListAjax)
+    @PostMapping(DocUrls.JournalListAjax)
+    @ResponseBody
     public HashMap getListAjax(
             JournalFilterDTO filterDTO,
             Pageable pageable
