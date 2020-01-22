@@ -118,7 +118,7 @@ public class JournalController {
     @PostMapping(DocUrls.JournalEdit)
     public String editJournal(
             Journal journal,
-            @RequestParam(name = "id")String id,
+            @RequestParam(name = "id")Integer id,
             @RequestParam(name = "createDate")String date
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -129,5 +129,44 @@ public class JournalController {
         journal.setCreatedById(user.getId());
         journalService.update(journal);
         return "redirect:" + DocUrls.JournalList;
+    }
+
+    @GetMapping(DocUrls.JournalView)
+    public String getJournal(
+            @RequestParam(name = "id")Integer id,
+            Model model
+    ) {
+        Journal journal = journalService.getById(id);
+        if (journal == null) {
+            return "redirect:" + DocUrls.JournalList;
+        }
+        model.addAttribute("journal", journal);
+        return DocTemplates.JournalView;
+    }
+
+    @GetMapping(DocUrls.JournalDelete)
+    @ResponseBody
+    public HashMap<String, Object> deleteJournal(@RequestParam(name = "id")Integer id) {
+        String error = "0";
+        String message = "";
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            error = "2";
+            message = "not authorized";
+        }
+        Journal journal = journalService.getById(id);
+        if (journal == null) {
+            error = "1";
+            message = "journal not found";
+        } else {
+            journal.setDeleted(Boolean.TRUE);
+            journalService.update(journal);
+            message = "successfully deleted";
+        }
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("status", error);
+        response.put("message", message);
+        response.put("id", id);
+        return response;
     }
 }

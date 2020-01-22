@@ -181,6 +181,9 @@
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            },
+            rowId: function (data) {
+                return 'id_' + data[0];
             }
         });
     }
@@ -194,8 +197,13 @@
 
         $(document).on('click', '.delete', function (e) {
             e.preventDefault();
-            if (confirm("O'chirish kerakmi?")) {
-                console.log('deleted');
+            if (confirm([[#{doc.confirm_delete}]])) {
+                $.get($(this).attr('href'), function (data) {
+                    if (data.status == 0) {
+                        $('#id_' + data.id).remove();
+                    }
+                    alert(data.message);
+                })
             }
         });
         $('#filter').on('change', function () {

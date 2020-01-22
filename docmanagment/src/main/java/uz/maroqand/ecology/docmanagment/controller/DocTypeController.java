@@ -134,11 +134,17 @@ public class DocTypeController {
     }
 
     @RequestMapping(value = DocUrls.DocTypeDelete)
-    public String deleteDocType(@RequestParam(name = "id")String id) {
+    public String deleteDocType(@RequestParam(name = "id")Integer id) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
             return "";
         }
+        DocumentType documentType = documentTypeService.getById(id);
+        if (documentType == null) {
+            return "redirect:" + DocUrls.DocTypeList;
+        }
+        documentType.setDeleted(Boolean.TRUE);
+        documentTypeService.update(documentType);
         return "redirect:" + DocUrls.DocTypeList;
     }
 }
