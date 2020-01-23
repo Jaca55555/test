@@ -17,6 +17,11 @@ public interface FolderService {
 
     Page<Folder> getFolderList(String name, Pageable pageable);
 
+    Page<Folder> findFiltered(Integer id, String name, String dateBegin, String dateEnd, Pageable pageable);
+
     Folder create(Folder folder, Integer userId);
 
+    Folder get(Integer id);
+
+    Folder update(Folder folder);
 }

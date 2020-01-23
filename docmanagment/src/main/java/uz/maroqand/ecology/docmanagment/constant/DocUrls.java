@@ -34,4 +34,9 @@ public class DocUrls {
     public static final String DocumentViewEdit = DocumentView + "/edit";
     public static final String DocumentViewEditStatus = DocumentViewEdit + "/status";
 
+    private static final String Folder = Prefix + "/folder";
+    public static final String FolderList = Folder + "/list";
+    public static final String FolderListAjax = Folder + "/ajax";
+    public static final String FolderNew = Folder + "/new";
+    public static final String FolderEdit = Folder + "/edit";
 }

@@ -28,4 +28,8 @@ public class DocTemplates {
     public static final String DocumentViewEdit = DocumentViewPrefix + "/edit";
     public static final String DocumentViewNew = DocumentViewPrefix + "/new";
 
+    private static final String Folder = Prefix + "/folder";
+    public static final String FolderList = Folder+ "/list";
+    public static final String FolderEdit = Folder + "/edit";
+    public static final String FolderNew = Folder + "/new";
 }
