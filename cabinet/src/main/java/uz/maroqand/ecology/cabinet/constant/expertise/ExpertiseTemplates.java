@@ -80,4 +80,9 @@ public class ExpertiseTemplates {
     public static final String ExpertiseRegApplicationMonitoringList = ExpertiseReg + "/mntr/list";
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseReg + "/mntr/view";
 
+    //Facture
+    private static final String Facture = Prefix + "/facture";
+    public static final String FactureList = "/list";
+    public static final String FactureView = "/view";
+
 }

@@ -29,7 +29,8 @@ public enum Permissions {
     EMPLOYEE_CONTROL(12,"sys_permissions.employee_control"), //
 
     EXPERTISE_REG(13,"sys_permissions.expertise_reg"), //
-    EXPERTISE_MONITORING(14,"sys_permissions.expertise_monitoring"); //
+    EXPERTISE_MONITORING(14,"sys_permissions.expertise_monitoring"), //
+    FACTURE_MONITORING(15,"sys_permissions.facture_monitoring"); //
 
     private Integer id;
     private String name;

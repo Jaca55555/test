@@ -157,4 +157,8 @@ public class ExpertiseUrls {
     public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
     public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";
 
+    //Facture
+    private static final String Facture = Prefix + "/facture";
+    public static final String FactureList = Facture + "/list";
+    public static final String FactureView = Facture + "/view";
 }

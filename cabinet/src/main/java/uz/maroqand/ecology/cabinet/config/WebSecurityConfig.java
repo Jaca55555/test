@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/expertise/coordinate/**").hasAuthority(Permissions.COORDINATE_REGISTER.name())
                 .antMatchers("/expertise/billing/**").hasAuthority(Permissions.BILLING.name())
                 .antMatchers("/billing/payment_file/**").hasAuthority(Permissions.PAYMENT_FILE.name())
+                .antMatchers("/expertise/facture/**").hasAuthority(Permissions.FACTURE_MONITORING.name())
 
                 .antMatchers("/sys/appeal_admin/**").hasAuthority(Permissions.APPEAL_ADMIN.name())
 
