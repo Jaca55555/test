@@ -7,6 +7,9 @@ package uz.maroqand.ecology.docmanagement.constant;
  */
 public class DocUrls {
     private static final String Prefix = "/doc";
+    private static final String Registration = "/registration";
+    private static final String Incoming = "/incoming";
+    private static final String Outgoing = "/outgoing";
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
