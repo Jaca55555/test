@@ -114,8 +114,8 @@
         </dependency>
 
         <dependency>
-            <groupId>uz.maroqand.ecology.docmanagment</groupId>
-            <artifactId>docmanagment</artifactId>
+            <groupId>uz.maroqand.ecology.docmanagement</groupId>
+            <artifactId>docmanagement</artifactId>
             <version>1.0</version>
         </dependency>
 

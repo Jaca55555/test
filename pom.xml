@@ -14,7 +14,7 @@
         <module>ecoexpertise</module>
         <module>cabinet</module>
         <module>rest</module>
-        <module>docmanagment</module>
+        <module>docmanagement</module>
     </modules>
 
     <parent>

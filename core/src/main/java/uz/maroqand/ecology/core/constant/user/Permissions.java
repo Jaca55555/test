@@ -30,7 +30,16 @@ public enum Permissions {
 
     EXPERTISE_REG(13,"sys_permissions.expertise_reg"), //
     EXPERTISE_MONITORING(14,"sys_permissions.expertise_monitoring"), //
-    FACTURE_MONITORING(15,"sys_permissions.facture_monitoring"); //
+    FACTURE_MONITORING(15,"sys_permissions.facture_monitoring"), //
+
+
+    DOC_MANAGEMENT(30,"sys_permissions.docManagement"), //Электрон Хужжатлар Юритиш Тизимига кириш
+    DOC_MANAGEMENT_REGISTER(31,"sys_permissions.docManagementRegister"), //Кирувчи ва чиқувчи хатларни рўйхатга олиш
+    DOC_MANAGEMENT_INTERNAL(32,"sys_permissions.docManagementInternal"), //Ички хужжатларни рўйхатга олиш
+    DOC_MANAGEMENT_APPEAL(33,"sys_permissions.docManagementAppeal"), //Мурожаатларни рўйхатга олиш
+    DOC_MANAGEMENT_LIBRARY(34,"sys_permissions.docManagementLibrary"), //Кутубхона маълумотларини рўйхатга олиш
+    DOC_MANAGEMENT_PERFORMER(35,"sys_permissions.docManagementPerformer"), //Хужжатларни ижрога йўналтириш
+    DOC_MANAGEMENT_SETTINGS(36,"sys_permissions.docManagementSettings"); //Электрон Хужжатлар Юритиш Тизимининг созламаларини ўзгартириш
 
     private Integer id;
     private String name;
