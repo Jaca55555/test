@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <style>
+        .control-label{
+            margin-top:20px;
+            height: inherit;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!--main content start-->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap">
+                <div class="form-group">
+                    <form method="post" th:object="${folder}" th:action="@{/doc/folder/edit}">
+                        <input type="hidden" th:field="*{id}">
+                        <label class="control-label"  th:text="#{folder.name}"></label><br/>
+                        <input  class="form-control" type="text" th:field="*{name}">
+
+                        <label class="control-label"  th:text="#{folder.document_type}"></label><br/>
+                        <select class="form-control" name="doctype_select" id="status" th:field="*{docTypeId}">
+                            <option value=1 th:text="#{incoming_documents}" selected></option>
+                            <option value=2 th:text="#{outgoing_documents}"></option>
+                        </select>
+
+                        <label class="control-label"  th:text="#{folder.parent_folder}"></label><br/>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{parentId}">
+                            <option th:each="folder_: ${folderList}" th:value="${folder_.id}" th:text="${folder_.name}">
+
+                        </select>
+
+                        <input style="margin-top: 20px;" type="submit" value="подтвердить" class="btn btn-primary">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--main content end-->
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script>
+    $('.singleSelect').select2();
+</script>
+</body>
+</html>

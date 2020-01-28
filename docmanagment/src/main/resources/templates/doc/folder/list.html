@@ -20,7 +20,10 @@
 
 <object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
 
+
+
 <!--main content start-->
+
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
@@ -32,58 +35,56 @@
                     </a>
                 </h5>
 
-        </div>
+            </div>
             <div class="card-body row">
                 <div class="form-group-row col-sm-3">
-                    <label class="control-label"  th:text="#{communication_tool.id}"></label><br/>
+                    <label class="control-label"  th:text="#{folder.id}"></label><br/>
                     <input type="text" class="form-control" id="id" />
                 </div>
                 <div class="form-group col-sm-3">
-                    <label class="control-label"  th:text="#{communication_tool.name}"></label><br/>
+                    <label class="control-label"  th:text="#{folder.name}"></label><br/>
                     <input type="text" class="form-control" id="name">
                 </div>
+                <div class="form-group-row col-sm-3">
+                    <label class="control-label"  th:text="#{folder.dateBegin}"></label><br/>
+                    <input type="date" class="form-control" id="dateBegin" />
+                </div>
+                <div class="form-group-row col-sm-3">
+                    <label class="control-label"  th:text="#{folder.dateEnd}"></label><br/>
+                    <input type="date" class="form-control" id="dateEnd" />
+                </div>
+
+
             </div>
             <div class="col-sm-12 text-right">
                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info btn-sm"><i class="feather icon-search"></i>
                     <span th:text="#{sys_search}">Поиск</span>
                 </a>
-                <a href="/doc/communication_tools/new" class="btn btn-success btn-sm"><i class="feather icon-plus"></i>
-                    <span>new tool</span>
+                <a href="/doc/folder/new" class="btn btn-success btn-sm"><i class="feather icon-plus"></i>
+                    <span>new folder</span>
                 </a>
             </div>
-        <div class="card parent-card table-responsive" style="padding:20px 15px 0px 15px">
-            <table id="communication_tools" class="display table nowrap table-striped table-hover" style="width:100%">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th th:text="#{communication_tool.name}">name</th>
-                    <th th:text="#{communication_tool.status}">name</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card parent-card table-responsive" style="padding:20px 15px 0px 15px">
+                <table id="communication_tools" class="display table nowrap table-striped table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th th:text="#{folder.name}">name</th>
+                        <th th:text="#{folder.date}">status</th>
+                        <th th:text="#{folder.parent_folder}">parent_folder</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>
 
 </div>
-    <div class="btn-group mb-2 mr-2">
-        <button type="button"
-                class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-        <button type="button"
-                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">изменить</a>
-            <!--    <a class="dropdown-item" href="#">Something else here</a>
-              <div class="dropdown-divider"></div>
-               <a class="dropdown-item" href="#">Separated link</a>-->
-        </div>
-    </div>
-</div>
+
 <!--main content end-->
 
 
@@ -91,51 +92,26 @@
 
 <script th:inline="javascript">
 
-    var editLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsEdit}]];
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsListAjax}]];
-    var editStatusLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).CommunicationToolsEditStatus}]];
+    var editLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).FolderEdit}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).FolderListAjax}]];
+
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
 
-    var statusTrue = [[#{communication_tool_status_true}]];
-    var statusFalse = [[#{communication_tool_status_false}]];
 </script>
 <script th:inline="none">
+
     /*<![CDATA[*/
     var labelEdit = "Edit";
     var dataDatatableSelector;
     var thead;
 
-    function changeStatusFunc(url, row){
-        fetch(url).then(data =>{return data; })
-            .then(res => console.log(res));
-        getDatatableConnect();
-    }
 
     function renderActionsColumn(data, type, row, meta) {
         var currentEditLink = editLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-rounded btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
-        return html;
-    }
-    function renderChangeColumn(data, type, row, meta) {
-        var currentEditStatusLink = editStatusLink + "?id=" + row[0];
-        var html = '';
-        x = data ? 'on' : 'false';
-        html += ` <div class="btn-group mb-2 mr-2">
-        <button style="width: 72.61px" type="button"
-                class="btn btn-outline-primary left-radius table-modal-button">${x}</button>
-        <button type="button"
-                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-        <div class="dropdown-menu">
-            <button class="dropdown-item"  onclick="changeStatusFunc('${currentEditStatusLink}', ${row})">изменить</button>
-
-        </div>
-    </div>`;
         return html;
     }
 
@@ -156,8 +132,11 @@
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
 
+                //    dataToSend.doctype_id = $('#typeId').val().trim();
                 dataToSend.id = $('#id').val().trim();
                 dataToSend.name = $('#name').val().trim();
+                dataToSend.date_begin = $('#dateBegin').val().trim();
+                dataToSend.date_end = $('#dateEnd').val().trim();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
@@ -169,7 +148,8 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
-                {render: renderChangeColumn, orderable: false},
+                {date: 2, name: 'date'},
+                {data: 3, name: 'parentId'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

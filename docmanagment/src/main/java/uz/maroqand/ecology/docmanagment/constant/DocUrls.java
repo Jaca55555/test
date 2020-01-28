@@ -27,4 +27,23 @@ public class DocUrls {
     public static final String CommunicationToolsEditStatus = CommunicationToolsEdit + "/status";
     public static final String CommunicationToolsEditSubmit = CommunicationToolsEdit + "/submit";
 
+    private static final String DocumentView = Prefix + "/document_view";
+    public static final String DocumentViewList = DocumentView + "/list";
+    public static final String DocumentViewListAjax = DocumentViewList + "/ajax";
+    public static final String DocumentViewNew = DocumentView + "/new";
+    public static final String DocumentViewEdit = DocumentView + "/edit";
+    public static final String DocumentViewEditStatus = DocumentViewEdit + "/status";
+
+    private static final String Folder = Prefix + "/folder";
+    public static final String FolderList = Folder + "/list";
+    public static final String FolderListAjax = Folder + "/ajax";
+    public static final String FolderNew = Folder + "/new";
+    public static final String FolderEdit = Folder + "/edit";
+
+    private static final String DocumentOrganization = Prefix + "/document_organization";
+    public static final String DocumentOrganizationList = DocumentOrganization + "/list";
+    public static final String DocumentOrganizationListAjax = DocumentOrganizationList + "/ajax";
+    public static final String DocumentOrganizationNew = DocumentOrganization + "/new";
+    public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
+    public static final String DocumentOrganizationEditStatus = DocumentOrganizationEdit + "/status";
 }

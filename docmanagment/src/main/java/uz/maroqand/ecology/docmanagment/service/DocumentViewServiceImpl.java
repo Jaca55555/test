@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
@@ -88,6 +90,35 @@ public class DocumentViewServiceImpl implements DocumentViewService {
                 return overAll;
             }
         };
+    }
+
+    private static Specification<DocumentView> getFilteringSpecification(String name, Integer status, String locale){
+        return new Specification<DocumentView>() {
+            @Override
+            public Predicate toPredicate(Root<DocumentView> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+                if(name != null){
+                    if(locale.equals("oz"))
+                        predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
+                    else if(locale.equals("ru"))
+                        predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + name + "%"));
+                }
+                if(status != null){
+                    if(status.equals(1))
+                        predicates.add(criteriaBuilder.equal(root.get("status"), true));
+                    else if(status.equals(2))
+                        predicates.add(criteriaBuilder.equal(root.get("status"), false));
+                }
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
+
+    @Override
+    public Page<DocumentView> findFiltered(String name, Integer status, String locale, Pageable pageable){
+        return documentViewRepository.findAll(getFilteringSpecification(name, status, locale), pageable);
     }
 
 }

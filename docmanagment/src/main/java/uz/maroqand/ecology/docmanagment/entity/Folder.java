@@ -38,6 +38,7 @@ public class Folder {
     @Column(name = "parent_id")
     private Integer parentId;
 
+
     /*
      * Technical Fields
      */
@@ -49,5 +50,9 @@ public class Folder {
 
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    private Folder parent;
 
 }

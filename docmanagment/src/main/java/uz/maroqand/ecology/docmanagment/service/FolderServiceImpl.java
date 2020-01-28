@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagment.entity.Folder;
 import uz.maroqand.ecology.docmanagment.repository.FolderRepository;
 import uz.maroqand.ecology.docmanagment.service.interfaces.FolderService;
@@ -40,6 +42,42 @@ public class FolderServiceImpl implements FolderService {
     public Page<Folder> getFolderList(String name,Pageable pageable) {
         return folderRepository.findAll(getFilteringSpecification(name), pageable);
     }
+    @Override
+    public Page<Folder> findFiltered(Integer id, String name, String dateBegin, String dateEnd, Pageable pageable){
+        Date begin = DateParser.TryParse(dateBegin, Common.uzbekistanDateFormat);
+        Date end = DateParser.TryParse(dateEnd, Common.uzbekistanDateFormat);
+        return folderRepository.findAll(getFilteringSpecification(id, name, begin, end), pageable);
+    }
+
+    private static Specification<Folder> getFilteringSpecification(Integer id, String name, Date dateBegin, Date dateEnd){
+        return new Specification<Folder>(){
+          @Override
+          public Predicate toPredicate(Root<Folder> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder){
+              List<Predicate> predicates = new LinkedList<>();
+
+              if(id != null)
+                  predicates.add(criteriaBuilder.equal(root.get("id"), id));
+
+              if(name != null)
+                  predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+
+              if (dateBegin != null && dateEnd == null)
+                  predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+              else if (dateEnd != null && dateBegin == null)
+                  predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+              else if (dateBegin != null && dateEnd != null)
+                  predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+
+              predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+              Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+
+              return overAll;
+          }
+        };
+    }
+
+
+
 
     private static Specification<Folder> getFilteringSpecification(final String name) {
         return new Specification<Folder>() {
@@ -61,6 +99,15 @@ public class FolderServiceImpl implements FolderService {
         folder.setDeleted(Boolean.FALSE);
         folder.setCreatedAt(new Date());
         folder.setCreatedById(userId);
+        return folderRepository.save(folder);
+    }
+    @Override
+    public Folder get(Integer id){
+
+        return folderRepository.getOne(id);
+    }
+    @Override
+    public Folder update(Folder folder){
         return folderRepository.save(folder);
     }
 }
