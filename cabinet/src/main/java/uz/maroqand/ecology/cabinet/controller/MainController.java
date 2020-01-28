@@ -31,7 +31,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String getPage() {
-        return "redirect: login";
+        return "redirect: /login";
     }
 
     @RequestMapping("/login")

@@ -78,7 +78,7 @@
                 </li>
                 <hr>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailList}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
                         <span class="pcoded-mtext">Кирувчи хатларни руйхатга олиш</span>
                     </a>
@@ -165,6 +165,20 @@
                         <span class="pcoded-micon"><i class="mdi mdi-network-strength-4 color-purple"></i></span>
                         <span class="pcoded-mtext">Хисоботлар</span>
                     </a>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a class="nav-link" href="#">
+                        <span class="pcoded-micon"><i class="feather icon-package color-red"></i></span>
+                        <span class="pcoded-mtext">Созламалар</span>
+                    </a>
+                    <ul class="pcoded-submenu" style="display: none;">
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsList}" th:text="#{doc_communication_tools.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocTypeList}" th:text="#{doc_doc_type.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).JournalList}" th:text="#{doc_journal.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentViewList}" th:text="#{doc_document_view.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FolderList}" th:text="#{doc_folder.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOrganizationList}" th:text="#{doc_document_organization.list}"></a></li>
+                    </ul>
                 </li>
                 <hr>
                 <li class="nav-item">
