@@ -86,7 +86,7 @@ public class Document {
 
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")
-    private Integer performerName;
+    private String performerName;
 
     //Маъсул ходим билан алоқа учун телефон рақами
     @Column(name = "performer_phone")

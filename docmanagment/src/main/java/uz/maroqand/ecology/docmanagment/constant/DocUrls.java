@@ -27,6 +27,21 @@ public class DocUrls {
     public static final String CommunicationToolsEditStatus = CommunicationToolsEdit + "/status";
     public static final String CommunicationToolsEditSubmit = CommunicationToolsEdit + "/submit";
 
+    private static final String DocType = Prefix + "/doc_type";
+    public static final String DocTypeList = DocType + "/list";
+    public static final String DocTypeListAjax = DocType + "/list_ajax";
+    public static final String DocTypeView = DocType + "/view";
+    public static final String DocTypeNew = DocType + "/new";
+    public static final String DocTypeEdit = DocType + "/edit";
+    public static final String DocTypeDelete = DocType + "/delete";
+
+    private static final String Journal = Prefix + "/journal";
+    public static final String JournalList = Journal + "/list";
+    public static final String JournalListAjax = Journal + "/list_ajax";
+    public static final String JournalView = Journal + "/view";
+    public static final String JournalNew = Journal + "/new";
+    public static final String JournalEdit = Journal + "/edit";
+    public static final String JournalDelete = Journal + "/delete";
     private static final String DocumentView = Prefix + "/document_view";
     public static final String DocumentViewList = DocumentView + "/list";
     public static final String DocumentViewListAjax = DocumentViewList + "/ajax";

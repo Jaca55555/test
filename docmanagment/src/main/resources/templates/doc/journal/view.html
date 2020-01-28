@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <!--/*@thymesVar id="journal" type="uz.maroqand.ecology.docmanagment.entity.Journal"*/-->
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 class="mb-0">
+                    <span class="card-header-a" th:text="#{doc.journal_view}"></span>
+                    <span class="card-header-a" th:text="${journal.name}"></span>
+                </h5>
+                <div class="btn-group">
+                    <a th:href="${T(uz.maroqand.ecology.docmanagment.constant.DocUrls).JournalEdit + '?id=' + journal.id}" class="btn btn-warning"><i class="feather icon-edit mr-0"></i></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" th:object="${journal}">
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_id}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{id}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_doc_type}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentType.name}}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_name}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{name}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_create_date}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(journal.createdAt,'dd.MM.yyyy')}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_prefix}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{prefix}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_suffix}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{suffix}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_numbering}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{numbering}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_restricted}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{restricted}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_status}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{status}"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>

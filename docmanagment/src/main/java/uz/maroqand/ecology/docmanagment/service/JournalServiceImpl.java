@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagment.dto.JournalFilterDTO;
 import uz.maroqand.ecology.docmanagment.entity.Journal;
 import uz.maroqand.ecology.docmanagment.repository.JournalRepository;
 import uz.maroqand.ecology.docmanagment.service.interfaces.JournalService;
@@ -62,17 +65,45 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
-    public DataTablesOutput<Journal> getAll(DataTablesInput input) {
-        return journalRepository.findAll(input,getFilteringSpecification());
+    public Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable) {
+        return journalRepository.findAll(getFilteringSpecification(filterDTO), pageable);
     }
 
-    private static Specification<Journal> getFilteringSpecification() {
+    @Override
+    public DataTablesOutput<Journal> getAll(DataTablesInput input) {
+        return journalRepository.findAll(input,getFilteringSpecification(new JournalFilterDTO()));
+    }
+
+    private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO) {
         return new Specification<Journal>() {
             @Override
             public Predicate toPredicate(Root<Journal> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
+                if (filterDTO.getDocTypeId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
+                }
+                if (filterDTO.getName() != null) {
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("name")),
+                            "%" + filterDTO.getName().toLowerCase() + "%"
+                    ));
+                }
+                if (filterDTO.getPrefix() != null) {
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("prefix")),
+                            "%" + filterDTO.getPrefix().toLowerCase() + "%"
+                    ));
+                }
+                if (filterDTO.getSuffix() != null) {
+                    predicates.add(criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("suffix")),
+                            "%" + filterDTO.getSuffix().toLowerCase() + "%"
+                    ));
+                }
+                if (filterDTO.getStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
+                }
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }

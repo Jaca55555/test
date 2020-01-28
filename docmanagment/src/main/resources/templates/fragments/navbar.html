@@ -18,8 +18,8 @@
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li><span>22 Ноября 2019 йил.</span></li>
-                <li><span>Алишер Иргашев - Тизимга хуш келибсиз!</span></li>
+                <li><span th:text="${#dates.createNow()}"></span></li>
+                <li><span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li>
