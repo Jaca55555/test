@@ -49,76 +49,26 @@
                                         <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
                                             <form class="row">
                                                 <div class="form-group col-sm-2">
-                                                    <label for="tin" class="control-label" th:text="#{sys_tin}">ИНН</label>
-                                                    <input type="text" class="form-control" id="tin">
+                                                    <label for="number" class="control-label" th:text="#{sys_facture.number}">ИНН</label>
+                                                    <input type="text" class="form-control" id="number">
                                                 </div>
                                                 <div class="form-group col-sm-2">
-                                                    <label for="name" class="control-label" th:text="#{sys_legal_entity_name}">Наименование предприятия</label>
-                                                    <input type="text" class="form-control" id="name">
+                                                    <label for="payerName" class="control-label" th:text="#{sys_provider}"> </label>
+                                                    <input type="text" class="form-control" id="payerName">
                                                 </div>
                                                 <div class="form-group col-sm-2">
-                                                    <label for="applicationId" class="control-label" th:text="#{reg_application.number}">№ id</label>
-                                                    <input type="text" class="form-control" id="applicationId">
+                                                    <label for="payerTin" class="control-label" th:text="#{sys_tin}"> </label>
+                                                    <input type="text" class="form-control" id="payerTin">
                                                 </div>
                                                 <div class="form-group col-sm-2">
-                                                    <label for="regionId" class="control-label" th:text="#{sys_region}"></label>
-                                                    <select id="regionId" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
-                                                    </select>
+                                                    <label for="payeeName" class="control-label" th:text="#{sys_customer}"> </label>
+                                                    <input type="text" class="form-control" id="payeeName">
                                                 </div>
-                                                <div class="form-group col-sm-4" >
-                                                    <label for="regDateBegin" class="control-label" th:text="#{reg_application.regdate}"></label>
-                                                    <div class="row">
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="regDateBegin" th:placeholder="#{sys_begin}"/>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="regDateEnd" th:placeholder="#{sys_end}"/>
-                                                        </div>
-                                                    </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label for="payeeTin" class="control-label" th:text="#{sys_tin}"> </label>
+                                                    <input type="text" class="form-control" id="payeeTin">
                                                 </div>
 
-
-                                                <div class="form-group col-sm-3">
-                                                    <label for="activityId" class="control-label" th:text="#{sys_about.activity}"></label>
-                                                    <select id="activityId" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-3">
-                                                    <label for="objectId" class="control-label" th:text="#{sys_about.objectExpertise}"></label>
-                                                    <select id="objectId" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-2">
-                                                    <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
-                                                    <select id="subRegionId" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-2">
-                                                    <label for="status" class="control-label" th:text="#{sys_status}"></label>
-                                                    <select id="status" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="#{${status.getForwardingName()}}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-2">
-                                                    <label for="deadlineDateBegin" class="control-label" th:text="#{sys_deadlineDate}"></label>
-                                                    <div class="row">
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="deadlineDateBegin" th:placeholder="#{sys_begin}" />
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control datepicker" id="deadlineDateEnd" th:placeholder="#{sys_end}" />
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div class="form-group col-sm-12 text-right">
                                                     <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
@@ -141,12 +91,13 @@
                                             <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
                                                 <thead>
                                                 <tr>
-                                                    <th th:text="#{number}"></th>
-                                                    <th th:text="#{date}"></th>
+                                                    <th th:text="#{sys_facture.number}"></th>
+                                                    <th th:text="#{sys_facture.date}"></th>
                                                     <th th:text="#{sys_provider}"></th>
                                                     <th th:text="#{sys_tin}"></th>
                                                     <th th:text="#{sys_customer}"></th>
                                                     <th th:text="#{sys_tin}"></th>
+                                                    <th th:text="#{sys_facture.total}"></th>
                                                     <th ></th>
                                                 </tr>
                                                 </thead>
@@ -205,18 +156,11 @@
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
                 dataToSend.tin = $('#tin').val();
-                dataToSend.name = $('#name').val();
-                dataToSend.contractNumber = "";
-                dataToSend.applicationId = $('#applicationId').val();
-                dataToSend.regionId = $('#regionId').val();
-                dataToSend.subRegionId = $('#subRegionId').val();
-                dataToSend.regDateBegin = $('#regDateBegin').val();
-                dataToSend.regDateEnd = $('#regDateEnd').val();
-                dataToSend.activityId = $('#activityId').val();
-                dataToSend.objectId = $('#objectId').val();
-                dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
-                dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
-                dataToSend.status = $('#status').val();
+                dataToSend.number = $('#number').val();
+                dataToSend.payerName = $('#payerName').val();
+                dataToSend.payerTin = $('#payerTin').val();
+                dataToSend.payeeName = $('#payeeName').val();
+                dataToSend.payeeTin = $('#payeeTin').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -234,6 +178,7 @@
                 {data: 4, name: 'payerTin'},
                 {data: 5, name: 'payeeName'},
                 {data: 6, name: 'payeeTin'},
+                {data: 7, name: 'amount'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

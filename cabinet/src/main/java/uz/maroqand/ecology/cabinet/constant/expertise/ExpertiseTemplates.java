@@ -82,7 +82,7 @@ public class ExpertiseTemplates {
 
     //Facture
     private static final String Facture = Prefix + "/facture";
-    public static final String FactureList = "/list";
-    public static final String FactureView = "/view";
+    public static final String FactureList = Facture + "/list";
+    public static final String FactureView = Facture + "/view";
 
 }

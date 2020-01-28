@@ -225,6 +225,8 @@ public class RegApplication {
     //for cancel
     private String message;
 
+    @Column(name = "facture_id")
+    private Integer factureId;
 
     @Column(name = "facture",columnDefinition = "boolean DEFAULT false")
     private Boolean facture = false;

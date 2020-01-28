@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.entity.expertise.Facture;
-import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.FactureService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -30,11 +28,9 @@ import java.util.List;
 public class FactureController {
 
     private final FactureService factureService;
-    private final UserService userService;
 
-    public FactureController(FactureService factureService, UserService userService) {
+    public FactureController(FactureService factureService) {
         this.factureService = factureService;
-        this.userService = userService;
     }
 
     @RequestMapping(value = ExpertiseUrls.FactureList, method = RequestMethod.GET)
@@ -47,39 +43,34 @@ public class FactureController {
     public HashMap<String,Object> getFactureListAjax(
             @RequestParam(name = "dateBegin", required = false) String dateBeginStr,
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
-            @RequestParam(name = "dateToday", required = false, defaultValue = "false") Boolean dateToday,
-            @RequestParam(name = "dateThisMonth", required = false, defaultValue = "false") Boolean dateThisMonth,
-            @RequestParam(name = "invoice", required = false) String invoiceNumber,
-            @RequestParam(name = "service", required = false) String service,
-            @RequestParam(name = "detail", required = false) String detail,
-            @RequestParam(name = "regionId", required = false) Integer regionId,
-            @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
+            @RequestParam(name = "number", required = false) String number,
+            @RequestParam(name = "payerName", required = false) String payerName,
+            @RequestParam(name = "payerTin", required = false) String payerTin,
+            @RequestParam(name = "payeeName", required = false) String payeeName,
+            @RequestParam(name = "payeeTin", required = false) String payeeTin,
             Pageable pageable
     ){
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
-        invoiceNumber = StringUtils.trimToNull(invoiceNumber);
-        service = StringUtils.trimToNull(service);
-        detail = StringUtils.trimToNull(detail);
+        number = StringUtils.trimToNull(number);
+        payerName = StringUtils.trimToNull(payerName);
+        payerTin = StringUtils.trimToNull(payerTin);
+        payeeName = StringUtils.trimToNull(payeeName);
+        payeeTin = StringUtils.trimToNull(payeeTin);
 
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
 
-        User user = userService.getCurrentUserFromContext();
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
 
         Page<Facture> facturePage = factureService.findFiltered(
                 dateBegin,
                 dateEnd,
-                dateToday,
-                dateThisMonth,
-                invoiceNumber,
-                service,
-                detail,
-                regionId,
-                subRegionId,
-                user.getOrganizationId(),
+                number,
+                payerName,
+                payerTin,
+                payeeName,
+                payeeTin,
                 pageable
         );
 
@@ -93,7 +84,8 @@ public class FactureController {
                     facture.getPayerName(),
                     facture.getPayerTin(),
                     facture.getPayeeName(),
-                    facture.getPayeeTin()
+                    facture.getPayeeTin(),
+                    facture.getAmount()
             });
         }
 
@@ -112,7 +104,8 @@ public class FactureController {
         if(facture == null){
             return "redirect:" + ExpertiseUrls.FactureList;
         }
-        model.addAttribute("facture",facture);
+        model.addAttribute("facture", facture);
+        model.addAttribute("factureProductList", factureService.getByFactureId(id));
         return ExpertiseTemplates.FactureView;
     }
 

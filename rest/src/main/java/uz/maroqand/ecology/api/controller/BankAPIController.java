@@ -42,7 +42,7 @@ public class BankAPIController {
         this.paymentService = paymentService;
     }
 
-    @RequestMapping(value = "/payment/new", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/payment/new", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public PaymentResponse newPaymentPost(
             @RequestBody( required = false) String params,

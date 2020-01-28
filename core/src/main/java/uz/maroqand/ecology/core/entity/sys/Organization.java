@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.entity.sys;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -25,6 +26,8 @@ public class Organization {
     private Integer id;
 
     private Integer tin;
+
+    private Integer vat;
 
     private String name;
 
@@ -58,6 +61,12 @@ public class Organization {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "director")
+    private String director;
+
+    @Column(name = "manager")
+    private String manager;
+
     @Column(name = "last_number")
     private Integer lastNumber;
 
@@ -71,4 +80,11 @@ public class Organization {
         }
     }
 
+    public String getFullAddressTranslation(HelperService helperService, String locale) {
+        String address = "";
+        address += helperService.getSoatoName(regionId, locale)+", ";
+        address += helperService.getSoatoName(subRegionId, locale)+", ";
+        address += address;
+        return address;
+    }
 }

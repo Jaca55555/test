@@ -34,6 +34,18 @@ public class Facture {
     @Column(name = "number")
     private String number;
 
+    //
+    @Column(name = "doc_date")
+    private Date docDate;
+
+    //
+    @Column(name = "doc_number")
+    private String docNumber;
+
+    //
+    @Column(name = "amount")
+    private Double amount;
+
     /*
     * payee
     * */

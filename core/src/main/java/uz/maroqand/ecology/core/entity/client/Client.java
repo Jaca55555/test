@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity.client;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -170,5 +171,13 @@ public class Client {
 
     @Column(name = "update_by")
     private Integer updateById;
+
+    public String getFullAddressTranslation(HelperService helperService, String locale) {
+        String address = "";
+        address += helperService.getSoatoName(regionId, locale)+", ";
+        address += helperService.getSoatoName(subRegionId, locale)+", ";
+        address += address;
+        return address;
+    }
 
 }

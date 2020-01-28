@@ -23,10 +23,11 @@ import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
-import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.FactureProductRepository;
 import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -81,6 +82,7 @@ public class RegApplicationController {
     private final ConclusionService conclusionService;
     private final DocumentRepoService documentRepoService;
     private final NotificationService notificationService;
+    private final FactureService factureService;
 
     @Autowired
     public RegApplicationController(
@@ -112,7 +114,8 @@ public class RegApplicationController {
             SmsSendService smsSendService,
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
-            NotificationService notificationService
+            NotificationService notificationService,
+            FactureService factureService
     ) {
         this.userService = userService;
         this.soatoService = soatoService;
@@ -144,6 +147,8 @@ public class RegApplicationController {
         this.conclusionService = conclusionService;
         this.documentRepoService = documentRepoService;
         this.notificationService = notificationService;
+        this.factureService = factureService;
+
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -771,6 +776,7 @@ public class RegApplicationController {
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
             return "redirect:" + RegUrls.RegApplicationList;
@@ -791,6 +797,13 @@ public class RegApplicationController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplication.setRegistrationDate(new Date());
             regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
+
+            Client client = clientService.getById(regApplication.getApplicantId());
+            Organization organization = organizationService.getById(regApplication.getReviewId());
+            Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+            Facture facture = factureService.create(regApplication, client, organization, requirement, invoice, locale);
+            regApplication.setFactureId(facture.getId());
+
             regApplicationService.update(regApplication);
         }
 
@@ -804,6 +817,8 @@ public class RegApplicationController {
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
 
         model.addAttribute("invoice", invoice);
+        model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
+        model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationList);
         model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
