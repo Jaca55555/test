@@ -39,4 +39,11 @@ public class DocUrls {
     public static final String FolderListAjax = Folder + "/ajax";
     public static final String FolderNew = Folder + "/new";
     public static final String FolderEdit = Folder + "/edit";
+
+    private static final String DocumentOrganization = Prefix + "/document_organization";
+    public static final String DocumentOrganizationList = DocumentOrganization + "/list";
+    public static final String DocumentOrganizationListAjax = DocumentOrganizationList + "/ajax";
+    public static final String DocumentOrganizationNew = DocumentOrganization + "/new";
+    public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
+    public static final String DocumentOrganizationEditStatus = DocumentOrganizationEdit + "/status";
 }

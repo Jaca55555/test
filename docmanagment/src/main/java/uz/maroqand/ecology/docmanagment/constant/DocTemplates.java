@@ -32,4 +32,9 @@ public class DocTemplates {
     public static final String FolderList = Folder+ "/list";
     public static final String FolderEdit = Folder + "/edit";
     public static final String FolderNew = Folder + "/new";
+
+    private static final String DocumentOrganization = Prefix + "/document_organization";
+    public static final String DocumentOrganizationList = DocumentOrganization + "/list";
+    public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
+    public static final String DocumentOrganizationNew = DocumentOrganization + "/new";
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!--main content start-->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap">
+
+                <form method="post" th:object="${docOrganization}" th:action="@{/doc/document_organization/edit}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="form-group  col-sm-12">
+                        <label class="control-label"  th:text="#{communication_tool.name}"></label><br/>
+                        <input  class="form-control" type="text" th:field="*{name}">
+                    </div>
+                    <div class="form-group  col-sm-12">
+                        <label class="control-label"  th:text="#{document_organization.status}"></label><br/>
+                        <input type="checkbox" th:field="*{status}"><br/>
+                    </div>
+                    <input type="submit" value="подтвердить" class="btn btn-primary">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--main content end-->
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+</body>
+</html>

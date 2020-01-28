@@ -71,6 +71,11 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
+    public Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable){
+        return documentOrganizationRepository.findAll(getFilteringSpecification(id, name, status), pageable);
+    }
+
+    @Override
     public Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable) {
         return documentOrganizationRepository.findAll(getFilteringSpecification(name),pageable);
     }
@@ -89,7 +94,25 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
             }
         };
     }
+    private static Specification<DocumentOrganization> getFilteringSpecification(Integer id, String name, Integer status){
+        return new Specification<DocumentOrganization>(){
+            @Override
+            public Predicate toPredicate(Root<DocumentOrganization> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder){
+                List<Predicate> predicates = new LinkedList<>();
 
+                if(id != null)
+                    predicates.add(criteriaBuilder.equal(root.get("id"), id));
+                if(name != null)
+                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                if(status != null)
+                    predicates.add(criteriaBuilder.equal(root.get("status"), status == 1));
+
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
     public DocumentOrganization create(DocumentOrganization organization) {
         organization.setDeleted(Boolean.FALSE);
         organization.setCreatedAt(new Date());

@@ -25,6 +25,8 @@ public interface DocumentOrganizationService {
 
     DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input);
 
+    Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable);
+
     Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable);
 
     DocumentOrganization create(DocumentOrganization communicationTool);
