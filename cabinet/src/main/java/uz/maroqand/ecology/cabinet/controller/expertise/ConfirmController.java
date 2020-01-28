@@ -215,6 +215,7 @@ public class ConfirmController {
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         if (regApplicationLog == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
@@ -238,7 +239,7 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                "Arizani tasqinlandi",
+                helperService.getTranslation("sys_notification.confirmInfo", locale),
                 "Sizning " + regApplication.getId() + " raqamli arizangiz tasdiqlandi",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
@@ -255,6 +256,7 @@ public class ConfirmController {
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         if (regApplicationLog == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
@@ -278,7 +280,7 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                "Arizani rad javobi berildi",
+                helperService.getTranslation("sys_notification.notConfirmInfo", locale),
                 "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
@@ -293,6 +295,7 @@ public class ConfirmController {
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         if (regApplicationLog == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
@@ -320,7 +323,7 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                "Arizani tasqinlandi",
+                helperService.getTranslation("sys_notification.confirmInfo", locale),
                 "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
@@ -336,6 +339,7 @@ public class ConfirmController {
             @RequestParam(name = "budget")Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         if (regApplicationLog == null){
             return "redirect:" + ExpertiseUrls.ConfirmList;
@@ -363,7 +367,8 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                "Arizani rad javobi berildi", "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                helperService.getTranslation("sys_notification.notConfirmInfo", locale),
+                "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );

@@ -22,6 +22,7 @@ import uz.maroqand.ecology.core.entity.sys.AppealSub;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.AppealService;
 import uz.maroqand.ecology.core.service.sys.AppealSubService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -38,13 +39,15 @@ public class AppealAdminController {
     private final AppealSubService appealSubService;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final HelperService helperService;
 
     @Autowired
-    public AppealAdminController(AppealService appealService, AppealSubService appealSubService, UserService userService, NotificationService notificationService) {
+    public AppealAdminController(AppealService appealService, AppealSubService appealSubService, UserService userService, NotificationService notificationService, HelperService helperService) {
         this.appealService = appealService;
         this.appealSubService = appealSubService;
         this.userService = userService;
         this.notificationService = notificationService;
+        this.helperService = helperService;
     }
 
     @RequestMapping(SysUrls.AppealAdminList)
@@ -128,6 +131,7 @@ public class AppealAdminController {
     ) {
         System.out.println("appealId == " + id);
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Appeal appeal = appealService.findById(id);
         if(appeal==null){
             return "redirect:" + SysUrls.AppealAdminList;
@@ -148,7 +152,7 @@ public class AppealAdminController {
         notificationService.create(
                 appeal.getCreatedById(),
                 NotificationType.Expertise,
-                "Yangi xabar",
+                helperService.getTranslation("sys_notification.new", locale),
                 "Sizning " + appeal.getId() + " raqamli murojaatingizga izox qoldirildi.",
                 "/reg/appeal/view?id=" + appeal.getId(),
                 user.getId()

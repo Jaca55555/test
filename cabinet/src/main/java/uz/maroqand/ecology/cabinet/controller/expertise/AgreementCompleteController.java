@@ -205,6 +205,7 @@ public class AgreementCompleteController {
             @RequestParam(name = "comment")String comment
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AgreementCompleteList;
@@ -231,7 +232,7 @@ public class AgreementCompleteController {
             notificationService.create(
                     regApplication.getCreatedById(),
                     NotificationType.Expertise,
-                    "Yangi xabar",
+                    helperService.getTranslation("sys_notification.new", locale),
                     "Sizning " + regApplication.getId() + " raqamli arizangizga ko'rib chiqildi",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
@@ -239,7 +240,7 @@ public class AgreementCompleteController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    "Ijrodagi ariza bo'yicha xabar",
+                    helperService.getTranslation("sys_notification.performerInfo", locale),
                     "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlandi",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
@@ -258,7 +259,7 @@ public class AgreementCompleteController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    "Ijrodagi ariza bo'yicha xabar",
+                    helperService.getTranslation("sys_notification.performerInfo", locale),
                     "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()

@@ -889,6 +889,7 @@ public class RegApplicationController {
             @RequestParam(name = "message") String message
     ){
         User user =userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Integer status=1;
         HashMap<String,Object> result = new HashMap<>();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
@@ -920,7 +921,7 @@ public class RegApplicationController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    "Arizachidan xabar keldi",
+                    helperService.getTranslation("sys_notification.newCommentApplicant", locale),
                     regApplication.getId() + " raqamli ariza arizachisidan chat orqali xabar yuborildi.",
                     "/expertise/performer/view?id=" + regApplication.getId(),
                     user.getId()

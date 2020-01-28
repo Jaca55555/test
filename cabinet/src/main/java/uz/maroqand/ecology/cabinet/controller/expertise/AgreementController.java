@@ -207,6 +207,7 @@ public class AgreementController {
             @RequestParam(name = "comment")String comment
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.AgreementList;
@@ -249,7 +250,7 @@ public class AgreementController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    "Ijrodagi ariza bo'yicha xabar",
+                    helperService.getTranslation("sys_notification.performerInfo", locale),
                     "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()

@@ -218,6 +218,7 @@ public class PerformerController {
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
@@ -252,7 +253,7 @@ public class PerformerController {
             notificationService.create(
                     agreementLog.getUpdateById(),
                     NotificationType.Expertise,
-                    "Kelishish uchun ariza yuborildi",
+                    helperService.getTranslation("sys_notification.newAppAgreement", locale),
                     id + " raqamli ariza kelishish uchun yuborildi.",
                     "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
                     user.getId()
@@ -287,6 +288,7 @@ public class PerformerController {
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
@@ -338,7 +340,7 @@ public class PerformerController {
             notificationService.create(
                     agreementLog.getUpdateById(),
                     NotificationType.Expertise,
-                    "Kelishish uchun ariza yuborildi",
+                    helperService.getTranslation("sys_notification.newAppAgreement", locale),
                     id + " raqamli ariza kelishish uchun yuborildi.",
                     "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
                     user.getId()
@@ -429,6 +431,7 @@ public class PerformerController {
             @RequestParam(name = "message") String message
     ){
         User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
         Comment comment;
         if (commentId != null){
@@ -453,7 +456,7 @@ public class PerformerController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                "Yangi xabar",
+                helperService.getTranslation("sys_notification.new", locale),
                 "Sizning " + regApplicationId + " raqamli arizangizga habar yozildi",
                 "/reg/application/resume?id=" + regApplicationId,
                 user.getId()
