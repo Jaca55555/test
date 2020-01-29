@@ -8,11 +8,20 @@ package uz.maroqand.ecology.docmanagement.constant;
 public class DocUrls {
     private static final String Prefix = "/doc";
     private static final String Registration = "/registration";
-    private static final String Incoming = "/incoming";
-    private static final String Outgoing = "/outgoing";
+    private static final String Incoming = "/incoming"; //kiruvchi xujjatlar
+    private static final String Outgoing = "/outgoing"; //chiquvchi xujjatlar
+    private static final String Inner = "/inner"; //Ichki xujjatlar
+    private static final String Appeal = "/appeal"; //Murojaatlar
+    private static final String Orders = "/orders"; //Buyruqlar
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
+
+    public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
+    public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
+    public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
+    public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
+    public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
     private static final String IncomeMail = Prefix + "/income_mail";
     public static final String IncomeMailList = IncomeMail + "/list";
@@ -22,6 +31,18 @@ public class DocUrls {
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/edit";
     public static final String IncomeMailExecuteEdit = IncomeMail + "/execute_edit";
+
+    //Chiquvchi hujjatlarni ro'yhatga olish
+    private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
+    public static final String OutgoingRegistrationList = OutgoingRegistration + "/list";
+
+    //Ichki hujjatlarni ro'yhatga olish
+    private static final String InnerRegistration = Prefix + Registration + Inner;
+    public static final String InnerRegistrationList = InnerRegistration + "/list";
+
+    //Murojaatlarni ro'yhatga olish
+    private static final String AppealRegistration = Prefix + Registration + Appeal;
+    public static final String AppealRegistrationList = AppealRegistration + "/list";
 
     private static final String CommunicationTools = Prefix +  "/communication_tools";
     public static final String CommunicationToolsList = CommunicationTools + "/list";
