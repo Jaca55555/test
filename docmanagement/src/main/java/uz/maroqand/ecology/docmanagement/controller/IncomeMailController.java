@@ -1,8 +1,8 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +19,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocumentSubType;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.service.interfaces.CommunicationToolService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTypeService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,24 +38,23 @@ public class IncomeMailController {
     private final JournalService journalService;
     private final DocumentTypeService documentTypeService;
     private final CommunicationToolService communicationToolService;
-    private final ObjectMapper objectMapper;
     private final UserService userService;
+    private final FolderService folderService;
 
     @Autowired
     public IncomeMailController(
             DocumentService documentService,
             DocumentTypeService documentTypeService,
             CommunicationToolService communicationToolService,
-            ObjectMapper objectMapper,
             UserService userService,
-            JournalService journalService
-    ) {
+            JournalService journalService,
+            FolderService folderService) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
-        this.objectMapper = objectMapper;
         this.userService = userService;
         this.journalService = journalService;
+        this.folderService = folderService;
     }
 
     @RequestMapping(DocUrls.IncomeMailList)
@@ -119,6 +115,9 @@ public class IncomeMailController {
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
         model.addAttribute("doc_sub_types", DocumentSubType.getDocumentSubTypeList());
         model.addAttribute("communication_list", communicationToolService.getStatusActive());
+        model.addAttribute("folder_list", folderService.getFolderList());
+        model.addAttribute("chief", userService.getEmployeeList());
+        model.addAttribute("doc_list", documentService.findAllActive());
         return DocTemplates.IncomeMailNew;
     }
 

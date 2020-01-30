@@ -20,4 +20,5 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 {
     Document findByIdAndDeletedFalse(Integer id);
 
+    List<Document> findAllByDeletedFalse();
 }

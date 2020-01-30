@@ -147,15 +147,21 @@
                     <div class="form-group col-sm-12 col-md-6">
                         <label for="name" class="control-label" th:text="#{doc.income_additional_doc}">Хужжат раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{additionalDocumentId}">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{addDocId}">
+                                <option value=""></option>
+                                <option th:each="i: ${doc_list}" th:value="${i.id}" th:text="${i.registrationNumber}"></option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
                         <label for="name" class="control-label" th:text="#{doc.income_answer_doc}">Хужжат раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{answerDocumentId}">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{answerDocId}">
+                                <option value=""></option>
+                                <option th:each="i: ${doc_list}" th:value="${i.id}" th:text="${i.registrationNumber}"></option>
+                            </select>
                         </div>
                     </div>
 
@@ -169,10 +175,13 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label">Кирувчи хатни тегишли хужжатлар тупламига бириктириш учун хужжатни танланг</label>
+                        <label th:for="${#ids.next('folderId')}" class="control-label" th:text="#{doc.income_folder}"></label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{folderId}">
+                                <option value=""></option>
+                                <option th:each="i: ${folder_list}" th:value="${i.id}" th:text="${i.name}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>

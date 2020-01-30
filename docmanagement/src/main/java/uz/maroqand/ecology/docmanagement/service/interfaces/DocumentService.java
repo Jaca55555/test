@@ -16,6 +16,8 @@ public interface DocumentService {
 
     public Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
 
+    public List<Document> findAllActive();
+
     public Document getById(Integer id);
 
     public Document createDoc(Document document);

@@ -58,6 +58,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public List<Document> findAllActive() {
+        return documentRepository.findAllByDeletedFalse();
+    }
+
+    @Override
     public Page<Document> findFiltered(
             DocFilterDTO filterDTO,
             Pageable pageable

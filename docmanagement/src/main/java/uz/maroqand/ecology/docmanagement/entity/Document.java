@@ -41,6 +41,27 @@ public class Document {
     @Column(name = "journal_id")
     private Integer journalId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder_id", insertable = false, updatable = false)
+    private Folder folder;
+
+    @Column(name = "folder_id")
+    private Integer folderId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "additional_doc_id", insertable = false, updatable = false)
+    private Document addDoc;
+
+    @Column(name = "additional_doc_id")
+    private Integer addDocId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_doc_id", insertable = false, updatable = false)
+    private Folder answerDoc;
+
+    @Column(name = "answer_doc_id")
+    private Integer answerDocId;
+
     //Хужжат тури
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_view_id", insertable = false, updatable = false)
