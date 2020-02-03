@@ -21,6 +21,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,7 +80,6 @@ public class IncomeMailController {
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     "docStatus",
@@ -118,9 +118,11 @@ public class IncomeMailController {
         model.addAttribute("folder_list", folderService.getFolderList());
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("doc_list", documentService.findAllActive());
+        model.addAttribute("description_list", documentService.getDescriptionsList());
         return DocTemplates.IncomeMailNew;
     }
 
+    @Transactional
     @RequestMapping(value = DocUrls.IncomeMailNew, method = RequestMethod.POST)
     public String createDoc(
             @RequestParam(name = "registrationDateStr") String regDate,

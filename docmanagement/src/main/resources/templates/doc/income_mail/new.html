@@ -127,22 +127,19 @@
                         </div>
                     </div>
                 </div>
-<!--                <div class="col-sm-12 form-group">-->
-<!--                    <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>-->
-<!--                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"-->
-<!--                            aria-hidden="true">-->
-<!--                        <option value=""></option>-->
-<!--                        <option value="AL">Мароканд умумий хатлар</option>-->
-<!--                        <option value="WY">Wyoming</option>-->
-<!--                        <option value="WY">Coming</option>-->
-<!--                        <option value="WY">Hanry Die</option>-->
-<!--                        <option value="WY">John Doe</option>-->
-<!--                    </select>-->
-<!--                </div>-->
                 <div class="col-sm-12 form-group">
-                    <label class="control-label" th:text="#{doc.income_description}">Кирувчи хатларни руйхатга олиш журнали</label>
-                    <textarea class="form-control" name="validation-text" th:field="*{content}"></textarea>
+                    <label class="control-label" th:text="#{doc.income_description}"></label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                            aria-hidden="true" th:field="*{documentDescription}" id="description">
+                        <option value=""></option>
+                        <option value="new" th:text="#{doc.new_description}"></option>
+                        <option th:each="type : ${description_list}" th:value="${type.id}" th:text="#{${type.content}}"></option>
+                    </select>
                 </div>
+                <div class="col-sm-12 form-group new-desc d-none">
+                    <textarea class="form-control" id="newDescription" th:field="*{documentDescription.content}"></textarea>
+                </div>
+
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label for="name" class="control-label" th:text="#{doc.income_additional_doc}">Хужжат раками</label>
@@ -155,35 +152,14 @@
                         </div>
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_answer_doc}">Хужжат раками</label>
-                        <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                    aria-hidden="true" th:field="*{answerDocId}">
-                                <option value=""></option>
-                                <option th:each="i: ${doc_list}" th:value="${i.id}" th:text="${i.registrationNumber}"></option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_performer_name}">Хужжат раками</label>
+                        <label class="control-label" th:text="#{doc.income_performer_name}">Хужжат раками</label>
                         <input type="text" class="form-control" th:field="*{performerName}">
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_performer_phone}">Хужжат раками</label>
+                        <label class="control-label" th:text="#{doc.income_performer_phone}">Хужжат раками</label>
                         <input type="text" class="form-control" th:field="*{performerPhone}">
                     </div>
 
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label th:for="${#ids.next('folderId')}" class="control-label" th:text="#{doc.income_folder}"></label>
-                        <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                    aria-hidden="true" th:field="*{folderId}">
-                                <option value=""></option>
-                                <option th:each="i: ${folder_list}" th:value="${i.id}" th:text="${i.name}"></option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
@@ -315,6 +291,19 @@
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
+        })
+
+        $('#description').on('change', function () {
+            if ($(this).val() === 'new') {
+                $('.new-desc').removeClass('d-none');
+            } else {
+                $('.new-desc').addClass('d-none');
+            }
+        })
+        $('form').on('submit', function () {
+            if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
+            else $('#newDescription').attr('disabled', 'disabled');
+            $(this).submit();
         })
     });
 </script>

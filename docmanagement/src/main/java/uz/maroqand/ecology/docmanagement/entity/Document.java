@@ -42,25 +42,11 @@ public class Document {
     private Integer journalId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id", insertable = false, updatable = false)
-    private Folder folder;
-
-    @Column(name = "folder_id")
-    private Integer folderId;
-
-    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "additional_doc_id", insertable = false, updatable = false)
     private Document addDoc;
 
     @Column(name = "additional_doc_id")
     private Integer addDocId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "answer_doc_id", insertable = false, updatable = false)
-    private Folder answerDoc;
-
-    @Column(name = "answer_doc_id")
-    private Integer answerDocId;
 
     //Хужжат тури
     @OneToOne(fetch = FetchType.LAZY)
@@ -82,20 +68,15 @@ public class Document {
     private String registrationNumber;
 
     //Краткое содержание документа
-    @Column(name = "content",columnDefinition = "TEXT")
-    private String content;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "description_id", nullable = false, updatable = false)
+    private DocumentDescription documentDescription;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "document_jt_content_files",
             joinColumns = { @JoinColumn(name = "appeal_id") },
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
     private Set<File> contentFiles;
-
-
-
-    //Ушбу хатга қўшимча тариқасида юборилган (агар мавжуд бўлса)
-    @Column(name = "additional_document_id")
-    private Integer additionalDocumentId;
 
     //Ушбу хатга жавоб тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "answer_document_id")
