@@ -163,7 +163,9 @@
                 </div>
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
-                <div class="row p20">
+                <div class="row p20" id="file-container">
+                    <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
+                    </select>
                     <div class="file-block" th:each="file: ${doc.contentFiles}">
                         <div class="text-right"><span class='fas fa-trash-alt'></span></div>
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
@@ -182,8 +184,7 @@
                 <div class="border-danger m20 p20">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
-                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}">Хужжат фақат хизмат доирасида
-                            фойдаланиш учун мулжалланган (Гриф ХДФУ)</label>
+                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}"></label>
                     </div>
                     <div class="m20-vertical">
                         <span th:text="#{sys_attention}">Диккат:</span>
@@ -284,14 +285,44 @@
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
-<script type="text/javascript" th:inline="none">
+<script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
         $('.file-button, #addFileButton').on('click', function () {
             $('#addFile').trigger('click');
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
-        })
+        }).on('change', function () {
+            let csrf = $("form input[name='_csrf']").val();
+            let files = $(this)[0].files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailFileUpload}]],
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    files.files = [];
+                    var file = data.file;
+                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
+                    $('#file-container').prepend(
+"                    <div class=\"file-block\">\n" +
+"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
+"                        <div class=\"text-center file-icon-container color-red\">" +
+"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                        </div>\n" +
+"                        <div class=\"text-center\">\n" +
+"                            <span>"+file.name+"</span>\n" +
+"                        </div>\n" +
+"                    </div>\n"
+                    );
+                }
+            })
+        });
 
         $('#description').on('change', function () {
             if ($(this).val() === 'new') {
@@ -300,7 +331,14 @@
                 $('.new-desc').addClass('d-none');
             }
         })
+
+        $(document).on('click', '.fa-trash-alt', function () {
+            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
+            $(this).parent().parent().remove();
+        });
+
         $('form').on('submit', function () {
+            $('#addFile').attr('disabled', 'disabled');
             if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
             else $('#newDescription').attr('disabled', 'disabled');
             $(this).submit();

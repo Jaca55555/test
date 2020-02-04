@@ -2,15 +2,14 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -22,10 +21,7 @@ import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Namazov Jamshid
@@ -40,6 +36,7 @@ public class IncomeMailController {
     private final DocumentTypeService documentTypeService;
     private final CommunicationToolService communicationToolService;
     private final UserService userService;
+    private final FileService fileService;
     private final FolderService folderService;
 
     @Autowired
@@ -49,12 +46,13 @@ public class IncomeMailController {
             CommunicationToolService communicationToolService,
             UserService userService,
             JournalService journalService,
-            FolderService folderService) {
+            FileService fileService, FolderService folderService) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
         this.userService = userService;
         this.journalService = journalService;
+        this.fileService = fileService;
         this.folderService = folderService;
     }
 
@@ -127,12 +125,18 @@ public class IncomeMailController {
     public String createDoc(
             @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "documentSubType") DocumentSubType type,
+            @RequestParam(name = "fileIds") List<Integer> fileIds,
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
             return "redirect: " + DocUrls.IncomeMailList;
         }
+        Set<File> files = new HashSet<>();
+        for (Integer fileId : fileIds) {
+            files.add(fileService.findById(fileId));
+        }
+        document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
@@ -173,5 +177,18 @@ public class IncomeMailController {
         document.setUpdateById(user.getId());
         documentService.update(document);
         return "redirect:" + DocUrls.IncomeMailList;
+    }
+
+    @PostMapping(value = DocUrls.IncomeMailFileUpload)
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "file")MultipartFile uploadFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> response = new HashMap<>();
+
+        File file = fileService.uploadFile(uploadFile,user.getId(),"documentFile",uploadFile.getOriginalFilename());
+        response.put("file", file);
+        return response;
     }
 }

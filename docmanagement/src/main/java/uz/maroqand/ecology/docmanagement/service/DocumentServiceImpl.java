@@ -48,7 +48,6 @@ public class DocumentServiceImpl implements DocumentService {
     public Document createDoc(Document document) {
         document.setDeleted(Boolean.FALSE);
         documentRepository.save(document);
-        System.out.println(document.getDocumentDescription().getContent());
         return document;
     }
 
