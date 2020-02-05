@@ -66,4 +66,8 @@ public class DocUrls {
     public static final String DocumentOrganizationNew = DocumentOrganization + "/new";
     public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
     public static final String DocumentOrganizationEditStatus = DocumentOrganizationEdit + "/status";
+
+     private static final String OutgoingMail = Prefix + "/outgoing_mail";
+     public static final String OutgoingMailNew = OutgoingMail + "/new";
+     public static final String OutgoingMailOrganizationList = OutgoingMail + "/organization_names";
 }

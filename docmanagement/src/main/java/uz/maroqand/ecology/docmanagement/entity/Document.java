@@ -71,10 +71,13 @@ public class Document {
     private Set<File> contentFiles;
 
 
-
     //Ушбу хатга қўшимча тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_document_id", insertable = false, updatable = false)
+    private Document answerDocument;
 
     //Ушбу хатга жавоб тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "answer_document_id")

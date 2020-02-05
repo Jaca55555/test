@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-menu-item-wrapper:hover{
+            color:white;
+            background:#62c462;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- MainContent start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-start mobile-column" style="align-items: center;">
+                <h5 class="mb-0"><span class="card-header-a">Кирувчи хатни рўйхатга олиш - IN-123456-MRQ</span></h5>
+                <div>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i
+                                class="fas fa-question-circle"></i>Хат жўнатилмаган</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <form th:action="@{/doc/outgoing_mail/new}" th:object="${document}" method="post">
+                <div class="row">
+                    <!-- journal, document_view, communication tools, organization_name fields start -->
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:for="${#ids.next('journalId')}"
+                               th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{journalId}">
+<!--                            <option value=""></option>-->
+                            <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" >хужат тури</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{documentViewId}">
+<!--                            <option value="AL">Мароканд умумий хатлар</option>-->
+                            <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{documentSub.communicationToolId}">
+<!--                            <option value="AL" th:text="#{communication_tool_select}"></option>-->
+                            <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">Хат юборилаётган ташкилот</label>
+                        <label for="tags">Tags: </label>
+                        <input class="form-control" id="tags" th:field="*{documentSub.organizationName}">
+                    </div>
+                   <!-- journal, document_view, communication tools, organization_name fields end -->
+
+                </div>
+
+                    <hr class="m20-vertical">
+                    <div class="col-sm-12 form-group">
+                        <label class="control-label">Хатнинг қисқача мазмуни</label>
+                        <textarea class="form-control" name="validation-text"
+                                  placeholder="Хатнинг қисқача махзмунини киритинг."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 form-group ">
+                        <label for="name" class="control-label">Хат жунатаётган булим номи</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control">
+                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-sm-6 form-group">
+                        <label for="name" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-sm-6 form-group">
+                        <label for="name" class="control-label">Чикувчи хатни тегиши хужжатлар тупламига бирикитиш учун керакли хужжатни танланг(агар зарур болса)</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                </div>
+                <!-- files input start -->
+                <hr class="m30-vertical">
+                <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <div class="row p20">
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>Письмо.pdf</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-blue"><span
+                                class="fas fa-file-word"></span></div>
+                        <div class="text-center">
+                            <span>Письмо.docx</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-green"><span
+                                class="fas fa-file-excel"></span></div>
+                        <div class="text-center">
+                            <span>Таблица.xlsx</span>
+                        </div>
+                    </div>
+                    <div class="file-block">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-blue"><span
+                                class="fas fa-file-image"></span></div>
+                        <div class="text-center">
+                            <span>Image.img</span>
+                        </div>
+                    </div>
+                    <div class="file-block flex-center">
+                        <div class="text-center file-icon-container align-self-center color-gray"><span
+                                class="fas fa-plus"></span></div>
+                    </div>
+                </div>
+                <hr class="m30-vertical">
+                <div class="row">
+                    <div class="flex-center w100 row-wrap">
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор қилиш</button>
+                        <button type="button" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
+                            олиш</button>
+                    </div>
+                </div>
+                    <input type="submit">
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- filters card begins here -->
+
+</div>
+<!-- MainContent end -->
+<!-- modals start-->
+
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Чиқувчи хатга
+                                адресат қўшиш</span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <form method="POST" th:action="@{/doc/outgoing_mail/new_organization}">
+                                <label class="control-label" th:text="#{organization_name}"></label>
+                                <input type="text" class="form-control">
+                                <input type="submit" class="">
+                            </form>
+                        </div>
+
+
+                    </div>
+                    <hr class="m30-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                қилиш</button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modals end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script th:inline="javascript">
+
+    var requestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailOrganizationList}]];
+    // console.log(requestLink);
+
+
+    async function getOrganizationNames(req){
+        return await fetch(req)
+            .then((response) => {
+                return response.json();
+            })
+    }
+
+    $( function() {
+        getOrganizationNames(requestLink)
+
+            .then((data) => {
+                $( "#tags" ).autocomplete({
+                    source: data
+                });
+            })
+        //
+        // let availableTags =  getOrganizationNames(requestLink);
+
+    } );
+</script>
+</body>
+</html>
