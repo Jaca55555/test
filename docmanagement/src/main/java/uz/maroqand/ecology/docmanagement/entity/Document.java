@@ -41,13 +41,6 @@ public class Document {
     @Column(name = "journal_id")
     private Integer journalId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "additional_doc_id", insertable = false, updatable = false)
-    private Document addDoc;
-
-    @Column(name = "additional_doc_id")
-    private Integer addDocId;
-
     //Хужжат тури
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_view_id", insertable = false, updatable = false)
@@ -82,6 +75,10 @@ public class Document {
     @Column(name = "answer_document_id")
     private Integer answerDocumentId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_document_id", insertable = false, updatable = false)
+    private Document answerDocument;
+
     //Для внутренного использования
     @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
     private Boolean insidePurpose;
@@ -94,11 +91,15 @@ public class Document {
     @Column(name = "performer_phone")
     private Integer performerPhone;
 
-
     //restricted = true, Ko'rish kechlangan
     @Column(name = "restricted", columnDefinition = "boolean DEFAULT true")
     private Boolean restricted;
 
+    @Column(name = "execute_form")
+    private String executeForm;
+
+    @Column(name = "control_form")
+    private String controlForm;
     /*
      * Technical Fields
      */

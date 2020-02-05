@@ -37,6 +37,7 @@ public class IncomeMailController {
     private final CommunicationToolService communicationToolService;
     private final UserService userService;
     private final FileService fileService;
+    private final DocumentOrganizationService organizationService;
     private final FolderService folderService;
 
     @Autowired
@@ -46,13 +47,14 @@ public class IncomeMailController {
             CommunicationToolService communicationToolService,
             UserService userService,
             JournalService journalService,
-            FileService fileService, FolderService folderService) {
+            FileService fileService, DocumentOrganizationService organizationService, FolderService folderService) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
         this.userService = userService;
         this.journalService = journalService;
         this.fileService = fileService;
+        this.organizationService = organizationService;
         this.folderService = folderService;
     }
 
@@ -78,6 +80,7 @@ public class IncomeMailController {
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    document.getDocumentDescription().getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     "docStatus",
@@ -107,6 +110,16 @@ public class IncomeMailController {
         if (user == null) {
             return "redirect: " + DocUrls.IncomeMailList;
         }
+        // TODO: ijro va nazorat shakllarini kerakli joydan olish
+        List<Object[]> executeForms = new ArrayList<>();
+            executeForms.add(new Object[]{"1","Ijro uchun"});
+            executeForms.add(new Object[]{"2", "Ma'lumot uchun"});
+        List<Object[]> controlForms = new ArrayList<>();
+            controlForms.add(new Object[]{"1","Yo'q"});
+            controlForms.add(new Object[]{"2","1A shakl"});
+            controlForms.add(new Object[]{"3","2A shakl"});
+            controlForms.add(new Object[]{"4","3A shakl"});
+            controlForms.add(new Object[]{"5","4A shakl"});
         model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailNew);
         model.addAttribute("journal", journalService.getStatusActive());
@@ -115,8 +128,11 @@ public class IncomeMailController {
         model.addAttribute("communication_list", communicationToolService.getStatusActive());
         model.addAttribute("folder_list", folderService.getFolderList());
         model.addAttribute("chief", userService.getEmployeeList());
+        model.addAttribute("executeController", userService.getEmployeeList());
         model.addAttribute("doc_list", documentService.findAllActive());
         model.addAttribute("description_list", documentService.getDescriptionsList());
+        model.addAttribute("execute_forms", executeForms);
+        model.addAttribute("control_forms", controlForms);
         return DocTemplates.IncomeMailNew;
     }
 
@@ -152,12 +168,32 @@ public class IncomeMailController {
         if (document == null) {
             response = "redirect:" + DocUrls.IncomeMailList;
         }
+
+        // TODO: ijro va nazorat shakllarini kerakli joydan olish
+        List<Object[]> executeForms = new ArrayList<>();
+        executeForms.add(new Object[]{"1","Ijro uchun"});
+        executeForms.add(new Object[]{"2", "Ma'lumot uchun"});
+        List<Object[]> controlForms = new ArrayList<>();
+        controlForms.add(new Object[]{"1","Yo'q"});
+        controlForms.add(new Object[]{"2","1A shakl"});
+        controlForms.add(new Object[]{"3","2A shakl"});
+        controlForms.add(new Object[]{"4","3A shakl"});
+        controlForms.add(new Object[]{"5","4A shakl"});
+
         model.addAttribute("action_url", DocUrls.IncomeMailEdit);
         model.addAttribute("doc", document);
         model.addAttribute("journal", journalService.getStatusActive());
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
         model.addAttribute("doc_sub_types", DocumentSubType.getDocumentSubTypeList());
         model.addAttribute("communication_list", communicationToolService.getStatusActive());
+        model.addAttribute("folder_list", folderService.getFolderList());
+        model.addAttribute("chief", userService.getEmployeeList());
+        model.addAttribute("executeController", userService.getEmployeeList());
+        model.addAttribute("doc_list", documentService.findAllActive());
+        model.addAttribute("description_list", documentService.getDescriptionsList());
+        model.addAttribute("execute_forms", executeForms);
+        model.addAttribute("control_forms", controlForms);
+        model.addAttribute("organizations", organizationService.getStatusActive());
 
         return response;
     }
@@ -166,12 +202,18 @@ public class IncomeMailController {
     public String updateDoc(
             @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "documentSubType") DocumentSubType type,
+            @RequestParam(name = "fileIds") List<Integer> fileIds,
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
             return "redirect: " + DocUrls.IncomeMailList;
         }
+        Set<File> files = new HashSet<>();
+        for (Integer fileId : fileIds) {
+            files.add(fileService.findById(fileId));
+        }
+        document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.getDocumentSub().setType(type);
         document.setUpdateById(user.getId());
