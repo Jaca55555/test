@@ -48,7 +48,10 @@ public class IncomeMailController {
             CommunicationToolService communicationToolService,
             UserService userService,
             JournalService journalService,
-            FileService fileService, DocumentOrganizationService organizationService, FolderService folderService) {
+            FileService fileService,
+            DocumentOrganizationService organizationService,
+            FolderService folderService
+    ) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
@@ -161,6 +164,16 @@ public class IncomeMailController {
         for (Integer fileId : fileIds) {
             files.add(fileService.findById(fileId));
         }
+        DocumentOrganization organization = organizationService.getByName(document.getDocumentSub().getOrganizationName());
+        if (organization == null) {
+            DocumentOrganization newOrg = new DocumentOrganization();
+            newOrg.setName(document.getDocumentSub().getOrganizationName());
+            newOrg.setStatus(Boolean.TRUE);
+            newOrg.setCreatedById(user.getId());
+            organization = organizationService.create(newOrg);
+        }
+
+        document.getDocumentSub().setOrganizationId(organization.getId());
         document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
@@ -227,6 +240,16 @@ public class IncomeMailController {
         for (Integer fileId : fileIds) {
             files.add(fileService.findById(fileId));
         }
+        DocumentOrganization organization = organizationService.getByName(document.getDocumentSub().getOrganizationName());
+        if (organization == null) {
+            DocumentOrganization newOrg = new DocumentOrganization();
+            newOrg.setName(document.getDocumentSub().getOrganizationName());
+            newOrg.setStatus(Boolean.TRUE);
+            newOrg.setCreatedById(user.getId());
+            organization = organizationService.create(newOrg);
+        }
+
+        document.getDocumentSub().setOrganizationId(organization.getId());
         document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.getDocumentSub().setType(type);

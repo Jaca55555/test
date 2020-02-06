@@ -17,6 +17,8 @@ public interface DocumentOrganizationRepository extends DataTablesRepository<Doc
 
     DocumentOrganization findByIdAndDeletedFalse(Integer id);
 
+    DocumentOrganization findByNameContaining(String name);
+
     List<DocumentOrganization> findByStatusTrue();
 
 }
