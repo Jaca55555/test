@@ -18,6 +18,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocumentSubType;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.transaction.Transactional;
@@ -120,6 +121,13 @@ public class IncomeMailController {
             controlForms.add(new Object[]{"3","2A shakl"});
             controlForms.add(new Object[]{"4","3A shakl"});
             controlForms.add(new Object[]{"5","4A shakl"});
+
+        List<DocumentOrganization> organizations = organizationService.getStatusActive();
+        List<String> orgNames = new ArrayList<>();
+        for (DocumentOrganization organization : organizations) {
+            orgNames.add(organization.getName());
+        }
+
         model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailNew);
         model.addAttribute("journal", journalService.getStatusActive());
@@ -133,6 +141,7 @@ public class IncomeMailController {
         model.addAttribute("description_list", documentService.getDescriptionsList());
         model.addAttribute("execute_forms", executeForms);
         model.addAttribute("control_forms", controlForms);
+        model.addAttribute("organizations", orgNames);
         return DocTemplates.IncomeMailNew;
     }
 
@@ -180,6 +189,11 @@ public class IncomeMailController {
         controlForms.add(new Object[]{"4","3A shakl"});
         controlForms.add(new Object[]{"5","4A shakl"});
 
+        List<DocumentOrganization> organizations = organizationService.getStatusActive();
+        List<String> orgNames = new ArrayList<>();
+        for (DocumentOrganization organization : organizations) {
+            orgNames.add(organization.getName());
+        }
         model.addAttribute("action_url", DocUrls.IncomeMailEdit);
         model.addAttribute("doc", document);
         model.addAttribute("journal", journalService.getStatusActive());
@@ -193,7 +207,7 @@ public class IncomeMailController {
         model.addAttribute("description_list", documentService.getDescriptionsList());
         model.addAttribute("execute_forms", executeForms);
         model.addAttribute("control_forms", controlForms);
-        model.addAttribute("organizations", organizationService.getStatusActive());
+        model.addAttribute("organizations", orgNames);
 
         return response;
     }

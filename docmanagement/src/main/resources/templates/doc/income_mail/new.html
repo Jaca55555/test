@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/">
+    <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
 </head>
 <body>
@@ -241,13 +241,15 @@
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
-<script src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
         $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
         $('#orgName').autocomplete({
-            source: [ [[${organizations}]] ]
+            minLength: 0,
+            source: [[${organizations}]]
         });
         $('.file-button, #addFileButton').on('click', function () {
             $('#addFile').trigger('click');
