@@ -27,10 +27,9 @@ public class DocUrls {
     public static final String IncomeMailList = IncomeMail + "/list";
     public static final String IncomeMailListAjax = IncomeMail + "/list_ajax";
     public static final String IncomeMailView = IncomeMail + "/view";
-    public static final String IncomeMailCreate = IncomeMail + "/create";
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/edit";
-    public static final String IncomeMailExecuteEdit = IncomeMail + "/execute_edit";
+    public static final String IncomeMailFileUpload = IncomeMail + "/file";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;

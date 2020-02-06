@@ -448,6 +448,7 @@
 <script th:inline="javascript">
     let ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailListAjax}]];
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailView}]];
+    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -467,6 +468,7 @@
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
     function datatableConnect() {
