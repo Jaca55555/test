@@ -19,4 +19,5 @@ public interface DocumentOrganizationRepository extends DataTablesRepository<Doc
 
     List<DocumentOrganization> findByStatusTrue();
 
+    DocumentOrganization getByName(String name);
 }

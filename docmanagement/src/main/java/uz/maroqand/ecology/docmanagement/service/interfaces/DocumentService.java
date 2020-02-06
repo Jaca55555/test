@@ -21,4 +21,6 @@ public interface DocumentService {
     public Document createDoc(Document document);
 
     public void update(Document document);
+
+    public List<Document> getList();
 }

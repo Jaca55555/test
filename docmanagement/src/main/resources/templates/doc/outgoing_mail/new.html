@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
@@ -42,7 +41,7 @@
                 </div>
             </div>
             <div class="card-block">
-                <form th:action="@{/doc/outgoing_mail/new}" th:object="${document}" method="post">
+                <form th:action="@{/doc/outgoing_mail/new}" id="document_form" th:object="${document}" method="post">
                 <div class="row">
                     <!-- journal, document_view, communication tools, organization_name fields start -->
                     <div class="col-sm-6 form-group">
@@ -50,7 +49,7 @@
                                th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{journalId}">
-<!--                            <option value=""></option>-->
+                            <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
                             <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
                         </select>
                     </div>
@@ -58,7 +57,7 @@
                         <label class="control-label" >хужат тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentViewId}">
-<!--                            <option value="AL">Мароканд умумий хатлар</option>-->
+                            <option value="">Мароканд умумий хатлар</option>
                             <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
                     </div>
@@ -66,7 +65,7 @@
                         <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentSub.communicationToolId}">
-<!--                            <option value="AL" th:text="#{communication_tool_select}"></option>-->
+                            <option value="" th:text="#{communication_tool_select}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
@@ -82,7 +81,7 @@
                     <hr class="m20-vertical">
                     <div class="col-sm-12 form-group">
                         <label class="control-label">Хатнинг қисқача мазмуни</label>
-                        <textarea class="form-control" name="validation-text"
+                        <textarea th:field="*{content}" class="form-control" name="validation-text"
                                   placeholder="Хатнинг қисқача махзмунини киритинг."></textarea>
                     </div>
 
@@ -97,7 +96,11 @@
                     <div class="col-md-6"></div>
                     <div class="col-sm-6 form-group">
                         <label for="name" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
-                        <input type="text" class="form-control">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                aria-hidden="true" th:field="*{answerDocumentId}">
+                            <option value="" th:text="#{answer_document_select}"></option>
+                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.name}"></option>
+                        </select>
                     </div>
                     <div class="col-md-6"></div>
                     <div class="col-sm-6 form-group">
@@ -142,20 +145,22 @@
                             <span>Image.img</span>
                         </div>
                     </div>
-                    <div class="file-block flex-center">
-                        <div class="text-center file-icon-container align-self-center color-gray"><span
-                                class="fas fa-plus"></span></div>
+                    <div class="file-block flex-center file-button">
+                        <div class="text-center file-icon-container align-self-center color-gray">
+                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <input type="file" class="d-none" id="addFile" name="addFile">
+                        </div>
                     </div>
                 </div>
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор қилиш</button>
-                        <button type="button" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
+                        <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
                             олиш</button>
                     </div>
                 </div>
-                    <input type="submit">
+<!--                    <input type="submit">-->
                 </form>
             </div>
 
@@ -235,6 +240,18 @@
         // let availableTags =  getOrganizationNames(requestLink);
 
     } );
+
+    $(document).ready(function () {
+        $('.file-button, #addFileButton').on('click', function () {
+            $('#addFile').trigger('click');
+        });
+        $('#addFile').on('click', function (e) {
+            e.stopImmediatePropagation();
+            console.log(e.target)
+            // console.log(document.querySelectorAll('#addFile').pop());
+        })
+    });
+
 </script>
 </body>
 </html>

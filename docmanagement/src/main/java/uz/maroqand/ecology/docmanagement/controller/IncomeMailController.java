@@ -136,7 +136,6 @@ public class IncomeMailController {
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
         document.getDocumentSub().setType(type);
-        document.setPerformerName(user.getUsername());
         documentService.createDoc(document);
         return "redirect:" + DocUrls.IncomeMailList;
     }

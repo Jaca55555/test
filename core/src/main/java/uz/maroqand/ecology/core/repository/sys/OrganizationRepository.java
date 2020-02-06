@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
-
+    Organization getByName(String name);
 }

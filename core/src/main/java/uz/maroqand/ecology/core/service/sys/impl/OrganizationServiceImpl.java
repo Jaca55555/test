@@ -49,4 +49,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         return names;
     }
 
+    @Override
+    public Organization getByName(String name){
+        return organizationRepository.getByName(name);
+    }
+    @Override
+    public Organization create(Organization organization){
+        return organizationRepository.save(organization);
+    }
+
+
+
 }
