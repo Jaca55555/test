@@ -13,6 +13,7 @@ public class DocUrls {
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
+    public static final String FileDownload = Prefix + "/file/download";
 
     private static final String IncomeMail = Prefix + "/income_mail";
     public static final String IncomeMailList = IncomeMail + "/list";

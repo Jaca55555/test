@@ -1,8 +1,10 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -269,5 +271,16 @@ public class IncomeMailController {
         File file = fileService.uploadFile(uploadFile,user.getId(),"documentFile",uploadFile.getOriginalFilename());
         response.put("file", file);
         return response;
+    }
+
+    @GetMapping(value = DocUrls.FileDownload)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(@RequestParam(name = "id")Integer id) {
+        File file = fileService.findById(id);
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
 }

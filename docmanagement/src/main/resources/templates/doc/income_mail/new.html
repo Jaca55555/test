@@ -162,7 +162,7 @@
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
                         <div class="text-center">
-                            <span th:text="${file.name}">Письмо.pdf</span>
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
                         </div>
                     </div>
                     <div class="file-block flex-center file-button">
