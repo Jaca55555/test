@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
 
 import java.util.List;
 
@@ -15,6 +16,10 @@ import java.util.List;
 public interface DocumentService {
 
     public Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
+
+    public List<Document> findAllActive();
+
+    public List<DocumentDescription> getDescriptionsList();
 
     public Document getById(Integer id);
 

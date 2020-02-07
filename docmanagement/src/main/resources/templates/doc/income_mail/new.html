@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-
+    <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
 </head>
 <body>
@@ -98,16 +98,8 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_author_organization}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.organizationId}">
-                            <option value=""></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
-                        </select>
+                        <label class="control-label" th:text="#{doc.income_author_organization}"></label>
+                        <input class="form-control" tabindex="-1" id="orgName" th:field="*{documentSub.organizationName}">
                     </div>
                 </div>
                 <div class="row">
@@ -127,58 +119,44 @@
                         </div>
                     </div>
                 </div>
-<!--                <div class="col-sm-12 form-group">-->
-<!--                    <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>-->
-<!--                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"-->
-<!--                            aria-hidden="true">-->
-<!--                        <option value=""></option>-->
-<!--                        <option value="AL">Мароканд умумий хатлар</option>-->
-<!--                        <option value="WY">Wyoming</option>-->
-<!--                        <option value="WY">Coming</option>-->
-<!--                        <option value="WY">Hanry Die</option>-->
-<!--                        <option value="WY">John Doe</option>-->
-<!--                    </select>-->
-<!--                </div>-->
                 <div class="col-sm-12 form-group">
-                    <label class="control-label" th:text="#{doc.income_description}">Кирувчи хатларни руйхатга олиш журнали</label>
-                    <textarea class="form-control" name="validation-text" th:field="*{content}"></textarea>
+                    <label class="control-label" th:text="#{doc.income_description}"></label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                            aria-hidden="true" th:field="*{documentDescription}" id="description">
+                        <option value=""></option>
+                        <option th:each="type : ${description_list}" th:value="${type.id}" th:text="#{${type.content}}"></option>
+                    </select>
                 </div>
+                <div class="col-sm-12 form-group new-desc d-none">
+                    <textarea class="form-control" id="newDescription" th:field="*{documentDescription.content}"></textarea>
+                </div>
+
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label for="name" class="control-label" th:text="#{doc.income_additional_doc}">Хужжат раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{additionalDocumentId}">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{answerDocumentId}">
+                                <option value=""></option>
+                                <option th:each="i: ${doc_list}" th:value="${i.id}" th:text="${i.registrationNumber}"></option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_answer_doc}">Хужжат раками</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{answerDocumentId}">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_performer_name}">Хужжат раками</label>
+                        <label class="control-label" th:text="#{doc.income_performer_name}">Хужжат раками</label>
                         <input type="text" class="form-control" th:field="*{performerName}">
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_performer_phone}">Хужжат раками</label>
+                        <label class="control-label" th:text="#{doc.income_performer_phone}">Хужжат раками</label>
                         <input type="text" class="form-control" th:field="*{performerPhone}">
                     </div>
 
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label">Кирувчи хатни тегишли хужжатлар тупламига бириктириш учун хужжатни танланг</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
-                        </div>
-                    </div>
                 </div>
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
-                <div class="row p20">
+                <div class="row p20" id="file-container">
+                    <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
+                    </select>
                     <div class="file-block" th:each="file: ${doc.contentFiles}">
                         <div class="text-right"><span class='fas fa-trash-alt'></span></div>
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
@@ -197,8 +175,7 @@
                 <div class="border-danger m20 p20">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
-                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}">Хужжат фақат хизмат доирасида
-                            фойдаланиш учун мулжалланган (Гриф ХДФУ)</label>
+                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}"></label>
                     </div>
                     <div class="m20-vertical">
                         <span th:text="#{sys_attention}">Диккат:</span>
@@ -210,27 +187,19 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <label class="control-label" th:text="#{doc.reciever_chief}"></label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true">
+                                aria-hidden="true" name="recieverChief">
                             <option value=""></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
+                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true">
+                                aria-hidden="true" name="executeController">
                             <option value=""></option>
-                            <option value="AL">Мароканд умумий хатлар</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
+                            <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                     </div>
                 </div>
@@ -238,44 +207,17 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хатнинг ижроси шакли</label>
                         <br>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline1">Ижро учун</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline2">Маълумот учун</label>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${execute_forms}">
+                            <input type="radio" th:field="*{executeForm}" th:value="${item[0]}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item[1]}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Назорат карточкасининг шакли</label>
                         <br>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline3" name="customRadioInline2"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline3">Йўқ</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline4" name="customRadioInline2"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline4">1А шакл</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline5" name="customRadioInline2"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline5">2А шакл</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline6" name="customRadioInline2"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline6">3А шакл</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline7" name="customRadioInline2"
-                                   class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline7">4А шакл</label>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${control_forms}">
+                            <input type="radio" th:field="*{controlForm}" th:value="${item[0]}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${#ids.prev('controlForm')}" th:text="${item[1]}"></label>
                         </div>
                     </div>
                 </div>
@@ -299,13 +241,69 @@
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
-<script type="text/javascript" th:inline="none">
+<script src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
+        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
+        $('#orgName').autocomplete({
+            source: [ [[${organizations}]] ]
+        });
         $('.file-button, #addFileButton').on('click', function () {
             $('#addFile').trigger('click');
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
+        }).on('change', function () {
+            let csrf = $("form input[name='_csrf']").val();
+            let files = $(this)[0].files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailFileUpload}]],
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    files.files = [];
+                    var file = data.file;
+                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
+                    $('#file-container').prepend(
+"                    <div class=\"file-block\">\n" +
+"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
+"                        <div class=\"text-center file-icon-container color-red\">" +
+"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                        </div>\n" +
+"                        <div class=\"text-center\">\n" +
+"                            <span>"+file.name+"</span>\n" +
+"                        </div>\n" +
+"                    </div>\n"
+                    );
+                }
+            })
+        });
+
+        $('#description').on('change', function () {
+            if ($(this).val() === 'new') {
+                $('.new-desc').removeClass('d-none');
+            } else {
+                $('.new-desc').addClass('d-none');
+            }
+        })
+
+        $(document).on('click', '.fa-trash-alt', function () {
+            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
+            $(this).parent().parent().remove();
+        });
+
+        $('form').on('submit', function () {
+            $('#addFile').attr('disabled', 'disabled');
+            if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
+            else $('#newDescription').attr('disabled', 'disabled');
+            $(this).submit();
         })
     });
 </script>

@@ -3,14 +3,14 @@ package uz.maroqand.ecology.docmanagement.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
+import uz.maroqand.ecology.docmanagement.repository.DocumentDescriptionRepository;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 
@@ -31,10 +31,12 @@ import java.util.List;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final DocumentDescriptionRepository descriptionRepository;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, DocumentDescriptionRepository descriptionRepository) {
         this.documentRepository = documentRepository;
+        this.descriptionRepository = descriptionRepository;
     }
 
     @Override
@@ -44,9 +46,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document createDoc(Document document) {
-        documentRepository.save(document);
         document.setDeleted(Boolean.FALSE);
-        document.getDocumentSub().setDocumentId(document.getId());
         documentRepository.save(document);
         return document;
     }
@@ -55,6 +55,16 @@ public class DocumentServiceImpl implements DocumentService {
     public void update(Document document) {
         document.setUpdateAt(new Date());
         documentRepository.save(document);
+    }
+
+    @Override
+    public List<Document> findAllActive() {
+        return documentRepository.findAllByDeletedFalse();
+    }
+
+    @Override
+    public List<DocumentDescription> getDescriptionsList() {
+        return descriptionRepository.findAll();
     }
 
     @Override
@@ -106,7 +116,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     if (filterDTO.getContent() != null) {
-                        predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + filterDTO.getContent() + "%"));
+                        predicates.add(criteriaBuilder.like(root.join("documentDescription").<String>get("content"), "%" + filterDTO.getContent() + "%"));
                     }
 
                     if (filterDTO.getChief() != null) {

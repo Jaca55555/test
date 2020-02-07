@@ -19,4 +19,6 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
                                             JpaSpecificationExecutor<Document>
 {
     Document findByIdAndDeletedFalse(Integer id);
+
+    List<Document> findAllByDeletedFalse();
 }

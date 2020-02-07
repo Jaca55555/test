@@ -11,7 +11,9 @@ import java.util.List;
  */
 public enum DocumentTypeEnum {
     IncomingDocuments(1,"doc.doc_type_incoming"), //Входящие документы
-    OutgoingDocuments(2,"doc.doc_type_outgoing"); //Исходящие документы
+    OutgoingDocuments(2,"doc.doc_type_outgoing"), //Исходящие документы
+    InnerDocuments(3,"doc.doc_type_inner"), //Внутренний документы
+    AppealDocuments(4,"doc.doc_type_appeal"); //Murojaatlar
 
     private Integer id;
     private String name;
