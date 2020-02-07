@@ -39,28 +39,28 @@
                                 <option value=""></option>
                                 <option th:each="i: ${docTypes}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="name" class="control-label" th:text="#{doc.journal_name}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{name}" id="name">
-                            <i class="gray-arrow fas fa-search  color-gray"></i>
+                            <i class="gray-search fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="prefix" class="control-label" th:text="#{doc.journal_prefix}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{prefix}" id="prefix">
-                            <i class="gray-arrow fas fa-search  color-gray"></i>
+                            <i class="gray-search fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="suffix" class="control-label" th:text="#{doc.journal_suffix}"></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{suffix}" id="suffix">
-                            <i class="gray-arrow fas fa-search  color-gray"></i>
+                            <i class="gray-search fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
@@ -72,7 +72,7 @@
                                 <option th:value="0" th:text="#{doc.doc_status_inactive}"></option>
                                 <option th:value="1" th:text="#{doc.doc_status_active}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
+                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
                 </div>

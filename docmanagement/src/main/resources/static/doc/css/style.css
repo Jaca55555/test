@@ -27,7 +27,7 @@ hr {
     color: #3f4d67;
 }
 .office-card {
-    margin:15px 15px;
+    margin:5px 10px;
     flex:1;
 }
 .office-card-file {
@@ -40,6 +40,7 @@ hr {
 }
 .office-h5 {
     margin:10px 15px;
+    font-size:17px;
 }
 .default-color {
     color:#3f4d67
@@ -116,20 +117,25 @@ hr {
     width:100%;
 }
 .card-svg {
-    max-height:60px;
+    max-height:55px;
     align-self: center;
     margin-left: 10px;
     width:30%;
 }
 .card-title {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
+    font-size: 13.5px;
+}
+h4.card-title {
+    font-size: 16px;
+    font-weight: bold;
 }
 .dashboard-card {
     display:flex;
     justify-content: center;
     flex-direction: row;
     align-content: center;
-    padding:5px;
+    padding:3px;
     width:100%;
     margin: auto;
 }
@@ -150,9 +156,9 @@ hr {
     transition: all 0.55s ease-in-out;
     cursor: pointer;
 }
-.dashboard-card > .card-body {
-    height:70px;
-}
+/*.dashboard-card > .card-body {*/
+    /*height:70px;*/
+/*}*/
 .border-primary {
     border: 0.5px solid #007bff;
 }
@@ -166,20 +172,20 @@ hr {
     border: 0.5px solid #dc3545;
 }
 .border-primary-shadow {
-    border: 0.5px solid #007bff;
-    box-shadow: 0 0.5px 3px 1px rgba(62, 191, 234, 0.56), 0 6px 11px 2px rgba(62, 191, 234, 0.2);
+    border: 1px solid rgba(0,0,0,.125);
+    /*box-shadow: 0 0.5px 3px 1px rgba(62, 191, 234, 0.56), 0 6px 11px 2px rgba(62, 191, 234, 0.2);*/
 }
 .border-green-shadow {
-    border: 0.5px solid #28a745;
-    box-shadow: 0 0.5px 3px 1px rgba(29, 233, 182, 0.56), 0 6px 11px 2px rgba(29, 233, 182, 0.2);
+    border: 1px solid rgba(0,0,0,.125);
+    /*box-shadow: 0 0.5px 3px 1px rgba(29, 233, 182, 0.56), 0 6px 11px 2px rgba(29, 233, 182, 0.2);*/
 }
 .border-warning-shadow {
-    border: 0.5px solid #ffc107;
-    box-shadow: 0 0.5px 3px 1px rgba(244, 194, 43, 0.56), 0 6px 11px 2px rgba(244, 194, 43, 0.2);
+    border: 1px solid rgba(0,0,0,.125);
+    /*box-shadow: 0 0.5px 3px 1px rgba(244, 194, 43, 0.56), 0 6px 11px 2px rgba(244, 194, 43, 0.2);*/
 }
 .border-danger-shadow {
-    border: 0.5px solid #dc3545;
-    box-shadow: 0 0.5px 3px 1px rgba(244, 66, 54, 0.56), 0 6px 11px 2px rgba(244, 66, 54, 0.2);
+    border: 1px solid rgba(0,0,0,.125);
+    /*box-shadow: 0 0.5px 3px 1px rgba(244, 66, 54, 0.56), 0 6px 11px 2px rgba(244, 66, 54, 0.2);*/
 }
 .flex-space-between {
     display:flex;
@@ -235,6 +241,8 @@ hr {
     flex-grow: 1;
 }
 .control-label {
+    display: inline-flex;
+    align-items: flex-end;
     height:40px;
     color:black;
 }
@@ -272,6 +280,7 @@ html, body {
     color: #62c462 !important;
   }
   .responsive {
+      padding:0 10px;
       display: flex;
       justify-content: flex-start;
   }
@@ -329,9 +338,8 @@ html, body {
        font-size:60px;
    }
    .file-icon-container-small {
-    margin:5px 0;
+       margin-left: 5px;
     font-size:40px;
-    margin-left:10px;
     display:flex;
     align-items: center;
    }
@@ -374,6 +382,10 @@ html, body {
      border:0.5px solid rgba(0,0,0,.1);
      padding: 5px;
    }
+   .office-h5 {
+       margin-bottom: 5px;
+       margin-top: 5px;
+   }
    .flex-center {
        display: flex;
        justify-content: center;
@@ -387,9 +399,15 @@ html, body {
    .gray-arrow {
         position: absolute;
         font-size: 20px;
-        top:7px;
-        right:7px;
+        top:3px;
+        right:8px;
    }
+    .gray-search {
+        position: absolute;
+        font-size: 20px;
+        top:7px;
+        right:8px;
+    }
    .calendar-img1 {
         position: absolute;
         width:20px;
@@ -475,6 +493,13 @@ html, body {
         font-size: 20px;
         margin:auto;
     }
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+
+
+
 
 /* media */
 @media (max-width:1700px) {
@@ -488,24 +513,31 @@ html, body {
         padding:0 5px;
     }
 }
-@media (max-width:1500px) {
+@media (max-width:1600px) {
     .card-title {
         font-size:12px;
     }
     .card .card-block, .card .card-body {
         padding: 5px;
     }
+}
+@media (max-width:1500px) {
+    .file-icon-container-small {
+        font-size:32px;
+    }
     .nav-link {
         padding:10px;
     }
 }
 @media (max-width:1400px) {
-
+    .office-card {
+        margin:5px 4px;
+    }
     h4 {
         margin-bottom: 0;
     }
-    h6 {
-        font-size: 12px;
+    .card-title {
+        font-size:11px;
     }
     .mobile-none {
         display:none;
@@ -592,4 +624,7 @@ html, body {
 
 .navbar-expand-lg .navbar-collapse {
     padding-left: 25px;
+}
+.form-control:focus {
+    background: #f4f7fa;
 }
