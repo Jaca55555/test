@@ -93,7 +93,7 @@ public class Document {
 
     //Маъсул ходим билан алоқа учун телефон рақами
     @Column(name = "performer_phone")
-    private Integer performerPhone;
+    private String performerPhone;
 
 
     //restricted = true, Ko'rish kechlangan

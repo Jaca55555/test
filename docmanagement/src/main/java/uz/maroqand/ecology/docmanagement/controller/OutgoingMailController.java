@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
@@ -100,6 +101,11 @@ public class OutgoingMailController {
 
         newDocument.setAnswerDocumentId(document.getAnswerDocumentId());
         newDocument.setAnswerDocument(documentService.getById(document.getAnswerDocumentId()));
+
+        User user = userService.getCurrentUserFromContext();
+         newDocument.setPerformerName(user.getUsername());
+
+         newDocument.setPerformerPhone(user.getPhone());
         documentService.createDoc(newDocument);
 
         return "redirect:" + DocUrls.OutgoingMailNew;

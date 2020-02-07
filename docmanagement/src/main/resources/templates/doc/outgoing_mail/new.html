@@ -48,7 +48,7 @@
                         <label class="control-label" th:for="${#ids.next('journalId')}"
                                th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{journalId}">
+                                aria-hidden="true" th:field="*{journalId}" required>
                             <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
                             <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
                         </select>
@@ -56,7 +56,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" >хужат тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentViewId}">
+                                aria-hidden="true" th:field="*{documentViewId}" required>
                             <option value="">Мароканд умумий хатлар</option>
                             <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
@@ -64,7 +64,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.communicationToolId}">
+                                aria-hidden="true" th:field="*{documentSub.communicationToolId}" required>
                             <option value="" th:text="#{communication_tool_select}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
@@ -72,7 +72,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хат юборилаётган ташкилот</label>
                         <label for="tags">Tags: </label>
-                        <input class="form-control" id="tags" th:field="*{documentSub.organizationName}">
+                        <input class="form-control" id="tags" th:field="*{documentSub.organizationName}" required>
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
 
@@ -99,7 +99,7 @@
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{answerDocumentId}">
                             <option value="" th:text="#{answer_document_select}"></option>
-                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.name}"></option>
+                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.documentView.name}"></option>
                         </select>
                     </div>
                     <div class="col-md-6"></div>
