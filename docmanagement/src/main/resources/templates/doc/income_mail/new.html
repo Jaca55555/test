@@ -230,6 +230,7 @@
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
                                 th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
                         <button class="btn btn-success m10-vertical m20-horizontal" type="button"
+                                th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailAddTask}"
                                 id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>

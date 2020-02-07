@@ -22,6 +22,8 @@ public class DocUrls {
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/edit";
     public static final String IncomeMailFileUpload = IncomeMail + "/file";
+    public static final String IncomeMailSpecial = IncomeMail + "/special";
+    public static final String IncomeMailAddTask = IncomeMail + "/task";
 
     private static final String CommunicationTools = Prefix +  "/communication_tools";
     public static final String CommunicationToolsList = CommunicationTools + "/list";

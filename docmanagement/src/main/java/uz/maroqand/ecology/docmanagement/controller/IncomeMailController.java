@@ -283,4 +283,51 @@ public class IncomeMailController {
             return fileService.getFileAsResourceForDownloading(file);
         }
     }
+
+    @GetMapping(value = DocUrls.IncomeMailSpecial)
+    @ResponseBody
+    public HashMap<String, Object> changeSpecial(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "enabled")Boolean enabled
+    ) {
+        HashMap<String, Object> response = new HashMap<>();
+        Document document = documentService.getById(id);
+        if (document == null) {
+            response.put("status", "not found");
+            return response;
+        }
+        document.setSpecialControl(enabled);
+        documentService.update(document);
+        response.put("status", "success");
+        response.put("value", enabled);
+        return response;
+    }
+
+    @GetMapping(value = DocUrls.IncomeMailAddTask)
+    public String getAddTaskPage(
+            @RequestParam(name = "id")Integer id
+    ) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomeMailList;
+        }
+
+        return DocTemplates.IncomeMailAddTask;
+    }
+
+    @PostMapping(value = DocUrls.IncomeMailAddTask)
+    public String addTask(
+            @RequestParam(name = "id")Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.IncomeMailList;
+        }
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomeMailList;
+        }
+
+        return "redirect:" + DocUrls.IncomeMailList;
+    }
 }

@@ -100,6 +100,10 @@ public class Document {
 
     @Column(name = "control_form")
     private String controlForm;
+
+    @Column(name = "special_control", columnDefinition = "boolean DEFAULT false")
+    private Boolean specialControl;
+
     /*
      * Technical Fields
      */
