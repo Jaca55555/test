@@ -7,8 +7,18 @@ package uz.maroqand.ecology.docmanagement.constant;
  */
 public class DocTemplates {
     private static final String Prefix = "doc";
+    private static final String Incoming = "/incoming";
+    private static final String Outgoing = "/outgoing";
 
     public static final String Dashboard = Prefix + "/office";
+
+    //kiruvchi xatlar
+    public static final String IncomingList = Prefix + Incoming + "/list";
+    public static final String IncomingView = Prefix + Incoming + "/view";
+
+    //chiquvchi xatlar
+    public static final String OutgoingList = Prefix + Outgoing + "/list";
+    public static final String OutgoingView = Prefix + Outgoing + "/view";
 
     private static final String IncomeMail = Prefix + "/income_mail";
     public static final String IncomeMailList = IncomeMail + "/list";
