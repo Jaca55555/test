@@ -99,7 +99,7 @@ public class OutgoingMailController {
 
         newDocument.setDocumentSub(documentSub);
 
-        newDocument.setContent(document.getContent());
+        newDocument.setDocumentDescription(document.getDocumentDescription());
 
         newDocument.setAnswerDocumentId(document.getAnswerDocumentId());
         newDocument.setAnswerDocument(documentService.getById(document.getAnswerDocumentId()));
@@ -119,6 +119,9 @@ public class OutgoingMailController {
     public List<String> getOrganizationNames() {
         return documentOrganizationService.getDocumentOrganizationNames();
     }
+
+
+
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(){
         return DocTemplates.OutgoingMailList;
