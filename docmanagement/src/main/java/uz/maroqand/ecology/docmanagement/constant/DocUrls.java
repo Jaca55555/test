@@ -69,5 +69,6 @@ public class DocUrls {
 
      private static final String OutgoingMail = Prefix + "/outgoing_mail";
      public static final String OutgoingMailNew = OutgoingMail + "/new";
+     public static final String OutgoingMailList = OutgoingMail + "/list";
      public static final String OutgoingMailOrganizationList = OutgoingMail + "/organization_names";
 }

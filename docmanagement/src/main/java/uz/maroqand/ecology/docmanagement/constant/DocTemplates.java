@@ -50,5 +50,6 @@ public class DocTemplates {
 
     private static final String OutgoingMail = Prefix + "/outgoing_mail";
     public static final String OutgoingMailNew = OutgoingMail + "/new";
+    public static final String OutgoingMailList = OutgoingMail + "/list";
 
 }

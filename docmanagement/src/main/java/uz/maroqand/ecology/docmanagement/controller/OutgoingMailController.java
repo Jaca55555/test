@@ -23,6 +23,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 
 
 import java.util.List;
+import java.util.Date;
 
 @Controller
 public class OutgoingMailController {
@@ -72,7 +73,7 @@ public class OutgoingMailController {
     public String newOutgoingMail(Document document){
 
         Document newDocument = new Document();
-        document.setDocumentTypeId(2);
+        newDocument.setDocumentTypeId(2);
         newDocument.setJournalId(document.getJournalId());
         newDocument.setJournal(journalService.getById(document.getJournalId()));
         newDocument.setDocumentViewId(document.getDocumentViewId());
@@ -83,10 +84,11 @@ public class OutgoingMailController {
         documentSub.setCommunicationToolId(comtoolId);
 
         DocumentOrganization documentOrganization = documentOrganizationService.getByName(document.getDocumentSub().getOrganizationName());
-
+        User user = userService.getCurrentUserFromContext();
         if(documentOrganization == null){
             documentOrganization = new DocumentOrganization();
             documentOrganization.setName(document.getDocumentSub().getOrganizationName());
+            documentOrganization.setCreatedById(user.getId());
             documentOrganizationService.create(documentOrganization);
         }
 
@@ -101,11 +103,12 @@ public class OutgoingMailController {
 
         newDocument.setAnswerDocumentId(document.getAnswerDocumentId());
         newDocument.setAnswerDocument(documentService.getById(document.getAnswerDocumentId()));
+        newDocument.setPerformerName(user.getUsername());
 
-        User user = userService.getCurrentUserFromContext();
-         newDocument.setPerformerName(user.getUsername());
+        newDocument.setPerformerPhone(user.getPhone());
+        newDocument.setCreatedAt(new Date());
+        newDocument.setCreatedById(user.getId());
 
-         newDocument.setPerformerPhone(user.getPhone());
         documentService.createDoc(newDocument);
 
         return "redirect:" + DocUrls.OutgoingMailNew;
@@ -113,8 +116,12 @@ public class OutgoingMailController {
 
     @RequestMapping(value = DocUrls.OutgoingMailOrganizationList, produces = "application/json")
     @ResponseBody
-    public List<String> getOrganizationNames(){
+    public List<String> getOrganizationNames() {
         return documentOrganizationService.getDocumentOrganizationNames();
+    }
+    @RequestMapping(DocUrls.OutgoingMailList)
+    public String getOutgoingMailList(){
+        return DocTemplates.OutgoingMailList;
     }
 
 
