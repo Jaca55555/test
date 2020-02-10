@@ -15,17 +15,17 @@ import java.util.List;
  */
 public interface DocumentService {
 
-    public Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
+    Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
 
-    public List<Document> findAllActive();
+   List<Document> findAllActive();
 
-    public List<DocumentDescription> getDescriptionsList();
+    List<DocumentDescription> getDescriptionsList();
 
-    public Document getById(Integer id);
+    Document getById(Integer id);
 
-    public Document createDoc(Document document);
+    Document createDoc(Document document);
 
-    public void update(Document document);
+    void update(Document document);
 
-    public List<Document> getList();
+    List<Document> getList();
 }

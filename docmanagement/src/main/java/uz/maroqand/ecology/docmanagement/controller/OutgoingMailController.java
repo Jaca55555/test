@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +21,11 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
+import org.springframework.data.domain.Page;
 
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Controller
@@ -120,10 +123,34 @@ public class OutgoingMailController {
         return documentOrganizationService.getDocumentOrganizationNames();
     }
 
+    @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object>  getOutgoingDocumentListAjax(
+            DocFilterDTO filter,
+            Pageable pageable
+    ){
 
+        Page<Document> documentPage = documentService.findFiltered(filter, pageable);
+
+        HashMap<String, Object> res = new HashMap<>();
+
+        res.put("recordsTotal", documentPage.getTotalElements());
+        res.put("recordsFiltered", documentPage.getTotalElements());
+
+        List<Object[]> data = new ArrayList<>(documentPage.getContent().size());
+
+        for(Document document: documentPage){
+            data.add(new Object[]{document.getRegistrationNumber(), document.getRegistrationDate(), document.getDocumentDescription(), document.getCreatedAt(), document.getCreatedAt(), document.getCreatedAt()});
+        }
+
+        res.put("data", data);
+
+        return res;
+    }
 
     @RequestMapping(DocUrls.OutgoingMailList)
-    public String getOutgoingMailList(){
+    public String getOutgoingMailList(Model model) {
+        model.addAttribute("organizationList", documentOrganizationService.getList());
         return DocTemplates.OutgoingMailList;
     }
 

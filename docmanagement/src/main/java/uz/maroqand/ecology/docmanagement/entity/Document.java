@@ -12,6 +12,7 @@ import java.util.Set;
  * (uz) Kiruvchi va chiquvchi hujjatlarni ro'yxatdan o'tkazish uchun
  * (ru)
  */
+
 @Data
 @Entity
 @Table(name = "document")
@@ -60,9 +61,9 @@ public class Document {
     @Column(name = "registration_number")
     private String registrationNumber;
 
-    //Краткое содержание документа
-    @Column(name = "content",columnDefinition = "TEXT")
-    private String content;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "document_description_id", nullable = false, updatable = false)
+    private DocumentDescription documentDescription;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "document_jt_content_files",
@@ -75,13 +76,13 @@ public class Document {
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "answer_document_id", insertable = false, updatable = false)
-    private Document answerDocument;
-
     //Ушбу хатга жавоб тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "answer_document_id")
     private Integer answerDocumentId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_document_id", insertable = false, updatable = false)
+    private Document answerDocument;
 
     //Для внутренного использования
     @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
@@ -93,12 +94,18 @@ public class Document {
 
     //Маъсул ходим билан алоқа учун телефон рақами
     @Column(name = "performer_phone")
-    private Integer performerPhone;
+    private String performerPhone;
 
 
     //restricted = true, Ko'rish kechlangan
     @Column(name = "restricted", columnDefinition = "boolean DEFAULT true")
     private Boolean restricted;
+
+    @Column(name = "execute_form")
+    private String executeForm;
+
+    @Column(name = "control_form")
+    private String controlForm;
 
     /*
      * Technical Fields
