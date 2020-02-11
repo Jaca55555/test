@@ -28,4 +28,6 @@ public interface DocumentService {
     void update(Document document);
 
     List<Document> getList();
+
+    Page<Document> findFiltered(Pageable pageable);
 }

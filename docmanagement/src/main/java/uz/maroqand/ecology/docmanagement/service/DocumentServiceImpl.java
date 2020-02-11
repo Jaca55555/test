@@ -91,8 +91,8 @@ public class DocumentServiceImpl implements DocumentService {
                         predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
                     }
 
-                    Date dateBegin = DateParser.TryParse(filterDTO.getRegsitrationDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                    Date dateBegin = DateParser.TryParse(filterDTO.getRegistrationDateBegin(), Common.uzbekistanDateFormat);
+                    Date dateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
                     if (dateBegin != null && dateEnd == null) {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), dateBegin));
                     }
@@ -140,7 +140,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);
-                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
                     if (executeDateBegin != null && executeDateEnd == null) {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateBegin));
                     }
@@ -159,8 +159,8 @@ public class DocumentServiceImpl implements DocumentService {
                         predicates.add(criteriaBuilder.equal(root.get("insicePurpose"), filterDTO.getInsidePurposeStatus()));
                     }
 
-                    if (filterDTO.getCoexecutorStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoexecutorStatus()));
+                    if (filterDTO.getCoExecutorStatus() != null) {
+                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoExecutorStatus()));
                     }
 
                     if (filterDTO.getReplies() != null) {
@@ -177,6 +177,11 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<Document> getList(){
         return documentRepository.findAll();
+    }
+
+    @Override
+    public Page<Document> findFiltered(Pageable pageable){
+        return documentRepository.findAll(pageable);
     }
 
 }

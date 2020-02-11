@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-
+import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
@@ -68,7 +69,6 @@ public class OutgoingMailController {
         model.addAttribute("organizations", documentOrganizationService.getList());
         model.addAttribute("documents_", documentService.getList());
 
-
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -76,15 +76,22 @@ public class OutgoingMailController {
     public String newOutgoingMail(Document document){
 
         Document newDocument = new Document();
-        newDocument.setDocumentTypeId(2);
-        newDocument.setJournalId(document.getJournalId());
-        newDocument.setJournal(journalService.getById(document.getJournalId()));
+        newDocument.setCreatedAt(new Date());
+        newDocument.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
+
+        Journal journal = journalService.getById(document.getJournalId());
+
+        newDocument.setJournalId(journal.getId());
+        newDocument.setJournal(journal);
+        newDocument.setRegistrationNumber(journal.getPrefix() + '-' + (journal.getNumbering() != null ? journal.getNumbering() : 1));
+        newDocument.setRegistrationDate(new Date());
+
         newDocument.setDocumentViewId(document.getDocumentViewId());
 
         DocumentSub documentSub = new DocumentSub();
-        Integer comtoolId = document.getDocumentSub().getCommunicationToolId();
-        documentSub.setCommunicationTool(communicationToolService.getById(comtoolId));
-        documentSub.setCommunicationToolId(comtoolId);
+        Integer communicationToolId = document.getDocumentSub().getCommunicationToolId();
+        documentSub.setCommunicationTool(communicationToolService.getById(communicationToolId));
+        documentSub.setCommunicationToolId(communicationToolId);
 
         DocumentOrganization documentOrganization = documentOrganizationService.getByName(document.getDocumentSub().getOrganizationName());
         User user = userService.getCurrentUserFromContext();
@@ -101,7 +108,6 @@ public class OutgoingMailController {
         newDocument.setDocumentSub(documentSub);
 
         newDocument.setDocumentSub(documentSub);
-
         newDocument.setDocumentDescription(document.getDocumentDescription());
 
         newDocument.setAnswerDocumentId(document.getAnswerDocumentId());
@@ -109,7 +115,8 @@ public class OutgoingMailController {
         newDocument.setPerformerName(user.getUsername());
 
         newDocument.setPerformerPhone(user.getPhone());
-        newDocument.setCreatedAt(new Date());
+        newDocument.setRegistrationDate(new Date());
+
         newDocument.setCreatedById(user.getId());
 
         documentService.createDoc(newDocument);
@@ -126,11 +133,11 @@ public class OutgoingMailController {
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
-            DocFilterDTO filter,
+            @RequestParam(name = "id")Integer id,
             Pageable pageable
     ){
-
-        Page<Document> documentPage = documentService.findFiltered(filter, pageable);
+/*        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
+        Page<Document> documentPage = documentService.findFiltered(pageable);
 
         HashMap<String, Object> res = new HashMap<>();
 
@@ -154,6 +161,31 @@ public class OutgoingMailController {
         return DocTemplates.OutgoingMailList;
     }
 
+    @RequestMapping(DocUrls.OutgoingMailView)
+    public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){
+
+        model.addAttribute("document", documentService.getById(id));
+        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("communicationTools", communicationToolService.getStatusActive());
+        model.addAttribute("organizations", documentOrganizationService.getList());
+        model.addAttribute("documents_", documentService.getList());
+
+        return DocTemplates.OutgoingMailNew;
+    }
+
+    @RequestMapping(DocUrls.OutgoingMailEdit)
+    public String outgoingMailEdit(@RequestParam(name="id")Integer id, Model model){
+
+        model.addAttribute("document", documentService.getById(id));
+        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("communicationTools", communicationToolService.getStatusActive());
+        model.addAttribute("organizations", documentOrganizationService.getList());
+        model.addAttribute("documents_", documentService.getList());
+
+        return DocTemplates.OutgoingMailNew;
+    }
 
 
 }
