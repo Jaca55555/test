@@ -305,6 +305,7 @@ public class IncomeMailController {
 
     @GetMapping(value = DocUrls.IncomeMailAddTask)
     public String getAddTaskPage(
+            Model model,
             @RequestParam(name = "id")Integer id
     ) {
         Document document = documentService.getById(id);
@@ -312,6 +313,9 @@ public class IncomeMailController {
             return  "redirect:" + DocUrls.IncomeMailList;
         }
 
+        model.addAttribute("doc", document);
+        model.addAttribute("task", document.getTask());
+        model.addAttribute("attends", userService.getEmployeeList());
         return DocTemplates.IncomeMailAddTask;
     }
 

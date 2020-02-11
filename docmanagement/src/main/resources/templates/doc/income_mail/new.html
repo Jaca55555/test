@@ -189,7 +189,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc.reciever_chief}"></label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" name="recieverChief">
+                                aria-hidden="true" th:field="*{task.chiefId}">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
@@ -199,7 +199,7 @@
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" name="executeController">
                             <option value=""></option>
-                            <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
                         </select>
                     </div>
                 </div>

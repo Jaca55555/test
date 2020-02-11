@@ -22,8 +22,8 @@
 
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
+        <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
         <div class="card parent-card">
-            <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
 
             <div class="card-header flex-space-between mobile-column" style="align-items: center;">
                 <h5 class="mb-0"><span href="" class="card-header-a collapsed">Кирувчи хат №
@@ -129,7 +129,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <div class="m20-vertical"><span class="bold" th:text="#{doc.doc_description}">Топшириқ шакли:</span></div>
-                        <div><span th:text="${doc.content}">Праздник Навруз, стало настоящим всенародным праздником.</span></div>
+                        <div><span th:text="${doc.documentDescription.content}">Праздник Навруз, стало настоящим всенародным праздником.</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <div class="m20-vertical"><span class="bold">Хатга иловалар:</span></div>
@@ -198,8 +198,126 @@
                 </div>
             </div>
         </div>
-        <div class="card parent-card">
 
+        <div class="card parent-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <span class="card-header-a" th:text="#{doc.add_task_title} + ' - ' + ${doc.registrationNumber}"></span>
+                </h5>
+            </div>
+            <div class="card-block">
+                <!--/*@thymesVar id="task" type="uz.maroqand.ecology.docmanagement.entity.DocumentTask"*/-->
+                <div class="row" th:object="${task}">
+                    <div class="col-md-6 col-sm-12 m10-vertical">
+                        <div class="col-sm-12 p0"><span class="bold" th:text="#{doc.task_number} + ' ' + ${task}"></span></div>
+                        <div class="flex-space-between p0 m20-vertical">
+                            <div>
+                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                                </i></div>
+                                <div class="inline-block m10-horizontal" th:if="${task.chief != null}">
+                                    <span class="color-green bold" th:text="${task.chief.fullName}"></span>
+                                    <br>
+                                    <span th:text="${task.chief.position.name}"></span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="fas fa-trash-alt fs20 color-gray pointer"></i>
+                                <i class="fas fa-edit fs20 color-gray m10-horizontal pointer"></i>
+                            </div>
+                        </div>
+                        <span th:text="#{doc.task_description}"></span>
+                        <div class="m10-vertical">
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true">
+                                <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="WY">Coming</option>
+                                <option value="WY">Hanry Die</option>
+                                <option value="WY">John Doe</option>
+                            </select>
+                        </div>
+                        <textarea class="form-control" name="content" th:value="*{documentDescription.content}"></textarea>
+                        <div class="m20-vertical"><span class="m10-vertical" th:text="#{doc.task_due_date}"></span></div>
+                        <div class="col-sm-12 p0">
+                            <input class="form-control datepicker date" id="dateBegin"
+                                   data-dtp="dtp_uzvAj" name="dueDate" th:value="${task.dueDate!=null ? #dates.format(task.dueDate,'dd.MM.yyyy'):''}">
+                            <img class="calendar-img2" src="../images/calendar.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 m10-vertical">
+                        <div class="col-sm-12 p0"><span class="bold" th:text="#{doc.participants}"></span></div>
+                        <div class="row ">
+                            <div th:each="participant : *{participants}" class="col-sm-12 col-md-12 p0 row m10-vertical">
+                                <div class="col-md-8 col-sm-12 flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-primary bold" th:text="${participant.user.fullName}"></span>
+                                            <br>
+                                            <span th:text="${participant.user.position.name}">Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group mb-2">
+                                        <a type="button"
+                                                class="btn btn-outline-primary left-radius table-modal-button"><i
+                                                class='fas fa-cog'></i> Жараёнда</a>
+                                        <button type="button"
+                                                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                class="sr-only" th:text="${participant.status}"></span></button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#!">Action</a>
+                                            <a class="dropdown-item" href="#!">Another action</a>
+                                            <a class="dropdown-item" href="#!">Something else here</a>
+                                            <a class="dropdown-item" href="#!">Separated link</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4 col-sm-12 flex-space-between">
+                                    <div style="height: fit-content;display: flex;align-items: center;"><i
+                                            class='feather icon-clock fs30 color-gray'></i>
+                                        <span class='m10-horizontal' th:text="${#dates.format(participant.createdAt, 'dd.MM.yyyy')}"></span></div>
+                                    <i style="line-height: inherit;"
+                                       class="fas fa-trash-alt fs20 color-gray pointer"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="m20-vertical flex-space-between">
+                            <div style="width:calc(100% - 110px)">
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" id="attend">
+                                    <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                    <option th:each="i: ${attends}" th:value="${i.id}" th:text="${i.fullName}"></option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-info ml-3" title=""
+                                    data-toggle="tooltip" data-original-title="btn btn-outline-info" th:text="#{doc.add_participant}"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="m20-vertical">
+                <div class="row">
+                    <div class="flex-center w100 row-wrap">
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
+                        <button type="button" class="btn btn-success m10-vertical m20-horizontal" th:text="#{doc.save}">Саклаш</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m30-vertical">
+            <div class="flex-center w100 row-wrap">
+                <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal">Янги
+                    топшириқ қўшиш
+
+                </button>
+                <button type="button"
+                        class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal">Хужжатга қайтиш
+                </button>
+            </div>
         </div>
     </div>
 </div>
