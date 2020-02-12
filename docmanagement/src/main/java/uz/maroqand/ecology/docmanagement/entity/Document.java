@@ -12,7 +12,6 @@ import java.util.Set;
  * (uz) Kiruvchi va chiquvchi hujjatlarni ro'yxatdan o'tkazish uchun
  * (ru)
  */
-
 @Data
 @Entity
 @Table(name = "document")
@@ -53,6 +52,9 @@ public class Document {
     @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DocumentSub documentSub;
 
+    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DocumentTask task;
+
     //registratsiya sanasi
     @Column(name = "registration_date", columnDefinition = "timestamp without time zone")
     private Date registrationDate;
@@ -61,6 +63,7 @@ public class Document {
     @Column(name = "registration_number")
     private String registrationNumber;
 
+    //Краткое содержание документа
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_description_id", nullable = false, updatable = false)
     private DocumentDescription documentDescription;
@@ -106,6 +109,9 @@ public class Document {
 
     @Column(name = "control_form")
     private String controlForm;
+
+    @Column(name = "special_control", columnDefinition = "boolean DEFAULT false")
+    private Boolean specialControl;
 
     /*
      * Technical Fields
