@@ -8,19 +8,18 @@
                 <img alt="" src="/static/doc/images/logo.png">
                 <span class="b-title">ЭКОЭКСПЕРТИЗА</span>
             </a>
-            <!-- <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span>
-</a> -->
+            <!-- <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span> </a> -->
         </div>
         <div class="navbar-content scroll-div">
             <ul class="nav pcoded-inner-navbar">
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Навигация</label>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/dashboard">
                         <span class="pcoded-micon"><i class="mdi mdi-more"></i></span>
                         <span class="pcoded-mtext">ЭКО ЭКСПЕРТИЗА</span>
                     </a>
+                </li>
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Хужжатлар</label>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
@@ -40,7 +39,7 @@
                         <span class="pcoded-mtext">Чикувчи хатлар</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}">
                         <span class="pcoded-micon"><i class="fas fa-shopping-basket color-yellow"></i></span>
                         <span class="pcoded-mtext">Ички хужжатлар</span>
@@ -57,7 +56,7 @@
                         <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
                         <span class="pcoded-mtext">Буйруклар</span>
                     </a>
-                </li>
+                </li>-->
                 <!--<li class="nav-item">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon color-gray"><i class="fas fa-sitemap"></i></span>
@@ -70,20 +69,46 @@
                         <span class="pcoded-mtext">Кутубхона</span>
                     </a>
                 </li>-->
-                <hr>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Девонхона</label>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
+                        <span class="pcoded-micon"><i class="fas fa-th-list color-primary"></i></span>
+                        <span class="pcoded-mtext">Хужжатлар иш столи</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailList}">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
+                        <span class="pcoded-mtext">Кирувчи хатлар</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailList}">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
+                        <span class="pcoded-mtext">Чикувчи хатлар</span>
+                    </a>
+                </li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Руйхатга олиш</label>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailNew}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
                         <span class="pcoded-mtext">Кирувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingRegistrationList}">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
                         <span class="pcoded-mtext">Чикувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationList}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-find color-purple"></i></span>
                         <span class="pcoded-mtext">Ички хужжатларни руйхатга олиш</span>
@@ -94,7 +119,7 @@
                         <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
                         <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
                     </a>
-                </li>
+                </li>-->
                 <!--<li class="nav-item">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-green"></i></span>
@@ -160,6 +185,7 @@
                         <span class="pcoded-mtext">Хисоботлар</span>
                     </a>
                 </li>-->
+                <hr>
                 <li class="nav-item pcoded-hasmenu">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon"><i class="feather icon-package color-red"></i></span>
