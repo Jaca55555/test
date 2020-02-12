@@ -1,3 +1,4 @@
+/*main css css*/
 body {
     background: #f4f7fa;
     overflow-x: hidden;
@@ -399,7 +400,7 @@ html, body {
    .gray-arrow {
         position: absolute;
         font-size: 20px;
-        top:3px;
+        top:5px;
         right:8px;
    }
     .gray-search {
