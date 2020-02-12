@@ -17,6 +17,10 @@ public interface DocumentOrganizationService {
 
     DocumentOrganization getById(Integer id);
 
+    List<String> getDocumentOrganizationNames();
+
+    DocumentOrganization getByName(String name);
+
     DocumentOrganization getByName(String name);
 
     DocumentOrganization updateByIdFromCache(Integer id);
@@ -26,6 +30,8 @@ public interface DocumentOrganizationService {
     List<DocumentOrganization> organizationGetStatusActive();
 
     DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input);
+
+    List<DocumentOrganization> getList();
 
     Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable);
 
