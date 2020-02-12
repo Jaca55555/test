@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.entity;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -52,6 +53,9 @@ public class Document {
     @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DocumentSub documentSub;
 
+    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DocumentTask task;
+
     //registratsiya sanasi
     @Column(name = "registration_date", columnDefinition = "timestamp without time zone")
     private Date registrationDate;
@@ -100,6 +104,10 @@ public class Document {
 
     @Column(name = "control_form")
     private String controlForm;
+
+    @Column(name = "special_control", columnDefinition = "boolean DEFAULT false")
+    private Boolean specialControl;
+
     /*
      * Technical Fields
      */

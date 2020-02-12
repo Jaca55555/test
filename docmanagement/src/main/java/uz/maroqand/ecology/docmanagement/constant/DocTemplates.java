@@ -25,6 +25,7 @@ public class DocTemplates {
     public static final String IncomeMailView = IncomeMail + "/view";
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/new";
+    public static final String IncomeMailAddTask = IncomeMail + "/task";
 
     private static final String CommunicationToolsPrefix = Prefix + "/communication_tools";
     public static final String CommunicationToolsList = CommunicationToolsPrefix + "/list";

@@ -17,6 +17,8 @@ public interface DocumentOrganizationService {
 
     DocumentOrganization getById(Integer id);
 
+    DocumentOrganization getByName(String name);
+
     DocumentOrganization updateByIdFromCache(Integer id);
 
     List<DocumentOrganization> getStatusActive();

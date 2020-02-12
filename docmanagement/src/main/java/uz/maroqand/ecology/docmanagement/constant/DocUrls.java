@@ -16,6 +16,7 @@ public class DocUrls {
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
+    public static final String FileDownload = Prefix + "/file/download";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
@@ -30,6 +31,8 @@ public class DocUrls {
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/edit";
     public static final String IncomeMailFileUpload = IncomeMail + "/file";
+    public static final String IncomeMailSpecial = IncomeMail + "/special";
+    public static final String IncomeMailAddTask = IncomeMail + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;

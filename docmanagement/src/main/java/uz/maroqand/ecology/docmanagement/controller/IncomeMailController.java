@@ -1,8 +1,10 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocumentSubType;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.transaction.Transactional;
@@ -47,7 +50,10 @@ public class IncomeMailController {
             CommunicationToolService communicationToolService,
             UserService userService,
             JournalService journalService,
-            FileService fileService, DocumentOrganizationService organizationService, FolderService folderService) {
+            FileService fileService,
+            DocumentOrganizationService organizationService,
+            FolderService folderService
+    ) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
@@ -120,6 +126,13 @@ public class IncomeMailController {
             controlForms.add(new Object[]{"3","2A shakl"});
             controlForms.add(new Object[]{"4","3A shakl"});
             controlForms.add(new Object[]{"5","4A shakl"});
+
+        List<DocumentOrganization> organizations = organizationService.getStatusActive();
+        List<String> orgNames = new ArrayList<>();
+        for (DocumentOrganization organization : organizations) {
+            orgNames.add(organization.getName());
+        }
+
         model.addAttribute("doc", new Document());
         model.addAttribute("action_url", DocUrls.IncomeMailNew);
         model.addAttribute("journal", journalService.getStatusActive());
@@ -133,6 +146,7 @@ public class IncomeMailController {
         model.addAttribute("description_list", documentService.getDescriptionsList());
         model.addAttribute("execute_forms", executeForms);
         model.addAttribute("control_forms", controlForms);
+        model.addAttribute("organizations", orgNames);
         return DocTemplates.IncomeMailNew;
     }
 
@@ -152,6 +166,16 @@ public class IncomeMailController {
         for (Integer fileId : fileIds) {
             files.add(fileService.findById(fileId));
         }
+        DocumentOrganization organization = organizationService.getByName(document.getDocumentSub().getOrganizationName());
+        if (organization == null) {
+            DocumentOrganization newOrg = new DocumentOrganization();
+            newOrg.setName(document.getDocumentSub().getOrganizationName());
+            newOrg.setStatus(Boolean.TRUE);
+            newOrg.setCreatedById(user.getId());
+            organization = organizationService.create(newOrg);
+        }
+
+        document.getDocumentSub().setOrganizationId(organization.getId());
         document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
@@ -180,6 +204,11 @@ public class IncomeMailController {
         controlForms.add(new Object[]{"4","3A shakl"});
         controlForms.add(new Object[]{"5","4A shakl"});
 
+        List<DocumentOrganization> organizations = organizationService.getStatusActive();
+        List<String> orgNames = new ArrayList<>();
+        for (DocumentOrganization organization : organizations) {
+            orgNames.add(organization.getName());
+        }
         model.addAttribute("action_url", DocUrls.IncomeMailEdit);
         model.addAttribute("doc", document);
         model.addAttribute("journal", journalService.getStatusActive());
@@ -193,7 +222,7 @@ public class IncomeMailController {
         model.addAttribute("description_list", documentService.getDescriptionsList());
         model.addAttribute("execute_forms", executeForms);
         model.addAttribute("control_forms", controlForms);
-        model.addAttribute("organizations", organizationService.getStatusActive());
+        model.addAttribute("organizations", orgNames);
 
         return response;
     }
@@ -213,6 +242,16 @@ public class IncomeMailController {
         for (Integer fileId : fileIds) {
             files.add(fileService.findById(fileId));
         }
+        DocumentOrganization organization = organizationService.getByName(document.getDocumentSub().getOrganizationName());
+        if (organization == null) {
+            DocumentOrganization newOrg = new DocumentOrganization();
+            newOrg.setName(document.getDocumentSub().getOrganizationName());
+            newOrg.setStatus(Boolean.TRUE);
+            newOrg.setCreatedById(user.getId());
+            organization = organizationService.create(newOrg);
+        }
+
+        document.getDocumentSub().setOrganizationId(organization.getId());
         document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.getDocumentSub().setType(type);
@@ -232,5 +271,67 @@ public class IncomeMailController {
         File file = fileService.uploadFile(uploadFile,user.getId(),"documentFile",uploadFile.getOriginalFilename());
         response.put("file", file);
         return response;
+    }
+
+    @GetMapping(value = DocUrls.FileDownload)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(@RequestParam(name = "id")Integer id) {
+        File file = fileService.findById(id);
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    @GetMapping(value = DocUrls.IncomeMailSpecial)
+    @ResponseBody
+    public HashMap<String, Object> changeSpecial(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "enabled")Boolean enabled
+    ) {
+        HashMap<String, Object> response = new HashMap<>();
+        Document document = documentService.getById(id);
+        if (document == null) {
+            response.put("status", "not found");
+            return response;
+        }
+        document.setSpecialControl(enabled);
+        documentService.update(document);
+        response.put("status", "success");
+        response.put("value", enabled);
+        return response;
+    }
+
+    @GetMapping(value = DocUrls.IncomeMailAddTask)
+    public String getAddTaskPage(
+            Model model,
+            @RequestParam(name = "id")Integer id
+    ) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomeMailList;
+        }
+
+        model.addAttribute("doc", document);
+        model.addAttribute("task", document.getTask());
+        model.addAttribute("attends", userService.getEmployeeList());
+        return DocTemplates.IncomeMailAddTask;
+    }
+
+    @PostMapping(value = DocUrls.IncomeMailAddTask)
+    public String addTask(
+            @RequestParam(name = "id")Integer id
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.IncomeMailList;
+        }
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomeMailList;
+        }
+
+        return "redirect:" + DocUrls.IncomeMailList;
     }
 }
