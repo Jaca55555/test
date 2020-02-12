@@ -1,0 +1,17 @@
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'ENTERPRISE_REGISTER');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EMPLOYEE_CONTROL');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_AGREEMENT_COMPLETE');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'DOC_MANAGEMENT');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_FORWARDING');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_PERFORMER');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_AGREEMENT');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'COORDINATE_REGISTER');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'APPEAL_ADMIN');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'BILLING');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'USER');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_REG');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'PAYMENT_FILE');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'ADMIN');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'FACTURE_MONITORING');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_MONITORING');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_CONFIRM');
