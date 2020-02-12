@@ -104,6 +104,14 @@ public class User {
     @Column(name = "last_event", columnDefinition = "timestamp without time zone")
     private Date lastEvent;
 
+    //Document ijro nazorati uchun ma'sul shaxs
+    @Column(name = "is_execute_controller", columnDefinition = "boolean DEFAULT false")
+    private Boolean isExecuteController;
+
+    //Document qabul qiluvchi rahbar
+    @Column(name = "is_execute_chief", columnDefinition = "boolean DEFAULT false")
+    private Boolean isExecuteChief;
+
     @Transient
     private Integer userAdditionalId;
 
