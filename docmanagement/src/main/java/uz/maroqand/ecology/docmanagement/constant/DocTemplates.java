@@ -26,6 +26,7 @@ public class DocTemplates {
     public static final String IncomeMailNew = IncomeMail + "/new";
     public static final String IncomeMailEdit = IncomeMail + "/new";
     public static final String IncomeMailAddTask = IncomeMail + "/task";
+    public static final String IncomingList = IncomeMailList;
 
     private static final String CommunicationToolsPrefix = Prefix + "/communication_tools";
     public static final String CommunicationToolsList = CommunicationToolsPrefix + "/list";
@@ -41,6 +42,7 @@ public class DocTemplates {
     public static final String FolderList = Folder+ "/list";
     public static final String FolderEdit = Folder + "/edit";
     public static final String FolderNew = Folder + "/new";
+
     private static final String DocType = Prefix + "/doc_type";
     public static final String DocTypeList = DocType + "/list";
     public static final String DocTypeView = DocType + "/view";
@@ -51,9 +53,15 @@ public class DocTemplates {
     public static final String DocumentOrganizationList = DocumentOrganization + "/list";
     public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
     public static final String DocumentOrganizationNew = DocumentOrganization + "/new";
+
     private static final String Journal = Prefix + "/journal";
     public static final String JournalList = Journal + "/list";
     public static final String JournalView = Journal + "/view";
     public static final String JournalNew = Journal + "/new";
     public static final String JournalEdit = Journal + "/new";
+
+    private static final String OutgoingMail = Prefix + "/outgoing_mail";
+    public static final String OutgoingMailNew = OutgoingMail + "/new";
+    public static final String OutgoingMailList = OutgoingMail + "/list";
+    public static final String OutgoingList = OutgoingMailList;
 }

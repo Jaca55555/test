@@ -6,6 +6,7 @@ import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.repository.sys.OrganizationRepository;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,5 +38,26 @@ public class OrganizationServiceImpl implements OrganizationService {
         String number = organization.getLastNumber()+"-"+"/19";
         return number;
     }
+
+    @Override
+    public List<String> getOrganizationNames(){
+        List<Organization> orgs = getList();
+        List<String> names = new ArrayList<String>(orgs.size());
+        for(Organization organization: orgs){
+            names.add(organization.getName());
+        }
+        return names;
+    }
+
+    @Override
+    public Organization getByName(String name){
+        return organizationRepository.getByName(name);
+    }
+    @Override
+    public Organization create(Organization organization){
+        return organizationRepository.save(organization);
+    }
+
+
 
 }

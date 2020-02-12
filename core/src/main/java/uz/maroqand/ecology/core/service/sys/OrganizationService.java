@@ -12,4 +12,9 @@ public interface OrganizationService {
 
     String getContractNumber(Integer organizationId);
 
+    List<String> getOrganizationNames();
+
+    Organization getByName(String organizationName);
+
+    Organization create(Organization organization);
 }

@@ -173,4 +173,10 @@ public class DocumentServiceImpl implements DocumentService {
             }
         };
     }
+
+    @Override
+    public List<Document> getList(){
+        return documentRepository.findAll();
+    }
+
 }

@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,21 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     @Cacheable(value = "organizationGetById", key = "#id",unless="#result == ''")
     public DocumentOrganization getById(Integer id) {
         return documentOrganizationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public List<String> getDocumentOrganizationNames(){
+        List<DocumentOrganization> orgs = getList();
+        List<String> names = new ArrayList<String>(orgs.size());
+        for(DocumentOrganization documentOrganization: orgs){
+            names.add(documentOrganization.getName());
+        }
+        return names;
+    }
+
+    @Override
+    public DocumentOrganization getByName(String name){
+        return documentOrganizationRepository.getByName(name);
     }
 
     //PutById
@@ -73,6 +89,11 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     @Override
     public DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input) {
         return documentOrganizationRepository.findAll(input,getFilteringSpecification(null));
+    }
+
+    @Override
+    public List<DocumentOrganization> getList(){
+        return documentOrganizationRepository.findAll();
     }
 
     @Override
