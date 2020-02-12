@@ -16,7 +16,7 @@ public class OutgoingController {
     @RequestMapping(DocUrls.OutgoingList)
     public String getOutgoingListPage(Model model) {
 
-        return DocTemplates.OutgoingList;
+        return DocTemplates.OutgoingMailList;
     }
 
 }

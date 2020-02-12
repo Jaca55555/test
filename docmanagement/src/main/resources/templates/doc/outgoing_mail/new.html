@@ -113,42 +113,43 @@
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20">
-                    <div class="file-block">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
-                        </div>
-                        <div class="text-center">
-                            <span>Письмо.pdf</span>
-                        </div>
-                    </div>
-                    <div class="file-block">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container color-blue"><span
-                                class="fas fa-file-word"></span></div>
-                        <div class="text-center">
-                            <span>Письмо.docx</span>
-                        </div>
-                    </div>
-                    <div class="file-block">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container color-green"><span
-                                class="fas fa-file-excel"></span></div>
-                        <div class="text-center">
-                            <span>Таблица.xlsx</span>
-                        </div>
-                    </div>
-                    <div class="file-block">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container color-blue"><span
-                                class="fas fa-file-image"></span></div>
-                        <div class="text-center">
-                            <span>Image.img</span>
-                        </div>
-                    </div>
-                    <div class="file-block flex-center file-button">
+<!--                    <div class="file-block">-->
+<!--                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>-->
+<!--                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>-->
+<!--                        </div>-->
+<!--                        <div class="text-center">-->
+<!--                            <span>Письмо.pdf</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-block">-->
+<!--                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>-->
+<!--                        <div class="text-center file-icon-container color-blue"><span-->
+<!--                                class="fas fa-file-word"></span></div>-->
+<!--                        <div class="text-center">-->
+<!--                            <span>Письмо.docx</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-block">-->
+<!--                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>-->
+<!--                        <div class="text-center file-icon-container color-green"><span-->
+<!--                                class="fas fa-file-excel"></span></div>-->
+<!--                        <div class="text-center">-->
+<!--                            <span>Таблица.xlsx</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-block">-->
+<!--                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>-->
+<!--                        <div class="text-center file-icon-container color-blue"><span-->
+<!--                                class="fas fa-file-image"></span></div>-->
+<!--                        <div class="text-center">-->
+<!--                            <span>Image.img</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickFunc()">
                         <div class="text-center file-icon-container align-self-center color-gray">
                             <span class="fas fa-plus" id="addFileButton"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
+                            <input type="file" class="d-none" id="addFile2" name="addFile">
                         </div>
                     </div>
                 </div>
@@ -240,20 +241,78 @@
         // let availableTags =  getOrganizationNames(requestLink);
 
     } );
-
-  $(document).ready(function () {
+/*
+    $(document).ready(function () {
+        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
+        $('#orgName').autocomplete({
+            minLength: 0,
+            source: [[${organizations}]]
+        });
         $('.file-button, #addFileButton').on('click', function () {
             $('#addFile').trigger('click');
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
-            console.log(e.target)
-            // console.log(document.querySelectorAll('#addFile').pop());
+        }).on('change', function () {
+            let csrf = $("form input[name='_csrf']").val();
+            let files = $(this)[0].files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailFileUpload}]],
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    files.files = [];
+                    var file = data.file;
+                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
+                    $('#file-container').prepend(
+                        "                    <div class=\"file-block\">\n" +
+                        "                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
+                        "                        <div class=\"text-center file-icon-container color-red\">" +
+                        "                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"text-center\">\n" +
+                        "                            <span>"+file.name+"</span>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n"
+                    );
+                }
+            })
+        });
+
+        $('#description').on('change', function () {
+            if ($(this).val() === 'new') {
+                $('.new-desc').removeClass('d-none');
+            } else {
+                $('.new-desc').addClass('d-none');
+            }
         })
-  });
 
+        $(document).on('click', '.fa-trash-alt', function () {
+            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
+            $(this).parent().parent().remove();
+        });
 
-
+        $('form').on('submit', function () {
+            $('#addFile').attr('disabled', 'disabled');
+            if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
+            else $('#newDescription').attr('disabled', 'disabled');
+            $(this).submit();
+        })
+    });
+*/
+    function clickFunc() {
+        let fileForm = document.querySelector('#addFile');
+        let fileForm2 = document.querySelector('#addFile2');
+        fileForm.click();
+        fileForm2.append(fileForm.value);
+        console.log(fileForm2.value);
+    }
 </script>
 </body>
 </html>

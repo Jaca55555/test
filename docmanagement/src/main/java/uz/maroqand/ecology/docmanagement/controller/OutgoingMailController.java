@@ -24,6 +24,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import org.springframework.data.domain.Page;
 
+import javax.swing.text.DocumentFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -130,15 +131,26 @@ public class OutgoingMailController {
         return documentOrganizationService.getDocumentOrganizationNames();
     }
 
+
+
+    @RequestMapping(DocUrls.OutgoingMailList)
+    public String getOutgoingMailList(Model model) {
+        model.addAttribute("organizationList", documentOrganizationService.getList());
+        return DocTemplates.OutgoingMailList;
+    }
+
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "name", required = false)String name,
             Pageable pageable
     ){
-/*        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
+        /*        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
         Page<Document> documentPage = documentService.findFiltered(pageable);
-
+        System.out.println("************************");
+        System.out.println("name: " + name);
+        System.out.println(documentPage);
+        System.out.println("*********************");
         HashMap<String, Object> res = new HashMap<>();
 
         res.put("recordsTotal", documentPage.getTotalElements());
@@ -147,7 +159,15 @@ public class OutgoingMailController {
         List<Object[]> data = new ArrayList<>(documentPage.getContent().size());
 
         for(Document document: documentPage){
-            data.add(new Object[]{document.getRegistrationNumber(), document.getRegistrationDate(), document.getDocumentDescription(), document.getCreatedAt(), document.getCreatedAt(), document.getCreatedAt()});
+            data.add(new Object[]{
+                    document.getRegistrationNumber(),
+                    document.getRegistrationDate(),
+                    document.getDocumentDescription() != null ? document.getDocumentDescription().getContent(): "",
+                    document.getId(),
+                    document.getId(),
+                    document.getId(),
+                    document.getId()
+            });
         }
 
         res.put("data", data);
@@ -155,11 +175,6 @@ public class OutgoingMailController {
         return res;
     }
 
-    @RequestMapping(DocUrls.OutgoingMailList)
-    public String getOutgoingMailList(Model model) {
-        model.addAttribute("organizationList", documentOrganizationService.getList());
-        return DocTemplates.OutgoingMailList;
-    }
 
     @RequestMapping(DocUrls.OutgoingMailView)
     public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){

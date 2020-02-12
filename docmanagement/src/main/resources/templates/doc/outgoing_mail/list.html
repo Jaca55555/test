@@ -261,8 +261,8 @@
                         <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="responsive-table-model"
-                                           class="display table dt-responsive dataTable no-footer dtr-inline collapsed"
+                                    <table id="dynamicTable"
+                                           class="display table dt-responsive dataTable no-footer dtr-inline collapsed outgoing_document"
                                            style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                         <tr role="row">
@@ -271,7 +271,6 @@
                                                 style="width: 0px;" aria-sort="ascending"
                                                 aria-label="First name: activate to sort column descending">
                                                 Регистрация
-
                                                 рақами</th>
                                             <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
                                                 rowspan="1" colspan="1" style="width: 0px;"
@@ -293,16 +292,16 @@
                                                 aria-label="Age: activate to sort column ascending">Ижро муддати
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
-                                                rowspan="1" colspan="1" style="width: 140px; display: none;"
+                                                rowspan="1" colspan="1"
                                                 aria-label="Start date: activate to sort column ascending">Жорий
                                                 ҳолати</th>
                                             <th class="sorting" tabindex="0" aria-controls="responsive-table-model"
-                                                rowspan="1" colspan="1" style="width: 300px; display: none;"
+                                                rowspan="1" colspan="1"
                                                 aria-label="Salary: activate to sort column ascending">Резолюция ва
                                                 иштирокчилар</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="dynamicTableBody">
 
                                         </tbody>
                                     </table>
@@ -346,17 +345,59 @@
 <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
 
 <script th:inline="javascript">
-
     let ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailView}]];
     let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
-
 </script>
 
 <script th:inline="none">
+
+    async function getOrganizationNames(req){
+        return await fetch(req)
+            .then((response) => {
+                return response.json()
+            })
+    }
+
+    $( function() {
+        getOrganizationNames(ajaxListLink)
+            .then((data) => {
+                console.log(data);
+                let table = document.querySelector('#dynamicTableBody');
+                for(let i = 0; i < data.data.length; i++){
+                    table.innerHTML += (`<tr>
+                                            <td>${data.data[i][0]}</td>
+                                            <td>${data.data[i][1]}</td>
+                                            <td>${data.data[i][2]}</td>
+                                            <td>${data.data[i][3]}</td>
+                                            <td>${data.data[i][4]}</td>
+                                            <td>${data.data[i][5]}</td>
+                                            <td>${data.data[i][6]}</td>
+                                         </tr>`);
+                }
+                 $('#dynamicTable').DataTable({
+                     responsive: {
+                         details: {
+                             display: $.fn.dataTable.Responsive.display.modal({
+                                 header: function(row) {
+                                     var data = row.data();
+                                     return 'Details for ' + data[0] + ' ' + data[1];
+                                 }
+                             }),
+                             renderer: $.fn.dataTable.Responsive.renderer.tableAll({
+                                 tableClass: 'table'
+                             })
+                         }
+                     }
+                 });
+            })
+    } );
+
+
+
 
 
 </script>

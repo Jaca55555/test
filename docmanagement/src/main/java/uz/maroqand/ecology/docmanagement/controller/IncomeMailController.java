@@ -86,7 +86,7 @@ public class IncomeMailController {
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getDocumentDescription().getContent(),
+                    document.getDocumentDescription() != null ? document.getDocumentDescription().getContent(): "",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     "docStatus",
