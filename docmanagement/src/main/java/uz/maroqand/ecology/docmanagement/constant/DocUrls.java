@@ -83,6 +83,11 @@ public class DocUrls {
     public static final String FolderNew = Folder + "/new";
     public static final String FolderEdit = Folder + "/edit";
 
+    private static final String UserManagement = Prefix + "/user_mngm";
+    public static final String Chiefs = UserManagement + "/chiefs";
+    public static final String Change = UserManagement + "/change";
+    public static final String Controllers = UserManagement + "/controllers";
+
     private static final String DocumentOrganization = Prefix + "/document_organization";
     public static final String DocumentOrganizationList = DocumentOrganization + "/list";
     public static final String DocumentOrganizationListAjax = DocumentOrganizationList + "/ajax";
