@@ -78,8 +78,8 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" for="organizationId" th:text="#{doc_incoming.reg_organization}"></label>
-                        <select class="form-control" id="organizationId" name="organizationId" required="required">
+                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                         <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
@@ -266,7 +266,7 @@
             $(this).submit();
         });
 
-        $('#organizationId').select2({
+        $('#documentOrganizationId').select2({
             ajax: {
                 url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
                 type: "POST",

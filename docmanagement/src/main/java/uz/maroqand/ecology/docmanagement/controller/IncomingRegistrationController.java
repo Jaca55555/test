@@ -140,7 +140,7 @@ public class IncomingRegistrationController {
     public String createDoc(
             @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
-            @RequestParam(name = "organizationId") Integer organizationId,
+            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
             Document document
     ) {
@@ -161,7 +161,7 @@ public class IncomingRegistrationController {
         DocumentSub documentSub = new DocumentSub();
         documentSub.setDocumentId(document.getId());
         documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(organizationId);
+        documentSub.setOrganizationId(documentOrganizationId);
         documentSubRepository.save(documentSub);
 
         return "redirect:" + DocUrls.IncomeMailList;
