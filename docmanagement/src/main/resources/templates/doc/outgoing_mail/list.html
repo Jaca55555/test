@@ -367,6 +367,8 @@
             .then((data) => {
                 console.log(data);
                 let table = document.querySelector('#dynamicTableBody');
+                let currentViewLink = '';
+                let currentEditLink = '';
                 for(let i = 0; i < data.data.length; i++){
                     table.innerHTML += (`<tr>
                                             <td>${data.data[i][0]}</td>

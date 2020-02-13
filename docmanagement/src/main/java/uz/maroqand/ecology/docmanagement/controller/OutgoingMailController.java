@@ -1,7 +1,9 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -25,10 +30,8 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import org.springframework.data.domain.Page;
 
 import javax.swing.text.DocumentFilter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Date;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Controller
 public class OutgoingMailController {
@@ -40,6 +43,8 @@ public class OutgoingMailController {
     private final CommunicationToolService communicationToolService;
     private final UserService userService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final FileService fileService;
+
 
     @Autowired
     public OutgoingMailController(
@@ -49,7 +54,8 @@ public class OutgoingMailController {
             DocumentTypeService documentTypeService,
             CommunicationToolService communicationToolService,
             UserService userService,
-            DocumentOrganizationService documentOrganizationService
+            DocumentOrganizationService documentOrganizationService,
+            FileService fileService
             ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -58,12 +64,13 @@ public class OutgoingMailController {
         this.communicationToolService = communicationToolService;
         this.userService = userService;
         this.documentOrganizationService = documentOrganizationService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
     public String newOutgoingMail(Model model){
-
-        model.addAttribute("document", new Document());
+        Document document = new Document();
+        model.addAttribute("document", document);
         model.addAttribute("journal", journalService.getStatusActive());
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
@@ -73,12 +80,20 @@ public class OutgoingMailController {
         return DocTemplates.OutgoingMailNew;
     }
 
+    @Transactional
     @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
-    public String newOutgoingMail(Document document){
+    public String newOutgoingMail(Document document, @RequestParam(name = "file_ids")List<Integer> file_ids){
+
+        System.out.println(file_ids);
 
         Document newDocument = new Document();
         newDocument.setCreatedAt(new Date());
         newDocument.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
+        Set<File> files = new HashSet<>();
+        for(Integer fileId: file_ids){
+            files.add(fileService.findById(fileId));
+        }
+        newDocument.setContentFiles(files);
 
         Journal journal = journalService.getById(document.getJournalId());
 
@@ -202,5 +217,24 @@ public class OutgoingMailController {
         return DocTemplates.OutgoingMailNew;
     }
 
+    @RequestMapping(value = DocUrls.OutgoingMailFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, File> uploadFile(@RequestParam(name = "file")MultipartFile file){
 
+        File file_ = fileService.uploadFile(file, userService.getCurrentUserFromContext().getId(), file.getOriginalFilename(), file.getContentType());
+        HashMap<String, File> res = new HashMap<>();
+        res.put("data", file_);
+
+        return res;
+    }
+    @RequestMapping(value = DocUrls.OutgoingMailFileDownload, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadAttachedDocument(@RequestParam(name = "id")Integer id){
+        File file = fileService.findById(id);
+        if(file == null)
+            return ResponseEntity.badRequest().body(null);
+        else
+            return fileService.getFileAsResourceForDownloading(file);
+
+    }
 }
