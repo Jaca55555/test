@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap">
+                <h5 class="mb-0" style="align-self:center" th:text="#{doc.controller_list}"></h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="role-table" class="display table nowrap table-striped table-hover" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th th:text="#{doc.user_id}">Id</th>
+                            <th th:text="#{doc.full_name}">Name</th>
+                            <th th:text="#{doc.status}">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.fullName}"></td>
+                            <td th:if="${isChief}">
+                                <div class="custom-control custom-switch" data-action="chief">
+                                    <input type="checkbox" name="chief" class="custom-control-input" th:attr="data-id=${user.id}"
+                                           th:id="'status_' + ${user.id}" th:checked="${user.isExecuteChief}"/>
+                                    <label class="custom-control-label" th:for="'status_' + ${user.id}" th:text="#{doc.change}"></label>
+                                </div>
+                            </td>
+                            <td th:if="${isController}">
+                                <div class="custom-control custom-switch" data-action="controller">
+                                    <input type="checkbox" name="controller" class="custom-control-input" th:attr="data-id=${user.id}"
+                                           th:id="'status_' + ${user.id}" th:checked="${user.isExecuteController}">
+                                    <label class="custom-control-label" th:for="'status_' + ${user.id}" th:text="#{doc.change}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            let input = $(this);
+            let ID = $(this).data('id');
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Change}]],
+                data: {
+                    id: ID,
+                    action: input.parent().data('action'),
+                    status: input.prop('checked'),
+                    _csrf: $('#_csrf').attr('content')
+                },
+                method: 'post',
+                success: function (data) {
+                    if (data.status ==='success') {
+                        console.log(data);
+                    }
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>

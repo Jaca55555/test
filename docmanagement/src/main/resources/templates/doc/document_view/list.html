@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
@@ -26,11 +26,13 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="" class="card-header-a collapsed" data-toggle="collapse"
-                       data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
+                    <a href="" class="card-header-a">
                         Communication_tools_list
                     </a>
                 </h5>
+                <div>
+                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentViewNew}" class="btn btn-rounded btn-success btn-sm ml-2 m0" th:text="#{doc.new_document_view}"></a>
+                </div>
 
             </div>
             <div class="card-body row">
