@@ -81,7 +81,7 @@ public class OutgoingMailController {
         newDocument.setJournal(journalService.getById(document.getJournalId()));
         newDocument.setDocumentViewId(document.getDocumentViewId());
 
-        DocumentSub documentSub = new DocumentSub();
+/*        DocumentSub documentSub = new DocumentSub();
         Integer comtoolId = document.getDocumentSub().getCommunicationToolId();
         documentSub.setCommunicationTool(communicationToolService.getById(comtoolId));
         documentSub.setCommunicationToolId(comtoolId);
@@ -110,7 +110,7 @@ public class OutgoingMailController {
 
         newDocument.setPerformerPhone(user.getPhone());
         newDocument.setCreatedAt(new Date());
-        newDocument.setCreatedById(user.getId());
+        newDocument.setCreatedById(user.getId());*/
 
         documentService.createDoc(newDocument);
 
@@ -139,9 +139,9 @@ public class OutgoingMailController {
 
         List<Object[]> data = new ArrayList<>(documentPage.getContent().size());
 
-        for(Document document: documentPage){
+        /*for(Document document: documentPage){
             data.add(new Object[]{document.getRegistrationNumber(), document.getRegistrationDate(), document.getDocumentDescription(), document.getCreatedAt(), document.getCreatedAt(), document.getCreatedAt()});
-        }
+        }*/
 
         res.put("data", data);
 
