@@ -65,7 +65,7 @@ public class Document {
     private String registrationNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "document_description_id", nullable = false, updatable = false)
+    @JoinColumn(name = "description_id", nullable = false, updatable = false)
     private DocumentDescription documentDescription;
 
     @ManyToMany(fetch = FetchType.LAZY)
