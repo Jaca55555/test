@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -223,5 +224,15 @@ public class UserServiceImpl implements UserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<User> getEmployeesForDocManage(String type) {
+        List<User> users = new ArrayList<>();
+        if (type.equals("chief"))
+            users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
+        if (type.equals("controller"))
+            users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
+        return users;
     }
 }

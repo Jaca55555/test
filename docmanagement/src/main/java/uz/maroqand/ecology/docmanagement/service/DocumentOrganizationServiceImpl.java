@@ -54,11 +54,6 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
         return names;
     }
 
-    @Override
-    public DocumentOrganization getByName(String name){
-        return documentOrganizationRepository.getByName(name);
-    }
-
     //PutById
     @Override
     @CachePut(value = "organizationGetById", key = "#id")

@@ -78,7 +78,7 @@ hr {
     margin:20px;
 }
 .p20 {
-    padding:20px;
+    padding:10px 20px;
 }
 .p10 {
     padding:10px;
@@ -106,8 +106,8 @@ hr {
     margin-bottom: 20px;
 }
 .m30-vertical {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .p10-horizontal {
     padding-top:10px;
@@ -329,7 +329,7 @@ html, body {
        width:150px;
        height:150px;
        border:2px solid #ced4da;
-       margin:10px 20px;
+       margin-right:20px;
    }
    .text-center {
        text-align: center;
@@ -399,8 +399,8 @@ html, body {
    .gray-arrow {
         position: absolute;
         font-size: 20px;
-        top:3px;
-        right:8px;
+        top:10px;
+        right:10px;
    }
     .gray-search {
         position: absolute;
@@ -417,7 +417,7 @@ html, body {
    .calendar-img2 {
     position: absolute;
     width:20px;
-    top:5px;
+    top:10px;
     right:10px;
     }
     .pointer {
@@ -493,9 +493,9 @@ html, body {
         font-size: 20px;
         margin:auto;
     }
-    .form-group {
+    /*.form-group {
         margin-bottom: 5px;
-    }
+    }*/
 
 
 

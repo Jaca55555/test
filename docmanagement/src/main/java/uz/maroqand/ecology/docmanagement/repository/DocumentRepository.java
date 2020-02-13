@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagement.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,11 +16,12 @@ import java.util.List;
  * (ru)
  */
 @Repository
-public interface DocumentRepository extends DataTablesRepository<Document, Integer>,
-                                            JpaRepository<Document, Integer>,
-                                            JpaSpecificationExecutor<Document>
-{
+public interface DocumentRepository extends DataTablesRepository<Document, Integer>, JpaRepository<Document, Integer>, JpaSpecificationExecutor<Document> {
+
     Document findByIdAndDeletedFalse(Integer id);
 
     List<Document> findAllByDeletedFalse();
+
+    Page<Document> findByRegistrationNumberLike(String number, Pageable pageable);
+
 }
