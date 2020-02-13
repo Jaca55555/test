@@ -44,6 +44,9 @@ public class DocUrls {
     //Ichki hujjatlarni ro'yhatga olish
     private static final String InnerRegistration = Prefix + Registration + Inner;
     public static final String InnerRegistrationList = InnerRegistration + "/list";
+    public static final String InnerRegistrationNew = InnerRegistration + "/new";
+    public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
+
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

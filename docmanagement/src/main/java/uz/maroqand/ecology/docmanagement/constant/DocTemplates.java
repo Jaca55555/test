@@ -9,6 +9,7 @@ public class DocTemplates {
     private static final String Prefix = "doc";
     private static final String Incoming = "/incoming";
     private static final String Outgoing = "/outgoing";
+    private static final String Inner = "/inner";
 
     public static final String Dashboard = Prefix + "/office";
 
@@ -63,4 +64,14 @@ public class DocTemplates {
     public static final String OutgoingMailNew = OutgoingMail + "/new";
     public static final String OutgoingMailList = OutgoingMail + "/list";
 
+    //ichki xatlar
+    public static final String InnerNew = Prefix + Inner + "_registration/new";
+    public static final String InnerView = Prefix + Inner + "/view";
+
+    private static final String InnerMail = Prefix + "/income_mail";
+    public static final String InnerMailList = Inner + "/list";
+    public static final String InnerMailView = Inner + "/view";
+    public static final String InnerMailNew = Inner + "/new";
+    public static final String InnerMailEdit = Inner + "/new";
+    public static final String InnerMailAddTask = Inner + "/task";
 }
