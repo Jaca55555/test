@@ -19,7 +19,10 @@ public class DocUrls {
     public static final String FileDownload = Prefix + "/file/download";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
+    public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
+    public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
+
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar

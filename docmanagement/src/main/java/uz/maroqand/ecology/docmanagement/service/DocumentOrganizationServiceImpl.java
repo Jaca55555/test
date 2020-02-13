@@ -62,11 +62,6 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
         return documentOrganizationRepository.findByIdAndDeletedFalse(id);
     }
 
-    @Override
-    public DocumentOrganization getByName(String name) {
-        return documentOrganizationRepository.findByNameContaining(name);
-    }
-
     //GetStatusActive
     @Override
     @Cacheable("organizationGetStatusActive")

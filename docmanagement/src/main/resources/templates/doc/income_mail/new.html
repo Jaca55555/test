@@ -41,7 +41,7 @@
                     <input type="hidden" th:field="*{documentSub.documentId}" th:value="*{documentSub.documentId}"/>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:for="${#ids.next('journalId')}"
                                th:text="#{doc.income_reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
@@ -50,13 +50,13 @@
                             <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc.income_reg_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{registrationNumber}">
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc.income_reg_type}"
                                th:for="${#ids.next('documentType')}">Кирувчи хатларни тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
@@ -65,7 +65,7 @@
                             <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc.income_reg_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
                             <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc.income_reg_date}"
@@ -75,21 +75,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:for="${#ids.next('authorName')}" th:text="#{doc.income_author_name}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{documentSub.fullName}">
                             <i class="gray-arrow fas  fa-map color-gray"></i>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:for="${#ids.next('authorPosition')}" th:text="#{doc.income_author_position}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{documentSub.position}">
                             <i class="gray-arrow fas  fa-map color-gray"></i>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc.income_author_type}">Кирувчи хатларни руйхатга олиш журнали</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" name="documentSubType" th:value="*{documentSub.type}">
@@ -97,7 +97,7 @@
                             <option th:each="type : ${doc_sub_types}" th:value="${type}" th:text="#{${type.name}}" th:attrappend="selected=${type == doc.documentSub.type}?@{selected}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
+                    <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc.income_author_organization}"></label>
                         <input class="form-control" tabindex="-1" id="orgName" th:field="*{documentSub.organizationName}">
                     </div>
@@ -119,16 +119,17 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-sm-12 form-group">
                     <label class="control-label" th:text="#{doc.income_description}"></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                            aria-hidden="true" th:field="*{documentDescription}" id="description">
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{documentDescription}" id="description">
                         <option value=""></option>
                         <option th:each="type : ${description_list}" th:value="${type.id}" th:text="#{${type.content}}"></option>
                     </select>
                 </div>
+
                 <div class="col-sm-12 form-group new-desc d-none">
-                    <textarea class="form-control" id="newDescription" th:placeholder="#{doc.write_new_description}" th:field="*{documentDescription.content}"></textarea>
+                    <textarea class="form-control" rows="4" id="newDescription" th:placeholder="#{doc.write_new_description}" th:field="*{documentDescription.content}"></textarea>
                 </div>
 
                 <div class="row">

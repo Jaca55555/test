@@ -19,4 +19,10 @@ public class IncomingController {
         return DocTemplates.IncomingList;
     }
 
+    @RequestMapping(DocUrls.IncomingView)
+    public String getIncomingViewPage(Model model) {
+
+        return DocTemplates.IncomingView;
+    }
+
 }
