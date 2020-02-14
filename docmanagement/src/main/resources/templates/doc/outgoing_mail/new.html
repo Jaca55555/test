@@ -125,9 +125,9 @@
 
                 </div>
                     <div id="file_ids" class="d-none">
-
+                        <input type="text" name="file_ids" value="">
                     </div>
-                    <input type="file" class="d-none" id="addFile2" name="files" multiple required>
+                    <input type="file" class="d-none" id="addFile2" name="files" multiple>
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор қилиш</button>
@@ -255,15 +255,13 @@
                         extension = '';
                         color = 'color-gray';
                 }
-                console.log(extension);
-                console.log(data.data);
                 $('#file_ids').append(
-                    `<input type="text" name="file_ids" value="${data.data.id}">`
+                    `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
                 );
                 $('#file-container').prepend(
-                  `<div class="file-block">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container ${color}"><span class="fas fa-file${extension}"></span>
+                  `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
                             <span>${data.data.name}</span>
@@ -274,12 +272,14 @@
         })
     });
 
-
-
-
-
-
-
+    function downloadFileFunction(id){
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+    function deleteFunc(id){
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+    }
 
 </script>
 </body>

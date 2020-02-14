@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -84,13 +85,13 @@ public class OutgoingMailController {
     @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
     public String newOutgoingMail(Document document, @RequestParam(name = "file_ids")List<Integer> file_ids){
 
-        System.out.println(file_ids);
-
         Document newDocument = new Document();
         newDocument.setCreatedAt(new Date());
         newDocument.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
+    //    System.out.println(file_ids);
         Set<File> files = new HashSet<>();
         for(Integer fileId: file_ids){
+            if(fileId == null) continue;
             files.add(fileService.findById(fileId));
         }
         newDocument.setContentFiles(files);
@@ -137,7 +138,8 @@ public class OutgoingMailController {
 
         documentService.createDoc(newDocument);
 
-        return "redirect:" + DocUrls.OutgoingMailNew;
+        return "redirect:" + DocUrls.OutgoingMailList;
+
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailOrganizationList, produces = "application/json")
@@ -157,37 +159,34 @@ public class OutgoingMailController {
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
-            @RequestParam(name = "name", required = false)String name,
+            DocFilterDTO filter,
             Pageable pageable
     ){
         /*        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
-        Page<Document> documentPage = documentService.findFiltered(pageable);
-        System.out.println("************************");
-        System.out.println("name: " + name);
-        System.out.println(documentPage);
-        System.out.println("*********************");
-        HashMap<String, Object> res = new HashMap<>();
-
-        res.put("recordsTotal", documentPage.getTotalElements());
-        res.put("recordsFiltered", documentPage.getTotalElements());
-
-        List<Object[]> data = new ArrayList<>(documentPage.getContent().size());
-
-        for(Document document: documentPage){
-            data.add(new Object[]{
+        HashMap<String, Object> result = new HashMap<>();
+     //   DocFilterDTO filter = new DocFilterDTO();
+        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
+        Page<Document> documentPage = documentService.findFiltered(filter, pageable);
+        System.out.println("*************************************");
+       // List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentPage.getTotalPages());
+        for (Document document : documentPage) {
+            JSONArray.add(new Object[]{
+                    document.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate(),
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getDocumentDescription() != null ? document.getDocumentDescription().getContent(): "",
-                    document.getId(),
-                    document.getId(),
-                    document.getId(),
-                    document.getId()
+                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
+                    "docStatus",
+                    "Resolution and parcipiants"
             });
         }
 
-        res.put("data", data);
-
-        return res;
+        result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
     }
 
 
@@ -237,4 +236,11 @@ public class OutgoingMailController {
             return fileService.getFileAsResourceForDownloading(file);
 
     }
+
+    @RequestMapping(value = DocUrls.OutgoingMailFileDelete, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public void deleteAttachment(@RequestParam(name = "id")Integer id){
+        fileService.deleteById(id);
+    }
+
 }
