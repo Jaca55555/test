@@ -22,7 +22,7 @@ public interface JournalService {
 
     List<Journal> getStatusActive();
 
-    List<Journal> removeStatusActive();
+    List<Journal> updateStatusActive();
 
     Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable);
 

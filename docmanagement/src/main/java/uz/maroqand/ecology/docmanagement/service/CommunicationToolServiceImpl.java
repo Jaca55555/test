@@ -41,7 +41,7 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     @Override
     @Cacheable(value = "communicationToolGetById", key = "#id",unless="#result == ''")
     public CommunicationTool getById(Integer id) {
-        return communicationToolRepository.findByIdAndDeletedFalse(id);
+        return updateCacheableById(id);
     }
 
     //PutById
@@ -56,6 +56,11 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     @Override
     @Cacheable("communicationToolGetStatusActive")
     public List<CommunicationTool> getStatusActive() {
+        return setStatusActive();
+    }
+
+    @CachePut("communicationToolGetStatusActive")
+    public List<CommunicationTool> setStatusActive() {
         return communicationToolRepository.findByStatusTrueOrderByIdAsc();
     }
 

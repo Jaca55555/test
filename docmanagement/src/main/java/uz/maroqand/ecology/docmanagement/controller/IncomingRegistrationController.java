@@ -73,9 +73,9 @@ public class IncomingRegistrationController {
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
-        model.addAttribute("doc_type", documentTypeService.getStatusActive());
 
-        return DocTemplates.IncomeMailList;
+        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        return DocTemplates.IncomingRegistrationList;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.POST, produces = "application/json")
@@ -115,7 +115,7 @@ public class IncomingRegistrationController {
         }
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        return DocTemplates.IncomeMailView;
+        return DocTemplates.IncomingRegistrationView;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationNew, method = RequestMethod.GET)
@@ -133,7 +133,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-        return DocTemplates.IncomeMailNew;
+        return DocTemplates.IncomingRegistrationNew;
     }
 
     @Transactional
@@ -223,7 +223,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-        return DocTemplates.IncomeMailNew;
+        return DocTemplates.IncomingRegistrationNew;
     }
 
     @RequestMapping(value = {DocUrls.IncomingRegistrationEdit, DocUrls.IncomingRegistrationEditTask}, method = RequestMethod.POST)
@@ -263,10 +263,22 @@ public class IncomingRegistrationController {
         documentSubService.create(document.getId(), documentSub, user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
-            return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
+            return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document.getId();
         }else {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationTask)
+    public String addTask( @RequestParam(name = "id")Integer id, Model model ) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        return DocTemplates.IncomingRegistrationTask;
     }
 
     @PostMapping(value = DocUrls.IncomeMailFileUpload)
@@ -328,16 +340,5 @@ public class IncomingRegistrationController {
         return DocTemplates.IncomeMailAddTask;
     }*/
 
-    @PostMapping(value = DocUrls.IncomeMailAddTask)
-    public String addTask(
-            @RequestParam(name = "id")Integer id
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        Document document = documentService.getById(id);
-        if (document == null) {
-            return  "redirect:" + DocUrls.IncomingRegistrationList;
-        }
 
-        return "redirect:" + DocUrls.IncomingRegistrationList;
-    }
 }

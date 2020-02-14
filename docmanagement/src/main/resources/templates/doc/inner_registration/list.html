@@ -28,21 +28,21 @@
                 <h5 class="mb-0" style="align-self:center">
                     <a href="/static/doc/" class="collapsed card-header-a"
                        data-toggle="collapse" data-target="#collapseTopContainer"
-                       aria-expanded="false" aria-controls="collapseOne">Девонхона хужжатлар иш столи</a>
+                       aria-expanded="false" aria-controls="collapseOne">Девонхона - Ички хужжатлар</a>
                 </h5>
                 <div>
                     <input type="text" class="form-control">
                     <i class="gray-search fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                 </div>
             </div>
-            <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
+            <h5 class="office-h5 default-color">Ички хужжатлар статистикаси</h5>
             <div class="responsive">
                 <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">10</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h6 class="card-title">Янги хужжатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                         <img class="card-svg" src="/static/doc/images/mail_deleted.svg" alt="">
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">20</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h6 class="card-title">Муддати яқинлашган</h6>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                         <img class="card-svg" src="/static/doc/images/mail_warning.svg" alt="">
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">30</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h6 class="card-title">Муддатдан кечиккан</h6>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                         <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h6 class="card-title">Ижро этилган</h6>
                         </div>
                     </div>
                 </div>
@@ -78,16 +78,7 @@
                         <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-green-shadow">
-                        <img class="card-svg" src="/static/doc/images/mail_received.svg" alt="">
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h6 class="card-title">Жами хужжатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -100,17 +91,18 @@
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
                     <a class="card-header-a" href="/static/doc/" data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="true" aria-controls="collapseOne" th:text="#{doc.doc_filter_header}">Саралаш фильтри</a>
+                       aria-expanded="true" aria-controls="collapseOne">Саралаш фильтри</a>
                 </h5>
             </div>
             <div class="row p10">
                 <div class="form-group col-md-3 col-sm-12">
-                    <label for="correspondent" class="control-label">Корреспондент</label>
+                    <label for="correspondent" class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
                     <div class="col-sm-12 p0">
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 id="correspondent" aria-hidden="true" disabled="disabled">
                             <option></option>
                             <option value="" th:text="#{sys_select}"></option>
+                            <option th:each="org : ${organizationList}" th:value="${org.id}" th:text="${org.getNameTranslation('#locale')}">Alabama</option>
                         </select>
                         <i class="gray-arrow fas fa-sort-down color-gray"></i>
                     </div>
@@ -446,8 +438,9 @@
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 
 <script th:inline="javascript">
-    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
-    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
+    let ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailListAjax}]];
+    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailView}]];
+    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -504,9 +497,8 @@
                 dataToSend.insidePurposeStatus = $('#isInternal').val();
                 dataToSend.coexecutorStatus = $('#coexecutorStatus').val();
                 dataToSend.replies = $('#response').val();
-                dataToSend._csrf = $("#global_csrf").val();
 
-                $.post("", dataToSend, function(data){
+                $.get(ajaxListLink, dataToSend, function(data){
                     callback(data);
                 });
             },

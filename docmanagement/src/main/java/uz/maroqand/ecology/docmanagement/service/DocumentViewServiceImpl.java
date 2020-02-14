@@ -40,7 +40,7 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     @Override
     @Cacheable(value = "documentViewGetById", key = "#id",unless="#result == ''")
     public DocumentView getById(Integer id) {
-        return documentViewRepository.findByIdAndDeletedFalse(id);
+        return updateByIdFromCache(id);
     }
 
     @Override
@@ -53,6 +53,11 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     @Override
     @Cacheable("documentViewStatusActive")
     public List<DocumentView> getStatusActive() {
+        return setStatusActive();
+    }
+
+    @CachePut("documentViewStatusActive")
+    public List<DocumentView> setStatusActive() {
         return documentViewRepository.findByStatusTrue();
     }
 

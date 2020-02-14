@@ -37,9 +37,11 @@ public class DocUrls {
     public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
     public static final String IncomingRegistrationEdit = IncomingRegistration + "/edit";
     public static final String IncomingRegistrationEditTask = IncomingRegistration + "/edit_and_task";
+    public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
+
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomeMailSpecial = IncomingRegistration + "/special";
-    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
+//    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
@@ -48,6 +50,10 @@ public class DocUrls {
     //Ichki hujjatlarni ro'yhatga olish
     private static final String InnerRegistration = Prefix + Registration + Inner;
     public static final String InnerRegistrationList = InnerRegistration + "/list";
+    public static final String InnerRegistrationListAjax = InnerRegistration + "/list_ajax";
+    public static final String InnerRegistrationNew = InnerRegistration + "/new";
+    public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
+
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

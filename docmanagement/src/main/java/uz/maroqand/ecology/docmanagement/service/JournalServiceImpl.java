@@ -10,6 +10,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.JournalFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.repository.JournalRepository;
@@ -60,8 +61,8 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
-    public List<Journal> removeStatusActive() {
-        return journalRepository.findAll();
+    public List<Journal> updateStatusActive() {
+        return journalRepository.findByStatusTrue();
     }
 
     @Override
