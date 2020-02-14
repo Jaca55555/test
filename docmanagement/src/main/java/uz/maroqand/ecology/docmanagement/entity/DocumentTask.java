@@ -48,6 +48,9 @@ public class DocumentTask {
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
+    @Column(name = "status")
+    private Integer status;
+
     /*
      * Technical Fields
      */

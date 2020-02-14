@@ -18,4 +18,5 @@ public interface DocumentTaskRepository extends DataTablesRepository<DocumentTas
 {
     List<DocumentTask> findByDocumentId(Integer docId);
 
+    DocumentTask findByDocumentIdAndChiefId(Integer docId, Integer userId);
 }

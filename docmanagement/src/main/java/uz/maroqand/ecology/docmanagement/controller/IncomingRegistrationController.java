@@ -20,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -43,6 +44,7 @@ public class IncomingRegistrationController {
     private final FileService fileService;
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentTaskService taskService;
     private final DocumentSubRepository documentSubRepository;
 
     @Autowired
@@ -56,9 +58,11 @@ public class IncomingRegistrationController {
             FileService fileService,
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
+            DocumentTaskService taskService,
             DocumentSubRepository documentSubRepository
     ) {
         this.documentService = documentService;
+        this.taskService = taskService;
         this.documentSubRepository = documentSubRepository;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTypeService = documentTypeService;
@@ -87,16 +91,18 @@ public class IncomingRegistrationController {
         Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        Integer userId = userService.getCurrentUserFromContext().getId();
         for (Document document : documentList) {
+            DocumentTask task = taskService.getTaskByUser(document.getId(), userId);
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    "docStatus",
-                    "Resolution and parcipiants"
+                    task!=null ? Common.uzbekistanDateFormat.format(task.getDueDate()):"",
+                    task!=null ? task.getStatus():"",
+                    task!=null ? task.getContent():""
             });
         }
 
