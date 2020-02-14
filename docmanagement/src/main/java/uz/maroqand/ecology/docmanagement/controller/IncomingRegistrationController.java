@@ -153,8 +153,8 @@ public class IncomingRegistrationController {
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
-            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
-            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
+            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
+            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -232,8 +232,8 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
-            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
+            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
+            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
             Document document
     ) {

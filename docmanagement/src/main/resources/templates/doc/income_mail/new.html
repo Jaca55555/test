@@ -36,8 +36,8 @@
             <form action="" th:object="${document}" th:method="post" class="card-block">
                 <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
-                    <input type="hidden" th:field="*{documentSub.id}" th:value="*{documentSub.id}"/>
-                    <input type="hidden" th:field="*{documentSub.documentId}" th:value="*{documentSub.documentId}"/>
+                    <input type="hidden" th:field="${documentSub.id}" th:value="${documentSub.id}"/>
+                    <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
@@ -89,13 +89,13 @@
 
                 <div class="col-sm-12 form-group">
                     <label class="control-label" th:text="#{doc_incoming.reg_description}"></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}">
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}" id="description_content">
                         <option value=""></option>
                         <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
                     </select>
                 </div>
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" name="content" th:text="*{content}"></textarea>
+                    <textarea class="form-control" rows="4" name="content" th:text="*{content}" id="description_textarea"></textarea>
                 </div>
 
                 <div class="row">
@@ -169,15 +169,15 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item : ${executeForms}">
-                            <input type="radio" th:field="*{executeForm}" name="executeFormId" th:value="${item.id}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item.name}"></label>
+                            <input type="radio" name="executeForm" th:id="'executeForm'+${item.id}" th:value="${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="'executeForm'+${item.id}" th:text="${item.name}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item: ${controlForms}">
-                            <input type="radio" th:field="*{controlForm}" th:value="${item.id}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('controlForm')}" th:text="${item.name}"></label>
+                            <input type="radio" th:value="${item.id}" name="controlForm" th:id="'controlForm'+${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="'controlForm'+${item.id}" th:text="${item.name}"></label>
                         </div>
                     </div>
                 </div>
@@ -204,13 +204,20 @@
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
+        if ([[${document.contentFiles}]].length>0){
+            $.each([[${document.contentFiles}]],function (index,val) {
+                $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+            })
+        }
+
         $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
         $('#orgName').autocomplete({
             minLength: 0,
             source: [[${organizations}]]
         });
-        $('.file-button, #addFileButton').on('click', function () {
-            $('#addFile').trigger('click');
+
+        $('#addFileButton').on('click', function () {
+            $('#addFile').click();
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
@@ -252,7 +259,7 @@
             } else {
                 $('.new-desc').addClass('d-none');
             }
-        })
+        });
 
         $(document).on('click', '.fa-trash-alt', function () {
             $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
@@ -284,6 +291,12 @@
                 }, cache: true
             }
         });
+    });
+
+    $('#description_content').on('change',function () {
+        var text=this.options[this.selectedIndex].text;
+        var dec = $('#description_textarea').val();
+        $('#description_textarea').val(dec + text);
     });
 </script>
 
