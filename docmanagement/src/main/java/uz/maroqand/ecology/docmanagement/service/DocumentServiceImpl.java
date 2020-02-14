@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -171,11 +172,20 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
-        if(name!=null){
-            return documentRepository.findByRegistrationNumberLike(name ,pageable);
-        }else {
-            return documentRepository.findAll(pageable);
-        }
+        return documentRepository.findAll(getSpecification(name), pageable);
     }
 
+    private static Specification<Document> getSpecification(String registrationNumber) {
+        return new Specification<Document>() {
+            @Override
+            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+                if(registrationNumber != null){
+                    predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + registrationNumber + "%"));
+                }
+                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            }
+        };
+    }
 }

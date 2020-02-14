@@ -102,9 +102,9 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
             public Predicate toPredicate(Root<DocumentOrganization> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
                 if(name!=null){
-                    predicates.add( criteriaBuilder.like(root.get("name"), "%" + name.toUpperCase() + "%") );
+                    predicates.add( criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + name.toUpperCase() + "%") );
                 }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+                predicates.add( criteriaBuilder.equal(root.get("deleted"), false));
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }

@@ -64,15 +64,16 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.communicationToolId}" required>
+                                aria-hidden="true" name="communication_tool_id" required>
                             <option value="" th:text="#{communication_tool_select}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хат юборилаётган ташкилот</label>
-                        <label for="tags">Tags: </label>
-                        <input class="form-control" id="tags" th:field="*{documentSub.organizationName}" required>
+                        <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
 
@@ -81,7 +82,7 @@
                     <hr class="m20-vertical">
                     <div class="col-sm-12 form-group">
                         <label class="control-label">Хатнинг қисқача мазмуни</label>
-                        <textarea th:field="*{documentDescription.content}" class="form-control" name="validation-text"
+                        <textarea th:field="*{content}" class="form-control" name="validation-text"
                                   placeholder="Хатнинг қисқача махзмунини киритинг."></textarea>
                     </div>
 
@@ -97,16 +98,16 @@
                     <div class="col-md-6"></div>
                     <div class="col-sm-6 form-group">
                         <label for="name" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{answerDocumentId}" multiple>
-                            <option value="" th:text="#{answer_document_select}"></option>
-                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.registrationNumber + '   ' + #dates.format(document_.registrationDate, 'dd.MM.yyyy')} "></option>
+                        <select class="form-control" id="additional_document_id" th:field="*{additionalDocumentId}">
+                            <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
                     <div class="col-md-6"></div>
                     <div class="col-sm-6 form-group">
                         <label for="name" class="control-label">Чикувчи хатни тегиши хужжатлар тупламига бирикитиш учун керакли хужжатни танланг(агар зарур болса)</label>
-                        <input type="text" class="form-control">
+                        <select class="form-control" id="*{performerId}">
+                            <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.username}"></option>
+                        </select>
                     </div>
 
                 </div>
@@ -193,74 +194,72 @@
 
 <script th:inline="javascript">
 
-    var requestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailOrganizationList}]];
-    // console.log(requestLink);
-
-
-    async function getOrganizationNames(req){
-        return await fetch(req)
-            .then((response) => {
-                return response.json();
-            })
-    }
-    $( function() {
-        getOrganizationNames(requestLink)
-            .then((data) => {
-                $( "#tags" ).autocomplete({
-                    source: data
-                });
-            })
-    } );
-
-    function clickPlus(){
+    // var requestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailOrganizationList}]];
+    // // console.log(requestLink);
+    //
+    //
+    // async function getOrganizationNames(req){
+    //     return await fetch(req)
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    // }
+    // $( function() {
+    //     getOrganizationNames(requestLink)
+    //         .then((data) => {
+    //             $( "#tags" ).autocomplete({
+    //                 source: data
+    //             });
+    //         })
+    // } )
+    function clickPlus() {
         $('#addFile2').click();
     }
+    $(document).ready(function () {
+        $('#addFile2').on('change', function () {
 
-
-    $('#addFile2').on('change', function () {
-
-        let csrf = $("form input[name='_csrf']").val();
-        let files = document.querySelector('#addFile2').files[0];
-        let fd = new FormData();
-        fd.append("file", files);
-        fd.append("_csrf", csrf);
-        $.ajax({
-            url: "/doc/outgoing_mail/file/upload",
-            type: 'post',
-            data: fd,
-            processData: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-            success: function (data) {
-                let extension = data.data.extension;
-                let color;
-                switch(extension){
-                    case 'jpg':
-                        extension = '-image';
-                        color = 'color-blue';
-                        break;
-                    case 'pdf':
-                        extension = '-pdf';
-                        color = 'color-red';
-                        break;
-                    case 'xlsx':
-                        extension = '-excel';
-                        color = 'color-green';
-                        break;
-                    case 'doc':
-                    case 'docx':
-                        extension = '-word';
-                        color = 'color-blue';
-                        break;
-                    default:
-                        extension = '';
-                        color = 'color-gray';
-                }
-                $('#file_ids').append(
-                    `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
-                );
-                $('#file-container').prepend(
-                  `<div class="file-block" id="file_block_${data.data.id}">
+            let csrf = $("form input[name='_csrf']").val();
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/doc/outgoing_mail/file/upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    let extension = data.data.extension;
+                    let color;
+                    switch (extension) {
+                        case 'jpg':
+                            extension = '-image';
+                            color = 'color-blue';
+                            break;
+                        case 'pdf':
+                            extension = '-pdf';
+                            color = 'color-red';
+                            break;
+                        case 'xlsx':
+                            extension = '-excel';
+                            color = 'color-green';
+                            break;
+                        case 'doc':
+                        case 'docx':
+                            extension = '-word';
+                            color = 'color-blue';
+                            break;
+                        default:
+                            extension = '';
+                            color = 'color-gray';
+                    }
+                    $('#file_ids').append(
+                        `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+                    );
+                    $('#file-container').prepend(
+                        `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
@@ -268,19 +267,41 @@
                             <span>${data.data.name}</span>
                         </div>
                     </div>`
-                );
-            }
-        })
-    });
+                    );
+                }
+            })
+        });
 
-    function downloadFileFunction(id){
-        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
-    }
-    function deleteFunc(id){
-        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
-        document.querySelector(`#file_block_${id}`).remove();
-        document.querySelector(`#input_file_id_${id}`).remove();
-    }
+        function downloadFileFunction(id) {
+            window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+        }
+
+        function deleteFunc(id) {
+            fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+            document.querySelector(`#file_block_${id}`).remove();
+            document.querySelector(`#input_file_id_${id}`).remove();
+        }
+
+        $('#document_organization_id').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+
+        $('#additional_document_id').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+    });
 
 </script>
 </body>
