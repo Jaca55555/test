@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.entity.*;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
@@ -54,8 +52,6 @@ public class OutgoingMailController {
             FileService fileService,
             DepartmentService departmentService
     ){
-            DocumentOrganizationService documentOrganizationService
-    ){
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.journalService = journalService;
@@ -75,7 +71,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
@@ -86,8 +81,9 @@ public class OutgoingMailController {
     @Transactional
     @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
     public String newOutgoingMail(
-            @RequestParam(name = "communicationToolId") Integer communicationToolId,
-            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "communication_tool_id") Integer communicationToolId,
+            @RequestParam(name = "document_organization_id") Integer documentOrganizationId,
+            @RequestParam(name = "file_ids") List<Integer> file_ids,
             Document document
     ){
         User user = userService.getCurrentUserFromContext();
@@ -117,12 +113,9 @@ public class OutgoingMailController {
             documentOrganizationService.create(documentOrganization);
         }*/
 
-        return "redirect:" + DocUrls.OutgoingMailList;
-        */
-
         System.out.println(document);
-        System.out.println("communication tool id: " + ctId);
-        System.out.println("document organization id: " + doId);
+        System.out.println("communication tool id: " + communicationToolId);
+        System.out.println("document organization id: " + documentOrganizationId);
         System.out.println("file_ids: " + file_ids);
 
         return "redirect:" + DocUrls.OutgoingMailNew;
@@ -184,7 +177,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
 
         return DocTemplates.OutgoingMailNew;
     }
@@ -197,7 +189,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
 
         return DocTemplates.OutgoingMailNew;
     }

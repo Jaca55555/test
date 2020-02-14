@@ -16,7 +16,7 @@ public class IncomingController {
     @RequestMapping(DocUrls.IncomingList)
     public String getIncomingListPage(Model model) {
 
-        return DocTemplates.IncomeMailList;
+        return DocTemplates.IncomingList;
     }
 
     @RequestMapping(DocUrls.IncomingView)
