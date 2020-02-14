@@ -23,6 +23,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class IncomingRegistrationController {
     private final FileService fileService;
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
-    private final DocumentSubRepository documentSubRepository;
+    private final DocumentSubService documentSubService;
 
     @Autowired
     public IncomingRegistrationController(
@@ -56,10 +57,10 @@ public class IncomingRegistrationController {
             FileService fileService,
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
-            DocumentSubRepository documentSubRepository
+            DocumentSubService documentSubService
     ) {
         this.documentService = documentService;
-        this.documentSubRepository = documentSubRepository;
+        this.documentSubService = documentSubService;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
@@ -70,16 +71,16 @@ public class IncomingRegistrationController {
         this.documentViewService = documentViewService;
     }
 
-    @RequestMapping(DocUrls.IncomeMailList)
-    public String getIncomeListPage(Model model) {
+    @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
+    public String getIncomingRegistrationListPage(Model model) {
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
 
         return DocTemplates.IncomeMailList;
     }
 
-    @RequestMapping(value = DocUrls.IncomeMailListAjax, produces = "application/json")
+    @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public HashMap<String, Object> getIncomeList(
+    public HashMap<String, Object> getIncomingRegistrationList(
             DocFilterDTO filterDTO,
             Pageable pageable
     ) {
@@ -106,18 +107,19 @@ public class IncomingRegistrationController {
         return result;
     }
 
-    @RequestMapping(DocUrls.IncomeMailView)
-    public String getIncomeMail(@RequestParam(name = "id")Integer id, Model model) {
+    @RequestMapping(DocUrls.IncomingRegistrationView)
+    public String getViewDocumentPage(@RequestParam(name = "id")Integer id, Model model) {
         Document document = documentService.getById(id);
         if (document == null) {
-            return "redirect: " + DocUrls.IncomeMailList;
+            return "redirect: " + DocUrls.IncomingRegistrationList;
         }
-        model.addAttribute("doc", document);
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.IncomeMailView;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationNew, method = RequestMethod.GET)
-    public String newDocument(Model model) {
+    public String getNewDocumentPage(Model model) {
 
         model.addAttribute("document", new Document());
         model.addAttribute("documentSub", new DocumentSub());
@@ -125,22 +127,113 @@ public class IncomingRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeeList());
         model.addAttribute("controlUserList", userService.getEmployeeList());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-        model.addAttribute("action_url", DocUrls.IncomingRegistrationNew);
         return DocTemplates.IncomeMailNew;
     }
 
     @Transactional
     @RequestMapping(value = {DocUrls.IncomingRegistrationNew, DocUrls.IncomingRegistrationNewTask}, method = RequestMethod.POST)
-    public String createDoc(
-            @RequestParam(name = "registrationDateStr") String regDate,
+    public String createDocument(
+            HttpServletRequest httpServletRequest,
+            @RequestParam(name = "journalId") Integer journalId,
+            @RequestParam(name = "documentViewId") Integer documentViewId,
+            @RequestParam(name = "docRegNumber") String docRegNumber,
+            @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "contentId", required = false) Integer contentId,
+            @RequestParam(name = "content", required = false) String content,
+            @RequestParam(name = "additionalDocumentId", required = false) Integer additionalDocumentId,
+            @RequestParam(name = "performerName", required = false) String performerName,
+            @RequestParam(name = "performerPhone", required = false) String performerPhone,
+            @RequestParam(name = "managerId") Integer managerId,
+            @RequestParam(name = "controlId", required = false) Integer controlId,
+            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
+            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
+            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        Set<File> files = new HashSet<>();
+        if(fileIds!=null){
+            for (Integer fileId : fileIds) {
+                files.add(fileService.findById(fileId));
+            }
+        }
+        System.out.println("content="+content);
+
+        Document document = new Document();
+        document.setJournalId(journalId);
+        document.setDocumentViewId(documentViewId);
+        document.setDocRegNumber(docRegNumber);
+        document.setDocRegDate(DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat));
+        document.setContentId(contentId);
+        document.setContent(content);
+        document.setAdditionalDocumentId(additionalDocumentId);
+        document.setPerformerName(performerName);
+        document.setPerformerPhone(performerPhone);
+        document.setManagerId(managerId);
+        document.setControlId(controlId);
+
+        if(executeFormId!=null){
+            document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
+        }
+        if(controlFormId!=null){
+            document.setControlForm(ControlForm.getControlForm(controlFormId));
+        }
+        document.setContentFiles(files);
+        document.setCreatedById(user.getId());
+        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
+        document.setRegistrationDate(new Date());
+        document.setStatus(DocumentStatus.New);
+        document = documentService.createDoc(document);
+
+        DocumentSub documentSub = new DocumentSub();
+        documentSub.setCommunicationToolId(communicationToolId);
+        documentSub.setOrganizationId(documentOrganizationId);
+        documentSubService.create(document.getId(), documentSub, user);
+
+        if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingRegistrationNewTask)){
+            return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
+        }else {
+            return "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+    }
+
+    @RequestMapping(DocUrls.IncomingRegistrationEdit)
+    public String getEditDocumentPage(@RequestParam(name = "id")Integer id, Model model) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+
+        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("managerUserList", userService.getEmployeeList());
+        model.addAttribute("controlUserList", userService.getEmployeeList());
+
+        model.addAttribute("executeForms", ControlForm.getControlFormList());
+        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
+        return DocTemplates.IncomeMailNew;
+    }
+
+    @RequestMapping(value = {DocUrls.IncomingRegistrationEdit, DocUrls.IncomingRegistrationEditTask}, method = RequestMethod.POST)
+    public String updateDocument(
+            HttpServletRequest httpServletRequest,
+            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestParam(name = "communicationToolId") Integer communicationToolId,
+            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
+            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
             Document document
     ) {
@@ -152,92 +245,28 @@ public class IncomingRegistrationController {
             }
         }
 
+        if(executeFormId!=null){
+            document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
+        }
+        if(controlFormId!=null){
+            document.setControlForm(ControlForm.getControlForm(controlFormId));
+        }
         document.setContentFiles(files);
-        document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
-        document.setCreatedAt(new Date());
+        document.setDocRegDate(DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat));
         document.setCreatedById(user.getId());
-        document = documentService.createDoc(document);
+        document.setStatus(DocumentStatus.New);
+        documentService.update(document);
 
         DocumentSub documentSub = new DocumentSub();
-        documentSub.setDocumentId(document.getId());
         documentSub.setCommunicationToolId(communicationToolId);
         documentSub.setOrganizationId(documentOrganizationId);
-        documentSubRepository.save(documentSub);
+        documentSubService.create(document.getId(), documentSub, user);
 
-        return "redirect:" + DocUrls.IncomeMailList;
-    }
-
-    @RequestMapping(DocUrls.IncomeMailEdit)
-    public String editDocument(@RequestParam(name = "id")Integer id, Model model) {
-        String response = DocTemplates.IncomeMailEdit;
-        Document document = documentService.getById(id);
-        if (document == null) {
-            response = "redirect:" + DocUrls.IncomeMailList;
+        if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
+            return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
+        }else {
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-
-        // TODO: ijro va nazorat shakllarini kerakli joydan olish
-        List<Object[]> executeForms = new ArrayList<>();
-        executeForms.add(new Object[]{"1","Ijro uchun"});
-        executeForms.add(new Object[]{"2", "Ma'lumot uchun"});
-        List<Object[]> controlForms = new ArrayList<>();
-        controlForms.add(new Object[]{"1","Yo'q"});
-        controlForms.add(new Object[]{"2","1A shakl"});
-        controlForms.add(new Object[]{"3","2A shakl"});
-        controlForms.add(new Object[]{"4","3A shakl"});
-        controlForms.add(new Object[]{"5","4A shakl"});
-
-        List<DocumentOrganization> organizations = organizationService.getStatusActive();
-        List<String> orgNames = new ArrayList<>();
-        for (DocumentOrganization organization : organizations) {
-            orgNames.add(organization.getName());
-        }
-        model.addAttribute("action_url", DocUrls.IncomeMailEdit);
-        model.addAttribute("doc", document);
-        model.addAttribute("journal", journalService.getStatusActive());
-        model.addAttribute("doc_type", documentTypeService.getStatusActive());
-        model.addAttribute("doc_sub_types", DocumentSubType.getDocumentSubTypeList());
-        model.addAttribute("communication_list", communicationToolService.getStatusActive());
-        model.addAttribute("chief", userService.getEmployeeList());
-        model.addAttribute("executeController", userService.getEmployeeList());
-        model.addAttribute("doc_list", documentService.findAllActive());
-        model.addAttribute("execute_forms", executeForms);
-        model.addAttribute("control_forms", controlForms);
-        model.addAttribute("organizations", orgNames);
-
-        return response;
-    }
-
-    @RequestMapping(value = DocUrls.IncomeMailEdit, method = RequestMethod.POST)
-    public String updateDoc(
-            @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "documentSubType") DocumentSubType type,
-            @RequestParam(name = "fileIds") List<Integer> fileIds,
-            Document document
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        if (user == null) {
-            return "redirect: " + DocUrls.IncomeMailList;
-        }
-        Set<File> files = new HashSet<>();
-        for (Integer fileId : fileIds) {
-            files.add(fileService.findById(fileId));
-        }
-/*        DocumentOrganization organization = organizationService.getByName(document.getDocumentSub().getOrganizationName());
-        if (organization == null) {
-            DocumentOrganization newOrg = new DocumentOrganization();
-            newOrg.setName(document.getDocumentSub().getOrganizationName());
-            newOrg.setStatus(Boolean.TRUE);
-            newOrg.setCreatedById(user.getId());
-            organization = organizationService.create(newOrg);
-        }
-
-        document.getDocumentSub().setOrganizationId(organization.getId());
-        document.setContentFiles(files);
-        document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
-        document.getDocumentSub().setType(type);
-        document.setUpdateById(user.getId());
-        documentService.update(document);*/
-        return "redirect:" + DocUrls.IncomeMailList;
     }
 
     @PostMapping(value = DocUrls.IncomeMailFileUpload)
@@ -304,14 +333,11 @@ public class IncomingRegistrationController {
             @RequestParam(name = "id")Integer id
     ) {
         User user = userService.getCurrentUserFromContext();
-        if (user == null) {
-            return "redirect:" + DocUrls.IncomeMailList;
-        }
         Document document = documentService.getById(id);
         if (document == null) {
-            return  "redirect:" + DocUrls.IncomeMailList;
+            return  "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
-        return "redirect:" + DocUrls.IncomeMailList;
+        return "redirect:" + DocUrls.IncomingRegistrationList;
     }
 }

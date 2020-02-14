@@ -32,4 +32,6 @@ public interface JournalService {
 
     Journal update(Journal journal);
 
+    String getRegistrationNumberByJournalId(Integer journalId);
+
 }

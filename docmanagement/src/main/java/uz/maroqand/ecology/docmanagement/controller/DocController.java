@@ -2,7 +2,6 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
@@ -66,7 +66,7 @@ public class DocController {
         HashMap<String,Object> resutl = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Document document  : documentPage.getContent()) {
-            select2DtoList.add(new Select2Dto(document.getId(), document.getRegistrationNumber() +" - "+ document.getRegistrationDate()));
+            select2DtoList.add(new Select2Dto(document.getId(), document.getRegistrationNumber() +" - "+ Common.uzbekistanDateFormat.format(document.getRegistrationDate()) ));
         }
 
         Select2PaginationDto paginationDto = new Select2PaginationDto();

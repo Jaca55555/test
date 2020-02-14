@@ -64,7 +64,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.communicationToolId}" required>
+                                aria-hidden="true" th:field="${documentSub.communicationToolId}" required>
                             <option value="" th:text="#{communication_tool_select}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
@@ -72,7 +72,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хат юборилаётган ташкилот</label>
                         <label for="tags">Tags: </label>
-                        <input class="form-control" id="tags" th:field="*{documentSub.organizationName}" required>
+                        <input class="form-control" id="tags" th:field="${documentSub.organizationName}" required>
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
 
@@ -81,7 +81,7 @@
                     <hr class="m20-vertical">
                     <div class="col-sm-12 form-group">
                         <label class="control-label">Хатнинг қисқача мазмуни</label>
-                        <textarea th:field="*{documentDescription.content}" class="form-control" name="validation-text"
+                        <textarea th:field="*{content}" class="form-control" name="validation-text"
                                   placeholder="Хатнинг қисқача махзмунини киритинг."></textarea>
                     </div>
 
@@ -97,7 +97,7 @@
                     <div class="col-sm-6 form-group">
                         <label for="name" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{answerDocumentId}">
+                                aria-hidden="true" th:field="*{additionalDocumentId}">
                             <option value="" th:text="#{answer_document_select}"></option>
                             <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.documentView.name}"></option>
                         </select>

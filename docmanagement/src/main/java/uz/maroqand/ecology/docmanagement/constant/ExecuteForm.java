@@ -1,7 +1,9 @@
 package uz.maroqand.ecology.docmanagement.constant;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Utkirbek Boltaev on 13.02.2020.
@@ -17,6 +19,18 @@ public enum ExecuteForm {
     ExecuteForm(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    private static Map<Integer, ExecuteForm> executeFormMap;
+    static {
+        executeFormMap = new HashMap<>();
+        for (ExecuteForm executeForm : ExecuteForm.values()) {
+            executeFormMap.put(executeForm.getId(), executeForm);
+        }
+    }
+
+    public static ExecuteForm getExecuteForm(Integer id) {
+        return executeFormMap.get(id);
     }
 
     public static List<ExecuteForm> getExecuteFormList() {
