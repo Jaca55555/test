@@ -27,15 +27,19 @@ public class DocUrls {
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
-    private static final String IncomeMail = Prefix + "/income_mail";
-    public static final String IncomeMailList = IncomeMail + "/list";
-    public static final String IncomeMailListAjax = IncomeMail + "/list_ajax";
-    public static final String IncomeMailView = IncomeMail + "/view";
-    public static final String IncomeMailNew = IncomeMail + "/new";
-    public static final String IncomeMailEdit = IncomeMail + "/edit";
-    public static final String IncomeMailFileUpload = IncomeMail + "/file";
-    public static final String IncomeMailSpecial = IncomeMail + "/special";
-    public static final String IncomeMailAddTask = IncomeMail + "/task";
+    public static final String RegistrationAdditionalDocument = Prefix + Registration + "/add_document";
+    public static final String RegistrationOrganization = Prefix + Registration + "/organization";
+
+    private static final String IncomingRegistration = Prefix + Registration + Incoming;
+    public static final String IncomeMailList = IncomingRegistration + "/list";
+    public static final String IncomeMailListAjax = IncomingRegistration + "/list_ajax";
+    public static final String IncomeMailView = IncomingRegistration + "/view";
+    public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
+    public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
+    public static final String IncomeMailEdit = IncomingRegistration + "/edit";
+    public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
+    public static final String IncomeMailSpecial = IncomingRegistration + "/special";
+    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
