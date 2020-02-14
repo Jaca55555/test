@@ -307,7 +307,7 @@ html, body {
       border:solid rgb(98, 196, 98) 1px;
   }
   .select2-container--open.select2-container--below{
-    border: solid rgb(98, 196, 98) 1px;
+    border: none;
     /* border: solid #80bdff 1px;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); */
@@ -628,4 +628,13 @@ html, body {
 }
 .form-control:focus {
     background: #f4f7fa;
+}
+.file-block > .text-center:not(.file-icon-container) > span {
+    display: block;
+    width: 90%;
+    margin: auto;
+    white-space: nowrap;
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

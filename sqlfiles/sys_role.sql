@@ -1,0 +1,1 @@
+INSERT INTO public.sys_role (id, description, name) VALUES (1, '', 'admin');
