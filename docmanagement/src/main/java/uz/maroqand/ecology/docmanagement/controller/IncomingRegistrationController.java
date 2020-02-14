@@ -61,7 +61,7 @@ public class IncomingRegistrationController {
             FileService fileService,
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
-            DocumentSubService documentSubService
+            DocumentSubService documentSubService,
             DocumentTaskService taskService,
             DocumentLogService documentLogService,
             DocumentSubRepository documentSubRepository
@@ -127,16 +127,10 @@ public class IncomingRegistrationController {
         }
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        return DocTemplates.IncomingRegistrationView;
-        model.addAttribute("doc", document);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-
-        DocumentSub documentSub = documentSubRepository.findOneByDocumentId(document.getId());
-        if (documentSub!=null)
-            model.addAttribute("documentSub", documentSub);
-        return DocTemplates.IncomeMailView;
+        return DocTemplates.IncomingRegistrationView;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationNew, method = RequestMethod.GET)

@@ -237,7 +237,7 @@
                                     <span th:text="${log.createdBy.position}">Руководитель организации</span>
                                 </div>
                             </div>
-                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:ii')}">
+                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
                                 10.05.2019 - 09:35
                             </div>
                             <div class="w100"></div>
@@ -274,7 +274,7 @@
                 <div class="card-body">
                     <form th:action="${comment_url}" id="commentForm">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                        <input type="hidden" name="documentId" th:value="${doc.id}">
+                        <input type="hidden" name="documentId" th:value="${document.id}">
                         <div class="flex-space-between p0 m20-vertical">
                             <div>
                                 <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
