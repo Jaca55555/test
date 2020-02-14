@@ -4,6 +4,15 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
 
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link rel="stylesheet" href="/static/bootstrap-treeview.css">
+<style>
+    .panel{
+        overflow-y: auto;
+        overflow-x: auto;
+        width: 100%;
+        height: 600px;
+    }
+</style>
 </head>
 <body>
 <div class="background"></div>
@@ -66,7 +75,7 @@
                 <div class="flex-center">
                     <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
                     <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
-                    <a><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
+                    <a  data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
                     <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
                 </div>
             </div>
@@ -78,15 +87,15 @@
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_organization_name}">Жўнатувчи ташкилот:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.organization.name}">"Мароқанд" МЧЖ</span></div>
+                        <!--<div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.organization.name}">"Мароқанд" МЧЖ</span></div>-->
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.document_type}">Хужжат тури:</span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentSub.type}}">Тижорат таклифи</span></div>
+                        <!--<div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentSub.type}}">Тижорат таклифи</span></div>-->
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_name}">Жўнатувчи шахс:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.fullName}">Иванов Иван Иванович</span></div>
+                        <!--<div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.fullName}">Иванов Иван Иванович</span></div>-->
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_number}">Рўйхатга олиш рақами:</span></div>
@@ -94,7 +103,7 @@
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_position}">Жунатувчининг лавозими:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.position}">Ижрочи мухандис</span></div>
+                        <!--<div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.position}">Ижрочи мухандис</span></div>-->
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_date}">Рўйхатга олинган сана:</span></div>
@@ -640,7 +649,7 @@
                                 <a class="dropdown-item" href="#!">Action</a>
                                 <a class="dropdown-item" href="#!">Another action</a>
                                 <a class="dropdown-item" href="#!">Something else here</a>
-                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-divider fa fa-"></div>
                                 <a class="dropdown-item" href="#!">Separated link</a>
                             </div>
                         </div>
@@ -696,8 +705,210 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">
+                            Кирувчи хат №
+                            <span th:text="${doc.registrationNumber}"></span>
+                            <span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')}"></span>
+                    </span>
+                    </h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div class="panel">
+                            <div id="treeview-selectable" class="treeview"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
+                            <i class="fas fa-times"></i>
+                            <span th:text="#{sys_close}">Chiqish</span></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="/static/bootstrap-treeview.js"></script>
+
+<script type="text/javascript">
+
+
+    var alternateData = [
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 1',
+            tags: ['2'],
+            icon: 'fa fa-download',
+            nodes: [
+                {
+                    text: 'Child 1',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                    nodes: [
+                        {
+                            text: 'Parent 1',
+                            tags: ['2'],
+                            icon: 'fa fa-download',
+                            nodes: [
+                                {
+                                    text: 'Child 1',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                    nodes: [
+                                        {
+                                            text: 'Grandchild 1',
+                                            tags: ['6'],
+                                            icon: 'fa fa-download',
+                                        },
+                                        {
+                                            text: 'Grandchild 2',
+                                            tags: ['3'],
+                                            icon: 'fa fa-download',
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: 'Child 2',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                }
+                            ]
+                        },
+                        {
+                            text: 'Grandchild 1',
+                            tags: ['6'],
+                            icon: 'fa fa-download',
+                        },
+                        {
+                            text: 'Grandchild 2',
+                            tags: ['3'],
+                            icon: 'fa fa-download',
+                            state: {
+                                checked: false,
+                                disabled: false,
+                                expanded: false,
+                                selected: true,
+                                open: true,
+                            },
+                            selected:true,
+                        }
+                    ]
+                },
+                {
+                    text: 'Child 2',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                }
+            ]
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        }
+    ];
+
+    $(function() {
+        console.log("defaultData41="+alternateData);
+        var initSelectableTree = function() {
+            return $('#treeview-selectable').treeview({
+                data: alternateData,
+                selectedBackColor:'#5c66bf',
+                levels: 5,
+                // nodeIcon: 'fa fa-download',
+                // multiSelect: $('#chk-select-multi').is(':checked'),
+                onNodeSelected: function(event, node) {
+                    console.log(node.tags);
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
+                },
+                onNodeUnselected: function (event, node) {
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
+                },
+                onNodeCollapsed: function(event, node) {
+                    $.each(node.nodes, function() {
+                        if (this.state.selected) {
+                            $('#treeview-selectable').treeview('selectNode', [node.nodeId, {
+                                silent: true
+                            }]);
+                            return;
+                        }
+                    });
+                }
+            });
+        };
+        initSelectableTree();
+    });
+
+
+</script>
 
 </body>
 </html>
