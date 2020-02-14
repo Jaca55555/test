@@ -31,12 +31,12 @@ public class DocUrls {
     public static final String RegistrationOrganization = Prefix + Registration + "/organization";
 
     private static final String IncomingRegistration = Prefix + Registration + Incoming;
-    public static final String IncomeMailList = IncomingRegistration + "/list";
-    public static final String IncomeMailListAjax = IncomingRegistration + "/list_ajax";
-    public static final String IncomeMailView = IncomingRegistration + "/view";
+    public static final String IncomingRegistrationList = IncomingRegistration + "/list";
+    public static final String IncomingRegistrationView = IncomingRegistration + "/view";
     public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
     public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
-    public static final String IncomeMailEdit = IncomingRegistration + "/edit";
+    public static final String IncomingRegistrationEdit = IncomingRegistration + "/edit";
+    public static final String IncomingRegistrationEditTask = IncomingRegistration + "/edit_and_task";
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomeMailSpecial = IncomingRegistration + "/special";
     public static final String IncomeMailAddTask = IncomingRegistration + "/task";

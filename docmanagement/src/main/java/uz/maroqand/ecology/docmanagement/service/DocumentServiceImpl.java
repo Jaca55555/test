@@ -41,20 +41,15 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document createDoc(Document document) {
+        document.setCreatedAt(new Date());
         document.setDeleted(Boolean.FALSE);
-        documentRepository.save(document);
-        return document;
+        return documentRepository.save(document);
     }
 
     @Override
     public void update(Document document) {
         document.setUpdateAt(new Date());
         documentRepository.save(document);
-    }
-
-    @Override
-    public List<Document> findAllActive() {
-        return documentRepository.findAllByDeletedFalse();
     }
 
     @Override
@@ -162,11 +157,6 @@ public class DocumentServiceImpl implements DocumentService {
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
-    }
-
-    @Override
-    public List<Document> getList(){
-        return documentRepository.findAll();
     }
 
     @Override

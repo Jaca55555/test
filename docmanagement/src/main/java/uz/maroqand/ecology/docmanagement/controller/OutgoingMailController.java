@@ -66,9 +66,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
-
-
         return DocTemplates.OutgoingMailNew;
     }
 

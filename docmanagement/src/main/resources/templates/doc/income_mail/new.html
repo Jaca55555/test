@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <form th:action="${action_url}" th:object="${document}" th:method="post" class="card-block">
+            <form action="" th:object="${document}" th:method="post" class="card-block">
                 <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
                     <input type="hidden" th:field="*{documentSub.id}" th:value="*{documentSub.id}"/>
@@ -55,16 +55,16 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{registrationNumber}" required="required">
+                            <input type="text" class="form-control" th:field="*{docRegNumber}" required="required">
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_date}">Хат рўйхатга олинган сана</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="registrationDateStr"  th:value="${document.registrationDate!=null? #dates.format(document.registrationDate,'dd.MM.yyyy'):''}">
+                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
                             <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_communication_tool}"></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}" required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}">
                             <option value=""></option>
                             <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
@@ -95,7 +95,7 @@
                     </select>
                 </div>
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" id="newDescription" th:field="*{content}"></textarea>
+                    <textarea class="form-control" rows="4" name="content" th:text="*{content}"></textarea>
                 </div>
 
                 <div class="row">
@@ -169,7 +169,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item : ${executeForms}">
-                            <input type="radio" th:field="*{executeForm}" th:value="${item.id}" class="custom-control-input">
+                            <input type="radio" th:field="*{executeForm}" name="executeFormId" th:value="${item.id}" class="custom-control-input">
                             <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item.name}"></label>
                         </div>
                     </div>
@@ -181,6 +181,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="flex-center w100 row-wrap">

@@ -4,6 +4,7 @@ import lombok.Data;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.docmanagement.constant.ControlForm;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
 
 import javax.persistence.*;
@@ -61,14 +62,27 @@ public class Document {
     @Column(name = "document_view_id")
     private Integer documentViewId;
 
+    //hujjat statusi
+    @Column(name = "status")
+    private DocumentStatus status;
 
-    //registratsiya sanasi
+    //registratsiya sanasi(tizim tomonidan belgilanadi)
     @Column(name = "registration_date", columnDefinition = "timestamp without time zone")
     private Date registrationDate;
 
-    //registratsiya raqami
+    //registratsiya raqami(tizim tomonidan belgilanadi)
     @Column(name = "registration_number")
     private String registrationNumber;
+
+
+
+    //kiruvchi hujjat yoki qaror sanasi
+    @Column(name = "doc_reg_date", columnDefinition = "timestamp without time zone")
+    private Date docRegDate;
+
+    //kiruvchi hujjat yoki qaror raqami
+    @Column(name = "doc_reg_number")
+    private String docRegNumber;
 
     @Column(name = "content_id")
     private Integer contentId;

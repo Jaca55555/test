@@ -120,4 +120,11 @@ public class JournalServiceImpl implements JournalService {
         return journalRepository.save(journal);
     }
 
+    public String getRegistrationNumberByJournalId(Integer journalId) {
+        Journal journal = journalRepository.getOne(journalId);
+        journal.setNumbering(journal.getNumbering() + 1);
+        journalRepository.save(journal);
+        return journal.getPrefix() + journal.getNumbering() + journal.getSuffix();
+    }
+
 }
