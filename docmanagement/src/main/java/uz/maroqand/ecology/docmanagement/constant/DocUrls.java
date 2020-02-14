@@ -112,5 +112,11 @@ public class DocUrls {
      public static final String OutgoingMailNew = OutgoingMail + "/new";
      public static final String OutgoingMailList = OutgoingMail + "/list";
      public static final String OutgoingMailOrganizationList = OutgoingMail + "/organization_names";
-     public static final String OutgoingMailListAjax = OutgoingMail + "/ajax";
+     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
+     public static final String OutgoingMailView = OutgoingMail + "/view";
+     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
+     public static final String OutgoingMailFile = OutgoingMail + "/file";
+     public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
+     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
+     public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
 }

@@ -14,8 +14,8 @@ public class DocFilterDTO {
     private String correspondent;
     private Integer documentId;
     private String registrationNumber;
-    private String regsitrationDateBegin;
-    private String regsitrationDateEnd;
+    private String registrationDateBegin;
+    private String registrationDateEnd;
     private String controlCard;
     private Integer documentType;
     private String correspondentType;
@@ -29,7 +29,7 @@ public class DocFilterDTO {
     private String executeDateEnd;
     private Integer executeControlStatus;
     private Boolean insidePurposeStatus;
-    private Integer coexecutorStatus;
+    private Integer coExecutorStatus;
     private String replies;
 
     public String getContent() {

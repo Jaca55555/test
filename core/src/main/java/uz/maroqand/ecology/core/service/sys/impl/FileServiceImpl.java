@@ -187,6 +187,12 @@ public class FileServiceImpl implements FileService {
         return fileRepository.save(file);
     }
 
+    @Override
+    public void deleteById(Integer id){
+        fileRepository.deleteById(id);
+    }
+
+
     private void createAndSetNextUploadFolder() {
         String newCurrentDir = globalConfigs.getUploadedFilesFolder()
                 + "/" + uploadFolderYMFormat.format(new Date());
@@ -200,5 +206,6 @@ public class FileServiceImpl implements FileService {
     public File findByIdAndUploadUserId(Integer id, Integer userId){
         return fileRepository.findByIdAndUploadedByIdAndDeletedFalse(id, userId);
     }
+
 
 }
