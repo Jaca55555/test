@@ -2,6 +2,8 @@ package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
@@ -49,5 +51,9 @@ public class DocumentTaskServiceImpl implements DocumentTaskService
     @Override
     public DocumentTask update(DocumentTask task) {
         return taskRepository.save(task);
+    }
+
+    public DocumentTask getTaskByUser(Integer docId, Integer userId) {
+        return taskRepository.findByDocumentIdAndChiefId(docId, userId);
     }
 }

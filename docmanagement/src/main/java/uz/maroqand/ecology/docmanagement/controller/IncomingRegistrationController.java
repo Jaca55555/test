@@ -20,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -45,6 +46,9 @@ public class IncomingRegistrationController {
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentSubService documentSubService;
+    private final DocumentTaskService taskService;
+    private final DocumentLogService documentLogService;
+    private final DocumentSubRepository documentSubRepository;
 
     @Autowired
     public IncomingRegistrationController(
@@ -58,9 +62,15 @@ public class IncomingRegistrationController {
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
             DocumentSubService documentSubService
+            DocumentTaskService taskService,
+            DocumentLogService documentLogService,
+            DocumentSubRepository documentSubRepository
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
+        this.taskService = taskService;
+        this.documentLogService = documentLogService;
+        this.documentSubRepository = documentSubRepository;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
@@ -88,16 +98,18 @@ public class IncomingRegistrationController {
         Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        Integer userId = userService.getCurrentUserFromContext().getId();
         for (Document document : documentList) {
+            DocumentTask task = taskService.getTaskByUser(document.getId(), userId);
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    "docStatus",
-                    "Resolution and parcipiants"
+                    task!=null ? Common.uzbekistanDateFormat.format(task.getDueDate()):"",
+                    task!=null ? task.getStatus():"",
+                    task!=null ? task.getContent():""
             });
         }
 
@@ -116,6 +128,15 @@ public class IncomingRegistrationController {
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.IncomingRegistrationView;
+        model.addAttribute("doc", document);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+
+        DocumentSub documentSub = documentSubRepository.findOneByDocumentId(document.getId());
+        if (documentSub!=null)
+            model.addAttribute("documentSub", documentSub);
+        return DocTemplates.IncomeMailView;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationNew, method = RequestMethod.GET)
