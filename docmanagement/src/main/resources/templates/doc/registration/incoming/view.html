@@ -3,6 +3,15 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link rel="stylesheet" href="/static/bootstrap-treeview.css">
+<style>
+    .panel{
+        overflow-y: auto;
+        overflow-x: auto;
+        width: 100%;
+        height: 600px;
+    }
+</style>
 </head>
 <body>
 <div class="background"></div>
@@ -510,7 +519,210 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">
+                            Кирувчи хат №
+                            <span th:text="${doc.registrationNumber}"></span>
+                            <span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')}"></span>
+                    </span>
+                    </h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div class="panel">
+                            <div id="treeview-selectable" class="treeview"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
+                            <i class="fas fa-times"></i>
+                            <span th:text="#{sys_close}">Chiqish</span></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="/static/bootstrap-treeview.js"></script>
+
+<script type="text/javascript">
+
+
+    var alternateData = [
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 1',
+            tags: ['2'],
+            icon: 'fa fa-download',
+            nodes: [
+                {
+                    text: 'Child 1',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                    nodes: [
+                        {
+                            text: 'Parent 1',
+                            tags: ['2'],
+                            icon: 'fa fa-download',
+                            nodes: [
+                                {
+                                    text: 'Child 1',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                    nodes: [
+                                        {
+                                            text: 'Grandchild 1',
+                                            tags: ['6'],
+                                            icon: 'fa fa-download',
+                                        },
+                                        {
+                                            text: 'Grandchild 2',
+                                            tags: ['3'],
+                                            icon: 'fa fa-download',
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: 'Child 2',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                }
+                            ]
+                        },
+                        {
+                            text: 'Grandchild 1',
+                            tags: ['6'],
+                            icon: 'fa fa-download',
+                        },
+                        {
+                            text: 'Grandchild 2',
+                            tags: ['3'],
+                            icon: 'fa fa-download',
+                            state: {
+                                checked: false,
+                                disabled: false,
+                                expanded: false,
+                                selected: true,
+                                open: true,
+                            },
+                            selected:true,
+                        }
+                    ]
+                },
+                {
+                    text: 'Child 2',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                }
+            ]
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        }
+    ];
+
+    $(function() {
+        console.log("defaultData41="+alternateData);
+        var initSelectableTree = function() {
+            return $('#treeview-selectable').treeview({
+                data: alternateData,
+                selectedBackColor:'#5c66bf',
+                levels: 5,
+                // nodeIcon: 'fa fa-download',
+                // multiSelect: $('#chk-select-multi').is(':checked'),
+                onNodeSelected: function(event, node) {
+                    console.log(node.tags);
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
+                },
+                onNodeUnselected: function (event, node) {
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
+                },
+                onNodeCollapsed: function(event, node) {
+                    $.each(node.nodes, function() {
+                        if (this.state.selected) {
+                            $('#treeview-selectable').treeview('selectNode', [node.nodeId, {
+                                silent: true
+                            }]);
+                            return;
+                        }
+                    });
+                }
+            });
+        };
+        initSelectableTree();
+    });
+
+
+</script>
+
 </body>
 </html>
