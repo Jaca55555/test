@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -30,26 +29,26 @@ public class InnerRegistrationController {
     private final UserService userService;
     private final FileService fileService;
     private final FolderService folderService;
-    private final OrganizationService organizationService;
+    private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final JournalService journalService;
 
     @Autowired
-    public InnerRegistrationController(DocumentService documentService, DocumentTypeService documentTypeService, CommunicationToolService communicationToolService, UserService userService, FileService fileService, FolderService folderService, OrganizationService organizationService, OrganizationService organizationService1, DocumentDescriptionService documentDescriptionService, JournalService journalService) {
+    public InnerRegistrationController(DocumentService documentService, DocumentTypeService documentTypeService, CommunicationToolService communicationToolService, UserService userService, FileService fileService, FolderService folderService, DocumentOrganizationService documentOrganizationService, DocumentDescriptionService documentDescriptionService, JournalService journalService) {
         this.documentService = documentService;
         this.documentTypeService = documentTypeService;
         this.userService = userService;
         this.fileService = fileService;
         this.folderService = folderService;
-        this.organizationService = organizationService1;
+        this.documentOrganizationService = documentOrganizationService;
         this.documentDescriptionService = documentDescriptionService;
         this.journalService = journalService;
     }
 
     @RequestMapping(DocUrls.InnerRegistrationList)
     public String getIncomeListPage(Model model) {
+
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
-        model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
         model.addAttribute("chief", userService.getEmployeeList());
@@ -88,12 +87,7 @@ public class InnerRegistrationController {
 
     @RequestMapping(DocUrls.InnerRegistrationNew)
     public String getInnerRegistrationNewPage(Model model) {
-        User user = userService.getCurrentUserFromContext();
-        if (user == null) {
-            return "redirect: " + DocUrls.InnerRegistrationList;
-        }
 
-        model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("doc", new Document());
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("action_url", DocUrls.InnerRegistrationNew);
@@ -102,7 +96,6 @@ public class InnerRegistrationController {
         model.addAttribute("folder_list", folderService.getFolderList());
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executeController", userService.getEmployeeList());
-        model.addAttribute("doc_list", documentService.findAllActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         return DocTemplates.InnerRegistrationNew;
@@ -118,9 +111,6 @@ public class InnerRegistrationController {
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
-        if (user == null) {
-            return "redirect: " + DocUrls.InnerRegistrationList;
-        }
         Set<File> files = new HashSet<>();
         for (Integer fileId : fileIds) {
             files.add(fileService.findById(fileId));

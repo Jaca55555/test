@@ -5,21 +5,19 @@ import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by Namazov Jamshid
  * email: <jamwid07@mail.ru>
  * date: 11.02.2020
  */
-
 @Data
 @Entity
-@Table(name = "document_task")
-public class DocumentTask {
+@Table(name = "document_task_participant")
+public class DocumentTaskSub {
 
     @Transient
-    private static final String sequenceName = "document_task_id_seq";
+    private static final String sequenceName = "document_task_participant_id_seq";
 
     @Id
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
@@ -33,18 +31,39 @@ public class DocumentTask {
     @Column(name = "document_id")
     private Integer documentId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_task_id", insertable = false, updatable = false)
+    private Document task;
+
+    @Column(name = "document_task_id")
+    private Integer taskId;
+
+
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chief_id", insertable = false, updatable = false)
-    private User chief;
+    @Column(name = "status")
+    private Integer status;
 
-    @Column(name = "chief_id")
-    private Integer chiefId;
+
+    //yuborgan user, User.id
+    @Column(name = "sender_id")
+    private Integer senderId;
+
+    //qabul qiluvshi
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", insertable = false, updatable = false)
+    private User receiver;
+
+    @Column(name = "receiver_id")
+    private Integer receiverId;
+
+    //User.departmentId (receiver)
+    @Column(name = "department_id")
+    private Integer departmentId;
 
     /*
      * Technical Fields

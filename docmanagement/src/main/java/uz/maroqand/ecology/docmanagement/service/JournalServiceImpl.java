@@ -43,7 +43,7 @@ public class JournalServiceImpl implements JournalService {
     @Cacheable(value = "journalGetById", key = "#id", condition="#id != null", unless="#result == null")
     public Journal getById(Integer id) throws IllegalArgumentException {
         if (id==null)return null;
-        return updateByIdFromCache(id);
+        return journalRepository.getOne(id);
     }
 
     @Override
@@ -56,19 +56,13 @@ public class JournalServiceImpl implements JournalService {
     @Override
     @Cacheable("journalGetStatusActive")
     public List<Journal> getStatusActive() {
-        return setStatusActive();
-    }
-
-    @CachePut("journalGetStatusActive")
-    public List<Journal> setStatusActive() {
         return journalRepository.findByStatusTrue();
     }
 
-
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
-    public List<Journal> removeStatusActive() {
-        return journalRepository.findAll();
+    public List<Journal> updateStatusActive() {
+        return journalRepository.findByStatusTrue();
     }
 
     @Override
