@@ -87,7 +87,6 @@
                     </div>
                 </div>
 
-
                 <div class="col-sm-12 form-group">
                     <label class="control-label" th:text="#{doc_incoming.reg_description}"></label>
                     <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}">
@@ -95,14 +94,8 @@
                         <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
                     </select>
                 </div>
-<<<<<<< HEAD
                 <div class="col-sm-12 form-group new-desc">
                     <textarea class="form-control" rows="4" id="newDescription" th:field="*{content}"></textarea>
-=======
-
-                <div class="col-sm-12 form-group new-desc d-none">
-                    <textarea class="form-control" rows="4" id="newDescription" th:placeholder="#{doc.write_new_description}" th:field="*{documentDescription.content}"></textarea>
->>>>>>> bf00e7f75e5410f9edf8af237d2e7b7fb631c61c
                 </div>
 
                 <div class="row">
