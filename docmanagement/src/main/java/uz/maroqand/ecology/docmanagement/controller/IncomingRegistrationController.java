@@ -164,7 +164,6 @@ public class IncomingRegistrationController {
                 files.add(fileService.findById(fileId));
             }
         }
-        System.out.println("content="+content);
 
         Document document = new Document();
         document.setJournalId(journalId);
