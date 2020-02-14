@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="ru">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
@@ -24,8 +24,8 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
-                <h5 class="mb-0" th:if="${doc.id==null}" th:text="#{doc.income_reg}">Кирувчи хатни рўйхатга олиш</h5>
-                <h5 class="mb-0" th:if="${doc.id!=null}" th:text="#{doc.income_edit}">Кирувчи хатни тахрирлаш - <span th:text="${doc.registrationNumber}">IN-123456-MRQ</span></h5>
+                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
                 <div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
@@ -33,131 +33,95 @@
                     </div>
                 </div>
             </div>
-            <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
-            <form th:action="${action_url}" th:object="${doc}" th:method="post" class="card-block">
-                <div th:if="${doc.id != null}">
+            <form th:action="${action_url}" th:object="${document}" th:method="post" class="card-block">
+                <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
                     <input type="hidden" th:field="*{documentSub.id}" th:value="*{documentSub.id}"/>
                     <input type="hidden" th:field="*{documentSub.documentId}" th:value="*{documentSub.documentId}"/>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:for="${#ids.next('journalId')}"
-                               th:text="#{doc.income_reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{journalId}">
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
                             <option value=""></option>
-                            <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
+                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_reg_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_document_view}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required">
+                            <option value=""></option>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{registrationNumber}">
+                            <input type="text" class="form-control" th:field="*{registrationNumber}" required="required">
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_reg_type}"
-                               th:for="${#ids.next('documentType')}">Кирувчи хатларни тури</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentTypeId}">
-                            <option value=""></option>
-                            <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_reg_date}">Хат рўйхатга олинган сана</label>
+
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc.income_reg_date}"
-                                   data-dtp="dtp_lq7TC" name="registrationDateStr"  th:value="${doc.registrationDate!=null? #dates.format(doc.registrationDate,'dd.MM.yyyy'):''}">
-                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="registrationDateStr"  th:value="${document.registrationDate!=null? #dates.format(document.registrationDate,'dd.MM.yyyy'):''}">
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:for="${#ids.next('authorName')}" th:text="#{doc.income_author_name}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{documentSub.fullName}">
-                            <i class="gray-arrow fas  fa-map color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:for="${#ids.next('authorPosition')}" th:text="#{doc.income_author_position}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{documentSub.position}">
-                            <i class="gray-arrow fas  fa-map color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_author_type}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" name="documentSubType" th:value="*{documentSub.type}">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_communication_tool}"></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}" required="required">
                             <option value=""></option>
-                            <option th:each="type : ${doc_sub_types}" th:value="${type}" th:text="#{${type.name}}" th:attrappend="selected=${type == doc.documentSub.type}?@{selected}"></option>
+                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 col-lg-3 form-group">
-                        <label class="control-label" th:text="#{doc.income_author_organization}"></label>
-                        <input class="form-control" tabindex="-1" id="orgName" th:field="*{documentSub.organizationName}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc.income_communication_type}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentSub.communicationToolId}">
-                            <option value=""></option>
-                            <option th:each="i: ${communication_list}" th:value="${i.id}" th:text="${i.name}"></option>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                            <option value="" th:text="#{sys_select}"></option>
                         </select>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label" th:for="${#ids.next('authorPosition')}" th:text="#{doc.income_author_address}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" th:field="*{documentSub.address}">
-                            <i class="gray-arrow fas  fa-map color-gray"></i>
-                        </div>
+                        <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
+                        <!--<input class="form-control" tabindex="-1" id="orgName" th:field="${documentSub.organizationName}">-->
                     </div>
                 </div>
+
                 <div class="col-sm-12 form-group">
-                    <label class="control-label" th:text="#{doc.income_description}"></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                            aria-hidden="true" th:field="*{documentDescription}" id="description">
+                    <label class="control-label" th:text="#{doc_incoming.reg_description}"></label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}">
                         <option value=""></option>
-                        <option th:each="type : ${description_list}" th:value="${type.id}" th:text="#{${type.content}}"></option>
+                        <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
                     </select>
                 </div>
-                <div class="col-sm-12 form-group new-desc d-none">
-                    <textarea class="form-control" id="newDescription" th:field="*{documentDescription.content}"></textarea>
+                <div class="col-sm-12 form-group new-desc">
+                    <textarea class="form-control" rows="4" id="newDescription" th:field="*{content}"></textarea>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
-                        <label for="name" class="control-label" th:text="#{doc.income_additional_doc}">Хужжат раками</label>
-                        <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                    aria-hidden="true" th:field="*{answerDocumentId}">
-                                <option value=""></option>
-                                <option th:each="i: ${doc_list}" th:value="${i.id}" th:text="${i.registrationNumber}"></option>
-                            </select>
-                        </div>
+                        <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
+                        <select class="form-control" id="additionalDocumentId">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="control-label" th:text="#{doc_incoming.reg_performer_name}"> </label>
+                        <input type="text" class="form-control" th:field="*{performerName}" >
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
-                        <label class="control-label" th:text="#{doc.income_performer_name}">Хужжат раками</label>
-                        <input type="text" class="form-control" th:field="*{performerName}">
-                    </div>
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label class="control-label" th:text="#{doc.income_performer_phone}">Хужжат раками</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_performer_phone}"> </label>
                         <input type="text" class="form-control" th:field="*{performerPhone}">
                     </div>
-
                 </div>
                 <hr class="m30-vertical">
-                <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <h5 class="mb-0 card-header no-border" th:text="#{doc_incoming.reg_files}" style="padding: 5px 20px;">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20" id="file-container">
                     <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
                     </select>
-                    <div class="file-block" th:each="file: ${doc.contentFiles}">
+                    <div class="file-block" th:each="file: ${document.contentFiles}">
                         <div class="text-right"><span class='fas fa-trash-alt'></span></div>
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
@@ -172,52 +136,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="border-danger m20 p20">
+                <div class="border-warning m20 p20">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
-                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}"></label>
+                        <label class="custom-control-label" for="customCheck1" th:text="#{doc_incoming.reg_inside_purpose}"></label>
                     </div>
                     <div class="m20-vertical">
                         <span th:text="#{sys_attention}">Диккат:</span>
                         <br>
-                        <span th:text="#{doc.income_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                        <span th:text="#{doc_incoming.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
                     </div>
-
                 </div>
+
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc.reciever_chief}"></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{task.chiefId}">
+                        <label class="control-label" th:text="#{doc_incoming.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" name="managerId"  required="required">
                             <option value=""></option>
-                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            <option th:each="manager: ${managerUserList}" th:value="${manager.id}" th:text="${manager.getFullName()}" th:selected="${document.managerId!=null && manager.id==document.managerId}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" name="executeController">
+                        <label class="control-label" th:text="#{doc_incoming.reg_control}">Ижро назорати учун маъсул шахс</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" name="controlId">
                             <option value=""></option>
-                            <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
+                            <option th:each="control: ${controlUserList}" th:value="${control.id}" th:text="${control.getFullName()}" th:selected="${document.controlId!=null && control.id==document.controlId}"></option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Хатнинг ижроси шакли</label>
-                        <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${execute_forms}">
-                            <input type="radio" th:field="*{executeForm}" th:value="${item[0]}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item[1]}"></label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${executeForms}">
+                            <input type="radio" th:field="*{executeForm}" th:value="${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item.name}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Назорат карточкасининг шакли</label>
-                        <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${control_forms}">
-                            <input type="radio" th:field="*{controlForm}" th:value="${item[0]}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('controlForm')}" th:text="${item[1]}"></label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${controlForms}">
+                            <input type="radio" th:field="*{controlForm}" th:value="${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${#ids.prev('controlForm')}" th:text="${item.name}"></label>
                         </div>
                     </div>
                 </div>
@@ -225,13 +185,9 @@
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
-                                th:if="${doc.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
-                                th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
-                        <button class="btn btn-success m10-vertical m20-horizontal" type="button"
-                                th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailAddTask}"
-                                id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
             </form>
@@ -307,7 +263,26 @@
             if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
             else $('#newDescription').attr('disabled', 'disabled');
             $(this).submit();
-        })
+        });
+
+        $('#documentOrganizationId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+        $('#additionalDocumentId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
     });
 </script>
 

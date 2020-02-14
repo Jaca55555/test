@@ -1,4 +1,3 @@
-/*main css css*/
 body {
     background: #f4f7fa;
     overflow-x: hidden;
@@ -79,7 +78,7 @@ hr {
     margin:20px;
 }
 .p20 {
-    padding:20px;
+    padding:10px 20px;
 }
 .p10 {
     padding:10px;
@@ -107,8 +106,8 @@ hr {
     margin-bottom: 20px;
 }
 .m30-vertical {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .p10-horizontal {
     padding-top:10px;
@@ -244,7 +243,7 @@ h4.card-title {
 .control-label {
     display: inline-flex;
     align-items: flex-end;
-    height:40px;
+    /*height:40px;*/
     color:black;
 }
 
@@ -307,7 +306,7 @@ html, body {
       border:solid rgb(98, 196, 98) 1px;
   }
   .select2-container--open.select2-container--below{
-    border: none;
+    border: solid rgb(98, 196, 98) 1px;
     /* border: solid #80bdff 1px;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); */
@@ -330,7 +329,7 @@ html, body {
        width:150px;
        height:150px;
        border:2px solid #ced4da;
-       margin:10px 20px;
+       margin-right:20px;
    }
    .text-center {
        text-align: center;
@@ -400,8 +399,8 @@ html, body {
    .gray-arrow {
         position: absolute;
         font-size: 20px;
-        top:5px;
-        right:8px;
+        top:10px;
+        right:10px;
    }
     .gray-search {
         position: absolute;
@@ -418,7 +417,7 @@ html, body {
    .calendar-img2 {
     position: absolute;
     width:20px;
-    top:5px;
+    top:10px;
     right:10px;
     }
     .pointer {
@@ -494,9 +493,9 @@ html, body {
         font-size: 20px;
         margin:auto;
     }
-    .form-group {
+    /*.form-group {
         margin-bottom: 5px;
-    }
+    }*/
 
 
 
@@ -628,13 +627,4 @@ html, body {
 }
 .form-control:focus {
     background: #f4f7fa;
-}
-.file-block > .text-center:not(.file-icon-container) > span {
-    display: block;
-    width: 90%;
-    margin: auto;
-    white-space: nowrap;
-    height: 20px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }

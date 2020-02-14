@@ -17,7 +17,7 @@ public interface DocumentOrganizationService {
 
     DocumentOrganization getById(Integer id);
 
-    DocumentOrganization getByName(String name);
+    List<String> getDocumentOrganizationNames();
 
     List<String> getDocumentOrganizationNames();
 
@@ -38,5 +38,6 @@ public interface DocumentOrganizationService {
     DocumentOrganization create(DocumentOrganization communicationTool);
 
     DocumentOrganization update(DocumentOrganization communicationTool);
+
 
 }

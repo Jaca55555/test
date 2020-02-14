@@ -9,8 +9,6 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
-import uz.maroqand.ecology.docmanagement.repository.DocumentDescriptionRepository;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 
@@ -25,18 +23,15 @@ import java.util.List;
 /**
  * Created by Utkirbek Boltaev on 01.04.2019.
  * (uz)
- * (ru)
  */
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
-    private final DocumentDescriptionRepository descriptionRepository;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository, DocumentDescriptionRepository descriptionRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
-        this.descriptionRepository = descriptionRepository;
     }
 
     @Override
@@ -60,11 +55,6 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<Document> findAllActive() {
         return documentRepository.findAllByDeletedFalse();
-    }
-
-    @Override
-    public List<DocumentDescription> getDescriptionsList() {
-        return descriptionRepository.findAll();
     }
 
     @Override
@@ -180,8 +170,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<Document> findFiltered(Pageable pageable){
-        return documentRepository.findAll(pageable);
+    public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
+        if(name!=null){
+            return documentRepository.findByRegistrationNumberLike(name ,pageable);
+        }else {
+            return documentRepository.findAll(pageable);
+        }
     }
 
 }

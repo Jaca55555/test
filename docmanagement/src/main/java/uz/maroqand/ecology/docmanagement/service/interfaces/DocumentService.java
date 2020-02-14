@@ -11,15 +11,12 @@ import java.util.List;
 /**
  * Created by Utkirbek Boltaev on 01.04.2019.
  * (uz)
- * (ru)
  */
 public interface DocumentService {
 
     Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
 
-   List<Document> findAllActive();
-
-    List<DocumentDescription> getDescriptionsList();
+    List<Document> findAllActive();
 
     Document getById(Integer id);
 
@@ -29,5 +26,6 @@ public interface DocumentService {
 
     List<Document> getList();
 
-    Page<Document> findFiltered(Pageable pageable);
+    Page<Document> getRegistrationNumber(String name, Pageable pageable);
+
 }

@@ -19,4 +19,10 @@ public class OutgoingController {
         return DocTemplates.OutgoingMailList;
     }
 
+    @RequestMapping(DocUrls.OutgoingView)
+    public String getOutgoingViewPage(Model model) {
+
+        return DocTemplates.OutgoingView;
+    }
+
 }

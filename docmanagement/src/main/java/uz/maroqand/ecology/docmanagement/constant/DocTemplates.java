@@ -12,6 +12,17 @@ public class DocTemplates {
 
     public static final String Dashboard = Prefix + "/office";
 
+    //kiruvchi xatlar
+    public static final String IncomingList = Prefix + Incoming + "/list";
+    public static final String IncomingView = Prefix + Incoming + "/view";
+
+    //chiquvchi xatlar
+    public static final String OutgoingList = Prefix + Outgoing + "/list";
+    public static final String OutgoingView = Prefix + Outgoing + "/view";
+
+    private static final String UserManagement = Prefix + "/user_mngm";
+    public static final String Controllers = UserManagement + "/controllers";
+
     private static final String IncomeMail = Prefix + "/income_mail";
     public static final String IncomeMailList = IncomeMail + "/list";
     public static final String IncomeMailView = IncomeMail + "/view";

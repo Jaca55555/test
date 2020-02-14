@@ -2,6 +2,9 @@ package uz.maroqand.ecology.docmanagement.entity;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.docmanagement.constant.ControlForm;
+import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +28,15 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    //xat qaysi tashkilotga tegishli ekanligi(tizimdan foydalanuvchi tashkilotlardan)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id", insertable = false, updatable = false)
+    private Organization organization;
+
+    @Column(name = "organization_id")
+    private Integer organizationId;
+
+    //kiruvchi, chiquvchi, ichki xujjat
     //Тип документа
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
@@ -49,11 +61,6 @@ public class Document {
     @Column(name = "document_view_id")
     private Integer documentViewId;
 
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DocumentSub documentSub;
-
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DocumentTask task;
 
     //registratsiya sanasi
     @Column(name = "registration_date", columnDefinition = "timestamp without time zone")
@@ -63,10 +70,11 @@ public class Document {
     @Column(name = "registration_number")
     private String registrationNumber;
 
-    //Краткое содержание документа
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "document_description_id", nullable = false, updatable = false)
-    private DocumentDescription documentDescription;
+    @Column(name = "content_id")
+    private Integer contentId;
+
+    @Column(name = "content")
+    private String content;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "document_jt_content_files",
@@ -75,21 +83,10 @@ public class Document {
     private Set<File> contentFiles;
 
 
+
     //Ушбу хатга қўшимча тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
-
-    //Ушбу хатга жавоб тариқасида юборилган (агар мавжуд бўлса)
-    @Column(name = "answer_document_id")
-    private Integer answerDocumentId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "answer_document_id", insertable = false, updatable = false)
-    private Document answerDocument;
-
-    //Для внутренного использования
-    @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
-    private Boolean insidePurpose;
 
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")
@@ -100,18 +97,27 @@ public class Document {
     private String performerPhone;
 
 
-    //restricted = true, Ko'rish kechlangan
-    @Column(name = "restricted", columnDefinition = "boolean DEFAULT true")
-    private Boolean restricted;
 
+    //Хатнинг ижроси шакли
     @Column(name = "execute_form")
-    private String executeForm;
+    private ExecuteForm executeForm;
 
+    //Назорат карточкасининг шакли
     @Column(name = "control_form")
-    private String controlForm;
+    private ControlForm controlForm;
 
-    @Column(name = "special_control", columnDefinition = "boolean DEFAULT false")
-    private Boolean specialControl;
+    //Для внутренного использования
+    //Хужжат фақат хизмат доирасида фойдаланиш учун мулжалланган
+    @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
+    private Boolean insidePurpose;
+
+    //Кирувчи хатни қабул қилиш учун маъсул рахбар
+    @Column(name = "manager_id")
+    private Integer managerId;
+
+    //Ижро назорати учун маъсул шахс
+    @Column(name = "control_id")
+    private Integer controlId;
 
     /*
      * Technical Fields

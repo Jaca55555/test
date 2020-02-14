@@ -26,6 +26,10 @@
         <div class="card">
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0" th:text="#{doc.doc_type_list_heading}"></h5>
+                <div>
+                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocTypeNew}" class="btn btn-rounded btn-success btn-sm ml-2 m0" th:text="#{doc.new_document_type}"></a>
+                </div>
+
             </div>
             <div class="card-body">
                 <!-- [ FIlter ] start -->
