@@ -33,6 +33,10 @@ public class DocumentTask {
     @Column(name = "document_id")
     private Integer documentId;
 
+    //TaskStatus
+    @Column(name = "status")
+    private Integer status;
+
     @Column(name = "content", columnDefinition = "text")
     private String content;
 

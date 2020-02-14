@@ -45,6 +45,11 @@ public class DocumentTaskSub {
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
+    //TaskSubType
+    @Column(name = "type")
+    private Integer type;
+
+    //TaskSubStatus
     @Column(name = "status")
     private Integer status;
 
