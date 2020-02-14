@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.core.entity.sys.Organization;
@@ -45,7 +46,7 @@ public class OutgoingMailController {
     private final UserService userService;
     private final DocumentOrganizationService documentOrganizationService;
     private final FileService fileService;
-
+    private final DepartmentService departmentService;
 
     @Autowired
     public OutgoingMailController(
@@ -56,7 +57,8 @@ public class OutgoingMailController {
             CommunicationToolService communicationToolService,
             UserService userService,
             DocumentOrganizationService documentOrganizationService,
-            FileService fileService
+            FileService fileService,
+            DepartmentService departmentService
             ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -66,17 +68,21 @@ public class OutgoingMailController {
         this.userService = userService;
         this.documentOrganizationService = documentOrganizationService;
         this.fileService = fileService;
+        this.departmentService = departmentService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
     public String newOutgoingMail(Model model){
-        Document document = new Document();
-        model.addAttribute("document", document);
+
+        model.addAttribute("document", new Document());
         model.addAttribute("journal", journalService.getStatusActive());
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
         model.addAttribute("documents_", documentService.getList());
+        Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
+        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
+        model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
 
         return DocTemplates.OutgoingMailNew;
     }

@@ -88,10 +88,11 @@
                     <div class="row">
                         <div class="col-sm-6 form-group ">
                         <label for="name" class="control-label">Хат жунатаётган булим номи</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control">
-                            <i class="gray-arrow fas  fa-search color-gray"></i>
-                        </div>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{departmentId}" multiple>
+                                <option value="" th:text="#{department_id_select}"></option>
+                                <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                            </select>
                     </div>
                     <div class="col-md-6"></div>
                     <div class="col-sm-6 form-group">
@@ -99,7 +100,7 @@
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{answerDocumentId}" multiple>
                             <option value="" th:text="#{answer_document_select}"></option>
-                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.documentView.name}"></option>
+                            <option th:each="document_: ${documents_}" th:value="${document_.id}" th:text="${document_.registrationNumber + '   ' + #dates.format(document_.registrationDate, 'dd.MM.yyyy')} "></option>
                         </select>
                     </div>
                     <div class="col-md-6"></div>

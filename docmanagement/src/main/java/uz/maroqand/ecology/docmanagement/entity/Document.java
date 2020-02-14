@@ -131,4 +131,6 @@ public class Document {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
+    @Column(name = "department_id")
+    private Integer departmentId;
 }
