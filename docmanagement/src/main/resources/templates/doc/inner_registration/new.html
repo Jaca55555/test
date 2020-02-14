@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="ru">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
@@ -37,14 +37,13 @@
             <form th:action="${action_url}" th:object="${doc}" th:method="post" class="card-block">
                 <div th:if="${doc.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
-                    <input type="hidden" th:field="*{documentSub.id}" th:value="*{documentSub.id}"/>
-                    <input type="hidden" th:field="*{documentSub.documentId}" th:value="*{documentSub.documentId}"/>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжатлар категориясини танланг</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="document_category">
-                            <option value="Ички хужжатлар тўплами"></option>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
+                            <option value=""></option>
+                            <option th:each="journal : ${journalList}" th:if="${journal.documentType.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum).InnerDocuments}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
@@ -73,8 +72,9 @@
 
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value="Вазирлар махкамаси"></option>
+                        <select id="organizationId" class="singleSelect col-sm-12" required="" th:field="*{organizationId}">
+                            <option value="" th:text="#{sys_select}"></option>
+                            <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}" th:selected="${doc.organizationId!=null and doc.organizationId==organization.id}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
@@ -84,22 +84,21 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="col-sm-12 form-group">
                     <label class="control-label" th:text="#{doc.income_description}"></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{documentDescription}" id="description">
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{contentId}">
                         <option value=""></option>
-                        <option th:each="type : ${description_list}" th:value="${type.id}" th:text="#{${type.content}}"></option>
+                        <option th:each="type : ${descriptionList}" th:value="${type.id}" th:text="${type.content}"></option>
                     </select>
                 </div>
 
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" id="newDescription" th:field="*{documentDescription.content}"></textarea>
+                    <textarea class="form-control" rows="4" th:field="*{content}"></textarea>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        <label for="name" class="control-label">Ушбу хужжатга алоқадор бошқа хужжатлар рўйхати (агар мавжуд бўлса)</label>
+                        <label class="control-label">Ушбу хужжатга алоқадор бошқа хужжатлар рўйхати (агар мавжуд бўлса)</label>
                         <div class="col-sm-12 p0">
                             <input class="form-control" type="text" placeholder="Хужжат рақамини киритинг ёки рўйхатдан танлаш учун қидирув тугмасини босинг">
                         </div>
@@ -120,7 +119,7 @@
                     </div>
                     <div class="file-block flex-center file-button">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <span class="fas fa-plus"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
                         </div>
                     </div>
@@ -142,7 +141,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжатни қабул қилиш учун маъсул рахбар</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{task.chiefId}">
+                                aria-hidden="true">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
@@ -158,19 +157,17 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Хатнинг ижроси шакли</label>
-                        <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${execute_forms}">
-                            <input type="radio" th:field="*{executeForm}" th:value="${item[0]}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('executeForm')}" th:text="${item[1]}"></label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${T(uz.maroqand.ecology.docmanagement.constant.ExecuteForm).values()}">
+                            <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${'executeForm' + item.id}" th:text="${item.name}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Назорат карточкасининг шакли</label>
-                        <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${control_forms}">
-                            <input type="radio" th:field="*{controlForm}" th:value="${item[0]}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="${#ids.prev('controlForm')}" th:text="${item[1]}"></label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${T(uz.maroqand.ecology.docmanagement.constant.ControlForm).values()}">
+                            <input type="radio" name="controlForm" th:id="${'controlForm' + item.id}" th:value="${item}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="${'controlForm' + item.id}" th:text="${item.name}"></label>
                         </div>
                     </div>
                 </div>
@@ -183,7 +180,7 @@
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
                                 th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
                         <button class="btn btn-success m10-vertical m20-horizontal" type="button"
-                                th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailAddTask}"
+                                th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}"
                                 id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
@@ -200,18 +197,14 @@
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
-        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
+        $('#content option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
         $('#orgName').autocomplete({
             minLength: 0,
             source: [[${organizations}]]
         });
 
-        function setPlaceHolders(){
-            $('')
-        }
-
-        $('.file-button, #addFileButton').on('click', function () {
-            $('#addFile').trigger('click');
+        $('.file-button').on('click', function () {
+            $("#addFile").trigger("click");
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
@@ -247,7 +240,7 @@
             })
         });
 
-        $('#description').on('change', function () {
+        $('#content').on('change', function () {
             if ($(this).val() === 'new') {
                 $('.new-desc').removeClass('d-none');
             } else {
@@ -262,11 +255,12 @@
 
         $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
-            if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
-            else $('#newDescription').attr('disabled', 'disabled');
+            if ($('#content').val() === 'new') $('#content').attr('disabled', 'disabled');
+            else $('#content').attr('disabled', 'disabled');
             $(this).submit();
         })
     });
+
 </script>
 
 </body>
