@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.constant;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,11 +38,7 @@ public enum ControlForm {
     }
 
     public static List<ControlForm> getControlFormList() {
-        List<ControlForm> controlFormList = new LinkedList<>();
-        for (ControlForm controlForm : ControlForm.values()) {
-            controlFormList.add(controlForm);
-        }
-        return controlFormList;
+        return new LinkedList<>(Arrays.asList(ControlForm.values()));
     }
 
     public Integer getId() {

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.JournalFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.repository.JournalRepository;
@@ -42,7 +43,7 @@ public class JournalServiceImpl implements JournalService {
     @Cacheable(value = "journalGetById", key = "#id", condition="#id != null", unless="#result == null")
     public Journal getById(Integer id) throws IllegalArgumentException {
         if (id==null)return null;
-        return journalRepository.getOne(id);
+        return updateByIdFromCache(id);
     }
 
     @Override
@@ -55,8 +56,14 @@ public class JournalServiceImpl implements JournalService {
     @Override
     @Cacheable("journalGetStatusActive")
     public List<Journal> getStatusActive() {
+        return setStatusActive();
+    }
+
+    @CachePut("journalGetStatusActive")
+    public List<Journal> setStatusActive() {
         return journalRepository.findByStatusTrue();
     }
+
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)

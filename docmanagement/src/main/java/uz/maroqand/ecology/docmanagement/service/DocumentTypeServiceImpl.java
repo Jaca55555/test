@@ -43,7 +43,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     @Cacheable(value = "documentTypeGetById", key = "#id", condition="#id != null", unless="#result == null")
     public DocumentType getById(Integer id) throws IllegalArgumentException {
         if(id==null) return null;
-        return documentTypeRepository.getOne(id);
+        return updateByIdFromCache(id);
     }
 
     //PutById
@@ -58,8 +58,14 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     @Override
     @Cacheable("documentTypeGetStatusActive")
     public List<DocumentType> getStatusActive() {
+        return setStatusActive();
+    }
+
+    @CachePut("documentTypeGetStatusActive")
+    public List<DocumentType> setStatusActive() {
         return documentTypeRepository.findByStatusTrue();
     }
+
 
     //RemoveAllStatusActiveFromCache
     @Override
