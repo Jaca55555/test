@@ -2,7 +2,6 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentLogService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 
@@ -39,12 +39,14 @@ public class DocController {
     private final UserService userService;
     private final DocumentService documentService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentLogService documentLogService;
 
     @Autowired
-    public DocController(UserService userService, DocumentService documentService, DocumentOrganizationService documentOrganizationService) {
+    public DocController(UserService userService, DocumentService documentService, DocumentOrganizationService documentOrganizationService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -103,6 +105,20 @@ public class DocController {
         resutl.put("results", select2DtoList);
         resutl.put("pagination", paginationDto);
         resutl.put("total_count", documentOrganizationPage.getTotalElements());
+        return resutl;
+    }
+
+    @RequestMapping(value = DocUrls.AddComment, method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> createLogComment(
+            DocumentLog documentLog
+    ) {
+        documentLog.setCreatedById(userService.getCurrentUserFromContext().getId());
+        documentLog.setType(1);
+        documentLog = documentLogService.create(documentLog);
+        HashMap<String,Object> resutl = new HashMap<>();
+        resutl.put("status", "success");
+        resutl.put("log", documentLog);
         return resutl;
     }
 }

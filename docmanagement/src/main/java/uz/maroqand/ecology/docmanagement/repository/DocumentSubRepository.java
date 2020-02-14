@@ -4,13 +4,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 
+import java.util.List;
+
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz)
  * (ru)
  */
 @Repository
-public interface DocumentSubRepository extends JpaRepository<DocumentSub, Integer> {
+public interface DocumentSubRepository extends JpaRepository<DocumentSub, Integer>
+{
+    List<DocumentSub> findAllByDocumentId(Integer id);
 
-
+    DocumentSub findOneByDocumentId(Integer id);
 }

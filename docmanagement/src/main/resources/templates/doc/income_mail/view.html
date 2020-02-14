@@ -78,15 +78,15 @@
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_organization_name}">Жўнатувчи ташкилот:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.organization.name}">"Мароқанд" МЧЖ</span></div>
+                        <div class="col-md-6 p0" th:if="${documentSub}!=null" style="float: right;"><span th:text="${documentSub.organizationName}">"Мароқанд" МЧЖ</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.document_type}">Хужжат тури:</span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentSub.type}}">Тижорат таклифи</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentType.name}}">Тижорат таклифи</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_name}">Жўнатувчи шахс:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.fullName}">Иванов Иван Иванович</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="${documentSub.fullName}">Иванов Иван Иванович</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_number}">Рўйхатга олиш рақами:</span></div>
@@ -94,19 +94,14 @@
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_position}">Жунатувчининг лавозими:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.position}">Ижрочи мухандис</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="${documentSub.position}">Ижрочи мухандис</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_date}">Рўйхатга олинган сана:</span></div>
-                        <div class="col-md-6 p0" style="float:right"><span><span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')}"></span>
-                            (Марат Абдуллаев, +998 (90) 999-99-99)</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')} + '(' + *{performerName} + ', ' + *{performerPhone} + ')'"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                        <div class="col-md-6 p0"><span class="bold">Ушбу хатга жавоб тариқасида:</span></div>
-                        <div class="col-md-6 p0" style="float: right;"><a href="#">TPP-4123/4565-MRQ</a></div>
-                    </div>
-                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                        <div class="col-md-6 p0"><span class="bold">Топшириқ шакли:</span></div>
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.task_type}">Топшириқ шакли:</span></div>
                         <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижро учун</span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
@@ -133,7 +128,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <div class="m20-vertical"><span class="bold" th:text="#{doc.doc_description}">Топшириқ шакли:</span></div>
-                        <div><span th:text="${doc.documentDescription.content}"></span></div>
+                        <div><span th:text="${doc.content}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <div class="m20-vertical"><span class="bold">Хатга иловалар:</span></div>
@@ -154,8 +149,8 @@
                         <div class="col-sm-12 m20-vertical">
                             <button type="button" class="btn btn-rounded btn-danger fs11">
                                 <i class="fas fa-lock"></i>
-                                Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
-                                девонхонага мурожаат қилинг!
+                                <span th:text="#{doc.warning_only_for_viewing}">Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
+                                    девонхонага мурожаат қилинг!</span>
                             </button>
                         </div>
 
@@ -205,7 +200,7 @@
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between align-center" style="height:65px;">
-                        <h5>Ижрочилар / Иштирокчилар</h5>
+                        <h5 th:text="#{doc.participants_executors}">Ижрочилар / Иштирокчилар</h5>
                     </div>
                     <div class="card-block">
                         <div class="row">
@@ -397,115 +392,34 @@
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
-                            <span class="card-header-a collapsed">Ижро амаллари ва изохлар</span>
+                            <span class="card-header-a collapsed" th:text="#{doc.execute_log_and_comments}"></span>
                         </h5>
                         <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
                     </div>
                     <div class="card-body">
-                        <div class="comment-item flex-space-between">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
                             <div>
                                 <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
                                 </i></div>
                                 <div class="inline-block m10-horizontal">
-                                    <span class="color-primary bold">Абдуллаев А. А.</span>
+                                    <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
                                     <br>
-                                    <span>Руководитель организации</span>
+                                    <span th:text="${log.createdBy.position}">Руководитель организации</span>
                                 </div>
                             </div>
-                            <div class="fs11">
+                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:ii')}">
                                 10.05.2019 - 09:35
                             </div>
                             <div class="w100"></div>
                             <div class="column-2 mt-3">
-                                <span>Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
-                            </div>
-                        </div>
-                        <div class="comment-item flex-space-between">
-                            <div>
-                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
-                                </i></div>
-                                <div class="inline-block m10-horizontal">
-                                    <span class="color-purple bold">Гафуров Г. Г.</span>
-                                    <br>
-                                    <span>Эксперт</span>
-                                </div>
-                            </div>
-                            <div class="fs11">
-                                10.05.2019 - 09:35
-                            </div>
-                            <div class="w100"></div>
-                            <div class="column-2 mt-3">
-                                    <span class="color-green">Ўз ижро статусини "Назоратдан чиқариш" холатига
-                                        ўзгартирди. Файл илова қилди.</span>
-                            </div>
-                            <div class="w100"></div>
-                            <div class="column-2 mt-3">
-                                <span class="fas fa-file-pdf fs30 color-red"></span>
-                                <span>Приложение 1.pdf
-                                    </span>
-                            </div>
-                        </div>
-                        <div class="comment-item flex-space-between">
-                            <div>
-                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
-                                </i></div>
-                                <div class="inline-block m10-horizontal">
-                                        <span class="color-primary bold">Ботиров Б. Б.
-
-                                        </span>
-                                    <br>
-                                    <span>Руководитель отдела
-
-                                        </span>
-                                </div>
-                            </div>
-                            <div class="fs11">
-                                10.05.2019 - 09:35
-                            </div>
-                            <div class="w100"></div>
-                            <div class="column-2 mt-3">
-                                    <span>Ижрога йўналтирилди. Ижрочилар:
-                                        <br> Валиев Валишер Вахобович
-                                        <br> Гафуров Геннадий Генрих
-                                    </span>
-                            </div>
-                        </div>
-                        <div class="comment-item flex-space-between" style="border:none">
-                            <div>
-                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
-                                </i></div>
-                                <div class="inline-block m10-horizontal">
-                                        <span class="bold">Салимова С. С.
-
-
-
-                                        </span>
-                                    <br>
-                                    <span>Иш юрутувчи котиба
-
-
-
-                                        </span>
-                                </div>
-                            </div>
-                            <div class="fs11">
-                                10.05.2019 - 09:35
-                            </div>
-                            <div class="w100"></div>
-                            <div class="column-2 mt-3">
-                                    <span>Ижрога йўналтирилди. Ижрочилар:
-                                        <br> Валиев Валишер Вахобович
-                                        <br> Гафуров Геннадий Генрих
-                                    </span>
+                                <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
                             </div>
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
                             <button type="button"
                                     class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"
-                                    data-toggle="modal" data-target="#modal1">Изох
-                                қолдириш
-
+                                    data-toggle="modal" data-target="#modal1" th:text="#{doc.add_comment}">
                             </button>
                         </div>
                     </div>
@@ -528,66 +442,53 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="flex-space-between p0 m20-vertical">
-                        <div>
-                            <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
-                            </i></div>
-                            <div class="inline-block m10-horizontal">
-                                <span class="color-green bold">Абдуллаев А. А.</span>
-                                <br>
-                                <span>Ташкилот рахбари</span>
+                    <form th:action="${comment_url}" id="commentForm">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="documentId" th:value="${doc.id}">
+                        <div class="flex-space-between p0 m20-vertical">
+                            <div>
+                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                                </i></div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
+                                    <br>
+                                    <span>Ташкилот рахбари</span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
                             </div>
                         </div>
-                        <div>
-                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
-                        </div>
-                    </div>
-                    <div class="m10-vertical"><span>Изоҳи</span></div>
+                        <div class="m10-vertical"><span>Изоҳи</span></div>
 
-                    <textarea class="form-control" name="validation-text"
-                              placeholder="Изоҳ матнини киритинг"></textarea>
+                        <textarea class="form-control" name="content"
+                                  th:placeholder="#{doc.enter_comment_text}"></textarea>
 
-                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+                        <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
 
-                    <div class="row p20">
-                        <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-red"><span
-                                    class="fas fa-file-pdf"></span>
+                        <div class="row p20">
+                            <div class="file-block">
+                                <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                                <div class="text-center file-icon-container color-red"><span
+                                        class="fas fa-file-pdf"></span>
+                                </div>
+                                <div class="text-center">
+                                    <span>Письмо.pdf</span>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <span>Письмо.pdf</span>
-                            </div>
-                        </div>
-                        <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-blue"><span
-                                    class="fas fa-file-word"></span></div>
-                            <div class="text-center">
-                                <span>Письмо.docx</span>
+                            <div class="file-block flex-center">
+                                <div class="text-center file-icon-container align-self-center color-gray"><span
+                                        class="fas fa-plus"></span></div>
                             </div>
                         </div>
-                        <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-green"><span
-                                    class="fas fa-file-excel"></span></div>
-                            <div class="text-center">
-                                <span>Таблица.xlsx</span>
+                        <hr class="m20-vertical">
+                        <div class="row">
+                            <div class="flex-center w100 row-wrap">
+                                <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}"></button>
+                                <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{doc.add_comment}"></button>
                             </div>
                         </div>
-                        <div class="file-block flex-center">
-                            <div class="text-center file-icon-container align-self-center color-gray"><span
-                                    class="fas fa-plus"></span></div>
-                        </div>
-                    </div>
-                    <hr class="m20-vertical">
-                    <div class="row">
-                        <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
-                                қилиш</button>
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -698,6 +599,25 @@
 </div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+<script th:inline="javascript">
+    var urlAction = [[${comment_url}]];
+    $(document).ready(function () {
+        $('#formSend').on('click', function (e) {
+            let url = $('#commentForm').prop('action');
+            let data = $('#commentForm').serialize();
+            $.ajax({
+                url: urlAction,
+                data: data,
+                method: 'post',
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            e.preventDefault();
+        })
+    })
+</script>
 
 </body>
 </html>

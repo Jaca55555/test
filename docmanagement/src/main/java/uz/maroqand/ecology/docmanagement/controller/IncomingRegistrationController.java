@@ -45,6 +45,7 @@ public class IncomingRegistrationController {
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentTaskService taskService;
+    private final DocumentLogService documentLogService;
     private final DocumentSubRepository documentSubRepository;
 
     @Autowired
@@ -59,10 +60,12 @@ public class IncomingRegistrationController {
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
             DocumentTaskService taskService,
+            DocumentLogService documentLogService,
             DocumentSubRepository documentSubRepository
     ) {
         this.documentService = documentService;
         this.taskService = taskService;
+        this.documentLogService = documentLogService;
         this.documentSubRepository = documentSubRepository;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTypeService = documentTypeService;
@@ -119,6 +122,13 @@ public class IncomingRegistrationController {
             return "redirect: " + DocUrls.IncomeMailList;
         }
         model.addAttribute("doc", document);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+
+        DocumentSub documentSub = documentSubRepository.findOneByDocumentId(document.getId());
+        if (documentSub!=null)
+            model.addAttribute("documentSub", documentSub);
         return DocTemplates.IncomeMailView;
     }
 
