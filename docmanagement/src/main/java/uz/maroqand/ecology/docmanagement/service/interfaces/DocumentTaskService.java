@@ -23,4 +23,7 @@ public interface DocumentTaskService
     DocumentTask createNewTask(Integer docId, Integer status, String context, Date dueDate,Integer chiefId, Integer createdById);
 
     DocumentTask update(DocumentTask task);
+
+    DocumentTask getTaskByUser(Integer docId, Integer userId);
+
 }

@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -61,23 +62,21 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-                if (filterDTO != null) {
-                    if (filterDTO.getDocumentId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
-                    }
+            if (filterDTO != null) {
+                if (filterDTO.getDocumentId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
+                }
 
-                    if (filterDTO.getRegistrationNumber() != null) {
-                        System.out.println(filterDTO.getRegistrationNumber());
-                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
-                    }
+                if (filterDTO.getRegistrationNumber() != null) {
+                    System.out.println(filterDTO.getRegistrationNumber());
+                    predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
+                }
 
-                    Date dateBegin = DateParser.TryParse(filterDTO.getRegsitrationDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                    Date dateBegin = DateParser.TryParse(filterDTO.getRegistrationDateBegin(), Common.uzbekistanDateFormat);
+                    Date dateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
                     if (dateBegin != null && dateEnd == null) {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), dateBegin));
                     }
@@ -125,7 +124,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);
-                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
                     if (executeDateBegin != null && executeDateEnd == null) {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateBegin));
                     }
@@ -144,8 +143,8 @@ public class DocumentServiceImpl implements DocumentService {
                         predicates.add(criteriaBuilder.equal(root.get("insicePurpose"), filterDTO.getInsidePurposeStatus()));
                     }
 
-                    if (filterDTO.getCoexecutorStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoexecutorStatus()));
+                    if (filterDTO.getCoExecutorStatus() != null) {
+                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoExecutorStatus()));
                     }
 
                     if (filterDTO.getReplies() != null) {
@@ -155,17 +154,22 @@ public class DocumentServiceImpl implements DocumentService {
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-            }
-        };
+            };
     }
 
     @Override
     public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
-        if(name!=null){
-            return documentRepository.findByRegistrationNumberLike(name ,pageable);
-        }else {
-            return documentRepository.findAll(pageable);
-        }
+        return documentRepository.findAll(getSpecification(name), pageable);
     }
 
+    private static Specification<Document> getSpecification(String registrationNumber) {
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(registrationNumber != null){
+                predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + registrationNumber + "%"));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }

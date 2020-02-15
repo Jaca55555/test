@@ -39,21 +39,18 @@
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label">Хужжатлар категориясини танланг</label>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_journal}">Хужжатлар категориясини танланг</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
                             <option value=""></option>
-                            <option th:each="journal : ${journalList}" th:if="${journal.documentType.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum).InnerDocuments}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label">Хужжат турини танланг</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentTypeId}">
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_document_view}" th:for="${#ids.seq('documentType')}">Хужжат турини танланг</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required">
                             <option value=""></option>
-                            <div th:each="i: ${doc_type}" th:if="${i.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum).InnerDocuments}">
-                                <option th:value="${i.id}" th:text="${i.name}"></option>
-                            </div>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
@@ -72,15 +69,20 @@
 
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
-                        <select id="organizationId" class="singleSelect col-sm-12" required="" th:field="*{organizationId}">
+                        <select class="singleSelect col-sm-12" required="" th:field="*{organizationId}">
                             <option value="" th:text="#{sys_select}"></option>
-                            <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}" th:selected="${doc.organizationId!=null and doc.organizationId==organization.id}"></option>
+                            <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжат қабул қилинган усул (почта орқали, e-mail, факс, етказиб бериш ва х.к.)</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:if="${documentSub!=null}" th:field="${documentSub.communicationToolId}">
                             <option value=""></option>
+                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
+                        </select>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:if="${documentSub==null}" name="communicationToolId">
+                            <option value=""></option>
+                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
                 </div>
@@ -100,7 +102,10 @@
                     <div class="form-group col-sm-12">
                         <label class="control-label">Ушбу хужжатга алоқадор бошқа хужжатлар рўйхати (агар мавжуд бўлса)</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control" type="text" placeholder="Хужжат рақамини киритинг ёки рўйхатдан танлаш учун қидирув тугмасини босинг">
+                            <select class="form-control" th:field="*{additionalDocumentId}">
+                                <option value="" th:text="#{sys_select}"></option>
+                                <option th:if="${docAdditional!=null}" th:value="${docAdditional.id}" th:text="${docAdditional.registrationNumber}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -175,13 +180,9 @@
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
-                                th:if="${doc.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit"
-                                th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
-                        <button class="btn btn-success m10-vertical m20-horizontal" type="button"
-                                th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}"
-                                id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" th:if="${doc.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNewTask}" id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
             </form>
@@ -197,11 +198,6 @@
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
-        $('#content option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
-        $('#orgName').autocomplete({
-            minLength: 0,
-            source: [[${organizations}]]
-        });
 
         $('.file-button').on('click', function () {
             $("#addFile").trigger("click");
@@ -240,14 +236,6 @@
             })
         });
 
-        $('#content').on('change', function () {
-            if ($(this).val() === 'new') {
-                $('.new-desc').removeClass('d-none');
-            } else {
-                $('.new-desc').addClass('d-none');
-            }
-        })
-
         $(document).on('click', '.fa-trash-alt', function () {
             $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
             $(this).parent().parent().remove();
@@ -255,11 +243,30 @@
 
         $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
-            if ($('#content').val() === 'new') $('#content').attr('disabled', 'disabled');
-            else $('#content').attr('disabled', 'disabled');
             $(this).submit();
         })
+
+        $('#organizationId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+        $('#additionalDocumentId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
     });
+
+
 
 </script>
 

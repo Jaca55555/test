@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
+        <div class="card parent-card">
+
+            <div class="card-header flex-space-between mobile-column" style="align-items: center;">
+                <h5 class="mb-0"><span href="" class="card-header-a collapsed">Кирувчи хат №
+                            <span th:text="${doc.registrationNumber}"></span> / <span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')}"></span> </span></h5>
+                <div class="p10-horizontal mobile-column">
+
+                    <a class="btn btn-rounded btn-success btn-sm ml-2 m0" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailSpecial} + '?id=' + ${doc.id}">
+                        <i class="feather icon-check-circle mr-0"></i>Махсус назоратда
+                    </a>
+
+                </div>
+                <div class="p10-horizontal mobile-column">
+                    <span class="color-red bold" style="text-align: center;">Хужжат статуси</span>
+                    <div class="btn-group ml-2">
+
+                        <button type="button" class="btn btn-outline-primary left-radius table-modal-button"><i class="fas fa-cog"></i> Жараёнда</button>
+                        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0">
+                        <i class="fas fa-clipboard-list mr-0"></i>
+                        <span>4А форма</span>
+                    </button>
+                </div>
+                <div class="flex-center">
+                    <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
+                    <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
+                    <a><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
+                    <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row" th:object="${doc}">
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_journal}">Рўйхатга олиш журнали:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{journal.name}">Тижорат таклифлари</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_organization_name}">Жўнатувчи ташкилот:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.organization.name}">"Мароқанд" МЧЖ</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.document_type}">Хужжат тури:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentSub.type}}">Тижорат таклифи</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_name}">Жўнатувчи шахс:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.fullName}">Иванов Иван Иванович</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_number}">Рўйхатга олиш рақами:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.sender_position}">Жунатувчининг лавозими:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{documentSub.position}">Ижрочи мухандис</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.reg_date}">Рўйхатга олинган сана:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span><span th:text="${#dates.format(doc.registrationDate,'dd.MM.yyyy')}"></span>
+                            (Марат Абдуллаев, +998 (90) 999-99-99)</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ушбу хатга жавоб тариқасида:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><a href="#">TPP-4123/4565-MRQ</a></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Топшириқ шакли:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижро учун</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.performer_name}">Жўнатувчи билан алоқа учун:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">+998 (99) 999-99-99</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Топшириқ шакли:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижро учун</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.performer_phone}">Жўнатувчи билан алоқа учун:</span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Топшириқ шакли:</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижро учун</span></div>
+                    </div>
+
+
+
+                </div>
+                <hr class="m20-vertical">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="m20-vertical"><span class="bold" th:text="#{doc.doc_description}">Топшириқ шакли:</span></div>
+                        <div><span th:text="${doc.documentDescription.content}">Праздник Навруз, стало настоящим всенародным праздником.</span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="m20-vertical"><span class="bold">Хатга иловалар:</span></div>
+                        <div class="flex-start mobile-flex-center">
+                            <div class="office-card-file" th:each="file: ${doc.contentFiles}">
+                                <div class="card dashboard-card">
+                                    <div class="file-icon-container-small color-blue">
+                                        <span class="fas fa-file-word"></span>
+                                    </div>
+                                    <div class="card-body"
+                                         style="display: flex;text-align: left;align-items: center;">
+                                        <h6 class="card-title" th:text="${file.name}">
+                                            Письмо КМК-234 от 23.01.2019г.pdf
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 m20-vertical">
+                            <button type="button" class="btn btn-rounded btn-danger fs11">
+                                <i class="fas fa-lock"></i>
+                                Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
+                                девонхонага мурожаат қилинг!
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="m20-vertical">
+                <div class="row m20-vertical">
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold color-red">Ижро натижаси</span></div>
+                        <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижрога тушмаган</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
+                        <div class="col-md-6 p0" style="float: right;"><span>----------
+                                </span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card parent-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <span class="card-header-a" th:text="#{doc.add_task_title} + ' - ' + ${doc.registrationNumber}"></span>
+                </h5>
+            </div>
+            <div class="card-block">
+                <!--/*@thymesVar id="task" type="uz.maroqand.ecology.docmanagement.entity.DocumentTask"*/-->
+                <div class="row" th:object="${task}">
+                    <div class="col-md-6 col-sm-12 m10-vertical">
+                        <div class="col-sm-12 p0"><span class="bold" th:text="#{doc.task_number} + ' ' + ${task}"></span></div>
+                        <div class="flex-space-between p0 m20-vertical">
+                            <div>
+                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                                </i></div>
+                                <div class="inline-block m10-horizontal" th:if="${task.chief != null}">
+                                    <span class="color-green bold" th:text="${task.chief.fullName}"></span>
+                                    <br>
+                                    <span th:text="${task.chief.position.name}"></span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="fas fa-trash-alt fs20 color-gray pointer"></i>
+                                <i class="fas fa-edit fs20 color-gray m10-horizontal pointer"></i>
+                            </div>
+                        </div>
+                        <span th:text="#{doc.task_description}"></span>
+                        <div class="m10-vertical">
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true">
+                                <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="WY">Coming</option>
+                                <option value="WY">Hanry Die</option>
+                                <option value="WY">John Doe</option>
+                            </select>
+                        </div>
+                        <textarea class="form-control" name="content" th:value="*{documentDescription.content}"></textarea>
+                        <div class="m20-vertical"><span class="m10-vertical" th:text="#{doc.task_due_date}"></span></div>
+                        <div class="col-sm-12 p0">
+                            <input class="form-control datepicker date" id="dateBegin"
+                                   data-dtp="dtp_uzvAj" name="dueDate" th:value="${task.dueDate!=null ? #dates.format(task.dueDate,'dd.MM.yyyy'):''}">
+                            <img class="calendar-img2" src="../images/calendar.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 m10-vertical">
+                        <div class="col-sm-12 p0"><span class="bold" th:text="#{doc.participants}"></span></div>
+                        <div class="row ">
+                            <div th:each="participant : *{participants}" class="col-sm-12 col-md-12 p0 row m10-vertical">
+                                <div class="col-md-8 col-sm-12 flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-primary bold" th:text="${participant.user.fullName}"></span>
+                                            <br>
+                                            <span th:text="${participant.user.position.name}">Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group mb-2">
+                                        <a type="button"
+                                                class="btn btn-outline-primary left-radius table-modal-button"><i
+                                                class='fas fa-cog'></i> Жараёнда</a>
+                                        <button type="button"
+                                                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                class="sr-only" th:text="${participant.status}"></span></button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#!">Action</a>
+                                            <a class="dropdown-item" href="#!">Another action</a>
+                                            <a class="dropdown-item" href="#!">Something else here</a>
+                                            <a class="dropdown-item" href="#!">Separated link</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4 col-sm-12 flex-space-between">
+                                    <div style="height: fit-content;display: flex;align-items: center;"><i
+                                            class='feather icon-clock fs30 color-gray'></i>
+                                        <span class='m10-horizontal' th:text="${#dates.format(participant.createdAt, 'dd.MM.yyyy')}"></span></div>
+                                    <i style="line-height: inherit;"
+                                       class="fas fa-trash-alt fs20 color-gray pointer"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="m20-vertical flex-space-between">
+                            <div style="width:calc(100% - 110px)">
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" id="attend">
+                                    <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                    <option th:each="i: ${attends}" th:value="${i.id}" th:text="${i.fullName}"></option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-info ml-3" title=""
+                                    data-toggle="tooltip" data-original-title="btn btn-outline-info" th:text="#{doc.add_participant}"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="m20-vertical">
+                <div class="row">
+                    <div class="flex-center w100 row-wrap">
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
+                        <button type="button" class="btn btn-success m10-vertical m20-horizontal" th:text="#{doc.save}">Саклаш</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m30-vertical">
+            <div class="flex-center w100 row-wrap">
+                <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal">Янги
+                    топшириқ қўшиш
+
+                </button>
+                <button type="button"
+                        class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal">Хужжатга қайтиш
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- [ Modals ] start -->
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва
+                                изохлар</span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div>
+                            <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                            </i></div>
+                            <div class="inline-block m10-horizontal">
+                                <span class="color-green bold">Абдуллаев А. А.</span>
+                                <br>
+                                <span>Ташкилот рахбари</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                        </div>
+                    </div>
+                    <div class="m10-vertical"><span>Изоҳи</span></div>
+
+                    <textarea class="form-control" name="validation-text"
+                              placeholder="Изоҳ матнини киритинг"></textarea>
+
+                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+
+                    <div class="row p20">
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-red"><span
+                                    class="fas fa-file-pdf"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.pdf</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-blue"><span
+                                    class="fas fa-file-word"></span></div>
+                            <div class="text-center">
+                                <span>Письмо.docx</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-green"><span
+                                    class="fas fa-file-excel"></span></div>
+                            <div class="text-center">
+                                <span>Таблица.xlsx</span>
+                            </div>
+                        </div>
+                        <div class="file-block flex-center">
+                            <div class="text-center file-icon-container align-self-center color-gray"><span
+                                    class="fas fa-plus"></span></div>
+                        </div>
+                    </div>
+                    <hr class="m20-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                қилиш</button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва
+                                изохлар</span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div>
+                            <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
+                            </i></div>
+                            <div class="inline-block m10-horizontal">
+                                <span class="color-green bold">Абдуллаев А. А.</span>
+                                <br>
+                                <span>Ташкилот рахбари</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                        </div>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span>Хужжатнинг жорий статуси</span>
+                        <button type="button" style="width:160px"
+                                class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0">Жараёнда
+                        </button>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span>Хужжатнинг янги статуси</span>
+                        <div class="btn-group mb-2 mr-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary left-radius table-modal-button">Маълумот
+                                сўралган</button>
+                            <button type="button"
+                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                    class="sr-only">Toggle
+                                        Dropdown</span></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#!">Action</a>
+                                <a class="dropdown-item" href="#!">Another action</a>
+                                <a class="dropdown-item" href="#!">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#!">Separated link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m10-vertical"><span>Ижро ҳолатининг ўзгариши сабаби</span></div>
+
+                    <textarea class="form-control" name="validation-text"
+                              placeholder="Ижро ҳолатини ўзгартириш сабабини киритинг"></textarea>
+
+                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+
+                    <div class="row p20">
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-red"><span
+                                    class="fas fa-file-pdf"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.pdf</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-blue"><span
+                                    class="fas fa-file-word"></span></div>
+                            <div class="text-center">
+                                <span>Письмо.docx</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                            <div class="text-center file-icon-container color-green"><span
+                                    class="fas fa-file-excel"></span></div>
+                            <div class="text-center">
+                                <span>Таблица.xlsx</span>
+                            </div>
+                        </div>
+                        <div class="file-block flex-center">
+                            <div class="text-center file-icon-container align-self-center color-gray"><span
+                                    class="fas fa-plus"></span></div>
+                        </div>
+                    </div>
+                    <hr class="m20-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                қилиш</button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Modals ] end -->
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>

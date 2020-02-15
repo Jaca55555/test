@@ -43,7 +43,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     @Cacheable(value = "documentTypeGetById", key = "#id", condition="#id != null", unless="#result == null")
     public DocumentType getById(Integer id) throws IllegalArgumentException {
         if(id==null) return null;
-        return updateByIdFromCache(id);
+        return documentTypeRepository.getOne(id);
     }
 
     //PutById
@@ -58,11 +58,6 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     @Override
     @Cacheable("documentTypeGetStatusActive")
     public List<DocumentType> getStatusActive() {
-        return setStatusActive();
-    }
-
-    @CachePut("documentTypeGetStatusActive")
-    public List<DocumentType> setStatusActive() {
         return documentTypeRepository.findByStatusTrue();
     }
 
@@ -70,8 +65,8 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     //RemoveAllStatusActiveFromCache
     @Override
     @CacheEvict(value = "documentTypeGetStatusActive", allEntries = true)
-    public List<DocumentType> removeStatusActive() {
-        return documentTypeRepository.findAll();
+    public List<DocumentType> updateStatusActive() {
+        return documentTypeRepository.findByStatusTrue();
     }
 
     @Override
@@ -85,24 +80,21 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     }
 
     private static Specification<DocumentType> getFilteringSpecification(DocumentTypeEnum type, String name, Boolean status) {
-        return new Specification<DocumentType>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentType> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (type != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
-                }
-                if (status != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), status));
-                }
-                if (name != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + name.toLowerCase() + "%"));
-                }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return (Specification<DocumentType>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
             }
+            if (status != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"));
+            }
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

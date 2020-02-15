@@ -5,7 +5,6 @@ import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by Namazov Jamshid
@@ -37,9 +36,11 @@ public class DocumentTask {
     @Column(name = "status")
     private Integer status;
 
+    //topshirish
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
+    //topshiriq muddati
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
@@ -47,8 +48,13 @@ public class DocumentTask {
     @JoinColumn(name = "chief_id", insertable = false, updatable = false)
     private User chief;
 
+    //topshiriq bergan rahbar
     @Column(name = "chief_id")
     private Integer chiefId;
+
+    //ijrochi
+    @Column(name = "performer_id")
+    private Integer performerId;
 
     /*
      * Technical Fields

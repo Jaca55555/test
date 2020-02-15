@@ -70,4 +70,6 @@ public class DocTemplates {
     //ichki xatlar
     public static final String InnerRegistrationNew = Prefix + Inner + "_registration/new";
     public static final String InnerRegistrationList = Prefix + Inner + "_registration/list";
+    public static final String InnerRegistrationTask = Prefix + Inner + "_registration/task";
+    public static final String InnerRegistrationView = Prefix + Inner + "_registration/view";
 }

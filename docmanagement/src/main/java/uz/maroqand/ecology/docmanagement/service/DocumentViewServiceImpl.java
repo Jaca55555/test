@@ -40,7 +40,7 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     @Override
     @Cacheable(value = "documentViewGetById", key = "#id",unless="#result == ''")
     public DocumentView getById(Integer id) {
-        return updateByIdFromCache(id);
+        return documentViewRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override
@@ -53,11 +53,6 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     @Override
     @Cacheable("documentViewStatusActive")
     public List<DocumentView> getStatusActive() {
-        return setStatusActive();
-    }
-
-    @CachePut("documentViewStatusActive")
-    public List<DocumentView> setStatusActive() {
         return documentViewRepository.findByStatusTrue();
     }
 
@@ -85,39 +80,31 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     }
 
     private static Specification<DocumentView> getFilteringSpecification() {
-        return new Specification<DocumentView>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentView> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
-            }
+        return (Specification<DocumentView>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
+            predicates.add( notDeleted );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 
     private static Specification<DocumentView> getFilteringSpecification(String name, Integer status, String locale){
-        return new Specification<DocumentView>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentView> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(name != null){
-                    if(locale.equals("oz"))
-                        predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
-                    else if(locale.equals("ru"))
-                        predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + name + "%"));
-                }
-                if(status != null){
-                    if(status.equals(1))
-                        predicates.add(criteriaBuilder.equal(root.get("status"), true));
-                    else if(status.equals(2))
-                        predicates.add(criteriaBuilder.equal(root.get("status"), false));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<DocumentView>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(name != null){
+                if(locale.equals("oz"))
+                    predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
+                else if(locale.equals("ru"))
+                    predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + name + "%"));
             }
+            if(status != null){
+                if(status.equals(1))
+                    predicates.add(criteriaBuilder.equal(root.get("status"), true));
+                else if(status.equals(2))
+                    predicates.add(criteriaBuilder.equal(root.get("status"), false));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

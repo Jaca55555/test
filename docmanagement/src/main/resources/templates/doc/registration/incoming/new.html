@@ -204,8 +204,9 @@
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
-        if ([[${document.contentFiles}]].length>0){
-            $.each([[${document.contentFiles}]],function (index,val) {
+        var files = [[${document.contentFiles}]];
+        if (files!=null && files.length>0){
+            $.each(files,function (index,val) {
                 $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
             })
         }
