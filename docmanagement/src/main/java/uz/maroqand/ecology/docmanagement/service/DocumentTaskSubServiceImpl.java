@@ -172,7 +172,6 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-            }
         };
     }
 
