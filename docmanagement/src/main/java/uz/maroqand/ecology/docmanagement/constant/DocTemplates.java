@@ -67,9 +67,12 @@ public class DocTemplates {
     public static final String OutgoingMailNew = OutgoingMail + "/new";
     public static final String OutgoingMailList = OutgoingMail + "/list";
 
+    public static final String InnerList = Prefix + Inner + "/list";
+    public static final String InnerView = Prefix + Inner + "/view";
+
     //ichki xatlar
-    public static final String InnerRegistrationNew = Prefix + Inner + "_registration/new";
-    public static final String InnerRegistrationList = Prefix + Inner + "_registration/list";
-    public static final String InnerRegistrationTask = Prefix + Inner + "_registration/task";
-    public static final String InnerRegistrationView = Prefix + Inner + "_registration/view";
+    public static final String InnerRegistrationNew = Prefix + Registration + Inner + "/new";
+    public static final String InnerRegistrationList = Prefix + Registration + Inner + "/list";
+    public static final String InnerRegistrationTask = Prefix + Registration + Inner + "/task";
+    public static final String InnerRegistrationView = Prefix + Registration + Inner + "/view";
 }
