@@ -23,5 +23,4 @@ public interface FileService {
 
     File save(File file);
 
-    void deleteById(Integer id);
 }

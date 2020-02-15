@@ -19,3 +19,14 @@ public interface DocumentSubService {
     Specification<DocumentSub> getSpecificationOrganization( final Integer documentOrganizationId );
 
 }
+import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+
+import java.util.List;
+
+public interface DocumentSubService {
+
+    List<DocumentSub> findByDocumentId(Integer documentId);
+
+    DocumentSub createDocumentSub(DocumentSub documentSub);
+
+}

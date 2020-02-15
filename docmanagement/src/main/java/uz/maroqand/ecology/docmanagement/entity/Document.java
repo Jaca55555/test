@@ -96,11 +96,12 @@ public class Document {
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
     private Set<File> contentFiles;
 
-
-
     //Ушбу хатга қўшимча тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
+
+    @Column(name = "performer_id")
+    private Integer performerId;
 
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")
@@ -109,8 +110,6 @@ public class Document {
     //Маъсул ходим билан алоқа учун телефон рақами
     @Column(name = "performer_phone")
     private String performerPhone;
-
-
 
     //Хатнинг ижроси шакли
     @Column(name = "execute_form")

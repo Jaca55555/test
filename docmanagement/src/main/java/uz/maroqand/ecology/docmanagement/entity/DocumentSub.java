@@ -11,6 +11,7 @@ import java.util.Date;
  * (uz)
  * (ru)
  */
+
 @Data
 @Entity
 @Table(name = "document_sub")

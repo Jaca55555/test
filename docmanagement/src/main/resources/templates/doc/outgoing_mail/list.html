@@ -113,7 +113,7 @@
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
-                        <div class="form-group col-md-3 col-sm-12">
+                        <div class="form-group col-md-4 col-sm-12">
                             <label for="tin" class="control-label">Корреспондент</label>
                             <div class="col-sm-12 p0">
                                 <select id="tin" class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
@@ -123,16 +123,12 @@
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
                         </div>
-                        <div class="form-group col-md-1 col-sm-12">
-                            <label for="name" class="control-label">Хужжат раками</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="applicationId" class="control-label">Руйхатга олиш раками</label>
-                            <input type="text" class="form-control" id="applicationId">
+                            <input type="text" class="form-control" id="registrationNumber">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="dateBegin" class="control-label">Келиб тушган сана</label>
+                            <label for="dateBegin" class="control-label">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
                                     <input class="form-control datepicker date" id="dateBegin" placeholder="Дан">
@@ -145,35 +141,24 @@
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="regionId" class="control-label">Назорат карточкаси</label>
+                            <label for="regionId" class="control-label">Хужжат тури</label>
                             <div class="col-sm-12 p0">
                                 <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
                                         id="regionId" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
+                                    <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                                 </select>
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
                         </div>
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label class="control-label">Ижрочилар</label>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label class="control-label">Хатнинг кискача мазмуни</label>
                             <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                        tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
+                                <input type="text" class="form-control" id="content">
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
                         </div>
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label for="subRegionId" class="control-label">Хатнинг қисқача мазмуни</label>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="subRegionId" class="control-label">Хат жунатаётган булим ёки ходим</label>
                             <div class="col-sm-12 p0">
                                 <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
                                         tabindex="-1" aria-hidden="true">
@@ -186,36 +171,9 @@
                                 <i class="gray-search fas fa-search  color-gray"></i>
                             </div>
                         </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label class="control-label">Ижро йуналиши</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                        tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label class="control-label">Жорий холати</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                        tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                            </div>
-                        </div>
+
                         <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;">искать</button>
+                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;">искать</button>
                         </div>
 
 
@@ -265,7 +223,8 @@
                                            class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
                                         <thead>
                                         <tr role="row">
-                                            <th>ID</th>
+                                            <th aria-controls="responsive-table-model" aria-sort="ascending"
+                                            class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">id</th>
                                             <th aria-controls="responsive-table-model" aria-sort="ascending"
                                                 class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
                                                 Регистрация рақами
@@ -342,7 +301,7 @@
 <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
 
 <script th:inline="javascript">
-    let ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailView}]];
     let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailEdit}]];
     function getCurrentLanguage() {
@@ -356,13 +315,6 @@
     let dataDatatableSelector;
     let thead;
 
-    function getDatatableConnect() {
-        dataDatatableSelector.DataTable().destroy();
-        dataDatatableSelector.html(thead);
-
-        datatableConnect();
-    }
-
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
@@ -370,22 +322,9 @@
         html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
-    function datatableConnect() {
 
-        dataDatatableSelector.DataTable({
-            responsive: {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.modal({
-                        header: function(row) {
-                            var data = row.data();
-                            return 'Details for ' + data[0] + ' ' + data[1];
-                        }
-                    }),
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                        tableClass: 'table'
-                    })
-                }
-            },
+    function datatableConnect() {
+        cDataTable = dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
             scrollX: true,
@@ -394,33 +333,21 @@
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
-                let api = this.api();
-                dataToSend.page = api !== undefined ? api.page() : 0;
-                dataToSend.size = api !== undefined ? api.page.len() : 25;
-             dataToSend.correspondent = $('#correspondent').val();
-                dataToSend.documentId = $('#docId').val();
-                dataToSend.registrationNumber = $('#regId').val();
-                dataToSend.regsitrationDateBegin = $('#incomeDateBegin').val();
-                dataToSend.regsitrationDateEnd = $('#incomeDateEnd').val();
-                dataToSend.controlCard = $('#controlCard').val();
-                dataToSend.documentType = $('#docType').val();
-                dataToSend.correspondentType = $('#correspondentType').val();
-                dataToSend.content = $('#description').val();
-                dataToSend.chief = $('#chiefId').val();
-                dataToSend.executors = $('#executorId').val();
-                dataToSend.resolution = $('#resolution').val();
-                dataToSend.executePath = $('#executeType').val();
-                dataToSend.executeStatus = $('#executeStatus').val();
-                dataToSend.executeDateBegin = $('#executeDateBegin').val();
-                dataToSend.executeDateEnd = $('#executeDateEnd').val();
-                dataToSend.executeControlStatus = $('#executeControlStatus').val();
-                dataToSend.insidePurposeStatus = $('#isInternal').val();
-                dataToSend.coexecutorStatus = $('#coexecutorStatus').val();
-                dataToSend.replies = $('#response').val();
+                var api = this.api();
+                var jqTable = $(api.table().node());
 
-                $.get( ajaxListLink, dataToSend, function(data){
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                //    dataToSend.doctype_id = $('#typeId').val().trim();
+                // dataToSend.name = $('#name').val().trim();
+                // dataToSend.status = document.querySelector('#status').value;
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
                     callback(data);
-                    console.log(data);
                 });
             },
             columns: [
@@ -439,65 +366,18 @@
             }
         });
     }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
     $(document).ready(function () {
         dataDatatableSelector = $('#dynamicTable');
         thead = dataDatatableSelector.html();
         datatableConnect();
-
-        $('#filter').on('change', function () {
-            getDatatableConnect();
-        })
-    })
-
-
-
-
-
-    //
-    // async function getOrganizationNames(req){
-    //     return await fetch(req)
-    //         .then((response) => {
-    //             return response.json()
-    //         });
-    // }
-
-    // $( function() {
-    //     getOrganizationNames(ajaxListLink)
-    //         .then((data) => {
-    //             console.log(data);
-    //             let table = document.querySelector('#dynamicTableBody');
-    //             let currentViewLink = '';
-    //             let currentEditLink = '';
-    //             for(let i = 0; i < data.data.length; i++){
-    //                 table.innerHTML += (`<tr>
-    //                                         <td>${data.data[i][1]}</td>
-    //                                         <td>${data.data[i][2]}</td>
-    //                                         <td>${data.data[i][3]}</td>
-    //                                         <td>${data.data[i][4]}</td>
-    //                                         <td>${data.data[i][5]}</td>
-    //                                         <td>${data.data[i][6]}</td>
-    //                                         <td>${data.data[i][7]}</td>
-    //                                      </tr>`);
-    //             }
-    //              $('#dynamicTable').DataTable({
-    //                  responsive: {
-    //                      details: {
-    //                          display: $.fn.dataTable.Responsive.display.modal({
-    //                              header: function(row) {
-    //                                  var data = row.data();
-    //                                  return 'Details for ' + data[0] + ' ' + data[1];
-    //                              }
-    //                          }),
-    //                          renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-    //                              tableClass: 'table'
-    //                          })
-    //                      }
-    //                  }
-    //              });
-    //         })
-    // } );
-
-
+    });
 
 
 

@@ -13,4 +13,6 @@ public interface DocumentDescriptionService {
 
     List<DocumentDescription> getDescriptionList();
 
+    DocumentDescription save(DocumentDescription desc);
+
 }

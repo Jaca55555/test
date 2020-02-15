@@ -74,6 +74,7 @@
                         <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
+<!--                        <input type="search" id="document_organization_id">-->
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
 
@@ -129,10 +130,10 @@
                     <div id="file_ids" class="d-none">
                         <input type="text" name="file_ids" value="">
                     </div>
-                    <input type="file" class="d-none" id="addFile2" name="files" multiple>
+                    <input type="file" class="d-none" id="addFile2" name="files" >
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
-                        <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор қилиш</button>
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" >Бекор қилиш</button>
                         <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
                             олиш</button>
                     </div>
@@ -176,7 +177,7 @@
                     <hr class="m30-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >Бекор
                                 қилиш</button>
                             <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                         </div>
@@ -215,7 +216,7 @@
     function clickPlus() {
         $('#addFile2').click();
     }
-    $(document).ready(function () {
+    $(document).ready(function(){
         $('#addFile2').on('change', function () {
 
             let csrf = $("form input[name='_csrf']").val();
@@ -230,59 +231,14 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: function (data) {
-                    let extension = data.data.extension;
-                    let color;
-                    switch (extension) {
-                        case 'jpg':
-                            extension = '-image';
-                            color = 'color-blue';
-                            break;
-                        case 'pdf':
-                            extension = '-pdf';
-                            color = 'color-red';
-                            break;
-                        case 'xlsx':
-                            extension = '-excel';
-                            color = 'color-green';
-                            break;
-                        case 'doc':
-                        case 'docx':
-                            extension = '-word';
-                            color = 'color-blue';
-                            break;
-                        default:
-                            extension = '';
-                            color = 'color-gray';
-                    }
-                    $('#file_ids').append(
-                        `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
-                    );
-                    $('#file-container').prepend(
-                        `<div class="file-block" id="file_block_${data.data.id}">
-                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
-                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
-                        </div>
-                        <div class="text-center">
-                            <span>${data.data.name}</span>
-                        </div>
-                    </div>`
-                    );
-                }
+                success: detectExtensionAndDisplay
             })
         });
 
-        function downloadFileFunction(id) {
-            window.open(`/doc/outgoing_mail/file/download?id=${id}`);
-        }
 
-        function deleteFunc(id) {
-            fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
-            document.querySelector(`#file_block_${id}`).remove();
-            document.querySelector(`#input_file_id_${id}`).remove();
-        }
 
         $('#document_organization_id').select2({
+            tags: true,
             ajax: {
                 url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
                 type: "POST",
@@ -301,7 +257,71 @@
                 }, cache: true
             }
         });
+
+
+
+
+
+
     });
+//function definitions
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function deleteFunc(id) {
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+    }
+
+    function withdrawal(){
+        window.location = `/doc/outgoing_mail/list`;
+
+    }
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let color;
+        switch (extension) {
+            case 'jpg':
+                extension = '-image';
+                color = 'color-blue';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').prepend(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${data.data.name}</span>
+                        </div>
+                    </div>`
+        );
+    }
+
+
 
 </script>
 </body>
