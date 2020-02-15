@@ -29,6 +29,8 @@ import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.lang.NumberFormatException;
+
 
 @Controller
 public class OutgoingMailController {
@@ -42,6 +44,8 @@ public class OutgoingMailController {
     private final DocumentOrganizationService documentOrganizationService;
     private final FileService fileService;
     private final DepartmentService departmentService;
+    private final DocumentDescriptionService descService;
+    private final DocumentSubService documentSubService;
 
     @Autowired
     public OutgoingMailController(
@@ -53,7 +57,9 @@ public class OutgoingMailController {
             UserService userService,
             DocumentOrganizationService documentOrganizationService,
             FileService fileService,
-            DepartmentService departmentService
+            DepartmentService departmentService,
+            DocumentDescriptionService descService,
+            DocumentSubService documentSubService
     ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -64,6 +70,8 @@ public class OutgoingMailController {
         this.documentOrganizationService = documentOrganizationService;
         this.fileService = fileService;
         this.departmentService = departmentService;
+        this.descService = descService;
+        this.documentSubService = documentSubService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
@@ -85,73 +93,64 @@ public class OutgoingMailController {
     @Transactional
     @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
     public String newOutgoingMail(Document document,
-                                  @RequestParam(name = "communication_tool_id")Integer ctId,
-                                  @RequestParam(name = "document_organization_id")Integer doId,
+                                  @RequestParam(name = "communication_tool_id")Integer communicationToolId,
+                                  @RequestParam(name = "document_organization_id")String documentOrganizationId_,
                                   @RequestParam(name = "file_ids")List<Integer> file_ids){
-        /*
-        Document newDocument = new Document();
-        newDocument.setCreatedAt(new Date());
-        newDocument.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
-        //    System.out.println(file_ids);
-        Set<File> files = new HashSet<>();
-        for(Integer fileId: file_ids){
-            if(fileId == null) continue;
-            files.add(fileService.findById(fileId));
-        }
-        newDocument.setContentFiles(files);
-
-        Journal journal = journalService.getById(document.getJournalId());
-
-        newDocument.setJournalId(journal.getId());
-        newDocument.setJournal(journal);
-        newDocument.setRegistrationNumber(journal.getPrefix() + '-' + (journal.getNumbering() != null ? journal.getNumbering() : 1));
-        newDocument.setRegistrationDate(new Date());
-
-        newDocument.setDocumentViewId(document.getDocumentViewId());
-
-        DocumentSub documentSub = new DocumentSub();
-
-        CommunicationTool ct = communicationToolService.getById(ctId);
-        documentSub.setCommunicationTool(communicationToolService.getById(communicationToolId));
-        documentSub.setCommunicationToolId(communicationToolId);
-
-        DocumentOrganization documentOrganization = documentOrganizationService.getByName(document.getDocumentSub().getOrganizationName());
+        Integer documentOrganizationId;
         User user = userService.getCurrentUserFromContext();
-        if(documentOrganization == null){
-            documentOrganization = new DocumentOrganization();
-            documentOrganization.setName(document.getDocumentSub().getOrganizationName());
+        try {
+            documentOrganizationId = Integer.parseInt(documentOrganizationId_);
+        }catch(NumberFormatException ex){
+            String name = documentOrganizationId_;
+            System.out.println("creating new document organization with '" + documentOrganizationId_ + "' name");
+            DocumentOrganization documentOrganization = new DocumentOrganization();
+            documentOrganization.setName(name);
+            documentOrganization.setStatus(true);
             documentOrganization.setCreatedById(user.getId());
-            documentOrganizationService.create(documentOrganization);
+            documentOrganizationId = documentOrganizationService.create(documentOrganization).getId();
         }
+        Set<File> files = new HashSet<File>();
+        for(Integer id: file_ids) {
+            if (id != null) files.add(fileService.findById(id));
+        }
+        document.setContentFiles(files);
+        //journal, registration number and registration date
+        Journal journal = journalService.getById(document.getJournalId());
+        document.setJournal(journal);
+        document.setRegistrationNumber(journal.getPrefix() + '-' + (journal.getNumbering() != null ? journal.getNumbering() : 1));
+        document.setRegistrationDate(new Date());
+        //document view
+        document.setDocumentView(documentViewService.getById(document.getDocumentViewId()));
+        //content and creating documentDescription
+        DocumentDescription description = new DocumentDescription();
+        description.setContent(document.getContent());
+        document.setContentId(descService.save(description).getId());
+        //setting createdAt and created by and organization
 
-        documentSub.setOrganizationName(document.getDocumentSub().getOrganizationName());
-        documentSub.setOrganizationId(documentOrganization.getId());
-        documentSub.setOrganization(documentOrganization);
-        newDocument.setDocumentSub(documentSub);
+        document.setCreatedById(user.getId());
+        document.setCreatedAt(new Date());
+        document.setOrganizationId(user.getOrganizationId());
+        document.setOrganization(user.getOrganization());
+        //setting document type
+        document.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
+        document.setDocumentType(documentTypeService.getById(document.getDocumentTypeId()));
 
-        newDocument.setDocumentSub(documentSub);
-        newDocument.setDocumentDescription(document.getDocumentDescription());
+        //setting document sub
+        DocumentSub docSub = new DocumentSub();
+        docSub.setOrganizationId(documentOrganizationId);
+        DocumentOrganization documentOrganization = documentOrganizationService.getById(documentOrganizationId);
+        docSub.setOrganization(documentOrganization);
+        docSub.setOrganizationName(documentOrganization.getName());
+        docSub.setCommunicationToolId(communicationToolId);
 
-        newDocument.setAnswerDocumentId(document.getAnswerDocumentId());
-        newDocument.setAnswerDocument(documentService.getById(document.getAnswerDocumentId()));
-        newDocument.setPerformerName(user.getUsername());
+        Document savedDocument = documentService.createDoc(document);
 
-        newDocument.setPerformerPhone(user.getPhone());
-        newDocument.setRegistrationDate(new Date());
 
-        newDocument.setCreatedById(user.getId());
-
-        documentService.createDoc(newDocument);
+        docSub.setDocumentId(savedDocument.getId());
+        docSub.setDocument(savedDocument);
+        documentSubService.createDocumentSub(docSub);
 
         return "redirect:" + DocUrls.OutgoingMailList;
-        */
-
-        System.out.println(document);
-        System.out.println("communication tool id: " + ctId);
-        System.out.println("document organization id: " + doId);
-        System.out.println("file_ids: " + file_ids);
-
-        return "redirect:" + DocUrls.OutgoingMailNew;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailOrganizationList, produces = "application/json")
@@ -165,18 +164,19 @@ public class OutgoingMailController {
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(Model model) {
         model.addAttribute("organizationList", documentOrganizationService.getList());
+        model.addAttribute("documentViews", documentViewService.getStatusActive());
         return DocTemplates.OutgoingMailList;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
-            DocFilterDTO filter,
+
             Pageable pageable
     ){
-        /*        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
+        /*filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
         HashMap<String, Object> result = new HashMap<>();
-        //   DocFilterDTO filter = new DocFilterDTO();
+           DocFilterDTO filter = new DocFilterDTO();
         filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
         Page<Document> documentPage = documentService.findFiltered(filter, pageable);
         System.out.println("*************************************");

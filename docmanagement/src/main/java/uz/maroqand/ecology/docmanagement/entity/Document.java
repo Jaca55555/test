@@ -86,6 +86,9 @@ public class Document {
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
 
+    @Column(name = "performer_id")
+    private Integer performerId;
+
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")
     private String performerName;
