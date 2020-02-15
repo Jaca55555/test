@@ -1,12 +1,14 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -18,9 +20,8 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,7 @@ public class IncomingRegistrationController {
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentSubService documentSubService;
+    private final DocumentTaskService documentTaskService;
 
     @Autowired
     public IncomingRegistrationController(
@@ -57,8 +59,8 @@ public class IncomingRegistrationController {
             FileService fileService,
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
-            DocumentSubService documentSubService
-    ) {
+            DocumentSubService documentSubService,
+            DocumentTaskService documentTaskService) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.documentDescriptionService = documentDescriptionService;
@@ -69,6 +71,7 @@ public class IncomingRegistrationController {
         this.fileService = fileService;
         this.organizationService = organizationService;
         this.documentViewService = documentViewService;
+        this.documentTaskService = documentTaskService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
@@ -276,9 +279,81 @@ public class IncomingRegistrationController {
             return  "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
+        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
+
         model.addAttribute("document", document);
+        model.addAttribute("userList", userList);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
         return DocTemplates.IncomingRegistrationTask;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationTaskSubmit)
+    public String IncomingRegistrationTaskSubmit(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+
+        User user = userService.getCurrentUserFromContext();
+        Document document = documentService.getById(id);
+        if (document==null){
+            return "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+
+
+        System.out.println("id=" + id);
+        System.out.println("content=" + content);
+        System.out.println("docRegDateStr=" + docRegDateStr);
+
+        DocumentTask documentTask = documentTaskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        Integer userId = null;
+        Integer performerType = null;
+        Date dueDate = null;
+        Map<String,String> map = formData.toSingleValueMap();
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            String value= mapEntry.getValue().replaceAll(" ","");
+
+            if (tagName.equals("user")){
+                userId=Integer.parseInt(value);
+            }
+            if (tagName.equals("performer")){
+                performerType = Integer.parseInt(value);
+            }
+
+            if (tagName.equals("dueDateStr")){
+                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+                if (userId!=null && performerType!=null){
+
+                }
+            }
+        }
+
+
+        return "redirect:" + DocUrls.IncomingRegistrationList;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationUserName)
+    @ResponseBody
+    public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        User user = userService.findById(userId);
+        if (user==null){
+            result.put("status",0);
+            return result;
+        }
+
+        result.put("userId",user.getId());
+        result.put("userFullName",user.getFullName());
+        result.put("position", user.getPosition().getNameTranslation(locale));
+        return result;
     }
 
     @PostMapping(value = DocUrls.IncomeMailFileUpload)

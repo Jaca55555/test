@@ -9,10 +9,10 @@ import java.util.List;
  * (ru)
  */
 public enum TaskSubType {
-    Performer(0,"task_sub_type.initial"),//Ижрочи
-    PerformerPartner(1,"task_sub_type.new"),//Хамкор ижрочи
-    Control(2,"task_sub_type.inProgress"),//Ижро назорати
-    Info(3,"task_sub_type.inProgress");//Маълумот учун
+    Performer(0,"task_sub_type.performer"),//Ижрочи
+    PerformerPartner(1,"task_sub_type.performer_partner"),//Хамкор ижрочи
+    Control(2,"task_sub_type.control"),//Ижро назорати
+    Info(3,"task_sub_type.info");//Маълумот учун
 
     private Integer id;
     private String name;
