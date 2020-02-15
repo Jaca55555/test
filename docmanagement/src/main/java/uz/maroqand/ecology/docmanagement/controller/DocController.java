@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
@@ -34,7 +32,6 @@ import java.util.List;
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz)
- * (ru)
  */
 @Controller
 public class DocController {
@@ -57,7 +54,6 @@ public class DocController {
 
         return DocTemplates.Dashboard;
     }
-
 
     @RequestMapping(value = DocUrls.RegistrationAdditionalDocument, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

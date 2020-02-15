@@ -42,6 +42,7 @@ public class OutgoingMailController {
     private final DepartmentService departmentService;
     private final DocumentDescriptionService descService;
     private final DocumentSubService documentSubService;
+    private final DocumentTypeService documentTypeService;
 
     @Autowired
     public OutgoingMailController(
@@ -54,7 +55,8 @@ public class OutgoingMailController {
             FileService fileService,
             DepartmentService departmentService,
             DocumentDescriptionService descService,
-            DocumentSubService documentSubService
+            DocumentSubService documentSubService,
+            DocumentTypeService documentTypeService
     ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -66,6 +68,7 @@ public class OutgoingMailController {
         this.departmentService = departmentService;
         this.descService = descService;
         this.documentSubService = documentSubService;
+        this.documentTypeService = documentTypeService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
@@ -85,10 +88,12 @@ public class OutgoingMailController {
 
     @Transactional
     @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
-    public String newOutgoingMail(Document document,
-                                  @RequestParam(name = "communication_tool_id")Integer communicationToolId,
-                                  @RequestParam(name = "document_organization_id")String documentOrganizationId_,
-                                  @RequestParam(name = "file_ids")List<Integer> file_ids){
+    public String newOutgoingMail(
+            Document document,
+            @RequestParam(name = "communication_tool_id")Integer communicationToolId,
+            @RequestParam(name = "document_organization_id")String documentOrganizationId_,
+            @RequestParam(name = "file_ids")List<Integer> file_ids
+    ){
         Integer documentOrganizationId;
         User user = userService.getCurrentUserFromContext();
         try {
@@ -152,8 +157,6 @@ public class OutgoingMailController {
         return documentOrganizationService.getDocumentOrganizationNames();
     }
 
-
-
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(Model model) {
         model.addAttribute("organizationList", documentOrganizationService.getList());
@@ -194,16 +197,16 @@ public class OutgoingMailController {
         return result;
     }
 
-
     @RequestMapping(DocUrls.OutgoingMailView)
-    public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){
-
+    public String outgoingMailView(
+        @RequestParam(name = "id")Integer id,
+        Model model
+    ){
         model.addAttribute("document", documentService.getById(id));
         model.addAttribute("journal", journalService.getStatusActive());
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -215,7 +218,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -229,6 +231,7 @@ public class OutgoingMailController {
 
         return res;
     }
+
     @RequestMapping(value = DocUrls.OutgoingMailFileDownload, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public ResponseEntity<Resource> downloadAttachedDocument(@RequestParam(name = "id")Integer id){

@@ -1,22 +1,14 @@
 package uz.maroqand.ecology.docmanagement.service;
 
-<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
-=======
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.docmanagement.entity.Document;
->>>>>>> aee8c6ca9285b7a6aeb5177932e4be76507edddb
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 
-<<<<<<< HEAD
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -84,33 +76,17 @@ public class DocumentSubServiceImpl implements DocumentSubService {
         };
     }
 
-
-}
-=======
-import java.util.List;
-
-@Service
-public class DocumentSubServiceImpl implements DocumentSubService {
-
-    private final DocumentSubRepository repository;
-
-    @Autowired
-    public DocumentSubServiceImpl(DocumentSubRepository repository){
-        this.repository = repository;
-    }
-
     @Override
     public List<DocumentSub> findByDocumentId(Integer documentId){
         DocumentSub doc = new DocumentSub();
         doc.setDocumentId(documentId);
         Example<DocumentSub> subExample = Example.of(doc);
-        return repository.findAll(subExample);
+        return documentSubRepository.findAll(subExample);
     }
 
     @Override
     public DocumentSub createDocumentSub(DocumentSub sub){
-        return repository.save(sub);
+        return documentSubRepository.save(sub);
     }
 
 }
->>>>>>> aee8c6ca9285b7a6aeb5177932e4be76507edddb
