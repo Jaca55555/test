@@ -5,20 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
+import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 15.02.2020.
@@ -29,32 +26,82 @@ import java.util.List;
 public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     private final DocumentTaskSubRepository documentTaskSubRepository;
+    private final DocumentSubService documentSubService;
 
     @Autowired
-    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository) {
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
+        this.documentSubService = documentSubService;
+    }
+
+    @Override
+    public Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date){
+        return documentTaskSubRepository.countByReceiverIdAndDueDateGreaterThanEqual(receiverId, date);
+    }
+
+    @Override
+    public Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date){
+        return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqual(receiverId, date);
+    }
+
+    @Override
+    public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){
+        return documentTaskSubRepository.countByReceiverIdAndStatusIn(receiverId, statuses);
+    }
+
+    @Override
+    public Integer countByReceiverId(Integer receiverId){
+        return documentTaskSubRepository.countByReceiverId(receiverId);
     }
 
     @Override
     public Page<DocumentTaskSub> findFiltered(
-            DocFilterDTO filterDTO,
+            Integer documentOrganizationId,
+            String docRegNumber,
+            String registrationNumber,
+            Date dateBegin,
+            Date dateEnd,
+            String taskContent,
+            String content,
+            Integer performerId,
+            Integer taskSubType,
+            Integer taskSubStatus,
+
             Date deadlineDateBegin,
             Date deadlineDateEnd,
             Integer type,
-            Integer status,
+            Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
             Pageable pageable
     ) {
-        return documentTaskSubRepository.findAll(getSpesification(filterDTO, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
+        Specification<DocumentSub> documentSubSpecification = null;
+        if (documentOrganizationId != null) {
+            documentSubSpecification = documentSubService.getSpecificationOrganization(documentOrganizationId);
+        }
+        return documentTaskSubRepository.findAll(getSpesification(
+                documentSubSpecification,
+                documentOrganizationId, docRegNumber, registrationNumber, dateBegin, dateEnd, taskContent, content, performerId, taskSubType, taskSubStatus,
+                deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
     }
 
     private static Specification<DocumentTaskSub> getSpesification(
-            final DocFilterDTO filterDTO,
+            Specification<DocumentSub> documentSubSpecification,
+            final Integer documentOrganizationId,
+            final String docRegNumber,
+            final String registrationNumber,
+            final Date dateBegin,
+            final Date dateEnd,
+            final String taskContent,
+            final String content,
+            final Integer performerId,
+            final Integer taskSubType,
+            final Integer taskSubStatus,
+
             final Date deadlineDateBegin,
             final Date deadlineDateEnd,
             final Integer type,
-            final Integer status,
+            final Set<Integer> statuses,
             final Integer departmentId,
             final Integer receiverId
     ) {
@@ -63,94 +110,51 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             public Predicate toPredicate(Root<DocumentTaskSub> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
 
-                if (filterDTO != null) {
-                    if (filterDTO.getDocumentId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
-                    }
+                /*if (documentOrganizationId != null) {
+                    Join<DocumentTaskSub, DocumentSub> userProd = root.join("documentId", JoinType.LEFT);
+                    predicates.add(criteriaBuilder.equal(userProd.get("organizationId"), documentOrganizationId));
+                }*/
 
-                    if (filterDTO.getRegistrationNumber() != null) {
-                        System.out.println(filterDTO.getRegistrationNumber());
-                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
-                    }
+                if (docRegNumber != null) {
+                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
+                }
+                if (registrationNumber != null) {
+                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("registrationNumber"), "%" + registrationNumber + "%"));
+                }
 
-                    Date dateBegin = DateParser.TryParse(filterDTO.getRegistrationDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
-                    if (dateBegin != null && dateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), dateBegin));
-                    }
-                    if (dateEnd != null && dateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), dateEnd));
-                    }
-                    if (dateBegin != null && dateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), dateBegin, dateEnd));
-                    }
+                if (dateBegin != null && dateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateBegin));
+                }
+                if (dateEnd != null && dateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateEnd));
+                }
+                if (dateBegin != null && dateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
+                }
+                if (content != null) {
+                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("content"), "%" + content + "%"));
+                }
 
-                    if (filterDTO.getControlCard() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getControlCard()));
-                    }
-
-                    if (filterDTO.getDocumentType() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
-                    }
-
-                    if (filterDTO.getCorrespondentType() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCorrespondentType()));
-                    }
-
-                    if (filterDTO.getContent() != null) {
-                        predicates.add(criteriaBuilder.like(root.join("documentDescription").<String>get("content"), "%" + filterDTO.getContent() + "%"));
-                    }
-
-                    if (filterDTO.getChief() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getChief()));
-                    }
-
-                    if (filterDTO.getExecutors() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutors()));
-                    }
-
-                    if (filterDTO.getResolution() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getResolution()));
-                    }
-
-                    if (filterDTO.getExecutePath() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutePath()));
-                    }
-
-                    if (filterDTO.getExecuteStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteStatus()));
-                    }
-
-                    Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);
-                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
-                    if (executeDateBegin != null && executeDateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateBegin));
-                    }
-                    if (executeDateEnd != null && executeDateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateEnd));
-                    }
-                    if (executeDateBegin != null && executeDateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), executeDateBegin, executeDateEnd));
-                    }
-
-                    if (filterDTO.getExecuteControlStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteControlStatus()));
-                    }
-
-                    if (filterDTO.getInsidePurposeStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("insicePurpose"), filterDTO.getInsidePurposeStatus()));
-                    }
-
-                    if (filterDTO.getCoExecutorStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoExecutorStatus()));
-                    }
-
-                    if (filterDTO.getReplies() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
-                    }
+                if (taskContent != null) {
+                    predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + taskContent + "%"));
+                }
+                if (performerId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
+                }
+                if (taskSubType != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                }
+                if (taskSubStatus != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
                 }
 
 
+                if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));
+                }
+                if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));
+                }
                 if (deadlineDateBegin != null && deadlineDateEnd != null) {
                     predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
                 }
@@ -158,8 +162,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 if (type != null) {
                     predicates.add(criteriaBuilder.equal(root.get("type"), type));
                 }
-                if (status != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                if (statuses != null) {
+                    predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
                 }
                 if (departmentId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));

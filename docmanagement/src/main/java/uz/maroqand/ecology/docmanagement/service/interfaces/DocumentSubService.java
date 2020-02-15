@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.service.interfaces;
 
+import org.springframework.data.jpa.domain.Specification;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 
@@ -14,5 +15,7 @@ public interface DocumentSubService {
     DocumentSub create(Integer organizationId, DocumentSub documentSub, User user);
 
     DocumentSub update(DocumentSub documentSub, User user);
+
+    Specification<DocumentSub> getSpecificationOrganization( final Integer documentOrganizationId );
 
 }

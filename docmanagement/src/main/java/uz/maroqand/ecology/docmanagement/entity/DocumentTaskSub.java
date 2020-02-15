@@ -33,15 +33,16 @@ public class DocumentTaskSub {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_task_id", insertable = false, updatable = false)
-    private Document task;
+    private DocumentTask task;
 
     @Column(name = "document_task_id")
     private Integer taskId;
 
-
+    //topshirish
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
+    //topshiriq muddati
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
