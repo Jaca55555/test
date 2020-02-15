@@ -43,7 +43,7 @@ public class JournalServiceImpl implements JournalService {
     @Cacheable(value = "journalGetById", key = "#id", condition="#id != null", unless="#result == null")
     public Journal getById(Integer id) throws IllegalArgumentException {
         if (id==null)return null;
-        return updateByIdFromCache(id);
+        return journalRepository.getOne(id);
     }
 
     @Override
@@ -56,14 +56,8 @@ public class JournalServiceImpl implements JournalService {
     @Override
     @Cacheable("journalGetStatusActive")
     public List<Journal> getStatusActive() {
-        return setStatusActive();
-    }
-
-    @CachePut("journalGetStatusActive")
-    public List<Journal> setStatusActive() {
         return journalRepository.findByStatusTrue();
     }
-
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
@@ -82,38 +76,34 @@ public class JournalServiceImpl implements JournalService {
     }
 
     private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO) {
-        return new Specification<Journal>() {
-            @Override
-            public Predicate toPredicate(Root<Journal> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (filterDTO.getDocTypeId() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
-                }
-                if (filterDTO.getName() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filterDTO.getName().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getPrefix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("prefix")),
-                            "%" + filterDTO.getPrefix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getSuffix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("suffix")),
-                            "%" + filterDTO.getSuffix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getStatus() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<Journal>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (filterDTO.getDocTypeId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
             }
+            if (filterDTO.getName() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + filterDTO.getName().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getPrefix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("prefix")),
+                        "%" + filterDTO.getPrefix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getSuffix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("suffix")),
+                        "%" + filterDTO.getSuffix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

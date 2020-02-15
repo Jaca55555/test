@@ -22,7 +22,7 @@ public interface DocumentTypeService {
 
     List<DocumentType> getStatusActive();
 
-    List<DocumentType> removeStatusActive();
+    List<DocumentType> updateStatusActive();
 
     Page<DocumentType> getFiltered(DocumentTypeEnum type, String name, Boolean status, Pageable pageable);
 

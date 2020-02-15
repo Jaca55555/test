@@ -48,8 +48,11 @@ public class DocUrls {
     //Ichki hujjatlarni ro'yhatga olish
     private static final String InnerRegistration = Prefix + Registration + Inner;
     public static final String InnerRegistrationList = InnerRegistration + "/list";
-    public static final String InnerRegistrationListAjax = InnerRegistration + "/list_ajax";
     public static final String InnerRegistrationNew = InnerRegistration + "/new";
+    public static final String InnerRegistrationView = InnerRegistration + "/view";
+    public static final String InnerRegistrationEdit = InnerRegistration + "/edit";
+    public static final String InnerRegistrationNewTask = InnerRegistration + "/new_and_task";
+    public static final String InnerRegistrationEditTask = InnerRegistration + "/edit_and_task";
     public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
 
 

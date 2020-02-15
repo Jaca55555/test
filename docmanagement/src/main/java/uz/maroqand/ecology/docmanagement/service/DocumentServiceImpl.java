@@ -61,101 +61,98 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-                if (filterDTO != null) {
-                    if (filterDTO.getDocumentId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
-                    }
-
-                    if (filterDTO.getRegistrationNumber() != null) {
-                        System.out.println(filterDTO.getRegistrationNumber());
-                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
-                    }
-
-                    Date dateBegin = DateParser.TryParse(filterDTO.getRegsitrationDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
-                    if (dateBegin != null && dateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), dateBegin));
-                    }
-                    if (dateEnd != null && dateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), dateEnd));
-                    }
-                    if (dateBegin != null && dateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), dateBegin, dateEnd));
-                    }
-
-                    if (filterDTO.getControlCard() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getControlCard()));
-                    }
-
-                    if (filterDTO.getDocumentType() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
-                    }
-
-                    if (filterDTO.getCorrespondentType() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCorrespondentType()));
-                    }
-
-                    if (filterDTO.getContent() != null) {
-                        predicates.add(criteriaBuilder.like(root.join("documentDescription").<String>get("content"), "%" + filterDTO.getContent() + "%"));
-                    }
-
-                    if (filterDTO.getChief() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getChief()));
-                    }
-
-                    if (filterDTO.getExecutors() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutors()));
-                    }
-
-                    if (filterDTO.getResolution() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getResolution()));
-                    }
-
-                    if (filterDTO.getExecutePath() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutePath()));
-                    }
-
-                    if (filterDTO.getExecuteStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteStatus()));
-                    }
-
-                    Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);
-                    Date executeDateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
-                    if (executeDateBegin != null && executeDateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateBegin));
-                    }
-                    if (executeDateEnd != null && executeDateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateEnd));
-                    }
-                    if (executeDateBegin != null && executeDateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), executeDateBegin, executeDateEnd));
-                    }
-
-                    if (filterDTO.getExecuteControlStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteControlStatus()));
-                    }
-
-                    if (filterDTO.getInsidePurposeStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("insicePurpose"), filterDTO.getInsidePurposeStatus()));
-                    }
-
-                    if (filterDTO.getCoexecutorStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getCoexecutorStatus()));
-                    }
-
-                    if (filterDTO.getReplies() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
-                    }
+            if (filterDTO != null) {
+                if (filterDTO.getDocumentId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
                 }
 
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                if (filterDTO.getRegistrationNumber() != null) {
+                    System.out.println(filterDTO.getRegistrationNumber());
+                    predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
+                }
+
+                Date dateBegin = DateParser.TryParse(filterDTO.getRegsitrationDateBegin(), Common.uzbekistanDateFormat);
+                Date dateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                if (dateBegin != null && dateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), dateBegin));
+                }
+                if (dateEnd != null && dateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), dateEnd));
+                }
+                if (dateBegin != null && dateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), dateBegin, dateEnd));
+                }
+
+                if (filterDTO.getControlCard() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getControlCard()));
+                }
+
+                if (filterDTO.getDocumentType() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
+                }
+
+                if (filterDTO.getCorrespondentType() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getCorrespondentType()));
+                }
+
+                if (filterDTO.getContent() != null) {
+                    predicates.add(criteriaBuilder.like(root.join("documentDescription").<String>get("content"), "%" + filterDTO.getContent() + "%"));
+                }
+
+                if (filterDTO.getChief() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getChief()));
+                }
+
+                if (filterDTO.getExecutors() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutors()));
+                }
+
+                if (filterDTO.getResolution() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getResolution()));
+                }
+
+                if (filterDTO.getExecutePath() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getExecutePath()));
+                }
+
+                if (filterDTO.getExecuteStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteStatus()));
+                }
+
+                Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);
+                Date executeDateEnd = DateParser.TryParse(filterDTO.getRegsitrationDateEnd(), Common.uzbekistanDateFormat);
+                if (executeDateBegin != null && executeDateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateBegin));
+                }
+                if (executeDateEnd != null && executeDateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate").as(Date.class), executeDateEnd));
+                }
+                if (executeDateBegin != null && executeDateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("registrationDate").as(Date.class), executeDateBegin, executeDateEnd));
+                }
+
+                if (filterDTO.getExecuteControlStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteControlStatus()));
+                }
+
+                if (filterDTO.getInsidePurposeStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("insicePurpose"), filterDTO.getInsidePurposeStatus()));
+                }
+
+                if (filterDTO.getCoexecutorStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getCoexecutorStatus()));
+                }
+
+                if (filterDTO.getReplies() != null) {
+                    predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
+                }
             }
+
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

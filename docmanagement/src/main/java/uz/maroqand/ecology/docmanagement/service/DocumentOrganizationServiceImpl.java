@@ -97,36 +97,28 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     private static Specification<DocumentOrganization> getFilteringSpecification(final String name) {
-        return new Specification<DocumentOrganization>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentOrganization> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(name!=null){
-                    predicates.add( criteriaBuilder.like(root.get("name"), "%" + name.toUpperCase() + "%") );
-                }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<DocumentOrganization>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(name!=null){
+                predicates.add( criteriaBuilder.like(root.get("name"), "%" + name.toUpperCase() + "%") );
             }
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
     private static Specification<DocumentOrganization> getFilteringSpecification(Integer id, String name, Integer status){
-        return new Specification<DocumentOrganization>(){
-            @Override
-            public Predicate toPredicate(Root<DocumentOrganization> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder){
-                List<Predicate> predicates = new LinkedList<>();
+        return (Specification<DocumentOrganization>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-                if(id != null)
-                    predicates.add(criteriaBuilder.equal(root.get("id"), id));
-                if(name != null)
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
-                if(status != null)
-                    predicates.add(criteriaBuilder.equal(root.get("status"), status == 1));
+            if(id != null)
+                predicates.add(criteriaBuilder.equal(root.get("id"), id));
+            if(name != null)
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+            if(status != null)
+                predicates.add(criteriaBuilder.equal(root.get("status"), status == 1));
 
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
-            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
     public DocumentOrganization create(DocumentOrganization organization) {
