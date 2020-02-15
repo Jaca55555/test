@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,9 +8,9 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,58 +21,57 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Utkirbek Boltaev on 01.04.2019.
+ * Created by Utkirbek Boltaev on 15.02.2020.
  * (uz)
  */
-@Service
-public class DocumentServiceImpl implements DocumentService {
 
-    private final DocumentRepository documentRepository;
+@Service
+public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
+
+    private final DocumentTaskSubRepository documentTaskSubRepository;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository) {
-        this.documentRepository = documentRepository;
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository) {
+        this.documentTaskSubRepository = documentTaskSubRepository;
     }
 
     @Override
-    public Document getById(Integer id) {
-        return documentRepository.findByIdAndDeletedFalse(id);
-    }
-
-    @Override
-    public Document createDoc(Document document) {
-        document.setCreatedAt(new Date());
-        document.setDeleted(Boolean.FALSE);
-        return documentRepository.save(document);
-    }
-
-    @Override
-    public void update(Document document) {
-        document.setUpdateAt(new Date());
-        documentRepository.save(document);
-    }
-
-    @Override
-    public Page<Document> findFiltered(
+    public Page<DocumentTaskSub> findFiltered(
             DocFilterDTO filterDTO,
+            Date deadlineDateBegin,
+            Date deadlineDateEnd,
+            Integer type,
+            Integer status,
+            Integer departmentId,
+            Integer receiverId,
             Pageable pageable
     ) {
-        return documentRepository.findAll(getSpesification(filterDTO), pageable);
+        return documentTaskSubRepository.findAll(getSpesification(filterDTO, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
     }
 
-    private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
-        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new LinkedList<>();
+    private static Specification<DocumentTaskSub> getSpesification(
+            final DocFilterDTO filterDTO,
+            final Date deadlineDateBegin,
+            final Date deadlineDateEnd,
+            final Integer type,
+            final Integer status,
+            final Integer departmentId,
+            final Integer receiverId
+    ) {
+        return new Specification<DocumentTaskSub>() {
+            @Override
+            public Predicate toPredicate(Root<DocumentTaskSub> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
 
-            if (filterDTO != null) {
-                if (filterDTO.getDocumentId() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
-                }
+                if (filterDTO != null) {
+                    if (filterDTO.getDocumentId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
+                    }
 
-                if (filterDTO.getRegistrationNumber() != null) {
-                    System.out.println(filterDTO.getRegistrationNumber());
-                    predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
-                }
+                    if (filterDTO.getRegistrationNumber() != null) {
+                        System.out.println(filterDTO.getRegistrationNumber());
+                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
+                    }
 
                     Date dateBegin = DateParser.TryParse(filterDTO.getRegistrationDateBegin(), Common.uzbekistanDateFormat);
                     Date dateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
@@ -152,28 +150,28 @@ public class DocumentServiceImpl implements DocumentService {
                     }
                 }
 
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-            }
-        };
-    }
 
-    @Override
-    public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
-        return documentRepository.findAll(getSpecification(name), pageable);
-    }
-
-    private static Specification<Document> getSpecification(String registrationNumber) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(registrationNumber != null){
-                    predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + registrationNumber + "%"));
+                if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
                 }
+
+                if (type != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                }
+                if (status != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                }
+                if (departmentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+                }
+                if (receiverId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+                }
+
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }
+
 }

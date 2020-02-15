@@ -16,6 +16,7 @@ public class DocUrls {
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
+    public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
@@ -37,9 +38,11 @@ public class DocUrls {
     public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
     public static final String IncomingRegistrationEdit = IncomingRegistration + "/edit";
     public static final String IncomingRegistrationEditTask = IncomingRegistration + "/edit_and_task";
+    public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
+
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomeMailSpecial = IncomingRegistration + "/special";
-    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
+//    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
@@ -113,5 +116,11 @@ public class DocUrls {
      public static final String OutgoingMailNew = OutgoingMail + "/new";
      public static final String OutgoingMailList = OutgoingMail + "/list";
      public static final String OutgoingMailOrganizationList = OutgoingMail + "/organization_names";
-     public static final String OutgoingMailListAjax = OutgoingMail + "/ajax";
+     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
+     public static final String OutgoingMailView = OutgoingMail + "/view";
+     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
+     public static final String OutgoingMailFile = OutgoingMail + "/file";
+     public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
+     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
+     public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
 }

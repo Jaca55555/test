@@ -14,8 +14,9 @@ import java.util.Optional;
  * date: 11.02.2020
  */
 @Repository
-public interface DocumentTaskRepository extends DataTablesRepository<DocumentTask, Integer>, JpaRepository<DocumentTask, Integer>
-{
+public interface DocumentTaskRepository extends DataTablesRepository<DocumentTask, Integer>, JpaRepository<DocumentTask, Integer> {
+
     List<DocumentTask> findByDocumentId(Integer docId);
 
+    DocumentTask findByDocumentIdAndChiefId(Integer docId, Integer userId);
 }

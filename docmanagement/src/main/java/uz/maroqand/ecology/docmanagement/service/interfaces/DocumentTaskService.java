@@ -20,4 +20,7 @@ public interface DocumentTaskService
     DocumentTask create(DocumentTask task);
 
     DocumentTask update(DocumentTask task);
+
+    DocumentTask getTaskByUser(Integer docId, Integer userId);
+
 }

@@ -20,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -45,6 +46,9 @@ public class IncomingRegistrationController {
     private final DocumentOrganizationService organizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentSubService documentSubService;
+    private final DocumentTaskService taskService;
+    private final DocumentLogService documentLogService;
+    private final DocumentSubRepository documentSubRepository;
 
     @Autowired
     public IncomingRegistrationController(
@@ -57,10 +61,16 @@ public class IncomingRegistrationController {
             FileService fileService,
             DocumentOrganizationService organizationService,
             DocumentViewService documentViewService,
-            DocumentSubService documentSubService
+            DocumentSubService documentSubService,
+            DocumentTaskService taskService,
+            DocumentLogService documentLogService,
+            DocumentSubRepository documentSubRepository
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
+        this.taskService = taskService;
+        this.documentLogService = documentLogService;
+        this.documentSubRepository = documentSubRepository;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
@@ -73,9 +83,9 @@ public class IncomingRegistrationController {
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
-        model.addAttribute("doc_type", documentTypeService.getStatusActive());
 
-        return DocTemplates.IncomeMailList;
+        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        return DocTemplates.IncomingRegistrationList;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.POST, produces = "application/json")
@@ -88,16 +98,18 @@ public class IncomingRegistrationController {
         Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        Integer userId = userService.getCurrentUserFromContext().getId();
         for (Document document : documentList) {
+            DocumentTask task = taskService.getTaskByUser(document.getId(), userId);
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent(),
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    "docStatus",
-                    "Resolution and parcipiants"
+                    task!=null ? Common.uzbekistanDateFormat.format(task.getDueDate()):"",
+                    task!=null ? task.getStatus():"",
+                    task!=null ? task.getContent():""
             });
         }
 
@@ -115,7 +127,10 @@ public class IncomingRegistrationController {
         }
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        return DocTemplates.IncomeMailView;
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        return DocTemplates.IncomingRegistrationView;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationNew, method = RequestMethod.GET)
@@ -133,7 +148,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-        return DocTemplates.IncomeMailNew;
+        return DocTemplates.IncomingRegistrationNew;
     }
 
     @Transactional
@@ -153,8 +168,8 @@ public class IncomingRegistrationController {
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
-            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
-            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
+            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
+            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -164,7 +179,6 @@ public class IncomingRegistrationController {
                 files.add(fileService.findById(fileId));
             }
         }
-        System.out.println("content="+content);
 
         Document document = new Document();
         document.setJournalId(journalId);
@@ -223,7 +237,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-        return DocTemplates.IncomeMailNew;
+        return DocTemplates.IncomingRegistrationNew;
     }
 
     @RequestMapping(value = {DocUrls.IncomingRegistrationEdit, DocUrls.IncomingRegistrationEditTask}, method = RequestMethod.POST)
@@ -232,8 +246,8 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
-            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
+            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
+            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
             Document document
     ) {
@@ -263,10 +277,22 @@ public class IncomingRegistrationController {
         documentSubService.create(document.getId(), documentSub, user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
-            return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
+            return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document.getId();
         }else {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationTask)
+    public String addTask( @RequestParam(name = "id")Integer id, Model model ) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        return DocTemplates.IncomingRegistrationTask;
     }
 
     @PostMapping(value = DocUrls.IncomeMailFileUpload)
@@ -328,16 +354,5 @@ public class IncomingRegistrationController {
         return DocTemplates.IncomeMailAddTask;
     }*/
 
-    @PostMapping(value = DocUrls.IncomeMailAddTask)
-    public String addTask(
-            @RequestParam(name = "id")Integer id
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        Document document = documentService.getById(id);
-        if (document == null) {
-            return  "redirect:" + DocUrls.IncomingRegistrationList;
-        }
 
-        return "redirect:" + DocUrls.IncomingRegistrationList;
-    }
 }

@@ -61,8 +61,8 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
-    public List<Journal> removeStatusActive() {
-        return journalRepository.findAll();
+    public List<Journal> updateStatusActive() {
+        return journalRepository.findByStatusTrue();
     }
 
     @Override

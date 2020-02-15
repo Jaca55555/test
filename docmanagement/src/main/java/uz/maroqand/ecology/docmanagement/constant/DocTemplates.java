@@ -7,6 +7,7 @@ package uz.maroqand.ecology.docmanagement.constant;
  */
 public class DocTemplates {
     private static final String Prefix = "doc";
+    private static final String Registration = "/registration";
     private static final String Incoming = "/incoming";
     private static final String Outgoing = "/outgoing";
     private static final String Inner = "/inner";
@@ -24,12 +25,11 @@ public class DocTemplates {
     private static final String UserManagement = Prefix + "/user_mngm";
     public static final String Controllers = UserManagement + "/controllers";
 
-    private static final String IncomeMail = Prefix + "/income_mail";
-    public static final String IncomeMailList = IncomeMail + "/list";
-    public static final String IncomeMailView = IncomeMail + "/view";
-    public static final String IncomeMailNew = IncomeMail + "/new";
-    public static final String IncomeMailEdit = IncomeMail + "/new";
-    public static final String IncomeMailAddTask = IncomeMail + "/task";
+    private static final String IncomingRegistration = Prefix + Registration + Incoming;
+    public static final String IncomingRegistrationList = IncomingRegistration + "/list";
+    public static final String IncomingRegistrationView = IncomingRegistration + "/view";
+    public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
+    public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
 
     private static final String CommunicationToolsPrefix = Prefix + "/communication_tools";
     public static final String CommunicationToolsList = CommunicationToolsPrefix + "/list";
