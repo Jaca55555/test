@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.entity.sys;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Soato {
     @Column(name = "name_oz")
     private String nameOz;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",updatable = false,insertable = false)
     private Soato parent;

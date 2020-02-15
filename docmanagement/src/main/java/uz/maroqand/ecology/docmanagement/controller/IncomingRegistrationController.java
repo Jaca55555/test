@@ -353,6 +353,4 @@ public class IncomingRegistrationController {
         model.addAttribute("attends", userService.getEmployeeList());
         return DocTemplates.IncomeMailAddTask;
     }*/
-
-
 }

@@ -29,7 +29,7 @@ public class DocumentLogServiceImpl implements DocumentLogService {
 
     @Override
     public List<DocumentLog> getAllByDocId(Integer docId) {
-        return logRepository.findAllByDocumentId(docId);
+        return logRepository.findAllByDocumentIdOrderByIdDesc(docId);
     }
 
     @Override
