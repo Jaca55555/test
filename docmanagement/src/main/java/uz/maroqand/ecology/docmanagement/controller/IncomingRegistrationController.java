@@ -88,6 +88,7 @@ public class IncomingRegistrationController {
     public String getIncomingRegistrationListPage(Model model) {
 
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        model.addAttribute("organizationList", organizationService.getStatusActive());
         return DocTemplates.IncomingRegistrationList;
     }
 
@@ -133,6 +134,8 @@ public class IncomingRegistrationController {
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("specialControll", true);
+        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
         return DocTemplates.IncomingRegistrationView;
     }
 
@@ -206,6 +209,7 @@ public class IncomingRegistrationController {
         document.setCreatedById(user.getId());
         document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
         document.setRegistrationDate(new Date());
+        document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
         document = documentService.createDoc(document);
 
@@ -376,6 +380,19 @@ public class IncomingRegistrationController {
         return result;
     }
 
+    @GetMapping(value = DocUrls.IncomingSpecialControll)
+    @ResponseBody
+    public HashMap<String, Object> toggleSpecialControl(@RequestParam(name = "id")Integer id) {
+        HashMap<String, Object> response = new HashMap<>();
+        Document document = documentService.getById(id);
+        document.setSpecialControll(!document.getSpecialControll());
+        System.out.println(document.getPerformerPhone());
+        System.out.println(document.getPerformerPhone().getClass().getName());
+        documentService.update(document);
+        response.put("status", "success");
+        return response;
+    }
+
     @PostMapping(value = DocUrls.IncomeMailFileUpload)
     @ResponseBody
     public HashMap<String, Object> uploadFile(
@@ -434,6 +451,4 @@ public class IncomingRegistrationController {
         model.addAttribute("attends", userService.getEmployeeList());
         return DocTemplates.IncomeMailAddTask;
     }*/
-
-
 }

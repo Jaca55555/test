@@ -124,6 +124,9 @@ public class Document {
     @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
     private Boolean insidePurpose;
 
+    @Column(name = "special_controll", columnDefinition = "boolean DEFAULT false")
+    private Boolean specialControll;
+
     //Кирувчи хатни қабул қилиш учун маъсул рахбар
     @Column(name = "manager_id")
     private Integer managerId;

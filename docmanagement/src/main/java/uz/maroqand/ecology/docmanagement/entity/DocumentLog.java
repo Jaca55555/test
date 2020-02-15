@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -47,6 +48,7 @@ public class DocumentLog
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id", insertable = false, updatable = false)
     private User createdBy;
