@@ -214,9 +214,9 @@
                                     '               <span class="sr-only"></span>\n' +
                                     '           </button>\n' +
                                     '           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
                                     '           </div>\n' +
                                     '           <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="0"/>\n' +
                                     '       </div>\n' +
@@ -226,15 +226,15 @@
                                 html+='<td style="width: 30%">\n' +
                                     '       <div class="btn-group mb-2 mr-2" id="status_div_'+userId+'">\n' +
                                     '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
-                                    '               <i class="fas fa-cog" style="margin-right: 1em"></i>\n' + task_sub_type_info +
+                                    '               <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>\n' + task_sub_type_info +
                                     '           </button>\n' +
                                     '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
                                     '               <span class="sr-only"></span>\n' +
                                     '           </button>\n' +
                                     '           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
-                                    '               <button class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
                                     '           </div>\n' +
                                     '           <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="3"/>\n' +
                                     '       </div>\n' +
@@ -280,10 +280,28 @@
         var performer = $('#performer_'+userId).val();
         var typeControl = $('#typeControl').val();
         var typePerformer = $('#typePerformer').val();
-        console.log("performer=" + performer);
-        console.log("userId=" + userId + " typeId=" + typeId);
         if (selectedUsersIds.indexOf(userId)>-1){
+            //performer qilmoqchi
+            if (typeId==0){
+                if (typePerformer==''){
+                    if (performer==2){ $('#typeControl').val('');}
+                    $('#typePerformer').val(userId);
+                    setType(userId,typeId);
+                }
+            }else
+                //control
+                if(typeId==2){
+                    if (typeControl==''){
+                        if (performer==0){  $('#typePerformer').val('');}
+                        $('#typeControl').val(userId);
+                        setType(userId,typeId);
 
+                    }
+            }else{
+                if (performer==0) { $('#typePerformer').val('');}
+                if (performer==2){ $('#typeControl').val('');}
+                    setType(userId,typeId);
+                }
         }
 
     }
@@ -300,6 +318,74 @@
                 $('#typeControl').val('');
             }
         }
+    }
+
+    function setType(userId,typeId){
+        var html = '';
+        if (typeId==0){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-cog" style="margin-right: 1em"></i>' + task_sub_type_performer +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="0"/>';
+
+        }else if(typeId==1){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-cogs" style="margin-right: 1em"></i>' + task_sub_type_performer_partner +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="1"/>';
+
+        }else if(typeId==2){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-check-circle" style="margin-right: 1em"></i>' + task_sub_type_control +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="2"/>';
+
+        }else{
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>' + task_sub_type_info +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="3"/>';
+
+        }
+        $('#status_div_'+userId).html(html);
     }
 </script>
 </body>

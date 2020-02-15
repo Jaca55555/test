@@ -347,6 +347,9 @@ public class IncomingRegistrationController {
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);
                     }
+                     userId = null;
+                     performerType = null;
+                     dueDate = null;
                 }
             }
         }
