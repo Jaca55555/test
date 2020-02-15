@@ -62,11 +62,13 @@ public class InnerRegistrationController {
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String, Object> getInnerRegistrationListAjax(
-            DocFilterDTO filterDTO,
+            DocFilterDTO dto,
             Pageable pageable
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
+
+        Page<Document> documentPage = documentService.findFiltered(dto, pageable);
+
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
         for (Document document : documentList) {
