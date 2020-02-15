@@ -8,6 +8,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,20 @@ public class DocumentTaskServiceImpl implements DocumentTaskService
     @Override
     public DocumentTask create(DocumentTask task) {
         return taskRepository.save(task);
+    }
+
+    @Override
+    public DocumentTask createNewTask(Integer docId, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById) {
+        DocumentTask documentTask = new DocumentTask();
+        documentTask.setDocumentId(docId);
+        documentTask.setStatus(status);
+        documentTask.setContent(context.trim());
+        documentTask.setDueDate(dueDate);
+        documentTask.setChiefId(chiefId);
+        documentTask.setCreatedAt(new Date());
+        documentTask.setCreatedById(createdById);
+        documentTask.setDeleted(Boolean.FALSE);
+        return taskRepository.save(documentTask);
     }
 
     @Override

@@ -22,6 +22,8 @@ public interface DocumentTaskSubService {
 
     Integer countByReceiverId(Integer receiverId);
 
+    DocumentTaskSub createNewSubTask(Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
+
     Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,
             String docRegNumber,
