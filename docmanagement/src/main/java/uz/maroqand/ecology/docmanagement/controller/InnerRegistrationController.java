@@ -234,4 +234,16 @@ public class InnerRegistrationController {
         return response;
     }
 
+    @RequestMapping(value = DocUrls.InnerRegistrationTask)
+    public String addTask( @RequestParam(name = "id")Integer id, Model model ) {
+        Document document = documentService.getById(id);
+        if (document == null) {
+            return  "redirect:" + DocUrls.InnerRegistrationList;
+        }
+
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        return DocTemplates.InnerRegistrationTask;
+    }
+
 }

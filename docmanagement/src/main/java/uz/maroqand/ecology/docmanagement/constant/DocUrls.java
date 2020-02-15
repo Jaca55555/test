@@ -25,6 +25,7 @@ public class DocUrls {
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
+    public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
@@ -57,6 +58,7 @@ public class DocUrls {
     public static final String InnerRegistrationNewTask = InnerRegistration + "/new_and_task";
     public static final String InnerRegistrationEditTask = InnerRegistration + "/edit_and_task";
     public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
+    public static final String InnerRegistrationTask = InnerRegistration + "/task";
 
 
     //Murojaatlarni ro'yhatga olish
