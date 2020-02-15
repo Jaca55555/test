@@ -634,6 +634,16 @@
 </script>
 
 <script th:inline="javascript">
+
+    $('#specialControl').on('click', function () {
+        $.get( [[${special_controll_url}]], {id: [[${document.id}]] } ).done(function (data) {
+            if (data.status === 'success') {
+                $('#specialControl i').toggleClass('icon-check-circle').toggleClass('icon-circle');
+                $('#specialControl').toggleClass('btn-danger').toggleClass('btn-outline-danger')
+            }
+        })
+    });
+
     var urlAction = [[${comment_url}]];
     $(document).ready(function () {
         $('#formSend').on('click', function (e) {

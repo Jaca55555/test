@@ -41,7 +41,7 @@ public class DocUrls {
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
 
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
-    public static final String IncomeMailSpecial = IncomingRegistration + "/special";
+    public static final String IncomingSpecialControll = IncomingRegistration + "/special";
 //    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
