@@ -16,13 +16,9 @@ import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
 
@@ -38,19 +34,22 @@ public class IncomingController {
     private final DocumentSubService documentSubService;
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
+    private final DocumentLogService documentLogService;
 
     public IncomingController(
             UserService userService,
             DocumentService documentService,
             DocumentSubService documentSubService,
             DocumentTaskService documentTaskService,
-            DocumentTaskSubService documentTaskSubService
+            DocumentTaskSubService documentTaskSubService,
+            DocumentLogService documentLogService
     ) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -200,6 +199,9 @@ public class IncomingController {
         }
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         return DocTemplates.IncomingView;
     }
 
