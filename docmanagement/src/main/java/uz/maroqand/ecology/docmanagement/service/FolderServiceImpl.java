@@ -76,17 +76,13 @@ public class FolderServiceImpl implements FolderService {
 
 
     private static Specification<Folder> getFilteringSpecification(final String name) {
-        return new Specification<Folder>() {
-            @Override
-            public Predicate toPredicate(Root<Folder> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(name!=null){
-                    predicates.add( criteriaBuilder.like(root.get("name"), "%" + name + "%") );
-                }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<Folder>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(name!=null){
+                predicates.add( criteriaBuilder.like(root.get("name"), "%" + name + "%") );
             }
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

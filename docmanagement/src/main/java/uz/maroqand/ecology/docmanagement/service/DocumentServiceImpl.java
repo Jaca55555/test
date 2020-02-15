@@ -154,8 +154,7 @@ public class DocumentServiceImpl implements DocumentService {
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-            }
-        };
+            };
     }
 
     @Override
@@ -164,16 +163,13 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private static Specification<Document> getSpecification(String registrationNumber) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(registrationNumber != null){
-                    predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + registrationNumber + "%"));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(registrationNumber != null){
+                predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + registrationNumber + "%"));
             }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 }
