@@ -76,38 +76,34 @@ public class JournalServiceImpl implements JournalService {
     }
 
     private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO) {
-        return new Specification<Journal>() {
-            @Override
-            public Predicate toPredicate(Root<Journal> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (filterDTO.getDocTypeId() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
-                }
-                if (filterDTO.getName() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filterDTO.getName().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getPrefix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("prefix")),
-                            "%" + filterDTO.getPrefix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getSuffix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("suffix")),
-                            "%" + filterDTO.getSuffix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getStatus() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<Journal>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (filterDTO.getDocTypeId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
             }
+            if (filterDTO.getName() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + filterDTO.getName().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getPrefix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("prefix")),
+                        "%" + filterDTO.getPrefix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getSuffix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("suffix")),
+                        "%" + filterDTO.getSuffix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

@@ -105,10 +105,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             final Integer departmentId,
             final Integer receiverId
     ) {
-        return new Specification<DocumentTaskSub>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentTaskSub> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
+        return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
                 /*if (documentOrganizationId != null) {
                     Join<DocumentTaskSub, DocumentSub> userProd = root.join("documentId", JoinType.LEFT);
