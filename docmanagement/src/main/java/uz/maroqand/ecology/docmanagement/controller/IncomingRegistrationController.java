@@ -85,6 +85,7 @@ public class IncomingRegistrationController {
     public String getIncomingRegistrationListPage(Model model) {
 
         model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        model.addAttribute("organizationList", organizationService.getStatusActive());
         return DocTemplates.IncomingRegistrationList;
     }
 
