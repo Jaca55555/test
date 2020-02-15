@@ -320,7 +320,7 @@ public class IncomingRegistrationController {
         System.out.println("content=" + content);
         System.out.println("docRegDateStr=" + docRegDateStr);
 
-        DocumentTask documentTask = documentTaskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = taskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
