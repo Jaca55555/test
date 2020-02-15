@@ -20,7 +20,6 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
@@ -49,6 +48,7 @@ public class IncomingRegistrationController {
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentSubService documentSubService;
     private final DocumentTaskService taskService;
+    private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
     private final DocumentSubRepository documentSubRepository;
 
@@ -65,12 +65,13 @@ public class IncomingRegistrationController {
             DocumentViewService documentViewService,
             DocumentSubService documentSubService,
             DocumentTaskService taskService,
-            DocumentLogService documentLogService,
+            DocumentTaskSubService taskSubService, DocumentLogService documentLogService,
             DocumentSubRepository documentSubRepository
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
+        this.taskSubService = taskSubService;
         this.documentLogService = documentLogService;
         this.documentSubRepository = documentSubRepository;
         this.documentDescriptionService = documentDescriptionService;
@@ -341,11 +342,14 @@ public class IncomingRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-
+                    taskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if (performerType==TaskSubType.Performer.getId()){
+                        documentTask.setPerformerId(userId);
+                        taskService.update(documentTask);
+                    }
                 }
             }
         }
-
 
         return "redirect:" + DocUrls.IncomingRegistrationList;
     }

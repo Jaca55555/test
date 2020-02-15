@@ -55,4 +55,6 @@ public interface UserService {
     LogType getUserLogType(User user);
 
     List<User> getEmployeesForDocManage(String type);
+
+    Integer getUserDepartmentId(Integer userId);
 }

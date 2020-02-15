@@ -59,6 +59,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService
         documentTask.setChiefId(chiefId);
         documentTask.setCreatedAt(new Date());
         documentTask.setCreatedById(createdById);
+        documentTask.setDeleted(Boolean.FALSE);
         return taskRepository.save(documentTask);
     }
 
