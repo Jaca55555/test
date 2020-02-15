@@ -251,8 +251,12 @@ public class OutgoingMailController {
 
     @RequestMapping(value = DocUrls.OutgoingMailFileDelete, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public void deleteAttachment(@RequestParam(name = "id")Integer id){
-        fileService.deleteById(id);
+    public File deleteAttachment(@RequestParam(name = "id")Integer id){
+        File file = fileService.findById(id);
+        file.setDeleted(true);
+        file.setDateDeleted(new Date());
+        file.setDeletedById(userService.getCurrentUserFromContext().getId());
+        return fileService.save(file);
     }
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
  * (uz)
  * (ru)
  */
+
 @Data
 @Entity
 @Table(name = "document_sub")

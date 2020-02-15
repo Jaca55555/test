@@ -215,7 +215,7 @@
     function clickPlus() {
         $('#addFile2').click();
     }
-    $(document).ready(function () {
+
         $('#addFile2').on('change', function () {
 
             let csrf = $("form input[name='_csrf']").val();
@@ -230,45 +230,7 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: function (data) {
-                    let extension = data.data.extension;
-                    let color;
-                    switch (extension) {
-                        case 'jpg':
-                            extension = '-image';
-                            color = 'color-blue';
-                            break;
-                        case 'pdf':
-                            extension = '-pdf';
-                            color = 'color-red';
-                            break;
-                        case 'xlsx':
-                            extension = '-excel';
-                            color = 'color-green';
-                            break;
-                        case 'doc':
-                        case 'docx':
-                            extension = '-word';
-                            color = 'color-blue';
-                            break;
-                        default:
-                            extension = '';
-                            color = 'color-gray';
-                    }
-                    $('#file_ids').append(
-                        `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
-                    );
-                    $('#file-container').prepend(
-                        `<div class="file-block" id="file_block_${data.data.id}">
-                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
-                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
-                        </div>
-                        <div class="text-center">
-                            <span>${data.data.name}</span>
-                        </div>
-                    </div>`
-                    );
-                }
+                success: detectExtensionAndDisplay
             })
         });
 
@@ -301,7 +263,48 @@
                 }, cache: true
             }
         });
-    });
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let color;
+        switch (extension) {
+            case 'jpg':
+                extension = '-image';
+                color = 'color-blue';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').prepend(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${data.data.name}</span>
+                        </div>
+                    </div>`
+        );
+    }
+
+
 
 </script>
 </body>
