@@ -69,7 +69,7 @@
 
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
-                        <select class="singleSelect col-sm-12" required="" th:field="*{organizationId}">
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
                         </select>
@@ -246,7 +246,7 @@
             $(this).submit();
         })
 
-        $('#organizationId').select2({
+        $('#documentOrganizationId').select2({
             ajax: {
                 url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
                 type: "POST",

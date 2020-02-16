@@ -107,7 +107,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="docRegNumber" class="control-label">Хат рақами</label>
+                        <label for="docRegNumber" class="control-label">Хужжат рақами</label>
                         <input type="text" class="form-control" id="docRegNumber" />
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
@@ -160,22 +160,24 @@
                     </div>
                 </div>
                 <div class="row p10" style="padding-top: 0px">
-                    <div class="form-group col-md-2 col-sm-12">
+                    <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label">Рахбарият</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                     </div>
 
-                    <div class="form-group col-md-2 col-sm-12">
+                    <div class="form-group col-md-4 col-sm-12">
                         <label class="control-label">Қўйилган топшириқ (резолюция)</label>
-                        <input type="text" class="form-control" id="taskContent" />
+                        <select class="form-control" id="resolution">
+                            <option value="">Танлаш</option>
+                        </select>
                     </div>
 
-                    <div class="form-group col-md-2 col-sm-12">
+                    <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label">Ижрочилар</label>
-                        <select class="form-control" id="performerId" >
+                        <select class="form-control" id="executors">
                             <option value="">Танлаш</option>
                             <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
                         </select>
@@ -183,7 +185,56 @@
 
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">Ижро йўналиши</label>
-                        <select class="form-control" >
+                        <select class="form-control" id="executePath">
+                            <option value="">Танлаш</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row p10" style="padding-top: 0px">
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label">Хужжатнинг ижро ҳолати</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="dateBegin" class="control-label">Ижро муддати</label>
+                        <div class="row">
+                            <div class="col-6" style="padding-left: 0;">
+                                <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                            </div>
+                            <div class="col-6" style="padding-right:0;">
+                                <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label">Ижро назорати холати</label>
+                        <select class="form-control" id="executeStatus" >
+                            <option value="">Танлаш</option>
+                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label">ХДФУ холати</label>
+                        <select class="form-control" id="insidePurposeStatus">
+                            <option value="">Танлаш</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label">Хамкор ижрочилар холати</label>
+                        <select class="form-control" id="coexecutorStatus">
+                            <option value="">Танлаш</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label">Хужжатга йўлланган жавоблар</label>
+                        <select class="form-control" id="replies">
                             <option value="">Танлаш</option>
                         </select>
                     </div>
