@@ -74,7 +74,9 @@ public class Document {
     @Column(name = "registration_number")
     private String registrationNumber;
 
-
+    //xujjat muddati
+    @Column(name = "due_date", columnDefinition = "timestamp without time zone")
+    private Date dueDate;
 
     //kiruvchi hujjat yoki qaror sanasi
     @Column(name = "doc_reg_date", columnDefinition = "timestamp without time zone")
