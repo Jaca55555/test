@@ -253,4 +253,14 @@ public class HelperService {
         return databaseMessageSource.resolveCodeSimply(applicantType.getName(),locale);
     }
 
+    @Cacheable(value = "getUserPositionName", key = "#id",condition="#id != null",unless="#result == ''")
+    public String getUserPositionName(Integer id,String locale) {
+        if(id==null) return "";
+        User user = userService.findById(id);
+        if (user!=null && user.getPositionId()!=null){
+            return user.getPosition().getNameTranslation(locale);
+        }
+        return "";
+    }
+
 }

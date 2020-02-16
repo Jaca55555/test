@@ -73,6 +73,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public List<DocumentTaskSub> getListByDocId(Integer docId) {
+        return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
+    }
+
+    @Override
     public Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,
             String docRegNumber,
