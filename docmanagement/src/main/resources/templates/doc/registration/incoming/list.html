@@ -99,78 +99,64 @@
         <form class="card" style="border-radius: 5px" id="filter">
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
-                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="true" aria-controls="collapseOne" th:text="#{doc.doc_filter_header}">Саралаш фильтри</a>
+                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" th:text="#{doc.doc_filter_header}">Саралаш фильтри</a>
                 </h5>
             </div>
             <div class="row p10">
                 <div class="form-group col-md-3 col-sm-12">
-                    <label for="correspondent" class="control-label">Корреспондент</label>
+                    <label for="documentOrganizationId" class="control-label">Корреспондент</label>
                     <div class="col-sm-12 p0">
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                id="correspondent" aria-hidden="true" disabled="disabled">
-                            <option></option>
+                        <select class="form-control" id="documentOrganizationId">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
-                        <i class="gray-arrow fas fa-sort-down color-gray"></i>
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="docId" class="control-label" th:text="#{doc.doc_id}">Хужжат раками</label>
-                    <input type="text" class="form-control" id="docId">
+                    <label for="docRegNumber" class="control-label" th:text="#{doc.doc_id}">Хужжат раками</label>
+                    <input type="text" class="form-control" id="docRegNumber">
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="regId" class="control-label" th:text="#{doc.doc_reg_date}">Руйхатга олиш раками</label>
-                    <input type="text" class="form-control" id="regId">
+                    <label for="registrationNumber" class="control-label" th:text="#{doc.doc_reg_date}">Руйхатга олиш раками</label>
+                    <input type="text" class="form-control" id="registrationNumber">
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
                     <label class="control-label" th:text="#{doc.income_date}">Келиб тушган сана</label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
-                            <input class="form-control datepicker date" id="incomeDateBegin" placeholder="Дан">
+                            <input class="form-control datepicker date" id="dateBeginStr" placeholder="Дан">
                             <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                         </div>
                         <div class="col-6" style="padding-right:0;">
-                            <input class="form-control datepicker date" id="incomeDateEnd" placeholder="гача">
+                            <input class="form-control datepicker date" id="dateEndStr" placeholder="гача">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="controlCard" class="control-label">Назорат карточкаси</label>
+                    <label for="controlForm" class="control-label">Назорат карточкаси</label>
                     <div class="col-sm-12 p0">
-                        <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
-                                id="controlCard" aria-hidden="true" disabled="disabled">
+                        <select class="col-sm-12 select2-hidden-accessible" id="controlForm" >
                             <option value="" th:text="#{sys_select}"></option>
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
+                            <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
                         </select>
-                        <i class="gray-arrow fas fa-sort-down color-gray"></i>
                     </div>
                 </div>
             </div>
-            <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne"
-                 data-parent="#accordionExample">
+            <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                 <div class="row" >
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="docType" class="control-label" th:text="#{doc.doc_type}">Хужжат тури</label>
+                        <label for="documentViewId" class="control-label" th:text="#{doc.doc_type}">Хужжат тури</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
-                                    id="docType" tabindex="-1" aria-hidden="true">
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentViewId" tabindex="-1" aria-hidden="true">
                                 <option></option>
-                                <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
+                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
-                    <div class="form-group col-md-3 col-sm-12">
+                    <!--<div class="form-group col-md-3 col-sm-12">
                         <label for="correspondentType" class="control-label">Корреспондент категорияси</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="correspondentType" tabindex="-1" aria-hidden="true" disabled="disabled">
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="correspondentType" tabindex="-1" aria-hidden="true" >
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -179,24 +165,19 @@
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="description" class="control-label" th:text="#{doc.doc_description}">Хатнинг қисқача мазмуни</label>
+                        <label for="content" class="control-label" th:text="#{doc.doc_description}">Хатнинг қисқача мазмуни</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" id="description">
+                            <input type="text" class="form-control" id="content">
                             <i class="gray-search fas fa-search  color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label" for="chiefId">Рахбарият</label>
+                        <label class="control-label" for="managerId">Рахбарият</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="chiefId" tabindex="-1" aria-hidden="true" th:disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple="" id="managerId" tabindex="-1" aria-hidden="true" >
+                                <option value="">Танлаш</option>
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
@@ -204,41 +185,22 @@
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label" for="executorId">Ижрочилар</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executorId" tabindex="-1" aria-hidden="true" disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executorId" tabindex="-1" aria-hidden="true" >
+                                <option value="">Танлаш</option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="resolution">Қўйилган топшириқ (резолюция)</label>
+                        <label class="control-label" for="taskContent">Қўйилган топшириқ (резолюция)</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="resolution" tabindex="-1" aria-hidden="true" disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-search fas  fa-search color-gray"></i>
+                            <input type="text" class="form-control" id="taskContent">
                         </div>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeType">Ижро йуналиши</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeType" tabindex="-1" aria-hidden="true" disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeType" tabindex="-1" aria-hidden="true" >
+                                <option value="">Танлаш</option>
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
@@ -246,13 +208,8 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeStatus">Хужжатнинг ижро ҳолати</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeStatus" tabindex="-1" aria-hidden="true" >
+                                <option value="">Танлаш</option>
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
@@ -273,13 +230,8 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeControlStatus">Ижро назорати холати</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="executeControlStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeControlStatus" tabindex="-1" aria-hidden="true" >
+                                <option value="">Танлаш</option>
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
@@ -287,8 +239,7 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="isInternal">ХДФУ холати</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
-                                    id="isInternal" tabindex="-1" aria-hidden="true">
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="isInternal" tabindex="-1" aria-hidden="true">
                                 <option></option>
                                 <option value="0" th:text="#{sys_no}"></option>
                                 <option value="1" th:text="#{sys_yes}"></option>
@@ -296,11 +247,10 @@
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
-                    <div class="form-group col-md-3 col-sm-12">
+                    <!--<div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="coexecutorStatus">Хамкор ижрочилар холати</label>
                         <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="coexecutorStatus" tabindex="-1" aria-hidden="true" disabled="disabled">
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="coexecutorStatus" tabindex="-1" aria-hidden="true" >
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -309,12 +259,12 @@
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
+                    </div>-->
+                    <!--<div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="response">Хужжатга йўлланган жавоблар</label>
                         <div class="col-sm-12 p0">
                             <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                    id="response" tabindex="-1" aria-hidden="true" disabled="disabled">
+                                    id="response" tabindex="-1" aria-hidden="true" >
                                 <option value="AL">Alabama</option>
                                 <option value="WY">Wyoming</option>
                                 <option value="WY">Coming</option>
@@ -323,7 +273,7 @@
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </form>
@@ -331,32 +281,25 @@
     <div class="parent-card col-xl-12">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                   aria-controls="home" aria-selected="true">Жами</a>
+                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true">Жами</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile"
-                   role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
+                <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact"
-                   role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
+                <a class="nav-link text-uppercase show" id="delayed-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase" id="home-tab1" data-toggle="tab" href="#home1" role="tab"
-                   aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
+                <a class="nav-link text-uppercase" id="nead-due-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="profile-tab1" data-toggle="tab" href="#profile1"
-                   role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
+                <a class="nav-link text-uppercase show" id="execute-control-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab1" data-toggle="tab" href="#contact1"
-                   role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
+                <a class="nav-link text-uppercase show" id="info-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab2" data-toggle="tab" href="#contact2"
-                   role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
+                <a class="nav-link text-uppercase show" id="done-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -370,37 +313,28 @@
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
-                                        <th aria-controls="responsive-table-model" aria-sort="ascending"
-                                            class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
                                             Регистрация рақами
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
                                             Регистрация санаси
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
                                             Кирувчи хат маълумотлари
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
                                             Хужжат санаси
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 110px;"
-                                            tabindex="0">Ижро муддати
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">
+                                            Ижро муддати
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 140px;"
-                                            tabindex="0">Жорий
-                                            ҳолати
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0">
+                                            Жорий ҳолати
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting"
-                                            colspan="1" rowspan="1" style="width: 300px;"
-                                            tabindex="0">Резолюция ва
-                                            иштирокчилар
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0">
+                                            Резолюция ва иштирокчилар
                                         </th>
-                                        <th></th>
+                                        <th style="width: 90px"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -410,31 +344,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <p class="mb-0">Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee
-                    squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan
-                    four loko
-                    farm-to-table
-                    craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-                    ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus
-                    mollit.
-                    Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack
-                    odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry
-                    richardson
-                    biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus
-                    tattooed echo park.</p>
-            </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                <p class="mb-0">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's
-                    organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
-                    tattooed
-                    craft beer,
-                    iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy
-                    irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free,
-                    carles
-                    pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard
-                    of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
             </div>
         </div>
     </div>
@@ -448,6 +357,7 @@
 <script th:inline="javascript">
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
     let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
+    var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -456,10 +366,18 @@
     let labelView = "view";
     let dataDatatableSelector;
     let thead;
+    var tabFilter;
 
     function getDatatableConnect() {
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    function getTabDatatableConnect(tab) {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        tabFilter = tab;
         datatableConnect();
     }
 
@@ -484,26 +402,23 @@
 
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
-                dataToSend.correspondent = $('#correspondent').val();
-                dataToSend.documentId = $('#docId').val();
-                dataToSend.registrationNumber = $('#regId').val();
-                dataToSend.regsitrationDateBegin = $('#incomeDateBegin').val();
-                dataToSend.regsitrationDateEnd = $('#incomeDateEnd').val();
-                dataToSend.controlCard = $('#controlCard').val();
-                dataToSend.documentType = $('#docType').val();
-                dataToSend.correspondentType = $('#correspondentType').val();
-                dataToSend.content = $('#description').val();
-                dataToSend.chief = $('#chiefId').val();
-                dataToSend.executors = $('#executorId').val();
-                dataToSend.resolution = $('#resolution').val();
-                dataToSend.executePath = $('#executeType').val();
-                dataToSend.executeStatus = $('#executeStatus').val();
-                dataToSend.executeDateBegin = $('#executeDateBegin').val();
-                dataToSend.executeDateEnd = $('#executeDateEnd').val();
-                dataToSend.executeControlStatus = $('#executeControlStatus').val();
-                dataToSend.insidePurposeStatus = $('#isInternal').val();
-                dataToSend.coexecutorStatus = $('#coexecutorStatus').val();
-                dataToSend.replies = $('#response').val();
+                dataToSend.documentOrganizationId = $('#documentOrganizationId').val();
+                dataToSend.docRegNumber = $('#docRegNumber').val();
+                dataToSend.registrationNumber = $('#registrationNumber').val();
+                dataToSend.dateBeginStr = $('#dateBeginStr').val();
+                dataToSend.dateEndStr = $('#dateEndStr').val();
+                dataToSend.controlForm = $('#controlForm').val();
+                dataToSend.documentViewId = $('#documentViewId').val();
+                dataToSend.content = $('#content').val();
+                dataToSend.managerId = $('#managerId').val();
+                dataToSend.taskContent = $('#taskContent').val();
+
+                dataToSend.receiverId = $('#receiverId').val();
+                dataToSend.type = $('#type').val();
+                dataToSend.status = $('#status').val();
+                dataToSend.dueDateBeginStr = $('#dueDateBeginStr').val();
+                dataToSend.dueDateEndStr = $('#dueDateEndStr').val();
+                dataToSend.tabFilter = tabFilter;
                 dataToSend._csrf = $("#global_csrf").val();
 
                 $.post("", dataToSend, function(data){
@@ -526,6 +441,17 @@
             }
         });
     }
+
+    $('#documentOrganizationId').select2({
+        ajax: {
+            url: getOrganization,
+            type: "POST",
+            data: function (params) {
+                return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+            }, cache: true
+        }
+    });
+
     $(document).ready(function () {
         dataDatatableSelector = $('#responsive-table-model');
         thead = dataDatatableSelector.html();

@@ -55,6 +55,29 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public DocumentTaskSub createNewSubTask(Integer docId, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
+        DocumentTaskSub documentTaskSub = new DocumentTaskSub();
+        documentTaskSub.setDocumentId(docId);
+        documentTaskSub.setTaskId(taskId);
+        documentTaskSub.setContent(content.trim());
+        documentTaskSub.setDueDate(dueDate);
+        documentTaskSub.setType(type);
+        documentTaskSub.setStatus(0);
+        documentTaskSub.setSenderId(senderId);
+        documentTaskSub.setReceiverId(receiverId);
+        documentTaskSub.setDepartmentId(departmentId);
+        documentTaskSub.setDeleted(Boolean.FALSE);
+        documentTaskSub.setCreatedAt(new Date());
+        documentTaskSub.setCreatedById(senderId);
+        return documentTaskSubRepository.save(documentTaskSub);
+    }
+
+    @Override
+    public List<DocumentTaskSub> getListByDocId(Integer docId) {
+        return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
+    }
+
+    @Override
     public Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,
             String docRegNumber,

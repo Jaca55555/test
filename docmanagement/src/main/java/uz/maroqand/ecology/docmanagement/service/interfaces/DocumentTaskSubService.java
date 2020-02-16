@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +22,10 @@ public interface DocumentTaskSubService {
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
 
     Integer countByReceiverId(Integer receiverId);
+
+    DocumentTaskSub createNewSubTask(Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
+
+    List<DocumentTaskSub> getListByDocId(Integer docId);
 
     Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,

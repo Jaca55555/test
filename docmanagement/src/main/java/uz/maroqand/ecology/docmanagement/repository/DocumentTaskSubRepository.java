@@ -16,7 +16,7 @@ import java.util.Set;
 @Repository
 public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub, Integer>, JpaSpecificationExecutor<DocumentTaskSub> {
 
-    List<DocumentTaskSub> findByDocumentIdAndDeletedFalse(Integer documentId);
+    List<DocumentTaskSub> findByDocumentIdAndDeletedFalseOrderByIdAsc(Integer documentId);
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
 

@@ -235,4 +235,14 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
         return users;
     }
+
+    @Override
+    public Integer getUserDepartmentId(Integer userId) {
+        if (userId==null) return null;
+        User user = findById(userId);
+        if (user!=null && user.getDepartmentId()!=null){
+            return user.getDepartmentId();
+        }
+        return null;
+    }
 }

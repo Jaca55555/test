@@ -39,83 +39,173 @@
                         <h5 th:text="#{doc.participants_executors}">Ижрочилар / Иштирокчилар</h5>
                     </div>
                     <div class="card-block">
-                        <div class="row" th:if="${#lists.size(documentTasks)>0}" th:each="task : ${documentTasks}">
-                            <div class="executor col-12 m10-vertical" th:object="${task}">
+                        <div class="row">
+                            <div class="executor col-12 m10-vertical">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
                                     <div>
                                         <div class="inline-block"><i
                                                 class="fas fa-user-circle fs40 color-gray column-1">
                                         </i></div>
                                         <div class="inline-block m10-horizontal">
-                                            <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
+                                            <span class="color-primary bold">Абдуллаев А. А.</span>
                                             <br>
-                                            <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
+                                            <span>Руководитель организации</span>
                                         </div>
                                     </div>
                                     <div class="flex-space-between p0 align-center column-1">
                                         <div style="height: fit-content;display: flex;align-items: center;"><i
                                                 class="fas fa-cog fs20 color-gray pointer"></i>
-                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}">Жараёнда</span></div>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
                                         <div style="height: fit-content;display: flex;align-items: center;"><i
                                                 class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
                                     </div>
                                     <div class="w100"></div>
                                     <div class="column-2 mt-2 text-container-border">
-                                        <span th:text="*{content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                        <span>Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
                                     </div>
                                     <div class="w100"></div>
+                                    <div class="column-2 flex-space-between text-container-border">
+                                            <span>resolution-Akbar Sapaev.jpg
+                                            </span>
+                                        <i class="fas fa-download color-gray align-center"></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div th:if="${#lists.size(documentTaskSubs)>0}">
-                                <div th:if="${task.id==taskSub.taskId}" th:each="taskSub : ${documentTaskSubs}">
-                                    <div class="executor col-12 m10-vertical">
-                                        <div class="flex-space-between p0">
-                                            <div>
-                                                <div class="inline-block"><i
-                                                        class="fas fa-user-circle fs40 color-gray column-2">
-                                                </i></div>
-                                                <div class="inline-block m10-horizontal ">
-                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
-                                                    <br>
-                                                    <span th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-space-between p0 align-center column-2" >
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cog fs20 color-primary pointer"></i>
-                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
-                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
-                                            </div>
-                                            <div class="w100"></div>
-                                            <div class="column-3 mt-2 text-container-border">
-                                                <span th:text="${taskSub.content}"></span>
-                                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-2">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal ">
+                                            <span class="color-primary bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
                                         </div>
                                     </div>
-                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
-                                        <div class="flex-space-between p0">
-                                            <div>
-                                                <div class="inline-block"><i
-                                                        class="fas fa-user-circle fs40 color-gray column-3">
-                                                </i></div>
-                                                <div class="inline-block m10-horizontal">
-                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
-                                                    <br>
-                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-space-between p0 align-center column-3">
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cogs fs20 color-purple pointer"></i>
-                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
-                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
-                                            </div>
+                                    <div class="flex-space-between p0 align-center column-2">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-cog fs20 color-primary pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                    </div>
+                                    <div class="w100"></div>
+                                    <div class="column-3 mt-2 text-container-border">
+                                            <span>Тегишли тартибда ўрганиб чиқиб таклиф берилсин. <br>Муддат 17.10.2019
+                                                й. </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-3">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-primary bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
                                         </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-3">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-cog fs20 color-primary pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-3">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-purple bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-3">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-cogs fs20 color-purple pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-2">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-purple bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-2">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-cogs fs20 color-purple pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-3">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-yellow bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-3">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-exclamation-circle fs20 color-yellow pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0">
+                                    <div>
+                                        <div class="inline-block"><i
+                                                class="fas fa-user-circle fs40 color-gray column-2">
+                                        </i></div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-green bold">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span>Ташкилот рахбари</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-2">
+                                        <div class="align-center height-fit"><i
+                                                class="fas fa-check-circle fs20 color-green pointer"></i>
+                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                        <div class="align-center height-fit"><i
+                                                class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal">21.11.2019</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +226,7 @@
                         </h5>
                         <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
                     </div>
-                    <div class="card-body" id="comments">
+                    <div class="card-body">
                         <div class="comment-item flex-space-between" th:each="log: ${logs}">
                             <div>
                                 <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
@@ -144,7 +234,7 @@
                                 <div class="inline-block m10-horizontal">
                                     <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
                                     <br>
-                                    <span th:text="${log.createdBy.position.name}">Руководитель организации</span>
+                                    <span th:text="${log.createdBy.position}">Руководитель организации</span>
                                 </div>
                             </div>
                             <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
@@ -153,13 +243,6 @@
                             <div class="w100"></div>
                             <div class="column-2 mt-3">
                                 <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
-                            </div>
-                            <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
-                            <div class="w100"></div>
-                                <div class="column-2 mt-3">
-                                    <span class='fas fa-file-pdf fs30 color-red'></span>
-                                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
-                                </div>
                             </div>
                         </div>
                         <hr class="m20-vertical">
@@ -213,15 +296,19 @@
 
                         <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
 
-                        <div id="file_ids" class="d-none">
-                        </div>
-                        <input type="file" class="d-none" id="addFile2" name="files" multiple>
-
-                        <div class="row p20" id="file-container">
-                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                                <div  class="text-center file-icon-container align-self-center color-gray">
-                                    <span class="fas fa-plus" id="addFileButton"></span>
+                        <div class="row p20">
+                            <div class="file-block">
+                                <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                                <div class="text-center file-icon-container color-red"><span
+                                        class="fas fa-file-pdf"></span>
                                 </div>
+                                <div class="text-center">
+                                    <span>Письмо.pdf</span>
+                                </div>
+                            </div>
+                            <div class="file-block flex-center">
+                                <div class="text-center file-icon-container align-self-center color-gray"><span
+                                        class="fas fa-plus"></span></div>
                             </div>
                         </div>
                         <hr class="m20-vertical">
@@ -544,16 +631,6 @@
 </script>
 
 <script th:inline="javascript">
-
-    $('#specialControl').on('click', function () {
-        $.get( [[${special_controll_url}]], {id: [[${document.id}]] } ).done(function (data) {
-            if (data.status === 'success') {
-                $('#specialControl i').toggleClass('icon-check-circle').toggleClass('icon-circle');
-                $('#specialControl').toggleClass('btn-danger').toggleClass('btn-outline-danger')
-            }
-        })
-    });
-
     var urlAction = [[${comment_url}]];
     $(document).ready(function () {
         $('#formSend').on('click', function (e) {
@@ -565,137 +642,11 @@
                 method: 'post',
                 success: function (data) {
                     console.log(data);
-                    if (data.status === 'success') {
-                        let log = data.log;
-                        let html =
-"                        <div class=\"comment-item flex-space-between\">\n" +
-"                            <div>\n" +
-"                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
-"                                </i></div>\n" +
-"                                <div class=\"inline-block m10-horizontal\">\n" +
-"                                    <span class=\"color-primary bold\">"+ log.createdBy.fullName +"</span>\n" +
-"                                    <br>\n" +
-"                                    <span>" + log.createdBy.position.name + "</span>\n" +
-"                                </div>\n" +
-"                            </div>\n" +
-"                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +
-"                            <div class=\"w100\"></div>\n" +
-"                            <div class=\"column-2 mt-3\">\n" +
-"                                <span>" + log.content + "</span>\n" +
-"                            </div>\n";
-                        if (log.contentFiles != null) {
-                            for (let file of log.contentFiles) {
-                                html += "<div class='w100'></div>\n" +
-                                    "<div class='column-2 mt-3'>\n" +
-                                    "    <span class='fas fa-file-pdf fs30 color-red'></span>\n" +
-                                    "    <a href='[(${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload})]?id=" + file.id + "'>" + file.name + "</a>\n" +
-                                    "</div>\n"
-                            }
-                        }
-                        html +="\n</div>";
-                        $('#comments').prepend(html);
-                        $('#modal1').modal('toggle');
-                    }
                 }
             });
             e.preventDefault();
         })
-    });
-
-    function clickPlus() {
-        $('#addFile2').click();
-    }
-
-    $('#addFile2').on('change', function () {
-
-        let csrf = $("form input[name='_csrf']").val();
-        let files = document.querySelector('#addFile2').files[0];
-        let fd = new FormData();
-        fd.append("file", files);
-        fd.append("_csrf", csrf);
-        $.ajax({
-            url: "/doc/outgoing_mail/file/upload",
-            type: 'post',
-            data: fd,
-            processData: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-            success: detectExtensionAndDisplay
-        })
-    });
-
-    function downloadFileFunction(id) {
-        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
-    }
-
-    function deleteFunc(id) {
-        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
-        document.querySelector(`#file_block_${id}`).remove();
-        document.querySelector(`#input_file_id_${id}`).remove();
-    }
-
-    $('#document_organization_id').select2({
-        ajax: {
-            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
-            type: "POST",
-            data: function (params) {
-                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
-            }, cache: true
-        }
-    });
-
-    $('#additional_document_id').select2({
-        ajax: {
-            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
-            type: "POST",
-            data: function (params) {
-                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
-            }, cache: true
-        }
-    });
-
-    function detectExtensionAndDisplay(data){
-        let extension = data.data.extension;
-        let color;
-        switch (extension) {
-            case 'bmp':
-            case 'jpg':
-            case 'png':
-                extension = '-image';
-                color = 'color-blue';
-                break;
-            case 'pdf':
-                extension = '-pdf';
-                color = 'color-red';
-                break;
-            case "xls":
-            case 'xlsx':
-                extension = '-excel';
-                color = 'color-green';
-                break;
-            case 'doc':
-            case 'docx':
-                extension = '-word';
-                color = 'color-blue';
-                break;
-            default:
-                extension = '';
-                color = 'color-gray';
-        }
-        $('#file_ids').append(
-            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
-        );
-        $('#file-container').prepend(
-            `<div class="file-block" id="file_block_${data.data.id}">
-                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
-                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
-                        </div>
-                        <div class="text-center">
-                            <span>${data.data.name}</span>
-                        </div>
-                    </div>`
-        );
-    }
+    })
 </script>
 
 </body>

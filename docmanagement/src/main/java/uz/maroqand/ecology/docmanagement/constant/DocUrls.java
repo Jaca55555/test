@@ -34,15 +34,18 @@ public class DocUrls {
 
     private static final String IncomingRegistration = Prefix + Registration + Incoming;
     public static final String IncomingRegistrationList = IncomingRegistration + "/list";
+    public static final String IncomingRegistrationNewList = IncomingRegistration + "/new_list";
     public static final String IncomingRegistrationView = IncomingRegistration + "/view";
     public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
     public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
     public static final String IncomingRegistrationEdit = IncomingRegistration + "/edit";
     public static final String IncomingRegistrationEditTask = IncomingRegistration + "/edit_and_task";
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
+    public static final String IncomingRegistrationTaskSubmit = IncomingRegistration + "/task_submit";
+    public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
 
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
-    public static final String IncomeMailSpecial = IncomingRegistration + "/special";
+    public static final String IncomingSpecialControll = IncomingRegistration + "/special";
 //    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish

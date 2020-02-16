@@ -74,7 +74,9 @@ public class Document {
     @Column(name = "registration_number")
     private String registrationNumber;
 
-
+    //xujjat muddati
+    @Column(name = "due_date", columnDefinition = "timestamp without time zone")
+    private Date dueDate;
 
     //kiruvchi hujjat yoki qaror sanasi
     @Column(name = "doc_reg_date", columnDefinition = "timestamp without time zone")
@@ -96,11 +98,12 @@ public class Document {
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
     private Set<File> contentFiles;
 
-
-
     //Ушбу хатга қўшимча тариқасида юборилган (агар мавжуд бўлса)
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
+
+    @Column(name = "performer_id")
+    private Integer performerId;
 
     //маъсул ходимнинг исми ва фамилияси
     @Column(name = "performer_name")
@@ -109,8 +112,6 @@ public class Document {
     //Маъсул ходим билан алоқа учун телефон рақами
     @Column(name = "performer_phone")
     private String performerPhone;
-
-
 
     //Хатнинг ижроси шакли
     @Column(name = "execute_form")
@@ -124,6 +125,9 @@ public class Document {
     //Хужжат фақат хизмат доирасида фойдаланиш учун мулжалланган
     @Column(name = "inside_purpose", columnDefinition = "boolean DEFAULT false")
     private Boolean insidePurpose;
+
+    @Column(name = "special_controll", columnDefinition = "boolean DEFAULT false")
+    private Boolean specialControll;
 
     //Кирувчи хатни қабул қилиш учун маъсул рахбар
     @Column(name = "manager_id")

@@ -28,4 +28,9 @@ public class DocumentDescriptionServiceImpl implements DocumentDescriptionServic
         return documentDescriptionRepository.findAll();
     }
 
+    @Override
+    public DocumentDescription save(DocumentDescription desc){
+        return documentDescriptionRepository.save(desc);
+    }
+
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
+import org.springframework.data.domain.Example;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -75,5 +76,17 @@ public class DocumentSubServiceImpl implements DocumentSubService {
         };
     }
 
+    @Override
+    public List<DocumentSub> findByDocumentId(Integer documentId){
+        DocumentSub doc = new DocumentSub();
+        doc.setDocumentId(documentId);
+        Example<DocumentSub> subExample = Example.of(doc);
+        return documentSubRepository.findAll(subExample);
+    }
+
+    @Override
+    public DocumentSub createDocumentSub(DocumentSub sub){
+        return documentSubRepository.save(sub);
+    }
 
 }

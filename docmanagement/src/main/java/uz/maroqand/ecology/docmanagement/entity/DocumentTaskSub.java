@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.entity;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -89,4 +90,9 @@ public class DocumentTaskSub {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
+    public String getStatusName(Integer id){
+        if (id==null) return "";
+        TaskSubStatus taskStatus = TaskSubStatus.getTaskStatus(id);
+        return taskStatus!=null?taskStatus.getName():"";
+    }
 }
