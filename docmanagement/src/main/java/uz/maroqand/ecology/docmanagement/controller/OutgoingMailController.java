@@ -84,7 +84,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
@@ -239,7 +238,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
 
         return DocTemplates.OutgoingMailNew;
     }
@@ -252,7 +250,6 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
-        model.addAttribute("documents_", documentService.getList());
 
         return DocTemplates.OutgoingMailNew;
     }
