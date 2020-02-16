@@ -50,29 +50,25 @@ public class FolderServiceImpl implements FolderService {
     }
 
     private static Specification<Folder> getFilteringSpecification(Integer id, String name, Date dateBegin, Date dateEnd){
-        return new Specification<Folder>(){
-          @Override
-          public Predicate toPredicate(Root<Folder> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder){
-              List<Predicate> predicates = new LinkedList<>();
+        return (Specification<Folder>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-              if(id != null)
-                  predicates.add(criteriaBuilder.equal(root.get("id"), id));
+            if(id != null)
+                predicates.add(criteriaBuilder.equal(root.get("id"), id));
 
-              if(name != null)
-                  predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+            if(name != null)
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
 
-              if (dateBegin != null && dateEnd == null)
-                  predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
-              else if (dateEnd != null && dateBegin == null)
-                  predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
-              else if (dateBegin != null && dateEnd != null)
-                  predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+            if (dateBegin != null && dateEnd == null)
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+            else if (dateEnd != null && dateBegin == null)
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+            else if (dateBegin != null && dateEnd != null)
+                predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
 
-              predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-              Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
 
-              return overAll;
-          }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 
@@ -80,17 +76,13 @@ public class FolderServiceImpl implements FolderService {
 
 
     private static Specification<Folder> getFilteringSpecification(final String name) {
-        return new Specification<Folder>() {
-            @Override
-            public Predicate toPredicate(Root<Folder> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(name!=null){
-                    predicates.add( criteriaBuilder.like(root.get("name"), "%" + name + "%") );
-                }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<Folder>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(name!=null){
+                predicates.add( criteriaBuilder.like(root.get("name"), "%" + name + "%") );
             }
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

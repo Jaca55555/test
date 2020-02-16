@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between">
+                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
+                <div>
+                    <div>
+                        <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
+                        <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
+                    </div>
+                </div>
+            </div>
+            <form action="" th:object="${document}" th:method="post" class="card-block">
+                <div th:if="${document.id != null}">
+                    <input type="hidden" th:field="*{id}" th:value="*{id}"/>
+                    <input type="hidden" th:field="${documentSub.id}" th:value="${documentSub.id}"/>
+                    <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
+                            <option value=""></option>
+                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_document_view}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required">
+                            <option value=""></option>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control" th:field="*{docRegNumber}" required="required">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
+                        <div class="col-sm-12 p0">
+                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_communication_tool}"></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}">
+                            <option value=""></option>
+                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-lg-6 form-group">
+                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
+                        <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
+                        <!--<input class="form-control" tabindex="-1" id="orgName" th:field="${documentSub.organizationName}">-->
+                    </div>
+                </div>
+
+                <div class="col-sm-12 form-group">
+                    <label class="control-label" th:text="#{doc_incoming.reg_description}"></label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}" id="description_content">
+                        <option value=""></option>
+                        <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
+                    </select>
+                </div>
+                <div class="col-sm-12 form-group new-desc">
+                    <textarea class="form-control" rows="4" name="content" th:text="*{content}" id="description_textarea"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
+                        <select class="form-control" id="additionalDocumentId">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="control-label" th:text="#{doc_incoming.reg_performer_name}"> </label>
+                        <input type="text" class="form-control" th:field="*{performerName}" >
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="control-label" th:text="#{doc_incoming.reg_performer_phone}"> </label>
+                        <input type="text" class="form-control" th:field="*{performerPhone}">
+                    </div>
+                </div>
+                <hr class="m30-vertical">
+                <h5 class="mb-0 card-header no-border" th:text="#{doc_incoming.reg_files}" style="padding: 5px 20px;">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <div class="row p20" id="file-container">
+                    <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
+                    </select>
+                    <div class="file-block" th:each="file: ${document.contentFiles}">
+                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
+                        </div>
+                        <div class="text-center">
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
+                        </div>
+                    </div>
+                    <div class="file-block flex-center file-button">
+                        <div class="text-center file-icon-container align-self-center color-gray">
+                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <input type="file" class="d-none" id="addFile" name="addFile">
+                        </div>
+                    </div>
+                </div>
+                <div class="border-warning m20 p20">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
+                        <label class="custom-control-label" for="customCheck1" th:text="#{doc_incoming.reg_inside_purpose}"></label>
+                    </div>
+                    <div class="m20-vertical">
+                        <span th:text="#{sys_attention}">Диккат:</span>
+                        <br>
+                        <span th:text="#{doc_incoming.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                    </div>
+                </div>
+
+                <hr class="m30-vertical">
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" name="managerId"  required="required">
+                            <option value=""></option>
+                            <option th:each="manager: ${managerUserList}" th:value="${manager.id}" th:text="${manager.getFullName()}" th:selected="${document.managerId!=null && manager.id==document.managerId}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_control}">Ижро назорати учун маъсул шахс</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" name="controlId">
+                            <option value=""></option>
+                            <option th:each="control: ${controlUserList}" th:value="${control.id}" th:text="${control.getFullName()}" th:selected="${document.controlId!=null && control.id==document.controlId}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${executeForms}">
+                            <input type="radio" name="executeForm" th:id="'executeForm'+${item.id}" th:value="${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="'executeForm'+${item.id}" th:text="${item.name}"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${controlForms}">
+                            <input type="radio" th:value="${item.id}" name="controlForm" th:id="'controlForm'+${item.id}" class="custom-control-input">
+                            <label class="custom-control-label" th:for="'controlForm'+${item.id}" th:text="${item.name}"></label>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <hr class="m30-vertical">
+                <div class="row">
+                    <div class="flex-center w100 row-wrap">
+                        <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+<script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var files = [[${document.contentFiles}]];
+        if (files!=null && files.length>0){
+            $.each(files,function (index,val) {
+                $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+            })
+        }
+
+        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
+        $('#orgName').autocomplete({
+            minLength: 0,
+            source: [[${organizations}]]
+        });
+
+        $('#addFileButton').on('click', function () {
+            $('#addFile').click();
+        });
+        $('#addFile').on('click', function (e) {
+            e.stopImmediatePropagation();
+        }).on('change', function () {
+            let csrf = $("form input[name='_csrf']").val();
+            let files = $(this)[0].files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomeMailFileUpload}]],
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    files.files = [];
+                    var file = data.file;
+                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
+                    $('#file-container').prepend(
+"                    <div class=\"file-block\">\n" +
+"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
+"                        <div class=\"text-center file-icon-container color-red\">" +
+"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                        </div>\n" +
+"                        <div class=\"text-center\">\n" +
+"                            <span>"+file.name+"</span>\n" +
+"                        </div>\n" +
+"                    </div>\n"
+                    );
+                }
+            })
+        });
+
+        $('#description').on('change', function () {
+            if ($(this).val() === 'new') {
+                $('.new-desc').removeClass('d-none');
+            } else {
+                $('.new-desc').addClass('d-none');
+            }
+        });
+
+        $(document).on('click', '.fa-trash-alt', function () {
+            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
+            $(this).parent().parent().remove();
+        });
+
+        $('form').on('submit', function () {
+            $('#addFile').attr('disabled', 'disabled');
+            if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
+            else $('#newDescription').attr('disabled', 'disabled');
+            $(this).submit();
+        });
+
+        $('#documentOrganizationId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+        $('#additionalDocumentId').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+    });
+
+    $('#description_content').on('change',function () {
+        var text=this.options[this.selectedIndex].text;
+        var dec = $('#description_textarea').val();
+        $('#description_textarea').val(dec + text);
+    });
+</script>
+
+</body>
+</html>

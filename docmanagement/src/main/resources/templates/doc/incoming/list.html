@@ -23,10 +23,10 @@
             <div class="card parent-card">
                 <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
                     <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" >Кирувчи хатлар</a></h5>
-                    <div>
+                    <!--<div>
                         <input type="text" class="form-control" />
                         <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                    </div>
+                    </div>-->
                 </div>
                 <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
@@ -35,7 +35,7 @@
                             <div class="file-icon-container-small color-primary"><span class="feather icon-mail"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">10</h4>
+                                <h4 class="card-title" th:text="${newDocumentCount}">10</h4>
                                 <h6 class="card-title">Янги хатлар</h6>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                             <div class="file-icon-container-small color-red"><span class="fas fa-pencil-alt"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">20</h4>
+                                <h4 class="card-title" th:text="${inProgressDocumentCount}"></h4>
                                 <h6 class="card-title">Жараёндаги</h6>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="fas fa-clock"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">30</h4>
+                                <h4 class="card-title" th:text="${lessDeadlineDocumentCount}"></h4>
                                 <h6 class="card-title">Муддати яқинлашган</h6>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">40</h4>
+                                <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}">></h4>
                                 <h6 class="card-title">Муддатдан кечиккан</h6>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="file-icon-container-small color-primary"><span class="feather icon-mail"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">10</h4>
+                                <h4 class="card-title" th:text="${checkingDocumentCount}">></h4>
                                 <h6 class="card-title">Ижро этилган</h6>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                             <div class="file-icon-container-small color-red"><span class="fas fa-pencil-alt"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">20</h4>
+                                <h4 class="card-title" th:text="${allDocumentCount}">></h4>
                                 <h6 class="card-title">Жами кирувчи хатлар</h6>
                             </div>
                         </div>
@@ -97,114 +97,69 @@
             <div class="card" style="border-radius: 5px">
                 <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
                     <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >Саралаш фильтри</a></h5>
-                    <div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>
+                    <!--<div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>-->
                 </div>
-                <div class="row p10">
+                <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="tin" class="control-label">Жўнатувчи ташкилот номи</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                        </div>
+                        <label for="documentOrganizationId" class="control-label">Жўнатувчи ташкилот номи</label>
+                        <select class="form-control" id="documentOrganizationId">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="name" class="control-label">Хат рақами</label>
-                        <input type="text" class="form-control" id="name" />
+                        <label for="docRegNumber" class="control-label">Хат рақами</label>
+                        <input type="text" class="form-control" id="docRegNumber" />
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="applicationId" class="control-label">Руйхатга олиш рақами</label>
-                        <input type="text" class="form-control" id="applicationId" />
+                        <label for="registrationNumber" class="control-label">Руйхатга олиш рақами</label>
+                        <input type="text" class="form-control" id="registrationNumber" />
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label for="dateBegin" class="control-label">Рўйхатга олинган сана</label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                                <img class="calendar-img1" src="../images/calendar.svg" alt="">
+                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
                             </div>
                             <div class="col-6" style="padding-right:0;">
                                 <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                                <img class="calendar-img2" src="../images/calendar.svg" alt="">
+                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="regionId" class="control-label">Қўйилган топшириқ (резолюция)</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                        </div>
+                        <label for="taskContent" class="control-label">Қўйилган топшириқ (резолюция)</label>
+                        <input type="text" class="form-control" id="taskContent" />
                     </div>
                 </div>
-                <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    <div class="row">
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label for="objectId" class="control-label">Хатнинг қисқача мазмуни</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label for="activityId" class="control-label">Ижрочи</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label for="subRegionId" class="control-label">Ижро йўналиши</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas fa-search  color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label class="control-label">Жорий ҳолати</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
-                                </select>
-                                <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px">Қидириш</button>
-                        </div>
+                <div class="row p10" style="padding-top: 0px;">
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="content" class="control-label">Хатнинг қисқача мазмуни</label>
+                        <input type="text" class="form-control" id="content" />
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="performerId" class="control-label">Ижрочи</label>
+                        <select class="form-control" id="performerId" >
+                            <option value="">Танлаш</option>
+                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="taskSubType" class="control-label">Ижро йўналиши</label>
+                        <select class="form-control" id="taskSubType">
+                            <option value="">Танлаш</option>
+                            <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="${taskSubType.getName()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="taskSubStatus" class="control-label">Жорий ҳолати</label>
+                        <select class="form-control" id="taskSubStatus">
+                            <option value="">Танлаш</option>
+                            <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="${taskSubStatus.getName()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">Қидириш</button>
                     </div>
                 </div>
             </div>
@@ -212,25 +167,25 @@
         <div class="parent-card col-xl-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Жами</a>
+                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
+                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -266,338 +221,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr role="row" class="odd">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <button type="button" style="width:160px" class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0">Кўрилмаган </button>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 red-color">IN-00114</td>
-                                                <td class="red-color">08.10.2019</td>
-                                                <td><span class="red-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="red-color">06.10.2019</td>
-                                                <td class="red-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="red-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button" class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td tabindex="0" class="sorting_1">IN-00114</td>
-                                                <td class="">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="">07.10.2019</td>
-                                                <td class="">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 orange-color">IN-00114</td>
-                                                <td class="orange-color">09.10.2019</td>
-                                                <td><span class="orange-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="orange-color">08.10.2019</td>
-                                                <td class="orange-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="orange-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td tabindex="0" class="sorting_1 blue-color">IN-00114</td>
-                                                <td class="blue-color">08.10.2019</td>
-                                                <td><span class="blue-color">Ўзбекистон овчи ва балиқчилар спорт
-                                                        бирлашмаси <br> Самарқанд вилояти. № 79/123-СМК, сана
-                                                        05.10.2019</span><br> Ҳайвонларни табиатдан олишга рухсат бериш
-                                                    ҳақида</td>
-                                                <td class="blue-color">05.10.2019</td>
-                                                <td class="blue-color">25.10.2019 <br> 14 кун қолди</td>
-                                                <td class="blue-color">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-                                                        <button type="button"
-                                                            class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"><span class="sr-only">Toggle
-                                                                Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#!">Action</a>
-                                                            <a class="dropdown-item" href="#!">Another action</a>
-                                                            <a class="dropdown-item" href="#!">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#!">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="red-color">Тартибга кўра кўриб чиқилсин.</span><br>
-                                                    Биохилмахиллик ва муҳофаза этиладиган
-                                                    табиий ҳудудлар масаласи, Молия бўлими,
-                                                    Хужжатларни назорат қилиш бўлими</td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -605,35 +229,112 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <p class="mb-0">Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee
-                        squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan
-                        four loko
-                        farm-to-table
-                        craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-                        ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus
-                        mollit.
-                        Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack
-                        odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry
-                        richardson
-                        biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus
-                        tattooed echo park.</p>
-                </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <p class="mb-0">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's
-                        organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
-                        tattooed
-                        craft beer,
-                        iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy
-                        irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free,
-                        carles
-                        pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard
-                        of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
-                </div>
             </div>
         </div>
     </div>
 
     <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+    <script th:src="@{/static/datatables/datatables.min.js}"></script>
+
+    <script th:inline="javascript">
+        var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}]];
+        var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
+        function getCurrentLanguage() {
+            return [[__${#locale}__]];
+        }
+    </script>
+    <script th:inline="none">
+        var dataDatatableSelector;
+        var thead;
+        var tabFilter = 1;
+
+        function getDatatableConnect() {
+            dataDatatableSelector.DataTable().destroy();
+            dataDatatableSelector.html(thead);
+            datatableConnect();
+        }
+
+        function getTabDatatableConnect(tab) {
+            dataDatatableSelector.DataTable().destroy();
+            dataDatatableSelector.html(thead);
+            tabFilter = tab;
+            datatableConnect();
+        }
+
+        function renderActionsColumn(data, type, row, meta) {
+            var html = '';
+            html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            return html;
+        }
+
+        function datatableConnect() {
+            dataDatatableSelector.DataTable({
+                processing: true,
+                serverSide: true,
+                scrollX: true,
+                pageLength: 25,
+                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                order: [[5, 'desc']],
+                dom: 'lrtip',
+                ajax : function (dataToSend, callback, settings) {
+                    var api = this.api();
+
+                    dataToSend.page = api !== undefined ? api.page() : 0;
+                    dataToSend.size = api !== undefined ? api.page.len() : 25;
+                    dataToSend.documentOrganizationId = $('#documentOrganizationId').val();
+                    dataToSend.docRegNumber = $('#docRegNumber').val();
+                    dataToSend.registrationNumber = $('#registrationNumber').val();
+                    dataToSend.dateBegin = $('#dateBegin').val();
+                    dataToSend.dateEnd = $('#dateEnd').val();
+                    dataToSend.taskContent = $('#taskContent').val();
+                    dataToSend.content = $('#content').val();
+                    dataToSend.performerId = $('#performerId').val();
+                    dataToSend.taskSubType = $('#taskSubType').val();
+                    dataToSend.taskSubStatus = $('#taskSubStatus').val();
+
+                    dataToSend.tabFilter = tabFilter;
+                    dataToSend._csrf = $("#global_csrf").val();
+
+                    $.post("", dataToSend, function(data){
+                        callback(data);
+                    });
+                },
+                columns: [
+                    {data: 1, name: 'registrationNumber'},
+                    {data: 2, name: 'registrationDate'},
+                    {data: 3, name: 'description'},
+                    {data: 4, name: 'createdAt'},
+                    {data: 5, name: 'dueDate'},
+                    {data: 6, name: 'status'},
+                    {data: 7, name: 'resolution'}
+                ],
+                language: {
+                    'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+                }
+            });
+        }
+
+        $('#performerId').select2();
+        $('#taskSubType').select2();
+        $('#taskSubStatus').select2();
+        $('#documentOrganizationId').select2({
+            ajax: {
+                url: getOrganization,
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+
+        $(document).ready(function () {
+            dataDatatableSelector = $('#responsive-table-model');
+            thead = dataDatatableSelector.html();
+            datatableConnect();
+            $('#filter').on('change', function () {
+                getDatatableConnect();
+            })
+        });
+    </script>
 </body>
 </html>

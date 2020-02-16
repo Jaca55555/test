@@ -10,6 +10,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.JournalFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.repository.JournalRepository;
@@ -60,8 +61,8 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
-    public List<Journal> removeStatusActive() {
-        return journalRepository.findAll();
+    public List<Journal> updateStatusActive() {
+        return journalRepository.findByStatusTrue();
     }
 
     @Override
@@ -75,38 +76,34 @@ public class JournalServiceImpl implements JournalService {
     }
 
     private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO) {
-        return new Specification<Journal>() {
-            @Override
-            public Predicate toPredicate(Root<Journal> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (filterDTO.getDocTypeId() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
-                }
-                if (filterDTO.getName() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + filterDTO.getName().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getPrefix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("prefix")),
-                            "%" + filterDTO.getPrefix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getSuffix() != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("suffix")),
-                            "%" + filterDTO.getSuffix().toLowerCase() + "%"
-                    ));
-                }
-                if (filterDTO.getStatus() != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+        return (Specification<Journal>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (filterDTO.getDocTypeId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
             }
+            if (filterDTO.getName() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + filterDTO.getName().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getPrefix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("prefix")),
+                        "%" + filterDTO.getPrefix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getSuffix() != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("suffix")),
+                        "%" + filterDTO.getSuffix().toLowerCase() + "%"
+                ));
+            }
+            if (filterDTO.getStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getStatus()));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 
@@ -118,6 +115,13 @@ public class JournalServiceImpl implements JournalService {
 
     public Journal update(Journal journal) {
         return journalRepository.save(journal);
+    }
+
+    public String getRegistrationNumberByJournalId(Integer journalId) {
+        Journal journal = journalRepository.getOne(journalId);
+        journal.setNumbering(journal.getNumbering() + 1);
+        journalRepository.save(journal);
+        return journal.getPrefix() + journal.getNumbering() + journal.getSuffix();
     }
 
 }

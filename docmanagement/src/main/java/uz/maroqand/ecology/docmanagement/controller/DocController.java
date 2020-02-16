@@ -2,7 +2,6 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
@@ -21,31 +21,34 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentLogService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz)
- * (ru)
  */
 @Controller
 public class DocController {
 
     private final UserService userService;
+    private final FileService fileService;
     private final DocumentService documentService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentLogService documentLogService;
 
     @Autowired
-    public DocController(UserService userService, DocumentService documentService, DocumentOrganizationService documentOrganizationService) {
+    public DocController(UserService userService, FileService fileService, DocumentService documentService, DocumentOrganizationService documentOrganizationService, DocumentLogService documentLogService) {
         this.userService = userService;
+        this.fileService = fileService;
         this.documentService = documentService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -53,7 +56,6 @@ public class DocController {
 
         return DocTemplates.Dashboard;
     }
-
 
     @RequestMapping(value = DocUrls.RegistrationAdditionalDocument, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
@@ -104,6 +106,29 @@ public class DocController {
         resutl.put("results", select2DtoList);
         resutl.put("pagination", paginationDto);
         resutl.put("total_count", documentOrganizationPage.getTotalElements());
+        return resutl;
+    }
+
+    @RequestMapping(value = DocUrls.AddComment, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> createLogComment(
+            @RequestParam(name = "file_ids", required = false) List<Integer> file_ids,
+            DocumentLog documentLog
+    ) {
+        documentLog.setCreatedById(userService.getCurrentUserFromContext().getId());
+        documentLog.setType(1);
+        if (file_ids != null) {
+            Set<File> files = new LinkedHashSet<>();
+            for (Integer id : file_ids) {
+                files.add(fileService.findById(id));
+            }
+            documentLog.setContentFiles(files);
+        }
+        documentLog = documentLogService.create(documentLog);
+        documentLog.setCreatedBy(userService.findById(documentLog.getCreatedById()));
+        HashMap<String,Object> resutl = new HashMap<>();
+        resutl.put("status", "success");
+        resutl.put("log", documentLog);
         return resutl;
     }
 }

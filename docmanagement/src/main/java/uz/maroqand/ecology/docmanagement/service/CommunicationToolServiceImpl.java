@@ -41,7 +41,7 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     @Override
     @Cacheable(value = "communicationToolGetById", key = "#id",unless="#result == ''")
     public CommunicationTool getById(Integer id) {
-        return communicationToolRepository.findByIdAndDeletedFalse(id);
+        return updateCacheableById(id);
     }
 
     //PutById
@@ -91,19 +91,16 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     }
 
     private static Specification<CommunicationTool> getFilteringSpecification2(Integer id, String name) {
-        return new Specification<CommunicationTool>() {
-            @Override
-            public Predicate toPredicate(Root<CommunicationTool> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (id != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("id"), id));
-                }
-                if (name != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("name"),"%" + name + "%"));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return (Specification<CommunicationTool>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (id != null) {
+                predicates.add(criteriaBuilder.equal(root.get("id"), id));
             }
+            if (name != null) {
+                predicates.add(criteriaBuilder.equal(root.get("name"),"%" + name + "%"));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
     public CommunicationTool update(CommunicationTool communicationTool) {
@@ -116,15 +113,11 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     }
 
     private static Specification<CommunicationTool> getFilteringSpecification() {
-        return new Specification<CommunicationTool>() {
-            @Override
-            public Predicate toPredicate(Root<CommunicationTool> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
-            }
+        return (Specification<CommunicationTool>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
+            predicates.add( notDeleted );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

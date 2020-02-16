@@ -33,9 +33,9 @@ public interface DocumentOrganizationService {
 
     Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable);
 
-    DocumentOrganization create(DocumentOrganization communicationTool);
+    DocumentOrganization create(DocumentOrganization documentOrganization);
 
-    DocumentOrganization update(DocumentOrganization communicationTool);
+    DocumentOrganization update(DocumentOrganization documentOrganization);
 
 
 }

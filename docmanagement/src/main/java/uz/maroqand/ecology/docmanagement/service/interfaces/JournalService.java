@@ -22,7 +22,7 @@ public interface JournalService {
 
     List<Journal> getStatusActive();
 
-    List<Journal> removeStatusActive();
+    List<Journal> updateStatusActive();
 
     Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable);
 
@@ -31,5 +31,7 @@ public interface JournalService {
     Journal create(Journal journal);
 
     Journal update(Journal journal);
+
+    String getRegistrationNumberByJournalId(Integer journalId);
 
 }

@@ -42,20 +42,15 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document createDoc(Document document) {
+        document.setCreatedAt(new Date());
         document.setDeleted(Boolean.FALSE);
-        documentRepository.save(document);
-        return document;
+        return documentRepository.save(document);
     }
 
     @Override
     public void update(Document document) {
         document.setUpdateAt(new Date());
         documentRepository.save(document);
-    }
-
-    @Override
-    public List<Document> findAllActive() {
-        return documentRepository.findAllByDeletedFalse();
     }
 
     @Override
@@ -67,20 +62,18 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-                if (filterDTO != null) {
-                    if (filterDTO.getDocumentId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
-                    }
+            if (filterDTO != null) {
+                if (filterDTO.getDocumentId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
+                }
 
-                    if (filterDTO.getRegistrationNumber() != null) {
-                        System.out.println(filterDTO.getRegistrationNumber());
-                        predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
-                    }
+                if (filterDTO.getRegistrationNumber() != null) {
+                    System.out.println(filterDTO.getRegistrationNumber());
+                    predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + filterDTO.getRegistrationNumber() + "%"));
+                }
 
                     Date dateBegin = DateParser.TryParse(filterDTO.getRegistrationDateBegin(), Common.uzbekistanDateFormat);
                     Date dateEnd = DateParser.TryParse(filterDTO.getRegistrationDateEnd(), Common.uzbekistanDateFormat);
@@ -161,13 +154,7 @@ public class DocumentServiceImpl implements DocumentService {
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-            }
-        };
-    }
-
-    @Override
-    public List<Document> getList(){
-        return documentRepository.findAll();
+            };
     }
 
     @Override
@@ -176,16 +163,13 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     private static Specification<Document> getSpecification(String registrationNumber) {
-        return new Specification<Document>() {
-            @Override
-            public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if(registrationNumber != null){
-                    predicates.add(criteriaBuilder.like(root.<String>get("registrationNumber"), "%" + registrationNumber + "%"));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if(registrationNumber != null){
+                predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + registrationNumber + "%"));
             }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

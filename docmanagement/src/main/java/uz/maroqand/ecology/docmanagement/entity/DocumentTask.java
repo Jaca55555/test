@@ -2,10 +2,10 @@ package uz.maroqand.ecology.docmanagement.entity;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by Namazov Jamshid
@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "document_task")
 public class DocumentTask {
+
     @Transient
     private static final String sequenceName = "document_task_id_seq";
 
@@ -32,21 +33,29 @@ public class DocumentTask {
     @Column(name = "document_id")
     private Integer documentId;
 
-    @Column(name = "chief_id")
-    private Integer chiefId;
+    //TaskStatus
+    @Column(name = "status")
+    private Integer status;
+
+    //topshirish
+    @Column(name = "content", columnDefinition = "text")
+    private String content;
+
+    //topshiriq muddati
+    @Column(name = "due_date", columnDefinition = "timestamp without time zone")
+    private Date dueDate;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chief_id", insertable = false, updatable = false)
     private User chief;
 
-    @OneToMany(mappedBy = "task")
-    private Set<DocumentTaskParticipant> participants;
+    //topshiriq bergan rahbar
+    @Column(name = "chief_id")
+    private Integer chiefId;
 
-    @Column(name = "content", columnDefinition = "text")
-    private String content;
-
-    @Column(name = "due_date", columnDefinition = "timestamp without time zone")
-    private Date dueDate;
+    //ijrochi
+    @Column(name = "performer_id")
+    private Integer performerId;
 
     /*
      * Technical Fields
@@ -66,4 +75,9 @@ public class DocumentTask {
     @Column(name="update_at", columnDefinition = "timestamp without time zone")
     private Date updateAt;
 
+    public String getStatusName(Integer id){
+        if (id==null) return "";
+        TaskStatus taskStatus = TaskStatus.getTaskStatus(id);
+        return taskStatus!=null?taskStatus.getName():"";
+    }
 }

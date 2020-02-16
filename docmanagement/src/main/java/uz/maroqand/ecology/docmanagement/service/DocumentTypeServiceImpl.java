@@ -61,11 +61,12 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
         return documentTypeRepository.findByStatusTrue();
     }
 
+
     //RemoveAllStatusActiveFromCache
     @Override
     @CacheEvict(value = "documentTypeGetStatusActive", allEntries = true)
-    public List<DocumentType> removeStatusActive() {
-        return documentTypeRepository.findAll();
+    public List<DocumentType> updateStatusActive() {
+        return documentTypeRepository.findByStatusTrue();
     }
 
     @Override
@@ -79,24 +80,21 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     }
 
     private static Specification<DocumentType> getFilteringSpecification(DocumentTypeEnum type, String name, Boolean status) {
-        return new Specification<DocumentType>() {
-            @Override
-            public Predicate toPredicate(Root<DocumentType> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
-                if (type != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
-                }
-                if (status != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), status));
-                }
-                if (name != null) {
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("name")),
-                            "%" + name.toLowerCase() + "%"));
-                }
-                predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        return (Specification<DocumentType>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
             }
+            if (status != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"));
+            }
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

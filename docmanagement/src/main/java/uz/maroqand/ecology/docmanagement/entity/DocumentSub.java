@@ -4,6 +4,7 @@ import lombok.Data;
 import uz.maroqand.ecology.docmanagement.constant.DocumentSubType;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 30.04.2019.
@@ -73,4 +74,21 @@ public class DocumentSub {
     @Column(name = "address")
     private String address;
 
+    /*
+     * Technical Fields
+     */
+    @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
+    private Boolean deleted = false;
+
+    @Column(name = "created_by_id")
+    private Integer createdById;
+
+    @Column(name="created_at", columnDefinition = "timestamp without time zone")
+    private Date createdAt;
+
+    @Column(name = "update_by_id")
+    private Integer updateById;
+
+    @Column(name="update_at", columnDefinition = "timestamp without time zone")
+    private Date updateAt;
 }

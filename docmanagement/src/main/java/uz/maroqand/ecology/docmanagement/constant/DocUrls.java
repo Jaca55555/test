@@ -16,6 +16,7 @@ public class DocUrls {
 
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
+    public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
@@ -24,6 +25,7 @@ public class DocUrls {
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
+    public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
@@ -31,15 +33,20 @@ public class DocUrls {
     public static final String RegistrationOrganization = Prefix + Registration + "/organization";
 
     private static final String IncomingRegistration = Prefix + Registration + Incoming;
-    public static final String IncomeMailList = IncomingRegistration + "/list";
-    public static final String IncomeMailListAjax = IncomingRegistration + "/list_ajax";
-    public static final String IncomeMailView = IncomingRegistration + "/view";
+    public static final String IncomingRegistrationList = IncomingRegistration + "/list";
+    public static final String IncomingRegistrationNewList = IncomingRegistration + "/new_list";
+    public static final String IncomingRegistrationView = IncomingRegistration + "/view";
     public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
     public static final String IncomingRegistrationNewTask = IncomingRegistration + "/new_and_task";
-    public static final String IncomeMailEdit = IncomingRegistration + "/edit";
+    public static final String IncomingRegistrationEdit = IncomingRegistration + "/edit";
+    public static final String IncomingRegistrationEditTask = IncomingRegistration + "/edit_and_task";
+    public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
+    public static final String IncomingRegistrationTaskSubmit = IncomingRegistration + "/task_submit";
+    public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
+
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
-    public static final String IncomeMailSpecial = IncomingRegistration + "/special";
-    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
+    public static final String IncomingSpecialControll = IncomingRegistration + "/special";
+//    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
@@ -48,6 +55,14 @@ public class DocUrls {
     //Ichki hujjatlarni ro'yhatga olish
     private static final String InnerRegistration = Prefix + Registration + Inner;
     public static final String InnerRegistrationList = InnerRegistration + "/list";
+    public static final String InnerRegistrationNew = InnerRegistration + "/new";
+    public static final String InnerRegistrationView = InnerRegistration + "/view";
+    public static final String InnerRegistrationEdit = InnerRegistration + "/edit";
+    public static final String InnerRegistrationNewTask = InnerRegistration + "/new_and_task";
+    public static final String InnerRegistrationEditTask = InnerRegistration + "/edit_and_task";
+    public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
+    public static final String InnerRegistrationTask = InnerRegistration + "/task";
+
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

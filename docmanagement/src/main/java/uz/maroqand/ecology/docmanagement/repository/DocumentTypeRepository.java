@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagement.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,5 @@ public interface DocumentTypeRepository extends DataTablesRepository<DocumentTyp
 
     List<DocumentType> findByStatusTrue();
 
+    Page<DocumentType> findByStatusTrueAndType(String name , Pageable pageable);
 }
