@@ -1,7 +1,9 @@
 package uz.maroqand.ecology.docmanagement.constant;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Utkirbek Boltaev on 14.02.2020.
@@ -33,6 +35,18 @@ public enum TaskSubStatus {
             taskSubStatusList.add(taskSubStatus);
         }
         return taskSubStatusList;
+    }
+
+    private static Map<Integer, TaskSubStatus> taskStatusMap;
+    static {
+        taskStatusMap = new HashMap<>();
+        for (TaskSubStatus taskStatus : TaskSubStatus.values()) {
+            taskStatusMap.put(taskStatus.getId(), taskStatus);
+        }
+    }
+
+    public static TaskSubStatus getTaskStatus(Integer id) {
+        return taskStatusMap.get(id);
     }
 
     public Integer getId() {

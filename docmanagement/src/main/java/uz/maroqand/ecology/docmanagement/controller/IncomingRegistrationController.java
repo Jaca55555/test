@@ -23,6 +23,8 @@ import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -129,8 +131,12 @@ public class IncomingRegistrationController {
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
+        List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
+        List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTasks", documentTasks);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
@@ -358,7 +364,7 @@ public class IncomingRegistrationController {
             }
         }
 
-        return "redirect:" + DocUrls.IncomingRegistrationList;
+        return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationUserName)

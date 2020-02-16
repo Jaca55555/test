@@ -39,173 +39,83 @@
                         <h5 th:text="#{doc.participants_executors}">Ижрочилар / Иштирокчилар</h5>
                     </div>
                     <div class="card-block">
-                        <div class="row">
-                            <div class="executor col-12 m10-vertical">
+                        <div class="row" th:if="${#lists.size(documentTasks)>0}" th:each="task : ${documentTasks}">
+                            <div class="executor col-12 m10-vertical" th:object="${task}">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
                                     <div>
                                         <div class="inline-block"><i
                                                 class="fas fa-user-circle fs40 color-gray column-1">
                                         </i></div>
                                         <div class="inline-block m10-horizontal">
-                                            <span class="color-primary bold">Абдуллаев А. А.</span>
+                                            <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
                                             <br>
-                                            <span>Руководитель организации</span>
+                                            <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
                                         </div>
                                     </div>
                                     <div class="flex-space-between p0 align-center column-1">
                                         <div style="height: fit-content;display: flex;align-items: center;"><i
                                                 class="fas fa-cog fs20 color-gray pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
+                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}">Жараёнда</span></div>
                                         <div style="height: fit-content;display: flex;align-items: center;"><i
                                                 class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
+                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
                                     </div>
                                     <div class="w100"></div>
                                     <div class="column-2 mt-2 text-container-border">
-                                        <span>Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                        <span th:text="*{content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
                                     </div>
                                     <div class="w100"></div>
-                                    <div class="column-2 flex-space-between text-container-border">
-                                            <span>resolution-Akbar Sapaev.jpg
-                                            </span>
-                                        <i class="fas fa-download color-gray align-center"></i>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-2">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal ">
-                                            <span class="color-primary bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
+                            <div th:if="${#lists.size(documentTaskSubs)>0}">
+                                <div th:if="${task.id==taskSub.taskId}" th:each="taskSub : ${documentTaskSubs}">
+                                    <div class="executor col-12 m10-vertical">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block"><i
+                                                        class="fas fa-user-circle fs40 color-gray column-2">
+                                                </i></div>
+                                                <div class="inline-block m10-horizontal ">
+                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-2" >
+                                                <div class="align-center height-fit"><i
+                                                        class="fas fa-cog fs20 color-primary pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span></div>
+                                                <div class="align-center height-fit"><i
+                                                        class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                            </div>
+                                            <div class="w100"></div>
+                                            <div class="column-3 mt-2 text-container-border">
+                                                <span th:text="${taskSub.content}"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="flex-space-between p0 align-center column-2">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-cog fs20 color-primary pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
-                                    </div>
-                                    <div class="w100"></div>
-                                    <div class="column-3 mt-2 text-container-border">
-                                            <span>Тегишли тартибда ўрганиб чиқиб таклиф берилсин. <br>Муддат 17.10.2019
-                                                й. </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-3">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal">
-                                            <span class="color-primary bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
+                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block"><i
+                                                        class="fas fa-user-circle fs40 color-gray column-3">
+                                                </i></div>
+                                                <div class="inline-block m10-horizontal">
+                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-3">
+                                                <div class="align-center height-fit"><i
+                                                        class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span></div>
+                                                <div class="align-center height-fit"><i
+                                                        class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="flex-space-between p0 align-center column-3">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-cog fs20 color-primary pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-3">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal">
-                                            <span class="color-purple bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex-space-between p0 align-center column-3">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-cogs fs20 color-purple pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-2">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal">
-                                            <span class="color-purple bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex-space-between p0 align-center column-2">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-cogs fs20 color-purple pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-3">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal">
-                                            <span class="color-yellow bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex-space-between p0 align-center column-3">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-exclamation-circle fs20 color-yellow pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="executor col-12 m10-vertical">
-                                <div class="flex-space-between p0">
-                                    <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-2">
-                                        </i></div>
-                                        <div class="inline-block m10-horizontal">
-                                            <span class="color-green bold">Абдуллаев А. А.</span>
-                                            <br>
-                                            <span>Ташкилот рахбари</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex-space-between p0 align-center column-2">
-                                        <div class="align-center height-fit"><i
-                                                class="fas fa-check-circle fs20 color-green pointer"></i>
-                                            <span class="m10-horizontal mobile-none">Жараёнда</span></div>
-                                        <div class="align-center height-fit"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal">21.11.2019</span></div>
                                     </div>
                                 </div>
                             </div>
