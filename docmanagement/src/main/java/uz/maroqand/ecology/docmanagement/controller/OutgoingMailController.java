@@ -115,11 +115,6 @@ public class OutgoingMailController {
             if (id != null) files.add(fileService.findById(id));
         }
         document.setContentFiles(files);
-        //journal, registration number and registration date
-        Journal journal = journalService.getById(document.getJournalId());
-        document.setJournal(journal);
-        document.setRegistrationNumber(journal.getPrefix() + '-' + (journal.getNumbering() != null ? journal.getNumbering() : 1));
-        document.setRegistrationDate(new Date());
         //document view
         document.setDocumentView(documentViewService.getById(document.getDocumentViewId()));
         //content and creating documentDescription
@@ -130,8 +125,6 @@ public class OutgoingMailController {
 
         document.setCreatedById(user.getId());
         document.setCreatedAt(new Date());
-        document.setOrganizationId(user.getOrganizationId());
-        document.setOrganization(user.getOrganization());
         //setting document type
         document.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
         document.setDocumentType(documentTypeService.getById(document.getDocumentTypeId()));
@@ -144,7 +137,7 @@ public class OutgoingMailController {
         docSub.setOrganizationName(documentOrganization.getName());
         docSub.setCommunicationToolId(communicationToolId);
 
-        Document savedDocument = documentService.createDoc(document);
+        Document savedDocument = documentService.createDoc(2, document, user);
 
 
         docSub.setDocumentId(savedDocument.getId());

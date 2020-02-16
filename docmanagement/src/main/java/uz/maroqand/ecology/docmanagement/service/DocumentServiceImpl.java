@@ -1,22 +1,20 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,10 +27,12 @@ import java.util.List;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final JournalService journalService;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, JournalService journalService) {
         this.documentRepository = documentRepository;
+        this.journalService = journalService;
     }
 
     @Override
@@ -41,7 +41,14 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document createDoc(Document document) {
+    public Document createDoc(Integer documentTypeId, Document document, User user) {
+        document.setOrganizationId(user.getOrganizationId());
+        document.setDocumentTypeId(documentTypeId);
+
+        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
+        document.setRegistrationDate(new Date());
+
+        document.setCreatedById(user.getId());
         document.setCreatedAt(new Date());
         document.setDeleted(Boolean.FALSE);
         return documentRepository.save(document);

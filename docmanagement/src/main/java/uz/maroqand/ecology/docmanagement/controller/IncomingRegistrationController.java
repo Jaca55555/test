@@ -247,11 +247,10 @@ public class IncomingRegistrationController {
         }
         document.setContentFiles(files);
         document.setCreatedById(user.getId());
-        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
-        document.setRegistrationDate(new Date());
+
         document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
-        document = documentService.createDoc(document);
+        document = documentService.createDoc(1, document, user);
 
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);

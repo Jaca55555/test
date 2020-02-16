@@ -165,10 +165,10 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setStatus(DocumentStatus.New);
-        documentService.createDoc(document);
+        documentService.createDoc(3, document, user);
 
         DocumentSub documentSub = new DocumentSub();
-        document.setOrganizationId(documentOrganizationId);
+        documentSub.setOrganizationId(documentOrganizationId);
         documentSub.setCommunicationToolId(communicationToolId);
         documentSubService.create(document.getId(), documentSub, user);
         if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
