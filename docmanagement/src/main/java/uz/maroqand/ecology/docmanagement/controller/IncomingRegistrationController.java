@@ -5,6 +5,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,9 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -121,6 +120,41 @@ public class IncomingRegistrationController {
 
         result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.GET)
+    public String getIncomingRegistrationNewListPage(){
+        return DocTemplates.IncomingRegistrationNewList;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getIncomingRegistrationNewListAjax(Pageable pageable){
+        HashMap<String,Object> result = new HashMap<>();
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
+        docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            JSONArray.add(new Object[]{
+                    document.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    documentView!=null?documentView.getNameTranslation(locale):"",
+                    document.getContent()!=null?document.getContent():"",
+                    documentSub.getOrganizationName()!=null?documentSub.getOrganizationName():""
+            });
+        }
+
+        result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
         return result;
     }

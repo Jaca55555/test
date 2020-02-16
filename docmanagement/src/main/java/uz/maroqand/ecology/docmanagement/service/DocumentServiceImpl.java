@@ -64,7 +64,7 @@ public class DocumentServiceImpl implements DocumentService {
     private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
-
+            System.out.println("status=" + filterDTO.getDocumentStatus());
             if (filterDTO != null) {
                 if (filterDTO.getDocumentId() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
@@ -149,6 +149,10 @@ public class DocumentServiceImpl implements DocumentService {
 
                     if (filterDTO.getReplies() != null) {
                         predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
+                    }
+
+                    if (filterDTO.getDocumentStatus() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getDocumentStatus()));
                     }
                 }
 
