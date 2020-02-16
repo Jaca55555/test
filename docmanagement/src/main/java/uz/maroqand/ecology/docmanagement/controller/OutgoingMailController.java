@@ -16,6 +16,8 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.docmanagement.dto.OutgoingFilterDto;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -163,23 +165,50 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(Model model) {
-        model.addAttribute("organizationList", documentOrganizationService.getList());
         model.addAttribute("documentViews", documentViewService.getStatusActive());
+        Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
+        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
+
         return DocTemplates.OutgoingMailList;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
-
+            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "registration_number", required = false)String registrationNumber,
+            @RequestParam(name = "date_begin", required = false)String dateBegin,
+            @RequestParam(name = "date_end", required = false)String dateEnd,
+            @RequestParam(name = "document_view_id", required = false)String documentViewId,
+            @RequestParam(name = "content", required = false)String content,
+            @RequestParam(name = "department_id", required = false)String departmentId,
             Pageable pageable
     ){
-        /*filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());*/
+        registrationNumber = StringUtils.trimToNull(registrationNumber);
+        dateBegin = StringUtils.trimToNull(dateBegin);
+        dateEnd = StringUtils.trimToNull(dateEnd);
+        content = StringUtils.trimToNull(content);
+        departmentId = StringUtils.trimToNull(departmentId);
+        documentViewId = StringUtils.trimToNull(documentViewId);
+
+        List<Integer> departmentIds = convertToIntegerList(departmentId);
+        List<Integer> documentViewIds = convertToIntegerList(documentViewId);
+
+        Date begin = null, end = null;
+        if(dateBegin != null)
+            begin = DateParser.TryParse(dateBegin, Common.uzbekistanDateFormat);
+        if(dateEnd != null)
+            end = DateParser.TryParse(dateEnd, Common.uzbekistanDateFormat);
+
         HashMap<String, Object> result = new HashMap<>();
-           DocFilterDTO filter = new DocFilterDTO();
+        DocFilterDTO filter = new DocFilterDTO();
+
         filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
+
+        OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
+
         Page<Document> documentPage = documentService.findFiltered(filter, pageable);
-        System.out.println("*************************************");
+
         // List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentPage.getTotalPages());
         for (Document document : documentPage) {
@@ -258,5 +287,17 @@ public class OutgoingMailController {
         file.setDeletedById(userService.getCurrentUserFromContext().getId());
         return fileService.save(file);
     }
+
+    List<Integer> convertToIntegerList(String string){
+        if(string == null) return null;
+        String[] strings = string.split(",");
+        List<Integer> ids = new ArrayList<>(strings.length);
+        for(String str: strings){
+            ids.add(Integer.parseInt(str));
+        }
+        return ids;
+    }
+
+
 
 }

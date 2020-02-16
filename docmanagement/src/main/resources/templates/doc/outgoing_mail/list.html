@@ -115,40 +115,34 @@
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
                             <label for="tin" class="control-label">Корреспондент</label>
-                            <div class="col-sm-12 p0">
-                                <select id="tin" class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
-                                        aria-hidden="true">
-                                    <option th:each="organization: ${organizationList}" th:value="${organization.id}" th:text="${organization.name}"></option>
-                                </select>
-                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                            </div>
+                            <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
+                                <option value="" th:text="#{sys_select}"></option>
+                            </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="applicationId" class="control-label">Руйхатга олиш раками</label>
-                            <input type="text" class="form-control" id="registrationNumber">
+                            <input type="text" class="form-control" id="registration_number">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="dateBegin" class="control-label">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="dateBegin" placeholder="Дан">
+                                    <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="dateEnd" placeholder="гача">
+                                    <input class="form-control datepicker date" id="date_end" placeholder="гача">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="regionId" class="control-label">Хужжат тури</label>
-                            <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
-                                        id="regionId" aria-hidden="true">
-                                    <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                                </select>
-                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                            </div>
+                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
+                                    id="document_view_id" aria-hidden="true">
+                                <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <label class="control-label">Хатнинг кискача мазмуни</label>
@@ -161,12 +155,8 @@
                             <label for="subRegionId" class="control-label">Хат жунатаётган булим ёки ходим</label>
                             <div class="col-sm-12 p0">
                                 <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
-                                        tabindex="-1" aria-hidden="true">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                    <option value="WY">Coming</option>
-                                    <option value="WY">Hanry Die</option>
-                                    <option value="WY">John Doe</option>
+                                        tabindex="-1" aria-hidden="true" id="department_id">
+                                    <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                                 </select>
                                 <i class="gray-search fas fa-search  color-gray"></i>
                             </div>
@@ -307,6 +297,17 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+
+    $('#document_organization_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
 </script>
 
 <script th:inline="none">
@@ -342,6 +343,14 @@
                 //    dataToSend.doctype_id = $('#typeId').val().trim();
                 // dataToSend.name = $('#name').val().trim();
                 // dataToSend.status = document.querySelector('#status').value;
+
+                dataToSend.document_organization_id = $('#document_organization_id').val();
+                dataToSend.registration_number = $('#registration_number').val();
+                dataToSend.date_begin = $('#date_begin').val();
+                dataToSend.date_end = $('#date_end').val();
+                dataToSend.document_view_id = $('#document_view_id').val().toString();
+                dataToSend.content = $('#content').val();
+                dataToSend.department_id = $('#department_id').val().toString();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
