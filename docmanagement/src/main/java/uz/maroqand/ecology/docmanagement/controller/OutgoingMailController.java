@@ -145,9 +145,7 @@ public class OutgoingMailController {
         docSub.setOrganizationName(documentOrganization.getName());
         docSub.setCommunicationToolId(communicationToolId);
 
-
-        Document savedDocument = documentService.createDoc(document);
-
+        Document savedDocument = documentService.createDoc(2, document, user);
 
 
         docSub.setDocumentId(savedDocument.getId());
