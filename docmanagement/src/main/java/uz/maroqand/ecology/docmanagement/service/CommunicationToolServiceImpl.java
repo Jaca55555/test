@@ -14,10 +14,7 @@ import uz.maroqand.ecology.docmanagement.entity.CommunicationTool;
 import uz.maroqand.ecology.docmanagement.repository.CommunicationToolRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.CommunicationToolService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,18 +58,9 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
 
     //RemoveAllStatusActiveFromCache
     @CacheEvict(value = "communicationToolGetStatusActive", allEntries = true)
-    public void removeCacheableStatusActive() { }
-
-    //GetList
-    @Override
-    @Cacheable("communicationToolGetList")
-    public List<CommunicationTool> getList() {
+    public List<CommunicationTool> updateStatusActive() {
         return communicationToolRepository.findByStatusTrueOrderByIdAsc();
     }
-
-    //RemoveAll
-    @CacheEvict(value = "communicationToolGetList", allEntries = true)
-    public void removeList() {}
 
     public CommunicationTool create(CommunicationTool communicationTool) {
         communicationTool.setDeleted(Boolean.FALSE);

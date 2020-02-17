@@ -88,6 +88,7 @@ public class DocTypeController {
         }
         docType.setCreatedById(user.getId());
         documentTypeService.create(docType);
+        documentTypeService.updateStatusActive();
         return "redirect:" + DocUrls.DocTypeList;
     }
 
@@ -120,6 +121,7 @@ public class DocTypeController {
         docType.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
         docType.setCreatedById(userService.getCurrentUserFromContext().getId());
         documentTypeService.update(docType);
+        documentTypeService.updateStatusActive();
         return "redirect:" + DocUrls.DocTypeList;
     }
 

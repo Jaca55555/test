@@ -41,8 +41,8 @@
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">10</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${newCount}"></h4>
+                            <h6 class="card-title" th:text="#{doc.new_documents_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -50,8 +50,8 @@
                     <div class="card dashboard-card border-danger-shadow">
                         <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">20</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${inProcess}">20</h4>
+                            <h6 class="card-title" th:text="#{doc.in_progress_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -59,8 +59,8 @@
                     <div class="card dashboard-card border-warning-shadow">
                         <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">30</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${nearDate}">30</h4>
+                            <h6 class="card-title" th:text="#{doc.near_date_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${expired}">40</h4>
+                            <h6 class="card-title" th:text="#{doc.expired_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -77,8 +77,8 @@
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${executed}">40</h4>
+                            <h6 class="card-title" th:text="#{doc.completed_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -86,8 +86,8 @@
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жами чикувчи хатлар</h6>
+                            <h4 class="card-title" th:text="${total}">40</h4>
+                            <h6 class="card-title" th:text="#{doc.all_doc_count}">Жами чикувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -112,15 +112,15 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="docRegNumber" class="control-label" th:text="#{doc.doc_id}">Хужжат раками</label>
+                    <label for="docRegNumber" class="control-label" th:text="#{doc_incoming.docRegNumber}">Хужжат раками</label>
                     <input type="text" class="form-control" id="docRegNumber">
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="registrationNumber" class="control-label" th:text="#{doc.doc_reg_date}">Руйхатга олиш раками</label>
+                    <label for="registrationNumber" class="control-label" th:text="#{doc_incoming.registrationNumber}">Руйхатга олиш раками</label>
                     <input type="text" class="form-control" id="registrationNumber">
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
-                    <label class="control-label" th:text="#{doc.income_date}">Келиб тушган сана</label>
+                    <label class="control-label" th:text="#{doc.registrationDate}">Келиб тушган сана</label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
                             <input class="form-control datepicker date" id="dateBeginStr" placeholder="Дан">
@@ -134,12 +134,10 @@
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
                     <label for="controlForm" class="control-label">Назорат карточкаси</label>
-                    <div class="col-sm-12 p0">
-                        <select class="col-sm-12 select2-hidden-accessible" id="controlForm" >
-                            <option value="" th:text="#{sys_select}"></option>
-                            <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
-                        </select>
-                    </div>
+                    <select class="col-sm-12" id="controlForm" >
+                        <option value="" th:text="#{sys_select}"></option>
+                        <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
+                    </select>
                 </div>
             </div>
             <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -167,7 +165,7 @@
                         </div>
                     </div>-->
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="content" class="control-label" th:text="#{doc.doc_description}">Хатнинг қисқача мазмуни</label>
+                        <label for="content" class="control-label" th:text="#{doc_incoming.description}">Хатнинг қисқача мазмуни</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" id="content">
                             <i class="gray-search fas fa-search  color-gray"></i>
@@ -175,20 +173,15 @@
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label" for="managerId">Рахбарият</label>
-                        <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" multiple="" id="managerId" tabindex="-1" aria-hidden="true" >
-                                <option value="">Танлаш</option>
-                            </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                        </div>
+                        <select class="col-sm-12" id="managerId">
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label" for="executorId">Ижрочилар</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executorId" tabindex="-1" aria-hidden="true" >
-                                <option value="">Танлаш</option>
-                            </select>
-                        </div>
+                        <select class="col-sm-12" id="executorId">
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="taskContent">Қўйилган топшириқ (резолюция)</label>
@@ -198,21 +191,15 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeType">Ижро йуналиши</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeType" tabindex="-1" aria-hidden="true" >
-                                <option value="">Танлаш</option>
-                            </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                        </div>
+                        <select class="col-sm-12" id="executeType" >
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeStatus">Хужжатнинг ижро ҳолати</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeStatus" tabindex="-1" aria-hidden="true" >
-                                <option value="">Танлаш</option>
-                            </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                        </div>
+                        <select class="col-sm-12" id="executeStatus" >
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label">Ижро муддати</label>
@@ -229,14 +216,11 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="executeControlStatus">Ижро назорати холати</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" id="executeControlStatus" tabindex="-1" aria-hidden="true" >
-                                <option value="">Танлаш</option>
-                            </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
-                        </div>
+                        <select class="col-sm-12" id="executeControlStatus" >
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                        </select>
                     </div>
-                    <div class="form-group col-md-3 col-sm-12">
+                    <!--<div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="isInternal">ХДФУ холати</label>
                         <div class="col-sm-12 p0">
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" id="isInternal" tabindex="-1" aria-hidden="true">
@@ -246,7 +230,7 @@
                             </select>
                             <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
-                    </div>
+                    </div>-->
                     <!--<div class="form-group col-md-3 col-sm-12">
                         <label class="control-label" for="coexecutorStatus">Хамкор ижрочилар холати</label>
                         <div class="col-sm-12 p0">
@@ -493,6 +477,12 @@
         });
     }
 
+    $('#executeControlStatus').select2();
+    $('#executeType').select2();
+    $('#executeStatus').select2();
+    $('#managerId').select2();
+    $('#executorId').select2();
+    $('#controlForm').select2();
     $('#documentOrganizationId').select2({
         ajax: {
             url: getOrganization,
