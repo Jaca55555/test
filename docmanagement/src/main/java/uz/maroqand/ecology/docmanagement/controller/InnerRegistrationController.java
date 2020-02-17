@@ -13,7 +13,6 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
@@ -140,7 +139,6 @@ public class InnerRegistrationController {
     @RequestMapping(value = {DocUrls.InnerRegistrationNew, DocUrls.InnerRegistrationNewTask}, method = RequestMethod.POST)
     public String createDoc(
             HttpServletRequest httpServletRequest,
-            @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -155,7 +153,6 @@ public class InnerRegistrationController {
             }
         }
         document.setContentFiles(files);
-        document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
         if (executeForm!=null){
@@ -206,7 +203,6 @@ public class InnerRegistrationController {
     @RequestMapping(value = {DocUrls.InnerRegistrationEdit, DocUrls.InnerRegistrationEditTask}, method = RequestMethod.POST)
     public String updateDocument(
             HttpServletRequest httpServletRequest,
-            @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -228,7 +224,6 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setContentFiles(files);
-        document.setDocRegDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedById(user.getId());
         document.setStatus(DocumentStatus.New);
         documentService.update(document);
