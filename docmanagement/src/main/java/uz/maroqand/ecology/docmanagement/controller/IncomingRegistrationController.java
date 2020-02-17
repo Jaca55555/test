@@ -375,17 +375,11 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
-
         User user = userService.getCurrentUserFromContext();
         Document document = documentService.getById(id);
-        if (document==null){
+        if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-
-
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
 
         DocumentTask documentTask = taskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
@@ -419,7 +413,10 @@ public class IncomingRegistrationController {
                 }
             }
         }
-
+        if(!document.getStatus().equals(DocumentStatus.InProgress)){
+            document.setStatus(DocumentStatus.InProgress);
+            documentService.update(document);
+        }
         return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
     }
 
