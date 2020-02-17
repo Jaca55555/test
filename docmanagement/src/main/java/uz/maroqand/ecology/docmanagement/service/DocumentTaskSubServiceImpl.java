@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +13,7 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
 import javax.persistence.criteria.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 15.02.2020.
@@ -32,6 +30,12 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.documentSubService = documentSubService;
+    }
+
+    @Override
+    public DocumentTaskSub getById(Integer id) {
+        Optional<DocumentTaskSub> optional = documentTaskSubRepository.findById(id);
+        return optional.orElse(null);
     }
 
     @Override
@@ -55,6 +59,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public DocumentTaskSub getByUserAndDocId(Integer userId, Integer docId) {
+        return documentTaskSubRepository.findByReceiverIdAndDocumentIdAndDeletedFalse(userId, docId);
+    }
+
+    @Override
     public DocumentTaskSub createNewSubTask(Integer docId, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
         DocumentTaskSub documentTaskSub = new DocumentTaskSub();
         documentTaskSub.setDocumentId(docId);
@@ -70,6 +79,12 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setCreatedAt(new Date());
         documentTaskSub.setCreatedById(senderId);
         return documentTaskSubRepository.save(documentTaskSub);
+    }
+
+    @Override
+    public DocumentTaskSub update(DocumentTaskSub taskSub) {
+        taskSub.setUpdateAt(new Date());
+        return documentTaskSubRepository.save(taskSub);
     }
 
     @Override
@@ -136,10 +151,10 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                     predicates.add(criteriaBuilder.equal(userProd.get("organizationId"), documentOrganizationId));
                 }*/
 
-                if (docRegNumber != null) {
+                if (StringUtils.trimToNull(docRegNumber) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
                 }
-                if (registrationNumber != null) {
+                if (StringUtils.trimToNull(registrationNumber) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("registrationNumber"), "%" + registrationNumber + "%"));
                 }
 
@@ -152,11 +167,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 if (dateBegin != null && dateEnd != null) {
                     predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
                 }
-                if (content != null) {
+                if (StringUtils.trimToNull(content) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("content"), "%" + content + "%"));
                 }
 
-                if (taskContent != null) {
+                if (StringUtils.trimToNull(taskContent) != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + taskContent + "%"));
                 }
                 if (performerId != null) {

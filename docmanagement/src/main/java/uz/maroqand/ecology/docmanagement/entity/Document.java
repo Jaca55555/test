@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
@@ -30,6 +31,7 @@ public class Document {
     private Integer id;
 
     //xat qaysi tashkilotga tegishli ekanligi(tizimdan foydalanuvchi tashkilotlardan)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private Organization organization;
@@ -39,6 +41,7 @@ public class Document {
 
     //kiruvchi, chiquvchi, ichki xujjat
     //Тип документа
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
     private DocumentType documentType;
@@ -47,6 +50,7 @@ public class Document {
     private Integer documentTypeId;
 
     //Журнал регистраци
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "journal_id", insertable = false, updatable = false)
     private Journal journal;
@@ -55,6 +59,7 @@ public class Document {
     private Integer journalId;
 
     //Хужжат тури
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_view_id", insertable = false, updatable = false)
     private DocumentView documentView;

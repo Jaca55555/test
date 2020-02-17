@@ -18,6 +18,7 @@ public class DocUrls {
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
+    public static final String DocumentTaskChange = Prefix + "/task_change";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish

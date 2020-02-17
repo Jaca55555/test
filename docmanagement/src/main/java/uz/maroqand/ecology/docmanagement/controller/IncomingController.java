@@ -12,11 +12,10 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -197,12 +196,65 @@ public class IncomingController {
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
+
+        User user = userService.getCurrentUserFromContext();
+        DocumentTask task = documentTaskService.getTaskByUser(document.getId(), user.getId());
+        List<TaskStatus> taskStatuses = TaskStatus.getTaskStatusList();
+        DocumentTaskSub taskSub = new DocumentTaskSub();
+        List<TaskSubStatus> taskSubStatuses = TaskSubStatus.getTaskSubStatusList();
+        if (task == null) {
+            System.out.println("got subTask");
+            taskSub = documentTaskSubService.getByUserAndDocId(user.getId(), document.getId());
+        }
+
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
+        model.addAttribute("task", (task != null) ? task : taskSub);
+        model.addAttribute("task_type", (task != null) ? 1 : 2);
+        model.addAttribute("task_statuses", (task != null) ? taskStatuses : taskSubStatuses);
         return DocTemplates.IncomingView;
     }
 
+    @RequestMapping(DocUrls.DocumentTaskChange)
+    @ResponseBody
+    public HashMap<String, Object> changeTaskStatus(
+            @RequestParam(name = "content")String content,
+            @RequestParam(name = "taskType")Integer type,
+            @RequestParam(name = "taskStatus")Integer status,
+            @RequestParam(name = "taskId")Integer taskId,
+            @RequestParam(name = "docId")Integer docId
+    ) {
+        HashMap<String, Object> response = new HashMap<>();
+        User user = userService.getCurrentUserFromContext();
+        DocumentTask task;
+        DocumentTaskSub taskSub;
+        DocumentLog log = new DocumentLog();
+        log.setCreatedById(user.getId());
+        log.setContent(docId + "raqamli hujjat statusi " + user.getFullName() + "tomonidan o'zgardi.");
+        log.setDocumentId(docId);
+        log.setType(2);
+        documentLogService.create(log);
+        if (type == 1) {
+            task = documentTaskService.getById(taskId);
+            task.setStatus(status);
+            task.setContent(content);
+            task.setUpdateById(user.getId());
+            documentTaskService.update(task);
+            response.put("task", task);
+        } else {
+            taskSub = documentTaskSubService.getById(taskId);
+            taskSub.setStatus(status);
+            taskSub.setContent(content);
+            taskSub.setUpdateById(user.getId());
+            documentTaskSubService.update(taskSub);
+            response.put("task", taskSub);
+        }
+        response.put("status", "success");
+        response.put("log", log);
+        return response;
+    }
 }

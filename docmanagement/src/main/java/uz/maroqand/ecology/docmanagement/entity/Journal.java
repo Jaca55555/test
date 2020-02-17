@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Journal {
     private Integer id;
 
     //Тип документа
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
     private DocumentType documentType;
