@@ -76,11 +76,9 @@
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-2" >
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cog fs20 color-primary pointer"></i>
+                                                <div class="align-center height-fit"><i class="fas fa-cog fs20 color-primary pointer"></i>
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
+                                                <div class="align-center height-fit"><i class="feather icon-clock fs30 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
                                             </div>
                                             <div class="w100"></div>
@@ -92,8 +90,7 @@
                                     <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
                                         <div class="flex-space-between p0">
                                             <div>
-                                                <div class="inline-block"><i
-                                                        class="fas fa-user-circle fs40 color-gray column-3">
+                                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-3">
                                                 </i></div>
                                                 <div class="inline-block m10-horizontal">
                                                     <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
@@ -102,11 +99,9 @@
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-3">
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                <div class="align-center height-fit"><i class="fas fa-cogs fs20 color-purple pointer"></i>
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
+                                                <div class="align-center height-fit"><i class="feather icon-clock fs30 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
                                             </div>
                                         </div>

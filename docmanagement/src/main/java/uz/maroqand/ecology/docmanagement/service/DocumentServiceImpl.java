@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
@@ -44,6 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
     public Document createDoc(Integer documentTypeId, Document document, User user) {
         document.setOrganizationId(user.getOrganizationId());
         document.setDocumentTypeId(documentTypeId);
+        document.setStatus(DocumentStatus.New);
 
         document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
         document.setRegistrationDate(new Date());

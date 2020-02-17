@@ -24,6 +24,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,7 @@ public class IncomingRegistrationController {
     private final DocumentTaskService taskService;
     private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
-    private final HelperService helperService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
     public IncomingRegistrationController(
@@ -67,14 +68,13 @@ public class IncomingRegistrationController {
             DocumentTaskService taskService,
             DocumentTaskSubService taskSubService,
             DocumentLogService documentLogService,
-            HelperService helperService
+            DocumentHelperService documentHelperService
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
         this.taskSubService = taskSubService;
         this.documentLogService = documentLogService;
-        this.helperService = helperService;
         this.documentDescriptionService = documentDescriptionService;
         this.communicationToolService = communicationToolService;
         this.userService = userService;
@@ -82,6 +82,7 @@ public class IncomingRegistrationController {
         this.fileService = fileService;
         this.organizationService = organizationService;
         this.documentViewService = documentViewService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
@@ -132,6 +133,8 @@ public class IncomingRegistrationController {
     @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getIncomingRegistrationNewListAjax(Pageable pageable){
+        System.out.println(pageable.getSort());
+
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
@@ -147,9 +150,9 @@ public class IncomingRegistrationController {
                     document.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentView!=null?documentView.getNameTranslation(locale):"",
+                    documentView!=null? documentView.getName():"",
                     document.getContent()!=null?document.getContent():"",
-                    documentSub.getOrganizationName()!=null?documentSub.getOrganizationName():""
+                    documentSub.getOrganizationId()!=null? documentHelperService.getDocumentOrganizationName(documentSub.getOrganizationId()):""
             });
         }
 
