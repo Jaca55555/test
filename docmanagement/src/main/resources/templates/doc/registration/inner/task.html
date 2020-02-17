@@ -38,9 +38,9 @@
                                     <h5>Топшириқ / кўрсатма № 1</h5><br/>
                                     <div class="flex-space-between p0">
                                         <div>
-                                            <div class="inline-block"><i
-                                                    class="fas fa-user-circle fs40 color-gray">
-                                            </i></div>
+                                            <div class="inline-block">
+                                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                                            </div>
                                             <div class="inline-block m10-horizontal">
                                                 <span class="color-green bold" th:if="${document.managerId!=null}" th:text="${@helperService.getUserFullNameById(document.managerId)}">Абдуллаев А. А.</span>
                                                 <br>
@@ -48,8 +48,8 @@
                                             </div>
                                         </div>
                                         <div class="flex-space-between p0 align-center column-2">
-                                            <button class="btn-icon"><i class="fas fs20 fa-edit color-gray"></i></button>
-                                            <button class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray"></i></button>
+                                            <button type="button" class="btn-icon"><i class="fas fs20 fa-edit color-gray"></i></button>
+                                            <button type="button" class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray"></i></button>
                                         </div>
                                     </div>
                                     <br/>
@@ -60,9 +60,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                    <textarea class="form-control" rows="4" name="content" >
-                                        Шартномага асосан барча ишлар амалга оширилсин ва жавоб хати йўллансин!Пулатов Г. П. 19.11.2019 гача маълумотларни Каримовга Етказиб берсин!
-                                    </textarea>
+                                    <textarea class="form-control" rows="4" name="content" ></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Ижро муддати</label>
