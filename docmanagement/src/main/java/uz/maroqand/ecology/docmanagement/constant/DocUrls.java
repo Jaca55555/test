@@ -44,6 +44,7 @@ public class DocUrls {
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
     public static final String IncomingRegistrationTaskSubmit = IncomingRegistration + "/task_submit";
     public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
+    public static final String IncomingRegistrationUpdateStatus = IncomingRegistration + "/update_status";
 
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomingSpecialControll = IncomingRegistration + "/special";

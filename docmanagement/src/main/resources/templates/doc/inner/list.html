@@ -102,7 +102,7 @@
                 <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="documentOrganizationId" class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
-                        <select class="form-control" id="documentOrganizationId">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentOrganizationId">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
@@ -170,14 +170,14 @@
 
                     <div class="form-group col-md-4 col-sm-12">
                         <label class="control-label">Қўйилган топшириқ (резолюция)</label>
-                        <select class="form-control" id="resolution">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="resolution">
                             <option value="">Танлаш</option>
                         </select>
                     </div>
 
                     <div class="form-group col-md-3 col-sm-12">
                         <label class="control-label">Ижрочилар</label>
-                        <select class="form-control" id="executors">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executors">
                             <option value="">Танлаш</option>
                             <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
                         </select>
@@ -185,7 +185,7 @@
 
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">Ижро йўналиши</label>
-                        <select class="form-control" id="executePath">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
                             <option value="">Танлаш</option>
                         </select>
                     </div>
@@ -214,7 +214,7 @@
 
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">Ижро назорати холати</label>
-                        <select class="form-control" id="executeStatus" >
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executeStatus">
                             <option value="">Танлаш</option>
                             <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
                         </select>
@@ -222,19 +222,19 @@
 
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">ХДФУ холати</label>
-                        <select class="form-control" id="insidePurposeStatus">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="insidePurposeStatus">
                             <option value="">Танлаш</option>
                         </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">Хамкор ижрочилар холати</label>
-                        <select class="form-control" id="coexecutorStatus">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="coexecutorStatus">
                             <option value="">Танлаш</option>
                         </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
                         <label class="control-label">Хужжатга йўлланган жавоблар</label>
-                        <select class="form-control" id="replies">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="replies">
                             <option value="">Танлаш</option>
                         </select>
                     </div>

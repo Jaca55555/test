@@ -1,13 +1,11 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -15,10 +13,12 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.*;
+import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
+import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,28 +34,22 @@ public class InnerRegistrationController {
     private final DocumentService documentService;
     private final DocumentViewService documentViewService;
     private final JournalService journalService;
-    private final CommunicationToolService communicationToolService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentTaskService documentTaskService;
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
-    private final DocumentTaskService taskService;
-    private final DocumentTaskSubService taskSubService;
-    private final DocumentLogService documentLogService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentTaskService taskService, DocumentTaskSubService taskSubService, DocumentLogService documentLogService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
         this.documentViewService = documentViewService;
         this.journalService = journalService;
-        this.communicationToolService = communicationToolService;
         this.documentDescriptionService = documentDescriptionService;
+        this.documentTaskService = documentTaskService;
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
-        this.taskService = taskService;
-        this.taskSubService = taskSubService;
-        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
@@ -91,20 +85,21 @@ public class InnerRegistrationController {
             Pageable pageable
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+        IncomingRegFilter incomingRegFilter = new IncomingRegFilter();
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(incomingRegFilter,null,null,null,null,null,null, pageable);
 
-        List<Document> documentList = documentPage.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
-        for (Document document : documentList) {
+        List<DocumentTask> documentTaskList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        for (DocumentTask documentTask : documentTaskList) {
+            Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    document.getId(),
-                    document.getRegistrationNumber(),
+                    documentTask.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
-                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    document.getStatus(),
+                    documentTask.getContent(),
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
+                    documentTask.getStatus(),
                     "Resolution and parcipiants"
             });
         }
@@ -121,14 +116,8 @@ public class InnerRegistrationController {
         if (document == null) {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
-        List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
-        List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("documentTasks", documentTasks);
-        model.addAttribute("documentTaskSubs", documentTaskSubs);
-        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-
         return DocTemplates.InnerRegistrationView;
     }
 
@@ -137,7 +126,6 @@ public class InnerRegistrationController {
         model.addAttribute("doc", new Document());
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
-        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executeController", userService.getEmployeeList());
@@ -151,8 +139,6 @@ public class InnerRegistrationController {
     @RequestMapping(value = {DocUrls.InnerRegistrationNew, DocUrls.InnerRegistrationNewTask}, method = RequestMethod.POST)
     public String createDoc(
             HttpServletRequest httpServletRequest,
-            @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -167,7 +153,6 @@ public class InnerRegistrationController {
             }
         }
         document.setContentFiles(files);
-        document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
         if (executeForm!=null){
@@ -177,11 +162,10 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setStatus(DocumentStatus.New);
-        documentService.createDoc(3, document, user);
+        documentService.createDoc(3,document,user);
 
         DocumentSub documentSub = new DocumentSub();
-        documentSub.setOrganizationId(documentOrganizationId);
-        documentSub.setCommunicationToolId(communicationToolId);
+        document.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
         if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
             return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
@@ -207,7 +191,6 @@ public class InnerRegistrationController {
         model.addAttribute("docAdditional",documentAdditional);
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
-        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeeList());
         model.addAttribute("controlUserList", userService.getEmployeeList());
@@ -220,8 +203,6 @@ public class InnerRegistrationController {
     @RequestMapping(value = {DocUrls.InnerRegistrationEdit, DocUrls.InnerRegistrationEditTask}, method = RequestMethod.POST)
     public String updateDocument(
             HttpServletRequest httpServletRequest,
-            @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -243,13 +224,11 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setContentFiles(files);
-        document.setDocRegDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedById(user.getId());
         document.setStatus(DocumentStatus.New);
         documentService.update(document);
 
         DocumentSub documentSub = new DocumentSub();
-        documentSub.setCommunicationToolId(communicationToolId);
         document.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
 
@@ -279,87 +258,10 @@ public class InnerRegistrationController {
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
-        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-        model.addAttribute("userList", userList);
+
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
-        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
         return DocTemplates.InnerRegistrationTask;
-    }
-
-    @RequestMapping(value = DocUrls.InnerRegistrationTaskSubmit)
-    public String innerRegistrationTaskSubmit(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "content") String content,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
-            @RequestBody MultiValueMap<String, String> formData
-    ){
-
-        User user = userService.getCurrentUserFromContext();
-        Document document = documentService.getById(id);
-        if (document==null){
-            return "redirect:" + DocUrls.InnerRegistrationList;
-        }
-
-
-        System.out.println("id=" + id);
-        System.out.println("content=" + content.trim());
-        System.out.println("docRegDateStr=" + docRegDateStr);
-
-        DocumentTask documentTask = taskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
-        Integer userId = null;
-        Integer performerType = null;
-        Date dueDate = null;
-        Map<String,String> map = formData.toSingleValueMap();
-        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
-
-            String[] paramName =  mapEntry.getKey().split("_");
-            String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
-
-            if (tagName.equals("user")){
-                userId=Integer.parseInt(value);
-            }
-            if (tagName.equals("performer")){
-                performerType = Integer.parseInt(value);
-            }
-
-            if (tagName.equals("dueDateStr")){
-                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
-                if (userId!=null && performerType!=null){
-                    taskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
-                    if (performerType==TaskSubType.Performer.getId()){
-                        documentTask.setPerformerId(userId);
-                        taskService.update(documentTask);
-                    }
-                    userId = null;
-                    performerType = null;
-                    dueDate = null;
-                }
-            }
-        }
-
-        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
-    }
-
-    @RequestMapping(value = DocUrls.InnerRegistrationUserName)
-    @ResponseBody
-    public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
-        HashMap<String,Object> result = new HashMap<>();
-        result.put("status",1);
-        User user = userService.findById(userId);
-        if (user==null){
-            result.put("status",0);
-            return result;
-        }
-
-        result.put("userId",user.getId());
-        result.put("userFullName",user.getFullName());
-        result.put("position", user.getPositionId()!=null?user.getPosition().getNameTranslation(locale):"");
-        return result;
     }
 
 }
