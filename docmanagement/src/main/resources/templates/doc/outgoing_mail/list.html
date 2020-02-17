@@ -46,8 +46,7 @@
             <div class="responsive">
                 <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
-                        <!--<img class="card-svg" src="/static/doc/images/mail_incoming.svg" alt="">-->
-                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
+                        <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">10</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -56,7 +55,7 @@
                 </div>
                 <div class="office-card">
                     <div class="card dashboard-card border-danger-shadow">
-                        <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
+                        <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">20</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -65,7 +64,7 @@
                 </div>
                 <div class="office-card">
                     <div class="card dashboard-card border-warning-shadow">
-                        <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
+                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">30</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -74,7 +73,7 @@
                 </div>
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
+                        <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -83,7 +82,7 @@
                 </div>
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
+                        <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -92,7 +91,7 @@
                 </div>
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
+                        <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
                             <h6 class="card-title">Жами чикувчи хатлар</h6>
@@ -174,33 +173,13 @@
 
         <div class="parent-card col-xl-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item card-nav-item">
+                <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab"
                        aria-controls="home" aria-selected="true">Жами</a>
                 </li>
-                <li class="nav-item card-nav-item">
+                <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect();return false;"
-                       role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
-                </li>
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getDatatableConnect();return false;"
-                       role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
-                </li>
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="home-tab1" data-toggle="tab" href="#home1" role="tab" onclick="getDatatableConnect();return false;"
-                       aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
-                </li>
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab1" data-toggle="tab" href="#profile1" onclick="getDatatableConnect();return false;"
-                       role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
-                </li>
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab1" data-toggle="tab" href="#contact1" onclick="getDatatableConnect();return false;"
-                       role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
-                </li>
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab2" data-toggle="tab" href="#contact2" onclick="getDatatableConnect();return false;"
-                       role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
+                       role="tab" aria-controls="profile" aria-selected="false">Чикиб кетмаган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -258,7 +237,20 @@
                 </div>
             </div>
         </div>
-
+        <div class="btn-group mb-2 mr-2">
+            <button type="button"
+                    class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
+            <button type="button"
+                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"><span class="sr-only">Toggle
+                                         Dropdown</span></button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item">Initial</button>
+                <button class="dropdown-item">New</button>
+                <button class="dropdown-item">InProgress</button>
+            </div>
+        </div>
 
     </div>
 </div>
@@ -298,6 +290,29 @@
         html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
+
+    function renderChangeColumn(data, type, row, meta) {
+        let editlink = 'doc/outgoing_mail/change_column'
+        let html = '';
+        html += `<div class="btn-group mb-2 mr-2">
+                                                        <button type="button"
+                                     class="btn btn-outline-primary left-radius table-modal-button">${data}</button>
+                                 <button type="button"
+                                     class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                     data-toggle="dropdown" aria-haspopup="true"
+                                     aria-expanded="false"><span class="sr-only">Toggle
+                                         Dropdown</span></button>
+                                 <div class="dropdown-menu">
+                                     <button class="dropdown-item">Initial</button>
+                                     <button class="dropdown-item">New</button>
+                                     <button class="dropdown-item">InProgress</button>
+                                 </div>
+                             </div>`;
+
+        return html;
+    }
+
+
 
     function datatableConnect() {
         cDataTable = dataDatatableSelector.DataTable({
@@ -341,7 +356,7 @@
                 {data: 3, name: 'description'},
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'dueDate'},
-                {data: 6, name: 'status'},
+                {render: renderChangeColumn, orderable: false},
                 {data: 7, name: 'resolution'},
                 {render: renderActionsColumn, orderable: false}
             ],

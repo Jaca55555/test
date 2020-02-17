@@ -17,6 +17,7 @@ import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.dto.OutgoingFilterDto;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.sys.Organization;
@@ -88,6 +89,7 @@ public class OutgoingMailController {
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
 
+
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -103,7 +105,7 @@ public class OutgoingMailController {
             documentOrganizationId = Integer.parseInt(documentOrganizationId_);
         }catch(NumberFormatException ex){
             String name = documentOrganizationId_;
-            System.out.println("creating new document organization with '" + documentOrganizationId_ + "' name");
+            System.out.println("creating new document organization with '" + name + "' name");
             DocumentOrganization documentOrganization = new DocumentOrganization();
             documentOrganization.setName(name);
             documentOrganization.setStatus(true);
@@ -135,7 +137,8 @@ public class OutgoingMailController {
         //setting document type
         document.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
         document.setDocumentType(documentTypeService.getById(document.getDocumentTypeId()));
-
+        document.setStatus(DocumentStatus.New);
+        document.setPerformerName(userService.findById(document.getPerformerId()).getFullName());
         //setting document sub
         DocumentSub docSub = new DocumentSub();
         docSub.setOrganizationId(documentOrganizationId);
@@ -144,7 +147,9 @@ public class OutgoingMailController {
         docSub.setOrganizationName(documentOrganization.getName());
         docSub.setCommunicationToolId(communicationToolId);
 
+
         Document savedDocument = documentService.createDoc(document);
+
 
 
         docSub.setDocumentId(savedDocument.getId());
@@ -167,6 +172,9 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
+
+
+
 
         return DocTemplates.OutgoingMailList;
     }
@@ -201,7 +209,11 @@ public class OutgoingMailController {
 
         HashMap<String, Object> result = new HashMap<>();
         DocFilterDTO filter = new DocFilterDTO();
-
+        result.put("inProcess", 0);
+        result.put("today", 0);
+        result.put("hasAdditionalDocuments", 0);
+        result.put("fifth", 0);
+        result.put("all", 0);
         filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
 
         OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
@@ -218,14 +230,19 @@ public class OutgoingMailController {
                     document.getContent() != null ? document.getContent() : "",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    "docStatus",
-                    "Resolution and parcipiants"
+                    document.getStatus(),
+                    (document.getPerformerName() != null ?document.getPerformerName(): "") + "\n" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }
 
         result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
+
+
+
+
+
         return result;
     }
 
