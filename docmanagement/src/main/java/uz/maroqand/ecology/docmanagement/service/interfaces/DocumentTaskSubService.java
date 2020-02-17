@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public interface DocumentTaskSubService {
 
+    DocumentTaskSub getById(Integer id);
+
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
 
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
@@ -25,7 +27,11 @@ public interface DocumentTaskSubService {
 
     DocumentTaskSub createNewSubTask(Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
 
+    DocumentTaskSub update(DocumentTaskSub taskSub);
+
     List<DocumentTaskSub> getListByDocId(Integer docId);
+
+    DocumentTaskSub getByUserAndDocId(Integer userId, Integer docId);
 
     Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,

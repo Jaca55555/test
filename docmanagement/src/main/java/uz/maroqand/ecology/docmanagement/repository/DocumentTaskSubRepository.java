@@ -28,4 +28,5 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
 
+    DocumentTaskSub findByReceiverIdAndDocumentIdAndDeletedFalse(Integer userId, Integer docId);
 }
