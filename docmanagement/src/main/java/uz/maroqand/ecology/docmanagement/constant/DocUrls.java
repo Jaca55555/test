@@ -61,7 +61,8 @@ public class DocUrls {
     public static final String InnerRegistrationEditTask = InnerRegistration + "/edit_and_task";
     public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
     public static final String InnerRegistrationTask = InnerRegistration + "/task";
-
+    public static final String InnerRegistrationTaskSubmit = InnerRegistration + "/task_submit";
+    public static final String InnerRegistrationUserName = InnerRegistration + "/user_name";
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

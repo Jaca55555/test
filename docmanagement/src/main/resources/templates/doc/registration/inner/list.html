@@ -312,7 +312,7 @@
 
     function renderActionsColumn(data, type, row, meta) {
         var html = '';
-        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0] + '" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
