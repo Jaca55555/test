@@ -27,6 +27,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
 
+    List<User> findAllByIsExecuteChiefTrue();
+    List<User> findAllByIsExecuteControllerTrue();
+
     List<User> findByOrganizationId(Integer organizationId);
 
 }

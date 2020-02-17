@@ -22,6 +22,18 @@ public interface DocumentTaskService {
 
     List<DocumentTask> getByStatusNotInactive();
 
+    Integer countNew();
+
+    Integer countInProcess();
+
+    Integer countNearDate();
+
+    Integer countExpired();
+
+    Integer countExecuted();
+
+    Integer countTotal();
+
     DocumentTask create(DocumentTask task);
 
     DocumentTask createNewTask(Integer docId, Integer status, String context, Date dueDate,Integer chiefId, Integer createdById);
