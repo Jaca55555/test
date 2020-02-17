@@ -89,4 +89,9 @@ public class DocumentSubServiceImpl implements DocumentSubService {
         return documentSubRepository.save(sub);
     }
 
+    @Override
+    public DocumentSub getById(Integer id) {
+        return documentSubRepository.findByIdAndDeletedFalse(id);
+    }
+
 }
