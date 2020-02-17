@@ -53,36 +53,12 @@
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label">Хужжатнинг рўйхатга олиш рақами</label>
-                        <input class="form-control" type="text" th:field="*{registrationNumber}">
-                    </div>
 
-                    <div class="col-sm-6 form-group">
-                    <label class="control-label">Хужжат санаси</label>
-                        <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin"
-                                   data-dtp="dtp_lq7TC" name="registrationDateStr"  th:value="${doc.registrationDate!=null? #dates.format(doc.registrationDate,'dd.MM.yyyy'):''}">
-                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 form-group">
+                    <div class="col-sm-12 form-group">
                         <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label">Хужжат қабул қилинган усул (почта орқали, e-mail, факс, етказиб бериш ва х.к.)</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:if="${documentSub!=null}" th:field="${documentSub.communicationToolId}">
-                            <option value=""></option>
-                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
-                        </select>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:if="${documentSub==null}" name="communicationToolId">
-                            <option value=""></option>
-                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
                 </div>

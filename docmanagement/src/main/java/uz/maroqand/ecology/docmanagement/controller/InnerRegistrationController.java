@@ -15,10 +15,11 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
+import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,20 +35,20 @@ public class InnerRegistrationController {
     private final DocumentService documentService;
     private final DocumentViewService documentViewService;
     private final JournalService journalService;
-    private final CommunicationToolService communicationToolService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentTaskService documentTaskService;
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
         this.documentViewService = documentViewService;
         this.journalService = journalService;
-        this.communicationToolService = communicationToolService;
         this.documentDescriptionService = documentDescriptionService;
+        this.documentTaskService = documentTaskService;
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
     }
@@ -85,20 +86,21 @@ public class InnerRegistrationController {
             Pageable pageable
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+        IncomingRegFilter incomingRegFilter = new IncomingRegFilter();
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(incomingRegFilter,null,null,null,null,null,null, pageable);
 
-        List<Document> documentList = documentPage.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
-        for (Document document : documentList) {
+        List<DocumentTask> documentTaskList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        for (DocumentTask documentTask : documentTaskList) {
+            Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    document.getId(),
-                    document.getRegistrationNumber(),
+                    documentTask.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
-                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    document.getStatus(),
+                    documentTask.getContent(),
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
+                    documentTask.getStatus(),
                     "Resolution and parcipiants"
             });
         }
@@ -125,7 +127,6 @@ public class InnerRegistrationController {
         model.addAttribute("doc", new Document());
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
-        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executeController", userService.getEmployeeList());
@@ -140,7 +141,6 @@ public class InnerRegistrationController {
     public String createDoc(
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -169,7 +169,6 @@ public class InnerRegistrationController {
 
         DocumentSub documentSub = new DocumentSub();
         document.setOrganizationId(documentOrganizationId);
-        documentSub.setCommunicationToolId(communicationToolId);
         documentSubService.create(document.getId(), documentSub, user);
         if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
             return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
@@ -195,7 +194,6 @@ public class InnerRegistrationController {
         model.addAttribute("docAdditional",documentAdditional);
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
-        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeeList());
         model.addAttribute("controlUserList", userService.getEmployeeList());
@@ -209,7 +207,6 @@ public class InnerRegistrationController {
     public String updateDocument(
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
@@ -237,7 +234,6 @@ public class InnerRegistrationController {
         documentService.update(document);
 
         DocumentSub documentSub = new DocumentSub();
-        documentSub.setCommunicationToolId(communicationToolId);
         document.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
 
