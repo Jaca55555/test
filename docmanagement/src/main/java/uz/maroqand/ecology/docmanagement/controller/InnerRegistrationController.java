@@ -165,7 +165,7 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setStatus(DocumentStatus.New);
-        documentService.createDoc(document);
+        documentService.createDoc(3,document,user);
 
         DocumentSub documentSub = new DocumentSub();
         document.setOrganizationId(documentOrganizationId);
