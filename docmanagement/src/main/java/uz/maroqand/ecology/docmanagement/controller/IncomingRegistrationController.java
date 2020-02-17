@@ -5,6 +5,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -38,8 +38,8 @@ import java.util.*;
 
 @Controller
 public class IncomingRegistrationController {
+
     private final DocumentService documentService;
-    private final DocumentTypeService documentTypeService;
     private final JournalService journalService;
     private final DocumentViewService documentViewService;
     private final CommunicationToolService communicationToolService;
@@ -51,13 +51,12 @@ public class IncomingRegistrationController {
     private final DocumentTaskService taskService;
     private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
-    private final DocumentSubRepository documentSubRepository;
+    private final HelperService helperService;
 
     @Autowired
     public IncomingRegistrationController(
             DocumentService documentService,
             DocumentDescriptionService documentDescriptionService,
-            DocumentTypeService documentTypeService,
             CommunicationToolService communicationToolService,
             UserService userService,
             JournalService journalService,
@@ -66,17 +65,17 @@ public class IncomingRegistrationController {
             DocumentViewService documentViewService,
             DocumentSubService documentSubService,
             DocumentTaskService taskService,
-            DocumentTaskSubService taskSubService, DocumentLogService documentLogService,
-            DocumentSubRepository documentSubRepository
+            DocumentTaskSubService taskSubService,
+            DocumentLogService documentLogService,
+            HelperService helperService
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
         this.taskSubService = taskSubService;
         this.documentLogService = documentLogService;
-        this.documentSubRepository = documentSubRepository;
+        this.helperService = helperService;
         this.documentDescriptionService = documentDescriptionService;
-        this.documentTypeService = documentTypeService;
         this.communicationToolService = communicationToolService;
         this.userService = userService;
         this.journalService = journalService;
@@ -88,33 +87,69 @@ public class IncomingRegistrationController {
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
 
-        model.addAttribute("doc_type", documentTypeService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("organizationList", organizationService.getStatusActive());
+        model.addAttribute("executeForms", ControlForm.getControlFormList());
+        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         return DocTemplates.IncomingRegistrationList;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getIncomingRegistrationList(
-            DocFilterDTO filterDTO,
+            IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        Page<Document> documentPage = documentService.findFiltered(filterDTO, pageable);
-        List<Document> documentList = documentPage.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
-        Integer userId = userService.getCurrentUserFromContext().getId();
-        for (Document document : documentList) {
-            DocumentTask task = taskService.getTaskByUser(document.getId(), userId);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        List<DocumentTask> documentTaskList = documentTaskPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        for (DocumentTask documentTask : documentTaskList) {
+            Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    document.getId(),
+                    documentTask.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
-                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    task!=null ? Common.uzbekistanDateFormat.format(task.getDueDate()):"",
-                    task!=null ? task.getStatus():"",
-                    task!=null ? task.getContent():""
+                    documentTask.getContent(),
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                    documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
+                    documentTask.getStatus(),
+                    ""
+            });
+        }
+
+        result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.GET)
+    public String getIncomingRegistrationNewListPage(){
+        return DocTemplates.IncomingRegistrationNewList;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getIncomingRegistrationNewListAjax(Pageable pageable){
+        HashMap<String,Object> result = new HashMap<>();
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
+        docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            JSONArray.add(new Object[]{
+                    document.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    documentView!=null?documentView.getNameTranslation(locale):"",
+                    document.getContent()!=null?document.getContent():"",
+                    documentSub.getOrganizationName()!=null?documentSub.getOrganizationName():""
             });
         }
 
@@ -212,11 +247,10 @@ public class IncomingRegistrationController {
         }
         document.setContentFiles(files);
         document.setCreatedById(user.getId());
-        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
-        document.setRegistrationDate(new Date());
+
         document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
-        document = documentService.createDoc(document);
+        document = documentService.createDoc(1, document, user);
 
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);

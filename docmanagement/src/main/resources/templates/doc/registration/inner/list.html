@@ -97,116 +97,152 @@
         <div class="card" style="border-radius: 5px">
             <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
                 <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >Саралаш фильтри</a></h5>
-                <div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>
+                <!--<div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>-->
             </div>
-            <div class="row p10">
-                <div class="form-group col-md-3 col-sm-12">
-                    <label for="tin" class="control-label">Жўнатувчи ташкилот номи</label>
-                    <div class="col-sm-12 p0">
-                        <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
-                        </select>
-                        <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                    </div>
+            <div class="row p10" style="padding-bottom: 0px;">
+                <div class="form-group col-md-4 col-sm-12">
+                    <label for="documentOrganizationId" class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
+                    <select class="form-control" id="documentOrganizationId">
+                        <option value="" th:text="#{sys_select}"></option>
+                    </select>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="name" class="control-label">Хат рақами</label>
-                    <input type="text" class="form-control" id="name" />
+                    <label for="docRegNumber" class="control-label">Хужжат рақами</label>
+                    <input type="text" class="form-control" id="docRegNumber" />
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="applicationId" class="control-label">Руйхатга олиш рақами</label>
-                    <input type="text" class="form-control" id="applicationId" />
+                    <label for="registrationNumber" class="control-label">Руйхатга олиш рақами</label>
+                    <input type="text" class="form-control" id="registrationNumber" />
                 </div>
-                <div class="form-group col-md-3 col-sm-12">
+                <div class="form-group col-md-2 col-sm-12">
                     <label for="dateBegin" class="control-label">Рўйхатга олинган сана</label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
                             <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                            <img class="calendar-img1" src="../images/calendar.svg" alt="">
+                            <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                         <div class="col-6" style="padding-right:0;">
                             <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                            <img class="calendar-img2" src="../images/calendar.svg" alt="">
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                         </div>
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="regionId" class="control-label">Қўйилган топшириқ (резолюция)</label>
-                    <div class="col-sm-12 p0">
-                        <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                            <option value="WY">Coming</option>
-                            <option value="WY">Hanry Die</option>
-                            <option value="WY">John Doe</option>
-                        </select>
-                        <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                    </div>
+                    <label class="control-label">Назорат карточкаси</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                            aria-hidden="true" name="executeController">
+                        <option value=""></option>
+                        <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
+                    </select>
                 </div>
             </div>
-            <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="row">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label for="objectId" class="control-label">Хатнинг қисқача мазмуни</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label for="activityId" class="control-label">Ижрочи</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas fa-angle-double-down color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label for="subRegionId" class="control-label">Ижро йўналиши</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas fa-search  color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label">Жорий ҳолати</label>
-                        <div class="col-sm-12 p0">
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="WY">Coming</option>
-                                <option value="WY">Hanry Die</option>
-                                <option value="WY">John Doe</option>
-                            </select>
-                            <i class="gray-arrow fas  fa-angle-double-down color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">Қидириш</button>
-                    </div>
+            <div class="row p10" style="padding-top: 0px;">
+
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label">Хужжат категорияси</label>
+                    <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
+                        <option value=""></option>
+                        <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label">Хужжат тури</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible">
+                        <option value=""></option>
+                        <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="content" class="control-label">Хужжатнинг қисқача мазмуни</label>
+                    <input class="form-control" id="content">
                 </div>
             </div>
+            <div class="row p10" style="padding-top: 0px">
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label">Рахбарият</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
+                        <option value=""></option>
+                        <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-4 col-sm-12">
+                    <label class="control-label">Қўйилган топшириқ (резолюция)</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="resolution">
+                        <option value="">Танлаш</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label">Ижрочилар</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executors">
+                        <option value="">Танлаш</option>
+                        <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">Ижро йўналиши</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
+                        <option value="">Танлаш</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row p10" style="padding-top: 0px">
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">Хужжатнинг ижро ҳолати</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                        <option value=""></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="dateBegin" class="control-label">Ижро муддати</label>
+                    <div class="row">
+                        <div class="col-6" style="padding-left: 0;">
+                            <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                            <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                        </div>
+                        <div class="col-6" style="padding-right:0;">
+                            <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">Ижро назорати холати</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executeStatus">
+                        <option value="">Танлаш</option>
+                        <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">ХДФУ холати</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="insidePurposeStatus">
+                        <option value="">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">Хамкор ижрочилар холати</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="coexecutorStatus">
+                        <option value="">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label">Хужжатга йўлланган жавоблар</label>
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="replies">
+                        <option value="">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">Қидириш</button>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="parent-card col-xl-12">
@@ -331,18 +367,18 @@
 
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
-                dataToSend.correspondent = $('#correspondent').val();
-                dataToSend.documentId = $('#docId').val();
-                dataToSend.registrationNumber = $('#regId').val();
+                dataToSend.documentOrganizationId = $('#documentOrganizationId').val();
+                dataToSend.registrationNumber = $('#regNumber').val();
+                dataToSend.docRegNumber = $('#docRegNumber').val();
                 dataToSend.registrationDateBegin = $('#incomeDateBegin').val();
                 dataToSend.registrationDateEnd = $('#incomeDateEnd').val();
                 dataToSend.controlCard = $('#controlCard').val();
-                dataToSend.documentType = $('#docType').val();
-                dataToSend.correspondentType = $('#correspondentType').val();
+                dataToSend.journalId = $('#journalId').val();
+                dataToSend.documentViewId = $('#documentViewId').val();
                 dataToSend.content = $('#description').val();
                 dataToSend.chief = $('#chiefId').val();
-                dataToSend.executors = $('#executorId').val();
                 dataToSend.resolution = $('#resolution').val();
+                dataToSend.executors = $('#executorId').val();
                 dataToSend.executePath = $('#executeType').val();
                 dataToSend.executeStatus = $('#executeStatus').val();
                 dataToSend.executeDateBegin = $('#executeDateBegin').val();

@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-
     <title th:text="#{sys_site_main_title}">Kanselariya</title>
 </head>
 <body>
@@ -17,7 +16,6 @@
 <!-- [ Pre-loader ] end -->
 
 <object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
-
 <object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
 
 <!--main content start-->
@@ -26,23 +24,16 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="" class="card-header-a collapsed">
-                        Communication_tools_list
-                    </a>
+                    <a href="" class="card-header-a collapsed" th:text="#{doc_communication_tool.list}"> Communication_tools_list </a>
                 </h5>
-                <div>
-                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsNew}" class="btn btn-rounded btn-success btn-sm ml-2 m0" th:text="#{doc.new_journal}"></a>
-                </div>
             </div>
-
-        </div>
             <div class="card-body row">
                 <div class="form-group-row col-sm-3">
-                    <label class="control-label"  th:text="#{communication_tool.id}"></label><br/>
+                    <label class="control-label"  th:text="#{doc_communication_tool.id}"></label><br/>
                     <input type="text" class="form-control" id="id" />
                 </div>
                 <div class="form-group col-sm-3">
-                    <label class="control-label"  th:text="#{communication_tool.name}"></label><br/>
+                    <label class="control-label"  th:text="#{doc_communication_tool.name}"></label><br/>
                     <input type="text" class="form-control" id="name">
                 </div>
             </div>
@@ -51,16 +42,18 @@
                     <span th:text="#{sys_search}">Поиск</span>
                 </a>
                 <a href="/doc/communication_tools/new" class="btn btn-success btn-sm"><i class="feather icon-plus"></i>
-                    <span>new tool</span>
+                    <span th:text="#{doc_communication_tool.new}">new tool</span>
                 </a>
             </div>
+        </div>
+
         <div class="card parent-card table-responsive" style="padding:20px 15px 0px 15px">
             <table id="communication_tools" class="display table nowrap table-striped table-hover" style="width:100%">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th th:text="#{communication_tool.name}">name</th>
-                    <th th:text="#{communication_tool.status}">name</th>
+                    <th th:text="#{doc_communication_tool.name}">name</th>
+                    <th th:text="#{doc_communication_tool.status}">name</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -69,24 +62,16 @@
         </div>
 
     </div>
-
-</div>
-
 </div>
 <!--main content end-->
-
-
 <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
-
 <script th:inline="javascript">
-
     var editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsEdit}]];
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsListAjax}]];
     var editStatusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsEditStatus}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
-
     var statusTrue = [[#{communication_tool_status_true}]];
     var statusFalse = [[#{communication_tool_status_false}]];
     var changeStatus = [[#{communication_tool_change_status}]]
@@ -108,7 +93,6 @@
         }else{
             button[0].innerHTML = statusTrue;
         }
-
     }
 
     function renderActionsColumn(data, type, row, meta) {
@@ -117,6 +101,7 @@
         html += '<div class="btn-group"><a class="btn btn-outline-info btn-rounded btn-sm" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
         return html;
     }
+
     function renderChangeColumn(data, type, row, meta) {
         var currentEditStatusLink = editStatusLink + "?id=" + row[0];
         var html = '';
@@ -136,7 +121,6 @@
     </div>`;
         return html;
     }
-
 
     function datatableConnect() {
         cDataTable = dataDatatableSelector.DataTable({
@@ -189,8 +173,5 @@
     });
     /*]]>*/
 </script>
-
-
-
 </body>
 </html>

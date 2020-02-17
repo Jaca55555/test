@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * Created by Utkirbek Boltaev on 16.04.2019.
  * (uz)
- * (ru)
  */
 public interface CommunicationToolService {
 
@@ -21,13 +20,9 @@ public interface CommunicationToolService {
 
     List<CommunicationTool> getStatusActive();
 
-    void removeCacheableStatusActive();
-
-    List<CommunicationTool> getList();
+    List<CommunicationTool> updateStatusActive();
 
     Page<CommunicationTool> findFiltered(Integer id, String service, Pageable pageAble);
-
-    void removeList();
 
     CommunicationTool create(CommunicationTool communicationTool);
 

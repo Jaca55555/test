@@ -29,14 +29,14 @@
                 <form method="post" th:object="${docOrganization}" th:action="@{/doc/document_organization/edit}">
                     <input type="hidden" th:field="*{id}">
                     <div class="form-group  col-sm-12">
-                        <label class="control-label"  th:text="#{communication_tool.name}"></label><br/>
+                        <label class="control-label"  th:text="#{doc_organization.name}"></label><br/>
                         <input  class="form-control" type="text" th:field="*{name}">
                     </div>
                     <div class="form-group  col-sm-12">
-                        <label class="control-label"  th:text="#{document_organization.status}"></label><br/>
+                        <label class="control-label"  th:text="#{doc_organization.status}"></label><br/>
                         <input type="checkbox" th:field="*{status}"><br/>
                     </div>
-                    <input type="submit" value="подтвердить" class="btn btn-primary">
+                    <input type="submit" th:value="#{sys_save}" class="btn btn-primary">
                 </form>
 
             </div>

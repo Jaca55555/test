@@ -45,4 +45,14 @@ public class DocumentView {
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+            case "uz":
+                return name;
+            case "ru":
+            default:
+                return nameRu;
+        }
+    }
+
 }
