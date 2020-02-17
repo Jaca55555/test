@@ -62,12 +62,31 @@ public class InnerRegistrationController {
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String, Object> getInnerRegistrationListAjax(
-            DocFilterDTO dto,
+            @RequestParam(name="documentOrganizationId",required = false,defaultValue = "")Set<Integer> documentOrganizationId,
+            @RequestParam(name="registrationNumber",required = false,defaultValue = "")String registrationNumber,
+            @RequestParam(name="docRegNumber",required = false,defaultValue = "")String docRegNumber,
+            @RequestParam(name="registrationDateBegin",required = false,defaultValue = "")String registrationDateBegin,
+            @RequestParam(name="registrationDateEnd",required = false,defaultValue = "")String registrationDateEnd,
+            @RequestParam(name="controlCard",required = false,defaultValue = "")String controlCard,
+            @RequestParam(name="journalId",required = false,defaultValue = "")Set<Integer> journalId,
+            @RequestParam(name="documentViewId",required = false,defaultValue = "")Set<Integer> documentViewId,
+            @RequestParam(name="content",required = false,defaultValue = "")String content,
+            @RequestParam(name="chief",required = false,defaultValue = "")Set<Integer> chief,
+            @RequestParam(name="resolution",required = false,defaultValue = "")String resolution,
+            @RequestParam(name="executors",required = false,defaultValue = "")Set<Integer> executors,
+            @RequestParam(name="executePath",required = false,defaultValue = "")String executePath,
+            @RequestParam(name="executeDateBegin",required = false,defaultValue = "")String executeDateBegin,
+            @RequestParam(name="executeDateEnd",required = false,defaultValue = "")String executeDateEnd,
+            @RequestParam(name="executeStatus",required = false,defaultValue = "")Integer executeStatus,
+            @RequestParam(name="insidePurposeStatus",required = false,defaultValue = "")Boolean insidePurposeStatus,
+            @RequestParam(name="coexecutorStatus",required = false,defaultValue = "")Integer coexecutorStatus,
+            @RequestParam(name="replies",required = false,defaultValue = "")Set<Integer> replies,
+            @RequestParam(name = "tabFilter",required = false,defaultValue = "")Integer tabFilter,
             Pageable pageable
     ) {
         HashMap<String, Object> result = new HashMap<>();
-
-        Page<Document> documentPage = documentService.findFiltered(dto, pageable);
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
@@ -121,29 +140,36 @@ public class InnerRegistrationController {
     public String createDoc(
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "registrationDateStr") String regDate,
-            @RequestParam(name = "fileIds") List<Integer> fileIds,
-            @RequestParam(name = "executeForm") ExecuteForm executeForm,
-            @RequestParam(name = "controlForm") ControlForm controlForm,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
+            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
+            @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
+            @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
         Set<File> files = new HashSet<>();
-        for (Integer fileId : fileIds) {
-            files.add(fileService.findById(fileId));
+        if (fileIds!=null){
+            for (Integer fileId : fileIds) {
+                files.add(fileService.findById(fileId));
+            }
         }
         document.setContentFiles(files);
         document.setRegistrationDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
-        document.setExecuteForm(executeForm);
-        document.setControlForm(controlForm);
-        document.setStatus(DocumentStatus.Initial);
-        documentService.createDoc(document);
+        if (executeForm!=null){
+            document.setExecuteForm(executeForm);
+        }
+        if (controlForm!=null){
+            document.setControlForm(controlForm);
+        }
+        document.setStatus(DocumentStatus.New);
+        documentService.createDoc(3, document, user);
 
         DocumentSub documentSub = new DocumentSub();
+        documentSub.setOrganizationId(documentOrganizationId);
         documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(document.getOrganizationId());
         documentSubService.create(document.getId(), documentSub, user);
         if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
             return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
@@ -158,11 +184,12 @@ public class InnerRegistrationController {
         if (document == null) {
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
-        DocumentOrganization documentOrganization = documentOrganizationService.getById(document.getOrganizationId());
+        DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+        DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
         Document documentAdditional = documentService.getById(document.getAdditionalDocumentId());
 
         model.addAttribute("doc", document);
-        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentSub", documentSub);
 
         model.addAttribute("docOrganization",documentOrganization);
         model.addAttribute("docAdditional",documentAdditional);
@@ -181,12 +208,12 @@ public class InnerRegistrationController {
     @RequestMapping(value = {DocUrls.InnerRegistrationEdit, DocUrls.InnerRegistrationEditTask}, method = RequestMethod.POST)
     public String updateDocument(
             HttpServletRequest httpServletRequest,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestParam(name = "registrationDateStr") String regDate,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
-            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
-            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
+            @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
+            @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
+            @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -197,21 +224,21 @@ public class InnerRegistrationController {
             }
         }
 
-        if(executeFormId!=null){
-            document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
+        if (executeForm!=null){
+            document.setExecuteForm(executeForm);
         }
-        if(controlFormId!=null){
-            document.setControlForm(ControlForm.getControlForm(controlFormId));
+        if (controlForm!=null){
+            document.setControlForm(controlForm);
         }
         document.setContentFiles(files);
-        document.setDocRegDate(DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat));
+        document.setDocRegDate(DateParser.TryParse(regDate, Common.uzbekistanDateFormat));
         document.setCreatedById(user.getId());
         document.setStatus(DocumentStatus.New);
         documentService.update(document);
 
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(documentOrganizationId);
+        document.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.InnerRegistrationEditTask)){
