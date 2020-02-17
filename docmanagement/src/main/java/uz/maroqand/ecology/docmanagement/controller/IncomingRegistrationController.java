@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
@@ -88,6 +90,12 @@ public class IncomingRegistrationController {
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
 
+        model.addAttribute("newCount", taskService.countNew());
+        model.addAttribute("inProcess", taskService.countInProcess());
+        model.addAttribute("nearDate", taskService.countNearDate());
+        model.addAttribute("expired", taskService.countExpired());
+        model.addAttribute("executed", taskService.countExecuted());
+        model.addAttribute("total", taskService.countTotal());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
