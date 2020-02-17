@@ -388,6 +388,32 @@
         html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
+
+    function renderStatusActionsColumn(data, type, row, meta) {
+        var html = '';
+        if (row[6]==0 && row[6]==1){
+        html += '<button type="button" style="width:160px"class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0">Кўрилмаган</button>';
+        }else {
+        html += '<div class="btn-group mb-2 mr-2">\n' +
+            '  <button type="button"\n' +
+            '  class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>\n' +
+            '  <button type="button"\n' +
+            '  class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"\n' +
+            '  data-toggle="dropdown" aria-haspopup="true"\n' +
+            '  aria-expanded="false"><span class="sr-only">Toggle\n' +
+            '  Dropdown</span></button>\n' +
+            '  <div class="dropdown-menu">\n' +
+            '  <a class="dropdown-item" href="#!">Action</a>\n' +
+            '  <a class="dropdown-item" href="#!">Another action</a>\n' +
+            '  <a class="dropdown-item" href="#!">Something else here</a>\n' +
+            '  <div class="dropdown-divider"></div>\n' +
+            '  <a class="dropdown-item" href="#!">Separated link</a>\n' +
+            '  </div>\n' +
+            '  </div>'
+        }
+        return html;
+    }
+
     function datatableConnect() {
         dataDatatableSelector.DataTable({
             processing: true,
@@ -432,7 +458,7 @@
                 {data: 3, name: 'description'},
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'dueDate'},
-                {data: 6, name: 'status'},
+                {render: renderStatusActionsColumn()},
                 {data: 7, name: 'resolution'},
                 {render: renderActionsColumn, orderable: false}
             ],
