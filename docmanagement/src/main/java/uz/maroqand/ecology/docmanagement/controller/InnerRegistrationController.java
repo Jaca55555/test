@@ -284,6 +284,7 @@ public class InnerRegistrationController {
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
+        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
         return DocTemplates.InnerRegistrationTask;
     }
 
