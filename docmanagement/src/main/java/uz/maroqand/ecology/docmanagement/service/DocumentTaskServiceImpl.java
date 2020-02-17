@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
@@ -50,6 +51,41 @@ public class DocumentTaskServiceImpl implements DocumentTaskService
     @Override
     public DocumentTask create(DocumentTask task) {
         return taskRepository.save(task);
+    }
+
+    public Integer countNew() {
+        Set<Integer> status = new HashSet<>();
+        status.add(TaskStatus.Initial.getId());
+        status.add(TaskStatus.New.getId());
+        return taskRepository.countByStatusInAndDeletedFalse(status);
+    }
+
+    public Integer countInProcess() {
+        Set<Integer> status = new LinkedHashSet<>();
+        status.add(TaskStatus.InProgress.getId());
+        return taskRepository.countByStatusInAndDeletedFalse(status);
+    }
+
+    public Integer countNearDate() {
+        Calendar calendar = Calendar.getInstance();
+        Date begin = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        Date end = calendar.getTime();
+        return taskRepository.countByDueDateBetweenAndStatusNotAndDeletedFalse(begin, end, TaskStatus.Complete.getId());
+    }
+
+    public Integer countExpired() {
+        return taskRepository.countByDueDateBeforeAndStatusNotAndDeletedFalse(new Date(), TaskStatus.Complete.getId());
+    }
+
+    public Integer countExecuted() {
+        Set<Integer> status = new LinkedHashSet<>();
+        status.add(TaskStatus.Complete.getId());
+        return taskRepository.countByStatusInAndDeletedFalse(status);
+    }
+
+    public Integer countTotal() {
+        return taskRepository.countByDeletedFalse();
     }
 
     @Override

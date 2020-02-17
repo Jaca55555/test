@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
@@ -20,6 +20,7 @@
 
 <object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
 
+<!--/*@thymesVar id="document" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">

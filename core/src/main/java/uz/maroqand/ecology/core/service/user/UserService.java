@@ -56,5 +56,7 @@ public interface UserService {
 
     List<User> getEmployeesForDocManage(String type);
 
+    List<User> getEmployeesForNewDoc(String type);
+
     Integer getUserDepartmentId(Integer userId);
 }

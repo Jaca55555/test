@@ -11,7 +11,8 @@ import java.util.List;
 public enum DocumentStatus {
     Initial(0,"document_status.initial"),//kiritish jarayonida
     New(1,"document_status.new"),//ijrochi belgilanmagan
-    InProgress(1,"document_status.inProgress");//jarayonda
+    InProgress(1,"document_status.inProgress"),//jarayonda, Чиқиб кетмаган
+    Complete(2,"document_status.complete");//Жўнатилган
 
     private Integer id;
     private String name;
