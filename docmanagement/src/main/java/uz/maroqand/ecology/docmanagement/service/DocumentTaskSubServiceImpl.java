@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
@@ -71,7 +72,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setContent(content.trim());
         documentTaskSub.setDueDate(dueDate);
         documentTaskSub.setType(type);
-        documentTaskSub.setStatus(0);
+        documentTaskSub.setStatus(TaskSubStatus.New.getId());
         documentTaskSub.setSenderId(senderId);
         documentTaskSub.setReceiverId(receiverId);
         documentTaskSub.setDepartmentId(departmentId);
@@ -90,6 +91,16 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public List<DocumentTaskSub> getListByDocId(Integer docId) {
         return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
+    }
+
+    @Override
+    public List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId) {
+        return documentTaskSubRepository.findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(docId,taskId);
+    }
+
+    @Override
+    public DocumentTaskSub getById(Integer id) {
+        return documentTaskSubRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override

@@ -264,4 +264,78 @@ public class InnerRegistrationController {
         return DocTemplates.InnerRegistrationTask;
     }
 
+    @RequestMapping(value = DocUrls.InnerRegistrationTaskSubmit)
+    public String innerRegistrationTaskSubmit(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+
+        User user = userService.getCurrentUserFromContext();
+        Document document = documentService.getById(id);
+        if (document==null){
+            return "redirect:" + DocUrls.InnerRegistrationList;
+        }
+
+
+        System.out.println("id=" + id);
+        System.out.println("content=" + content.trim());
+        System.out.println("docRegDateStr=" + docRegDateStr);
+
+        DocumentTask documentTask = taskService.createNewTask(document.getId(),TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        Integer userId = null;
+        Integer performerType = null;
+        Date dueDate = null;
+        Map<String,String> map = formData.toSingleValueMap();
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            String value= mapEntry.getValue().replaceAll(" ","");
+
+            if (tagName.equals("user")){
+                userId=Integer.parseInt(value);
+            }
+            if (tagName.equals("performer")){
+                performerType = Integer.parseInt(value);
+            }
+
+            if (tagName.equals("dueDateStr")){
+                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+                if (userId!=null && performerType!=null){
+                    taskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if (performerType==TaskSubType.Performer.getId()){
+                        documentTask.setPerformerId(userId);
+                        taskService.update(documentTask);
+                    }
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
+            }
+        }
+
+        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
+    }
+
+    @RequestMapping(value = DocUrls.InnerRegistrationUserName)
+    @ResponseBody
+    public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        User user = userService.findById(userId);
+        if (user==null){
+            result.put("status",0);
+            return result;
+        }
+
+        result.put("userId",user.getId());
+        result.put("userFullName",user.getFullName());
+        result.put("position", user.getPositionId()!=null?user.getPosition().getNameTranslation(locale):"");
+        return result;
+    }
+
 }
