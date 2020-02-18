@@ -18,6 +18,8 @@ public interface DocumentTaskService {
 
     DocumentTask getById(Integer id);
 
+    DocumentTask getByIdAndDocumentId(Integer id,Integer docId);
+
     List<DocumentTask> getByDocumetId(Integer docId);
 
     List<DocumentTask> getByStatusNotInactive();

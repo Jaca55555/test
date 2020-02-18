@@ -23,8 +23,8 @@ import java.util.*;
  */
 
 @Service
-public class DocumentTaskServiceImpl implements DocumentTaskService
-{
+public class DocumentTaskServiceImpl implements DocumentTaskService{
+
     private final DocumentTaskRepository taskRepository;
 
     @Autowired
@@ -36,6 +36,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService
     public DocumentTask getById(Integer id) {
         Optional<DocumentTask> task = taskRepository.findById(id);
         return task.orElse(null);
+    }
+
+    @Override
+    public DocumentTask getByIdAndDocumentId(Integer id, Integer docId) {
+        return taskRepository.findByIdAndDocumentIdAndDeletedFalse(id,docId);
     }
 
     @Override

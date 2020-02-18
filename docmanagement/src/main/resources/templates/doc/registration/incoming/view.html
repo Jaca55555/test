@@ -82,9 +82,9 @@
                                                     <i class="fas fa-user-circle fs40 color-gray column-2"></i>
                                                 </div>
                                                 <div class="inline-block m10-horizontal ">
-                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
                                                     <br>
-                                                    <span th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    <span th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-2" >
@@ -110,9 +110,9 @@
                                                     <i class="fas fa-user-circle fs40 color-gray column-3"></i>
                                                 </div>
                                                 <div class="inline-block m10-horizontal">
-                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
                                                     <br>
-                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-3">

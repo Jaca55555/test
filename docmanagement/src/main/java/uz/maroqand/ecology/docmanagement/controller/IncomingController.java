@@ -1,13 +1,12 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -17,6 +16,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -193,16 +193,142 @@ public class IncomingController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-        Document document = documentService.getById(id);
-        if (document == null) {
-            return "redirect: " + DocUrls.IncomingRegistrationList;
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        if (documentTaskSub == null && documentTaskSub.getTaskId()==null) {
+            return "redirect: " + DocUrls.IncomingList;
         }
+        DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
+        if (task == null) {
+            return "redirect: " + DocUrls.IncomingList;
+        }
+
+        Document document = documentService.getById(task.getDocumentId());
+        if (document == null) {
+            return "redirect: " + DocUrls.IncomingList;
+        }
+
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("task", task);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTaskSub", documentTaskSub);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         return DocTemplates.IncomingView;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingTask)
+    public String addTask(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "taskId")Integer taskId,
+            Model model
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        if (documentTaskSub == null) {
+            return  "redirect:" + DocUrls.IncomingList;
+        }
+        Document document = documentService.getById(documentTaskSub.getDocumentId());
+        if (document == null) {
+            return  "redirect:" + DocUrls.IncomingList;
+        }
+
+        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
+        if (documentTask == null) {
+            return  "redirect:" + DocUrls.IncomingList;
+        }
+
+        List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
+
+        model.addAttribute("document", document);
+        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("documentTaskSub", documentTaskSub);
+        model.addAttribute("userList", userList);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
+        model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + document.getId());
+
+        return DocTemplates.IncomingTask;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingTaskSubmit)
+    public String incomingTaskSubmit(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "taskId") Integer taskId,
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+
+        User user = userService.getCurrentUserFromContext();
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        if (documentTaskSub==null){
+            return "redirect:" + DocUrls.IncomingList;
+        }
+
+        Document document = documentService.getById(documentTaskSub.getDocumentId());
+        if (document==null){
+            return "redirect:" + DocUrls.IncomingList;
+        }
+
+        System.out.println("id=" + id);
+        System.out.println("content=" + content);
+        System.out.println("docRegDateStr=" + docRegDateStr);
+
+        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
+        if (documentTask==null){
+            return "redirect:" + DocUrls.IncomingList;
+        }
+        Integer userId = null;
+        Integer performerType = null;
+        Date dueDate = null;
+        Map<String,String> map = formData.toSingleValueMap();
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            String value= mapEntry.getValue().replaceAll(" ","");
+
+            if (tagName.equals("user")){
+                userId=Integer.parseInt(value);
+            }
+            if (tagName.equals("performer")){
+                performerType = Integer.parseInt(value);
+            }
+
+            if (tagName.equals("dueDateStr")){
+                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+                if (userId!=null && performerType!=null){
+                    documentTaskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
+            }
+        }
+
+        return "redirect:" + DocUrls.IncomingView + "?id=" + documentTaskSub.getId();
+    }
+
+    @RequestMapping(value = DocUrls.IncomingTaskUserName)
+    @ResponseBody
+    public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        User user = userService.findById(userId);
+        if (user==null){
+            result.put("status",0);
+            return result;
+        }
+
+        result.put("userId",user.getId());
+        result.put("userFullName",user.getFullName());
+        result.put("position", user.getPosition().getNameTranslation(locale));
+        return result;
     }
 
 }
