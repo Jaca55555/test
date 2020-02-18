@@ -27,13 +27,13 @@
             <div class="col-xl-12 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between align-center" style="height:65px;">
-                        <h5>Топшириқ ва иштирокчилар № 1</h5>
+                        <h5><span th:text="#{doc_incoming.task_number}"></span>&nbsp;№ 1</h5>
                     </div>
                     <form method="post" th:action="${action_url}">
                         <div class="card-block">
                             <div class="row">
                                 <div class="executor col-6 m10-vertical">
-                                    <h5>Топшириқ / кўрсатма № 1</h5><br/>
+                                    <h5><span th:text="#{doc_incoming.task_manager}"></span>&nbsp;№ 1</h5><br/>
                                     <div class="flex-space-between p0">
                                         <div>
                                             <div class="inline-block">
@@ -42,30 +42,30 @@
                                             <div class="inline-block m10-horizontal">
                                                 <span class="color-green bold" th:if="${document.managerId!=null}" th:text="${@helperService.getUserFullNameById(document.managerId)}">Абдуллаев А. А.</span>
                                                 <br>
-                                                <span>Ташкилот рахбари</span>
+                                                <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(document.managerId,#locale)}">Руководитель организации</span>
                                             </div>
                                         </div>
-                                        <div class="flex-space-between p0 align-center column-2">
+                                        <!--<div class="flex-space-between p0 align-center column-2">
                                             <button type="button" class="btn-icon">
                                                 <i class="fas fs20 fa-edit color-gray"></i>
                                             </button>
                                             <button type="button" class="btn-icon">
                                                 <i class="fas fs20 fa-trash-alt color-gray"></i>
                                             </button>
-                                        </div>
+                                        </div>-->
                                     </div>
                                     <br/>
                                     <div class="form-group">
-                                        <label class="control-label" >Топшириқ / Кўрсатма / Резолюция матни</label>
+                                        <label class="control-label" th:text="#{doc_incoming.task_content_type}">Топшириқ / Кўрсатма / Резолюция матни</label>
                                         <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                                            <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                            <option value="" th:text="#{sys_select}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                     <textarea class="form-control" rows="4" name="content"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label">Ижро муддати</label>
+                                        <label class="control-label" th:text="#{doc_incoming.task_deadline}">Ижро муддати</label>
                                         <div class="col-sm-12 p0">
                                             <input class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
                                             <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
@@ -74,7 +74,7 @@
                                 </div>
 
                                 <div class="executor col-6 m10-vertical">
-                                    <h5>Иштирокчилар</h5><br/>
+                                    <h5 th:text="#{doc_incoming.task_sub_receivers}">Иштирокчилар</h5><br/>
                                     <div class="table-responsive">
                                         <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
                                             <tbody>
@@ -132,14 +132,14 @@
                                     </div>
                                     <br/>
                                     <div class="row">
-                                        <div class="col-10 pl-0">
+                                        <div class="col-9 pl-0">
                                             <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
                                                 <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
                                                 <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
                                             </select>
                                         </div>
-                                        <div class="col-2 p-0">
-                                            <button type="button" class="btn btn-outline-secondary btn-block" id="add_user">Qo'shish</button>
+                                        <div class="col-3 p-0">
+                                            <button type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user" th:text="#{sys_add}">Qo'shish</button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                         <input  type="hidden" th:field="${document.id}" />
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
-                                <button class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</button>
+                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
                                 <button type="submit" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
