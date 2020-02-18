@@ -193,7 +193,7 @@ public class IncomingController {
             Model model
     ) {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
-        if (documentTaskSub == null && documentTaskSub.getTaskId()==null) {
+        if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
             return "redirect: " + DocUrls.IncomingList;
         }
         DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
@@ -206,17 +206,6 @@ public class IncomingController {
             return "redirect: " + DocUrls.IncomingList;
         }
 
-        User user = userService.getCurrentUserFromContext();
-        DocumentTask task = documentTaskService.getTaskByUser(document.getId(), user.getId());
-        List<TaskStatus> taskStatuses = TaskStatus.getTaskStatusList();
-        DocumentTaskSub taskSub = new DocumentTaskSub();
-        List<TaskSubStatus> taskSubStatuses = TaskSubStatus.getTaskSubStatusList();
-        if (task == null) {
-            System.out.println("got subTask");
-            taskSub = documentTaskSubService.getByUserAndDocId(user.getId(), document.getId());
-        }
-
-
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
         model.addAttribute("task", task);
@@ -227,9 +216,7 @@ public class IncomingController {
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
-        model.addAttribute("task", (task != null) ? task : taskSub);
-        model.addAttribute("task_type", (task != null) ? 1 : 2);
-        model.addAttribute("task_statuses", (task != null) ? taskStatuses : taskSubStatuses);
+        model.addAttribute("task_statuses", TaskSubStatus.getTaskSubStatusList());
         return DocTemplates.IncomingView;
     }
 

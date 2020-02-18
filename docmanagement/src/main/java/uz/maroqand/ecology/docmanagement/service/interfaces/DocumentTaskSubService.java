@@ -11,19 +11,10 @@ import java.util.Set;
 /**
  * Created by Utkirbek Boltaev on 15.02.2020.
  * (uz)
- * (ru)
  */
 public interface DocumentTaskSubService {
 
     DocumentTaskSub getById(Integer id);
-
-    Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
-
-    Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
-
-    Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
-
-    Integer countByReceiverId(Integer receiverId);
 
     DocumentTaskSub createNewSubTask(Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
 
@@ -31,11 +22,7 @@ public interface DocumentTaskSubService {
 
     List<DocumentTaskSub> getListByDocId(Integer docId);
 
-    DocumentTaskSub getByUserAndDocId(Integer userId, Integer docId);
-
     List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId);
-
-    DocumentTaskSub getById(Integer id);
 
     Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,
@@ -57,5 +44,14 @@ public interface DocumentTaskSubService {
             Integer receiverId,
             Pageable pageable
     );
+
+    //statistics
+    Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
+
+    Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
+
+    Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
+
+    Integer countByReceiverId(Integer receiverId);
 
 }

@@ -1,11 +1,13 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -13,6 +15,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
@@ -36,11 +39,12 @@ public class InnerRegistrationController {
     private final JournalService journalService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentTaskService documentTaskService;
+    private final DocumentTaskSubService documentTaskSubService;
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -48,6 +52,7 @@ public class InnerRegistrationController {
         this.journalService = journalService;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTaskService = documentTaskService;
+        this.documentTaskSubService = documentTaskSubService;
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
     }
@@ -283,7 +288,7 @@ public class InnerRegistrationController {
         System.out.println("content=" + content.trim());
         System.out.println("docRegDateStr=" + docRegDateStr);
 
-        DocumentTask documentTask = taskService.createNewTask(document.getId(),TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = documentTaskService.createNewTask(document.getId(),TaskStatus.New.getId(),content, DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -304,10 +309,10 @@ public class InnerRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    taskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
-                        taskService.update(documentTask);
+                        documentTaskService.update(documentTask);
                     }
                     userId = null;
                     performerType = null;

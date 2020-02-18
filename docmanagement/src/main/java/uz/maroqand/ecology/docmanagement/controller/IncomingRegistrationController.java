@@ -380,13 +380,6 @@ public class IncomingRegistrationController {
         if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-
-        DocumentTask documentTask = taskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
-
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
-
         DocumentTask documentTask = taskService.createNewTask(document.getId(),TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
