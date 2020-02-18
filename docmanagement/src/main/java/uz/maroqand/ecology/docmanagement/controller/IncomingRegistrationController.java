@@ -475,23 +475,6 @@ public class IncomingRegistrationController {
         }
     }
 
-    @RequestMapping(value = DocUrls.IncomingRegistrationUpdateStatus, method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String,Object> updateStatus(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "status")Integer status
-    ){
-        HashMap<String,Object> response = new HashMap<>();
-        response.put("status","");
-        DocumentTask documentTask = taskService.getById(id);
-        if (documentTask!=null && documentTask.getStatus()==1){
-            documentTask.setStatus(status);
-            taskService.update(documentTask);
-            response.put("status",TaskSubStatus.getTaskStatus(status).getName());
-        }
-        return response;
-    }
-
     /*@GetMapping(value = DocUrls.IncomeMailSpecial)
     @ResponseBody
     public HashMap<String, Object> changeSpecial(
