@@ -5,9 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,5 +26,13 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
     List<Document> findAllByDeletedFalse();
 
     Page<Document> findByRegistrationNumberLike(String number, Pageable pageable);
+
+    Long countAllByDocumentTypeId(Integer typeId);
+
+    Long countAllByDocumentTypeIdAndStatus(Integer typeId, DocumentStatus status);
+
+    Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer documentTypeId);
+
+    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(Integer documentTypeId);
 
 }
