@@ -12,9 +12,12 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.ControlForm;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -181,6 +184,24 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
         return documentRepository.findAll(getSpecification(name), pageable);
+    }
+    @Override
+    public Long countTotalByDocumentType(Integer documentTypeId){
+        return documentRepository.countAllByDocumentTypeId(documentTypeId);
+    }
+
+    @Override
+    public Long countTotalByTypeAndStatus(Integer typeId, DocumentStatus status){
+        return documentRepository.countAllByDocumentTypeIdAndStatus(typeId, status);
+    }
+
+    @Override
+    public Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer docTypeId){
+        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeId(time,docTypeId);
+    }
+    @Override
+    public Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId){
+        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(documentTypeId);
     }
 
     @Override
