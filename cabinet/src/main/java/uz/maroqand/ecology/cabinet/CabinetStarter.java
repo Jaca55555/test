@@ -17,6 +17,7 @@ import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
@@ -43,6 +44,7 @@ public class CabinetStarter {
         WebMVCConfigs webMVCConfigs = applicationContext.getBean(WebMVCConfigs.class);
         DatabaseMessageSource messageSource = (DatabaseMessageSource) webMVCConfigs.messageSource();
         HelperService.setTranslationsSource(messageSource);
+        DocumentHelperService.setTranslationsSource(messageSource);
 
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();

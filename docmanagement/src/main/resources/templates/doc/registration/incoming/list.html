@@ -133,7 +133,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-2 col-sm-12">
-                    <label for="controlForm" class="control-label">Назорат карточкаси</label>
+                    <label for="controlForm" class="control-label"><span th:text="#{sys.executeControl}">Назорат карточкаси</span></label>
                     <select class="col-sm-12" id="controlForm" >
                         <option value="" th:text="#{sys_select}"></option>
                         <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
@@ -172,19 +172,19 @@
                         </div>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label" for="managerId">Рахбарият</label>
+                        <label class="control-label" for="managerId"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
                         <select class="col-sm-12" id="managerId">
                             <option value="" th:text="#{sys_select}">Танлаш</option>
                         </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label" for="executorId">Ижрочилар</label>
+                        <label class="control-label" for="executorId"><span th:text="#{sys.doc_performer}">Ижрочилар</span></label>
                         <select class="col-sm-12" id="executorId">
                             <option value="" th:text="#{sys_select}">Танлаш</option>
                         </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="taskContent">Қўйилган топшириқ (резолюция)</label>
+                        <label class="control-label" for="taskContent"><span th:text="#{sys.doc_resolution}">Қўйилган топшириқ (резолюция)</span></label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" id="taskContent">
                         </div>
@@ -196,13 +196,13 @@
                         </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="executeStatus">Хужжатнинг ижро ҳолати</label>
+                        <label class="control-label" for="executeStatus"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
                         <select class="col-sm-12" id="executeStatus" >
                             <option value="" th:text="#{sys_select}">Танлаш</option>
                         </select>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label">Ижро муддати</label>
+                        <label class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан">
@@ -215,7 +215,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="executeControlStatus">Ижро назорати холати</label>
+                        <label class="control-label" for="executeControlStatus"><span th:text="#{sys.doc_executeControlStatus}">Ижро назорати холати</span></label>
                         <select class="col-sm-12" id="executeControlStatus" >
                             <option value="" th:text="#{sys_select}">Танлаш</option>
                         </select>
@@ -265,25 +265,25 @@
     <div class="parent-card col-xl-12">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true">Жами</a>
+                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_total}">Жами</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false">Ижро учун</a>
+                <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_to_execute}">Ижро учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="delayed-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false">Муддати кеччикан</a>
+                <a class="nav-link text-uppercase show" id="delayed-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_delayed}">Муддати кеччикан</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase" id="nead-due-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true">Муддати якинлашаётган</a>
+                <a class="nav-link text-uppercase" id="nead-due-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_dueDate}">Муддати якинлашаётган</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="execute-control-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false">Ижро назоратида</a>
+                <a class="nav-link text-uppercase show" id="execute-control-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_control}">Ижро назоратида</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="info-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false">Малъумот учун</a>
+                <a class="nav-link text-uppercase show" id="info-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_info}">Малъумот учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="done-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false">Якунланган</a>
+                <a class="nav-link text-uppercase show" id="done-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_finished}">Якунланган</span></a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -298,25 +298,25 @@
                                     <tr role="row">
                                         <th>ID</th>
                                         <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                            Регистрация рақами
+                                            <span th:text="#{sys.registrationNumber}">Регистрация рақами</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                            Регистрация санаси
+                                            <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
-                                            Кирувчи хат маълумотлари
+                                            <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
-                                            Хужжат санаси
+                                            <span th:text="#{sys.doc_date}">Хужжат санаси</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">
-                                            Ижро муддати
+                                            <span th:text="#{sys.doc_executeDate}"> Ижро муддати</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0">
-                                            Жорий ҳолати
+                                            <span th:text="#{sys.doc_execution_status}">Жорий ҳолати</span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0">
-                                            Резолюция ва иштирокчилар
+                                            <span th:text="#{sys.doc_resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th style="width: 90px"></th>
                                     </tr>

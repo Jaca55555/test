@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="col-sm-12 form-group">
-                        <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
+                        <label class="control-label"><span th:text="#{sys.documentOrganizationId}">Хужжат чиқарувчи орган / ташкилот / бўлим номи</span></label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
