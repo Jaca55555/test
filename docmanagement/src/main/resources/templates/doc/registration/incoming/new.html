@@ -129,7 +129,8 @@
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
                         <div class="text-center">
-                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
                         </div>
                     </div>
                     <div class="file-block flex-center file-button" id="addFileButton">
@@ -213,6 +214,9 @@
         if (files!=null && files.length>0){
             $.each(files,function (index,val) {
                 $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+                var fileName=$('#fileName_'+val.id).text();
+                var subStringFileName = fileNameSubString(fileName);
+                $('#fileName_'+val.id).text(subStringFileName);
             })
         }
 
@@ -248,10 +252,10 @@
 "                    <div class=\"file-block\">\n" +
 "                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
 "                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                           <span class=\"fas fa-file-pdf\"></span>\n" +
 "                        </div>\n" +
 "                        <div class=\"text-center\">\n" +
-"                            <span>"+file.name+"</span>\n" +
+"                            <span>"+fileNameSubString(file.name)+"</span>\n" +
 "                        </div>\n" +
 "                    </div>\n"
                     );
@@ -304,6 +308,17 @@
         var dec = $('#description_textarea').val();
         $('#description_textarea').val(dec + text);
     });
+
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
 </script>
 
 </body>
