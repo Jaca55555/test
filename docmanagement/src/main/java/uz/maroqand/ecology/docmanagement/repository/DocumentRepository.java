@@ -27,20 +27,20 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 
     Page<Document> findByRegistrationNumberLike(String number, Pageable pageable);
 
-    Long countAllByDocumentTypeId(Integer typeId);
+    Long countAllByDocumentTypeIdAndOrganizationId(Integer typeId, Integer organizationId);
 
-    Long countAllByDocumentTypeIdAndStatus(Integer typeId, DocumentStatus status);
+    Long countAllByDocumentTypeIdAndStatusAndOrganizationId(Integer typeId, DocumentStatus status, Integer organizationId);
 
-    Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer documentTypeId);
+    Long countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationId(Date time, Integer documentTypeId, Integer organizationId);
 
-    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(Integer documentTypeId);
+    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationId(Integer documentTypeId, Integer organizationId);
 
-    Long countAllByDocumentTypeIdAndDepartmentId(Integer documentTypeId, Integer departmentId);
+    Long countAllByDocumentTypeIdAndOrganizationIdAndDepartmentId(Integer documentTypeId, Integer organizationId, Integer departmentId);
 
-    Long countAllByDocumentTypeIdAndStatusAndDepartmentId(Integer typeId, DocumentStatus status, Integer departmentId);
+    Long countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(Integer typeId, DocumentStatus status, Integer organizationId, Integer departmentId);
 
-    Long countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(Date time, Integer documentTypeId, Integer departmentId);
+    Long countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentId(Date time, Integer documentTypeId, Integer organizationId, Integer departmentId);
 
-    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndDepartmentId(Integer documentTypeId, Integer departmentId);
+    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(Integer documentTypeId, Integer organizationId, Integer departmentId);
 
 }

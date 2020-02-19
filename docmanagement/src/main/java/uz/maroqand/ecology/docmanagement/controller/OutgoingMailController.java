@@ -161,23 +161,16 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(Model model) {
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
-        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
-        model.addAttribute("totalOutgoing", documentService.countTotalByDocumentType(outgoingMailType));
-        model.addAttribute("inProgress", documentService.countTotalByTypeAndStatus(outgoingMailType, DocumentStatus.InProgress));
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.HOUR, 0);
+        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
 
-        System.out.println("Updated Date = " + calendar.getTime());
-        model.addAttribute("todayDocuments", documentService.countAllByCreatedAtAfterAndDocumentTypeId(calendar.getTime(), outgoingMailType));
-        model.addAttribute("haveAdditionalDocument", documentService.countAllByDocumentTypeAndHasAdditionalDocument(outgoingMailType));
+        model.addAttribute("totalOutgoing", documentService.countAll(outgoingMailType, organizationId));
+        model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId));
+        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId));
+        model.addAttribute("haveAdditionalDocument", documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId));
 
         return DocTemplates.OutgoingMailList;
     }

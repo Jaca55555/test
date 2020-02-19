@@ -26,19 +26,19 @@ public interface DocumentService {
 
     Page<Document> getRegistrationNumber(String name, Pageable pageable);
 
-    Long countTotalByDocumentType(Integer documentTypeId);
+    Long countAll(Integer documentTypeId, Integer organizationId);
 
-    Long countTotalByTypeAndStatus(Integer typeId, DocumentStatus status);
+    Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId);
 
-    Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer docTypeId);
+    Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId);
 
-    Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId);
+    Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId);
 
-    Long countTotalByDocumentTypeAndDepartmentId(Integer documentTypeId, Integer departmentId);
+    Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId);
 
-    Long countTotalByTypeAndStatusAndDepartmentId(Integer typeId, DocumentStatus status, Integer departmentId);
+    Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId, Integer departmentId);
 
-    Long countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(Date time, Integer docTypeId, Integer departmentId);
+    Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId);
 
-    Long countAllByDocumentTypeAndHasAdditionalDocumentAndDepartmentId(Integer documentTypeId, Integer departmentId);
+    Long  countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId);
 }
