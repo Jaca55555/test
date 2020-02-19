@@ -12,18 +12,17 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.ControlForm;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
-import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,22 +185,42 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAll(getSpecification(name), pageable);
     }
     @Override
-    public Long countTotalByDocumentType(Integer documentTypeId){
-        return documentRepository.countAllByDocumentTypeId(documentTypeId);
+    public Long countAll(Integer documentTypeId, Integer organizationId){
+        return documentRepository.countAllByDocumentTypeIdAndOrganizationId(documentTypeId, organizationId);
     }
 
     @Override
-    public Long countTotalByTypeAndStatus(Integer typeId, DocumentStatus status){
-        return documentRepository.countAllByDocumentTypeIdAndStatus(typeId, status);
+    public Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId){
+        return documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationId(typeId, status, organizationId);
     }
 
     @Override
-    public Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer docTypeId){
-        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeId(time,docTypeId);
+    public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId){
+        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationId(getCastedDate(),docTypeId, organizationId);
     }
     @Override
-    public Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId){
-        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(documentTypeId);
+    public Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId){
+        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationId(documentTypeId, organizationId);
+    }
+
+    @Override
+    public Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId);
+    }
+
+    @Override
+    public Long countAllByStatus(Integer typeId, DocumentStatus status,Integer organizationId, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(typeId, status, organizationId, departmentId);
+    }
+
+    @Override
+    public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId){
+        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentId(getCastedDate(), docTypeId, organizationId, departmentId);
+    }
+
+    @Override
+    public  Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId);
     }
 
     @Override
@@ -250,4 +269,15 @@ public class DocumentServiceImpl implements DocumentService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    private Date getCastedDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+        return calendar.getTime();
+    }
+
 }

@@ -4,17 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.docmanagement.constant.ControlForm;
-import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 
 import java.util.Date;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -33,14 +28,21 @@ public interface DocumentService {
 
     Page<Document> getRegistrationNumber(String name, Pageable pageable);
 
-    Long countTotalByDocumentType(Integer documentTypeId);
+    Long countAll(Integer documentTypeId, Integer organizationId);
 
-    Long countTotalByTypeAndStatus(Integer typeId, DocumentStatus status);
+    Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId);
 
-    Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer docTypeId);
+    Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId);
 
-    Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId);
+    Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId);
+
+    Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId);
+
+    Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId, Integer departmentId);
+
     Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet,Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser);
 
+    Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId);
 
+    Long  countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId);
 }
