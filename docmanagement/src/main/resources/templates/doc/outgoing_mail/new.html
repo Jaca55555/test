@@ -6,6 +6,21 @@
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
     <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
         .ui-menu-item-wrapper:hover{
             color:white;
             background:#62c462;
@@ -126,7 +141,8 @@
                         <div  class="text-center file-icon-container align-self-center color-gray">
                             <span class="fas fa-plus" id="addFileButton"></span>
 <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
-
+                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
 
@@ -235,7 +251,27 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: detectExtensionAndDisplay
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
+                }
+
             })
         });
 
@@ -287,6 +323,7 @@
 
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
+        let fileName = data.data.name;
         let color;
         switch (extension) {
             case 'jpg':
@@ -319,12 +356,28 @@
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>${data.data.name}</span>
+                            <span>` + fileNameSubString(fileName) + `</span>
                         </div>
                     </div>`
         );
     }
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
 
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
 
 
 </script>

@@ -4,6 +4,25 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+
+    <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -95,13 +114,17 @@
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
                         <div class="text-center">
-                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}">
+                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
+                            </a>
                         </div>
                     </div>
                     <div class="file-block flex-center file-button">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
+                            <span class="fas fa-plus" id="plus-icon"></span>
+                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -175,8 +198,19 @@
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
 
+        var files = [[${doc.contentFiles}]];
+        if (files!=null && files.length>0){
+            $.each(files,function (index,val) {
+                $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+                var fileName=$('#fileName_'+val.id).text();
+                var subStringFileName = fileNameSubString(fileName);
+                $('#fileName_'+val.id).text(subStringFileName);
+            })
+        }
+
+
         $('.file-button').on('click', function () {
-            $("#addFile").trigger("click");
+            $('#addFile').click();
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
@@ -201,26 +235,47 @@
 "                    <div class=\"file-block\">\n" +
 "                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
 "                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                           <span class=\"fas fa-file-pdf\"></span>\n" +
 "                        </div>\n" +
 "                        <div class=\"text-center\">\n" +
-"                            <span>"+file.name+"</span>\n" +
+"                            <span>"+fileNameSubString(file.name)+"</span>\n" +
 "                        </div>\n" +
 "                    </div>\n"
                     );
+                },
+                beforeSend: function () {
+                    $('#plus-icon').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#plus-icon').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
                 }
+
             })
         });
 
         $(document).on('click', '.fa-trash-alt', function () {
             $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
             $(this).parent().parent().remove();
+            $('#addFile').val('');
         });
 
         $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
             $(this).submit();
-        })
+        });
 
         $('#documentOrganizationId').select2({
             ajax: {
@@ -242,7 +297,23 @@
         });
     });
 
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
 
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
 
 </script>
 

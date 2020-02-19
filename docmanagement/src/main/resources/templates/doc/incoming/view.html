@@ -12,6 +12,22 @@
         height: 600px;
     }
     .status-button {cursor: pointer;}
+
+    #upload-gif{
+        position: relative;
+        float: left;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 125px;
+    }
+    #percentage {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
 </style>
 </head>
 <body>
@@ -229,28 +245,18 @@
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
                                 <div  class="text-center file-icon-container align-self-center color-gray">
                                     <span class="fas fa-plus" id="addFileButton"></span>
-                        <div class="m10-vertical"><span th:text="#{doc.comment_text}">Изоҳи</span></div>
-
-                        <textarea class="form-control" name="content" th:placeholder="#{doc.enter_comment_text}"></textarea>
-
-                        <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
-
-                        <div id="file_ids" class="d-none">
-                        </div>
-                        <input type="file" class="d-none" id="addFile2" name="files" multiple>
-
-                        <div class="row p20" id="file-container">
-                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                                <div  class="text-center file-icon-container align-self-center color-gray">
-                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                                 </div>
                             </div>
                         </div>
-
+                        <div class="m10-vertical">
+                            <span th:text="#{doc.comment_text}">Изоҳи</span>
+                        </div>
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
-                                <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}"></button>
+                                <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
                                 <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{doc.add_comment}"></button>
                             </div>
                         </div>
@@ -369,7 +375,7 @@
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >
                                 Бекор қилиш
                             </button>
                             <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
@@ -664,7 +670,26 @@
             processData: false,
             contentType: false,
             enctype: 'multipart/form-data',
-            success: detectExtensionAndDisplay
+            success: detectExtensionAndDisplay,
+            beforeSend: function () {
+                $('#addFileButton').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#addFileButton').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
         })
     });
 
@@ -701,6 +726,7 @@
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
         let color;
+        let name = data.data.name;
         switch (extension) {
             case 'bmp':
             case 'jpg':
@@ -735,10 +761,28 @@
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>${data.data.name}</span>
+                            <span>` + fileNameSubString(name) + `</span>
                         </div>
                     </div>`
         );
+    }
+
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
     }
 
 
