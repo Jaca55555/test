@@ -1,10 +1,12 @@
 package uz.maroqand.ecology.docmanagement.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
@@ -12,10 +14,7 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
 import javax.persistence.criteria.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 15.02.2020.
@@ -35,23 +34,24 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date){
-        return documentTaskSubRepository.countByReceiverIdAndDueDateGreaterThanEqual(receiverId, date);
+    public DocumentTaskSub getById(Integer id) {
+        return documentTaskSubRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override
-    public Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date){
-        return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqual(receiverId, date);
+    public DocumentTaskSub update(DocumentTaskSub taskSub) {
+        taskSub.setUpdateAt(new Date());
+        return documentTaskSubRepository.save(taskSub);
     }
 
     @Override
-    public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){
-        return documentTaskSubRepository.countByReceiverIdAndStatusIn(receiverId, statuses);
+    public List<DocumentTaskSub> getListByDocId(Integer docId) {
+        return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
     }
 
     @Override
-    public Integer countByReceiverId(Integer receiverId){
-        return documentTaskSubRepository.countByReceiverId(receiverId);
+    public List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId) {
+        return documentTaskSubRepository.findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(docId,taskId);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setContent(content.trim());
         documentTaskSub.setDueDate(dueDate);
         documentTaskSub.setType(type);
-        documentTaskSub.setStatus(0);
+        documentTaskSub.setStatus(TaskSubStatus.New.getId());
         documentTaskSub.setSenderId(senderId);
         documentTaskSub.setReceiverId(receiverId);
         documentTaskSub.setDepartmentId(departmentId);
@@ -70,11 +70,6 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setCreatedAt(new Date());
         documentTaskSub.setCreatedById(senderId);
         return documentTaskSubRepository.save(documentTaskSub);
-    }
-
-    @Override
-    public List<DocumentTaskSub> getListByDocId(Integer docId) {
-        return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
     }
 
     @Override
@@ -136,10 +131,10 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                     predicates.add(criteriaBuilder.equal(userProd.get("organizationId"), documentOrganizationId));
                 }*/
 
-                if (docRegNumber != null) {
+                if (StringUtils.trimToNull(docRegNumber) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
                 }
-                if (registrationNumber != null) {
+                if (StringUtils.trimToNull(registrationNumber) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("registrationNumber"), "%" + registrationNumber + "%"));
                 }
 
@@ -152,11 +147,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 if (dateBegin != null && dateEnd != null) {
                     predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
                 }
-                if (content != null) {
+                if (StringUtils.trimToNull(content) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("content"), "%" + content + "%"));
                 }
 
-                if (taskContent != null) {
+                if (StringUtils.trimToNull(taskContent) != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + taskContent + "%"));
                 }
                 if (performerId != null) {
@@ -196,6 +191,27 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    //statistics
+    @Override
+    public Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date){
+        return documentTaskSubRepository.countByReceiverIdAndDueDateGreaterThanEqual(receiverId, date);
+    }
+
+    @Override
+    public Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date){
+        return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqual(receiverId, date);
+    }
+
+    @Override
+    public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){
+        return documentTaskSubRepository.countByReceiverIdAndStatusIn(receiverId, statuses);
+    }
+
+    @Override
+    public Integer countByReceiverId(Integer receiverId){
+        return documentTaskSubRepository.countByReceiverId(receiverId);
     }
 
 }

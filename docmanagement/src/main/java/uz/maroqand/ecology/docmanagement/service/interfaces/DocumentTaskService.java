@@ -18,9 +18,23 @@ public interface DocumentTaskService {
 
     DocumentTask getById(Integer id);
 
+    DocumentTask getByIdAndDocumentId(Integer id,Integer docId);
+
     List<DocumentTask> getByDocumetId(Integer docId);
 
     List<DocumentTask> getByStatusNotInactive();
+
+    Integer countNew();
+
+    Integer countInProcess();
+
+    Integer countNearDate();
+
+    Integer countExpired();
+
+    Integer countExecuted();
+
+    Integer countTotal();
 
     DocumentTask create(DocumentTask task);
 

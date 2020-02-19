@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
@@ -20,23 +20,24 @@
 
 <object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
 
+<!--/*@thymesVar id="document" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
                 <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
-                <div>
+                <!--<div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
                         <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
                     </div>
-                </div>
+                </div>-->
             </div>
             <form action="" th:object="${document}" th:method="post" class="card-block">
                 <div th:if="${document.id != null}">
-                    <input type="hidden" th:field="*{id}" th:value="*{id}"/>
-                    <input type="hidden" th:field="${documentSub.id}" th:value="${documentSub.id}"/>
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" name="docSubId" th:value="${documentSub.id}"/>
                     <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
                 </div>
                 <div class="row">
@@ -80,6 +81,7 @@
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                            <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                         <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
@@ -101,7 +103,8 @@
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
-                        <select class="form-control" id="additionalDocumentId">
+                        <select class="form-control" id="additionalDocumentId" th:field="*{additionalDocumentId}">
+                            <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
@@ -129,9 +132,9 @@
                             <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
                         </div>
                     </div>
-                    <div class="file-block flex-center file-button">
+                    <div class="file-block flex-center file-button" id="addFileButton">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <span class="fas fa-plus" ></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
                         </div>
                     </div>
@@ -152,7 +155,7 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" name="managerId"  required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required">
                             <option value=""></option>
                             <option th:each="manager: ${managerUserList}" th:value="${manager.id}" th:text="${manager.getFullName()}" th:selected="${document.managerId!=null && manager.id==document.managerId}"></option>
                         </select>
@@ -168,16 +171,18 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item : ${executeForms}">
-                            <input type="radio" name="executeForm" th:id="'executeForm'+${item.id}" th:value="${item.id}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="'executeForm'+${item.id}" th:text="${item.name}"></label>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="executeForm : ${executeForms}">
+                            <input type="radio" name="executeFormId" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
+                            <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="${executeForm.name}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="item: ${controlForms}">
-                            <input type="radio" th:value="${item.id}" name="controlForm" th:id="'controlForm'+${item.id}" class="custom-control-input">
-                            <label class="custom-control-label" th:for="'controlForm'+${item.id}" th:text="${item.name}"></label>
+                        <div class="custom-control custom-radio custom-control-inline" >
+                            <div class="radio radio-success d-inline" th:each="controlForm: ${controlForms}">
+                                <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
+                                <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="${controlForm.name}"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -185,7 +190,7 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
-                        <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
+                        <a th:href="${cancel_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
                         <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>

@@ -1,29 +1,32 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.docmanagement.constant.ControlForm;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
+import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
+import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 01.04.2019.

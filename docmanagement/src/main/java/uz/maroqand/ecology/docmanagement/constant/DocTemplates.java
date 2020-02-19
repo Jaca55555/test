@@ -17,6 +17,7 @@ public class DocTemplates {
     //kiruvchi xatlar
     public static final String IncomingList = Prefix + Incoming + "/list";
     public static final String IncomingView = Prefix + Incoming + "/view";
+    public static final String IncomingTask = Prefix + Incoming + "/task";
 
     //chiquvchi xatlar
     public static final String OutgoingList = Prefix + Outgoing + "/list";
@@ -27,6 +28,7 @@ public class DocTemplates {
 
     private static final String IncomingRegistration = Prefix + Registration + Incoming;
     public static final String IncomingRegistrationList = IncomingRegistration + "/list";
+    public static final String IncomingRegistrationNewList = IncomingRegistration + "/new_list";
     public static final String IncomingRegistrationView = IncomingRegistration + "/view";
     public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";

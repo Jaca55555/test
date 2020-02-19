@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 10.06.2019..
@@ -27,6 +28,11 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
 
+    List<User> findAllByIsExecuteChiefTrue();
+    List<User> findAllByIsExecuteControllerTrue();
+
     List<User> findByOrganizationId(Integer organizationId);
+
+    List<User> findByDepartmentIdInAndEnabledTrue(Set<Integer> departmentIds);
 
 }

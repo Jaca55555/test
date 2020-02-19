@@ -20,6 +20,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
 
+    DocumentTaskSub findByIdAndDeletedFalse(Integer id);
+
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);//Муддати якинлашаётган
 
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);//Муддати кеччикан
@@ -27,5 +29,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
 
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
+
+    DocumentTaskSub findByReceiverIdAndDocumentIdAndDeletedFalse(Integer userId, Integer docId);
+    List<DocumentTaskSub> findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(Integer docId, Integer taskId);
 
 }

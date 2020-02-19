@@ -32,20 +32,25 @@
 
         <object th:include="doc/registration/incoming/fragments/document_view :: document_view" th:remove="tag" ></object>
 
-        <div class="row flex-space-between">
+        <div class="row flex-space-between" th:if="${#lists.size(documentTasks)>0}" th:each="task,iter : ${documentTasks}">
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
+
                     <div class="card-header flex-space-between align-center" style="height:65px;">
-                        <h5 th:text="#{doc.participants_executors}">Ижрочилар / Иштирокчилар</h5>
+                        <h5>
+                            <span th:text="#{doc_incoming.task_number}"></span>&nbsp;&nbsp;№
+                            <span th:text="${iter.index+1}"></span>
+                        </h5>
                     </div>
+
                     <div class="card-block">
-                        <div class="row" th:if="${#lists.size(documentTasks)>0}" th:each="task : ${documentTasks}">
+                        <div class="row" >
                             <div class="executor col-12 m10-vertical" th:object="${task}">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
                                     <div>
-                                        <div class="inline-block"><i
-                                                class="fas fa-user-circle fs40 color-gray column-1">
-                                        </i></div>
+                                        <div class="inline-block">
+                                            <i class="fas fa-user-circle fs40 color-gray column-1"> </i>
+                                        </div>
                                         <div class="inline-block m10-horizontal">
                                             <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
                                             <br>
@@ -53,12 +58,13 @@
                                         </div>
                                     </div>
                                     <div class="flex-space-between p0 align-center column-1">
-                                        <div style="height: fit-content;display: flex;align-items: center;"><i
-                                                class="fas fa-cog fs20 color-gray pointer"></i>
-                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}">Жараёнда</span></div>
-                                        <div style="height: fit-content;display: flex;align-items: center;"><i
-                                                class="feather icon-clock fs30 color-gray"></i>
-                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                        <div style="height: fit-content;display: flex;align-items: center;">
+                                            <i class="fas fa-cog fs20 color-gray pointer"></i>
+                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
+                                        </div>
+                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                        </div>
                                     </div>
                                     <div class="w100"></div>
                                     <div class="column-2 mt-2 text-container-border">
@@ -72,22 +78,24 @@
                                     <div class="executor col-12 m10-vertical">
                                         <div class="flex-space-between p0">
                                             <div>
-                                                <div class="inline-block"><i
-                                                        class="fas fa-user-circle fs40 color-gray column-2">
-                                                </i></div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-2"></i>
+                                                </div>
                                                 <div class="inline-block m10-horizontal ">
-                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
                                                     <br>
-                                                    <span th:if="${taskSub.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    <span th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-2" >
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cog fs20 color-primary pointer"></i>
-                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
-                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cog fs20 color-primary pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
                                             </div>
                                             <div class="w100"></div>
                                             <div class="column-3 mt-2 text-container-border">
@@ -98,49 +106,52 @@
                                     <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
                                         <div class="flex-space-between p0">
                                             <div>
-                                                <div class="inline-block"><i
-                                                        class="fas fa-user-circle fs40 color-gray column-3">
-                                                </i></div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-3"></i>
+                                                </div>
                                                 <div class="inline-block m10-horizontal">
-                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
                                                     <br>
-                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="*{@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
                                                 </div>
                                             </div>
                                             <div class="flex-space-between p0 align-center column-3">
-                                                <div class="align-center height-fit"><i
-                                                        class="fas fa-cogs fs20 color-purple pointer"></i>
-                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span></div>
-                                                <div class="align-center height-fit"><i
-                                                        class="feather icon-clock fs30 color-gray"></i>
-                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span></div>
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <hr class="m20-vertical">
-                        <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}"> Янги топшириқ қўшиш  </a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
-                        </div>
                     </div>
+
                 </div>
             </div>
+
             <div class="col-xl-4 col-sm-12 pr-0 pr-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
-                            <span class="card-header-a collapsed" th:text="#{doc.execute_log_and_comments}"></span>
+                            <span class="card-header-a collapsed" th:text="#{execute_log_and_comments}"></span>&nbsp;&nbsp;
+                            <span th:text="${iter.index+1}"></span>
                         </h5>
-                        <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
+                        <button class="btn-icon">
+                            <i class="fas fs20 fa-print color-gray"></i>
+                        </button>
                     </div>
                     <div class="card-body" id="comments">
                         <div class="comment-item flex-space-between" th:each="log: ${logs}">
                             <div>
-                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray column-1">
-                                </i></div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray column-1"></i>
+                                </div>
                                 <div class="inline-block m10-horizontal">
                                     <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
                                     <br>
@@ -164,15 +175,19 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button"
-                                    class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"
-                                    data-toggle="modal" data-target="#modal1" th:text="#{doc.add_comment}">
-                            </button>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{doc_incoming.add_comment}"> </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <hr class="m20-vertical">
+        <div class="flex-center w100 row-wrap">
+            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
+            <!--<button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2" th:text="#{doc_incoming.newTask}">Ижро холатини белгилаш</button>-->
+        </div>
+
     </div>
 </div>
 
@@ -182,8 +197,7 @@
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва
-                                изохлар</span></h5>
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва изохлар</span></h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -194,8 +208,9 @@
                         <input type="hidden" name="documentId" th:value="${document.id}">
                         <div class="flex-space-between p0 m20-vertical">
                             <div>
-                                <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
-                                </i></div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray"></i>
+                                </div>
                                 <div class="inline-block m10-horizontal">
                                     <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
                                     <br>
@@ -207,16 +222,12 @@
                             </div>
                         </div>
                         <div class="m10-vertical"><span>Изоҳи</span></div>
-
-                        <textarea class="form-control" name="content"
-                                  th:placeholder="#{doc.enter_comment_text}"></textarea>
-
-                        <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
-
-                        <div id="file_ids" class="d-none">
+                        <textarea class="form-control" name="content" th:placeholder="#{doc.enter_comment_text}"></textarea>
+                        <div class="m10-vertical">
+                            <span th:text="#{doc.additional_files}"></span>
                         </div>
+                        <div id="file_ids" class="d-none"></div>
                         <input type="file" class="d-none" id="addFile2" name="files" multiple>
-
                         <div class="row p20" id="file-container">
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
                                 <div  class="text-center file-icon-container align-self-center color-gray">
@@ -242,8 +253,9 @@
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва
-                                изохлар</span></h5>
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">Ижро амаллари ва изохлар</span>
+                    </h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -251,8 +263,9 @@
                 <div class="card-body">
                     <div class="flex-space-between p0 m20-vertical">
                         <div>
-                            <div class="inline-block"><i class="fas fa-user-circle fs40 color-gray">
-                            </i></div>
+                            <div class="inline-block">
+                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                            </div>
                             <div class="inline-block m10-horizontal">
                                 <span class="color-green bold">Абдуллаев А. А.</span>
                                 <br>
@@ -288,48 +301,54 @@
                         </div>
                     </div>
                     <div class="m10-vertical"><span>Ижро ҳолатининг ўзгариши сабаби</span></div>
-
-                    <textarea class="form-control" name="validation-text"
-                              placeholder="Ижро ҳолатини ўзгартириш сабабини киритинг"></textarea>
-
+                    <textarea class="form-control" name="validation-text"placeholder="Ижро ҳолатини ўзгартириш сабабини киритинг"></textarea>
                     <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
-
                     <div class="row p20">
                         <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-red"><span
-                                    class="fas fa-file-pdf"></span>
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-red">
+                                <span class="fas fa-file-pdf"></span>
                             </div>
                             <div class="text-center">
                                 <span>Письмо.pdf</span>
                             </div>
                         </div>
                         <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-blue"><span
-                                    class="fas fa-file-word"></span></div>
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-blue">
+                                <span class="fas fa-file-word"></span>
+                            </div>
                             <div class="text-center">
                                 <span>Письмо.docx</span>
                             </div>
                         </div>
                         <div class="file-block">
-                            <div class="text-right"><span class="fas fa-trash-alt"></span></div>
-                            <div class="text-center file-icon-container color-green"><span
-                                    class="fas fa-file-excel"></span></div>
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-green">
+                                <span class="fas fa-file-excel"></span>
+                            </div>
                             <div class="text-center">
                                 <span>Таблица.xlsx</span>
                             </div>
                         </div>
                         <div class="file-block flex-center">
-                            <div class="text-center file-icon-container align-self-center color-gray"><span
-                                    class="fas fa-plus"></span></div>
+                            <div class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus"></span>
+                            </div>
                         </div>
                     </div>
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
-                                қилиш</button>
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">
+                                Бекор қилиш
+                            </button>
                             <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                         </div>
                     </div>
@@ -350,7 +369,7 @@
                             Кирувчи хат №
                             <span th:text="${document.registrationNumber}"></span>
                             <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
-                    </span>
+                        </span>
                     </h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -365,9 +384,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
                             <i class="fas fa-times"></i>
-                            <span th:text="#{sys_close}">Chiqish</span></button>
+                            <span th:text="#{sys_close}">Chiqish</span>
+                        </button>
                     </div>
-
                 </div>
             </div>
         </div>

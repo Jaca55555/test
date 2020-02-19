@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by Namazov Jamshid
@@ -19,4 +21,15 @@ public interface DocumentTaskRepository extends DataTablesRepository<DocumentTas
     List<DocumentTask> findByDocumentId(Integer docId);
 
     DocumentTask findByDocumentIdAndChiefId(Integer docId, Integer userId);
+
+    DocumentTask findByIdAndDocumentIdAndDeletedFalse(Integer id, Integer docId);
+
+    Integer countByStatusInAndDeletedFalse(Set<Integer> status);
+
+    Integer countByDueDateBetweenAndStatusNotAndDeletedFalse(Date begin, Date end, Integer statusId);
+
+    Integer countByDueDateBeforeAndStatusNotAndDeletedFalse(Date now, Integer statusId);
+
+    Integer countByDeletedFalse();
+
 }

@@ -20,9 +20,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.dto.OutgoingFilterDto;
 import uz.maroqand.ecology.docmanagement.entity.*;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
@@ -147,10 +145,7 @@ public class OutgoingMailController {
         docSub.setOrganizationName(documentOrganization.getName());
         docSub.setCommunicationToolId(communicationToolId);
 
-
-        Document savedDocument = documentService.createDoc(document);
-
-
+        Document savedDocument = documentService.createDoc(2, document, user);
 
         docSub.setDocumentId(savedDocument.getId());
         docSub.setDocument(savedDocument);

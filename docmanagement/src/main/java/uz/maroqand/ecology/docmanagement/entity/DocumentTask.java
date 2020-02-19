@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
@@ -26,6 +27,7 @@ public class DocumentTask {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
@@ -45,6 +47,7 @@ public class DocumentTask {
     @Column(name = "due_date", columnDefinition = "timestamp without time zone")
     private Date dueDate;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chief_id", insertable = false, updatable = false)
     private User chief;

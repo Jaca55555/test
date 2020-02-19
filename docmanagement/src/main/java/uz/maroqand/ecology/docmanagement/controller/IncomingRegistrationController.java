@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -19,12 +22,11 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +54,7 @@ public class IncomingRegistrationController {
     private final DocumentTaskService taskService;
     private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
-    private final HelperService helperService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
     public IncomingRegistrationController(
@@ -68,14 +70,13 @@ public class IncomingRegistrationController {
             DocumentTaskService taskService,
             DocumentTaskSubService taskSubService,
             DocumentLogService documentLogService,
-            HelperService helperService
+            DocumentHelperService documentHelperService
     ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
         this.taskSubService = taskSubService;
         this.documentLogService = documentLogService;
-        this.helperService = helperService;
         this.documentDescriptionService = documentDescriptionService;
         this.communicationToolService = communicationToolService;
         this.userService = userService;
@@ -83,11 +84,18 @@ public class IncomingRegistrationController {
         this.fileService = fileService;
         this.organizationService = organizationService;
         this.documentViewService = documentViewService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
 
+        model.addAttribute("newCount", taskService.countNew());
+        model.addAttribute("inProcess", taskService.countInProcess());
+        model.addAttribute("nearDate", taskService.countNearDate());
+        model.addAttribute("expired", taskService.countExpired());
+        model.addAttribute("executed", taskService.countExecuted());
+        model.addAttribute("total", taskService.countTotal());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
@@ -125,6 +133,43 @@ public class IncomingRegistrationController {
         return result;
     }
 
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.GET)
+    public String getIncomingRegistrationNewListPage(){
+        return DocTemplates.IncomingRegistrationNewList;
+    }
+
+    @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getIncomingRegistrationNewListAjax(Pageable pageable){
+        System.out.println(pageable.getSort());
+
+        HashMap<String,Object> result = new HashMap<>();
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
+        docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            JSONArray.add(new Object[]{
+                    document.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    documentView!=null? documentView.getName():"",
+                    document.getContent()!=null?document.getContent():"",
+                    documentSub.getOrganizationId()!=null? documentHelperService.getDocumentOrganizationName(documentSub.getOrganizationId()):""
+            });
+        }
+
+        result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
+    }
+
     @RequestMapping(DocUrls.IncomingRegistrationView)
     public String getViewDocumentPage(@RequestParam(name = "id")Integer id, Model model) {
         Document document = documentService.getById(id);
@@ -142,6 +187,7 @@ public class IncomingRegistrationController {
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         model.addAttribute("specialControll", true);
         model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
         return DocTemplates.IncomingRegistrationView;
     }
 
@@ -155,11 +201,11 @@ public class IncomingRegistrationController {
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("managerUserList", userService.getEmployeeList());
-        model.addAttribute("controlUserList", userService.getEmployeeList());
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
 
-        model.addAttribute("executeForms", ControlForm.getControlFormList());
-        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
+        model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
+        model.addAttribute("controlForms", ControlForm.getControlFormList());
         return DocTemplates.IncomingRegistrationNew;
     }
 
@@ -213,11 +259,10 @@ public class IncomingRegistrationController {
         }
         document.setContentFiles(files);
         document.setCreatedById(user.getId());
-        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
-        document.setRegistrationDate(new Date());
+
         document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
-        document = documentService.createDoc(document);
+        document = documentService.createDoc(1, document, user);
 
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
@@ -238,8 +283,23 @@ public class IncomingRegistrationController {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
+        DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
         model.addAttribute("document", document);
-        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentSub",documentSub);
+
+        DocumentOrganization documentOrdanization = null;
+        Document  additionalDocument = null;
+        String  additionalDocumentText = null;
+        if (document.getAdditionalDocumentId()!=null){
+            additionalDocument = documentService.getById(document.getAdditionalDocumentId());
+            additionalDocumentText = additionalDocument.getRegistrationNumber() +" - "+ Common.uzbekistanDateAndTimeFormat.format(additionalDocument.getRegistrationDate());
+        }
+        if (documentSub.getOrganizationId()!=null){
+            documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
+        }
+        model.addAttribute("additionalDocument", additionalDocument);
+        model.addAttribute("additionalDocumentText", additionalDocumentText);
+        model.addAttribute("documentOrdanization", documentOrdanization);
 
         model.addAttribute("journalList", journalService.getStatusActive());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
@@ -248,8 +308,10 @@ public class IncomingRegistrationController {
         model.addAttribute("managerUserList", userService.getEmployeeList());
         model.addAttribute("controlUserList", userService.getEmployeeList());
 
-        model.addAttribute("executeForms", ControlForm.getControlFormList());
-        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
+        model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
+        model.addAttribute("controlForms", ControlForm.getControlFormList());
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+
         return DocTemplates.IncomingRegistrationNew;
     }
 
@@ -259,8 +321,9 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
-            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
+            @RequestParam(name = "docSubId") Integer docSubId,
+            @RequestParam(name = "executeFormId", required = false) Integer executeForm,
+            @RequestParam(name = "controlFormId", required = false) Integer controlForm,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
             Document document
     ) {
@@ -272,25 +335,16 @@ public class IncomingRegistrationController {
             }
         }
 
-        if(executeFormId!=null){
-            document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
-        }
-        if(controlFormId!=null){
-            document.setControlForm(ControlForm.getControlForm(controlFormId));
-        }
-        document.setContentFiles(files);
-        document.setDocRegDate(DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat));
-        document.setCreatedById(user.getId());
-        document.setStatus(DocumentStatus.New);
-        documentService.update(document);
+        Document document1 = documentService.getById(document.getId());
 
-        DocumentSub documentSub = new DocumentSub();
-        documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(documentOrganizationId);
-        documentSubService.create(document.getId(), documentSub, user);
+        if (document1==null){
+            return "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+
+        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
-            return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document.getId();
+            return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();
         }else {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
@@ -309,6 +363,8 @@ public class IncomingRegistrationController {
         model.addAttribute("userList", userList);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
+        model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());
+
         return DocTemplates.IncomingRegistrationTask;
     }
 
@@ -319,19 +375,12 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
-
         User user = userService.getCurrentUserFromContext();
         Document document = documentService.getById(id);
-        if (document==null){
+        if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-
-
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
-
-        DocumentTask documentTask = taskService.createNewTask(document.getId(),0,content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = taskService.createNewTask(document.getId(),TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -363,7 +412,10 @@ public class IncomingRegistrationController {
                 }
             }
         }
-
+        if(!document.getStatus().equals(DocumentStatus.InProgress)){
+            document.setStatus(DocumentStatus.InProgress);
+            documentService.update(document);
+        }
         return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
     }
 

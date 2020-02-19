@@ -41,4 +41,8 @@ public interface DocumentService {
     Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId);
 
     Long  countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId);
+  //  Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId);
+
+  //  Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet,Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser);
+
 }

@@ -11,21 +11,18 @@ import java.util.Set;
 /**
  * Created by Utkirbek Boltaev on 15.02.2020.
  * (uz)
- * (ru)
  */
 public interface DocumentTaskSubService {
 
-    Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
-
-    Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
-
-    Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
-
-    Integer countByReceiverId(Integer receiverId);
+    DocumentTaskSub getById(Integer id);
 
     DocumentTaskSub createNewSubTask(Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
 
+    DocumentTaskSub update(DocumentTaskSub taskSub);
+
     List<DocumentTaskSub> getListByDocId(Integer docId);
+
+    List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId);
 
     Page<DocumentTaskSub> findFiltered(
             Integer documentOrganizationId,
@@ -47,5 +44,14 @@ public interface DocumentTaskSubService {
             Integer receiverId,
             Pageable pageable
     );
+
+    //statistics
+    Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
+
+    Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
+
+    Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
+
+    Integer countByReceiverId(Integer receiverId);
 
 }

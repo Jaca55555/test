@@ -6,6 +6,7 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -13,6 +14,8 @@ import java.util.List;
  * (ru)
  */
 public interface UserService {
+
+    List<User> getListByDepartmentAllParent(Integer departmentId);
 
     List<User> getEmployeeList();
 
@@ -55,6 +58,8 @@ public interface UserService {
     LogType getUserLogType(User user);
 
     List<User> getEmployeesForDocManage(String type);
+
+    List<User> getEmployeesForNewDoc(String type);
 
     Integer getUserDepartmentId(Integer userId);
 }

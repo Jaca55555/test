@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.user.UserRepository;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -30,10 +30,24 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final DepartmentService departmentService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, DepartmentService departmentService) {
         this.userRepository = userRepository;
+        this.departmentService = departmentService;
+    }
+
+    @Override
+    public List<User> getListByDepartmentAllParent(Integer departmentId) {
+        if (departmentId==null) return null;
+        Set<Integer> departmentIds = new HashSet<>();
+        departmentIds.add(departmentId);
+        List<Department> departmentList = departmentService.findByParentId(departmentId);
+        for (Department department: departmentList){
+            departmentIds.add(department.getId());
+        }
+        return userRepository.findByDepartmentIdInAndEnabledTrue(departmentIds);
     }
 
     @Override
@@ -233,6 +247,16 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
         if (type.equals("controller"))
             users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
+        return users;
+    }
+
+    @Override
+    public List<User> getEmployeesForNewDoc(String type) {
+        List<User> users = new ArrayList<>();
+        if (type.equals("chief"))
+            users = userRepository.findAllByIsExecuteChiefTrue();
+        if (type.equals("controller"))
+            users = userRepository.findAllByIsExecuteControllerTrue();
         return users;
     }
 

@@ -24,4 +24,6 @@ public interface DocumentSubService {
 
     DocumentSub createDocumentSub(DocumentSub documentSub);
 
+    DocumentSub getById(Integer id);
+
 }

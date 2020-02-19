@@ -106,7 +106,7 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
-                        <span class="pcoded-mtext">Кирувчи хатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.reg}">Кирувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -127,13 +127,13 @@
                          <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
                      </a>
                  </li>-->
-                <!--<li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}">
                         <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-green"></i></span>
                         <span class="pcoded-mtext">Ижрога тушмаган</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-primary"></i></span>
                         <span class="pcoded-mtext">Чикиб кетмаган</span>
@@ -196,14 +196,13 @@
                 <li class="nav-item pcoded-hasmenu">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon"><i class="feather icon-package color-red"></i></span>
-                        <span class="pcoded-mtext">Созламалар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_settings}">Созламалар</span>
                     </a>
                     <ul class="pcoded-submenu" style="display: none;">
-                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsList}" th:text="#{doc_communication_tools.list}"></a></li>
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocTypeList}" th:text="#{doc_doc_type.list}"></a></li>
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).JournalList}" th:text="#{doc_journal.list}"></a></li>
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentViewList}" th:text="#{doc_document_view.list}"></a></li>
-                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FolderList}" th:text="#{doc_folder.list}"></a></li>
+                        <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommunicationToolsList}" th:text="#{doc_communication_tools.list}"></a></li>
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOrganizationList}" th:text="#{doc_document_organization.list}"></a></li>
                         <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Chiefs}" th:text="#{doc_user_mngm.chiefs_list}"></a></li>
                         <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Controllers}" th:text="#{doc_user_mngm.controllers_list}"></a></li>

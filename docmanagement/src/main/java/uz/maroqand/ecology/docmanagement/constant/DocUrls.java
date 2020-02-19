@@ -18,9 +18,13 @@ public class DocUrls {
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
+    public static final String DocumentTaskChange = Prefix + "/task_change";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish
+    public static final String IncomingTask = Prefix + Incoming + "/task";
+    public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
+    public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
 
@@ -62,7 +66,8 @@ public class DocUrls {
     public static final String InnerRegistrationEditTask = InnerRegistration + "/edit_and_task";
     public static final String InnerRegistrationFileUpload = InnerRegistration + "/file";
     public static final String InnerRegistrationTask = InnerRegistration + "/task";
-
+    public static final String InnerRegistrationTaskSubmit = InnerRegistration + "/task_submit";
+    public static final String InnerRegistrationUserName = InnerRegistration + "/user_name";
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

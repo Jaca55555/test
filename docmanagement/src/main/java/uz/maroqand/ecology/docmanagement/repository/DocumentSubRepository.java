@@ -17,4 +17,6 @@ public interface DocumentSubRepository extends JpaRepository<DocumentSub, Intege
     List<DocumentSub> findByDocumentIdAndDeletedFalse(Integer documentId);
 
     DocumentSub findOneByDocumentId(Integer id);
+
+    DocumentSub findByIdAndDeletedFalse(Integer id);
 }

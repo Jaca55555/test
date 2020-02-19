@@ -14,11 +14,11 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "document_task_participant")
+@Table(name = "document_task_sub")
 public class DocumentTaskSub {
 
     @Transient
-    private static final String sequenceName = "document_task_participant_id_seq";
+    private static final String sequenceName = "document_task_sub_id_seq";
 
     @Id
     @SequenceGenerator(name = sequenceName, sequenceName = sequenceName, allocationSize = 1)
