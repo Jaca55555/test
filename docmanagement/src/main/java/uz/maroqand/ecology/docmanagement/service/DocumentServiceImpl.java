@@ -114,6 +114,10 @@ public class DocumentServiceImpl implements DocumentService {
                         predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
                     }
 
+                    if (filterDTO.getDocumentTypeEnum() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("documentType").get("type"), filterDTO.getDocumentTypeEnum().getId()));
+                    }
+
                     if (filterDTO.getCorrespondentType() != null) {
                         predicates.add(criteriaBuilder.equal(root, filterDTO.getCorrespondentType()));
                     }

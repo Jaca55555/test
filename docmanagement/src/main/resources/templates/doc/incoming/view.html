@@ -366,6 +366,7 @@
                             </button>
                             <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                             <button type="reset" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор
                                 қилиш</button>
                             <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                         </div>
@@ -759,7 +760,7 @@
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>` + fileNameSubString(name) + `</span>
+                            <span>${data.data.name}</span>
                         </div>
                     </div>`
         );
