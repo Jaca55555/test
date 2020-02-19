@@ -52,13 +52,6 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document createDoc(Document document) {
-        document.setCreatedAt(new Date());
-        document.setDeleted(Boolean.FALSE);
-        return documentRepository.save(document);
-    }
-
-    @Override
     public Document createDoc(Integer documentTypeId, Document document, User user) {
         document.setOrganizationId(user.getOrganizationId());
         document.setDocumentTypeId(documentTypeId);
