@@ -102,8 +102,8 @@ public class InnerRegistrationController {
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentTask.getContent(),
-                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getUpdateAt()):"",
                     documentTask.getStatus(),
                     "Resolution and parcipiants"
             });

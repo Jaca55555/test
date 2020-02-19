@@ -127,11 +127,11 @@
                         </div>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="name" class="control-label">Руйхатга олиш рақами</label>
+                        <label for="name" class="control-label"> <span th:text="#{sys.registrationNumber}">Руйхатга олиш рақами</span></label>
                         <input type="text" class="form-control" id="name" />
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="applicationId" class="control-label">Рўйхатга олинган сана</label>
+                        <label for="applicationId" class="control-label"><span th:text="#{sys.registrationDate}">Рўйхатга олинган сана</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="dateBegin" placeholder="Дан">
@@ -212,13 +212,13 @@
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 0px;" aria-sort="ascending" aria-label="First name: activate to sort column descending">
-                                                    Регистрация рақами
+                                                    <span th:text="#{sys.registrationNumber}">Регистрация рақами</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 0px;" aria-label="Last name: activate to sort column ascending">
-                                                    Регистрация санаси
+                                                    <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 350px;" aria-label="Position: activate to sort column ascending">
-                                                    Кирувчи хат маълумотлари
+                                                    <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 82px;" aria-label="Office: activate to sort column ascending">
                                                     Хат жўнатилган сана
@@ -227,7 +227,7 @@
                                                     Чиқувчи хатни имзолаган ходим
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 140px; display: none;" aria-label="Start date: activate to sort column ascending">
-                                                    Жорий ҳолати
+                                                    <span th:text="#{sys.doc_execution_status}">Жорий ҳолати</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 300px; display: none;" aria-label="Salary: activate to sort column ascending">
                                                     Хатни юбораётган бўлим ва ижрочи
