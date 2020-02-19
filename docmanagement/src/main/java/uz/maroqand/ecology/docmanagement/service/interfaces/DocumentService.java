@@ -33,4 +33,12 @@ public interface DocumentService {
     Long countAllByCreatedAtAfterAndDocumentTypeId(Date time, Integer docTypeId);
 
     Long countAllByDocumentTypeAndHasAdditionalDocument(Integer documentTypeId);
+
+    Long countTotalByDocumentTypeAndDepartmentId(Integer documentTypeId, Integer departmentId);
+
+    Long countTotalByTypeAndStatusAndDepartmentId(Integer typeId, DocumentStatus status, Integer departmentId);
+
+    Long countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(Date time, Integer docTypeId, Integer departmentId);
+
+    Long countAllByDocumentTypeAndHasAdditionalDocumentAndDepartmentId(Integer documentTypeId, Integer departmentId);
 }

@@ -35,4 +35,12 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 
     Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(Integer documentTypeId);
 
+    Long countAllByDocumentTypeIdAndDepartmentId(Integer documentTypeId, Integer departmentId);
+
+    Long countAllByDocumentTypeIdAndStatusAndDepartmentId(Integer typeId, DocumentStatus status, Integer departmentId);
+
+    Long countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(Date time, Integer documentTypeId, Integer departmentId);
+
+    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndDepartmentId(Integer documentTypeId, Integer departmentId);
+
 }

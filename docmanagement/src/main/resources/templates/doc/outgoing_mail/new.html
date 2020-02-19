@@ -64,15 +64,15 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" name="communication_tool_id" required>
-                            <option value="" th:text="#{communication_tool_select}"></option>
+                                aria-hidden="true" th:name="communication_tool_id" required>
+                            <option th:value="${communication_tool_id}" th:text="${communication_tool_name}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label">Хат юборилаётган ташкилот</label>
                         <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
-                            <option value="" th:text="#{sys_select}"></option>
+                            <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
                         </select>
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
@@ -111,7 +111,7 @@
                     <div class="col-sm-6 form-group">
                         <label for="name" class="control-label">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
                         <select class="form-control singleSelect" th:field="*{performerId}"  required>
-                            <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.username}"></option>
+                            <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.fullName}"></option>
                         </select>
                     </div>
 

@@ -159,14 +159,6 @@ public class OutgoingMailController {
         return "redirect:" + DocUrls.OutgoingMailList;
     }
 
-    @RequestMapping(value = DocUrls.OutgoingMailOrganizationList, produces = "application/json")
-    @ResponseBody
-    public List<String> getOrganizationNames() {
-        return documentOrganizationService.getDocumentOrganizationNames();
-    }
-
-
-
     @RequestMapping(DocUrls.OutgoingMailList)
     public String getOutgoingMailList(Model model) {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
@@ -220,11 +212,6 @@ public class OutgoingMailController {
 
         HashMap<String, Object> result = new HashMap<>();
         DocFilterDTO filter = new DocFilterDTO();
-        result.put("inProcess", 0);
-        result.put("today", 0);
-        result.put("hasAdditionalDocuments", 0);
-        result.put("fifth", 0);
-        result.put("all", 0);
         filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
 
         OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
@@ -242,14 +229,13 @@ public class OutgoingMailController {
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     document.getStatus(),
-                    (document.getPerformerName() != null ?document.getPerformerName(): "") + "\n" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
+                    (document.getPerformerName() != null ?document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }
 
         result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
-
 
         return result;
     }
@@ -269,7 +255,19 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailEdit)
     public String outgoingMailEdit(@RequestParam(name="id")Integer id, Model model){
+        Document document = documentService.getById(id);
+        List<DocumentSub> documentSubList = documentSubService.findByDocumentId(document.getId());
+        DocumentSub documentSub = null;
+        if(documentSubList.size() != 0){
+            documentSub = documentSubList.get(documentSubList.size() - 1);
+        }
 
+        model.addAttribute("communication_tool_id", documentSub.getCommunicationToolId());
+        model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
+        model.addAttribute("document_organization_id", documentSub.getOrganization().getId());
+        model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
+        model.addAttribute("performer_id", document.getPerformerId());
+        model.addAttribute("performer_name", document.getPerformerName());
         model.addAttribute("document", documentService.getById(id));
         model.addAttribute("journal", journalService.getStatusActive());
         model.addAttribute("documentViews", documentViewService.getStatusActive());

@@ -183,6 +183,26 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNull(documentTypeId);
     }
 
+    @Override
+    public Long countTotalByDocumentTypeAndDepartmentId(Integer documentTypeId, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndDepartmentId(documentTypeId, documentTypeId);
+    }
+
+    @Override
+    public Long countTotalByTypeAndStatusAndDepartmentId(Integer typeId, DocumentStatus status, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndStatusAndDepartmentId(typeId, status, departmentId);
+    }
+
+    @Override
+    public Long countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(Date time, Integer docTypeId, Integer departmentId){
+        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndDepartmentId(time, docTypeId, departmentId);
+    }
+
+    @Override
+    public  Long countAllByDocumentTypeAndHasAdditionalDocumentAndDepartmentId(Integer documentTypeId, Integer departmentId){
+        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndDepartmentId(documentTypeId, departmentId);
+    }
+
     private static Specification<Document> getSpecification(String registrationNumber) {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
