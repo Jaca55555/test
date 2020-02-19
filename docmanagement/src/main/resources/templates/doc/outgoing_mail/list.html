@@ -237,20 +237,6 @@
                 </div>
             </div>
         </div>
-        <div class="btn-group mb-2 mr-2">
-            <button type="button"
-                    class="btn btn-outline-primary left-radius table-modal-button">Жараёнда</button>
-            <button type="button"
-                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                    data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><span class="sr-only">Toggle
-                                         Dropdown</span></button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item">Initial</button>
-                <button class="dropdown-item">New</button>
-                <button class="dropdown-item">InProgress</button>
-            </div>
-        </div>
 
     </div>
 </div>
@@ -261,6 +247,7 @@
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailView}]];
     let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailEdit}]];
+    let changeStatusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailChangeStatus}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -284,30 +271,78 @@
     let thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = viewLink + '?id=' + row[0];
-        var html = '';
-        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
-        html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        let currentViewLink = viewLink + '?id=' + row[0];
+        let currentEditLink = editLink + '?id=' + row[0];
+        let html = '';
+        html += `<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
+        html += `<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
         return html;
+    }
+
+    let statuses = {};
+    statuses[1] = "New";
+    statuses[2] = "InProgress";
+    statuses[3] = "Completed";
+
+    function changeStatus(btn, id, targetStatus){
+        dropDownValues = $(btn).parent();
+      //  console.log();
+
+        fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
+            .then((response) =>{
+                if(response.ok){
+                    console.log(response);
+                    return response.json()
+                }
+            })
+            .then((data) => {
+                console.log(data);
+                dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
+                dropDownValues[0].innerHTML = `
+                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
+                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
+                `;
+                dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
+
+            })
     }
 
     function renderChangeColumn(data, type, row, meta) {
         let editlink = 'doc/outgoing_mail/change_column'
         let html = '';
+       // console.log(meta);
+        let stringOne, stringTwo;
+        let idToChangeOne, idToChangeTwo;
+        let current;
+        if(data === "New"){
+            current = 1;
+            idToChangeOne = 2;
+            idToChangeTwo = 3;
+        }else if(data === "InProgress"){
+            current = 2;
+            idToChangeOne = 1;
+            idToChangeTwo = 3;
+        }else if(data == "Completed"){
+            current = 3;
+            idToChangeOne = 1;
+            idToChangeTwo = 2;
+        }
+
+
         html += `<div class="btn-group mb-2 mr-2">
-                                                        <button type="button"
-                                     class="btn btn-outline-primary left-radius table-modal-button">${data}</button>
-                                 <button type="button"
-                                     class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                                     data-toggle="dropdown" aria-haspopup="true"
-                                     aria-expanded="false"><span class="sr-only">Toggle
-                                         Dropdown</span></button>
-                                 <div class="dropdown-menu">
-                                     <button class="dropdown-item">Initial</button>
-                                     <button class="dropdown-item">New</button>
-                                     <button class="dropdown-item">InProgress</button>
-                                 </div>
-                             </div>`;
+                                            <button type="button"
+                         class="btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
+                     <button type="button"
+                         class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                         data-toggle="dropdown" aria-haspopup="true"
+                         aria-expanded="false"><span class="sr-only">Toggle
+                             Dropdown</span></button>
+                     <div class="dropdown-menu">
+                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
+                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
+                       <!--  <button class="dropdown-item">InProgress</button> -->
+                     </div>
+                 </div>`;
 
         return html;
     }
