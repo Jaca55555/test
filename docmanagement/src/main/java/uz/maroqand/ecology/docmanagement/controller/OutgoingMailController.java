@@ -306,6 +306,46 @@ public class OutgoingMailController {
         return ids;
     }
 
+    @RequestMapping(value = DocUrls.OutgoingMailChangeStatus, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody HashMap<String, Object> changeStatus(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "target_status_id")Integer statusId
+    ){
+        System.out.println("id: " + id + ", statusId: " + statusId);
+        HashMap<String, Object> result = new HashMap<>();
+        Document document = documentService.getById(id);
+        switch (statusId){
+            case 1:
+                document.setStatus(DocumentStatus.New);
+                result.put("first", "InProgress");
+                result.put("firstId", 2);
+                result.put("second", "Completed");
+                result.put("secondId", 3);
+                break;
+            case 2:
+                document.setStatus(DocumentStatus.InProgress);
+                result.put("first", "New");
+                result.put("firstId", 1);
+                result.put("second", "Completed");
+                result.put("secondId", 3);
+                break;
+            case 3:
+                document.setStatus(DocumentStatus.Completed);
+                result.put("first", "New");
+                result.put("firstId", 1);
+                result.put("second", "InProgress");
+                result.put("secondId", 2);
+                break;
+        }
 
+        Date date = new Date();
+        document.setUpdateAt(date);
+        document.setUpdateById(userService.getCurrentUserFromContext().getId());
+
+        result.put("updatedAt", Common.uzbekistanDateFormat.format(date));
+        result.put("changedOnStatusId", statusId);
+        documentService.update(document);
+        return result;
+    }
 
 }

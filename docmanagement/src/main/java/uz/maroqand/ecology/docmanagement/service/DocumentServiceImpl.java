@@ -36,10 +36,14 @@ import java.util.Set;
 public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final JournalService journalService;
+    private final DocumentSubService documentSubService;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, JournalService journalService, DocumentSubService documentSubService) {
         this.documentRepository = documentRepository;
+        this.journalService = journalService;
+        this.documentSubService = documentSubService;
     }
 
     @Override
@@ -49,6 +53,21 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document createDoc(Document document) {
+        document.setCreatedAt(new Date());
+        document.setDeleted(Boolean.FALSE);
+        return documentRepository.save(document);
+    }
+
+    @Override
+    public Document createDoc(Integer documentTypeId, Document document, User user) {
+        document.setOrganizationId(user.getOrganizationId());
+        document.setDocumentTypeId(documentTypeId);
+        document.setStatus(DocumentStatus.New);
+
+        document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
+        document.setRegistrationDate(new Date());
+
+        document.setCreatedById(user.getId());
         document.setCreatedAt(new Date());
         document.setDeleted(Boolean.FALSE);
         return documentRepository.save(document);
@@ -205,6 +224,42 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public  Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId){
         return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId);
+    }
+
+    @Override
+    public Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet, Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser) {
+        Document document1 = getById(document.getId());
+        document1.setJournalId(document.getJournalId());
+        document1.setDocumentViewId(document.getDocumentViewId());
+        document1.setDocRegNumber(document.getDocRegNumber());
+        document1.setDocRegDate(docRegDate);
+        document1.setContentId(document.getContentId());
+        document1.setContent(document.getContent());
+        document1.setAdditionalDocumentId(document.getAdditionalDocumentId());
+        document1.setPerformerName(document.getPerformerName());
+        document1.setPerformerPhone(document.getPerformerPhone());
+        document1.setManagerId(document.getManagerId());
+        document1.setControlId(document.getControlId());
+        if(executeForm!=null){
+            document1.setExecuteForm(ExecuteForm.getExecuteForm(executeForm));
+        }
+        if(controlForm!=null){
+            document1.setControlForm(ControlForm.getControlForm(controlForm));
+        }
+
+        document1.setContentFiles(fileSet);
+        document1.setInsidePurpose(document.getInsidePurpose());
+        document1.setUpdateById(updateUser.getId());
+        document1.setUpdateAt(new Date());
+        document1 = documentRepository.save(document1);
+
+        DocumentSub documentSub = documentSubService.getById(docSubId);
+        if (documentSub!=null){
+            documentSub.setCommunicationToolId(communicationToolId);
+            documentSub.setOrganizationId(documentOrganizationId);
+            documentSubService.update(documentSub,updateUser);
+        }
+        return document1;
     }
 
     private static Specification<Document> getSpecification(String registrationNumber) {
