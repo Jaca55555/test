@@ -11,6 +11,7 @@
         width: 100%;
         height: 600px;
     }
+    .select2-dropdown {z-index: 1074;}
     .status-button {cursor: pointer;}
 </style>
 </head>
@@ -60,7 +61,7 @@
                                     <div class="flex-space-between p0 align-center column-1">
                                         <div style="height: fit-content;display: flex;align-items: center;">
                                             <i class="fas fa-cog fs20 color-gray pointer"></i>
-                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
+                                            <span id="currentStatus" class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
                                         </div>
                                         <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
                                             <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
@@ -129,6 +130,11 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="flex-center w100 row-wrap">
+                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}"> Янги топшириқ қўшиш  </a>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
                         </div>
                     </div>
 
@@ -225,19 +231,11 @@
                         </div>
                         <div id="file_ids" class="d-none"></div>
                         <input type="file" class="d-none" id="addFile2" name="files" multiple>
-                        <div class="row p20" id="file-container">
-                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                                <div  class="text-center file-icon-container align-self-center color-gray">
-                                    <span class="fas fa-plus" id="addFileButton"></span>
                         <div class="m10-vertical"><span th:text="#{doc.comment_text}">Изоҳи</span></div>
 
                         <textarea class="form-control" name="content" th:placeholder="#{doc.enter_comment_text}"></textarea>
 
                         <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
-
-                        <div id="file_ids" class="d-none">
-                        </div>
-                        <input type="file" class="d-none" id="addFile2" name="files" multiple>
 
                         <div class="row p20" id="file-container">
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
@@ -262,14 +260,11 @@
 </div>
 
 <!-- Status modal -->
-<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+<div class="modal" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
     <div class="modal-dialog col-xl-6 col-12" role="document">
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center">
-                        <span href="#" class="card-header-a">Ижро амаллари ва изохлар</span>
-                    </h5>
                     <h5 class="mb-0" style="align-self:center">
                         <span href="#" class="card-header-a" th:text="#{doc.execute_action_and_comments}"></span>
                     </h5>
@@ -295,7 +290,7 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
-                        <span type="button" style="width:160px" th:text="${task.getStatusName(task.status)}"
+                        <span type="button" style="width:160px" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}"
                                 class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0"></span>
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
@@ -310,15 +305,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="m10-vertical"><span>Ижро ҳолатининг ўзгариши сабаби</span></div>
-                    <textarea class="form-control" name="validation-text"placeholder="Ижро ҳолатини ўзгартириш сабабини киритинг"></textarea>
-                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span th:text="#{doc.document_task_additional_doc}"></span>
+                        <div class="form-group">
+                            <select class="addDocSelect col-sm-12" name="addDocId">
+                                <option value=""></option>
+                                <option th:each="document: ${docList}" th:text="${document.registrationNumber}" th:value="${document.id}"></option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="hidden" name="taskStatus" id="taskStatus">
-                    <input type="hidden" name="taskType" th:value="${task_type}">
-                    <input type="hidden" name="taskId" th:value="${task.id}">
+                    <input type="hidden" name="taskId" th:value="${documentTaskSub.id}">
                     <input type="hidden" name="docId" th:value="${document.id}">
                     <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
                     <div class="m10-vertical"><span th:text="#{doc.task_change_reason}">Ижро ҳолатининг ўзгариши сабаби</span></div>
 
                     <textarea class="form-control" name="content"
@@ -327,39 +326,6 @@
                     <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
 
                     <div class="row p20">
-                        <div class="file-block">
-                            <div class="text-right">
-                                <span class="fas fa-trash-alt"></span>
-                            </div>
-                            <div class="text-center file-icon-container color-red">
-                                <span class="fas fa-file-pdf"></span>
-                            </div>
-                            <div class="text-center">
-                                <span>Письмо.pdf</span>
-                            </div>
-                        </div>
-                        <div class="file-block">
-                            <div class="text-right">
-                                <span class="fas fa-trash-alt"></span>
-                            </div>
-                            <div class="text-center file-icon-container color-blue">
-                                <span class="fas fa-file-word"></span>
-                            </div>
-                            <div class="text-center">
-                                <span>Письмо.docx</span>
-                            </div>
-                        </div>
-                        <div class="file-block">
-                            <div class="text-right">
-                                <span class="fas fa-trash-alt"></span>
-                            </div>
-                            <div class="text-center file-icon-container color-green">
-                                <span class="fas fa-file-excel"></span>
-                            </div>
-                            <div class="text-center">
-                                <span>Таблица.xlsx</span>
-                            </div>
-                        </div>
                         <div class="file-block flex-center">
                             <div class="text-center file-icon-container align-self-center color-gray">
                                 <span class="fas fa-plus"></span>
@@ -369,10 +335,6 @@
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">
-                                Бекор қилиш
-                            </button>
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                             <button type="reset" class="btn btn-light m10-vertical m20-horizontal">Бекор
                                 қилиш</button>
                             <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
@@ -605,6 +567,16 @@
             e.preventDefault();
         });
 
+        $('#modal2').on('show.bs.modal', function() {
+            $('.addDocSelect').select2({
+                placeholder: "Танланг",
+                allowClear: true
+            });
+        });
+        $('#modal2').on('hidden.bs.modal', function() {
+            $('.addDocSelect').select2('destroy');
+        });
+
         $('#submitChange').on('click', function () {
             let form = $('#changeStatusForm');
             let formData = form.serialize();
@@ -613,6 +585,7 @@
                 data: formData,
                 method: 'post',
                 success: function (data) {
+                    console.log(data);
                     if (data.status === 'success') {
                         // show logs
                         let log = data.log;
@@ -622,9 +595,9 @@
 "                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
 "                                </i></div>\n" +
 "                                <div class=\"inline-block m10-horizontal\">\n" +
-"                                    <span class=\"color-primary bold\">"+ log.createdBy.fullName +"</span>\n" +
+"                                    <span class=\"color-primary bold\">"+ data.logCreateName +"</span>\n" +
 "                                    <br>\n" +
-"                                    <span>" + log.createdBy.position.name + "</span>\n" +
+"                                    <span>" + data.logCreatePosition + "</span>\n" +
 "                                </div>\n" +
 "                            </div>\n" +
 "                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +
@@ -633,6 +606,7 @@
 "                                <span>" + log.content + "</span>\n" +
 "                            </div>\n</div>";
                         $('#comments').prepend(html);
+                        $('#currentStatus').text(data.taskStatus);
 
                         $('#modal2').modal('toggle');
                     }
