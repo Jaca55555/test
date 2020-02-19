@@ -27,12 +27,12 @@
             <div class="card-header flex-space-between">
                 <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
-                <div>
+                <!--<div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
                         <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
                     </div>
-                </div>
+                </div>-->
             </div>
             <form action="" th:object="${document}" th:method="post" class="card-block">
                 <div th:if="${document.id != null}">
@@ -132,9 +132,9 @@
                             <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
                         </div>
                     </div>
-                    <div class="file-block flex-center file-button">
+                    <div class="file-block flex-center file-button" id="addFileButton">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <span class="fas fa-plus" ></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
                         </div>
                     </div>
