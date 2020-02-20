@@ -90,7 +90,7 @@
                         <div class="col-sm-6 form-group ">
                         <label for="name" class="control-label">Хат жунатаётган булим номи</label>
                             <select class="form-control singleSelect" tabindex="-1"
-                                    aria-hidden="true" th:field="*{departmentId}" multiple  required>
+                                    aria-hidden="true" th:field="*{departmentId}" required>
                                 <option value="" th:text="#{department_id_select}">department select</option>
                                 <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                             </select>
@@ -98,7 +98,7 @@
                     <div class="col-md-6"></div>
 
                         <div class="form-group col-md-6 col-sm-6">
-                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса) гавно</label>
+                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
                             <div class="col-sm-12 p0">
                                 <select class="form-control singleSelect select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
@@ -221,8 +221,6 @@
                 success: detectExtensionAndDisplay
             })
         });
-
-
 
         $('#document_organization_id').select2({
             tags: true,
