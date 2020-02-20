@@ -55,14 +55,14 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     @Cacheable("journalGetStatusActive")
-    public List<Journal> getStatusActive() {
-        return journalRepository.findByStatusTrue();
+    public List<Journal> getStatusActive(Integer documentTypeId) {
+        return journalRepository.findByStatusTrueAndDocumentTypeId(documentTypeId);
     }
 
     @Override
     @CacheEvict(value = "journalGetStatusActive", allEntries = true)
-    public List<Journal> updateStatusActive() {
-        return journalRepository.findByStatusTrue();
+    public List<Journal> updateStatusActive(Integer documentTypeId) {
+        return journalRepository.findByStatusTrueAndDocumentTypeId(documentTypeId);
     }
 
     @Override

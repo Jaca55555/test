@@ -136,12 +136,12 @@
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="regionId" class="control-label"><span th:text="#{sys.doc_view}">Хужжат тури</span></label>
-                            <select class="multiselect col-sm-12 select2-hidden-accessible" multiple="" tabindex="-1"
+                            <label for="regionId" class="control-label">Хужжат тури</label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                     id="document_view_id" aria-hidden="true">
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
+<!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <label class="control-label">Хатнинг кискача мазмуни</label>
@@ -153,11 +153,11 @@
                         <div class="form-group col-md-4 col-sm-12">
                             <label for="subRegionId" class="control-label">Хат жунатаётган булим ёки ходим</label>
                             <div class="col-sm-12 p0">
-                                <select class="multiselect col-sm-12 select2-hidden-accessible" multiple=""
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="department_id">
                                     <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                                 </select>
-                                <i class="gray-search fas fa-search  color-gray"></i>
+<!--                                <i class="gray-search fas fa-search  color-gray"></i>-->
                             </div>
                         </div>
 
@@ -196,23 +196,23 @@
                                             class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">id</th>
                                             <th aria-controls="responsive-table-model" aria-sort="ascending"
                                                 class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                <span th:text="#{sys.registrationNumber}"> Регистрация рақами</span>
+                                                Регистрация рақами
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
+                                                Регистрация санаси
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
-                                                <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
+                                                Кирувчи хат маълумотлари
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
-                                                <span th:text="#{sys.doc_date}">Хужжат санаси</span>
+                                                Хужжат санаси
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 110px;"
-                                                tabindex="0"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span>
+                                                tabindex="0">Ижро муддати
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 140px;"
@@ -373,9 +373,9 @@
                 dataToSend.registration_number = $('#registration_number').val();
                 dataToSend.date_begin = $('#date_begin').val();
                 dataToSend.date_end = $('#date_end').val();
-                dataToSend.document_view_id = $('#document_view_id').val().toString();
+                dataToSend.document_view_id = $('#document_view_id').val();
                 dataToSend.content = $('#content').val();
-                dataToSend.department_id = $('#department_id').val().toString();
+                dataToSend.department_id = $('#department_id').val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];

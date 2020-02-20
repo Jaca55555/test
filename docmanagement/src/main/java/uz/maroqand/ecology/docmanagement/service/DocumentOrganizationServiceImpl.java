@@ -42,6 +42,12 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
+    @Cacheable(value = "organizationGetByName", key = "#name",unless="#result == ''")
+    public DocumentOrganization getByName(String name) {
+        return documentOrganizationRepository.getByName(name);
+    }
+
+    @Override
     public List<String> getDocumentOrganizationNames(){
         List<DocumentOrganization> orgs = getList();
         List<String> names = new ArrayList<String>(orgs.size());
@@ -57,6 +63,14 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     public DocumentOrganization updateByIdFromCache(Integer id) {
         if(id==null)return null;
         return documentOrganizationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    //PutByName
+    @Override
+    @CachePut(value = "organizationGetById", key = "#name")
+    public DocumentOrganization updateByNameFromCache(String name) {
+        if(name==null)return null;
+        return documentOrganizationRepository.getByName(name);
     }
 
     //GetStatusActive

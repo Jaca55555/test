@@ -133,7 +133,7 @@ public class InnerRegistrationController {
     @RequestMapping(DocUrls.InnerRegistrationNew)
     public String getInnerRegistrationNewPage(Model model) {
         model.addAttribute("doc", new Document());
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("chief", userService.getEmployeeList());
@@ -198,7 +198,7 @@ public class InnerRegistrationController {
 
         model.addAttribute("docOrganization",documentOrganization);
         model.addAttribute("docAdditional",documentAdditional);
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeeList());

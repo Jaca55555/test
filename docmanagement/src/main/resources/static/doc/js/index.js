@@ -78,3 +78,21 @@ $(document).ready(function() {
 });
 
 
+function switchLanguage(targetLanguage) {
+    var currentUrl = window.location.href;
+
+    var urlAndHash = currentUrl.split('#');
+
+    currentUrl = urlAndHash[0];
+
+    currentUrl = currentUrl.replace(/[&]?lang=(uz|oz|ru|en|uzc)/ig, '');
+
+    if (currentUrl.indexOf('?') > 0) {
+        currentUrl += '&lang='+targetLanguage;
+    } else {
+        currentUrl += '?lang='+targetLanguage;
+    }
+    if (urlAndHash.length > 1) currentUrl += '#' + urlAndHash[1];
+
+    window.location.href = currentUrl;
+}
