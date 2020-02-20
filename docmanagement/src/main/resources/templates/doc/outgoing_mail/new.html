@@ -47,7 +47,7 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-start mobile-column" style="align-items: center;">
-                <h5 class="mb-0"><span class="card-header-a">Кирувчи хатни рўйхатга олиш - IN-123456-MRQ</span></h5>
+                <h5 class="mb-0"><span class="card-header-a">Чикувчи хатни рўйхатга олиш - IN-123456-MRQ</span></h5>
                 <div>
                     <div>
                         <button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i
@@ -105,7 +105,7 @@
                         <div class="col-sm-6 form-group ">
                         <label for="name" class="control-label">Хат жунатаётган булим номи</label>
                             <select class="form-control singleSelect" tabindex="-1"
-                                    aria-hidden="true" th:field="*{departmentId}" multiple  required>
+                                    aria-hidden="true" th:field="*{departmentId}" required>
                                 <option value="" th:text="#{department_id_select}">department select</option>
                                 <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                             </select>
@@ -113,7 +113,7 @@
                     <div class="col-md-6"></div>
 
                         <div class="form-group col-md-6 col-sm-6">
-                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса) гавно</label>
+                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
                             <div class="col-sm-12 p0">
                                 <select class="form-control singleSelect select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
@@ -137,9 +137,9 @@
 
                 <div class="row p20" id="file-container">
 
-                    <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                    <div class="file-block flex-center file-button" id="addFileBlock" >
                         <div  class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <span class="fas fa-plus" id="addFileButton" onclick="clickPlus()"></span>
 <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
                             <span id="percentage"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
@@ -150,7 +150,9 @@
                     <div id="file_ids" class="d-none">
                         <input type="text" name="file_ids" value="">
                     </div>
-                    <input type="file" class="d-none" id="addFile2" name="files" >
+                    <div id="addFileDiv">
+                        <input type="file" class="d-none" id="addFile2" name="files">
+                    </div>
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" >Бекор қилиш</button>
@@ -218,48 +220,11 @@
 
     function clickPlus() {
         $('#addFile2').click();
+
     }
+
     $(document).ready(function(){
-        $('#addFile2').on('change', function () {
-
-            let csrf = $("form input[name='_csrf']").val();
-            let files = document.querySelector('#addFile2').files[0];
-            let fd = new FormData();
-            fd.append("file", files);
-            fd.append("_csrf", csrf);
-            $.ajax({
-                url: "/doc/outgoing_mail/file/upload",
-                type: 'post',
-                data: fd,
-                processData: false,
-                contentType: false,
-                enctype: 'multipart/form-data',
-                success: detectExtensionAndDisplay,
-                beforeSend: function () {
-                    $('#addFileButton').hide();
-                    $('#upload-gif').show();
-                    $('#percentage').show();
-                },
-                complete: function () {
-                    $('#upload-gif').hide();
-                    $('#percentage').hide();
-                    $('#addFileButton').show();
-                },
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress",
-                        uploadProgressHandler,
-                        false
-                    );
-
-                    return xhr;
-                }
-
-            })
-        });
-
-
-
+        hearInputClickFunction();
         $('#document_organization_id').select2({
             tags: true,
             ajax: {
@@ -287,16 +252,40 @@
 
 
     });
-//function definitions
 
     function downloadFileFunction(id) {
         window.open(`/doc/outgoing_mail/file/download?id=${id}`);
     }
 
-    function deleteFunc(id) {
+    function deleteFunc(id){
         fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        $('#addFile2').remove();
         document.querySelector(`#file_block_${id}`).remove();
         document.querySelector(`#input_file_id_${id}`).remove();
+        $('#addFileDiv').append(`
+             <input type="file" class="d-none" id="addFile2" name="files">
+        `);
+        hearInputClickFunction();
+    }
+
+    function hearInputClickFunction(){
+        $('#addFile2').on('change', function () {
+
+            let csrf = $("form input[name='_csrf']").val();
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/doc/outgoing_mail/file/upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: detectExtensionAndDisplay
+            })
+        });
     }
 
     function withdrawal(){
