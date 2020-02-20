@@ -386,13 +386,31 @@
             },
             columns: [
                 {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'registrationNumber'},
-                {data: 2, name: 'registrationDate'},
+                {data: 1, name: 'registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 2, name: 'registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        return html;
+                    }
+                },
                 {data: 3, name: 'description'},
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'dueDate'},
                 {render: renderChangeColumn, orderable: false},
-                {data: 7, name: 'resolution'},
+                {data: 7, name: 'resolution',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';
+                        return html;
+                    }
+                },
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
