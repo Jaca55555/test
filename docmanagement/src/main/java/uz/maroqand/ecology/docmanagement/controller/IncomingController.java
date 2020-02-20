@@ -187,7 +187,7 @@ public class IncomingController {
                     documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus(),
-                    ""
+                    documentTaskSub.getContent()
             });
         }
 
