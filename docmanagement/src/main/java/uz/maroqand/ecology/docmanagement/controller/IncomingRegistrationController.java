@@ -113,6 +113,7 @@ public class IncomingRegistrationController {
         Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
@@ -122,8 +123,8 @@ public class IncomingRegistrationController {
                     documentTask.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatus(),
-                    ""
+                    documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getContent()
             });
         }
 

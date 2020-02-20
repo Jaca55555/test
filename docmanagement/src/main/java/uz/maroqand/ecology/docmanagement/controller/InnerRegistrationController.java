@@ -22,6 +22,7 @@ import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +43,10 @@ public class InnerRegistrationController {
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -55,6 +57,7 @@ public class InnerRegistrationController {
         this.documentTaskSubService = documentTaskSubService;
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
@@ -95,6 +98,7 @@ public class InnerRegistrationController {
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
@@ -104,8 +108,8 @@ public class InnerRegistrationController {
                     documentTask.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getUpdateAt()):"",
-                    documentTask.getStatus(),
-                    "Resolution and parcipiants"
+                    documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getContent()
             });
         }
 
