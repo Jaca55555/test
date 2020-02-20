@@ -161,7 +161,7 @@
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
-                            <span class="card-header-a collapsed" th:text="#{execute_log_and_comments}"></span>&nbsp;&nbsp;
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}"></span>&nbsp;&nbsp;
                         </h5>
                         <button class="btn-icon">
                             <i class="fas fs20 fa-print color-gray"></i>
@@ -196,7 +196,7 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{doc_incoming.add_comment}"> </button>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{sys_document.add_comment}"> </button>
                         </div>
                     </div>
                 </div>
@@ -233,17 +233,17 @@
                                 <div class="inline-block m10-horizontal">
                                     <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
                                     <br>
-                                    <span>Ташкилот рахбари</span>
+                                    <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
                                 </div>
                             </div>
                             <div>
                                 <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
                             </div>
                         </div>
-                        <div class="m10-vertical"><span>Изоҳи</span></div>
-                        <textarea class="form-control" name="content" th:placeholder="#{doc.enter_comment_text}"></textarea>
+                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
+                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
                         <div class="m10-vertical">
-                            <span th:text="#{doc.additional_files}"></span>
+                            <span th:text="#{sys_document.additional_files}"></span>
                         </div>
                         <div id="file_ids" class="d-none"></div>
                         <input type="file" class="d-none" id="addFile2" name="files" multiple>
@@ -256,13 +256,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="m10-vertical">
-                            <span th:text="#{doc.comment_text}">Изоҳи</span>
-                        <div class="m10-vertical"><span th:text="#{doc.comment_text}">Изоҳи</span></div>
+                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
 
-                        <textarea class="form-control" name="content" th:placeholder="#{doc.enter_comment_text}"></textarea>
+                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
 
-                        <div class="m10-vertical"><span th:text="#{doc.additional_files}"></span></div>
+                        <div class="m10-vertical"><span th:text="#{sys_document.additional_files}"></span></div>
 
                         <div class="row p20" id="file-container">
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
@@ -274,8 +272,8 @@
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
-                                <button type="button" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
-                                <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{doc.add_comment}"></button>
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
+                                <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
                             </div>
                         </div>
                     </form>
