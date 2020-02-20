@@ -128,6 +128,8 @@ public class JournalController {
         journal.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
         journal.setCreatedById(user.getId());
         journalService.update(journal);
+        journalService.updateStatusActive(journal.getDocumentTypeId());
+
         return "redirect:" + DocUrls.JournalList;
     }
 
@@ -161,6 +163,7 @@ public class JournalController {
         } else {
             journal.setDeleted(Boolean.TRUE);
             journalService.update(journal);
+            journalService.updateStatusActive(journal.getDocumentTypeId());
             message = "successfully deleted";
         }
         HashMap<String, Object> response = new HashMap<>();

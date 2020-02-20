@@ -79,7 +79,7 @@ public class OutgoingMailController {
     public String newOutgoingMail(Model model){
 
         model.addAttribute("document", new Document());
-        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
@@ -233,7 +233,7 @@ public class OutgoingMailController {
     public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){
 
         model.addAttribute("document", documentService.getById(id));
-        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
@@ -257,7 +257,7 @@ public class OutgoingMailController {
         model.addAttribute("performer_id", document.getPerformerId());
         model.addAttribute("performer_name", document.getPerformerName());
         model.addAttribute("document", documentService.getById(id));
-        model.addAttribute("journal", journalService.getStatusActive());
+        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());

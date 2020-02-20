@@ -20,9 +20,9 @@ public interface JournalService {
 
     Journal updateByIdFromCache(Integer id);
 
-    List<Journal> getStatusActive();
+    List<Journal> getStatusActive(Integer documentTypeId);
 
-    List<Journal> updateStatusActive();
+    List<Journal> updateStatusActive(Integer documentTypeId);
 
     Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable);
 

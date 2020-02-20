@@ -198,7 +198,7 @@ public class IncomingRegistrationController {
         model.addAttribute("document", new Document());
         model.addAttribute("documentSub", new DocumentSub());
 
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -310,7 +310,7 @@ public class IncomingRegistrationController {
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
 
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
