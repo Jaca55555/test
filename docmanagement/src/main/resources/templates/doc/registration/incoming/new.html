@@ -98,12 +98,10 @@
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
-<!--                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">-->
-<!--                            <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>-->
-<!--                            <option value="" th:text="#{sys_select}"></option>-->
-<!--                        </select>-->
-                        <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
-                        <input class="form-control" tabindex="-1" id="organizationName" name="organizationName">
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                            <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
                     </div>
                 </div>
 
@@ -241,10 +239,6 @@
         }
 
         $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
-        $('#organizationName').autocomplete({
-            minLength: 0,
-            source: [[${organizationList}]]
-        });
 
         $('#addFileButton').on('click', function () {
             $('#addFile').click();
@@ -323,6 +317,7 @@
         });
 
         $('#documentOrganizationId').select2({
+            tags: true,
             ajax: {
                 url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
                 type: "POST",
