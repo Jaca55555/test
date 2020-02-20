@@ -203,7 +203,7 @@ public class IncomingRegistrationController {
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
-
+        model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
         return DocTemplates.IncomingRegistrationNew;
@@ -218,7 +218,7 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegNumber") String docRegNumber,
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
-            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "organizationName") String documentOrganizationName,
             @RequestParam(name = "contentId", required = false) Integer contentId,
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "additionalDocumentId", required = false) Integer additionalDocumentId,
@@ -264,9 +264,17 @@ public class IncomingRegistrationController {
         document.setStatus(DocumentStatus.New);
         document = documentService.createDoc(1, document, user);
 
+        DocumentOrganization documentOrganization = organizationService.getByName(documentOrganizationName);
+        if (documentOrganization == null) {
+            DocumentOrganization newOrganization = new DocumentOrganization();
+            newOrganization.setCreatedById(user.getId());
+            newOrganization.setName(documentOrganizationName);
+            newOrganization.setStatus(Boolean.TRUE);
+            documentOrganization = organizationService.create(newOrganization);
+        }
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(documentOrganizationId);
+        documentSub.setOrganizationId(documentOrganization.getId());
         documentSubService.create(document.getId(), documentSub, user);
 
         if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingRegistrationNewTask)){

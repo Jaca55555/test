@@ -98,12 +98,12 @@
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
-                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
-                            <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
-                            <option value="" th:text="#{sys_select}"></option>
-                        </select>
+<!--                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">-->
+<!--                            <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>-->
+<!--                            <option value="" th:text="#{sys_select}"></option>-->
+<!--                        </select>-->
                         <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
-                        <!--<input class="form-control" tabindex="-1" id="orgName" th:field="${documentSub.organizationName}">-->
+                        <input class="form-control" tabindex="-1" id="organizationName" name="organizationName">
                     </div>
                 </div>
 
@@ -241,9 +241,9 @@
         }
 
         $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
-        $('#orgName').autocomplete({
+        $('#organizationName').autocomplete({
             minLength: 0,
-            source: [[${organizations}]]
+            source: [[${organizationList}]]
         });
 
         $('#addFileButton').on('click', function () {
@@ -316,11 +316,10 @@
             $('#addFile').val('');
         });
 
-        $('form').on('submit', function () {
+        $('form').on('submit', function (e) {
             $('#addFile').attr('disabled', 'disabled');
             if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
             else $('#newDescription').attr('disabled', 'disabled');
-            $(this).submit();
         });
 
         $('#documentOrganizationId').select2({
