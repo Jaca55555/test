@@ -173,6 +173,7 @@ public class OutgoingMailController {
     @RequestMapping(value = DocUrls.OutgoingMailListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
+            @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
             @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
@@ -201,6 +202,7 @@ public class OutgoingMailController {
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
+                documentStatusIdToExclude,
                 documentOrganizationId,
                 registrationNumber,
                 begin,
