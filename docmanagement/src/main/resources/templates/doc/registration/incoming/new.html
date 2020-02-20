@@ -115,7 +115,7 @@
                     </select>
                 </div>
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" name="content" th:text="*{content}" id="description_textarea"></textarea>
+                    <textarea class="form-control" rows="4" name="content" th:text="*{content}" id="description_textarea" required="required"></textarea>
                 </div>
 
                 <div class="row">
@@ -201,7 +201,7 @@
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" >
                             <div class="radio radio-success d-inline" th:each="controlForm: ${controlForms}">
-                                <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
+                                <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${(document.controlForm!=null && controlForm.id==document.controlForm.id) || (document.controlForm==null && controlForm.id==0)}">
                                 <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="${controlForm.name}"></label>
                             </div>
                         </div>
@@ -264,22 +264,7 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: function (data) {
-                    files.files = [];
-                    var file = data.file;
-                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
-                    $('#file-container').prepend(
-"                    <div class=\"file-block\">\n" +
-"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
-"                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
-"                        </div>\n" +
-"                        <div class=\"text-center\">\n" +
-"                            <span>"+fileNameSubString(file.name)+"</span>\n" +
-"                        </div>\n" +
-"                    </div>\n"
-                    );
-                },
+                success: detectExtensionAndDisplay,
                 beforeSend: function () {
                 $('#plus-icon').hide();
                 $('#upload-gif').show();
@@ -301,6 +286,47 @@
                 }
             })
         });
+
+        function detectExtensionAndDisplay(data){
+            let extension = data.data.extension;
+            let fileName = data.data.name;
+            let color;
+            switch (extension) {
+                case 'jpg':
+                    extension = '-image';
+                    color = 'color-blue';
+                    break;
+                case 'pdf':
+                    extension = '-pdf';
+                    color = 'color-red';
+                    break;
+                case 'xlsx':
+                    extension = '-excel';
+                    color = 'color-green';
+                    break;
+                case 'doc':
+                case 'docx':
+                    extension = '-word';
+                    color = 'color-blue';
+                    break;
+                default:
+                    extension = '';
+                    color = 'color-gray';
+            }
+            $('#file_ids').append(
+                `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+            );
+            $('#file-container').prepend(
+                `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+            );
+        }
 
         $('#description').on('change', function () {
             if ($(this).val() === 'new') {
