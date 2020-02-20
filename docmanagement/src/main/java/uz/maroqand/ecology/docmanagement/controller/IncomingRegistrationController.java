@@ -117,7 +117,7 @@ public class IncomingRegistrationController {
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    documentTask.getId(),
+                    document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentTask.getContent(),
