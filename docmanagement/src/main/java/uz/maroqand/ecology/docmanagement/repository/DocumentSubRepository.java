@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * (ru)
  */
 @Repository
-public interface DocumentSubRepository extends JpaRepository<DocumentSub, Integer> {
+public interface DocumentSubRepository extends JpaRepository<DocumentSub, Integer>, JpaSpecificationExecutor<DocumentSub> {
 
     List<DocumentSub> findByDocumentIdAndDeletedFalse(Integer documentId);
 

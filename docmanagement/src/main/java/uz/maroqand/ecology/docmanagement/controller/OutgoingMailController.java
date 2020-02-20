@@ -177,20 +177,15 @@ public class OutgoingMailController {
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
-            @RequestParam(name = "document_view_id", required = false)String documentViewId,
+            @RequestParam(name = "document_view_id", required = false)Integer documentViewId,
             @RequestParam(name = "content", required = false)String content,
-            @RequestParam(name = "department_id", required = false)String departmentId,
+            @RequestParam(name = "department_id", required = false)Integer departmentId,
             Pageable pageable
     ){
         registrationNumber = StringUtils.trimToNull(registrationNumber);
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-        departmentId = StringUtils.trimToNull(departmentId);
-        documentViewId = StringUtils.trimToNull(documentViewId);
-
-        List<Integer> departmentIds = convertToIntegerList(departmentId);
-        List<Integer> documentViewIds = convertToIntegerList(documentViewId);
 
         Date begin = null, end = null;
         if(dateBegin != null)
@@ -202,13 +197,24 @@ public class OutgoingMailController {
         DocFilterDTO filter = new DocFilterDTO();
         filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
 
-        OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
+     //   OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
 
-        Page<Document> documentPage = documentService.findFiltered(filter, pageable);
+        Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
+                DocumentTypeEnum.OutgoingDocuments.getId(),
+                documentOrganizationId,
+                registrationNumber,
+                begin,
+                end,
+                documentViewId,
+                content,
+                departmentId,
+                pageable);
 
         // List<Document> documentList = documentPage.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentPage.getTotalPages());
-        for (Document document : documentPage) {
+        List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
+        for (DocumentSub documentSub : documentSubPage) {
+            Document document = documentSub.getDocument();
+            if(document == null) continue;
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
@@ -221,8 +227,8 @@ public class OutgoingMailController {
             });
         }
 
-        result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", documentSubPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentSubPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
 
         return result;
@@ -294,16 +300,6 @@ public class OutgoingMailController {
         file.setDateDeleted(new Date());
         file.setDeletedById(userService.getCurrentUserFromContext().getId());
         return fileService.save(file);
-    }
-
-    List<Integer> convertToIntegerList(String string){
-        if(string == null) return null;
-        String[] strings = string.split(",");
-        List<Integer> ids = new ArrayList<>(strings.length);
-        for(String str: strings){
-            ids.add(Integer.parseInt(str));
-        }
-        return ids;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailChangeStatus, method = RequestMethod.GET, produces = "application/json")
