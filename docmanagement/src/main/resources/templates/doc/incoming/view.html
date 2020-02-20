@@ -53,13 +53,11 @@
         <div class="row flex-space-between" >
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
-
                     <div class="card-header flex-space-between align-center" style="height:65px;">
                         <h5>
                             <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;
                         </h5>
                     </div>
-
                     <div class="card-block" th:object="${documentTaskSub}">
                         <div class="row" >
                             <div class="executor col-12 m10-vertical">
@@ -149,11 +147,10 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}"> Янги топшириқ қўшиш  </a>
+                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}"> Ижро учун йўналтириш  </a>
                             <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -201,11 +198,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <hr class="m20-vertical">
-        <div class="flex-center w100 row-wrap">
-            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id+'&taskId=' + task.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
-            <!--<button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2" th:text="#{doc_incoming.newTask}">Ижро холатини белгилаш</button>-->
         </div>
     </div>
 </div>

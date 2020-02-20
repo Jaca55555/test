@@ -68,7 +68,7 @@
                         <div class="row"> <div class="col-md-4" id="journalIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.document_view}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <label class="control-label" th:text="#{doc_incoming.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required" data-parsley-errors-container="#documentViewError">
                             <option value=""></option>
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
@@ -195,16 +195,14 @@
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="executeForm : ${executeForms}">
                             <input type="radio" name="executeFormId" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
-                            <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="${executeForm.name}"></label>
+                            <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
-                        <div class="custom-control custom-radio custom-control-inline" >
-                            <div class="radio radio-success d-inline" th:each="controlForm: ${controlForms}">
-                                <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
-                                <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="${controlForm.name}"></label>
-                            </div>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="controlForm: ${controlForms}">
+                            <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
+                            <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="#{${controlForm.name}}"></label>
                         </div>
                     </div>
                 </div>

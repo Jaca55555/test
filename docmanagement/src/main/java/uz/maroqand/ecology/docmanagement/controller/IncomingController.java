@@ -199,10 +199,10 @@ public class IncomingController {
 
     @RequestMapping(DocUrls.IncomingView)
     public String getIncomingViewPage(
-            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "id")Integer taskSubId,
             Model model
     ) {
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
         if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
@@ -238,12 +238,11 @@ public class IncomingController {
 
     @RequestMapping(value = DocUrls.IncomingTask)
     public String addTask(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "taskId")Integer taskId,
+            @RequestParam(name = "id")Integer taskSubId,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
         if (documentTaskSub == null) {
             return  "redirect:" + DocUrls.IncomingList;
         }
@@ -251,8 +250,7 @@ public class IncomingController {
         if (document == null) {
             return  "redirect:" + DocUrls.IncomingList;
         }
-
-        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
+        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(documentTaskSub.getTaskId(),document.getId());
         if (documentTask == null) {
             return  "redirect:" + DocUrls.IncomingList;
         }
@@ -266,7 +264,6 @@ public class IncomingController {
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + documentTaskSub.getId());
-
         return DocTemplates.IncomingTask;
     }
 
@@ -278,7 +275,6 @@ public class IncomingController {
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
-
         User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub==null){

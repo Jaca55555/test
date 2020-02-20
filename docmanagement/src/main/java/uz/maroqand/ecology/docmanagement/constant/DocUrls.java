@@ -25,6 +25,7 @@ public class DocUrls {
     public static final String IncomingTask = Prefix + Incoming + "/task";
     public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
     public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
+
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
 
