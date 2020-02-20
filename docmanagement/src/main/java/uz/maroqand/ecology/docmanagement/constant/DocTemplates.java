@@ -65,6 +65,12 @@ public class DocTemplates {
     public static final String JournalNew = Journal + "/new";
     public static final String JournalEdit = Journal + "/new";
 
+    private static final String DocDescription = Prefix + "/doc_description";
+    public static final String DocDescriptionList = DocDescription + "/list";
+    public static final String DocDescriptionNew = DocDescription + "/new";
+    public static final String DocDescriptionEdit = DocDescription + "/new";
+    public static final String DocDescriptionView = DocDescription + "/view";
+
     private static final String OutgoingMail = Prefix + "/outgoing_mail";
     public static final String OutgoingMailNew = OutgoingMail + "/new";
     public static final String OutgoingMailList = OutgoingMail + "/list";
