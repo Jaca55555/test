@@ -174,7 +174,7 @@ public class IncomingController {
                 receiverId,
                 pageable
         );
-
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
@@ -186,8 +186,8 @@ public class IncomingController {
                     documentTaskSub.getContent(),
                     documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
-                    documentTaskSub.getStatus(),
-                    ""
+                    documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
+                    documentTaskSub.getContent()
             });
         }
 
