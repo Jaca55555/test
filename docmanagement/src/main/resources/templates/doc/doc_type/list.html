@@ -115,12 +115,15 @@
     }
 
     function renderActionsColumn(data, type, row, meta) {
+        console.log(data);
+        console.log(type);
+        console.log(row);
         var html = '<div class="btn-group">';
-        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+data+'" title="view">'
+        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="view">'
             + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+data+'" title="edit">'
+        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+data+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }
@@ -134,13 +137,13 @@
             pageLength: 25,
             dom: 'lrtip',
             lengthMenu: [[25, 50, 100], [25, 50, 100]],
-            order: [[0, 'desc']],
+            order: [[1, 'desc']],
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'type'},
                 {data: 2, name: 'name'},
                 {data: 3, name: 'status'},
-                {data: 4, name: 'id', render: renderActionsColumn, orderable: false}
+                {render: renderActionsColumn, orderable: false}
             ],
             ajax: function (dataToSend, callback, settings) {
                 let api = this.api();
@@ -151,6 +154,8 @@
                 dataToSend.name = $('#name').val();
                 dataToSend.status = $('#status').val();
 
+                var order = api!=undefined ? api.order():[[1,'desc']];
+                dataToSend.sort=dataToSend.columns[order[0][0].name+','+order[0][1]];
                 $.get(ajaxListLink, dataToSend, function(data){
                     callback(data);
                 });
@@ -168,12 +173,13 @@
         thead = dataDatatableSelector.html();
         getDatatableConnect();
 
-        $(document).on('click', '.delete', function (e) {
-            e.preventDefault();
-            if (confirm("O'chirish kerakmi?")) {
-                console.log('deleted');
-            }
-        });
+        // $(document).on('click', '.delete', function (e) {
+        //     e.preventDefault();
+        //
+        //     if (confirm("O'chirish kerakmi?")) {
+        //         console.log('deleted');
+        //     }
+        // });
         $('#filter').on('change', function () {
             getDatatableConnect();
         })

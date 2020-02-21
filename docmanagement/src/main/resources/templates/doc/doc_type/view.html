@@ -36,22 +36,22 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row" th:object="${docType}">
+                <div class="row" th:object="${docType}" th:each="i:${docType}">
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_id}"></span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="*{id}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.id}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_type}"></span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{type}}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.type}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_name}"></span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="*{name}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.name}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_name_ru}"></span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="*{nameRu}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.nameRu}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.doc_type_create_date}"></span></div>

@@ -95,7 +95,7 @@ public class DocTypeController {
     @RequestMapping(value = DocUrls.DocTypeEdit)
     public String getEditDocType(
             Model model,
-            @RequestParam(name = "id")Integer id
+            @RequestParam(name = "id") Integer id
     ) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {

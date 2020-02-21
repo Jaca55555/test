@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type_name_ru}"></label>
+                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type}"></label>
                             <div class="col-sm-12 p0">
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" th:field="*{type}">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <label class="control-label" th:for="${#ids.next('status')}" th:text="#{doc.doc_type_name_ru}"></label>
+                            <label class="control-label" th:for="${#ids.next('status')}" th:text="#{doc.doc_type_status}"></label>
                             <input type="checkbox" class="form-control checkbox" th:field="*{status}">
                         </div>
                     </div>
