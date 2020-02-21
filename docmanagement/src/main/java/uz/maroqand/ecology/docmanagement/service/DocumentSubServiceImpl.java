@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
 import org.springframework.data.domain.Example;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
@@ -101,6 +102,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     @Override
     public Page<DocumentSub> findFiltered(
             Integer documentTypeId,
+            Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
             String registrationNumber,
             Date dateBegin,
@@ -112,6 +114,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     ){
         return documentSubRepository.findAll(filteringSpecificationForOutgoingForm(
                 documentTypeId,
+                documentStatusIdToExclude,
                 documentOrganizationId,
                 registrationNumber,
                 dateBegin, dateEnd,
@@ -123,6 +126,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
 
     Specification<DocumentSub> filteringSpecificationForOutgoingForm(
             Integer documentTypeId,
+            Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
             String registrationNumber,
             Date dateBegin,
@@ -140,6 +144,8 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 predicates.add(criteriaBuilder.equal(root.get("organizationId"), documentOrganizationId));
             if(documentTypeId != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentTypeId"), documentTypeId));
+            if(documentStatusIdToExclude != null)
+                predicates.add(criteriaBuilder.notEqual(joinDocument.get("status"), documentStatusIdToExclude));
             if(registrationNumber != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("registrationNumber"), registrationNumber));
             if(dateEnd != null)
