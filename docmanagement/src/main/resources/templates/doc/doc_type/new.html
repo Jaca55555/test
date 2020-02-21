@@ -30,7 +30,7 @@
                 <h5 class="mb-0" th:if="${docType.id!=null}" th:text="#{doc.doc_type_edit}"> - <span th:text="${docType.name}"></span></h5>
             </div>
             <div class="card-body">
-                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${docType}">
+                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${docType}" >
                     <input type="hidden" th:if="${docType.id != null}" th:field="*{id}" th:value="*{id}"/>
                     <input type="hidden" th:if="${docType.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}"/>
                     <div class="row">
