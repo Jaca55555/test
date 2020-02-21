@@ -2,7 +2,9 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -188,17 +190,11 @@ public class OutgoingMailController {
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
 
-        Date begin = null, end = null;
-        if(dateBegin != null)
-            begin = DateParser.TryParse(dateBegin, Common.uzbekistanDateFormat);
-        if(dateEnd != null)
-            end = DateParser.TryParse(dateEnd, Common.uzbekistanDateFormat);
+        Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-        DocFilterDTO filter = new DocFilterDTO();
-        filter.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
 
-     //   OutgoingFilterDto outgoingFilterDto = new OutgoingFilterDto(documentOrganizationId, begin, end, content, departmentIds, documentViewIds, DocumentTypeEnum.OutgoingDocuments.getId());
+        Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
@@ -210,9 +206,8 @@ public class OutgoingMailController {
                 documentViewId,
                 content,
                 departmentId,
-                pageable);
+                specificPageable);
 
-        // List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
             Document document = documentSub.getDocument();
@@ -283,6 +278,7 @@ public class OutgoingMailController {
 
         return res;
     }
+
     @RequestMapping(value = DocUrls.OutgoingMailFileDownload, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public ResponseEntity<Resource> downloadAttachedDocument(@RequestParam(name = "id")Integer id){
@@ -344,6 +340,26 @@ public class OutgoingMailController {
         result.put("changedOnStatusId", statusId);
         documentService.update(document);
         return result;
+    }
+
+    Pageable specifyPageableForCurrentFilter(Pageable pageable){
+
+        String sortString = pageable.getSort().toString();
+
+        String sortDirection = sortString.substring(sortString.indexOf(' ') + 1);
+        String sortField = sortString.substring(0, sortString.indexOf(':'));
+
+        if(sortDirection.equals("ASC")){
+            return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("document." + sortField).ascending());
+        }else{
+            return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("document." + sortField).descending());
+        }
+    }
+
+    Date castDate(String dateString){
+        if(dateString == null)
+            return null;
+        else return DateParser.TryParse(dateString, Common.uzbekistanDateFormat);
     }
 
 }

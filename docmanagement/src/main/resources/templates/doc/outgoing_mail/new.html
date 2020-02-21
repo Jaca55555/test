@@ -279,9 +279,10 @@
 
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
+        console.log(extension);
         let color;
         switch (extension) {
-            case 'jpg':
+            case 'jpg': case 'png':
                 extension = '-image';
                 color = 'color-blue';
                 break;
