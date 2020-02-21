@@ -123,7 +123,7 @@
             + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
         html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" onclick="return confirm(\'O`chirilsinmi?\')" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }
@@ -138,13 +138,7 @@
             dom: 'lrtip',
             lengthMenu: [[25, 50, 100], [25, 50, 100]],
             order: [[1, 'desc']],
-            columns: [
-                {data: 0, name: 'id'},
-                {data: 1, name: 'type'},
-                {data: 2, name: 'name'},
-                {data: 3, name: 'status'},
-                {render: renderActionsColumn, orderable: false}
-            ],
+
             ajax: function (dataToSend, callback, settings) {
                 let api = this.api();
 
@@ -160,6 +154,13 @@
                     callback(data);
                 });
             },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'type'},
+                {data: 2, name: 'name'},
+                {data: 3, name: 'status'},
+                {render: renderActionsColumn, orderable: false}
+            ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }
@@ -176,8 +177,12 @@
         // $(document).on('click', '.delete', function (e) {
         //     e.preventDefault();
         //
-        //     if (confirm("O'chirish kerakmi?")) {
-        //         console.log('deleted');
+        //     if (confirm([[#{doc.confirm_delete}]])) {
+        //         // $.get($(this).attr('href'), function (data) {
+        //         //         if (data.status === "success") {
+        //         //             $('#id_' + data).remove();
+        //         //         }
+        //         // })
         //     }
         // });
         $('#filter').on('change', function () {

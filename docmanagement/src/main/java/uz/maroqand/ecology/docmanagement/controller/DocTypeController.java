@@ -118,8 +118,6 @@ public class DocTypeController {
             @RequestParam(name = "createDate")String date,
             DocumentType docType
     ) {
-        docType.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
-        docType.setCreatedById(userService.getCurrentUserFromContext().getId());
         documentTypeService.update(docType);
         documentTypeService.updateStatusActive();
         return "redirect:" + DocUrls.DocTypeList;
