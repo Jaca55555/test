@@ -127,7 +127,7 @@
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
-                            <span class="card-header-a collapsed" th:text="#{execute_log_and_comments}"></span>&nbsp;&nbsp;
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}"></span>&nbsp;&nbsp;
                             <span th:text="${iter.index+1}"></span>
                         </h5>
                         <button class="btn-icon">
@@ -163,7 +163,7 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{doc_incoming.add_comment}"> </button>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{sys_document.add_comment}"> </button>
                         </div>
                     </div>
                 </div>
@@ -187,8 +187,7 @@
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва
-                                изохлар</span></h5>
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва изохлар</span></h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -200,16 +199,16 @@
                                 <i class="fas fa-user-circle fs40 color-gray"></i>
                             </div>
                             <div class="inline-block m10-horizontal">
-                                <span class="color-green bold">Абдуллаев А. А.</span>
+                                <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
                                 <br>
-                                <span>Ташкилот рахбари</span>
+                                <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
                             </div>
                         </div>
                         <div>
                             <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
                         </div>
                     </div>
-                    <div class="m10-vertical"><span>Изоҳи</span></div>
+                    <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
 
                     <textarea class="form-control" name="validation-text" placeholder="Изоҳ матнини киритинг"></textarea>
                     <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>

@@ -628,3 +628,12 @@ html, body {
 .form-control:focus {
     background: #f4f7fa;
 }
+
+.flag-image-li{
+    cursor: pointer;
+    border-bottom: 1px solid #f4f7fa;
+    padding: 10px 20px;
+}
+.parsley-errors-list {
+    color: #dc3545;
+}
