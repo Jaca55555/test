@@ -139,6 +139,7 @@
                             <label for="regionId" class="control-label">Хужжат тури</label>
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                     id="document_view_id" aria-hidden="true">
+                                <option value=""></option>
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
 <!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
@@ -155,6 +156,7 @@
                             <div class="col-sm-12 p0">
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="department_id">
+                                    <option value=""></option>
                                     <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                                 </select>
 <!--                                <i class="gray-search fas fa-search  color-gray"></i>-->
@@ -178,7 +180,7 @@
                        aria-controls="home" aria-selected="true">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect();return false;"
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;"
                        role="tab" aria-controls="profile" aria-selected="false">Чикиб кетмаган</a>
                 </li>
             </ul>
@@ -349,7 +351,7 @@
 
 
 
-    function datatableConnect() {
+    function datatableConnect(status) {
         cDataTable = dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -376,7 +378,7 @@
                 dataToSend.document_view_id = $('#document_view_id').val();
                 dataToSend.content = $('#content').val();
                 dataToSend.department_id = $('#department_id').val();
-
+                dataToSend.document_status_id_to_exclude = status;
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
 
@@ -386,31 +388,13 @@
             },
             columns: [
                 {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'registrationNumber',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
-                        return html;
-                    }
-                },
-                {data: 2, name: 'registrationDate',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
-                        return html;
-                    }
-                },
-                {data: 3, name: 'description'},
+                {data: 1, name: 'registrationNumber'},
+                {data: 2, name: 'registrationDate'},
+                {data: 3, name: 'content'},
                 {data: 4, name: 'createdAt'},
-                {data: 5, name: 'dueDate'},
+                {data: 5, name: 'updateAt'},
                 {render: renderChangeColumn, orderable: false},
-                {data: 7, name: 'resolution',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';
-                        return html;
-                    }
-                },
+                {data: 7, name: 'performerName'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
@@ -419,10 +403,10 @@
         });
     }
 
-    function getDatatableConnect() {
+    function getDatatableConnect(status = null) {
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
-        datatableConnect();
+        datatableConnect(status);
     }
 
     $(document).ready(function () {
