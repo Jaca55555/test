@@ -472,7 +472,7 @@ public class IncomingRegistrationController {
         HashMap<String, Object> response = new HashMap<>();
 
         File file = fileService.uploadFile(uploadFile,user.getId(),"documentFile",uploadFile.getOriginalFilename());
-        response.put("file", file);
+        response.put("data", file);
         return response;
     }
 
