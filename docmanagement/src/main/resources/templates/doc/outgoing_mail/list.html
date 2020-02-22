@@ -111,17 +111,17 @@
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="tin" class="control-label">Корреспондент</label>
+                            <label for="tin" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
                             <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                                 <option value="" th:text="#{sys_select}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="applicationId" class="control-label">Руйхатга олиш раками</label>
+                            <label for="applicationId" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="dateBegin" class="control-label">Руйхатга олинган сана</label>
+                            <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
                                     <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="regionId" class="control-label">Хужжат тури</label>
+                            <label for="regionId" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                     id="document_view_id" aria-hidden="true">
                                 <option value=""></option>
@@ -150,7 +150,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="subRegionId" class="control-label">Хат жунатаётган булим ёки ходим</label>
+                            <label for="subRegionId" class="control-label" th:text="#{doc_outgoing.content}">Хат жунатаётган булим ёки ходим</label>
                             <div class="col-sm-12 p0">
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="department_id">
@@ -196,33 +196,34 @@
                                             class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">id</th>
                                             <th aria-controls="responsive-table-model" aria-sort="ascending"
                                                 class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация рақами
+                                                <span th:text="#{doc_outgoing.registrationNumber}" >Регистрация рақами</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация санаси
+                                                <span th:text="#{doc_outgoing.registrationDate}" >Регистрация санаси</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
-                                                Кирувчи хат маълумотлари
+                                                <span th:text="#{doc_outgoing.content}"> Кирувчи хат маълумотлари</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
-                                                Хужжат санаси
+                                                <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 110px;"
-                                                tabindex="0">Ижро муддати
+                                                tabindex="0">
+                                                <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 140px;"
-                                                tabindex="0">Жорий
-                                                ҳолати
+                                                tabindex="0">
+                                                <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 300px;"
-                                                tabindex="0">Резолюция ва
-                                                иштирокчилар
+                                                tabindex="0">
+                                                <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                             </th>
                                             <th></th>
                                         </tr>
