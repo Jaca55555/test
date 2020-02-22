@@ -20,12 +20,11 @@ import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
-import uz.maroqand.ecology.docmanagement.dto.OutgoingFilterDto;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
@@ -33,7 +32,6 @@ import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.lang.NumberFormatException;
-
 
 @Controller
 public class OutgoingMailController {
@@ -49,6 +47,7 @@ public class OutgoingMailController {
     private final DepartmentService departmentService;
     private final DocumentDescriptionService descService;
     private final DocumentSubService documentSubService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
     public OutgoingMailController(
@@ -62,7 +61,8 @@ public class OutgoingMailController {
             FileService fileService,
             DepartmentService departmentService,
             DocumentDescriptionService descService,
-            DocumentSubService documentSubService
+            DocumentSubService documentSubService,
+            DocumentHelperService documentHelperService
     ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -75,6 +75,7 @@ public class OutgoingMailController {
         this.departmentService = departmentService;
         this.descService = descService;
         this.documentSubService = documentSubService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
@@ -89,7 +90,6 @@ public class OutgoingMailController {
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
 
-
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -99,19 +99,11 @@ public class OutgoingMailController {
                                   @RequestParam(name = "communication_tool_id")Integer communicationToolId,
                                   @RequestParam(name = "document_organization_id")String documentOrganizationId_,
                                   @RequestParam(name = "file_ids")List<Integer> file_ids){
-        Integer documentOrganizationId;
+
         User user = userService.getCurrentUserFromContext();
-        try {
-            documentOrganizationId = Integer.parseInt(documentOrganizationId_);
-        }catch(NumberFormatException ex){
-            String name = documentOrganizationId_;
-            System.out.println("creating new document organization with '" + name + "' name");
-            DocumentOrganization documentOrganization = new DocumentOrganization();
-            documentOrganization.setName(name);
-            documentOrganization.setStatus(true);
-            documentOrganization.setCreatedById(user.getId());
-            documentOrganizationId = documentOrganizationService.create(documentOrganization).getId();
-        }
+
+        Integer documentOrganizationId = parseIdOrCreateNew(documentOrganizationId_, user.getId());
+
         Set<File> files = new HashSet<File>();
         for(Integer id: file_ids) {
             if (id != null) files.add(fileService.findById(id));
@@ -234,20 +226,39 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailView)
     public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){
+        Document document = documentService.getById(id);
+        document.getJournal().getName();
 
-        model.addAttribute("document", documentService.getById(id));
-        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
-        model.addAttribute("communicationTools", communicationToolService.getStatusActive());
-        model.addAttribute("organizations", documentOrganizationService.getList());
+        model.addAttribute("journal_name", document.getJournal().getName());
+        model.addAttribute("document_view_name", document.getDocumentView().getName());
+        model.addAttribute("registration_number", document.getRegistrationNumber());
+        model.addAttribute("registration_date", Common.uzbekistanDateFormat.format(document.getRegistrationDate()));
+        model.addAttribute("updated_at", document.getUpdateAt() != null ? document.getUpdateAt() : "");
 
-        return DocTemplates.OutgoingMailNew;
+        DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
+        model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
+        Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
+        if(additionalDocument != null) {
+            model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
+            model.addAttribute("additional_document_view_link", DocUrls.OutgoingMailView + "?id=" + additionalDocument.getId());
+        }
+        model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
+
+        model.addAttribute("department_name", departmentService.getById(document.getDepartmentId()).getName());
+        model.addAttribute("performer_name", document.getPerformerName());
+        model.addAttribute("content", document.getContent());
+        model.addAttribute("files", document.getContentFiles());
+
+        System.out.println(documentSub.getDocument());
+
+        return DocTemplates.OutgoingMailView;
     }
 
     @RequestMapping(DocUrls.OutgoingMailEdit)
     public String outgoingMailEdit(@RequestParam(name="id")Integer id, Model model){
         Document document = documentService.getById(id);
         List<DocumentSub> documentSubList = documentSubService.findByDocumentId(document.getId());
+
         DocumentSub documentSub = null;
         if(documentSubList.size() != 0){
             documentSub = documentSubList.get(documentSubList.size() - 1);
@@ -257,15 +268,67 @@ public class OutgoingMailController {
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         model.addAttribute("document_organization_id", documentSub.getOrganization().getId());
         model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
-        model.addAttribute("performer_id", document.getPerformerId());
-        model.addAttribute("performer_name", document.getPerformerName());
-        model.addAttribute("document", documentService.getById(id));
-        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
+
+        model.addAttribute("document", document);
+        model.addAttribute("journals", journalService.getStatusActive());
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
-        model.addAttribute("organizations", documentOrganizationService.getList());
+        Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
+        model.addAttribute("additional_document_id", additionalDocument.getId());
+        model.addAttribute("registration_number_and_date", additionalDocument.getRegistrationNumber() + " - " + Common.uzbekistanDateFormat.format(additionalDocument.getRegistrationDate()));
+        Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
+        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
+        model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
 
-        return DocTemplates.OutgoingMailNew;
+        return DocTemplates.OutgoingMailEdit;
+    }
+
+    @RequestMapping(value = DocUrls.OutgoingMailEdit, method = RequestMethod.POST)
+    public String outgoingMailEditSubmit(Document document,
+                                         @RequestParam(name = "communication_tool_id")Integer communicationToolId,
+                                         @RequestParam(name = "document_organization_id")String documentOrganizationId_,
+                                         @RequestParam(name = "file_ids")List<Integer> file_ids){
+
+        Document documentForUpdate = documentService.getById(document.getId());
+        User user = userService.getCurrentUserFromContext();
+        //updating journal
+        documentForUpdate.setJournalId(document.getJournalId());
+        documentForUpdate.setJournal(journalService.getById(document.getJournalId()));
+
+        //updating document view
+        documentForUpdate.setDocumentViewId(document.getDocumentViewId());
+        documentForUpdate.setDocumentView(documentViewService.getById(document.getDocumentViewId()));
+
+        documentForUpdate.setContent(document.getContent());
+        User performer = userService.findById(document.getPerformerId());
+        documentForUpdate.setPerformerId(performer.getId());
+        documentForUpdate.setPerformerPhone(performer.getPhone());
+        documentForUpdate.setDepartmentId(document.getDepartmentId());
+        documentForUpdate.setAdditionalDocumentId(document.getAdditionalDocumentId());
+        document.setUpdateById(user.getId());
+        //updating documentSub
+
+        Integer documentOrganizationId = parseIdOrCreateNew(documentOrganizationId_, user.getId());
+        DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
+        documentSub.setOrganizationId(documentOrganizationId);
+
+        DocumentOrganization documentOrganization = documentOrganizationService.getById(documentOrganizationId);
+        documentSub.setOrganization(documentOrganization);
+        documentSub.setOrganizationName(documentOrganization.getName());
+        documentSub.setCommunicationToolId(communicationToolId);
+        documentSub.setCommunicationTool(communicationToolService.getById(communicationToolId));
+        documentSub.setDocument(documentForUpdate);
+
+        Set<File> files = new HashSet<>();
+        for(Integer id: file_ids) {
+            if (id != null) files.add(fileService.findById(id));
+        }
+        documentForUpdate.setContentFiles(files);
+
+        documentSubService.update(documentSub, user);
+        documentService.update(documentForUpdate);
+
+        return "redirect:" + DocUrls.OutgoingMailList;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailFileUpload, method = RequestMethod.POST, produces = "application/json")
@@ -360,6 +423,22 @@ public class OutgoingMailController {
         if(dateString == null)
             return null;
         else return DateParser.TryParse(dateString, Common.uzbekistanDateFormat);
+    }
+
+    Integer parseIdOrCreateNew(String documentOrganizationId_, Integer userId){
+        Integer documentOrganizationId;
+        try {
+            documentOrganizationId = Integer.parseInt(documentOrganizationId_);
+        }catch(NumberFormatException ex){
+            String name = documentOrganizationId_;
+            System.out.println("creating new document organization with '" + name + "' name");
+            DocumentOrganization documentOrganization = new DocumentOrganization();
+            documentOrganization.setName(name);
+            documentOrganization.setStatus(true);
+            documentOrganization.setCreatedById(userId);
+            documentOrganizationId = documentOrganizationService.create(documentOrganization).getId();
+        }
+        return documentOrganizationId;
     }
 
 }
