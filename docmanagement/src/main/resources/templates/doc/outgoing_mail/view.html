@@ -120,63 +120,7 @@
                     <div class="col-md-6 col-sm-12">
                         <div class="m20-vertical"><span class="bold">Хатга иловалар:</span></div>
                         <div id="fileContainer" class="flex-start mobile-flex-center">
-                         <!--   <div  class="office-card-file"  th:each="file: ${files}">
-                                <div class="card dashboard-card">
-                                    <div class="file-icon-container-small color-blue"><span
-                                            class="fas fa-file-word"></span></div>
-                                    <div class="card-body"
-                                         style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title" th:text="${file.name}">Письмо КМК-234 от
-                                            23.01.2019г.pdf</h6>
-                                    </div>
-                                </div>
-                            </div> -->
 
-                        <!--    <div class="office-card-file">
-                                <div class="card dashboard-card">
-                                    <div class="file-icon-container-small color-red"><span
-                                            class="fas fa-file-pdf"></span></div>
-                                    <div class="card-body"
-                                         style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title">Письмо КМК-234 от
-                                            23.01.2019г.pdf</h6>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="office-card-file">
-                                <div class="card dashboard-card">
-                                    <div class="file-icon-container-small color-green"><span
-                                            class="fas fa-file-excel"></span></div>
-                                    <div class="card-body"
-                                         style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title">Письмо КМК-234 от
-                                            23.01.2019г.pdf</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="office-card-file">
-                                <div class="card dashboard-card">
-                                    <div class="file-icon-container-small color-yellow"><span
-                                            class="fas fa-file-image"></span></div>
-                                    <div class="card-body"
-                                         style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title">Письмо КМК-234 от
-                                            23.01.2019г.pdf</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="office-card-file">
-                                <div class="card dashboard-card">
-                                    <div class="file-icon-container-small color-blue"><span
-                                            class="fas fa-file-word"></span></div>
-                                    <div class="card-body"
-                                         style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title">Письмо КМК-234 от
-                                            23.01.2019г.pdf</h6>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -229,7 +173,7 @@
         for(let i = 0; i < files.length; i++){
             let extensionAndColor = detectExtensionAndColor(files[i].extension)
             $('#fileContainer').append(`
-                <div  class="office-card-file">
+                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
                                 <div class="card dashboard-card">
                                     <div class="file-icon-container-small ${extensionAndColor.color}"><span
                                             class="fas fa-file${extensionAndColor.extension}"></span></div>
@@ -240,9 +184,11 @@
                                 </div>
                             </div>
             `);
-
-
         }
+    }
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
     }
 
     displayFiles(files);

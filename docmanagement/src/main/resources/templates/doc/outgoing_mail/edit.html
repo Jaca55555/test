@@ -44,13 +44,14 @@
                 <form enctype="multipart/form-data" th:action="@{/doc/outgoing_mail/edit}" id="document_form" th:object="${document}" method="post">
                     <div class="row">
                         <!-- journal, document_view, communication tools, organization_name fields start -->
+                        <input type="hidden" th:field="*{id}" >
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('journalId')}"
                                    th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                     aria-hidden="true" th:field="*{journalId}" required>
                                 <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
-                                <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
+                                <option th:each="journal: ${journals}" th:value="${journal.id}" th:text="${journal.name}"></option>
                             </select>
                         </div>
                         <div class="col-sm-6 form-group">
@@ -91,7 +92,6 @@
                             <label for="name" class="control-label">Хат жунатаётган булим номи</label>
                             <select class="form-control singleSelect" tabindex="-1"
                                     aria-hidden="true" th:field="*{departmentId}" required>
-                                <option value="" th:text="#{department_id_select}">department select</option>
                                 <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                             </select>
                         </div>
@@ -102,6 +102,7 @@
                             <div class="col-sm-12 p0">
                                 <select class="form-control singleSelect select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
+                                    <option th:value="${additional_document_id}" th:text="${registration_number_and_date}"></option>
                                     <option value="" th:text="#{sys_select}"></option>
                                 </select>
                                 <i class="gray-search fas fa-search  color-gray"></i>
@@ -154,53 +155,12 @@
 
 </div>
 <!-- MainContent end -->
-<!-- modals start-->
-
-<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
-    <div class="modal-dialog col-xl-6 col-12" role="document">
-        <div class="modal-content">
-            <div class="card parent-card m0">
-                <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Чиқувчи хатга
-                                адресат қўшиш</span></h5>
-                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="form-group">
-                            <form method="POST" th:action="@{/doc/outgoing_mail/new_organization}">
-                                <label class="control-label" th:text="#{organization_name}"></label>
-                                <input type="text" class="form-control">
-                                <input type="submit" class="">
-                            </form>
-                        </div>
-
-
-                    </div>
-                    <hr class="m30-vertical">
-                    <div class="row">
-                        <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >Бекор
-                                қилиш</button>
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- modals end -->
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script th:inline="javascript">
-
+    let files = [[${document.contentFiles}]];
 
     function clickPlus() {
         $('#addFile2').click();
@@ -229,11 +189,6 @@
                 }, cache: true
             }
         });
-
-
-
-
-
 
     });
 
@@ -278,30 +233,9 @@
     }
 
     function detectExtensionAndDisplay(data){
-        let extension = data.data.extension;
-        let color;
-        switch (extension) {
-            case 'jpg': case 'png':
-                extension = '-image';
-                color = 'color-blue';
-                break;
-            case 'pdf':
-                extension = '-pdf';
-                color = 'color-red';
-                break;
-            case 'xlsx':
-                extension = '-excel';
-                color = 'color-green';
-                break;
-            case 'doc':
-            case 'docx':
-                extension = '-word';
-                color = 'color-blue';
-                break;
-            default:
-                extension = '';
-                color = 'color-gray';
-        }
+        let extensionAndColor = detectExtensionAndColor(data.data.extension);
+        let extension = extensionAndColor.extension;
+        let color = extensionAndColor.color;
         $('#file_ids').append(
             `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
         );
@@ -316,6 +250,54 @@
                     </div>`
         );
     }
+
+    function detectExtensionAndColor(extension){
+        let data = {};
+        switch (extension) {
+            case 'jpg': case 'png':
+                data.extension = '-image';
+                data.color = 'color-yellow';
+                break;
+            case 'pdf':
+                data.extension = '-pdf';
+                data.color = 'color-red';
+                break;
+            case 'xlsx':
+                data.extension = "-excel";
+                data.color = "color-green";
+                break;
+            case 'doc':
+            case 'docx':
+                data.extension = "-word";
+                data.color = "color-blue";
+                break;
+            default:
+                data.extension = "";
+                data.color = "color-gray";
+        }
+        return data;
+    }
+
+    function displayFiles(files){
+        for(let i = 0; i < files.length; i++){
+            let extensionAndColor = detectExtensionAndColor(files[i].extension);
+            $('#file_ids').append(
+                `<input type="text" name="file_ids" id="input_file_id_${files[i].id}" value="${files[i].id}">`
+            );
+            $('#file-container').prepend(`
+               <div class="file-block" id="file_block_${files[i].id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${files[i].id})"></span></div>
+                        <div class="text-center file-icon-container ${extensionAndColor.color}" onclick="downloadFileFunction(${files[i].id})"><span class="fas fa-file${extensionAndColor.extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${files[i].name}</span>
+                        </div>
+                    </div>
+            `);
+        }
+    }
+
+    displayFiles(files);
 
 </script>
 </body>
