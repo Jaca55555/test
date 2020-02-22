@@ -64,7 +64,7 @@ public class DocController {
             @RequestParam(name = "page") Integer page
     ){
         search = StringUtils.trimToNull(search);
-        PageRequest pageRequest = new PageRequest(page-1, 15, Sort.Direction.ASC, "id");
+        PageRequest pageRequest = new PageRequest(page-1, 15, Sort.Direction.DESC, "id");
         Page<Document> documentPage = documentService.getRegistrationNumber(search, pageRequest);
         HashMap<String,Object> resutl = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();

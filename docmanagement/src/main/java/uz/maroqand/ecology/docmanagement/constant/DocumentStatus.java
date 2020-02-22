@@ -3,7 +3,7 @@ package uz.maroqand.ecology.docmanagement.constant;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
+/*
  * Created by Utkirbek Boltaev on 14.02.2020.
  * (uz)
  * (ru)

@@ -31,4 +31,6 @@ public interface DocumentSubService {
 
     Page<DocumentSub> findFiltered(Integer documentTypeId, Integer documentStatusId, Integer documentOrganizationId, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Pageable pageable);
 
+    DocumentSub findOneByDocumentId(Integer documentId);
+
 }

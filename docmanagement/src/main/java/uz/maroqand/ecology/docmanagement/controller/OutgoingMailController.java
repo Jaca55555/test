@@ -26,6 +26,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
@@ -49,6 +50,7 @@ public class OutgoingMailController {
     private final DepartmentService departmentService;
     private final DocumentDescriptionService descService;
     private final DocumentSubService documentSubService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
     public OutgoingMailController(
@@ -62,7 +64,8 @@ public class OutgoingMailController {
             FileService fileService,
             DepartmentService departmentService,
             DocumentDescriptionService descService,
-            DocumentSubService documentSubService
+            DocumentSubService documentSubService,
+            DocumentHelperService documentHelperService
     ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -75,6 +78,7 @@ public class OutgoingMailController {
         this.departmentService = departmentService;
         this.descService = descService;
         this.documentSubService = documentSubService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(DocUrls.OutgoingMailNew)
@@ -234,14 +238,32 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailView)
     public String outgoingMailView(@RequestParam(name = "id")Integer id, Model model){
+        Document document = documentService.getById(id);
+        document.getJournal().getName();
 
-        model.addAttribute("document", documentService.getById(id));
-        model.addAttribute("journal", journalService.getStatusActive());
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
-        model.addAttribute("communicationTools", communicationToolService.getStatusActive());
-        model.addAttribute("organizations", documentOrganizationService.getList());
+        model.addAttribute("journal_name", document.getJournal().getName());
+        model.addAttribute("document_view_name", document.getDocumentView().getName());
+        model.addAttribute("registration_number", document.getRegistrationNumber());
+        model.addAttribute("registration_date", Common.uzbekistanDateFormat.format(document.getRegistrationDate()));
+        model.addAttribute("updated_at", document.getUpdateAt() != null ? document.getUpdateAt() : "");
 
-        return DocTemplates.OutgoingMailNew;
+        DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
+        model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
+        Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
+        if(additionalDocument != null) {
+            model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
+            model.addAttribute("additional_document_view_link", DocUrls.OutgoingMailView + "?id=" + additionalDocument.getId());
+        }
+        model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
+
+        model.addAttribute("department_name", departmentService.getById(document.getDepartmentId()).getName());
+        model.addAttribute("performer_name", document.getPerformerName());
+        model.addAttribute("content", document.getContent());
+        model.addAttribute("files", document.getContentFiles());
+
+        System.out.println(documentSub.getDocument());
+
+        return DocTemplates.OutgoingMailView;
     }
 
     @RequestMapping(DocUrls.OutgoingMailEdit)
@@ -265,7 +287,7 @@ public class OutgoingMailController {
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
 
-        return DocTemplates.OutgoingMailNew;
+        return DocTemplates.OutgoingMailEdit;
     }
 
     @RequestMapping(value = DocUrls.OutgoingMailFileUpload, method = RequestMethod.POST, produces = "application/json")

@@ -39,7 +39,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     @Override
     public DocumentSub getByDocumentIdForIncoming(Integer documentId){
         List<DocumentSub> documentSubList = documentSubRepository.findByDocumentIdAndDeletedFalse(documentId);
-        if(documentSubList.size()>0){
+        if(documentSubList.size() > 0){
             return documentSubList.get(0);
         }else {
             return null;
@@ -162,6 +162,11 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             return overAll;
         };
+    }
+
+    @Override
+    public DocumentSub findOneByDocumentId(Integer documentId){
+        return documentSubRepository.findOneByDocumentId(documentId);
     }
 
 }
