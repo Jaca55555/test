@@ -22,20 +22,20 @@
         <div class="col-xl-12 col-md-12">
             <div class="card parent-card">
                 <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
-                    <h5 class="mb-0" style="align-self:center"> <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" >Чиқувчи хатлар</a> </h5>
+                    <h5 class="mb-0" style="align-self:center"> <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_outgoing.list}" >Чиқувчи хатлар</a> </h5>
                     <!--<div>
                         <input type="text" class="form-control" />
                         <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                     </div>-->
                 </div>
-                <h5 class="office-h5 default-color">Чиқувчи хатлар статистикаси</h5>
+                <h5 class="office-h5 default-color" th:text="#{doc_outgoing.documentsCount}">Чиқувчи хатлар статистикаси</h5>
                 <div class="responsive">
                     <div class="office-card">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">10</h4>
-                                <h6 class="card-title">Жўнатилмаган</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.not_send_count}">Жўнатилмаган</h6>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">20</h4>
-                                <h6 class="card-title">Янги рўйхатга олинган</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Янги рўйхатга олинган</h6>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             <div class="file-icon-container-small color-yellow"><span>7</span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">30</h4>
-                                <h6 class="card-title">Хафта давомида</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.weekly_count}">Хафта давомида</h6>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                             <div class="file-icon-container-small color-yellow"><span>30</span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">30</h4>
-                                <h6 class="card-title">Ой давомида</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.monthly_count}">Ой давомида</h6>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             <div class="file-icon-container-small color-yellow ml-0"><span>365</span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">30</h4>
-                                <h6 class="card-title">Йил давомида</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.yearly_count}">Йил давомида</h6>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title">20</h4>
-                                <h6 class="card-title">Жами чиқувчи хатлар</h6>
+                                <h6 class="card-title" th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -178,7 +178,9 @@
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12 mobile-text-center">
-                            <button type="button" class="btn btn-primary mt-4" style="height:33px;padding:0px 20px">Қидириш</button>
+                            <button type="button" class="btn btn-primary mt-4" style="height:33px;padding:0px 20px">
+                                <span th:text="#{sys_document.search}">Қидириш</span>
+                            </button>
                         </div>
                     </div>
                 </div>

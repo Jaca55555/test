@@ -35,21 +35,21 @@
                 <h5 class="mb-0" style="align-self:center">
                     <a href="/static/doc/" class="collapsed card-header-a"
                        data-toggle="collapse" data-target="#collapseTopContainer"
-                       aria-expanded="false" aria-controls="collapseOne">Девонхона хужжатлар иш столи</a>
+                       aria-expanded="false" aria-controls="collapseOne"><span th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</span></a>
                 </h5>
                 <div>
                     <input type="text" class="form-control">
                     <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                 </div>
             </div>
-            <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
+            <h5 class="office-h5 default-color" ><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
                 <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${inProgress}">10</h4>
-                            <h6 class="card-title">Жўнатилмаган</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</span></h6>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${todayDocuments}">20</h4>
-                            <h6 class="card-title">Бугун рўйхатга олинган</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</span></h6>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">30</h4>
-                            <h6 class="card-title">Жавоб тариқасида</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_document_count}">Жавоб тариқасида</span></h6>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                         <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;" >
                             <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
-                            <h6 class="card-title">Хатга жавоб олинган</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</span></h6>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                         <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
-                            <h6 class="card-title">Жавобсиз хужжатлар</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</span></h6>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
-                            <h6 class="card-title">Жами чиқувчи хатлар</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</span></h6>
                         </div>
                     </div>
                 </div>
