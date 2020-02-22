@@ -114,6 +114,7 @@ public class DocumentOrganizationController {
         updatedDocOrganization.setName(docOrganization.getName());
         updatedDocOrganization.setStatus(docOrganization.getStatus());
         documentOrganizationService.update(updatedDocOrganization);
+
         return "redirect:" + DocUrls.DocumentOrganizationList;
     }
 

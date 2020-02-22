@@ -143,6 +143,7 @@ public class DocTypeController {
         if (user == null) {
             return "";
         }
+
         DocumentType documentType = documentTypeService.getById(id);
         if (documentType == null) {
             return "redirect:" + DocUrls.DocTypeList;

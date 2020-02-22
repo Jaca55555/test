@@ -79,7 +79,7 @@
         return [[__${#locale}__]];
     }
 </script>
-<script th:inline="javascript">
+<script th:inline="none">
     let dataDatatableSelector;
     let thead;
 
@@ -93,7 +93,7 @@
         var html = '<div class="btn-group">';
         html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" onclick="return confirm(\'O`chirilsinmi?\')" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }
@@ -109,12 +109,12 @@
             lengthMenu: [
                 [25, 50, 100], [25, 50, 100]
             ],
-            order: [ [0, 'desc'] ],
+
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'content'},
                 {data: 2, name: 'createdAt'},
-                {data: 3, name: 'id', render: renderActionsColumn, orderable: false}
+                {render: renderActionsColumn, orderable: false}
             ],
             ajax: function (dataToSend, callback, settings) {
                 let api = this.api();
@@ -122,7 +122,10 @@
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
                 dataToSend.content = $('#content').val();
-                dataToSend.[(${_csrf.parameterName})] = [[${_csrf.token}]];
+                dataToSend._csrf=$('#global_csrf').val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
 
                 $.post(ajaxListLink, dataToSend, function(data){
                     callback(data);
@@ -144,16 +147,7 @@
         thead = dataDatatableSelector.html();
         getDatatableConnect();
 
-        $(document).on('click', '.delete', function (e) {
-            e.preventDefault();
-            if (confirm([[#{doc.confirm_delete}]])) {
-                $.get($(this).attr('href'), function (data) {
-                    if (data.status === "success") {
-                        $('#id_' + data.id).remove();
-                    }
-                })
-            }
-        });
+
         $('#filter').on('change', function () {
             getDatatableConnect();
         })

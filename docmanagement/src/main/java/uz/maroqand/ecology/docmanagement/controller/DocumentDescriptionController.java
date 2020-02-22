@@ -4,10 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -104,16 +101,13 @@ public class DocumentDescriptionController
         return "redirect:" + DocUrls.DocDescriptionList;
     }
 
-    @GetMapping(DocUrls.DocDescriptionDelete)
-    @ResponseBody
-    public HashMap<String, Object> deleteDescription(@RequestParam(name = "id")Integer id) {
-        HashMap<String, Object> response = new HashMap<>();
+   @RequestMapping(value = DocUrls.DocDescriptionDelete)
+    public String deleteDescription(@RequestParam(name = "id")Integer id) {
+
         DocumentDescription description = descriptionService.getById(id);
         if (description != null) {
-            descriptionService.delete(description);
-        }
-        response.put("status", "success");
-        response.put("id", id);
-        return response;
+           descriptionService.delete(description);
+       }
+       return "redirect:" + DocUrls.DocDescriptionList;
     }
 }

@@ -111,6 +111,7 @@ public class CommunicationToolController {
         updatedTool.setStatus(tool.getStatus());
         communicationToolService.update(updatedTool);
         communicationToolService.updateStatusActive();
+        communicationToolService.updateCacheableById(updatedTool.getId());
         return "redirect:" + DocUrls.CommunicationToolsList;
     }
     @RequestMapping(value = DocUrls.CommunicationToolsEditStatus, method = RequestMethod.GET, produces = "application/json")

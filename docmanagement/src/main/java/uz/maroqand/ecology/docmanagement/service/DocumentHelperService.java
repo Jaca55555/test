@@ -40,6 +40,11 @@ public class DocumentHelperService {
         this.journalService = journalService;
     }
 
+    public String getTypeName(Integer id){
+        DocumentType documentType = documentTypeService.getById(id);
+        return documentType!=null? documentType.getName():"";
+    }
+
     public String getJournalName(Integer id){
         Journal journal = journalService.getById(id);
         return journal!=null? journal.getName():"";
