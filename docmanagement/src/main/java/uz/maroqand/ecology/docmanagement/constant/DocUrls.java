@@ -28,6 +28,7 @@ public class DocUrls {
 
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
+    public static final String OutgoingListAjax = Prefix + OutgoingList + "/ajax";
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
     public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
