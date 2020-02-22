@@ -245,9 +245,9 @@
 
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
-    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailView}]];
-    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailEdit}]];
-    let changeStatusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailChangeStatus}]];
+    let viewLink = [[${view_link}]];
+    let editLink = [[${edit_link}]];
+    let changeStatusLink = [[${change_status_link}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }

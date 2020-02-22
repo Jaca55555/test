@@ -161,6 +161,10 @@ public class OutgoingMailController {
         model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId));
         model.addAttribute("haveAdditionalDocument", documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId));
 
+        model.addAttribute("edit_link", DocUrls.OutgoingMailEdit);
+        model.addAttribute("view_link", DocUrls.OutgoingMailView);
+        model.addAttribute("change_status_link", DocUrls.OutgoingMailChangeStatus);
+
         return DocTemplates.OutgoingMailList;
     }
 
@@ -248,8 +252,6 @@ public class OutgoingMailController {
         model.addAttribute("performer_name", document.getPerformerName());
         model.addAttribute("content", document.getContent());
         model.addAttribute("files", document.getContentFiles());
-
-        System.out.println(documentSub.getDocument());
 
         return DocTemplates.OutgoingMailView;
     }
