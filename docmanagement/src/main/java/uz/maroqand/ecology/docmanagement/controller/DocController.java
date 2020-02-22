@@ -16,8 +16,10 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.docmanagement.constant.ControlForm;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
+import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
@@ -26,6 +28,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentLogService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
 
 import java.util.*;
 
@@ -39,20 +42,33 @@ public class DocController {
     private final UserService userService;
     private final FileService fileService;
     private final DocumentService documentService;
-    private final DocumentOrganizationService documentOrganizationService;
     private final DocumentLogService documentLogService;
+    private final DocumentViewService documentViewService;
+    private final DocumentOrganizationService documentOrganizationService;
 
     @Autowired
-    public DocController(UserService userService, FileService fileService, DocumentService documentService, DocumentOrganizationService documentOrganizationService, DocumentLogService documentLogService) {
+    public DocController(
+            UserService userService,
+            FileService fileService,
+            DocumentService documentService,
+            DocumentLogService documentLogService,
+            DocumentViewService documentViewService,
+            DocumentOrganizationService documentOrganizationService
+    ) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
-        this.documentOrganizationService = documentOrganizationService;
         this.documentLogService = documentLogService;
+        this.documentViewService = documentViewService;
+        this.documentOrganizationService = documentOrganizationService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
     public String getDepartmentList(Model model) {
+        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("organizationList", documentOrganizationService.getStatusActive());
+        model.addAttribute("executeForms", ControlForm.getControlFormList());
+        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
 
         return DocTemplates.Dashboard;
     }
@@ -90,7 +106,7 @@ public class DocController {
             @RequestParam(name = "page") Integer page
     ){
         search = StringUtils.trimToNull(search);
-        PageRequest pageRequest = new PageRequest(page-1, 15, Sort.Direction.ASC, "id");
+        PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
         Page<DocumentOrganization> documentOrganizationPage = documentOrganizationService.getOrganizationList(search, pageRequest);
         HashMap<String,Object> resutl = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();

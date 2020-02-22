@@ -403,6 +403,9 @@
                 dataToSend.tabFilter = tabFilter;
                 dataToSend._csrf = $("#global_csrf").val();
 
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
                 $.post("", dataToSend, function(data){
                     callback(data);
                 });
@@ -458,7 +461,7 @@
         }
     });
 
-    $(document).ready(function () {
+    $(() => {
         dataDatatableSelector = $('#responsive-table-model');
         thead = dataDatatableSelector.html();
         datatableConnect();
