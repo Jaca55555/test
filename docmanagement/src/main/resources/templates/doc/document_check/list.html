@@ -218,7 +218,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 300px; display: none;" aria-label="Salary: activate to sort column ascending">
                                             <span th:text="#{sys.doc_resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
-                                        <th></th>
+                                        <!--<th></th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -320,14 +320,14 @@
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'dueDate'},
                 {data: 6, name: 'status'},
-                {data: 7, name: 'resolution',
+                {data: 7, name: 'resolution',orderable: false,
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';
                         return html;
                     }
                 },
-                {render: renderActionsColumn, orderable: false}
+                // {render: renderActionsColumn, orderable: false}
             ],
 
 

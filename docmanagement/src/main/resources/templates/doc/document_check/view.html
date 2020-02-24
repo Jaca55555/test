@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
@@ -20,12 +20,12 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 125px;
+            max-width: 110px;
         }
         #percentage {
             position: absolute;
-            top: 60%;
-            left: 50%;
+            top: 74%;
+            left: 11%;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -48,7 +48,7 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
 
-        <object th:include="doc/incoming/fragments/document_view :: document_view" th:remove="tag" ></object>
+        <object th:include="doc/document_check/fragments/document_view :: document_view" th:remove="tag" ></object>
 
         <div class="row flex-space-between" >
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
@@ -147,8 +147,12 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}"> Ижро учун йўналтириш  </a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
+                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" href="#">
+                                <span th:text="#{doc_incoming.sub_task_add}">Ижро учун йўналтириш</span>
+                            </a>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
+                                <span th:text="#{doc_incoming.doc_log_add}">Ижро холатини белгилаш</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -208,7 +212,7 @@
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва изохлар</span></h5>
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a"><span th:text="#{sys_document.comments_and_execute}">Ижро амаллари ва изохлар</span></span></h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -243,28 +247,15 @@
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
                                 <div  class="text-center file-icon-container align-self-center color-gray">
                                     <span class="fas fa-plus" id="addFileButton"></span>
-                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
                                     <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
-
-                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
-
-                        <div class="m10-vertical"><span th:text="#{sys_document.additional_files}"></span></div>
-
-                        <div class="row p20" id="file-container">
-                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                                <div  class="text-center file-icon-container align-self-center color-gray">
-                                    <span class="fas fa-plus" id="addFileButton"></span>
                                 </div>
                             </div>
                         </div>
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
-                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{sys_cancel}" data-dismiss="modal" id="closeCommentModal"></button>
                                 <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
                             </div>
                         </div>
@@ -311,7 +302,7 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_new_status}">Хужжатнинг янги статуси</span>
-                        <div class="btn-group mb-2 mr-2">
+                        <div class="btn-group mb-2 mr-2 col-sm-4">
                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split rounded-pill table-modal-button">
                                 <span id="newStatusText" class="pl-3" th:text="#{doc.select_new_status}"></span>
@@ -323,7 +314,7 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_additional_doc}"></span>
-                        <div class="form-group">
+                        <div class="form-group col-sm-4">
                             <select class="addDocSelect col-sm-12" name="addDocId">
                                 <option value=""></option>
                                 <option th:each="document: ${docList}" th:text="${document.registrationNumber}" th:value="${document.id}"></option>
@@ -338,20 +329,24 @@
 
                     <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
 
-                    <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
+                    <!--<div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>-->
 
-                    <div class="row p20">
+                    <!--<div class="row p20">
                         <div class="file-block flex-center">
                             <div class="text-center file-icon-container align-self-center color-gray">
                                 <span class="fas fa-plus"></span>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                                <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор қилиш</button>
-                                <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">
+                                <span th:text="#{sys_cancel}">Бекор қилиш</span>
+                            </button>
+                            <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">
+                                <span th:text="#{sys_save}">Қўшиш</span>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -566,20 +561,9 @@
 
 <script th:inline="javascript">
     var urlAction = [[${comment_url}]];
+    var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     $(document).ready(function () {
-        $('#formSend').on('click', function (e) {
-            let url = $('#commentForm').prop('action');
-            let data = $('#commentForm').serialize();
-            $.ajax({
-                url: urlAction,
-                data: data,
-                method: 'post',
-                success: function (data) {
-                    console.log(data);
-                }
-            });
-            e.preventDefault();
-        });
+
 
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
@@ -632,6 +616,58 @@
             $('#taskStatus').val($(this).data('id'));
             $('#newStatusText').text($(this).text());
         })
+    });
+
+    $('#formSend').on('click', function (e) {
+        let url = $('#commentForm').prop('action');
+        let data = $('#commentForm').serialize();
+        $.ajax({
+            url: urlAction,
+            data: data,
+            method: 'post',
+            success: function (data) {
+                console.log(data);
+                console.log(data.status);
+                if(data != undefined && data.status=="success"){
+                    // show logs
+                    var log = data.log;
+                    var html =' <div class="comment-item flex-space-between">\n' +
+                        '           <div>\n' +
+                        '               <div class="inline-block">\n' +
+                        '                   <i class="fas fa-user-circle fs40 color-gray column-1"></i>\n' +
+                        '               </div>\n' +
+                        '               <div class="inline-block m10-horizontal">\n' +
+                        '                   <span class="color-primary bold">'+data.createName+'</span>\n' +
+                        '                   <br>\n' +
+                        '                   <span >'+data.createPosition+'</span>\n' +
+                        '               </div>\n' +
+                        '           </div>\n' +
+                        '           <div class="fs11" >\n' + data.createdAt + '</div>\n' +
+                        '           <div class="w100"></div>\n' +
+                        '           <div class="column-2 mt-3">\n' +
+                        '               <span >'+log.content+' </span>\n' +
+                        '           </div>'+
+                        '       <div >\n';
+
+                    if (log.contentFiles!=null && log.contentFiles.length>0){
+                        $.each(log.contentFiles,function (element,val) {
+                            html+=' <div class="w100"></div>\n' +
+                                '       <div class="column-2 mt-3">\n' +
+                                '           <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                '           <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                '       </div>\n' +
+                                '   </div>';
+                        })
+
+                    }
+
+                    html+='</div>';
+                    $('#comments').prepend(html);
+                    $('#closeCommentModal').click();
+                }
+            }
+        });
+        e.preventDefault();
     });
 
     function clickPlus() {
@@ -707,6 +743,7 @@
 
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
+        let fileName = data.data.name;
         let color;
         let name = data.data.name;
         switch (extension) {
@@ -737,13 +774,13 @@
         $('#file_ids').append(
             `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
         );
-        $('#file-container').prepend(
+        $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>${data.data.name}</span>
+                            <span>`+fileNameSubString(fileName)+`</span>
                         </div>
                     </div>`
         );
