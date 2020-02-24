@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,19 +17,15 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.docmanagement.constant.ControlForm;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
+import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentLogService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
 
@@ -44,6 +41,7 @@ public class DocController {
     private final DocumentService documentService;
     private final DocumentLogService documentLogService;
     private final DocumentViewService documentViewService;
+    private final DocumentTaskService taskService;
     private final DocumentOrganizationService documentOrganizationService;
 
     @Autowired
@@ -53,6 +51,7 @@ public class DocController {
             DocumentService documentService,
             DocumentLogService documentLogService,
             DocumentViewService documentViewService,
+            DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService
     ) {
         this.userService = userService;
@@ -60,6 +59,7 @@ public class DocController {
         this.documentService = documentService;
         this.documentLogService = documentLogService;
         this.documentViewService = documentViewService;
+        this.taskService = taskService;
         this.documentOrganizationService = documentOrganizationService;
     }
 
@@ -70,7 +70,42 @@ public class DocController {
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
 
+        model.addAttribute("incomingCount", documentService.getCountersByType(DocumentTypeEnum.IncomingDocuments.getId()));
+        model.addAttribute("innerCount", documentService.getCountersByType(DocumentTypeEnum.InnerDocuments.getId()));
+        model.addAttribute("outgoingCount", documentService.getCountersByType(DocumentTypeEnum.OutgoingDocuments.getId()));
+        model.addAttribute("appealCount", documentService.getCountersByType(DocumentTypeEnum.AppealDocuments.getId()));
+
         return DocTemplates.Dashboard;
+    }
+
+    @RequestMapping(value = DocUrls.DashboardDocList, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> getIncomingRegistrationList(
+            IncomingRegFilter incomingRegFilter,
+            Pageable pageable
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        List<DocumentTask> documentTaskList = documentTaskPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        for (DocumentTask documentTask : documentTaskList) {
+            Document document = documentService.getById(documentTask.getDocumentId());
+            JSONArray.add(new Object[]{
+                    documentTask.getId(),
+                    document.getRegistrationNumber(),
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    document.getContent(),
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                    documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
+                    documentTask.getStatusName(documentTask.getStatus()),
+                    documentTask.getContent(),
+            });
+        }
+
+        result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+        return result;
     }
 
     @RequestMapping(value = DocUrls.RegistrationAdditionalDocument, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

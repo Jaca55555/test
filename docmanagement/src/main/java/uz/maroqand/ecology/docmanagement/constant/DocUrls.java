@@ -15,6 +15,7 @@ public class DocUrls {
     private static final String Orders = "/orders"; //Buyruqlar
 
     public static final String Dashboard = Prefix + "/office";
+    public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
