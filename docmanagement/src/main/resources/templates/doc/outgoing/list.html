@@ -35,61 +35,68 @@
                 <h5 class="mb-0" style="align-self:center">
                     <a href="/static/doc/" class="collapsed card-header-a"
                        data-toggle="collapse" data-target="#collapseTopContainer"
-                       aria-expanded="false" aria-controls="collapseOne">Девонхона хужжатлар иш столи</a>
+                       aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</a>
                 </h5>
                 <div>
                     <input type="text" class="form-control">
                     <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                 </div>
             </div>
-            <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
+            <h5 class="office-h5 default-color"><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
-                <div class="row">
-                    <div class="office-card">
+                <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${inProgress}">10</h4>
-                            <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</span></h6>
                         </div>
                     </div>
                 </div>
-                    <div class="office-card">
-                        <div class="card dashboard-card border-danger-shadow">
+                <div class="office-card">
+                    <div class="card dashboard-card border-danger-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${todayDocuments}">20</h4>
-                            <h6 class="card-title" th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</h6>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="office-card">
-                    <div class="card dashboard-card border-warning-shadow">
-                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${haveAdditionalDocument}">30</h4>
-                            <h6 class="card-title" th:text="#{doc_outgoing.answer_document_count}">Жавоб тариқасида</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</span></h6>
                         </div>
                     </div>
                 </div>
-                    <div class="office-card">
-                        <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${answerNotAccepted}">40</h4>
-                                <h6 class="card-title" th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</h6>
-                            </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-warning-shadow">
+                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;">
+                            <h4 class="card-title">30</h4>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_document_count}">Жавоб тариқасида</span></h6>
                         </div>
                     </div>
-                    <div class="office-card">
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-green-shadow">
+                        <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" >
+                            <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</span></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-green-shadow">
+                        <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;">
+                            <h4 class="card-title">40</h4>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</span></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
-                            <h6 class="card-title" th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</h6>
+                            <h6 class="card-title"><span th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</span></h6>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -106,17 +113,17 @@
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="tin" class="control-label">Корреспондент</label>
+                            <label for="tin" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
                             <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                                 <option value="" th:text="#{sys_select}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="applicationId" class="control-label">Руйхатга олиш раками</label>
+                            <label for="applicationId" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="dateBegin" class="control-label">Руйхатга олинган сана</label>
+                            <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
                                     <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
@@ -129,7 +136,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="regionId" class="control-label">Хужжат тури</label>
+                            <label for="regionId" class="control-label"><span th:text="#{doc_outgoing.documentView}">Хужжат тури</span></label>
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                     id="document_view_id" aria-hidden="true">
                                 <option value=""></option>
@@ -138,16 +145,15 @@
                             <!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
-                            <label class="control-label">Хатнинг кискача мазмуни</label>
+                            <label class="control-label"><span th:text="#{doc_outgoing.content}">Хужжатнинг қисқача мазмуни</span></label>
                             <div class="col-sm-12 p0">
                                 <input type="text" class="form-control" id="content">
-                              <!--  <i class="gray-arrow fas fa-sort-down color-gray"></i> -->
-                               <!-- <i class="gray-arrow fas fa-search  color-gray pointer"></i> -->
+                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
                         </div>
 
                         <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;" th:text="#{sys_document.search}"></button>
+                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;">искать</button>
                         </div>
 
 
@@ -160,7 +166,7 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab"
-                       aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
+                       aria-controls="home" aria-selected="true">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;"
@@ -181,33 +187,32 @@
                                                 class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">id</th>
                                             <th aria-controls="responsive-table-model" aria-sort="ascending"
                                                 class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация рақами
+                                                <span th:text="#{doc_outgoing.registrationNumber}" >Регистрация рақами</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация санаси
+                                                <span th:text="#{doc_outgoing.registrationDate}" >Регистрация санаси</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
-                                                Кирувчи хат маълумотлари
+                                                <span th:text="#{doc_outgoing.content}"> Кирувчи хат маълумотлари</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
-                                                Хужжат санаси
+                                                <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                             </th>
-                                            <th aria-controls="responsive-table-model" class="sorting"
-                                                colspan="1" rowspan="1" style="width: 110px;"
-                                                tabindex="0">Ижро муддати
+                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">
+                                                <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 140px;"
-                                                tabindex="0">Жорий
-                                                ҳолати
+                                                tabindex="0">
+                                                <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting"
                                                 colspan="1" rowspan="1" style="width: 300px;"
-                                                tabindex="0">Резолюция ва
-                                                иштирокчилар
+                                                tabindex="0">
+                                                <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                             </th>
                                             <th></th>
                                         </tr>
@@ -368,9 +373,27 @@
             },
             columns: [
                 {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'registrationNumber'},
-                {data: 2, name: 'registrationDate'},
-                {data: 3, name: 'content'},
+                {data: 1, name: 'registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 2, name: 'registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 3, name: 'content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[3]+'</a>';
+                        return html;
+                    }
+                },
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'updateAt'},
                 {render: renderChangeColumn, orderable: false},

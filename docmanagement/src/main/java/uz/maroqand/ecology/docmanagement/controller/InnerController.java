@@ -18,6 +18,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
@@ -37,8 +38,9 @@ public class InnerController {
     private final CommunicationToolService communicationToolService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentLogService documentLogService;
 
-    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService) {
+    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
@@ -49,6 +51,7 @@ public class InnerController {
         this.communicationToolService = communicationToolService;
         this.documentDescriptionService = documentDescriptionService;
         this.documentHelperService = documentHelperService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
@@ -197,10 +200,30 @@ public class InnerController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-        Document document = documentService.getById(id);
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        if (documentTaskSub == null) {
+            return "redirect: " + DocUrls.IncomingRegistrationList;
+        }
+
+        Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
+
+        DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("specialControll", true);
+        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerView;
