@@ -95,7 +95,7 @@ public class DocumentCheckController {
 
     @RequestMapping(value = DocUrls.DocumentCheckList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public HashMap<String, Object> getIncomingRegistrationList(
+    public HashMap<String, Object> getDocumentCheckRegistrationList(
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "docRegNumber") String docRegNumber,
             @RequestParam(name = "registrationNumber") String registrationNumber,
@@ -198,7 +198,7 @@ public class DocumentCheckController {
     }
 
     @RequestMapping(DocUrls.DocumentCheckView)
-    public String getIncomingViewPage(
+    public String getDocumentViewPage(
             @RequestParam(name = "id")Integer taskSubId,
             Model model
     ) {
@@ -262,13 +262,13 @@ public class DocumentCheckController {
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
+        model.addAttribute("action_url", DocUrls.DocumentCheckTaskSubmit);
         model.addAttribute("back_url", DocUrls.DocDescriptionView+"?id=" + documentTaskSub.getId());
         return DocTemplates.DocumentCheckTask;
     }
 
     @RequestMapping(value = DocUrls.DocumentCheckTaskSubmit)
-    public String incomingTaskSubmit(
+    public String DocumentTaskSubmit(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "taskId") Integer taskId,
             @RequestParam(name = "content") String content,
@@ -278,7 +278,7 @@ public class DocumentCheckController {
         User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub==null){
-            return "redirect:" + DocUrls.IncomingList;
+            return "redirect:" + DocUrls.DocumentCheckList;
         }
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());
@@ -322,7 +322,7 @@ public class DocumentCheckController {
             }
         }
 
-        return "redirect:" + DocUrls.IncomingView + "?id=" + documentTaskSub.getId();
+        return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTaskSub.getId();
     }
 
     @RequestMapping(value = DocUrls.DocumentCheckTaskUserName)
