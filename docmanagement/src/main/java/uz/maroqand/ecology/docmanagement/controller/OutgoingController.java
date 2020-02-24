@@ -127,7 +127,9 @@ public class OutgoingController {
         HashMap<String, Object> result = new HashMap<>();
 
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
-        Integer departmentId = userService.getCurrentUserFromContext().getDepartmentId();
+        User user = userService.getCurrentUserFromContext();
+        Integer departmentId = user.getDepartmentId();
+        Integer performerId = user.getId();
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 documentStatusIdToExclude,
@@ -138,6 +140,7 @@ public class OutgoingController {
                 documentViewId,
                 content,
                 departmentId,
+                performerId,
                 specificPageable);
 
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());

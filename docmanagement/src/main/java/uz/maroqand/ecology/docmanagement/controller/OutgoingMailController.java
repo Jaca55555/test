@@ -205,6 +205,7 @@ public class OutgoingMailController {
                 documentViewId,
                 content,
                 departmentId,
+                null,
                 specificPageable);
 
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
