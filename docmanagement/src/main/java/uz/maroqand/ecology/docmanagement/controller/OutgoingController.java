@@ -56,14 +56,20 @@ public class OutgoingController {
         Integer departmentId = user.getDepartmentId();
         Integer organizationId = user.getOrganizationId();
         Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
+        long totalOutgoing = documentService.countAll(outgoingMailType, organizationId, departmentId);
+        long haveAdditionalDocument =  documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId, departmentId);
 
-        model.addAttribute("totalOutgoing", documentService.countAll(outgoingMailType, organizationId, departmentId));
         model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId));
-        model.addAttribute("haveAdditionalDocument", documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId, departmentId));
+        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId));
+
+        model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
+        //additional document is null, 'answer not accepted translation tag'
+        model.addAttribute("answerNotAccepted", totalOutgoing - haveAdditionalDocument);
+        model.addAttribute("totalOutgoing", totalOutgoing);
 
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("documentViews", documentViewService.getStatusActive());
-        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId));
+
 
         model.addAttribute("view_link", DocUrls.OutgoingView);
 
@@ -121,7 +127,9 @@ public class OutgoingController {
         HashMap<String, Object> result = new HashMap<>();
 
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
-        Integer departmentId = userService.getCurrentUserFromContext().getDepartmentId();
+        User user = userService.getCurrentUserFromContext();
+        Integer departmentId = user.getDepartmentId();
+        Integer performerId = user.getId();
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 documentStatusIdToExclude,
@@ -132,6 +140,7 @@ public class OutgoingController {
                 documentViewId,
                 content,
                 departmentId,
+                performerId,
                 specificPageable);
 
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());

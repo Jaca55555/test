@@ -44,12 +44,14 @@
             </div>
             <h5 class="office-h5 default-color" ><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
-                <div class="office-card">
+                 <div class="row">
+                    <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${inProgress}">10</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</span></h6>
+                            <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</h6>
                         </div>
                     </div>
                 </div>
@@ -59,24 +61,17 @@
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${todayDocuments}">20</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</span></h6>
+                            <h6 class="card-title" th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</h6>
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-warning-shadow">
-                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">30</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_document_count}">Жавоб тариқасида</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
+                    <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;" >
                             <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</span></h6>
+                            <h6 class="card-title"  th:text="#{doc_outgoing.answer_document_count}">Хатга жавоб олинган</h6>
                         </div>
                     </div>
                 </div>
@@ -86,6 +81,8 @@
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title">40</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</span></h6>
+                            <h4 class="card-title" th:text="${answerNotAccepted}">40</h4>
+                            <h6 class="card-title" th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</h6>
                         </div>
                     </div>
                 </div>
@@ -95,9 +92,11 @@
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</span></h6>
+                            <h6 class="card-title"  th:text="#{doc_outgoing.all_doc_count}"Жами чиқувчи хатлар</h6>
                         </div>
                     </div>
                 </div>
+                 </div>
             </div>
         </div>
         <div class="card parent-card">
@@ -146,7 +145,6 @@
                             <label class="control-label">Хатнинг кискача мазмуни</label>
                             <div class="col-sm-12 p0">
                                 <input type="text" class="form-control" id="content">
-                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-sm-12">
@@ -162,7 +160,7 @@
                         </div>
 
                         <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;">искать</button>
+                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;" th:text="#{sys_document.search}">искать</button>
                         </div>
 
 
@@ -175,7 +173,7 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab"
-                       aria-controls="home" aria-selected="true">Жами</a>
+                       aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;"

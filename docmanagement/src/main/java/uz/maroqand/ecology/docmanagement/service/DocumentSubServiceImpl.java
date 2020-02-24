@@ -110,6 +110,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Integer documentViewId,
             String content,
             Integer departmentId,
+            Integer performerId,
             Pageable pageable
     ){
         return documentSubRepository.findAll(filteringSpecificationForOutgoingForm(
@@ -120,7 +121,9 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 dateBegin, dateEnd,
                 documentViewId,
                 content,
-                departmentId),
+                departmentId,
+                performerId
+                ),
                 pageable);
     }
 
@@ -133,7 +136,8 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Date dateEnd,
             Integer documentViewId,
             String content,
-            Integer departmentId
+            Integer departmentId,
+            Integer performerId
     ){  return (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new LinkedList<>();
@@ -156,9 +160,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentViewId"), documentViewId));
             if(content != null)
                 predicates.add(criteriaBuilder.like(joinDocument.get("content"), "%" + content + "%"));
-            if(departmentId != null)
-                predicates.add(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId));
-
+            if(departmentId != null && performerId != null) {
+                Predicate p = criteriaBuilder.or(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId), criteriaBuilder.equal(joinDocument.get("performerId"), performerId));
+                predicates.add(p);
+            }
             Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             return overAll;
         };

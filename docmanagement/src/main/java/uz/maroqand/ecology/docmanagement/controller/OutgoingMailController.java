@@ -156,11 +156,14 @@ public class OutgoingMailController {
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
 
-        model.addAttribute("totalOutgoing", documentService.countAll(outgoingMailType, organizationId));
+        long totalOutgoing = documentService.countAll(outgoingMailType, organizationId);
+        long haveAdditionalDocument = documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId);
+
+        model.addAttribute("totalOutgoing", totalOutgoing);
         model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId));
         model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId));
-        model.addAttribute("haveAdditionalDocument", documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId));
-
+        model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
+        model.addAttribute("answerNotAccepted", totalOutgoing - haveAdditionalDocument);
         model.addAttribute("edit_link", DocUrls.OutgoingMailEdit);
         model.addAttribute("view_link", DocUrls.OutgoingMailView);
         model.addAttribute("change_status_link", DocUrls.OutgoingMailChangeStatus);
@@ -202,6 +205,7 @@ public class OutgoingMailController {
                 documentViewId,
                 content,
                 departmentId,
+                null,
                 specificPageable);
 
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
