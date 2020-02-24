@@ -10,6 +10,8 @@ import uz.maroqand.ecology.core.entity.sys.File;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 /**
  * Created by Utkirbek Boltaev on 01.04.2019.
@@ -45,4 +47,5 @@ public interface DocumentService {
 
     Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet,Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser);
 
+    HashMap<String, Object> getCountersByType(Integer type);
 }
