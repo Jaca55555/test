@@ -336,8 +336,7 @@
                     <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="m10-vertical"><span th:text="#{doc.task_change_reason}">Ижро ҳолатининг ўзгариши сабаби</span></div>
 
-                    <textarea class="form-control" name="content"
-                              th:placeholder="#{doc.write_task_change_reason}"></textarea>
+                    <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
 
                     <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
 
@@ -351,13 +350,7 @@
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >
-                                Бекор қилиш
-                            </button>
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
-                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal">Бекор
-                                <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор
-                                    қилиш</button>
+                                <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор қилиш</button>
                                 <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
                         </div>
                     </div>
