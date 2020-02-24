@@ -13,7 +13,7 @@ public class DocUrls {
     private static final String Inner = "/inner"; //Ichki xujjatlar
     private static final String Appeal = "/appeal"; //Murojaatlar
     private static final String Orders = "/orders"; //Buyruqlar
-
+    private static final String DocumentCheck="/document_check"; //Document oxirgisi
     public static final String Dashboard = Prefix + "/office";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
@@ -25,6 +25,12 @@ public class DocUrls {
     public static final String IncomingTask = Prefix + Incoming + "/task";
     public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
     public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
+
+    public static final String DocumentCheckList = Prefix + DocumentCheck + "/list"; //kiruvchi xatlar
+    public static final String DocumentCheckView = Prefix + DocumentCheck + "/view"; //kiruvchi xatni ko'rish
+    public static final String DocumentCheckTask = Prefix + DocumentCheck + "/task";
+    public static final String DocumentCheckTaskSubmit = Prefix + DocumentCheck + "/task_submit";
+    public static final String DocumentCheckTaskUserName = Prefix + DocumentCheck + "/user_name";
 
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
