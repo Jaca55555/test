@@ -33,6 +33,12 @@ public class DocumentTaskSub {
 
     @Column(name = "document_id")
     private Integer documentId;
+    @Column(name="description")
+    public String description;
+    @Column(name="registrationDate")
+    public String registrationDate;
+    @Column(name="registrationNumber")
+    public String registrationNumber;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)

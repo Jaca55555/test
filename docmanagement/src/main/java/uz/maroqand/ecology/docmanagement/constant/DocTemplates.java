@@ -11,6 +11,7 @@ public class DocTemplates {
     private static final String Incoming = "/incoming";
     private static final String Outgoing = "/outgoing";
     private static final String Inner = "/inner";
+    private static final String DocumentCheck="/document_check";
 
     public static final String Dashboard = Prefix + "/office";
 
@@ -18,6 +19,12 @@ public class DocTemplates {
     public static final String IncomingList = Prefix + Incoming + "/list";
     public static final String IncomingView = Prefix + Incoming + "/view";
     public static final String IncomingTask = Prefix + Incoming + "/task";
+
+
+    //xatlarni tasdiqlash
+    public static final String DocumentCheckList=Prefix + DocumentCheck+"/list";
+    public static final String DocumentCheckTask = Prefix + DocumentCheck + "/task";
+    public static final String DocumentCheckView = Prefix + DocumentCheck + "/view";
 
     //chiquvchi xatlar
     public static final String OutgoingList = Prefix + Outgoing + "/list";

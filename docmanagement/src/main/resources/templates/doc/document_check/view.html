@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link rel="stylesheet" href="/static/bootstrap-treeview.css">
+    <style>
+        .panel{
+            overflow-y: auto;
+            overflow-x: auto;
+            width: 100%;
+            height: 600px;
+        }
+        .select2-dropdown {z-index: 1074;}
+        .status-button {cursor: pointer;}
+
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 125px;
+        }
+        #percentage {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+
+        <object th:include="doc/incoming/fragments/document_view :: document_view" th:remove="tag" ></object>
+
+        <div class="row flex-space-between" >
+            <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between align-center" style="height:65px;">
+                        <h5>
+                            <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;
+                        </h5>
+                    </div>
+                    <div class="card-block" th:object="${documentTaskSub}">
+                        <div class="row" >
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0" style="flex-flow:row wrap">
+                                    <div>
+                                        <div class="inline-block">
+                                            <i class="fas fa-user-circle fs40 color-gray column-1"> </i>
+                                        </div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-primary bold" th:if="*{receiverId!=null}" th:text="*{@helperService.getUserFullNameById(receiverId)}">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span  th:if="*{receiverId!=null}" th:text="*{@helperService.getUserPositionName(receiverId,#locale)}">Руководитель организации</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-1">
+                                        <div style="height: fit-content;display: flex;align-items: center;">
+                                            <i class="fas fa-cog fs20 color-gray pointer"></i>
+                                            <span id="currentStatus" class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
+                                        </div>
+                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                        </div>
+                                    </div>
+                                    <div class="w100"></div>
+                                    <div class="column-2 mt-2 text-container-border">
+                                        <span th:text="*{content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                    </div>
+                                    <div class="w100"></div>
+                                </div>
+                            </div>
+                            <div th:if="${#lists.size(documentTaskSubs)>0}">
+                                <div th:if="${task.id==taskSub.taskId}" th:each="taskSub : ${documentTaskSubs}">
+                                    <div class="executor col-12 m10-vertical">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-2"></i>
+                                                </div>
+                                                <div class="inline-block m10-horizontal ">
+                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-2" >
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cog fs20 color-primary pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
+                                            </div>
+                                            <div class="w100"></div>
+                                            <div class="column-3 mt-2 text-container-border">
+                                                <span th:text="${taskSub.content}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-3"></i>
+                                                </div>
+                                                <div class="inline-block m10-horizontal">
+                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-3">
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="flex-center w100 row-wrap">
+                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}"> Ижро учун йўналтириш  </a>
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-sm-12 pr-0 pr-15-mobile">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between-nowrap mb-0">
+                        <h5 class="mb-0" style="align-self:center">
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}"></span>&nbsp;&nbsp;
+                        </h5>
+                        <button class="btn-icon">
+                            <i class="fas fs20 fa-print color-gray"></i>
+                        </button>
+                    </div>
+                    <div class="card-body" id="comments">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray column-1"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
+                                    <br>
+                                    <span th:text="${log.createdBy.position.name}">Руководитель организации</span>
+                                </div>
+                            </div>
+                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
+                                10.05.2019 - 09:35
+                            </div>
+                            <div class="w100"></div>
+                            <div class="column-2 mt-3">
+                                <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
+                            </div>
+                            <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
+                                <div class="w100"></div>
+                                <div class="column-2 mt-3">
+                                    <span class='fas fa-file-pdf fs30 color-red'></span>
+                                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{sys_document.add_comment}"> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- [ Modals ] start -->
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва изохлар</span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form th:action="${comment_url}" id="commentForm">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="documentId" th:value="${document.id}">
+                        <div class="flex-space-between p0 m20-vertical">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
+                                    <br>
+                                    <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                            </div>
+                        </div>
+                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
+                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+                        <div class="m10-vertical">
+                            <span th:text="#{sys_document.additional_files}"></span>
+                        </div>
+                        <div id="file_ids" class="d-none"></div>
+                        <input type="file" class="d-none" id="addFile2" name="files" multiple>
+                        <div class="row p20" id="file-container">
+                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
+
+                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+
+                        <div class="m10-vertical"><span th:text="#{sys_document.additional_files}"></span></div>
+
+                        <div class="row p20" id="file-container">
+                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="row">
+                            <div class="flex-center w100 row-wrap">
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
+                                <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Status modal -->
+<div class="modal" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a" th:text="#{doc.execute_action_and_comments}"></span>
+                    </h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="${task_change_url}" id="changeStatusForm" class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div>
+                            <div class="inline-block">
+                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                            </div>
+                            <div class="inline-block m10-horizontal">
+                                <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
+                                <br>
+                                <span>Ташкилот рахбари</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                        </div>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
+                        <span type="button" style="width:160px" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}"
+                              class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0"></span>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span th:text="#{doc.document_task_new_status}">Хужжатнинг янги статуси</span>
+                        <div class="btn-group mb-2 mr-2">
+                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split rounded-pill table-modal-button">
+                                <span id="newStatusText" class="pl-3" th:text="#{doc.select_new_status}"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <span class="dropdown-item status-button" th:each="taskStatus: ${task_statuses}" th:text="#{${taskStatus.name}}" th:attr="data-id=${taskStatus.id}">Action</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span th:text="#{doc.document_task_additional_doc}"></span>
+                        <div class="form-group">
+                            <select class="addDocSelect col-sm-12" name="addDocId">
+                                <option value=""></option>
+                                <option th:each="document: ${docList}" th:text="${document.registrationNumber}" th:value="${document.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="taskStatus" id="taskStatus">
+                    <input type="hidden" name="taskId" th:value="${documentTaskSub.id}">
+                    <input type="hidden" name="docId" th:value="${document.id}">
+                    <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="m10-vertical"><span th:text="#{doc.task_change_reason}">Ижро ҳолатининг ўзгариши сабаби</span></div>
+
+                    <textarea class="form-control" name="content"
+                              th:placeholder="#{doc.write_task_change_reason}"></textarea>
+
+                    <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
+
+                    <div class="row p20">
+                        <div class="file-block flex-center">
+                            <div class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="m20-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >
+                                Бекор қилиш
+                            </button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор
+                                    қилиш</button>
+                                <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">
+                            Кирувчи хат №
+                            <span th:text="${document.registrationNumber}"></span>
+                            <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                    </span>
+                    </h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div class="panel">
+                            <div id="treeview-selectable" class="treeview"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
+                            <i class="fas fa-times"></i>
+                            <span th:text="#{sys_close}">Chiqish</span></button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- [ Modals ] end -->
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="/static/bootstrap-treeview.js"></script>
+
+<script type="text/javascript">
+
+
+    var alternateData = [
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        },
+        {
+            text: 'Parent 1',
+            tags: ['2'],
+            icon: 'fa fa-download',
+            nodes: [
+                {
+                    text: 'Child 1',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                    nodes: [
+                        {
+                            text: 'Parent 1',
+                            tags: ['2'],
+                            icon: 'fa fa-download',
+                            nodes: [
+                                {
+                                    text: 'Child 1',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                    nodes: [
+                                        {
+                                            text: 'Grandchild 1',
+                                            tags: ['6'],
+                                            icon: 'fa fa-download',
+                                        },
+                                        {
+                                            text: 'Grandchild 2',
+                                            tags: ['3'],
+                                            icon: 'fa fa-download',
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: 'Child 2',
+                                    tags: ['3'],
+                                    icon: 'fa fa-download',
+                                }
+                            ]
+                        },
+                        {
+                            text: 'Grandchild 1',
+                            tags: ['6'],
+                            icon: 'fa fa-download',
+                        },
+                        {
+                            text: 'Grandchild 2',
+                            tags: ['3'],
+                            icon: 'fa fa-download',
+                            state: {
+                                checked: false,
+                                disabled: false,
+                                expanded: false,
+                                selected: true,
+                                open: true,
+                            },
+                            selected:true,
+                        }
+                    ]
+                },
+                {
+                    text: 'Child 2',
+                    tags: ['3'],
+                    icon: 'fa fa-download',
+                }
+            ]
+        },
+        {
+            text: 'Parent 2',
+            tags: ['7'],
+            icon: 'fa fa-download',
+        },
+        {
+            text: 'Parent 3',
+            icon: 'fa fa-download',
+            tags: ['11']
+        },
+        {
+            text: 'Parent 4',
+            icon: 'fa fa-upload',
+            tags: ['19'],
+        },
+        {
+            text: 'Parent 5',
+            icon: 'fa fa-upload',
+            tags: ['available','0']
+        }
+    ];
+
+    $(function() {
+        console.log("defaultData41="+alternateData);
+        var initSelectableTree = function() {
+            return $('#treeview-selectable').treeview({
+                data: alternateData,
+                selectedBackColor:'#5c66bf',
+                levels: 5,
+                // nodeIcon: 'fa fa-download',
+                // multiSelect: $('#chk-select-multi').is(':checked'),
+                onNodeSelected: function(event, node) {
+                    console.log(node.tags);
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
+                },
+                onNodeUnselected: function (event, node) {
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
+                },
+                onNodeCollapsed: function(event, node) {
+                    $.each(node.nodes, function() {
+                        if (this.state.selected) {
+                            $('#treeview-selectable').treeview('selectNode', [node.nodeId, {
+                                silent: true
+                            }]);
+                            return;
+                        }
+                    });
+                }
+            });
+        };
+        initSelectableTree();
+    });
+
+
+</script>
+
+<script th:inline="javascript">
+    var urlAction = [[${comment_url}]];
+    $(document).ready(function () {
+        $('#formSend').on('click', function (e) {
+            let url = $('#commentForm').prop('action');
+            let data = $('#commentForm').serialize();
+            $.ajax({
+                url: urlAction,
+                data: data,
+                method: 'post',
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('#modal2').on('show.bs.modal', function() {
+            $('.addDocSelect').select2({
+                placeholder: "Танланг",
+                allowClear: true
+            });
+        });
+        $('#modal2').on('hidden.bs.modal', function() {
+            $('.addDocSelect').select2('destroy');
+        });
+
+        $('#submitChange').on('click', function () {
+            let form = $('#changeStatusForm');
+            let formData = form.serialize();
+            $.ajax({
+                url: form.attr('action'),
+                data: formData,
+                method: 'post',
+                success: function (data) {
+                    console.log(data);
+                    if (data.status === 'success') {
+                        // show logs
+                        let log = data.log;
+                        let html =
+                            "                        <div class=\"comment-item flex-space-between\">\n" +
+                            "                            <div>\n" +
+                            "                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
+                            "                                </i></div>\n" +
+                            "                                <div class=\"inline-block m10-horizontal\">\n" +
+                            "                                    <span class=\"color-primary bold\">"+ data.logCreateName +"</span>\n" +
+                            "                                    <br>\n" +
+                            "                                    <span>" + data.logCreatePosition + "</span>\n" +
+                            "                                </div>\n" +
+                            "                            </div>\n" +
+                            "                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +
+                            "                            <div class=\"w100\"></div>\n" +
+                            "                            <div class=\"column-2 mt-3\">\n" +
+                            "                                <span>" + log.content + "</span>\n" +
+                            "                            </div>\n</div>";
+                        $('#comments').prepend(html);
+                        $('#currentStatus').text(data.taskStatus);
+
+                        $('#modal2').modal('toggle');
+                    }
+                }
+            })
+        });
+
+        $('.status-button').on('click', function () {
+            $('#taskStatus').val($(this).data('id'));
+            $('#newStatusText').text($(this).text());
+        })
+    });
+
+    function clickPlus() {
+        $('#addFile2').click();
+    }
+
+    $('#addFile2').on('change', function () {
+
+        let csrf = $("form input[name='_csrf']").val();
+        let files = document.querySelector('#addFile2').files[0];
+        let fd = new FormData();
+        fd.append("file", files);
+        fd.append("_csrf", csrf);
+        $.ajax({
+            url: "/doc/outgoing_mail/file/upload",
+            type: 'post',
+            data: fd,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: detectExtensionAndDisplay,
+            beforeSend: function () {
+                $('#addFileButton').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#addFileButton').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+        })
+    });
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function deleteFunc(id) {
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+    }
+
+    $('#document_organization_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
+    $('#additional_document_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let color;
+        let name = data.data.name;
+        switch (extension) {
+            case 'bmp':
+            case 'jpg':
+            case 'png':
+                extension = '-image';
+                color = 'color-blue';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case "xls":
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').prepend(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${data.data.name}</span>
+                        </div>
+                    </div>`
+        );
+    }
+
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -32,11 +32,14 @@
                     <label class="control-label"  th:text="#{doc_communication_tool.id}"></label><br/>
                     <input type="text" class="form-control" id="id" />
                 </div>
-                <div class="form-group col-sm-3">
+                <div class="form-group-row col-sm-3">
                     <label class="control-label"  th:text="#{doc_communication_tool.name}"></label><br/>
-                    <input type="text" class="form-control" id="name">
+                    <input type="text" class="form-control" id="name" />
                 </div>
+
+
             </div>
+
             <div class="col-sm-12 text-right">
                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info btn-sm"><i class="feather icon-search"></i>
                     <span th:text="#{sys_search}">Поиск</span>
@@ -123,9 +126,10 @@
     }
 
     function datatableConnect() {
-        cDataTable = dataDatatableSelector.DataTable({
+        dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
+            searching: true,
             scrollX: true,
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],

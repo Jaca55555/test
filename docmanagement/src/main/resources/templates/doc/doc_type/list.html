@@ -37,12 +37,12 @@
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="docType" class="control-label" th:text="#{doc.doc_type_type}">Хужжат тури</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible custom-select"
                                     id="docType" tabindex="-1" aria-hidden="true">
                                 <option></option>
                                 <option th:each="i: ${doc_type}" th:value="${i}" th:text="${i.name}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
+<!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
@@ -55,13 +55,13 @@
                     <div class="form-group col-md-4 col-sm-12">
                         <label for="status" class="control-label" th:text="#{doc.doc_type_status}">Хужжат тури</label>
                         <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible custom-select"
                                     id="status" tabindex="-1" aria-hidden="true">
                                 <option></option>
                                 <option th:value="0" th:text="#{doc.doc_status_inactive}"></option>
                                 <option th:value="1" th:text="#{doc.doc_status_active}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
+<!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             <thead>
                             <tr role="row">
                                 <th th:text="#{doc.doc_id}">ID</th>
-                                <th th:text="#{doc.doc_type}"></th>
+                                <th th:text="#{doc.doc_type_type}"></th>
                                 <th th:text="#{doc.doc_name}"></th>
                                 <th th:text="#{doc.doc_type_status}"></th>
                                 <th th:text="#{actions}"></th>
@@ -115,12 +115,13 @@
     }
 
     function renderActionsColumn(data, type, row, meta) {
+
         var html = '<div class="btn-group">';
-        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+data+'" title="view">'
+        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="view">'
             + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+data+'" title="edit">'
+        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+data+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" onclick="return confirm(\'O`chirilsinmi?\')" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }
@@ -134,13 +135,14 @@
             pageLength: 25,
             dom: 'lrtip',
             lengthMenu: [[25, 50, 100], [25, 50, 100]],
-            order: [[0, 'desc']],
+            order: [[0, 'asc']],
+
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'type'},
                 {data: 2, name: 'name'},
                 {data: 3, name: 'status'},
-                {data: 4, name: 'id', render: renderActionsColumn, orderable: false}
+                {render: renderActionsColumn, orderable: false}
             ],
             ajax: function (dataToSend, callback, settings) {
                 let api = this.api();
@@ -151,10 +153,13 @@
                 dataToSend.name = $('#name').val();
                 dataToSend.status = $('#status').val();
 
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
                 $.get(ajaxListLink, dataToSend, function(data){
                     callback(data);
                 });
             },
+
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }
@@ -168,12 +173,7 @@
         thead = dataDatatableSelector.html();
         getDatatableConnect();
 
-        $(document).on('click', '.delete', function (e) {
-            e.preventDefault();
-            if (confirm("O'chirish kerakmi?")) {
-                console.log('deleted');
-            }
-        });
+
         $('#filter').on('change', function () {
             getDatatableConnect();
         })
