@@ -56,10 +56,9 @@ public class DocController {
             DocumentLogService documentLogService,
             DocumentViewService documentViewService,
             DocumentTaskService taskService,
-            DocumentOrganizationService documentOrganizationService
-    ) {
             DocumentOrganizationService documentOrganizationService,
-            HelperService helperService) {
+            HelperService helperService
+    ) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
