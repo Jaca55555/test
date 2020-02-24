@@ -387,9 +387,27 @@
             },
             columns: [
                 {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'registrationNumber'},
-                {data: 2, name: 'registrationDate'},
-                {data: 3, name: 'content'},
+                {data: 1, name: 'registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 2, name: 'registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 3, name: 'content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[3]+'</a>';
+                        return html;
+                    }
+                },
                 {data: 4, name: 'createdAt'},
                 {data: 5, name: 'updateAt'},
                 {render: renderChangeColumn, orderable: false},

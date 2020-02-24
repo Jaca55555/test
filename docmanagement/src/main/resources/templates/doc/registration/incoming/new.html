@@ -10,13 +10,13 @@
             float: left;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 125px;
+            transform: translate(-50%, -53%);
+            max-width: 115px;
         }
         #percentage {
             position: absolute;
-            top: 60%;
-            left: 50%;
+            top: 65%;
+            left: 8%;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -156,7 +156,7 @@
                         <div class="text-center file-icon-container align-self-center color-gray">
                             <span class="fas fa-plus" id="plus-icon"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
-                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
@@ -318,7 +318,7 @@
             $('#file_ids').append(
                 `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
             );
-            $('#file-container').prepend(
+            $('#file-container').append(
                 `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>

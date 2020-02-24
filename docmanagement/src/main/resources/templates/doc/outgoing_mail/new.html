@@ -11,13 +11,13 @@
             float: left;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 125px;
+            transform: translate(-50%, -52%);
+            max-width: 115px;
         }
         #percentage {
             position: absolute;
-            top: 60%;
-            left: 50%;
+            top: 88%;
+            left: 8%;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -141,7 +141,7 @@
                         <div  class="text-center file-icon-container align-self-center color-gray">
                             <span class="fas fa-plus" id="addFileButton"></span>
 <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
-                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
@@ -283,7 +283,26 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: detectExtensionAndDisplay
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
+                }
             })
         });
     }
@@ -322,7 +341,7 @@
         $('#file_ids').append(
             `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
         );
-        $('#file-container').prepend(
+        $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
