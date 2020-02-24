@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <object th:include="doc/inner/fragments/document_view :: document_view" th:remove="tag" ></object>
+
+        <div class="row flex-space-between" th:object="${documentTask}">
+            <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between align-center" style="height:65px;">
+                        <h5>
+                            <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;№
+                        </h5>
+                    </div>
+                    <div class="card-block">
+                        <div class="row" >
+                            <div class="executor col-12 m10-vertical">
+                                <div class="flex-space-between p0" style="flex-flow:row wrap">
+                                    <div>
+                                        <div class="inline-block">
+                                            <i class="fas fa-user-circle fs40 color-gray column-1"> </i>
+                                        </div>
+                                        <div class="inline-block m10-horizontal">
+                                            <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
+                                            <br>
+                                            <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-space-between p0 align-center column-1">
+                                        <div style="height: fit-content;display: flex;align-items: center;">
+                                            <i class="fas fa-cog fs20 color-gray pointer"></i>
+                                            <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
+                                        </div>
+                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
+                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                        </div>
+                                    </div>
+                                    <div class="w100"></div>
+                                    <div class="column-2 mt-2 text-container-border">
+                                        <span th:text="*{content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                    </div>
+                                    <div class="w100"></div>
+                                </div>
+                            </div>
+                            <div th:if="${#lists.size(documentTaskSubs)>0}">
+                                <div th:if="${documentTask.id==taskSub.taskId}" th:each="taskSub : ${documentTaskSubs}">
+                                    <div class="executor col-12 m10-vertical">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-2"></i>
+                                                </div>
+                                                <div class="inline-block m10-horizontal ">
+                                                    <span class="color-primary bold" th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-2" >
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cog fs20 color-primary pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
+                                            </div>
+                                            <div class="w100"></div>
+                                            <div class="column-3 mt-2 text-container-border">
+                                                <span th:text="${taskSub.content}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && documentTask.id==taskSub1.taskId}">
+                                        <div class="flex-space-between p0">
+                                            <div>
+                                                <div class="inline-block">
+                                                    <i class="fas fa-user-circle fs40 color-gray column-3"></i>
+                                                </div>
+                                                <div class="inline-block m10-horizontal">
+                                                    <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                    <br>
+                                                    <span th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-space-between p0 align-center column-3">
+                                                <div class="align-center height-fit">
+                                                    <i class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                </div>
+                                                <div class="align-center height-fit">
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 pr-0 pr-15-mobile">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between-nowrap mb-0">
+                        <h5 class="mb-0" style="align-self:center">
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}"></span>&nbsp;&nbsp;
+                        </h5>
+                        <button class="btn-icon">
+                            <i class="fas fs20 fa-print color-gray"></i>
+                        </button>
+                    </div>
+                    <div class="card-body" id="comments">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray column-1"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
+                                    <br>
+                                    <span th:text="${log.createdBy.position.name}">Руководитель организации</span>
+                                </div>
+                            </div>
+                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
+                                10.05.2019 - 09:35
+                            </div>
+                            <div class="w100"></div>
+                            <div class="column-2 mt-3">
+                                <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
+                            </div>
+                            <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
+                                <div class="w100"></div>
+                                <div class="column-2 mt-3">
+                                    <span class='fas fa-file-pdf fs30 color-red'></span>
+                                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal1" th:text="#{sys_document.add_comment}"> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <hr class="m20-vertical">
+    <div class="flex-center w100 row-wrap">
+        <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"  href="#">Янги
+            топшириқ қўшиш
+
+        </a>
+        <button type="button"
+                class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"
+                data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
+    </div>
+</div>
+
+<!-- [ Modals ] start -->
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a"><span th:text="#{sys_document.comments_and_execute}">Ижро амаллари ва изохлар</span></span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div>
+                            <div class="inline-block">
+                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                            </div>
+                            <div class="inline-block m10-horizontal">
+                                <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
+                                <br>
+                                <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                        </div>
+                    </div>
+                    <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
+
+                    <textarea class="form-control" name="validation-text" placeholder="Изоҳ матнини киритинг"></textarea>
+                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+                    <div class="row p20">
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-red">
+                                <span class="fas fa-file-pdf"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.pdf</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-blue">
+                                <span class="fas fa-file-word"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.docx</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-green">
+                                <span class="fas fa-file-excel"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Таблица.xlsx</span>
+                            </div>
+                        </div>
+                        <div class="file-block flex-center">
+                            <div class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="m20-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                қилиш</button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a"><span th:text="#{sys_document.comments_and_execute}">Ижро амаллари ва изохлар</span></span>
+                    </h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical">
+                        <div>
+                            <div class="inline-block">
+                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                            </div>
+                            <div class="inline-block m10-horizontal">
+                                <span class="color-green bold">Абдуллаев А. А.</span>
+                                <br>
+                                <span>Ташкилот рахбари</span>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                        </div>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span>Хужжатнинг жорий статуси</span>
+                        <button type="button" style="width:160px"
+                                class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0">Жараёнда
+                        </button>
+                    </div>
+                    <div class="flex-space-between p0 m20-vertical align-center">
+                        <span>Хужжатнинг янги статуси</span>
+                        <div class="btn-group mb-2 mr-2">
+                            <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button">Маълумот сўралган</button>
+                            <button type="button"
+                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                    class="sr-only">Toggle
+                                        Dropdown</span></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#!">Action</a>
+                                <a class="dropdown-item" href="#!">Another action</a>
+                                <a class="dropdown-item" href="#!">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#!">Separated link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m10-vertical"><span>Ижро ҳолатининг ўзгариши сабаби</span></div>
+
+                    <textarea class="form-control" name="validation-text" placeholder="Ижро ҳолатини ўзгартириш сабабини киритинг"></textarea>
+                    <div class="m10-vertical"><span>Изохга қўшимча файллар</span></div>
+                    <div class="row p20">
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-red">
+                                <span class="fas fa-file-pdf"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.pdf</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-blue">
+                                <span class="fas fa-file-word"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Письмо.docx</span>
+                            </div>
+                        </div>
+                        <div class="file-block">
+                            <div class="text-right">
+                                <span class="fas fa-trash-alt"></span>
+                            </div>
+                            <div class="text-center file-icon-container color-green">
+                                <span class="fas fa-file-excel"></span>
+                            </div>
+                            <div class="text-center">
+                                <span>Таблица.xlsx</span>
+                            </div>
+                        </div>
+                        <div class="file-block flex-center">
+                            <div class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="m20-vertical">
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal">Бекор
+                                қилиш</button>
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Modals ] end -->
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>

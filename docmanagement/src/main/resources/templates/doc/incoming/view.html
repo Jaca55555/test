@@ -255,7 +255,7 @@
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
-                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{sys_cancel}" data-dismiss="modal"></button>
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{sys_cancel}" data-dismiss="modal" id="closeCommentModal"></button>
                                 <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
                             </div>
                         </div>
@@ -329,15 +329,15 @@
 
                     <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
 
-                    <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
+                    <!--<div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>-->
 
-                    <div class="row p20">
+                    <!--<div class="row p20">
                         <div class="file-block flex-center">
                             <div class="text-center file-icon-container align-self-center color-gray">
                                 <span class="fas fa-plus"></span>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
@@ -561,20 +561,9 @@
 
 <script th:inline="javascript">
     var urlAction = [[${comment_url}]];
+    var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     $(document).ready(function () {
-        $('#formSend').on('click', function (e) {
-            let url = $('#commentForm').prop('action');
-            let data = $('#commentForm').serialize();
-            $.ajax({
-                url: urlAction,
-                data: data,
-                method: 'post',
-                success: function (data) {
-                    console.log(data);
-                }
-            });
-            e.preventDefault();
-        });
+
 
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
@@ -627,6 +616,58 @@
             $('#taskStatus').val($(this).data('id'));
             $('#newStatusText').text($(this).text());
         })
+    });
+
+    $('#formSend').on('click', function (e) {
+        let url = $('#commentForm').prop('action');
+        let data = $('#commentForm').serialize();
+        $.ajax({
+            url: urlAction,
+            data: data,
+            method: 'post',
+            success: function (data) {
+                console.log(data);
+                console.log(data.status);
+                if(data != undefined && data.status=="success"){
+                    // show logs
+                    var log = data.log;
+                    var html =' <div class="comment-item flex-space-between">\n' +
+                        '           <div>\n' +
+                        '               <div class="inline-block">\n' +
+                        '                   <i class="fas fa-user-circle fs40 color-gray column-1"></i>\n' +
+                        '               </div>\n' +
+                        '               <div class="inline-block m10-horizontal">\n' +
+                        '                   <span class="color-primary bold">'+data.createName+'</span>\n' +
+                        '                   <br>\n' +
+                        '                   <span >'+data.createPosition+'</span>\n' +
+                        '               </div>\n' +
+                        '           </div>\n' +
+                        '           <div class="fs11" >\n' + data.createdAt + '</div>\n' +
+                        '           <div class="w100"></div>\n' +
+                        '           <div class="column-2 mt-3">\n' +
+                        '               <span >'+log.content+' </span>\n' +
+                        '           </div>'+
+                        '       <div >\n';
+
+                    if (log.contentFiles!=null && log.contentFiles.length>0){
+                        $.each(log.contentFiles,function (element,val) {
+                            html+=' <div class="w100"></div>\n' +
+                                '       <div class="column-2 mt-3">\n' +
+                                '           <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                '           <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                '       </div>\n' +
+                                '   </div>';
+                        })
+
+                    }
+
+                    html+='</div>';
+                    $('#comments').prepend(html);
+                    $('#closeCommentModal').click();
+                }
+            }
+        });
+        e.preventDefault();
     });
 
     function clickPlus() {
