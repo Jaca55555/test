@@ -317,8 +317,8 @@ public class IncomingRegistrationController {
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("managerUserList", userService.getEmployeeList());
-        model.addAttribute("controlUserList", userService.getEmployeeList());
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
 
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -332,7 +332,7 @@ public class IncomingRegistrationController {
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
-            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "documentOrganizationId") String documentOrganizationId,
             @RequestParam(name = "docSubId") Integer docSubId,
             @RequestParam(name = "executeFormId", required = false) Integer executeForm,
             @RequestParam(name = "controlFormId", required = false) Integer controlForm,
@@ -352,8 +352,19 @@ public class IncomingRegistrationController {
         if (document1==null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
+        Integer documentOrganizationId1;
+        try {
+            documentOrganizationId1 = Integer.parseInt(documentOrganizationId);
+        }catch(NumberFormatException ex){
+            System.out.println("creating new document organization with '" + documentOrganizationId + "' name");
+            DocumentOrganization documentOrganization = new DocumentOrganization();
+            documentOrganization.setName(documentOrganizationId);
+            documentOrganization.setStatus(true);
+            documentOrganization.setCreatedById(user.getId());
+            documentOrganizationId1 = organizationService.create(documentOrganization).getId();
+        }
 
-        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
+        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
             return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();

@@ -143,8 +143,8 @@ public class InnerRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("chief", userService.getEmployeeList());
-        model.addAttribute("executeController", userService.getEmployeeList());
+        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("action_url", DocUrls.InnerRegistrationNew);
@@ -208,8 +208,8 @@ public class InnerRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("managerUserList", userService.getEmployeeList());
-        model.addAttribute("controlUserList", userService.getEmployeeList());
+        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
