@@ -17,6 +17,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
+import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -96,117 +97,44 @@ public class DocumentCheckController {
     @RequestMapping(value = DocUrls.DocumentCheckList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getDocumentCheckRegistrationList(
-            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "docRegNumber") String docRegNumber,
-            @RequestParam(name = "registrationNumber") String registrationNumber,
-            @RequestParam(name = "dateBegin") String dateBeginStr,
-            @RequestParam(name = "dateEnd") String dateEndStr,
-            @RequestParam(name = "taskContent") String taskContent,
-            @RequestParam(name = "content") String content,
-            @RequestParam(name = "performerId") Integer performerId,
-            @RequestParam(name = "taskSubType") Integer taskSubType,
-            @RequestParam(name = "taskSubStatus") Integer taskSubStatus,
-            @RequestParam(name = "tabFilter") Integer tabFilter,
+            IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
-        User user = userService.getCurrentUserFromContext();
-        Date deadlineDateBegin = null;
-        Date deadlineDateEnd = null;
-        Integer type = null;
-        Set<Integer> status = null;
-        Integer departmentId = null;
-        Integer receiverId = user.getId();
-        Calendar calendar = Calendar.getInstance();
 
-        switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
-            case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.New.getId());
-                status.add(TaskSubStatus.InProgress.getId());
-                status.add(TaskSubStatus.Waiting.getId());
-                status.add(TaskSubStatus.Agreement.getId());
-                break;//Муддати кеччикан
-            case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-                deadlineDateEnd = calendar.getTime();
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.New.getId());
-                status.add(TaskSubStatus.InProgress.getId());
-                status.add(TaskSubStatus.Waiting.getId());
-                status.add(TaskSubStatus.Agreement.getId());
-                break;//Муддати якинлашаётган
-            case 5:
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.Checking.getId());
-                break;//Ижро назоратида
-            case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
-            case 7:
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.Complete.getId());
-                break;//Якунланган
-            default:
-                departmentId = user.getDepartmentId();
-                receiverId=null;
-                break;//Жами
-        }
-
+        System.out.println(incomingRegFilter.getTabFilter());
+        incomingRegFilter.setStatus(TaskStatus.Checking.toString());
         HashMap<String, Object> result = new HashMap<>();
-        Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
-                documentOrganizationId,
-                docRegNumber,
-                registrationNumber,
-                DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat),
-                DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat),
-                taskContent,
-                content,
-                performerId,
-                taskSubType,
-                taskSubStatus,
-
-                deadlineDateBegin,
-                deadlineDateEnd,
-                type,
-                status,
-                departmentId,
-                receiverId,
-                pageable
-        );
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        List<DocumentTask> documentTaskList = documentTaskPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
-        List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
-        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
-        for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
-            Document document = documentService.getById(documentTaskSub.getDocumentId());
+        for (DocumentTask documentTask : documentTaskList) {
+            Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    documentTaskSub.getId(),
+                    documentTask.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTaskSub.getContent(),
-                    documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
-                    documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
-                    documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
-                    documentTaskSub.getContent()
+                    documentTask.getContent(),
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                    documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
+                    documentTask.getStatus()!=null ? helperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getContent()
             });
         }
 
-        result.put("recordsTotal", documentTaskSubs.getTotalElements()); //Total elements
-        result.put("recordsFiltered", documentTaskSubs.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
         return result;
     }
 
     @RequestMapping(DocUrls.DocumentCheckView)
     public String getDocumentViewPage(
-            @RequestParam(name = "id")Integer taskSubId,
+            @RequestParam(name = "id")Integer taskId,
             Model model
     ) {
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
-        if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
-            return "redirect:" + DocUrls.DocumentCheckList;
-        }
-        DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
+
+        DocumentTask task = documentTaskService.getById(taskId);
         if (task == null) {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
@@ -225,158 +153,35 @@ public class DocumentCheckController {
         model.addAttribute("document", document);
         model.addAttribute("task", task);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-        model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findFiltered(docFilterDTO, new PageRequest(0,100, Sort.Direction.DESC, "id")));
         return DocTemplates.DocumentCheckView;
     }
 
-    @RequestMapping(value = DocUrls.DocumentCheckTask)
-    public String addTask(
-            @RequestParam(name = "id")Integer taskSubId,
-            Model model
-    ) {
-        User user = userService.getCurrentUserFromContext();
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
-        if (documentTaskSub == null) {
-            return  "redirect:" + DocUrls.DocumentCheckList;
-        }
-        Document document = documentService.getById(documentTaskSub.getDocumentId());
-        if (document == null) {
-            return  "redirect:" + DocUrls.DocumentCheckList;
-        }
-        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(documentTaskSub.getTaskId(),document.getId());
-        if (documentTask == null) {
-            return  "redirect:" + DocUrls.DocumentCheckList;
-        }
-
-        List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
-
-        model.addAttribute("document", document);
-        model.addAttribute("documentTask", documentTask);
-        model.addAttribute("documentTaskSub", documentTaskSub);
-        model.addAttribute("userList", userList);
-        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("action_url", DocUrls.DocumentCheckTaskSubmit);
-        model.addAttribute("back_url", DocUrls.DocDescriptionView+"?id=" + documentTaskSub.getId());
-        return DocTemplates.DocumentCheckTask;
-    }
-
-    @RequestMapping(value = DocUrls.DocumentCheckTaskSubmit)
-    public String DocumentTaskSubmit(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "taskId") Integer taskId,
-            @RequestParam(name = "content") String content,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
-            @RequestBody MultiValueMap<String, String> formData
+    @RequestMapping(DocUrls.DocumentCheckComplete)
+    public String documentCheckComplete(
+            @RequestParam(name = "id") Integer id
     ){
         User user = userService.getCurrentUserFromContext();
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
-        if (documentTaskSub==null){
+        DocumentTask documentTask = documentTaskService.getById(id);
+        if (documentTask==null){
             return "redirect:" + DocUrls.DocumentCheckList;
         }
 
-        Document document = documentService.getById(documentTaskSub.getDocumentId());
+        Document document = documentService.getById(documentTask.getDocumentId());
         if (document==null){
             return "redirect:" + DocUrls.DocumentCheckList;
         }
 
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
+        documentTask.setStatus(TaskStatus.Complete.getId());
+        documentTaskService.update(documentTask);
 
-        DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
-        if (documentTask==null){
-            return "redirect:" + DocUrls.DocumentCheckList;
-        }
-        Integer userId = null;
-        Integer performerType = null;
-        Date dueDate = null;
-        Map<String,String> map = formData.toSingleValueMap();
-        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+        return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTask.getId();
 
-            String[] paramName =  mapEntry.getKey().split("_");
-            String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
-
-            if (tagName.equals("user")){
-                userId=Integer.parseInt(value);
-            }
-            if (tagName.equals("performer")){
-                performerType = Integer.parseInt(value);
-            }
-
-            if (tagName.equals("dueDateStr")){
-                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
-                if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
-                    userId = null;
-                    performerType = null;
-                    dueDate = null;
-                }
-            }
-        }
-
-        return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTaskSub.getId();
     }
-
-    @RequestMapping(value = DocUrls.DocumentCheckTaskUserName)
-    @ResponseBody
-    public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
-        HashMap<String,Object> result = new HashMap<>();
-        result.put("status",1);
-        User user = userService.findById(userId);
-        if (user==null){
-            result.put("status",0);
-            return result;
-        }
-
-        result.put("userId",user.getId());
-        result.put("userFullName",user.getFullName());
-        result.put("position", user.getPosition().getNameTranslation(locale));
-        return result;
-    }
-
-//    @RequestMapping(DocUrls.DocumentTaskChange)
-//    @ResponseBody
-//    public HashMap<String, Object> changeTaskStatus(
-//            @RequestParam(name = "content")String content,
-//            @RequestParam(name = "taskStatus")Integer status,
-//            @RequestParam(name = "taskId")Integer taskId,
-//            @RequestParam(name = "addDocId")Integer additionalDocId,
-//            @RequestParam(name = "docId")Integer docId
-//    ) {
-//        HashMap<String, Object> response = new HashMap<>();
-//        User user = userService.getCurrentUserFromContext();
-//        DocumentLog log = new DocumentLog();
-//        log.setCreatedById(user.getId());
-//        log.setContent(content);
-//        log.setDocumentId(docId);
-//        log.setType(2);
-//        documentLogService.create(log);
-//        String logAuthorPos = positionService.getById(user.getPositionId()).getName();
-//
-//        DocumentTaskSub taskSub = documentTaskSubService.getById(taskId);
-//        taskSub.setStatus(status);
-//        taskSub.setContent(content);
-//        taskSub.setUpdateById(user.getId());
-//        taskSub.setAdditionalDocumentId(additionalDocId);
-//        documentTaskSubService.update(taskSub);
-//
-//        response.put("task", taskSub);
-//        response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
-//        response.put("status", "success");
-//        response.put("log", log);
-//        response.put("logCreateName", user.getFullName());
-//        response.put("logCreatePosition", logAuthorPos);
-//        return response;
-//    }
 }
 

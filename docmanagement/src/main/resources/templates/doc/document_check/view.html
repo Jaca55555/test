@@ -58,7 +58,7 @@
                             <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;
                         </h5>
                     </div>
-                    <div class="card-block" th:object="${documentTaskSub}">
+                    <div class="card-block" th:object="${task}">
                         <div class="row" >
                             <div class="executor col-12 m10-vertical">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
@@ -67,9 +67,9 @@
                                             <i class="fas fa-user-circle fs40 color-gray column-1"> </i>
                                         </div>
                                         <div class="inline-block m10-horizontal">
-                                            <span class="color-primary bold" th:if="*{receiverId!=null}" th:text="*{@helperService.getUserFullNameById(receiverId)}">Абдуллаев А. А.</span>
+                                            <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
                                             <br>
-                                            <span  th:if="*{receiverId!=null}" th:text="*{@helperService.getUserPositionName(receiverId,#locale)}">Руководитель организации</span>
+                                            <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
                                         </div>
                                     </div>
                                     <div class="flex-space-between p0 align-center column-1">
@@ -147,12 +147,12 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" href="#">
-                                <span th:text="#{doc_incoming.sub_task_add}">Ижро учун йўналтириш</span>
+                            <a th:if="${task.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckComplete + '?id=' + task.id}">
+                                <span th:text="#{doc_check.complete}"></span>
                             </a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
+                            <!--<button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
                                 <span th:text="#{doc_incoming.doc_log_add}">Ижро холатини белгилаш</span>
-                            </button>
+                            </button>-->
                         </div>
                     </div>
                 </div>
@@ -265,8 +265,8 @@
         </div>
     </div>
 </div>
-
-<!-- Status modal -->
+<!--
+&lt;!&ndash; Status modal &ndash;&gt;
 <div class="modal" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
     <div class="modal-dialog col-xl-6 col-12" role="document">
         <div class="modal-content">
@@ -297,7 +297,7 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
-                        <span type="button" style="width:160px" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}"
+                        <span type="button" style="width:160px" th:if="${documentTaskSub.status!=null}" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}"
                               class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0"></span>
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
@@ -329,15 +329,15 @@
 
                     <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
 
-                    <!--<div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>-->
+                    &lt;!&ndash;<div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>&ndash;&gt;
 
-                    <!--<div class="row p20">
+                    &lt;!&ndash;<div class="row p20">
                         <div class="file-block flex-center">
                             <div class="text-center file-icon-container align-self-center color-gray">
                                 <span class="fas fa-plus"></span>
                             </div>
                         </div>
-                    </div>-->
+                    </div>&ndash;&gt;
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
@@ -354,6 +354,7 @@
         </div>
     </div>
 </div>
+-->
 
 
 <!--<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">

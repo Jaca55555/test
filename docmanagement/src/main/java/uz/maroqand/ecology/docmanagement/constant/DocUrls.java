@@ -29,7 +29,7 @@ public class DocUrls {
 
     public static final String DocumentCheckList = Prefix + DocumentCheck + "/list"; //kiruvchi xatlar
     public static final String DocumentCheckView = Prefix + DocumentCheck + "/view"; //kiruvchi xatni ko'rish
-    public static final String DocumentCheckTask = Prefix + DocumentCheck + "/task";
+    public static final String DocumentCheckComplete = Prefix + DocumentCheck + "/complete";
     public static final String DocumentCheckTaskSubmit = Prefix + DocumentCheck + "/task_submit";
     public static final String DocumentCheckTaskUserName = Prefix + DocumentCheck + "/user_name";
 
