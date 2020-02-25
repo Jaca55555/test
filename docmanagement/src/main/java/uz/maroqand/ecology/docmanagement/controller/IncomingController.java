@@ -219,6 +219,7 @@ public class IncomingController {
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
         statuses.add(TaskSubStatus.Agreement);
+        statuses.add(TaskSubStatus.Checking);
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
@@ -369,6 +370,11 @@ public class IncomingController {
         taskSub.setUpdateById(user.getId());
         taskSub.setAdditionalDocumentId(additionalDocId);
         documentTaskSubService.update(taskSub);
+        DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
+        if (documentTask!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
+                documentTask.setStatus(TaskStatus.Checking.getId());
+                documentTaskService.update(documentTask);
+        }
 
         response.put("task", taskSub);
         response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
