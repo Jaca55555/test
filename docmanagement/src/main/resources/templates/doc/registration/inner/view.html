@@ -374,8 +374,14 @@
         </div>
     </div>
 </div>
+</div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script th:inline="javascript">
+    $(document).ready(function () {
+            docFileName([[${document.contentFiles}]]);
+    });
 
+</script>
 </body>
 </html>

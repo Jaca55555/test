@@ -172,7 +172,9 @@
     var task_sub_type_performer_partner = [[#{task_sub_type.performer_partner}]];
     var task_sub_type_control = [[#{task_sub_type.control}]];
     var task_sub_type_info = [[#{task_sub_type.info}]];
-
+    $(document).ready(function () {
+        docFileName([[${document.contentFiles}]]);
+    });
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTaskUserName}]];
     $('#add_user').on('click',function () {
         var userId = $('#userId').val();

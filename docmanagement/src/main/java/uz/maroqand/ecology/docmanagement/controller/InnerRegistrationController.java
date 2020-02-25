@@ -133,13 +133,14 @@ public class InnerRegistrationController {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
         model.addAttribute("document", document);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerRegistrationView;
     }
 
     @RequestMapping(DocUrls.InnerRegistrationNew)
     public String getInnerRegistrationNewPage(Model model) {
-        model.addAttribute("doc", new Document());
+        model.addAttribute("document", new Document());
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());

@@ -150,8 +150,6 @@ public class DocumentCheckController {
         if (document == null) {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
         model.addAttribute("task", task);

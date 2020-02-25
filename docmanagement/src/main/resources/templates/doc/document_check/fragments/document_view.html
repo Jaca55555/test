@@ -119,7 +119,9 @@
                             </div>
                             <div class="card-body" style="display: flex;text-align: left;align-items: center;">
                                 <a class="view-pdf" dat th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
-                                    <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    <div th:id="'file_name_'+${file.id}"></div>
+
+                                    <!--<h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>-->
                                 </a>
                             </div>
                         </div>

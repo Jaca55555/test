@@ -96,3 +96,22 @@ function switchLanguage(targetLanguage) {
 
     window.location.href = currentUrl;
 }
+
+function fileNameSubString(fileName) {
+    var lastIndex = fileName.lastIndexOf('.');
+    var subStringName = fileName.substring(0,lastIndex);
+    var getExtension = fileName.substring(lastIndex,fileName.length);
+    if (subStringName.length>10){
+        subStringName = subStringName.substring(0,9)+'..';
+    }
+    subStringName += getExtension;
+    return subStringName;
+}
+
+function docFileName(files) {
+    if (files!=null && files.length>0){
+        $.each(files,function (item, value) {
+            $('#file_name_'+value.id).html('<span>'+fileNameSubString(value.name)+'</span>');
+        })
+    }
+}

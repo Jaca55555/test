@@ -27,7 +27,7 @@
         <div class="p10-horizontal mobile-column">
             <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
             <div class="btn-group ml-2">
-                <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:text="#{${document.status.name}}">Жараёнда</span> </button>
+                <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:if="${document.status!=null}" th:text="#{${document.status.name}}">Жараёнда</span> </button>
                 <!--<button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>-->
@@ -119,7 +119,9 @@
                             </div>
                             <div class="card-body" style="display: flex;text-align: left;align-items: center;">
                                 <a class="view-pdf" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" target="_blank">
-                                    <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    <div th:id="'file_name_'+${file.id}">
+                                        <!--<h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>-->
+                                    </div>
                                 </a>
                             </div>
                         </div>

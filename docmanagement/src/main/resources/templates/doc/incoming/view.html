@@ -559,18 +559,18 @@
 
 </script>
 
-<script th:inline="javascript">
+<script th:inline="javascript" type="text/javascript">
     var urlAction = [[${comment_url}]];
     var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     $(document).ready(function () {
-
-
+            docFileName([[${document.contentFiles}]]);
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
                 placeholder: "Танланг",
                 allowClear: true
             });
         });
+
         $('#modal2').on('hidden.bs.modal', function() {
             $('.addDocSelect').select2('destroy');
         });
@@ -793,7 +793,7 @@
         $('#percentage-num').html(progress);
     }
 
-    function fileNameSubString(fileName) {
+   /* function fileNameSubString(fileName) {
         var lastIndex = fileName.lastIndexOf('.');
         var subStringName = fileName.substring(0,lastIndex);
         var getExtension = fileName.substring(lastIndex,fileName.length);
@@ -802,7 +802,7 @@
         }
         subStringName += getExtension;
         return subStringName;
-    }
+    }*/
 
 
 </script>
