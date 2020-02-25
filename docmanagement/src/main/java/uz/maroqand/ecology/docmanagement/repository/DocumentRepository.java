@@ -43,4 +43,15 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 
     Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(Integer documentTypeId, Integer organizationId, Integer departmentId);
 
+    @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id WHERE dt.type.id = ?1 AND d.deleted = FALSE")
+    Integer countAllDocByType(Integer type);
+
+    @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id WHERE dt.type.id = ?1 AND d.status IN (?2) AND d.deleted = FALSE")
+    Integer countAllDocByTypeAndStatusIn(Integer type, List<DocumentStatus> status);
+
+    @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id LEFT JOIN DocumentTask dtk ON dtk.documentId = d.id WHERE dt.type.id = ?1 AND d.status <> uz.maroqand.ecology.docmanagement.constant.DocumentStatus.Completed AND dtk.dueDate BETWEEN ?2 AND ?3 AND d.deleted = FALSE")
+    Integer countAllDocByTypeAndDueDateBetween(Integer type, Date beginDate, Date endDate);
+
+    @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id LEFT JOIN DocumentTask dtk ON dtk.documentId = d.id WHERE dt.type.id = ?1 AND d.status <> uz.maroqand.ecology.docmanagement.constant.DocumentStatus.Completed AND dtk.dueDate < ?2 AND d.deleted = FALSE")
+    Integer countAllExpiredDocsByType(Integer type, Date date);
 }

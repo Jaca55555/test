@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="uz">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
@@ -42,8 +42,8 @@
                         <div class="card dashboard-card border-primary-shadow">
                              <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">10</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.new}">10</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_new}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,8 @@
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">20</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.inProcess}">20</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_in_process}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -60,8 +60,8 @@
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">30</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.nearDate}">30</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_near_date}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -69,8 +69,8 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">40</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.expired}">40</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_expired}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -78,8 +78,8 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">40</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.complete}">40</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_completed}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -87,8 +87,8 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title">40</h4>
-                                <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                <h4 class="card-title" th:text="${incomingCount.all}">40</h4>
+                                <h6 class="card-title" th:text="#{doc_incoming.count_total}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -98,55 +98,55 @@
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
-                                <div class="file-icon-container-small color-purple"><span class=" hawcons-icon-108-folder-bookmark"></span></div>
+                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">10</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.new}">10</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-danger-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-95-folder"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">20</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.inProcess}">20</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-warning-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-85-folder-information"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">30</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.nearDate}">30</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-102-folder-error"></span></div>
+                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.expired}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-104-folder-checked"></span></div>
+                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.complete}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-96-folders"></span></div>
+                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${innerCount.all}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_inner.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
@@ -155,55 +155,55 @@
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
-                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-41-note"></span></div>
+                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">10</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.new}">10</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-danger-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-44-note-text"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">20</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.inProcess}">20</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-warning-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-44-note-text"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">30</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.nearDate}">30</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-47-note-important"></span></div>
+                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.expired}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-46-note-checked"></span></div>
+                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.complete}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-primary"><span class=" hawcons-icon-45-note-list"></span></div>
+                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${appealCount.all}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_appeal.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
@@ -212,55 +212,55 @@
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
-                                <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
+                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">10</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.new}">10</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-danger-shadow">
-                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">20</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.inProcess}">20</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-warning-shadow">
-                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-58-document-upload"></span></div>
+                                <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">30</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.nearDate}">30</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
+                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.expired}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
+                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.complete}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="office-card">
                             <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
+                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title">40</h4>
-                                    <h6 class="card-title">Жами чикувчи хатлар</h6>
+                                    <h4 class="card-title" th:text="${outgoingCount.all}">40</h4>
+                                    <h6 class="card-title" th:text="#{doc_outgoing.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +280,7 @@
                     <div class="form-group col-md-3 col-sm-12">
                         <label for="documentOrganizationId" class="control-label">Корреспондент</label>
                         <div class="col-sm-12 p0">
-                            <select class="form-control" id="documentOrganizationId">
+                            <select class="form-control singleSelect" id="documentOrganizationId">
                                 <option value="" th:text="#{sys_select}"></option>
                                 <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.name}"></option>
                             </select>
@@ -294,7 +294,7 @@
                         <label for="registrationNumber" class="control-label" th:text="#{doc_incoming.registrationNumber}">Руйхатга олиш раками</label>
                         <input type="text" class="form-control" id="registrationNumber">
                     </div>
-                    <div class="form-group col-md-3 col-sm-12">
+                    <div class="form-group col-md-3 col-sm-12 text-center">
                         <label class="control-label" th:text="#{doc.registrationDate}">Келиб тушган сана</label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
@@ -309,7 +309,7 @@
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
                         <label for="controlForm" class="control-label"><span th:text="#{sys.executeControl}">Назорат карточкаси</span></label>
-                        <select class="col-sm-12" id="controlForm" >
+                        <select class="col-sm-12 singleSelect" id="controlForm" >
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
                         </select>
@@ -335,13 +335,13 @@
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label class="control-label" for="managerId"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
-                            <select class="col-sm-12" id="managerId">
+                            <select class="col-sm-12 singleSelect" id="managerId">
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label class="control-label" for="executorId"><span th:text="#{sys.doc_performer}">Ижрочилар</span></label>
-                            <select class="col-sm-12" id="executorId">
+                            <select class="col-sm-12 singleSelect" id="executorId">
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
                         </div>
@@ -353,13 +353,13 @@
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label class="control-label" for="executeType">Ижро йуналиши</label>
-                            <select class="col-sm-12" id="executeType" >
+                            <select class="col-sm-12 singleSelect" id="executeType" >
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label class="control-label" for="executeStatus"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                            <select class="col-sm-12" id="executeStatus" >
+                            <select class="col-sm-12 singleSelect" id="executeStatus" >
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
                         </div>
@@ -378,43 +378,43 @@
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label class="control-label" for="executeControlStatus"><span th:text="#{sys.doc_executeControlStatus}">Ижро назорати холати</span></label>
-                            <select class="col-sm-12" id="executeControlStatus" >
+                            <select class="col-sm-12 singleSelect" id="executeControlStatus" >
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="parent-card col-xl-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase active show" data-toggle="tab" href="#home"
-                       role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
+                       onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show"  data-toggle="tab" href="#profile"
-                       role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_to_execute}">Ижро учун</a>
+                    <a class="nav-link text-uppercase show"  data-toggle="tab" href="#home"
+                       onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_to_execute}">Ижро учун</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#contact"
-                       role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</a>
+                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#home"
+                       onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" data-toggle="tab" href="#home1" role="tab"
+                    <a class="nav-link text-uppercase" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(4)" role="tab"
                        aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#profile1"
-                       role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</a>
+                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#home"
+                       onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show"data-toggle="tab" href="#contact1"
-                       role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</a>
+                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#home"
+                       onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#contact2"
-                       role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_finished}">Якунланган</a>
+                    <a class="nav-link text-uppercase show" data-toggle="tab" href="#home"
+                       onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false" th:text="#{sys_document.info_tab_finished}">Якунланган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -426,6 +426,7 @@
                                     <table id="responsive-table-model" class="display table dt-responsive dataTable no-footer dtr-inline collapsed" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                         <tr role="row">
+                                            <th></th>
                                             <th class="sorting_asc" aria-controls="responsive-table-model" style="width: 0px;" >
                                                 <span th:text="#{sys.registrationNumber}">Регистрация рақами</span>
                                             </th>
@@ -466,10 +467,127 @@
 
     <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
 
-    <!--<script th:inline="javascript">
-        $(() => {
+    <script th:inline="javascript">
+        let getListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DashboardDocList}]];
+        let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
+        let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
+        var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
+        function getCurrentLanguage() {
+            return [[__${#locale}__]];
+        }
+    </script>
+    <script th:inline="none">
 
+        let labelView = 'view';
+        let dataDatatableSelector;
+        let thead;
+        var tabFilter;
+
+        function getDatatableConnect() {
+            dataDatatableSelector.DataTable().destroy();
+            dataDatatableSelector.html(thead);
+            datatableConnect();
+        }
+
+        function getTabDatatableConnect(tab) {
+            dataDatatableSelector.DataTable().destroy();
+            dataDatatableSelector.html(thead);
+            tabFilter = tab;
+            datatableConnect();
+        }
+
+        function renderActionsColumn(data, type, row, meta) {
+            var currentViewLink = viewLink + '?id=' + row[0];
+            var html = '';
+            html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+            return html;
+        }
+
+        function datatableConnect() {
+            dataDatatableSelector.DataTable({
+                processing: true,
+                serverSide: true,
+                scrollX: true,
+                pageLength: 25,
+                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                order: [[5, 'desc']],
+                dom: 'lrtip',
+                ajax : function (dataToSend, callback, settings) {
+                    let api = this.api();
+
+                    dataToSend.page = api !== undefined ? api.page() : 0;
+                    dataToSend.size = api !== undefined ? api.page.len() : 25;
+                    dataToSend.documentOrganizationId = $('#documentOrganizationId').val();
+                    dataToSend.docRegNumber = $('#docRegNumber').val();
+                    dataToSend.registrationNumber = $('#registrationNumber').val();
+                    dataToSend.dateBeginStr = $('#dateBeginStr').val();
+                    dataToSend.dateEndStr = $('#dateEndStr').val();
+                    dataToSend.controlForm = $('#controlForm').val();
+                    dataToSend.documentViewId = $('#documentViewId').val();
+                    dataToSend.content = $('#content').val();
+                    dataToSend.managerId = $('#managerId').val();
+                    dataToSend.taskContent = $('#taskContent').val();
+
+                    dataToSend.receiverId = $('#receiverId').val();
+                    dataToSend.type = $('#type').val();
+                    dataToSend.status = $('#status').val();
+                    dataToSend.dueDateBeginStr = $('#dueDateBeginStr').val();
+                    dataToSend.dueDateEndStr = $('#dueDateEndStr').val();
+                    dataToSend.tabFilter = tabFilter;
+                    dataToSend._csrf = $("#global_csrf").val();
+
+                    var order = api != undefined ? api.order() : [[1, 'desc']];
+                    dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                    $.post(getListLink, dataToSend, function(data){
+                        callback(data);
+                    });
+                },
+                columns: [
+                    {data: 0, name: 'id', visible: false},
+                    {data: 1, name: 'registrationNumber',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                            return html;
+                        }
+                    },
+                    {data: 2, name: 'registrationDate',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            return html;
+                        }
+                    },
+                    {data: 3, name: 'content'},
+                    {data: 4, name: 'createdAt'},
+                    {data: 5, name: 'dueDate'},
+                    {data: 6, name: 'status'},
+                    {data: 7, name: 'resolution',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += row[7];
+                            return html;
+                        }
+                    },
+                    {render: renderActionsColumn, orderable: false}
+                ],
+                language: {
+                    'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+                }
+            });
+        }
+
+        $(() => {
+            dataDatatableSelector = $('#responsive-table-model');
+            thead = dataDatatableSelector.html();
+            getDatatableConnect();
+
+            $('#filter').on('change', function () {
+                getTabDatatableConnect(1);
+            })
         })
-    </script>-->
+    </script>
 </body>
 </html>
