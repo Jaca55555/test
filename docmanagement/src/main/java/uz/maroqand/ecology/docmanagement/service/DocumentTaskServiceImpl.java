@@ -145,33 +145,32 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
 
-            /*if (docRegNumber != null) {
-                predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
+            if (incomingRegFilter.getDocRegNumber() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + incomingRegFilter.getDocRegNumber().toLowerCase() + "%"));
             }
-            if (registrationNumber != null) {
-                predicates.add(criteriaBuilder.like(root.get("document").<String>get("registrationNumber"), "%" + registrationNumber + "%"));
-            }
-
-            if (dateBegin != null && dateEnd == null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateBegin));
-            }
-            if (dateEnd != null && dateBegin == null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateEnd));
-            }
-            if (dateBegin != null && dateEnd != null) {
-                predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
-            }
-            if (content != null) {
-                predicates.add(criteriaBuilder.like(root.get("document").<String>get("content"), "%" + content + "%"));
+            if (incomingRegFilter.getRegistrationNumber() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + incomingRegFilter.getRegistrationNumber().toLowerCase() + "%"));
             }
 
-            if (taskContent != null) {
-                predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + taskContent + "%"));
+            if (incomingRegFilter.getDateBegin() != null && incomingRegFilter.getDateEnd() == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), incomingRegFilter.getDateBegin()));
             }
-            if (performerId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
+            if (incomingRegFilter.getDateEnd() != null && incomingRegFilter.getDateBegin() == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), incomingRegFilter.getDateEnd()));
             }
-            if (taskSubType != null) {
+            if (incomingRegFilter.getDateBegin() != null && incomingRegFilter.getDateEnd() != null) {
+                predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), incomingRegFilter.getDateBegin(), incomingRegFilter.getDateEnd()));
+            }
+            if (incomingRegFilter.getContent() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + incomingRegFilter.getContent().toLowerCase() + "%"));
+            }
+            if (incomingRegFilter.getTaskContent() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + incomingRegFilter.getTaskContent() + "%"));
+            }
+            if (incomingRegFilter.getPerformerId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), incomingRegFilter.getPerformerId()));
+            }
+            /*if (taskSubType != null) {
                 predicates.add(criteriaBuilder.equal(root.get("type"), type));
             }
             if (taskSubStatus != null) {
