@@ -2,19 +2,18 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
@@ -41,6 +40,7 @@ public class DocumentCheckController {
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentLogService documentLogService;
+    private final FileService fileService;
 
     public DocumentCheckController(
             UserService userService,
@@ -50,8 +50,8 @@ public class DocumentCheckController {
             DocumentSubService documentSubService,
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
-            DocumentLogService documentLogService
-    ) {
+            DocumentLogService documentLogService,
+            FileService fileService) {
         this.userService = userService;
         this.positionService = positionService;
         this.helperService = helperService;
@@ -60,6 +60,7 @@ public class DocumentCheckController {
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(value = DocUrls.DocumentCheckList, method = RequestMethod.GET)
@@ -104,7 +105,13 @@ public class DocumentCheckController {
         System.out.println(incomingRegFilter.getTabFilter());
         incomingRegFilter.setStatus(TaskStatus.Checking.toString());
         HashMap<String, Object> result = new HashMap<>();
-        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        Set<Integer> taskStatuses = new HashSet<>();
+        if (incomingRegFilter.getTabFilter()==null){
+            taskStatuses.add(TaskStatus.Checking.getId());
+        }else{
+            taskStatuses.add(TaskStatus.Complete.getId());
+        }
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -143,10 +150,6 @@ public class DocumentCheckController {
         if (document == null) {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
-        List<TaskSubStatus> statuses = new LinkedList<>();
-        statuses.add(TaskSubStatus.InProgress);
-        statuses.add(TaskSubStatus.Waiting);
-        statuses.add(TaskSubStatus.Agreement);
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
@@ -157,15 +160,17 @@ public class DocumentCheckController {
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-        model.addAttribute("task_statuses", statuses);
-        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, new PageRequest(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("task_statuses", TaskStatus.getTaskStatusList());
         return DocTemplates.DocumentCheckView;
     }
 
-    @RequestMapping(DocUrls.DocumentCheckComplete)
+    @RequestMapping(value = DocUrls.DocumentCheckComplete, method = RequestMethod.POST)
     public String documentCheckComplete(
-            @RequestParam(name = "id") Integer id
-    ){
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "status") Integer status,
+            @RequestParam(name = "content", required = false) String content,
+            @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids
+            ){
         User user = userService.getCurrentUserFromContext();
         DocumentTask documentTask = documentTaskService.getById(id);
         if (documentTask==null){
@@ -177,8 +182,26 @@ public class DocumentCheckController {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
 
-        documentTask.setStatus(TaskStatus.Complete.getId());
+
+        documentTask.setStatus(status);
         documentTaskService.update(documentTask);
+
+        DocumentLog documentLog = new DocumentLog();
+        documentLog.setContent(content);
+        documentLog.setType(LogType.Agreement.getId());
+        documentLog.setDocumentId(documentTask.getDocumentId());
+        documentLog.setCreatedAt(new Date());
+        documentLog.setCreatedById(user.getId());
+        if (file_ids != null) {
+            Set<File> files = new LinkedHashSet<>();
+            for (Integer fileId : file_ids) {
+                files.add(fileService.findById(fileId));
+            }
+            documentLog.setContentFiles(files);
+        }
+
+        documentLogService.create(documentLog);
+
 
         return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTask.getId();
 
