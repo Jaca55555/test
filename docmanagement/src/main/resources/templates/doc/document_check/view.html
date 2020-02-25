@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
@@ -20,12 +20,12 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 125px;
+            max-width: 110px;
         }
         #percentage {
             position: absolute;
-            top: 60%;
-            left: 50%;
+            top: 74%;
+            left: 11%;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -48,7 +48,7 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
 
-        <object th:include="doc/incoming/fragments/document_view :: document_view" th:remove="tag" ></object>
+        <object th:include="doc/document_check/fragments/document_view :: document_view" th:remove="tag" ></object>
 
         <div class="row flex-space-between" >
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
@@ -58,7 +58,7 @@
                             <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;
                         </h5>
                     </div>
-                    <div class="card-block" th:object="${documentTaskSub}">
+                    <div class="card-block" th:object="${task}">
                         <div class="row" >
                             <div class="executor col-12 m10-vertical">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
@@ -67,9 +67,9 @@
                                             <i class="fas fa-user-circle fs40 color-gray column-1"> </i>
                                         </div>
                                         <div class="inline-block m10-horizontal">
-                                            <span class="color-primary bold" th:if="*{receiverId!=null}" th:text="*{@helperService.getUserFullNameById(receiverId)}">Абдуллаев А. А.</span>
+                                            <span class="color-primary bold" th:if="*{chiefId!=null}" th:text="*{@helperService.getUserFullNameById(chiefId)}">Абдуллаев А. А.</span>
                                             <br>
-                                            <span  th:if="*{receiverId!=null}" th:text="*{@helperService.getUserPositionName(receiverId,#locale)}">Руководитель организации</span>
+                                            <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
                                         </div>
                                     </div>
                                     <div class="flex-space-between p0 align-center column-1">
@@ -147,8 +147,12 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}"> Ижро учун йўналтириш  </a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
+                            <!--<a  class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal">
+                                <span th:text="#{doc_check.complete}"></span>
+                            </a>-->
+                            <button th:if="${task.status!=4}" type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
+                                <span th:text="#{doc_check.complete}">Ижро холатини белгилаш</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -208,7 +212,7 @@
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a">Ижро амаллари ва изохлар</span></h5>
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a"><span th:text="#{sys_document.comments_and_execute}">Ижро амаллари ва изохлар</span></span></h5>
                     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -243,28 +247,15 @@
                             <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
                                 <div  class="text-center file-icon-container align-self-center color-gray">
                                     <span class="fas fa-plus" id="addFileButton"></span>
-                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
                                     <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
-
-                        <textarea class="form-control" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
-
-                        <div class="m10-vertical"><span th:text="#{sys_document.additional_files}"></span></div>
-
-                        <div class="row p20" id="file-container">
-                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                                <div  class="text-center file-icon-container align-self-center color-gray">
-                                    <span class="fas fa-plus" id="addFileButton"></span>
                                 </div>
                             </div>
                         </div>
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
-                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{doc.cancel}" data-dismiss="modal"></button>
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal" th:text="#{sys_cancel}" data-dismiss="modal" id="closeCommentModal"></button>
                                 <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
                             </div>
                         </div>
@@ -274,7 +265,6 @@
         </div>
     </div>
 </div>
-
 <!-- Status modal -->
 <div class="modal" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
     <div class="modal-dialog col-xl-6 col-12" role="document">
@@ -288,7 +278,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form th:action="${task_change_url}" id="changeStatusForm" class="card-body">
+                <form th:action="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckComplete}" id="completeForm" method="post" class="card-body" data-parsley-validate="">
                     <div class="flex-space-between p0 m20-vertical">
                         <div>
                             <div class="inline-block">
@@ -306,59 +296,47 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
-                        <span type="button" style="width:160px" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}"
-                              class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0"></span>
+                        <button type="button" style="width:160px" th:if="${task.status!=null}" th:text="${task.getStatusName(task.status)}"
+                              class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0 col-sm-4"></button>
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_new_status}">Хужжатнинг янги статуси</span>
-                        <div class="btn-group mb-2 mr-2">
-                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split rounded-pill table-modal-button">
-                                <span id="newStatusText" class="pl-3" th:text="#{doc.select_new_status}"></span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <span class="dropdown-item status-button" th:each="taskStatus: ${task_statuses}" th:text="#{${taskStatus.name}}" th:attr="data-id=${taskStatus.id}">Action</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-space-between p0 m20-vertical align-center">
-                        <span th:text="#{doc.document_task_additional_doc}"></span>
-                        <div class="form-group">
-                            <select class="addDocSelect col-sm-12" name="addDocId">
-                                <option value=""></option>
-                                <option th:each="document: ${docList}" th:text="${document.registrationNumber}" th:value="${document.id}"></option>
+                        <div class="btn-group mb-2 mr-2 col-sm-4 pr-0 pl-0 row">
+                            <select class="col-sm-12 singleSelect" id="status" name="status" required="required" data-parsley-errors-container="#statusError">
+                                <option value="" th:text="#{doc.select_new_status}"></option>
+                                <option th:each="taskStatus: ${task_statuses}" th:value="${taskStatus.id}" th:text="#{${taskStatus.name}}"></option>
                             </select>
+                            <span id="statusError"></span>
                         </div>
                     </div>
                     <input type="hidden" name="taskStatus" id="taskStatus">
-                    <input type="hidden" name="taskId" th:value="${documentTaskSub.id}">
-                    <input type="hidden" name="docId" th:value="${document.id}">
-                    <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="id" th:value="${task.id}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
                     <div class="m10-vertical"><span th:text="#{doc.task_change_reason}">Ижро ҳолатининг ўзгариши сабаби</span></div>
 
-                    <textarea class="form-control" name="content"
-                              th:placeholder="#{doc.write_task_change_reason}"></textarea>
+                    <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
 
-                    <div class="m10-vertical"><span th:text="#{doc.task_status_change_files}">Изохга қўшимча файллар</span></div>
-
-                    <div class="row p20">
-                        <div class="file-block flex-center">
-                            <div class="text-center file-icon-container align-self-center color-gray">
-                                <span class="fas fa-plus"></span>
+                    <div id="status_file-ids" class="d-none"></div>
+                    <input type="file" class="d-none" id="status_addFile" name="files" multiple>
+                    <div class="row p20" id="status_file-container">
+                        <div class="file-block flex-center file-button" id="status_addFileBlock" onclick="clickPlus()">
+                            <div  class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus" id="status_addFileButton"></span>
+                                <span id="percentage" style="font-size: 40px; top:77%"><span id="percentage-num"></span>%</span>
+                                <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                             </div>
                         </div>
                     </div>
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
-                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" >
-                                Бекор қилиш
+                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">
+                                <span th:text="#{sys_cancel}">Бекор қилиш</span>
                             </button>
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
-                            <button type="reset" class="btn btn-light m10-vertical m20-horizontal">Бекор
-                                <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">Бекор
-                                    қилиш</button>
-                                <button type="button" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">Қўшиш</button>
+                            <button type="submit" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">
+                                <span th:text="#{sys_save}">Қўшиш</span>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -366,44 +344,11 @@
         </div>
     </div>
 </div>
-
-
-<!--<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
-    <div class="modal-dialog col-xl-6 col-12" role="document">
-        <div class="modal-content">
-            <div class="card parent-card m0">
-                <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center">
-                        <span href="#" class="card-header-a">
-                            Кирувчи хат №
-                            <span th:text="${document.registrationNumber}"></span>
-                            <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
-                    </span>
-                    </h5>
-                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="flex-space-between p0 m20-vertical">
-                        <div class="panel">
-                            <div id="treeview-selectable" class="treeview"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
-                            <i class="fas fa-times"></i>
-                            <span th:text="#{sys_close}">Chiqish</span></button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script src="/static/bootstrap-treeview.js"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
 <script type="text/javascript">
 
@@ -573,20 +518,9 @@
 
 <script th:inline="javascript">
     var urlAction = [[${comment_url}]];
+    var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     $(document).ready(function () {
-        $('#formSend').on('click', function (e) {
-            let url = $('#commentForm').prop('action');
-            let data = $('#commentForm').serialize();
-            $.ajax({
-                url: urlAction,
-                data: data,
-                method: 'post',
-                success: function (data) {
-                    console.log(data);
-                }
-            });
-            e.preventDefault();
-        });
+
 
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
@@ -641,6 +575,58 @@
         })
     });
 
+    $('#formSend').on('click', function (e) {
+        let url = $('#commentForm').prop('action');
+        let data = $('#commentForm').serialize();
+        $.ajax({
+            url: urlAction,
+            data: data,
+            method: 'post',
+            success: function (data) {
+                console.log(data);
+                console.log(data.status);
+                if(data != undefined && data.status=="success"){
+                    // show logs
+                    var log = data.log;
+                    var html =' <div class="comment-item flex-space-between">\n' +
+                        '           <div>\n' +
+                        '               <div class="inline-block">\n' +
+                        '                   <i class="fas fa-user-circle fs40 color-gray column-1"></i>\n' +
+                        '               </div>\n' +
+                        '               <div class="inline-block m10-horizontal">\n' +
+                        '                   <span class="color-primary bold">'+data.createName+'</span>\n' +
+                        '                   <br>\n' +
+                        '                   <span >'+data.createPosition+'</span>\n' +
+                        '               </div>\n' +
+                        '           </div>\n' +
+                        '           <div class="fs11" >\n' + data.createdAt + '</div>\n' +
+                        '           <div class="w100"></div>\n' +
+                        '           <div class="column-2 mt-3">\n' +
+                        '               <span >'+log.content+' </span>\n' +
+                        '           </div>'+
+                        '       <div >\n';
+
+                    if (log.contentFiles!=null && log.contentFiles.length>0){
+                        $.each(log.contentFiles,function (element,val) {
+                            html+=' <div class="w100"></div>\n' +
+                                '       <div class="column-2 mt-3">\n' +
+                                '           <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                '           <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                '       </div>\n' +
+                                '   </div>';
+                        })
+
+                    }
+
+                    html+='</div>';
+                    $('#comments').prepend(html);
+                    $('#closeCommentModal').click();
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
     function clickPlus() {
         $('#addFile2').click();
     }
@@ -682,6 +668,92 @@
         })
     });
 
+    function clickPlus() {
+        $('#status_addFile').click();
+    }
+
+    $('#status_addFile').on('change', function () {
+
+        let csrf = $("form input[name='_csrf']").val();
+        let files = document.querySelector('#status_addFile').files[0];
+        let fd = new FormData();
+        fd.append("file", files);
+        fd.append("_csrf", csrf);
+        $.ajax({
+            url: "/doc/outgoing_mail/file/upload",
+            type: 'post',
+            data: fd,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: detectExtensionAndDisplayForStatus,
+            beforeSend: function () {
+                $('#status_addFileButton').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#status_addFileButton').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+        })
+    });
+
+    function detectExtensionAndDisplayForStatus(data){
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        let name = data.data.name;
+        switch (extension) {
+            case 'bmp':
+            case 'jpg':
+            case 'png':
+                extension = '-image';
+                color = 'color-blue';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case "xls":
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#status_file-ids').append(
+            `<input type="text" name="status_file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#status_file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>`+fileNameSubString(fileName)+`</span>
+                        </div>
+                    </div>`
+        );
+    }
+
     function downloadFileFunction(id) {
         window.open(`/doc/outgoing_mail/file/download?id=${id}`);
     }
@@ -714,6 +786,7 @@
 
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
+        let fileName = data.data.name;
         let color;
         let name = data.data.name;
         switch (extension) {
@@ -744,13 +817,13 @@
         $('#file_ids').append(
             `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
         );
-        $('#file-container').prepend(
+        $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>${data.data.name}</span>
+                            <span>`+fileNameSubString(fileName)+`</span>
                         </div>
                     </div>`
         );

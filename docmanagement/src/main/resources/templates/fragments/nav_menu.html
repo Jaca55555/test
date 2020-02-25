@@ -1,4 +1,4 @@
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <body th:fragment="menu">
 <!-- [ navigation menu ] start -->
 <nav class="pcoded-navbar">
@@ -24,25 +24,32 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
                         <span class="pcoded-micon"><i class="fas fa-th-list color-primary"></i></span>
-                        <span class="pcoded-mtext">Хужжатлар иш столи</span>
+                        <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}">
                         <span class="pcoded-micon"><i class="feather icon-package color-red"></i></span>
-                        <span class="pcoded-mtext">Кирувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}">
                         <span class="pcoded-micon"><i class="fas fa-upload color-green"></i></span>
-                        <span class="pcoded-mtext">Чикувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}">
                         <span class="pcoded-micon"><i class="fas fa-shopping-basket color-yellow"></i></span>
-                        <span class="pcoded-mtext">Ички хужжатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.list}">Ички хужжатлар</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}">
+                        <span class="pcoded-micon"><i class="fas fa-shopping-basket color-green"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_check.list}"></span>
                     </a>
                 </li>
 
@@ -77,25 +84,25 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
                         <span class="pcoded-micon"><i class="fas fa-th-list color-primary"></i></span>
-                        <span class="pcoded-mtext">Хужжатлар иш столи</span>
+                        <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationList}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-download-outline color-red"></i></span>
-                        <span class="pcoded-mtext">Кирувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailList}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
-                        <span class="pcoded-mtext">Чикувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationList}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
-                        <span class="pcoded-mtext">Ички хужжатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.list}">Ички хужжатлар</span>
                     </a>
                 </li>
 
@@ -112,13 +119,13 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-upload-outline color-gray"></i></span>
-                        <span class="pcoded-mtext">Чикувчи хатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.reg}">Чикувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}">
                         <span class="pcoded-micon"><i class="mdi mdi-file-find color-purple"></i></span>
-                        <span class="pcoded-mtext">Ички хужжатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.reg}">Ички хужжатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <!-- <li class="nav-item">
@@ -130,7 +137,7 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}">
                         <span class="pcoded-micon"><i class="mdi mdi-clock-outline color-green"></i></span>
-                        <span class="pcoded-mtext">Ижрога тушмаган</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.taskNotIncluded}">Ижрога тушмаган</span>
                     </a>
                 </li>
                 <!--<li class="nav-item">

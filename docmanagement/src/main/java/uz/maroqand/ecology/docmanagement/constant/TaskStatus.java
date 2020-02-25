@@ -11,11 +11,11 @@ import java.util.Map;
  * (ru)
  */
 public enum TaskStatus {
-    Initial(0,"task_sub_type.initial"),//
-    New(1,"task_sub_type.new"),//Кўрилмаган
-    InProgress(2,"task_sub_type.inProgress"),//Жараёнда,
-    Checking(3,"task_sub_type.checking"),//Назоратдан чиқариш
-    Complete(4,"task_sub_type.complete");//Якунланган
+    Initial(0,"task_status.initial"),//
+    New(1,"task_status.new"),//Кўрилмаган
+    InProgress(2,"task_status.inProgress"),//Жараёнда,
+    Checking(3,"task_status.checking"),//Назоратдан чиқариш
+    Complete(4,"task_status.complete");//Якунланган
 
     private Integer id;
     private String name;

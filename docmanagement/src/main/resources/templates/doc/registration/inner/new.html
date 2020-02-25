@@ -12,12 +12,12 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 125px;
+            max-width: 115px;
         }
         #percentage {
             position: absolute;
-            top: 60%;
-            left: 50%;
+            top: 61%;
+            left: 8%;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -123,7 +123,7 @@
                         <div class="text-center file-icon-container align-self-center color-gray">
                             <input type="file" class="d-none" id="addFile" name="addFile">
                             <span class="fas fa-plus" id="plus-icon"></span>
-                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                     files.files = [];
                     var file = data.file;
                     $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
-                    $('#file-container').prepend(
+                    $('#file-container').append(
 "                    <div class=\"file-block\">\n" +
 "                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
 "                        <div class=\"text-center file-icon-container color-red\">" +

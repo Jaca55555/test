@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-menu-item-wrapper:hover{
+            color:white;
+            background:#62c462;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- MainContent start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-start mobile-column" style="align-items: center;">
+                <h5 class="mb-0"><span class="card-header-a">Чикувчи хатни рўйхатга олиш - IN-123456-MRQ</span></h5>
+                <div>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i
+                                class="fas fa-question-circle"></i>Хат жўнатилмаган</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <form enctype="multipart/form-data" th:action="@{/doc/outgoing_mail/edit}" id="document_form" th:object="${document}" method="post">
+                    <div class="row">
+                        <!-- journal, document_view, communication tools, organization_name fields start -->
+                        <input type="hidden" th:field="*{id}" >
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('journalId')}"
+                                   th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{journalId}" required>
+                                <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
+                                <option th:each="journal: ${journals}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" >хужат тури</label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:field="*{documentViewId}" required>
+                                <option value="">Мароканд умумий хатлар</option>
+                                <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
+                                    aria-hidden="true" th:name="communication_tool_id" required>
+                                <option th:value="${communication_tool_id}" th:text="${communication_tool_name}"></option>
+                                <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label">Хат юборилаётган ташкилот</label>
+                            <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
+                                <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
+                            </select>
+                        </div>
+                        <!-- journal, document_view, communication tools, organization_name fields end -->
+
+                    </div>
+
+                    <hr class="m20-vertical">
+                    <div class="col-sm-12 form-group">
+                        <label class="control-label">Хатнинг қисқача мазмуни</label>
+                        <textarea th:field="*{content}" class="form-control" name="validation-text"
+                                  placeholder="Хатнинг қисқача махзмунини киритинг."  required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 form-group ">
+                            <label for="name" class="control-label">Хат жунатаётган булим номи</label>
+                            <select class="form-control singleSelect" tabindex="-1"
+                                    aria-hidden="true" th:field="*{departmentId}" required>
+                                <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-sm-6 form-group">
+                            <label for="name" class="control-label">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
+                            <select class="form-control singleSelect" th:field="*{performerId}"  required>
+                                <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.fullName}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6"></div>
+                        <div class="form-group col-md-6 col-sm-6">
+                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
+                            <div class="col-sm-12 p0">
+                                <select class="form-control singleSelect select2-hidden-accessible"
+                                        tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
+                                    <option th:value="${additional_document_id}" th:text="${registration_number_and_date}"></option>
+                                    <option value="" th:text="#{sys_select}"></option>
+                                </select>
+                              <!--  <i class="gray-search fas fa-search  color-gray"></i> -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- files input start -->
+                    <hr class="m30-vertical">
+                    <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+
+                    <div class="row p20" id="file-container">
+
+                        <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                            <div  class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus" id="addFileButton"></span>
+                                <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="file_ids" class="d-none">
+                        <input type="text" name="file_ids" value="">
+                    </div>
+                    <div id="addFileDiv">
+                        <input type="file" class="d-none" id="addFile2" name="files">
+                    </div>
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" >Бекор қилиш</button>
+                            <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
+                                олиш</button>
+                        </div>
+                    </div>
+                    <!--                    <input type="submit">-->
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- filters card begins here -->
+
+</div>
+<!-- MainContent end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script th:inline="javascript">
+    let files = [[${document.contentFiles}]];
+
+    function clickPlus() {
+        $('#addFile2').click();
+
+    }
+
+    $(document).ready(function(){
+        hearInputClickFunction();
+        $('#document_organization_id').select2({
+            tags: true,
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+
+        $('#additional_document_id').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+
+    });
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function deleteFunc(id){
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        $('#addFile2').remove();
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+        $('#addFileDiv').append(`
+             <input type="file" class="d-none" id="addFile2" name="files">
+        `);
+        hearInputClickFunction();
+    }
+
+    function hearInputClickFunction(){
+        $('#addFile2').on('change', function () {
+
+            let csrf = $("form input[name='_csrf']").val();
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/doc/outgoing_mail/file/upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: detectExtensionAndDisplay
+            })
+        });
+    }
+
+    function withdrawal(){
+        window.location = `/doc/outgoing_mail/list`;
+
+    }
+
+    function detectExtensionAndDisplay(data){
+        let extensionAndColor = detectExtensionAndColor(data.data.extension);
+        let extension = extensionAndColor.extension;
+        let color = extensionAndColor.color;
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').prepend(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${data.data.name}</span>
+                        </div>
+                    </div>`
+        );
+    }
+
+    function detectExtensionAndColor(extension){
+        let data = {};
+        switch (extension) {
+            case 'jpg': case 'png':
+                data.extension = '-image';
+                data.color = 'color-yellow';
+                break;
+            case 'pdf':
+                data.extension = '-pdf';
+                data.color = 'color-red';
+                break;
+            case 'xlsx':
+                data.extension = "-excel";
+                data.color = "color-green";
+                break;
+            case 'doc':
+            case 'docx':
+                data.extension = "-word";
+                data.color = "color-blue";
+                break;
+            default:
+                data.extension = "";
+                data.color = "color-gray";
+        }
+        return data;
+    }
+
+    function displayFiles(files){
+        for(let i = 0; i < files.length; i++){
+            let extensionAndColor = detectExtensionAndColor(files[i].extension);
+            $('#file_ids').append(
+                `<input type="text" name="file_ids" id="input_file_id_${files[i].id}" value="${files[i].id}">`
+            );
+            $('#file-container').prepend(`
+               <div class="file-block" id="file_block_${files[i].id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${files[i].id})"></span></div>
+                        <div class="text-center file-icon-container ${extensionAndColor.color}" onclick="downloadFileFunction(${files[i].id})"><span class="fas fa-file${extensionAndColor.extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>${files[i].name}</span>
+                        </div>
+                    </div>
+            `);
+        }
+    }
+
+    displayFiles(files);
+
+</script>
+</body>
+</html>

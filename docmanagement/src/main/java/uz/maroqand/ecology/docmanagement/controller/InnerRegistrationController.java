@@ -62,6 +62,13 @@ public class InnerRegistrationController {
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
     public String getIncomeListPage(Model model) {
+        model.addAttribute("newDocumentCount", documentTaskService.countNew());
+        model.addAttribute("inProgressDocumentCount", documentTaskService.countInProcess());
+        model.addAttribute("lessDeadlineDocumentCount", documentTaskService.countNearDate());
+        model.addAttribute("greaterDeadlineDocumentCount", documentTaskService.countExpired());
+        model.addAttribute("checkingDocumentCount", documentTaskService.countExecuted());
+        model.addAttribute("allDocumentCount", documentTaskService.countTotal());
+
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executes", userService.getEmployeeList());
         return DocTemplates.InnerRegistrationList;
