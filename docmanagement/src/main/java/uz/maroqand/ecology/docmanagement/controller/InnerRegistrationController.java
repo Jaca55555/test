@@ -201,7 +201,7 @@ public class InnerRegistrationController {
         DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
         Document documentAdditional = documentService.getById(document.getAdditionalDocumentId());
 
-        model.addAttribute("doc", document);
+        model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSub);
 
         model.addAttribute("docOrganization",documentOrganization);

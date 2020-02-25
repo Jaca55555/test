@@ -26,9 +26,8 @@
             <div class="card parent-card">
                 <div class="card-header flex-space-between-nowrap mb-0">
                     <h5 class="mb-0" style="align-self:center">
-                        <a href="" class="card-header-a collapsed" data-toggle="collapse"
-                           data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
-                            Девонхона хужжатлар иш столи
+                        <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
+                            <span th:text="#{sys_office.list}">Девонхона хужжатлар иш столи</span>
                         </a>
                     </h5>
                     <div>
@@ -36,7 +35,7 @@
                         <i class="gray-search fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                     </div>
                 </div>
-                <h5 class="office-h5 default-color">Кирувчи хатлар статистикаси</h5>
+                <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
@@ -94,7 +93,7 @@
                     </div>
                 </div>
                 <div id="collapseTopContainer" class="col-xl-12 card-body collapse show" style="padding: 0;">
-                    <h5 class="office-h5 default-color">Ички хужжатлар статистикаси</h5>
+                    <h5 class="office-h5 default-color" th:text="#{doc_inner.statistic}">Ички хужжатлар статистикаси</h5>
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
@@ -151,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    <h5 class="office-h5 default-color">Муррожатлар статистикаси</h5>
+                    <h5 class="office-h5 default-color" th:text="#{doc_appeal.statistic}">Муррожатлар статистикаси</h5>
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
@@ -208,7 +207,7 @@
                             </div>
                         </div>
                     </div>
-                    <h5 class="office-h5 default-color">Чикувчи хатлар статистикаси</h5>
+                    <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Чикувчи хатлар статистикаси</h5>
                     <div class="responsive">
                         <div class="office-card">
                             <div class="card dashboard-card border-primary-shadow">
@@ -278,7 +277,7 @@
                 </div>
                 <div class="row p10">
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="documentOrganizationId" class="control-label">Корреспондент</label>
+                        <label for="documentOrganizationId" class="control-label" th:text="#{sys_office.senderOrganizationName}">Корреспондент</label>
                         <div class="col-sm-12 p0">
                             <select class="form-control singleSelect" id="documentOrganizationId">
                                 <option value="" th:text="#{sys_select}"></option>
@@ -352,7 +351,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label class="control-label" for="executeType">Ижро йуналиши</label>
+                            <label class="control-label" for="executeType" th:text="#{sys_office.executeType}">Ижро йуналиши</label>
                             <select class="col-sm-12 singleSelect" id="executeType" >
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                             </select>
@@ -475,6 +474,14 @@
         function getCurrentLanguage() {
             return [[__${#locale}__]];
         }
+        var sys_select = [[#{sys_select}]];
+        $(document).ready(function () {
+            $('.singleSelect').select2({
+                placeholder: sys_select,
+                allowClear: true
+            });
+        })
+
     </script>
     <script th:inline="none">
 
