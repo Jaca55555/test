@@ -55,7 +55,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public DocumentTaskSub createNewSubTask(Integer docId, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
+    public DocumentTaskSub createNewSubTask(Integer level,Integer docId, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
         DocumentTaskSub documentTaskSub = new DocumentTaskSub();
         documentTaskSub.setDocumentId(docId);
         documentTaskSub.setTaskId(taskId);
@@ -69,6 +69,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setDeleted(Boolean.FALSE);
         documentTaskSub.setCreatedAt(new Date());
         documentTaskSub.setCreatedById(senderId);
+        documentTaskSub.setLevel(level!=null?(level+1):1);
         return documentTaskSubRepository.save(documentTaskSub);
     }
 

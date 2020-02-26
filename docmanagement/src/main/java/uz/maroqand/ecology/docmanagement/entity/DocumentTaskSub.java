@@ -33,10 +33,13 @@ public class DocumentTaskSub {
 
     @Column(name = "document_id")
     private Integer documentId;
+
     @Column(name="description")
     public String description;
+
     @Column(name="registrationDate")
     public String registrationDate;
+
     @Column(name="registrationNumber")
     public String registrationNumber;
 
@@ -89,6 +92,9 @@ public class DocumentTaskSub {
 
     @Column(name = "additional_document_id")
     private Integer additionalDocumentId;
+
+    @Column(name = "level", columnDefinition = "int default 1")
+    private Integer level;
 
     /*
      * Technical Fields
