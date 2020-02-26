@@ -179,10 +179,10 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setStatus(DocumentStatus.New);
-        documentService.createDoc(3,document,user);
+        documentService.createDoc(3, document, user);
 
         DocumentSub documentSub = new DocumentSub();
-        document.setOrganizationId(documentOrganizationId);
+        documentSub.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
         if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
             return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
