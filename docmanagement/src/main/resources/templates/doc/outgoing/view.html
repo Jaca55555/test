@@ -171,6 +171,7 @@
 
     function displayFiles(files){
         for(let i = 0; i < files.length; i++){
+            let fileName= files[i].name;
             let extensionAndColor = detectExtensionAndColor(files[i].extension)
             $('#fileContainer').append(`
                 <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
@@ -179,7 +180,7 @@
                                             class="fas fa-file${extensionAndColor.extension}"></span></div>
                                     <div class="card-body"
                                          style="display: flex;text-align: left;align-items: center;">
-                                        <h6 class="card-title" >${files[i].name}</h6>
+                                        <h6 class="card-title" >` + fileNameSubString(fileName) + `</h6>
                                     </div>
                                 </div>
                             </div>

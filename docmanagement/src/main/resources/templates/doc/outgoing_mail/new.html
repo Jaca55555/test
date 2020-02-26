@@ -6,6 +6,21 @@
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
     <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -52%);
+            max-width: 115px;
+        }
+        #percentage {
+            position: absolute;
+            top: 88%;
+            left: 8%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
         .ui-menu-item-wrapper:hover{
             color:white;
             background:#62c462;
@@ -32,11 +47,11 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-start mobile-column" style="align-items: center;">
-                <h5 class="mb-0"><span class="card-header-a">Чикувчи хатни рўйхатга олиш - IN-123456-MRQ</span></h5>
+                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_outgoing.reg}"></h5>
                 <div>
                     <div>
                         <button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i
-                                class="fas fa-question-circle"></i>Хат жўнатилмаган</button>
+                                class="fas fa-question-circle"></i><span th:text="#{doc_outgoing.not_send}">Хат жўнатилмаган</span></button>
                     </div>
                 </div>
             </div>
@@ -54,7 +69,7 @@
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" >хужат тури</label>
+                        <label class="control-label" th:text="#{doc_outgoing.doc_view}">хужат тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{documentViewId}" required>
                             <option value="">Мароканд умумий хатлар</option>
@@ -62,7 +77,7 @@
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
+                        <label class="control-label" th:text="#{doc_outgoing.communication_tool}">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:name="communication_tool_id" required>
                             <option th:value="${communication_tool_id}" th:text="${communication_tool_name}"></option>
@@ -70,7 +85,7 @@
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Хат юборилаётган ташкилот</label>
+                        <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
                         <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                             <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
                         </select>
@@ -81,14 +96,13 @@
 
                     <hr class="m20-vertical">
                     <div class="col-sm-12 form-group">
-                        <label class="control-label">Хатнинг қисқача мазмуни</label>
-                        <textarea th:field="*{content}" class="form-control" name="validation-text"
-                                  placeholder="Хатнинг қисқача махзмунини киритинг."  required></textarea>
+                        <label class="control-label" th:text="#{doc_outgoing.content}">Хатнинг қисқача мазмуни</label>
+                        <textarea th:field="*{content}" class="form-control" name="validation-text"  th:placeholder="#{doc_outgoing.content_placeholder}"  required></textarea>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6 form-group ">
-                        <label for="name" class="control-label">Хат жунатаётган булим номи</label>
+                        <div class="col-sm-6 form-group " >
+                        <label for="name" class="control-label" th:text="#{doc_outgoing.department}">Хат жунатаётган булим номи</label>
                             <select class="form-control singleSelect" tabindex="-1"
                                     aria-hidden="true" th:field="*{departmentId}" required>
                                 <option value="" th:text="#{department_id_select}">department select</option>
@@ -96,8 +110,8 @@
                             </select>
                     </div>
                     <div class="col-md-6"></div>
-                        <div class="col-sm-6 form-group">
-                            <label for="name" class="control-label">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
+                        <div class="col-sm-6 form-group" >
+                            <label for="name" class="control-label" th:text="#{doc_outgoing.performer}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
                             <select class="form-control singleSelect" th:field="*{performerId}"  required>
                                 <option value=""></option>
                                 <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.fullName}"></option>
@@ -106,7 +120,7 @@
 
                     <div class="col-md-6"></div>
                         <div class="form-group col-md-6 col-sm-6">
-                            <label for="subRegionId" class="control-label">Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
+                            <label for="subRegionId" class="control-label"  th:text="#{doc_outgoing.additional_document}" >Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
                             <div class="col-sm-12 p0">
                                 <select class="form-control singleSelect select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
@@ -119,7 +133,7 @@
                 </div>
                 <!-- files input start -->
                 <hr class="m30-vertical">
-                <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <h5 class="mb-0 card-header no-border" th:text="#{doc_outgoing.files}">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
 
                 <div class="row p20" id="file-container">
 
@@ -127,7 +141,8 @@
                         <div  class="text-center file-icon-container align-self-center color-gray">
                             <span class="fas fa-plus" id="addFileButton"></span>
 <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
-
+                            <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                            <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
 
@@ -140,9 +155,8 @@
                     </div>
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
-                        <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" >Бекор қилиш</button>
-                        <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
-                            олиш</button>
+                        <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" th:text="#{sys_cancel}">Бекор қилиш</button>
+                        <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal" th:text="#{sys_save}">Рўйхатга олиш</button>
                     </div>
                 </div>
 <!--                    <input type="submit">-->
@@ -201,7 +215,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script th:inline="javascript">
-
+    var sys_select = [[#{sys_select}]];
 
     function clickPlus() {
         $('#addFile2').click();
@@ -210,6 +224,12 @@
 
     $(document).ready(function(){
         hearInputClickFunction();
+
+        $('.singleSelect').select2({
+            placeholder: sys_select,
+            allowClear: true
+        });
+
         $('#document_organization_id').select2({
             tags: true,
             ajax: {
@@ -268,7 +288,26 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: detectExtensionAndDisplay
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
+                }
             })
         });
     }
@@ -280,6 +319,7 @@
 
     function detectExtensionAndDisplay(data){
         let extension = data.data.extension;
+        let fileName = data.data.name;
         let color;
         switch (extension) {
             case 'jpg': case 'png':
@@ -306,17 +346,35 @@
         $('#file_ids').append(
             `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
         );
-        $('#file-container').prepend(
+        $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
                         <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
-                            <span>${data.data.name}</span>
+                            <span>` + fileNameSubString(fileName) + `</span>
                         </div>
                     </div>`
         );
     }
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+/*
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }*/
+
 
 </script>
 </body>

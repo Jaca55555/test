@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
@@ -25,13 +26,21 @@ public class DocumentTaskSub {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
 
     @Column(name = "document_id")
     private Integer documentId;
+    @Column(name="description")
+    public String description;
+    @Column(name="registrationDate")
+    public String registrationDate;
+    @Column(name="registrationNumber")
+    public String registrationNumber;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_task_id", insertable = false, updatable = false)
     private DocumentTask task;
@@ -61,6 +70,7 @@ public class DocumentTaskSub {
     private Integer senderId;
 
     //qabul qiluvshi
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", insertable = false, updatable = false)
     private User receiver;
@@ -71,6 +81,14 @@ public class DocumentTaskSub {
     //User.departmentId (receiver)
     @Column(name = "department_id")
     private Integer departmentId;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "additional_document_id", insertable = false, updatable = false)
+    private Document additionalDocument;
+
+    @Column(name = "additional_document_id")
+    private Integer additionalDocumentId;
 
     /*
      * Technical Fields

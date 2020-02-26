@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
@@ -20,6 +21,15 @@ public class DocumentHelperService {
     private final DocumentViewService documentViewService;
     private final JournalService journalService;
 
+    private static DatabaseMessageSource databaseMessageSource;
+    public static void setTranslationsSource(DatabaseMessageSource initializedDatabaseMessageSource) {
+        databaseMessageSource = initializedDatabaseMessageSource;
+    }
+
+    public String getTranslation(String tag,String locale) {
+        return databaseMessageSource.resolveCodeSimply(tag, locale);
+    }
+
     public DocumentHelperService(DocumentService documentService, UserService userService, CommunicationToolService communicationToolService, DocumentOrganizationService documentOrganizationService, DocumentTypeService documentTypeService, DocumentViewService documentViewService, JournalService journalService) {
         this.documentService = documentService;
         this.userService = userService;
@@ -28,6 +38,11 @@ public class DocumentHelperService {
         this.documentTypeService = documentTypeService;
         this.documentViewService = documentViewService;
         this.journalService = journalService;
+    }
+
+    public String getTypeName(Integer id){
+        DocumentType documentType = documentTypeService.getById(id);
+        return documentType!=null? documentType.getName():"";
     }
 
     public String getJournalName(Integer id){

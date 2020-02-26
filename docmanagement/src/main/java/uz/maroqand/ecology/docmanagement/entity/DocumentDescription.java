@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Namazov Jamshid
@@ -25,4 +26,9 @@ public class DocumentDescription {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "created_at", columnDefinition = "timestamp without time zone")
+    private Date createdAt;
+
+    @Column(name = "created_by_id")
+    private Integer createdById;
 }

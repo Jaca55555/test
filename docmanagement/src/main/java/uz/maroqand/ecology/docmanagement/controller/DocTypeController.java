@@ -95,7 +95,7 @@ public class DocTypeController {
     @RequestMapping(value = DocUrls.DocTypeEdit)
     public String getEditDocType(
             Model model,
-            @RequestParam(name = "id")Integer id
+            @RequestParam(name = "id") Integer id
     ) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
@@ -116,12 +116,14 @@ public class DocTypeController {
     public String editDocType(
             @RequestParam(name = "id")String id,
             @RequestParam(name = "createDate")String date,
-            DocumentType docType
+            DocumentType documentType
     ) {
-        docType.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
-        docType.setCreatedById(userService.getCurrentUserFromContext().getId());
-        documentTypeService.update(docType);
+        documentType.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
+        documentType.setCreatedById(userService.getCurrentUserFromContext().getId());
+        documentTypeService.update(documentType);
         documentTypeService.updateStatusActive();
+        documentTypeService.updateByIdFromCache(documentType.getId());
+
         return "redirect:" + DocUrls.DocTypeList;
     }
 
@@ -141,12 +143,15 @@ public class DocTypeController {
         if (user == null) {
             return "";
         }
+
         DocumentType documentType = documentTypeService.getById(id);
         if (documentType == null) {
             return "redirect:" + DocUrls.DocTypeList;
         }
         documentType.setDeleted(Boolean.TRUE);
         documentTypeService.update(documentType);
+        documentTypeService.updateStatusActive();
+        documentTypeService.updateByIdFromCache(documentType.getId());
         return "redirect:" + DocUrls.DocTypeList;
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
@@ -122,7 +122,7 @@
         return [[__${#locale}__]];
     }
 </script>
-<script th:inline="javascript">
+<script th:inline="none">
     let dataDatatableSelector;
     let thead;
 
@@ -138,7 +138,7 @@
             + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
         html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
             + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
-        html += '<a class="btn btn-outline-danger btn-sm delete" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
+        html += '<a class="btn btn-outline-danger btn-sm delete" onclick="return confirm(\'O`chirilsinmi?\')" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
             + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
         return html;
     }
@@ -176,7 +176,10 @@
                 dataToSend.prefix = $('#prefix').val();
                 dataToSend.suffix = $('#suffix').val();
                 dataToSend.status = $('#status').val();
-                dataToSend.[(${_csrf.parameterName})] = [[${_csrf.token}]];
+                dataToSend._csrf = $('#global_csrf').val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
 
                 $.post(ajaxListLink, dataToSend, function(data){
                     callback(data);
@@ -198,17 +201,7 @@
         thead = dataDatatableSelector.html();
         getDatatableConnect();
 
-        $(document).on('click', '.delete', function (e) {
-            e.preventDefault();
-            if (confirm([[#{doc.confirm_delete}]])) {
-                $.get($(this).attr('href'), function (data) {
-                    if (data.status == 0) {
-                        $('#id_' + data.id).remove();
-                    }
-                    alert(data.message);
-                })
-            }
-        });
+
         $('#filter').on('change', function () {
             getDatatableConnect();
         })

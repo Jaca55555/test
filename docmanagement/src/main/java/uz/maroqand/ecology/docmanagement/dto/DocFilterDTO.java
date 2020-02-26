@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.dto;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 
 /**
  * Created by Namazov Jamshid
@@ -32,6 +33,7 @@ public class DocFilterDTO {
     private Boolean insidePurposeStatus;
     private Integer coExecutorStatus;
     private String replies;
+    private DocumentTypeEnum documentTypeEnum;
     private DocumentStatus documentStatus;
 
     public String getContent() {

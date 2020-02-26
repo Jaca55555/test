@@ -22,11 +22,7 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 01.04.2019.
@@ -49,13 +45,6 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document getById(Integer id) {
         return documentRepository.findByIdAndDeletedFalse(id);
-    }
-
-    @Override
-    public Document createDoc(Document document) {
-        document.setCreatedAt(new Date());
-        document.setDeleted(Boolean.FALSE);
-        return documentRepository.save(document);
     }
 
     @Override
@@ -119,6 +108,10 @@ public class DocumentServiceImpl implements DocumentService {
 
                     if (filterDTO.getDocumentType() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
+                    }
+
+                    if (filterDTO.getDocumentTypeEnum() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("documentType").get("type"), filterDTO.getDocumentTypeEnum().getId()));
                     }
 
                     if (filterDTO.getCorrespondentType() != null) {
@@ -283,4 +276,31 @@ public class DocumentServiceImpl implements DocumentService {
         return calendar.getTime();
     }
 
+    @Override
+    public HashMap<String, Object> getCountersByType(Integer type) {
+        HashMap<String, Object> countersList = new HashMap<>();
+        countersList.put("all", documentRepository.countAllDocByType(type));
+
+        List<DocumentStatus> documentStatuses = new LinkedList<>();
+        documentStatuses.add(DocumentStatus.Initial);
+        documentStatuses.add(DocumentStatus.New);
+        countersList.put("new", documentRepository.countAllDocByTypeAndStatusIn(type, documentStatuses));
+
+        documentStatuses.clear();
+        documentStatuses.add(DocumentStatus.InProgress);
+        countersList.put("inProcess", documentRepository.countAllDocByTypeAndStatusIn(type, documentStatuses));
+
+        documentStatuses.clear();
+        documentStatuses.add(DocumentStatus.Completed);
+        countersList.put("complete", documentRepository.countAllDocByTypeAndStatusIn(type, documentStatuses));
+
+        Calendar calendar = Calendar.getInstance();
+        Date beginDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date endDate = calendar.getTime();
+        countersList.put("nearDate", documentRepository.countAllDocByTypeAndDueDateBetween(type, beginDate, endDate));
+
+        countersList.put("expired", documentRepository.countAllExpiredDocsByType(type, beginDate));
+        return countersList;
+    }
 }

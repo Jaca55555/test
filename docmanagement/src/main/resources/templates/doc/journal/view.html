@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_doc_type}"></span></div>
-                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{documentType.name}}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="#{*{@documentHelperService.getTypeName(documentTypeId)}}"></span></div>
                     </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.journal_name}"></span></div>

@@ -4,6 +4,25 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+
+    <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 115px;
+        }
+        #percentage {
+            position: absolute;
+            top: 61%;
+            left: 8%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -24,8 +43,8 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
-                <h5 class="mb-0" th:if="${doc.id==null}">Ички хужжатларни рўйхатга олиш</h5>
-                <h5 class="mb-0" th:if="${doc.id!=null}">Ички хужжатларни тахрирлаш - <span th:text="${doc.registrationNumber}">IN-123456-MRQ</span></h5>
+                <h5 class="mb-0" th:if="${document.id==null}">Ички хужжатларни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${document.id!=null}"><span th:text="#{doc_inner.edit}">Ички хужжатларни тахрирлаш</span> - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
                 <div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
@@ -34,8 +53,8 @@
                 </div>
             </div>
             <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
-            <form th:action="${action_url}" th:object="${doc}" th:method="post" class="card-block">
-                <div th:if="${doc.id != null}">
+            <form th:action="${action_url}" th:object="${document}" th:method="post" class="card-block">
+                <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
                 </div>
                 <div class="row">
@@ -55,7 +74,7 @@
                     </div>
 
                     <div class="col-sm-12 form-group">
-                        <label class="control-label">Хужжат чиқарувчи орган / ташкилот / бўлим номи</label>
+                        <label class="control-label"><span th:text="#{sys.documentOrganizationId}">Хужжат чиқарувчи орган / ташкилот / бўлим номи</span></label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
@@ -63,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 form-group">
-                    <label class="control-label" th:text="#{doc.income_description}"></label>
+                    <label class="control-label" th:text="#{document.income_description}"></label>
                     <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{contentId}">
                         <option value=""></option>
                         <option th:each="type : ${descriptionList}" th:value="${type.id}" th:text="${type.content}"></option>
@@ -76,7 +95,7 @@
 
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        <label class="control-label">Ушбу хужжатга алоқадор бошқа хужжатлар рўйхати (агар мавжуд бўлса)</label>
+                        <label class="control-label" th:text="#{doc_inner.additional_document}">Ушбу хужжатга алоқадор бошқа хужжатлар рўйхати (агар мавжуд бўлса)</label>
                         <div class="col-sm-12 p0">
                             <select class="form-control" th:field="*{additionalDocumentId}">
                                 <option value="" th:text="#{sys_select}"></option>
@@ -86,22 +105,26 @@
                     </div>
                 </div>
                 <hr class="m30-vertical">
-                <h5 class="mb-0 card-header no-border">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <h5 class="mb-0 card-header no-border" th:text="#{sys_document.files}">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20" id="file-container">
                     <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
                     </select>
-                    <div class="file-block" th:each="file: ${doc.contentFiles}">
+                    <div class="file-block" th:each="file: ${document.contentFiles}">
                         <div class="text-right"><span class='fas fa-trash-alt'></span></div>
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
                         <div class="text-center">
-                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}">
+                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
+                            </a>
                         </div>
                     </div>
                     <div class="file-block flex-center file-button">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
+                            <span class="fas fa-plus" id="plus-icon"></span>
+                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
+                            <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -120,15 +143,14 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Хужжатни қабул қилиш учун маъсул рахбар</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true">
+                        <label class="control-label" th:text="#{doc_inner.chief}">Хужжатни қабул қилиш учун маъсул рахбар</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label">Ижро назорати учун маъсул шахс</label>
+                        <label class="control-label" th:text="#{doc_inner.execute_controller}">Ижро назорати учун маъсул шахс</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" name="executeController">
                             <option value=""></option>
@@ -156,9 +178,9 @@
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" th:if="${doc.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${doc.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
-                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNewTask}" id="nextStep" th:if="${doc.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
             </form>
@@ -173,10 +195,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
+
+    var sys_select = [[#{sys_select}]];
+
     $(document).ready(function () {
 
+
+        $('.singleSelect').select2({
+            placeholder: sys_select,
+            allowClear: true
+        });
+
+        var files = [[${document.contentFiles}]];
+        if (files!=null && files.length>0){
+            $.each(files,function (index,val) {
+                $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+                var fileName=$('#fileName_'+val.id).text();
+                var subStringFileName = fileNameSubString(fileName);
+                $('#fileName_'+val.id).text(subStringFileName);
+            })
+        }
+
+
         $('.file-button').on('click', function () {
-            $("#addFile").trigger("click");
+            $('#addFile').click();
         });
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
@@ -197,30 +239,51 @@
                     files.files = [];
                     var file = data.file;
                     $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
-                    $('#file-container').prepend(
+                    $('#file-container').append(
 "                    <div class=\"file-block\">\n" +
 "                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
 "                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
+"                           <span class=\"fas fa-file-pdf\"></span>\n" +
 "                        </div>\n" +
 "                        <div class=\"text-center\">\n" +
-"                            <span>"+file.name+"</span>\n" +
+"                            <span>"+fileNameSubString(file.name)+"</span>\n" +
 "                        </div>\n" +
 "                    </div>\n"
                     );
+                },
+                beforeSend: function () {
+                    $('#plus-icon').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#plus-icon').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
                 }
+
             })
         });
 
         $(document).on('click', '.fa-trash-alt', function () {
             $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
             $(this).parent().parent().remove();
+            $('#addFile').val('');
         });
 
         $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
             $(this).submit();
-        })
+        });
 
         $('#documentOrganizationId').select2({
             ajax: {
@@ -242,7 +305,23 @@
         });
     });
 
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
 
+    /*function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }*/
 
 </script>
 

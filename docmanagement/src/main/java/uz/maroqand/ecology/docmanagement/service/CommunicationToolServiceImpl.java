@@ -85,7 +85,9 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
                 predicates.add(criteriaBuilder.equal(root.get("id"), id));
             }
             if (name != null) {
-                predicates.add(criteriaBuilder.equal(root.get("name"),"%" + name + "%"));
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"));
             }
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

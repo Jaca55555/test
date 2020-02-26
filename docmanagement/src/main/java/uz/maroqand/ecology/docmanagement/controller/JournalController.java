@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -20,6 +17,7 @@ import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTypeService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +87,7 @@ public class JournalController {
         return DocTemplates.JournalNew;
     }
 
-    @PostMapping(DocUrls.JournalNew)
+    @RequestMapping(value = DocUrls.JournalNew,method = RequestMethod.POST)
     public String createJournal(Journal journal) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
@@ -97,6 +95,8 @@ public class JournalController {
         }
         journal.setCreatedById(user.getId());
         journalService.create(journal);
+        journalService.updateStatusActive(journal.getDocumentTypeId());
+
         return "redirect:" + DocUrls.JournalList;
     }
 
@@ -110,7 +110,7 @@ public class JournalController {
             return "redirect:" + DocUrls.JournalList;
         }
         model.addAttribute("docType", documentTypeService.getStatusActive());
-        model.addAttribute("action_url", DocUrls.JournalNew);
+        model.addAttribute("action_url", DocUrls.JournalEdit);
         model.addAttribute("journal", journal);
         return DocTemplates.JournalEdit;
     }
@@ -128,6 +128,9 @@ public class JournalController {
         journal.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
         journal.setCreatedById(user.getId());
         journalService.update(journal);
+        journalService.updateStatusActive(journal.getDocumentTypeId());
+        journalService.updateByIdFromCache(journal.getId());
+
         return "redirect:" + DocUrls.JournalList;
     }
 
@@ -143,30 +146,22 @@ public class JournalController {
         model.addAttribute("journal", journal);
         return DocTemplates.JournalView;
     }
-
-    @GetMapping(DocUrls.JournalDelete)
-    @ResponseBody
-    public HashMap<String, Object> deleteJournal(@RequestParam(name = "id")Integer id) {
-        String error = "0";
-        String message = "";
+    @RequestMapping(value = DocUrls.JournalDelete)
+    public String deleteJournal(@RequestParam(name = "id")Integer id) {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
-            error = "2";
-            message = "not authorized";
+            return "";
         }
         Journal journal = journalService.getById(id);
         if (journal == null) {
-            error = "1";
-            message = "journal not found";
-        } else {
-            journal.setDeleted(Boolean.TRUE);
-            journalService.update(journal);
-            message = "successfully deleted";
+            return "redirect:" + DocUrls.JournalList;
         }
-        HashMap<String, Object> response = new HashMap<>();
-        response.put("status", error);
-        response.put("message", message);
-        response.put("id", id);
-        return response;
+        journal.setDeleted(Boolean.TRUE);
+        journalService.update(journal);
+        journalService.updateStatusActive(journal.getDocumentTypeId());
+
+        return "redirect:" + DocUrls.JournalList;
     }
+
+
 }

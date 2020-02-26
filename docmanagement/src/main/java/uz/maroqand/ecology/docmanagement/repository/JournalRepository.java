@@ -15,6 +15,6 @@ import java.util.List;
 @Repository
 public interface JournalRepository extends DataTablesRepository<Journal, Integer>, JpaRepository<Journal, Integer> {
 
-    List<Journal> findByStatusTrue();
+    List<Journal> findByStatusTrueAndDocumentTypeId(Integer documentTypeId);
 
 }

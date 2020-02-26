@@ -13,8 +13,9 @@ public class DocUrls {
     private static final String Inner = "/inner"; //Ichki xujjatlar
     private static final String Appeal = "/appeal"; //Murojaatlar
     private static final String Orders = "/orders"; //Buyruqlar
-
+    private static final String DocumentCheck="/document_check"; //Document oxirgisi
     public static final String Dashboard = Prefix + "/office";
+    public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
@@ -25,6 +26,13 @@ public class DocUrls {
     public static final String IncomingTask = Prefix + Incoming + "/task";
     public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
     public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
+
+    public static final String DocumentCheckList = Prefix + DocumentCheck + "/list"; //kiruvchi xatlar
+    public static final String DocumentCheckView = Prefix + DocumentCheck + "/view"; //kiruvchi xatni ko'rish
+    public static final String DocumentCheckComplete = Prefix + DocumentCheck + "/complete";
+    public static final String DocumentCheckTaskSubmit = Prefix + DocumentCheck + "/task_submit";
+    public static final String DocumentCheckTaskUserName = Prefix + DocumentCheck + "/user_name";
+
     public static final String OutgoingList = Prefix + Outgoing + "/list"; //chiquvchi xatlar
     public static final String OutgoingView = Prefix + Outgoing + "/view"; //chiquvchi xatni ko'rish
     public static final String OutgoingListAjax = Prefix + OutgoingList + "/ajax";
@@ -97,6 +105,14 @@ public class DocUrls {
     public static final String JournalNew = Journal + "/new";
     public static final String JournalEdit = Journal + "/edit";
     public static final String JournalDelete = Journal + "/delete";
+
+    private static final String DocDescription = Prefix + "/description";
+    public static final String DocDescriptionList = DocDescription + "/list";
+    public static final String DocDescriptionListAjax = DocDescription + "/list_ajax";
+    public static final String DocDescriptionNew = DocDescription + "/new";
+    public static final String DocDescriptionEdit = DocDescription + "/edit";
+    public static final String DocDescriptionView = DocDescription + "/view";
+    public static final String DocDescriptionDelete = DocDescription + "/delete";
 
     private static final String DocumentView = Prefix + "/document_view";
     public static final String DocumentViewList = DocumentView + "/list";

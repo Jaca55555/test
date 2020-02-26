@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -53%);
+            max-width: 115px;
+        }
+        #percentage {
+            position: absolute;
+            top: 65%;
+            left: 8%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -34,7 +52,7 @@
                     </div>
                 </div>-->
             </div>
-            <form action="" th:object="${document}" th:method="post" class="card-block">
+            <form action="" th:object="${document}" th:method="post" class="card-block" data-parsley-validate="">
                 <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" />
                     <input type="hidden" name="docSubId" th:value="${documentSub.id}"/>
@@ -42,18 +60,20 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_journal}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
+                        <label class="control-label" th:text="#{doc_incoming.journal}">Кирувчи хатларни руйхатга олиш журнали</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required" data-parsley-errors-container="#journalIdError">
                             <option value=""></option>
                             <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-4" id="journalIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_document_view}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required">
+                        <label class="control-label" th:text="#{doc_incoming.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required" data-parsley-errors-container="#documentViewError">
                             <option value=""></option>
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-4" id="documentViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
@@ -72,32 +92,31 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_communication_tool}"></label>
+                        <label class="control-label" th:text="#{doc_incoming.communication_tool}"></label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}">
                             <option value=""></option>
                             <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.reg_organization}"></label>
-                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.organization}"></label>
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required" data-parsley-errors-container="#documentOrganizationIdError">
                             <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
-                        <!--<option th:if="*{parentId!=null}" th:value="*{parentId}" th:text="${parentName}" selected="selected"></option>-->
-                        <!--<input class="form-control" tabindex="-1" id="orgName" th:field="${documentSub.organizationName}">-->
+                        <div class="row"> <div class="col-md-4" id="documentOrganizationIdError"></div> </div>
                     </div>
                 </div>
 
                 <div class="col-sm-12 form-group">
-                    <label class="control-label" th:text="#{doc_incoming.reg_description}"></label>
+                    <label class="control-label" th:text="#{doc_incoming.description}"></label>
                     <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{contentId}" id="description_content">
                         <option value=""></option>
                         <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
                     </select>
                 </div>
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" name="content" th:text="*{content}" id="description_textarea"></textarea>
+                    <textarea class="form-control" rows="4" name="content max-textarea" maxlength="500" th:text="*{content}" id="description_textarea" required="required"></textarea>
                 </div>
 
                 <div class="row">
@@ -125,17 +144,20 @@
                     <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
                     </select>
                     <div class="file-block" th:each="file: ${document.contentFiles}">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
+                        <div class="text-right"><span class="fas fa-trash-alt"></span></div>
                         <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
                         </div>
                         <div class="text-center">
-                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}">Письмо.pdf</a>
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
                         </div>
                     </div>
                     <div class="file-block flex-center file-button" id="addFileButton">
                         <div class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" ></span>
+                            <span class="fas fa-plus" id="plus-icon"></span>
                             <input type="file" class="d-none" id="addFile" name="addFile">
+                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
+                            <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -173,16 +195,14 @@
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="executeForm : ${executeForms}">
                             <input type="radio" name="executeFormId" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
-                            <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="${executeForm.name}"></label>
+                            <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
-                        <div class="custom-control custom-radio custom-control-inline" >
-                            <div class="radio radio-success d-inline" th:each="controlForm: ${controlForms}">
-                                <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
-                                <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="${controlForm.name}"></label>
-                            </div>
+                        <div class="custom-control custom-radio custom-control-inline" th:each="controlForm: ${controlForms}">
+                            <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
+                            <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="#{${controlForm.name}}"></label>
                         </div>
                     </div>
                 </div>
@@ -191,9 +211,9 @@
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
                         <a th:href="${cancel_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
+                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc_income.create}">Рўйхатга олиш</button>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
-                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc_income.save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
             </form>
@@ -206,6 +226,9 @@
 
 <script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     $(document).ready(function () {
@@ -213,14 +236,17 @@
         if (files!=null && files.length>0){
             $.each(files,function (index,val) {
                 $('#fileIds').append("<option selected='selected' value='"+val.id+"'>"+val.description+"</option>");
+                var fileName=$('#fileName_'+val.id).text();
+                var subStringFileName = fileNameSubString(fileName);
+                $('#fileName_'+val.id).text(subStringFileName);
             })
         }
 
-        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
-        $('#orgName').autocomplete({
-            minLength: 0,
-            source: [[${organizations}]]
+        $('textarea.max-textarea').maxlength({
+            alwaysShow: true
         });
+
+        $('#description option[value=""]').after('<option value="new">Yangi qisqacha ma\'lumot</option>');
 
         $('#addFileButton').on('click', function () {
             $('#addFile').click();
@@ -240,24 +266,69 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: function (data) {
-                    files.files = [];
-                    var file = data.file;
-                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
-                    $('#file-container').prepend(
-"                    <div class=\"file-block\">\n" +
-"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
-"                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-"+file.extension+"\"></span>\n" +
-"                        </div>\n" +
-"                        <div class=\"text-center\">\n" +
-"                            <span>"+file.name+"</span>\n" +
-"                        </div>\n" +
-"                    </div>\n"
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                $('#plus-icon').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#plus-icon').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
                     );
+
+                    return xhr;
                 }
             })
         });
+
+        function detectExtensionAndDisplay(data){
+            let extension = data.data.extension;
+            let fileName = data.data.name;
+            let color;
+            switch (extension) {
+                case 'jpg':
+                    extension = '-image';
+                    color = 'color-blue';
+                    break;
+                case 'pdf':
+                    extension = '-pdf';
+                    color = 'color-red';
+                    break;
+                case 'xlsx':
+                    extension = '-excel';
+                    color = 'color-green';
+                    break;
+                case 'doc':
+                case 'docx':
+                    extension = '-word';
+                    color = 'color-blue';
+                    break;
+                default:
+                    extension = '';
+                    color = 'color-gray';
+            }
+            $('#file_ids').append(
+                `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+            );
+            $('#file-container').append(
+                `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+            );
+        }
 
         $('#description').on('change', function () {
             if ($(this).val() === 'new') {
@@ -270,16 +341,17 @@
         $(document).on('click', '.fa-trash-alt', function () {
             $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
             $(this).parent().parent().remove();
+            $('#addFile').val('');
         });
 
-        $('form').on('submit', function () {
+        $('form').on('submit', function (e) {
             $('#addFile').attr('disabled', 'disabled');
             if ($('#description').val() === 'new') $('#description').attr('disabled', 'disabled');
             else $('#newDescription').attr('disabled', 'disabled');
-            $(this).submit();
         });
 
         $('#documentOrganizationId').select2({
+            tags: true,
             ajax: {
                 url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
                 type: "POST",
@@ -304,6 +376,24 @@
         var dec = $('#description_textarea').val();
         $('#description_textarea').val(dec + text);
     });
+
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    /*function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }*/
 </script>
 
 </body>

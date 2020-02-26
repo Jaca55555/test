@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,9 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
@@ -34,8 +37,10 @@ public class InnerController {
     private final JournalService journalService;
     private final CommunicationToolService communicationToolService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentHelperService documentHelperService;
+    private final DocumentLogService documentLogService;
 
-    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService) {
+    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
@@ -45,6 +50,8 @@ public class InnerController {
         this.journalService = journalService;
         this.communicationToolService = communicationToolService;
         this.documentDescriptionService = documentDescriptionService;
+        this.documentHelperService = documentHelperService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
@@ -76,7 +83,7 @@ public class InnerController {
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -164,6 +171,7 @@ public class InnerController {
                 receiverId,
                 pageable
         );
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
@@ -172,12 +180,12 @@ public class InnerController {
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentTaskSub.getContent(),
-                    documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
-                    documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
-                    documentTaskSub.getStatus(),
-                    ""
+                    documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
+                    documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
+                    documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
+                    documentTaskSub.getContent()
             });
         }
 
@@ -192,10 +200,30 @@ public class InnerController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-        Document document = documentService.getById(id);
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
+        if (documentTaskSub == null) {
+            return "redirect: " + DocUrls.IncomingRegistrationList;
+        }
+
+        Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
+
+        DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
+        model.addAttribute("document", document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("specialControll", true);
+        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerView;

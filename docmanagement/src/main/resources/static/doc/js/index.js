@@ -78,3 +78,40 @@ $(document).ready(function() {
 });
 
 
+function switchLanguage(targetLanguage) {
+    var currentUrl = window.location.href;
+
+    var urlAndHash = currentUrl.split('#');
+
+    currentUrl = urlAndHash[0];
+
+    currentUrl = currentUrl.replace(/[&]?lang=(uz|oz|ru|en|uzc)/ig, '');
+
+    if (currentUrl.indexOf('?') > 0) {
+        currentUrl += '&lang='+targetLanguage;
+    } else {
+        currentUrl += '?lang='+targetLanguage;
+    }
+    if (urlAndHash.length > 1) currentUrl += '#' + urlAndHash[1];
+
+    window.location.href = currentUrl;
+}
+
+function fileNameSubString(fileName) {
+    var lastIndex = fileName.lastIndexOf('.');
+    var subStringName = fileName.substring(0,lastIndex);
+    var getExtension = fileName.substring(lastIndex,fileName.length);
+    if (subStringName.length>10){
+        subStringName = subStringName.substring(0,9)+'..';
+    }
+    subStringName += getExtension;
+    return subStringName;
+}
+
+function docFileName(files) {
+    if (files!=null && files.length>0){
+        $.each(files,function (item, value) {
+            $('#file_name_'+value.id).html('<span>'+fileNameSubString(value.name)+'</span>');
+        })
+    }
+}

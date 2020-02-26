@@ -22,6 +22,7 @@ import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +43,10 @@ public class InnerRegistrationController {
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentHelperService documentHelperService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -55,10 +57,18 @@ public class InnerRegistrationController {
         this.documentTaskSubService = documentTaskSubService;
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentHelperService = documentHelperService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
     public String getIncomeListPage(Model model) {
+        model.addAttribute("newDocumentCount", documentTaskService.countNew());
+        model.addAttribute("inProgressDocumentCount", documentTaskService.countInProcess());
+        model.addAttribute("lessDeadlineDocumentCount", documentTaskService.countNearDate());
+        model.addAttribute("greaterDeadlineDocumentCount", documentTaskService.countExpired());
+        model.addAttribute("checkingDocumentCount", documentTaskService.countExecuted());
+        model.addAttribute("allDocumentCount", documentTaskService.countTotal());
+
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executes", userService.getEmployeeList());
         return DocTemplates.InnerRegistrationList;
@@ -95,6 +105,7 @@ public class InnerRegistrationController {
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
@@ -102,10 +113,10 @@ public class InnerRegistrationController {
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentTask.getContent(),
-                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    documentTask.getStatus(),
-                    "Resolution and parcipiants"
+                    documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getUpdateAt()):"",
+                    documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getContent()
             });
         }
 
@@ -122,14 +133,15 @@ public class InnerRegistrationController {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
         model.addAttribute("document", document);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerRegistrationView;
     }
 
     @RequestMapping(DocUrls.InnerRegistrationNew)
     public String getInnerRegistrationNewPage(Model model) {
-        model.addAttribute("doc", new Document());
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("document", new Document());
+        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("chief", userService.getEmployeeList());
@@ -189,12 +201,12 @@ public class InnerRegistrationController {
         DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
         Document documentAdditional = documentService.getById(document.getAdditionalDocumentId());
 
-        model.addAttribute("doc", document);
+        model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSub);
 
         model.addAttribute("docOrganization",documentOrganization);
         model.addAttribute("docAdditional",documentAdditional);
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeeList());

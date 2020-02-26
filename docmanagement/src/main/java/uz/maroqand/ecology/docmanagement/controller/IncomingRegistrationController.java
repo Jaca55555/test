@@ -113,17 +113,18 @@ public class IncomingRegistrationController {
         Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
-                    documentTask.getId(),
+                    document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentTask.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatus(),
-                    ""
+                    documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getContent()
             });
         }
 
@@ -197,13 +198,13 @@ public class IncomingRegistrationController {
         model.addAttribute("document", new Document());
         model.addAttribute("documentSub", new DocumentSub());
 
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
-
+        model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
         return DocTemplates.IncomingRegistrationNew;
@@ -218,7 +219,7 @@ public class IncomingRegistrationController {
             @RequestParam(name = "docRegNumber") String docRegNumber,
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestParam(name = "communicationToolId") Integer communicationToolId,
-            @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
+            @RequestParam(name = "documentOrganizationId") String documentOrganizationId,
             @RequestParam(name = "contentId", required = false) Integer contentId,
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "additionalDocumentId", required = false) Integer additionalDocumentId,
@@ -264,9 +265,20 @@ public class IncomingRegistrationController {
         document.setStatus(DocumentStatus.New);
         document = documentService.createDoc(1, document, user);
 
+        Integer documentOrganizationId1;
+        try {
+            documentOrganizationId1 = Integer.parseInt(documentOrganizationId);
+        }catch(NumberFormatException ex){
+            System.out.println("creating new document organization with '" + documentOrganizationId + "' name");
+            DocumentOrganization documentOrganization = new DocumentOrganization();
+            documentOrganization.setName(documentOrganizationId);
+            documentOrganization.setStatus(true);
+            documentOrganization.setCreatedById(user.getId());
+            documentOrganizationId1 = organizationService.create(documentOrganization).getId();
+        }
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
-        documentSub.setOrganizationId(documentOrganizationId);
+        documentSub.setOrganizationId(documentOrganizationId1);
         documentSubService.create(document.getId(), documentSub, user);
 
         if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingRegistrationNewTask)){
@@ -301,7 +313,7 @@ public class IncomingRegistrationController {
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
 
-        model.addAttribute("journalList", journalService.getStatusActive());
+        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -460,7 +472,7 @@ public class IncomingRegistrationController {
         HashMap<String, Object> response = new HashMap<>();
 
         File file = fileService.uploadFile(uploadFile,user.getId(),"documentFile",uploadFile.getOriginalFilename());
-        response.put("file", file);
+        response.put("data", file);
         return response;
     }
 
