@@ -269,6 +269,7 @@
                     <form th:action="${comment_url}" id="commentForm">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <input type="hidden" name="documentId" th:value="${document.id}">
+                        <input type="hidden" name="taskSubId" th:value="${documentTaskSub.id}">
                         <div class="flex-space-between p0 m20-vertical">
                             <div>
                                 <div class="inline-block">
