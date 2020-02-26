@@ -159,7 +159,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             if(documentViewId != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentViewId"), documentViewId));
             if(content != null)
-                predicates.add(criteriaBuilder.like(joinDocument.get("content"), "%" + content + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(joinDocument.get("content")), "%" + content.toLowerCase() + "%"));
             if(departmentId != null && performerId != null) {
                 Predicate p = criteriaBuilder.or(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId), criteriaBuilder.equal(joinDocument.get("performerId"), performerId));
                 predicates.add(p);

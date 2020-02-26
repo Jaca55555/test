@@ -124,7 +124,7 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
             if(id != null)
                 predicates.add(criteriaBuilder.equal(root.get("id"), id));
             if(name != null)
-                predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
             if(status != null)
                 predicates.add(criteriaBuilder.equal(root.get("status"), status == 1));
 
