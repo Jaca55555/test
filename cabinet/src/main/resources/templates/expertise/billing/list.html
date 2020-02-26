@@ -415,8 +415,8 @@
     function renderActionsColumn(data, type, row, meta) {
         // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><button class="btn btn-outline-warning btn-sm" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
-        html += '<div class="btn-group"><button class="btn btn-outline-info btn-sm" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+        html += '<div class="btn-group"><button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
+        html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
         return html;
     }
 

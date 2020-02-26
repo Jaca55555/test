@@ -37,10 +37,6 @@
                        data-toggle="collapse" data-target="#collapseTopContainer"
                        aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</a>
                 </h5>
-                <div>
-                    <input type="text" class="form-control">
-                    <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                </div>
             </div>
             <h5 class="office-h5 default-color"><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
@@ -98,7 +94,6 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="row">
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
@@ -144,7 +139,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
         <div class="card parent-card">
@@ -199,8 +193,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;" th:text="#{sys_document.search}">искать</button>
+                        <div class="form-group col-md-2 col-sm-12 form-button-container">
+                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>
                         </div>
 
 
@@ -312,7 +306,7 @@
 
         let html = '';
 
-        html += `<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
+        html += `<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
 
         return html;
     }

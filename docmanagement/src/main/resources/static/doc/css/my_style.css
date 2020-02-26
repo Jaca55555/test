@@ -126,21 +126,29 @@ hr {
     margin-bottom: 0px;
     font-size: 13.5px;
 }
+h6.card-title {
+    word-break: break-all;
+    margin-bottom: 3px;
+}
 h4.card-title {
     font-size: 16px;
     font-weight: bold;
 }
+#collapseOne {
+    padding-top:0;
+}
 .dashboard-card {
-    display:flex;
+    display: flex;
     justify-content: center;
     flex-direction: row;
     align-content: center;
-    padding:3px;
-    width:100%;
+    padding: 3px;
+    width: 100%;
+    height: 62px;
     margin: auto;
 }
 .pcoded-inner-navbar li:hover i {
-    color:white;
+    color:#04a9f5;
 }
 .dashboard-card:hover {
     -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -243,8 +251,18 @@ h4.card-title {
 .control-label {
     display: inline-flex;
     align-items: flex-end;
-    /*height:40px;*/
+    height:40px;
     color:black;
+}
+.form-button-container {
+    display: flex;
+    align-items: flex-end;
+}
+.form-button-container > button {
+    height:43px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding:0 10px;
 }
 
 
@@ -322,7 +340,7 @@ html, body {
       background: white;
   }
   a.active.nav-link {
-    background: #62c462;
+    background: #04a9f5;
     color:white !important;
    }
    .file-block {
@@ -347,7 +365,7 @@ html, body {
        align-self:center;
    }
    .color-red {
-       color:red;
+       color:#ff5252;
    }
    .color-blue {
        color:lightskyblue;
@@ -356,7 +374,7 @@ html, body {
        color:#512da8;
    }
    .color-primary {
-       color:#04a9f5;
+       color:#23b7e5;
     }
    .color-green {
        color:#62c462;
@@ -405,7 +423,7 @@ html, body {
     .gray-search {
         position: absolute;
         font-size: 20px;
-        top:7px;
+        top:11px;
         right:8px;
     }
    .calendar-img1 {
@@ -482,15 +500,15 @@ html, body {
         width:600px;
     }
     .pcoded-micon > .mdi {
-        font-size: 25px;
+        font-size: 18px;
         margin: auto;
     }
     .pcoded-micon > .fas {
-        font-size: 20px;
+        font-size: 15px;
         margin:auto;
     }
     .pcoded-micon > .feather {
-        font-size: 20px;
+        font-size: 15px;
         margin:auto;
     }
     /*.form-group {

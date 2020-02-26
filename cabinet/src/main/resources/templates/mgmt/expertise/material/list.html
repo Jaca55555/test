@@ -128,13 +128,13 @@
         var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
-            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-outline-info">\n' +
+            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-info mr-1">\n' +
             '                    <i class="feather icon-eye" style="margin: 0px"></i>\n' +
             '            </a>\n' +
-            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-outline-success">\n' +
+            '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-success mr-1">\n' +
             '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
             '            </a>\n' +
-            '            <a href="'+deleteLink+'"  class="btn btn-sm btn-outline-danger delete" data-id="' + row[0] + '">\n' +
+            '            <a href="'+deleteLink+'"  class="btn btn-sm btn-danger delete mr-1" data-id="' + row[0] + '">\n' +
             '                   <i class="feather icon-delete" style="margin: 0px"></i>\n' +
             '            </a>\n' +
             '      </div>';
