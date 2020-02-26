@@ -86,7 +86,7 @@
                         <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
                             <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
-                            <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
                 </div>

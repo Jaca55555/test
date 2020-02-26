@@ -30,10 +30,6 @@
                             <span th:text="#{sys_office.list}">Девонхона хужжатлар иш столи</span>
                         </a>
                     </h5>
-                    <div>
-                        <input type="text" class="form-control">
-                        <i class="gray-search fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                    </div>
                 </div>
                 <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
@@ -506,8 +502,8 @@
         function renderActionsColumn(data, type, row, meta) {
             var currentViewLink = viewLink + '?id=' + row[0];
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
-            html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
 

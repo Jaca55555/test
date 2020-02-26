@@ -121,11 +121,11 @@
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
                                 <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
                     </div>
@@ -173,11 +173,11 @@
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
-                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
                                 <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
-                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
                     </div>
@@ -187,8 +187,8 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">
+                    <div class="form-group col-md-2 col-sm-12 form-button-container">
+                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4"  onclick="getDatatableConnect()">
                             <span th:text="#{sys_document.search}">Қидириш</span>
                         </button>
                     </div>
@@ -294,7 +294,7 @@
 
         function renderActionsColumn(data, type, row, meta) {
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
 
