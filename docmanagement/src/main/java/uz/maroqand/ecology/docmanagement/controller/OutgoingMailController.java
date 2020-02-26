@@ -82,7 +82,7 @@ public class OutgoingMailController {
     public String newOutgoingMail(Model model){
 
         model.addAttribute("document", new Document());
-        model.addAttribute("journal", journalService.getStatusActive(2));//todo 2
+        model.addAttribute("journals", journalService.getStatusActive(2));//todo 2
         model.addAttribute("documentViews", documentViewService.getStatusActive());
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
@@ -242,7 +242,8 @@ public class OutgoingMailController {
         model.addAttribute("registration_number", document.getRegistrationNumber());
         model.addAttribute("registration_date", Common.uzbekistanDateFormat.format(document.getRegistrationDate()));
         model.addAttribute("updated_at", document.getUpdateAt() != null ? document.getUpdateAt() : "");
-
+        model.addAttribute("document_id", document.getId());
+        model.addAttribute("document_status", document.getStatus());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());

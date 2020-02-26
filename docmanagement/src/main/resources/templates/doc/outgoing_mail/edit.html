@@ -302,6 +302,17 @@
 
     displayFiles(files);
 
+    function fileNameSubString(fileName) {
+        let lastIndex = fileName.lastIndexOf('.');
+        let subStringName = fileName.substring(0,lastIndex);
+        let getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
+
 </script>
 </body>
 </html>

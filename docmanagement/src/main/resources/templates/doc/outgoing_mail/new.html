@@ -65,7 +65,7 @@
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
                                 aria-hidden="true" th:field="*{journalId}" required>
                             <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
-                            <option th:each="i: ${journal}" th:value="${i.id}" th:text="${i.name}"></option>
+                            <option th:each="journal: ${journals}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
@@ -250,12 +250,6 @@
                 }, cache: true
             }
         });
-
-
-
-
-
-
     });
 
     function downloadFileFunction(id) {
@@ -359,21 +353,21 @@
     }
     function uploadProgressHandler(event)
     {
-        var percent = (event.loaded / event.total) * 100;
-        var progress = Math.round(percent);
+        let percent = (event.loaded / event.total) * 100;
+        let progress = Math.round(percent);
         $('#percentage-num').html(progress);
     }
-/*
+
     function fileNameSubString(fileName) {
-        var lastIndex = fileName.lastIndexOf('.');
-        var subStringName = fileName.substring(0,lastIndex);
-        var getExtension = fileName.substring(lastIndex,fileName.length);
+        let lastIndex = fileName.lastIndexOf('.');
+        let subStringName = fileName.substring(0,lastIndex);
+        let getExtension = fileName.substring(lastIndex,fileName.length);
         if (subStringName.length>10){
             subStringName = subStringName.substring(0,9)+'..';
         }
         subStringName += getExtension;
         return subStringName;
-    }*/
+    }
 
 
 </script>
