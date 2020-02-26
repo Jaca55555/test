@@ -44,7 +44,7 @@
             </div>
             <h5 class="office-h5 default-color"><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
-                <div class="office-card">
+             <!--   <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -95,6 +95,53 @@
                         <div class="card-body" style="display: inline-block;text-align: center;">
                             <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
                             <h6 class="card-title"><span th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</span></h6>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="office-card">
+                        <div class="card dashboard-card border-primary-shadow">
+                            <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title" th:text="${inProgress}">10</h4>
+                                <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-danger-shadow">
+                            <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title" th:text="${todayDocuments}">20</h4>
+                                <h6 class="card-title" th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
+                            <div class="card-body" style="display: inline-block;text-align: center;" >
+                                <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
+                                <h6 class="card-title"  th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title" th:text="${answerNotAccepted}">40</h4>
+                                <h6 class="card-title" th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="office-card">
+                        <div class="card dashboard-card border-green-shadow">
+                            <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
+                            <div class="card-body" style="display: inline-block;text-align: center;">
+                                <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
+                                <h6 class="card-title"  th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,7 +200,7 @@
                         </div>
 
                         <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;">искать</button>
+                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;" th:text="#{sys_document.search}">искать</button>
                         </div>
 
 
@@ -179,8 +226,7 @@
                         <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="dynamicTable" aria-describedby="responsive-table-model_info"
-                                           class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
+                                    <table id="dynamicTable" aria-describedby="responsive-table-model_info" class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
                                         <thead>
                                         <tr role="row">
                                             <th aria-controls="responsive-table-model" aria-sort="ascending"
