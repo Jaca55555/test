@@ -229,8 +229,9 @@ public class IncomingRegistrationController {
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
-            @RequestParam(name = "executeForm", required = false) Integer executeFormId,
-            @RequestParam(name = "controlForm", required = false) Integer controlFormId,
+            @RequestParam(name = "insidePurpose", required = false) Boolean insidePurpose,
+            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
+            @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -253,6 +254,7 @@ public class IncomingRegistrationController {
         document.setPerformerPhone(performerPhone);
         document.setManagerId(managerId);
         document.setControlId(controlId);
+        document.setInsidePurpose(insidePurpose);
 
         if(executeFormId!=null){
             document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
@@ -311,6 +313,7 @@ public class IncomingRegistrationController {
         if (documentSub.getOrganizationId()!=null){
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
         }
+        model.addAttribute("document", document);
         model.addAttribute("additionalDocument", additionalDocument);
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
@@ -405,7 +408,7 @@ public class IncomingRegistrationController {
         if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-        DocumentTask documentTask = taskService.createNewTask(document.getId(),TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -426,7 +429,7 @@ public class IncomingRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    taskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);

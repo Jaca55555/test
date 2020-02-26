@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 
 import java.util.Date;
@@ -38,7 +39,7 @@ public interface DocumentTaskService {
 
     DocumentTask create(DocumentTask task);
 
-    DocumentTask createNewTask(Integer docId, Integer status, String context, Date dueDate,Integer chiefId, Integer createdById);
+    DocumentTask createNewTask(Document doc, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById);
 
     DocumentTask update(DocumentTask task);
 

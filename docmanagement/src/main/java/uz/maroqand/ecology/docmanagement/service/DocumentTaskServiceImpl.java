@@ -5,12 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
 
 import javax.persistence.criteria.Predicate;
@@ -26,10 +27,12 @@ import java.util.*;
 public class DocumentTaskServiceImpl implements DocumentTaskService{
 
     private final DocumentTaskRepository taskRepository;
+    private final DocumentService documentService;
 
     @Autowired
-    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository) {
+    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService) {
         this.taskRepository = taskRepository;
+        this.documentService = documentService;
     }
 
     @Override
@@ -94,9 +97,9 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     }
 
     @Override
-    public DocumentTask createNewTask(Integer docId, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById) {
+    public DocumentTask createNewTask(Document doc, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById) {
         DocumentTask documentTask = new DocumentTask();
-        documentTask.setDocumentId(docId);
+        documentTask.setDocumentId(doc.getId());
         documentTask.setStatus(status);
         documentTask.setContent(context.trim());
         documentTask.setDueDate(dueDate);
@@ -104,6 +107,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         documentTask.setCreatedAt(new Date());
         documentTask.setCreatedById(createdById);
         documentTask.setDeleted(Boolean.FALSE);
+
+        if (doc.getStatus().equals(DocumentStatus.New)){
+            doc.setStatus(DocumentStatus.InProgress);
+            documentService.update(doc);
+        }
         return taskRepository.save(documentTask);
     }
 

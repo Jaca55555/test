@@ -302,7 +302,7 @@ public class InnerRegistrationController {
         System.out.println("content=" + content.trim());
         System.out.println("docRegDateStr=" + docRegDateStr);
 
-        DocumentTask documentTask = documentTaskService.createNewTask(document.getId(),TaskStatus.New.getId(),content, DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = documentTaskService.createNewTask(document,TaskStatus.New.getId(),content, DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -323,7 +323,7 @@ public class InnerRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         documentTaskService.update(documentTask);

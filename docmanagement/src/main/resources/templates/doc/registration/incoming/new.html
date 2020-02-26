@@ -116,13 +116,13 @@
                     </select>
                 </div>
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" name="content max-textarea" maxlength="500" th:text="*{content}" id="description_textarea" required="required"></textarea>
+                    <textarea class="form-control" rows="4" name="content" maxlength="500" th:text="*{content}" id="description_textarea" required="required"></textarea>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
-                        <select class="form-control" id="additionalDocumentId" th:field="*{additionalDocumentId}">
+                        <select class="form-control" id="additionalDocumentId" name="additionalDocumentId">
                             <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
@@ -163,7 +163,7 @@
                 </div>
                 <div class="border-warning m20 p20">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="insidePurpose" th:checked="${document!=null && document.insidePurpose!=null && document.insidePurpose}">
                         <label class="custom-control-label" for="customCheck1" th:text="#{doc_incoming.reg_inside_purpose}"></label>
                     </div>
                     <div class="m20-vertical">
@@ -231,7 +231,15 @@
 <script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
-    $(document).ready(function () {
+    var sys_select = [[#{sys_select}]];
+
+    $(document).ready(function ()
+    {
+        $('.singleSelect').select2({
+            placeholder: sys_select,
+            allowClear: true
+        });
+
         var files = [[${document.contentFiles}]];
         if (files!=null && files.length>0){
             $.each(files,function (index,val) {
@@ -315,9 +323,7 @@
                     extension = '';
                     color = 'color-gray';
             }
-            $('#file_ids').append(
-                `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
-            );
+            $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
             $('#file-container').append(
                 `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
