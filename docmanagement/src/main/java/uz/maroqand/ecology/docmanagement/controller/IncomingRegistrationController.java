@@ -161,9 +161,10 @@ public class IncomingRegistrationController {
                     document.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentView!=null? documentView.getName():"",
                     document.getContent()!=null?document.getContent():"",
-                    documentSub.getOrganizationId()!=null? documentHelperService.getDocumentOrganizationName(documentSub.getOrganizationId()):""
+                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    userService.findById(document.getManagerId()).getFullName(),
+                    document.getStatus().getName(),
             });
         }
 

@@ -40,9 +40,11 @@
                                     <thead>
                                     <tr role="row">
                                         <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" tabindex="0"> <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами </span></th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0"> <span th:text="#{sys.registrationDate}">Регистрация санаси </th>
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0"> <span th:text="#{sys.registrationDate}">Регистрация санаси</span> </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.document_view}"> </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.description}"> </th>
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.organization}"> </th>
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.organization}"> </th>
                                         <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.organization}"> </th>
                                     </tr>
                                     </thead>
@@ -64,6 +66,7 @@
 
 <script th:inline="javascript">
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
+    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -76,6 +79,14 @@
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
         datatableConnect();
+    }
+
+    function renderActionsColumn(data, type, row, meta) {
+        var currentViewLink = viewLink + '?id=' + row[0];
+        var html = '';
+        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+currentViewLink+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        return html;
     }
 
     function datatableConnect() {
@@ -105,11 +116,13 @@
                 {data: 2, name: 'registrationDate',
                     render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[2]+'</span>'}
                 },
-                {data: 3, name: 'documentView'},
-                {data: 4, name: 'content',
-                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[4]+'</span>'}
+                {data: 3, name: 'content',
+                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[3]+'</span>'}
                 },
-                {data: 5, name: 'organization'}
+                {data: 4, name: 'createdAt'},
+                {data: 5, name: 'fullName'},
+                {data: 6, name: 'status'},
+                {render: renderActionsColumn, orderable: false}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
