@@ -99,9 +99,11 @@ public class InnerRegistrationController {
             @RequestParam(name = "tabFilter",required = false,defaultValue = "")Integer tabFilter,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
         IncomingRegFilter incomingRegFilter = new IncomingRegFilter();
-        Page<DocumentTask> documentPage = documentTaskService.findFiltered(incomingRegFilter,null,null,null,null,null,null, pageable);
+        //todo documentTypeId=3
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,null,null,null,null,null,null, pageable);
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());

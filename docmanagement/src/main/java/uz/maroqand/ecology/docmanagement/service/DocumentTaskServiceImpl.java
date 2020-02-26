@@ -118,8 +118,9 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 
     @Override
     public Page<DocumentTask> findFiltered(
+            Integer organizationId,
+            Integer documentTypeId,
             IncomingRegFilter incomingRegFilter,
-
             Date deadlineDateBegin,
             Date deadlineDateEnd,
             Integer type,
@@ -128,11 +129,13 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             Integer receiverId,
             Pageable pageable
     ) {
-        return taskRepository.findAll(getSpesification(
-                incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
+        return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
     }
 
     private static Specification<DocumentTask> getSpesification(
+            final Integer organizationId,
+            final Integer documentTypeId,
+
             final IncomingRegFilter incomingRegFilter,
 
             final Date deadlineDateBegin,
@@ -144,6 +147,16 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     ) {
         return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
+
+            if (organizationId != null) {
+                //tashkilotga tegishli xatlar
+                predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+            }
+            if (documentTypeId != null) {
+                //kiruvchi, chiquvchi, ichki hujjatlar
+                predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
+            }
+
 
             if (incomingRegFilter.getDocRegNumber() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + incomingRegFilter.getDocRegNumber().toLowerCase() + "%"));

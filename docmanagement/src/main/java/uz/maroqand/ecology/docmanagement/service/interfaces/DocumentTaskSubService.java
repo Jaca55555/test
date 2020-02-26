@@ -25,6 +25,9 @@ public interface DocumentTaskSubService {
     List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId);
 
     Page<DocumentTaskSub> findFiltered(
+            Integer organizationId,
+            Integer documentTypeId,
+
             Integer documentOrganizationId,
             String docRegNumber,
             String registrationNumber,

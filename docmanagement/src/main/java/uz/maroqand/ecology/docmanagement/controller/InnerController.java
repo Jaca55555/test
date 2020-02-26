@@ -152,6 +152,8 @@ public class InnerController {
 
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
+                user.getOrganizationId(),
+                3, //todo documentTypeId=3
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,

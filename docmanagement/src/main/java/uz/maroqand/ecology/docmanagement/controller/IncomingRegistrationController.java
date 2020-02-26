@@ -109,8 +109,10 @@ public class IncomingRegistrationController {
             IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        //todo documentTypeId=1
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();

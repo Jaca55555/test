@@ -45,8 +45,9 @@ public interface DocumentTaskService {
     DocumentTask getTaskByUser(Integer docId, Integer userId);
 
     Page<DocumentTask> findFiltered(
+            Integer organizationId,
+            Integer documentTypeId,
             IncomingRegFilter incomingRegFilter,
-
             Date deadlineDateBegin,
             Date deadlineDateEnd,
             Integer type,

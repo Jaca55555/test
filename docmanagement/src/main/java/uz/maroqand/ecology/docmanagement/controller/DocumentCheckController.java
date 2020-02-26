@@ -101,8 +101,7 @@ public class DocumentCheckController {
             IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
-
-        System.out.println(incomingRegFilter.getTabFilter());
+        User user = userService.getCurrentUserFromContext();
         incomingRegFilter.setStatus(TaskStatus.Checking.toString());
         HashMap<String, Object> result = new HashMap<>();
         Set<Integer> taskStatuses = new HashSet<>();
@@ -111,7 +110,8 @@ public class DocumentCheckController {
         }else{
             taskStatuses.add(TaskStatus.Complete.getId());
         }
-        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
+        //barcha hujjatlar ko'rinishi uchun documentTypeId=null
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();

@@ -74,6 +74,9 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     @Override
     public Page<DocumentTaskSub> findFiltered(
+            Integer organizationId,
+            Integer documentTypeId,
+
             Integer documentOrganizationId,
             String docRegNumber,
             String registrationNumber,
@@ -93,18 +96,16 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             Integer receiverId,
             Pageable pageable
     ) {
-        Specification<DocumentSub> documentSubSpecification = null;
-        if (documentOrganizationId != null) {
-            documentSubSpecification = documentSubService.getSpecificationOrganization(documentOrganizationId);
-        }
         return documentTaskSubRepository.findAll(getSpesification(
-                documentSubSpecification,
+                organizationId, documentTypeId,
                 documentOrganizationId, docRegNumber, registrationNumber, dateBegin, dateEnd, taskContent, content, performerId, taskSubType, taskSubStatus,
                 deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
     }
 
     private static Specification<DocumentTaskSub> getSpesification(
-            Specification<DocumentSub> documentSubSpecification,
+            final Integer organizationId,
+            final Integer documentTypeId,
+
             final Integer documentOrganizationId,
             final String docRegNumber,
             final String registrationNumber,
@@ -125,11 +126,14 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     ) {
         return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
-
-                /*if (documentOrganizationId != null) {
-                    Join<DocumentTaskSub, DocumentSub> userProd = root.join("documentId", JoinType.LEFT);
-                    predicates.add(criteriaBuilder.equal(userProd.get("organizationId"), documentOrganizationId));
-                }*/
+                if (organizationId != null) {
+                    //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
+                    predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+                }
+                if (documentTypeId != null) {
+                    //kiruvchi va chiquvchi hujjatlar ajratish uchun
+                    predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
+                }
 
                 if (StringUtils.trimToNull(docRegNumber) != null) {
                     predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
