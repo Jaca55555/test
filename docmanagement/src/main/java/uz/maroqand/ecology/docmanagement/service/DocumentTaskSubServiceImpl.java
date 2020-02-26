@@ -136,10 +136,10 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 }
 
                 if (StringUtils.trimToNull(docRegNumber) != null) {
-                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("docRegNumber"), "%" + docRegNumber + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + docRegNumber.toLowerCase() + "%"));
                 }
                 if (StringUtils.trimToNull(registrationNumber) != null) {
-                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("registrationNumber"), "%" + registrationNumber + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
                 }
 
                 if (dateBegin != null && dateEnd == null) {
@@ -152,11 +152,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                     predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
                 }
                 if (StringUtils.trimToNull(content) != null) {
-                    predicates.add(criteriaBuilder.like(root.get("document").<String>get("content"), "%" + content + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + content.toLowerCase() + "%"));
                 }
 
                 if (StringUtils.trimToNull(taskContent) != null) {
-                    predicates.add(criteriaBuilder.like(root.<String>get("content"), "%" + taskContent + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + taskContent.toLowerCase() + "%"));
                 }
                 if (performerId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
