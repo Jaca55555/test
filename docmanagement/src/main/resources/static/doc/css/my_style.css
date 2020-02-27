@@ -511,6 +511,9 @@ html, body {
         font-size: 15px;
         margin:auto;
     }
+    td > div.btn-group {
+        margin-bottom: 2px;
+    }
     /*.form-group {
         margin-bottom: 5px;
     }*/

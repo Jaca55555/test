@@ -2438,6 +2438,7 @@ p.text-muted {
   justify-content: center;
 }
 .pcoded-navbar .pcoded-inner-navbar li > a > .pcoded-micon + .pcoded-mtext {
+  width:190px;
 }
 .pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu > a:after {
   content: "\e844";
