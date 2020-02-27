@@ -19,10 +19,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -43,11 +40,12 @@ public class InnerRegistrationController {
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentSubService documentSubService;
+    private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentHelperService documentHelperService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -57,6 +55,7 @@ public class InnerRegistrationController {
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
         this.documentSubService = documentSubService;
+        this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentHelperService = documentHelperService;
     }
@@ -145,6 +144,16 @@ public class InnerRegistrationController {
         model.addAttribute("document", document);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        List<DocumentTask> documentTasks = documentTaskService.getByDocumetId(document.getId());
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());
+        model.addAttribute("documentTasks", documentTasks);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("specialControll", true);
+        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+
         return DocTemplates.InnerRegistrationView;
     }
 
@@ -287,6 +296,7 @@ public class InnerRegistrationController {
         }
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
+        model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
         model.addAttribute("userList", userList);
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
