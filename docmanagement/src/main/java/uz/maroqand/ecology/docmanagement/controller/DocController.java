@@ -105,7 +105,7 @@ public class DocController {
                     document.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatusName(documentTask.getStatus()),
+                    documentTask.getStatus(),
                     documentTask.getContent(),
             });
         }

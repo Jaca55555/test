@@ -125,10 +125,10 @@ strong {
   padding: 0;
 }
 .page-header-title + .breadcrumb > .breadcrumb-item a {
-  color: #888;
+  color: white;
 }
 .page-header-title + .breadcrumb > .breadcrumb-item:last-child a {
-  color: #111;
+  color: white;
   font-weight: 600;
 }
 
@@ -1923,7 +1923,7 @@ p.text-muted {
 .pcoded-header .input-group .input-group-text,
 .pcoded-header a,
 .pcoded-header dropdown-toggle {
-  color: #3f4d67;
+  color: white;
 }
 .pcoded-header .input-group .input-group-text:hover,
 .pcoded-header a:hover,
@@ -2321,8 +2321,6 @@ p.text-muted {
 .pcoded-navbar .header-logo + .scroll-div {
   float: left;
   display: inline-block;
-  -webkit-box-shadow: 1px 0 20px 0 #3f4d67;
-  box-shadow: 1px 0 20px 0 #3f4d67;
   background: white;
   border-top-right-radius: 10px;
   padding-bottom: 30px;
@@ -2414,7 +2412,7 @@ p.text-muted {
   display: flex;
   align-items: center;
   text-align: left;
-  padding: 7px 15px;
+  padding: 10px 15px;
   margin: 0;
   border-radius: 0;
   position: relative;
@@ -2489,7 +2487,7 @@ p.text-muted {
 .pcoded-navbar .pcoded-inner-navbar li.pcoded-menu-caption {
   font-size: 12px;
   font-weight: 600;
-  padding: 5px 20px 5px;
+  padding: 10px 20px 5px;
   text-transform: uppercase;
   position: relative;
   color:black;
@@ -7348,6 +7346,7 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 .table thead th {
   border-bottom: 1px solid #eaeaea;
+  text-align: center;
 }
 .table tbody + tbody {
   border-top: 2px solid #eaeaea;
@@ -7775,7 +7774,6 @@ a.btn-theme.active {
   margin-bottom: 0;
   margin-right: 0;
   width: fit-content !important;
-  max-width: 180px;
 }
 
 .btn-group-sm > .btn,
@@ -8610,6 +8608,7 @@ a.btn-theme.active {
 .nav-tabs .nav-link {
   border: none;
   color: #888;
+  text-align: center;
 }
 .nav-tabs .nav-link:hover {
   color: #04a9f5;
