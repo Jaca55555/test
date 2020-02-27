@@ -285,7 +285,9 @@ public class InnerRegistrationController {
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
+        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
+        model.addAttribute("userList", userList);
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerRegistrationTask;

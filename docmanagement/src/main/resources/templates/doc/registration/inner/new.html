@@ -144,15 +144,14 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_inner.chief}">Хужжатни қабул қилиш учун маъсул рахбар</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_inner.execute_controller}">Ижро назорати учун маъсул шахс</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" name="executeController">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{controlId}">
                             <option value=""></option>
                             <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
                         </select>
