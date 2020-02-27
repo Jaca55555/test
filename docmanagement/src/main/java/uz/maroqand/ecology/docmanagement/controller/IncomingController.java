@@ -352,10 +352,10 @@ public class IncomingController {
     @RequestMapping(DocUrls.DocumentTaskChange)
     @ResponseBody
     public HashMap<String, Object> changeTaskStatus(
-            @RequestParam(name = "content")String content,
+            @RequestParam(name = "content", required = false)String content,
             @RequestParam(name = "taskStatus")Integer status,
             @RequestParam(name = "taskId")Integer taskId,
-            @RequestParam(name = "addDocId")Integer additionalDocId,
+            @RequestParam(name = "addDocId", required = false)Integer additionalDocId,
             @RequestParam(name = "docId")Integer docId
     ) {
         HashMap<String, Object> response = new HashMap<>();
@@ -365,6 +365,8 @@ public class IncomingController {
         log.setContent(content);
         log.setDocumentId(docId);
         log.setType(2);
+        log.setAttachedDoc(documentService.getById(additionalDocId));
+        log.setAttachedDocId(additionalDocId);
         documentLogService.create(log);
         String logAuthorPos = positionService.getById(user.getPositionId()).getName();
 

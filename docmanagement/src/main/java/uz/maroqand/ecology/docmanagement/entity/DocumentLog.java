@@ -55,6 +55,15 @@ public class DocumentLog
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
 
+
+    @Column(name = "attached_doc_id")
+    private Integer attachedDocId;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne
+    @JoinColumn(name = "attached_doc_id", insertable = false, updatable = false)
+    private Document attachedDoc;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id", insertable = false, updatable = false)
