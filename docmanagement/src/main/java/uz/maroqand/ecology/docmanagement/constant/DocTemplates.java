@@ -61,6 +61,12 @@ public class DocTemplates {
     public static final String DocTypeNew = DocType + "/new";
     public static final String DocTypeEdit = DocType + "/new";
 
+    private static final String LibraryCategory = Prefix + "/library_category";
+    public static final String LibraryCategoryList = LibraryCategory + "/list";
+    public static final String LibraryCategoryView = LibraryCategory + "/view";
+    public static final String LibraryCategoryNew = LibraryCategory + "/new";
+    public static final String LibraryCategoryEdit = LibraryCategory + "/new";
+
     private static final String DocumentOrganization = Prefix + "/document_organization";
     public static final String DocumentOrganizationList = DocumentOrganization + "/list";
     public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Categories</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagement.entity.DocumentType"*/-->
+            <div class="card-header flex-space-between-nowrap" id="headingOne" >
+                <h5 class="mb-0" th:if="${libraryCategory.id==null}" th:text="#{doc.doc_type_create}">Кирувчи хатни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${libraryCategory.id!=null}" th:text="#{doc.doc_type_edit}"> - <span th:text="${docType.name}"></span></h5>
+            </div>
+            <div class="card-body">
+                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${libraryCategory}">
+                    <input type="hidden" th:if="${libraryCategory.id != null}" th:field="*{id}" th:value="*{id}" />
+                    <input type="hidden" th:if="${libraryCategory.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}" />
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('name')}" th:text="#{doc.library_category_name}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{name}">
+                                <i class="gray-arrow fas  fa-map color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                        <label class="control-label"  th:for="${#ids.next('nameRu')}" th:text="#{doc.library_category_name_ru}"></label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control" th:field="*{nameRu}">
+                            <i class="gray-arrow fas  fa-map color-gray"></i>
+                        </div>
+                    </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label"  th:text="#{doc.library_category_name_kr}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{nameKr}" >
+                                <i class="gray-arrow fas  fa-map color-gray"> </i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type}"></label>
+                            <div class="col-sm-12 p0">
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                                        tabindex="-1" aria-hidden="true" >
+                                    <option value="" th:value="*{parent}" th:text="Category">
+
+                                    </option>
+                                    <option></option>
+                                </select>
+                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button th:text="#{doc.doc_type_reset_btn}" class="btn btn-dark"></button>
+                            <button th:text="#{doc.doc_type_save_btn}" class="btn btn-success"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>
