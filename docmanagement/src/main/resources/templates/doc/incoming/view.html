@@ -238,6 +238,14 @@
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
                                 </div>
                             </div>
+                            <div th:if="${log.attachedDoc}!=null" th:remove="tag">
+                                <div class="w100"></div>
+                                <div class="column-2 mt-3 d-flex">
+                                    <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>
+                                    <span class='mdi mdi-file-upload-outline fs30 color-green'></span>
+                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView} + '?id=' + ${log.attachedDoc.id}" th:text="${log.attachedDoc.registrationNumber}"></a>
+                                </div>
+                            </div>
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
@@ -265,6 +273,7 @@
                     <form th:action="${comment_url}" id="commentForm">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <input type="hidden" name="documentId" th:value="${document.id}">
+                        <input type="hidden" name="taskSubId" th:value="${documentTaskSub.id}">
                         <div class="flex-space-between p0 m20-vertical">
                             <div>
                                 <div class="inline-block">
@@ -605,6 +614,7 @@
 <script th:inline="javascript" type="text/javascript">
     var urlAction = [[${comment_url}]];
     var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
+    let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}]] + '?id=';
     $(document).ready(function () {
             docFileName([[${document.contentFiles}]]);
         $('#modal2').on('show.bs.modal', function() {
@@ -645,7 +655,29 @@
 "                            <div class=\"w100\"></div>\n" +
 "                            <div class=\"column-2 mt-3\">\n" +
 "                                <span>" + log.content + "</span>\n" +
-"                            </div>\n</div>";
+"                            </div>";
+
+                        if (log.contentFiles!=null && log.contentFiles.length>0){
+                            $.each(log.contentFiles,function (element,val) {
+                                html+='<div class="w100"></div>\n' +
+                                      '<div class="column-2 mt-3">\n' +
+                                      '    <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                      '    <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                      '</div>\n';
+                            })
+                        }
+
+                        if (log.attachedDoc!=null) {
+                            let doc = log.attachedDoc;
+                            html += '<div class="w100"></div>\n' +
+                                '   <div class="column-2 mt-3 d-flex">\n' +
+                                '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
+                                '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
+                                '       <a class="d-flex align-self-center" href="'+attachedDocView + doc.id +'">'+ doc.registrationNumber + '</a>\n' +
+                                '   </div>\n';
+                        }
+                        html += "\n</div>";
+
                         $('#comments').prepend(html);
                         $('#currentStatus').text(data.taskStatus);
 
@@ -701,7 +733,15 @@
                                 '       </div>\n' +
                                 '   </div>';
                         })
-
+                    }
+                    if (log.attachedDoc!=null) {
+                        let doc = log.attachedDoc;
+                        html += '<div class="w100"></div>\n' +
+                                '   <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-external-link-alt fs30 color-green"></span>\n' +
+                                '       <a href="'+attachedDocView + doc.id +'">'+ doc.registrationNumber + '</a>\n' +
+                                '   </div>\n' +
+                                '</div>';
                     }
 
                     html+='</div>';
