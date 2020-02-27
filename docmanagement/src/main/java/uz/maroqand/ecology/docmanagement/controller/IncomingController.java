@@ -237,6 +237,7 @@ public class IncomingController {
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("isView", true);
         return DocTemplates.IncomingView;
     }
 
