@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -77,7 +78,7 @@ public class InnerRegistrationController {
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String, Object> getInnerRegistrationListAjax(
-            @RequestParam(name="documentOrganizationId",required = false,defaultValue = "")Set<Integer> documentOrganizationId,
+            @RequestParam(name="documentOrganizationId",required = false,defaultValue = "")Integer documentOrganizationId,
             @RequestParam(name="registrationNumber",required = false,defaultValue = "")String registrationNumber,
             @RequestParam(name="docRegNumber",required = false,defaultValue = "")String docRegNumber,
             @RequestParam(name="registrationDateBegin",required = false,defaultValue = "")String registrationDateBegin,
@@ -102,6 +103,13 @@ public class InnerRegistrationController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
         IncomingRegFilter incomingRegFilter = new IncomingRegFilter();
+        incomingRegFilter.initNull();
+        incomingRegFilter.setDocRegNumber(StringUtils.trimToNull(docRegNumber));
+        incomingRegFilter.setRegistrationNumber(StringUtils.trimToNull(registrationNumber));
+        incomingRegFilter.setDateBeginStr(StringUtils.trimToNull(registrationDateBegin));
+        incomingRegFilter.setDateEndStr(StringUtils.trimToNull(registrationDateEnd));
+        incomingRegFilter.setContent(StringUtils.trimToNull(content));
+        incomingRegFilter.setDocumentOrganizationId(documentOrganizationId);
         //todo documentTypeId=3
         Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,null,null,null,null,null,null, pageable);
 

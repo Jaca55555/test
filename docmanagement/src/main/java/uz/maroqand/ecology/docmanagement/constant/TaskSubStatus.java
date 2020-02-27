@@ -19,7 +19,9 @@ public enum TaskSubStatus {
     Agreement(4,"task_sub_status.agreement"),//Келишув жараёнида, (listda o'zfartirsa bo'ladi)
 
     Checking(5,"task_sub_status.checking"),//Назоратдан чиқариш
-    Complete(6,"task_sub_status.complete");//Якунланган
+    Complete(6,"task_sub_status.complete"),//Якунланган
+    Rejected(7,"task_sub_status.rejected");//Rad etildi
+
 
     private Integer id;
     private String name;

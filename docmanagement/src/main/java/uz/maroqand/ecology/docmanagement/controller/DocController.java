@@ -92,6 +92,7 @@ public class DocController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         //todo documentTypeId=1
         Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
@@ -105,7 +106,7 @@ public class DocController {
                     document.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatusName(documentTask.getStatus()),
+                    helperService.getTranslation(documentTask.getStatusName(documentTask.getStatus()),locale),
                     documentTask.getContent(),
             });
         }

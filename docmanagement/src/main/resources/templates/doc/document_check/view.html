@@ -88,8 +88,8 @@
                                     <div class="w100"></div>
                                 </div>
                             </div>
-                            <div th:if="${#lists.size(documentTaskSubs)>0}">
-                                <div th:if="${task.id==taskSub.taskId}" th:each="taskSub : ${documentTaskSubs}">
+                            <div th:if="${#lists.size(documentTaskSubs)>0}" class="col-sm-12">
+                                <div th:if="${task.id==taskSub.taskId && taskSub.level!=null && taskSub.level==1}" th:each="taskSub : ${documentTaskSubs}">
                                     <div class="executor col-12 m10-vertical">
                                         <div class="flex-space-between p0">
                                             <div>
@@ -112,14 +112,10 @@
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
-                                            <div class="w100"></div>
-                                            <div class="column-3 mt-2 text-container-border">
-                                                <span th:text="${taskSub.content}"></span>
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId}">
-                                        <div class="flex-space-between p0">
+                                    <div class="executor col-12 m10-vertical" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId && taskSub1.level!=null && taskSub1.level==(taskSub.level+1)}">
+                                        <div class="flex-space-between p0" >
                                             <div>
                                                 <div class="inline-block">
                                                     <i class="fas fa-user-circle fs40 color-gray column-3"></i>
@@ -133,11 +129,59 @@
                                             <div class="flex-space-between p0 align-center column-3">
                                                 <div class="align-center height-fit">
                                                     <i class="fas fa-cogs fs20 color-purple pointer"></i>
-                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                    <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub1.status)}}">Жараёнда</span>
                                                 </div>
                                                 <div class="align-center height-fit">
                                                     <i class="feather icon-clock fs30 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="executor col-12 m10-vertical" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && taskSub2.level!=null && taskSub2.level==(taskSub1.level+1)}">
+                                            <div class="flex-space-between p0">
+                                                <div>
+                                                    <div class="inline-block">
+                                                        <i class="fas fa-user-circle fs40 color-gray column-4"></i>
+                                                    </div>
+                                                    <div class="inline-block m10-horizontal">
+                                                        <span class="color-purple bold" th:if="${taskSub2.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub2.receiverId)}">Абдуллаев А. А.</span>
+                                                        <br>
+                                                        <span th:if="${taskSub2.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub2.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-space-between p0 align-center column-4">
+                                                    <div class="align-center height-fit">
+                                                        <i class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                        <span class="m10-horizontal mobile-none" th:if="${taskSub2.status!=null}" th:text="#{${taskSub2.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                    </div>
+                                                    <div class="align-center height-fit">
+                                                        <i class="feather icon-clock fs30 color-gray"></i>
+                                                        <span class="m10-horizontal" th:text="${taskSub2.dueDate!=null ? #dates.format(taskSub2.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="executor col-12 m10-vertical" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && taskSub3.level!=null && taskSub3.level==(taskSub2.level+1)}">
+                                            <div class="flex-space-between p0">
+                                                <div>
+                                                    <div class="inline-block">
+                                                        <i class="fas fa-user-circle fs40 color-gray column-4"></i>
+                                                    </div>
+                                                    <div class="inline-block m10-horizontal">
+                                                        <span class="color-purple bold" th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub1.receiverId)}">Абдуллаев А. А.</span>
+                                                        <br>
+                                                        <span th:if="${taskSub1.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub1.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-space-between p0 align-center column-4">
+                                                    <div class="align-center height-fit">
+                                                        <i class="fas fa-cogs fs20 color-purple pointer"></i>
+                                                        <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub.status)}}">Жараёнда</span>
+                                                    </div>
+                                                    <div class="align-center height-fit">
+                                                        <i class="feather icon-clock fs30 color-gray"></i>
+                                                        <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

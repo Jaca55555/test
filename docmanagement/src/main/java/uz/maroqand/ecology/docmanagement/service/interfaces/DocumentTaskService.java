@@ -37,6 +37,8 @@ public interface DocumentTaskService {
 
     Integer countTotal();
 
+    Integer getCountTaskStatus(Set<Integer> taskStatusSet);
+
     DocumentTask create(DocumentTask task);
 
     DocumentTask createNewTask(Document doc, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById);

@@ -15,7 +15,8 @@ public enum TaskStatus {
     New(1,"task_status.new"),//Кўрилмаган
     InProgress(2,"task_status.inProgress"),//Жараёнда,
     Checking(3,"task_status.checking"),//Назоратдан чиқариш
-    Complete(4,"task_status.complete");//Якунланган
+    Complete(4,"task_status.complete"),//Якунланган
+    Rejected(5,"task_status.rejected");//Rad etildi
 
     private Integer id;
     private String name;

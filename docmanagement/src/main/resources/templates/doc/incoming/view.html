@@ -112,10 +112,6 @@
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
-                                            <!--<div class="w100"></div>
-                                            <div class="column-3 mt-2 text-container-border">
-                                                <span th:text="${taskSub.content}"></span>
-                                            </div>-->
                                         </div>
                                     </div>
                                     <div class="executor col-12 m10-vertical pr-0" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId && (taskSub.level+1)==taskSub1.level}">
@@ -195,10 +191,10 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}">
+                            <a th:if="${task.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}">
                                 <span th:text="#{doc_incoming.sub_task_add}">Ижро учун йўналтириш</span>
                             </a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
+                            <button th:if="${documentTaskSub.status!=6}" type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
                                 <span th:text="#{doc_incoming.doc_log_add}">Ижро холатини белгилаш</span>
                             </button>
                         </div>

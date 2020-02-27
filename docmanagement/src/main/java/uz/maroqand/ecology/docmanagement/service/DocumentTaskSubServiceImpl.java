@@ -50,6 +50,15 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public void allTaskSubCompleteGetTaskId(Integer taskId) {
+        List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByTaskIdAndDeletedFalse(taskId);
+        for (DocumentTaskSub documentTaskSub:documentTaskSubList) {
+            documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+            update(documentTaskSub);
+        }
+    }
+
+    @Override
     public List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId) {
         return documentTaskSubRepository.findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(docId,taskId);
     }

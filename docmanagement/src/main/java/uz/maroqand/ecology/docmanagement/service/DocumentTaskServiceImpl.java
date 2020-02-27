@@ -97,6 +97,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     }
 
     @Override
+    public Integer getCountTaskStatus(Set<Integer> statusSet) {
+        return taskRepository.countByStatusInAndDeletedFalse(statusSet);
+    }
+
+    @Override
     public DocumentTask createNewTask(Document doc, Integer status, String context, Date dueDate, Integer chiefId, Integer createdById) {
         DocumentTask documentTask = new DocumentTask();
         documentTask.setDocumentId(doc.getId());
@@ -156,6 +161,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
 
+            System.out.println(incomingRegFilter.getRegistrationNumber() + "  -");
             if (organizationId != null) {
                 //tashkilotga tegishli xatlar
                 predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));

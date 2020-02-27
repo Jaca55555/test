@@ -9,9 +9,9 @@
 <div class="card parent-card">
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
-                    <span href="" class="card-header-a collapsed">
-                        <span th:text="#{doc_inner.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
-                    </span>
+            <span href="" class="card-header-a collapsed">
+                <span th:text="#{doc_inner.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+            </span>
         </h5>
         <div class="p10-horizontal mobile-column">
             <button th:if="${document.insidePurpose == true}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
@@ -21,23 +21,11 @@
             <button th:if="${specialControll}!=null" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
                 <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
             </button>
-            <!--<button type="button" class="btn btn-rounded btn-success btn-sm ml-2 m0"><i class="feather icon-check-circle mr-0"></i>Махсус назоратда</button>-->
-            <!--<button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i class="feather icon-clock mr-0"></i>Муддати яқинлашган</button>-->
         </div>
         <div class="p10-horizontal mobile-column">
             <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
             <div class="btn-group ml-2">
                 <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:text="#{${document.status.name}}">Жараёнда</span> </button>
-                <!--<button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>-->
-                <!--<div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                </div>-->
             </div>
             <button type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0" th:if="${document.executeForm!=null}">
                 <i class="fas fa-clipboard-list mr-0"></i>
@@ -135,44 +123,6 @@
                     </button>
                 </div>
 
-            </div>
-        </div>
-        <hr class="m20-vertical">
-        <div class="row m20-vertical">
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold color-red">Ижро натижаси</span></div>
-                <div class="col-md-6 p0" style="float:right"><span class="color-red">Ижрога тушмаган</span>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold">Ижрочи бўлим </span></div>
-                <div class="col-md-6 p0" style="float: right;"><span>----------
-                                </span></div>
             </div>
         </div>
     </div>
