@@ -190,7 +190,8 @@ public class IncomingController {
                     documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
-                    documentTaskSub.getContent()
+                    documentTaskSub.getContent(),
+                    documentTaskSub.getStatus()
             });
         }
 
@@ -361,6 +362,15 @@ public class IncomingController {
     ) {
         HashMap<String, Object> response = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
+
+
+        DocumentTaskSub taskSub = documentTaskSubService.getById(taskId);
+        taskSub.setStatus(status);
+        taskSub.setContent(content);
+        taskSub.setUpdateById(user.getId());
+        taskSub.setAdditionalDocumentId(additionalDocId);
+        taskSub = documentTaskSubService.update(taskSub);
+
         DocumentLog log = new DocumentLog();
         log.setCreatedById(user.getId());
         log.setContent(content);
@@ -368,15 +378,10 @@ public class IncomingController {
         log.setType(2);
         log.setAttachedDoc(documentService.getById(additionalDocId));
         log.setAttachedDocId(additionalDocId);
+        log.setTaskSubId(taskSub.getId());
         documentLogService.create(log);
         String logAuthorPos = positionService.getById(user.getPositionId()).getName();
 
-        DocumentTaskSub taskSub = documentTaskSubService.getById(taskId);
-        taskSub.setStatus(status);
-        taskSub.setContent(content);
-        taskSub.setUpdateById(user.getId());
-        taskSub.setAdditionalDocumentId(additionalDocId);
-        documentTaskSubService.update(taskSub);
         DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
         if (documentTask!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
                 documentTask.setStatus(TaskStatus.Checking.getId());

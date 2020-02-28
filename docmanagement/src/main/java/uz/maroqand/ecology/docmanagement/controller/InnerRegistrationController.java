@@ -19,10 +19,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -45,9 +42,10 @@ public class InnerRegistrationController {
     private final DocumentSubService documentSubService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentLogService documentLogService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -59,6 +57,7 @@ public class InnerRegistrationController {
         this.documentSubService = documentSubService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentHelperService = documentHelperService;
+        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
@@ -122,11 +121,12 @@ public class InnerRegistrationController {
                     documentTask.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTask.getContent(),
+                    document.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
-                    documentTask.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getUpdateAt()):"",
+                    documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
-                    documentTask.getContent()
+                    documentTask.getContent(),
+                    documentTask.getStatus()
             });
         }
 
@@ -142,10 +142,20 @@ public class InnerRegistrationController {
         if (document == null) {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
+
+        List<DocumentTask> documentTasks = documentTaskService.getByDocumetId(document.getId());
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
         model.addAttribute("tree", documentService.createTree(document));
-        model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTasks", documentTasks);
+        model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("user", userService.getCurrentUserFromContext());
+        model.addAttribute("comment_url", DocUrls.AddComment);
+        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("specialControll", true);
+        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
         return DocTemplates.InnerRegistrationView;
     }
 
@@ -286,9 +296,13 @@ public class InnerRegistrationController {
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
+        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
+        model.addAttribute("userList", userList);
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
+        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
         return DocTemplates.InnerRegistrationTask;
     }
 

@@ -250,25 +250,25 @@
     <div class="parent-card col-xl-12 mh-1000">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_total}">Жами</span></a>
+                <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_to_execute}">Ижро учун</span></a>
+                <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_delayed}">Муддати кеччикан</span></a>
+                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_dueDate}">Муддати якинлашаётган</span></a>
+                <a class="nav-link text-uppercase" id="profile1-tab" data-toggle="tab" href="#profile1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_control}">Ижро назоратида</span></a>
+                <a class="nav-link text-uppercase show" id="profile2-tab" data-toggle="tab" href="#profile2" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_info}">Малъумот учун</span></a>
+                <a class="nav-link text-uppercase show" id="contact3-tab" data-toggle="tab" href="#contact3" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_finished}">Якунланган</span></a>
+                <a class="nav-link text-uppercase show" id="contact2-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -355,6 +355,21 @@
         return html;
     }
 
+    function renderStatusColumn(data, type, row, meta) {
+        var html = '';
+        var status=row[8];
+        switch (status) {
+            case 0: html='<span class="badge badge-info">'+row[6]+'</span>';return html;
+            case 1: html='<span class="badge badge-warning">'+row[6]+'</span>';return html;
+            case 2: html='<span class="badge badge-primary">'+row[6]+'</span>';return html;
+            case 3: html='<span class="badge badge-secondary">'+row[6]+'</span>';return html;
+            case 4: html='<span class="badge badge-success">'+row[6]+'</span>';return html;
+            case 5: html='<span class="badge badge-danger">'+row[6]+'</span>';return html;
+            default: html='<span class="badge badge-light">'+row[6]+'</span>';return html;
+        }
+        return html;
+    }
+
     function datatableConnect() {
         dataDatatableSelector.DataTable({
             processing: true,
@@ -392,31 +407,35 @@
                 dataToSend.tabFilter = tabFilter;
                 dataToSend._csrf = $("#global_csrf").val();
 
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
                 $.post("", dataToSend, function(data){
                     callback(data);
                 });
             },
             columns: [
                 {data: 0, name: 'id',visible:false},
-                {data: 1, name: 'registrationNumber',
+                {data: 1, name: 'document.registrationNumber',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
                         return html;
                     }
                 },
-                {data: 2, name: 'registrationDate',
+                {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                         return html;
                     }
                 },
-                {data: 3, name: 'content'},
+                {data: 3, name: 'document.content'},
                 {data: 4, name: 'createdAt'},
-                {data: 5, name: 'updatedAt'},
-                {data: 6, name: 'status'},
-                {data: 7, name: 'resolution',
+                {data: 5, name: 'dueDate'},
+                {render: renderStatusColumn, name: 'status'},
+                {data: 7, name: 'content',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';

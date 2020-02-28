@@ -183,11 +183,12 @@ public class InnerController {
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTaskSub.getContent(),
+                    document.getContent(),
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
-                    documentTaskSub.getContent()
+                    documentTaskSub.getContent(),
+                    documentTaskSub.getStatus()
             });
         }
 
