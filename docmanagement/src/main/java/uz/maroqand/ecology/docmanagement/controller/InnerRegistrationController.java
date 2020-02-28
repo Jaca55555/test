@@ -137,18 +137,27 @@ public class InnerRegistrationController {
     }
 
     @RequestMapping(DocUrls.InnerRegistrationView)
-    public String getViewDocumentPage(@RequestParam(name = "id")Integer id, Model model) {
-        Document document = documentService.getById(id);
+    public String getViewDocumentPage(
+            @RequestParam(name = "id")Integer id,
+            Model model
+    ) {
+
+
+        DocumentTask documentTask = documentTaskService.getById(id);
+        if (documentTask == null) {
+            return "redirect: " + DocUrls.InnerRegistrationList;
+        }
+
+        Document document = documentService.getById(documentTask.getDocumentId());
         if (document == null) {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
 
-        List<DocumentTask> documentTasks = documentTaskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
+        model.addAttribute("task", documentTask);
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("documentTasks", documentTasks);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
@@ -291,7 +300,15 @@ public class InnerRegistrationController {
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationTask)
-    public String addTask( @RequestParam(name = "id")Integer id, Model model ) {
+    public String addTask(
+            @RequestParam(name = "id")Integer id,
+            Model model
+    ) {
+        DocumentTask documentTask = documentTaskService.getById(id);
+        if (documentTask == null) {
+            return  "redirect:" + DocUrls.InnerRegistrationList;
+        }
+
         Document document = documentService.getById(id);
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
@@ -299,33 +316,30 @@ public class InnerRegistrationController {
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
         model.addAttribute("userList", userList);
+        model.addAttribute("documentTask", documentTask);
         model.addAttribute("document", document);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
-        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
+        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + documentTask.getId());
         return DocTemplates.InnerRegistrationTask;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationTaskSubmit)
     public String innerRegistrationTaskSubmit(
-            @RequestParam(name = "id") Integer id,
             @RequestParam(name = "content") String content,
+            @RequestParam(name = "taskId") Integer taskId,
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
 
         User user = userService.getCurrentUserFromContext();
-        Document document = documentService.getById(id);
-        if (document==null){
+
+        DocumentTask documentTask = documentTaskService.getById(taskId);
+        if (documentTask==null){
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
 
 
-        System.out.println("id=" + id);
-        System.out.println("content=" + content.trim());
-        System.out.println("docRegDateStr=" + docRegDateStr);
-
-        DocumentTask documentTask = documentTaskService.createNewTask(document,TaskStatus.New.getId(),content, DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -346,8 +360,8 @@ public class InnerRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
-                    if (performerType==TaskSubType.Performer.getId()){
+                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if (performerType.equals(TaskSubType.Performer.getId())){
                         documentTask.setPerformerId(userId);
                         documentTaskService.update(documentTask);
                     }
@@ -358,7 +372,7 @@ public class InnerRegistrationController {
             }
         }
 
-        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
+        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + documentTask.getId();
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationUserName)

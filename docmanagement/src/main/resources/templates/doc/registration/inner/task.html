@@ -97,7 +97,8 @@
                         <input type="hidden" id="typePerformer" value=""/>
                         <input type="hidden" id="typeControl" value=""/>
                         <input  type="hidden" name="selectedUsersIds" value="" id="selectedUsersIds"/>
-                        <input  type="hidden" th:field="${document.id}" />
+                        <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
+
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
                                 <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:href="${back_url}" th:text="#{sys_cancel}">Бекор қилиш</a>

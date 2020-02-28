@@ -386,12 +386,10 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document getTopParentId(Document document) {
-        System.out.println("---------docId=--------" + document.getId());
         if (document.getAdditionalDocumentId()==null) return document;
 
         Document documentParent = getById(document.getAdditionalDocumentId());
         if (documentParent==null) return document;
-        System.out.println("------parentId=------" + documentParent.getId());
         if (documentParent.getAdditionalDocumentId()==null){
             return documentParent;
         }
