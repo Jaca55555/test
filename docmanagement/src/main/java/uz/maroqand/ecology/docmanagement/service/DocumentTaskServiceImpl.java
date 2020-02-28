@@ -1,18 +1,22 @@
 package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
 import javax.persistence.criteria.Predicate;
 import java.util.*;
@@ -28,11 +32,15 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 
     private final DocumentTaskRepository taskRepository;
     private final DocumentService documentService;
+    private final HelperService helperService;
+    private final DocumentTaskSubService taskSubService;
 
     @Autowired
-    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService) {
+    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService, HelperService helperService, DocumentTaskSubService taskSubService) {
         this.taskRepository = taskRepository;
         this.documentService = documentService;
+        this.helperService = helperService;
+        this.taskSubService = taskSubService;
     }
 
     @Override
@@ -127,6 +135,24 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 
     public DocumentTask getTaskByUser(Integer docId, Integer userId) {
         return taskRepository.findByDocumentIdAndChiefId(docId, userId);
+    }
+
+    @Override
+    public String getTreeByDocumentId(List<DocumentTask> documentTasks) {
+        String tree = "";
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        for (DocumentTask documentTask: documentTasks){
+            System.out.println("------------" + documentTask.getId());
+            String getReceiverName =  helperService.getUserFullNameById(documentTask.getChiefId()) +" ("+ helperService.getPositionName(documentTask.getChief().getPositionId(),locale)+")";
+            tree+= "{ text :\"" + getReceiverName + " \",tags:" + documentTask.getId();
+            List<DocumentTaskSub> taskSubs = taskSubService.getListByDocIdAndTaskId(documentTask.getDocumentId(),documentTask.getId());
+            if (taskSubs.size()>0){
+                tree+=" , nodes:" + taskSubService.buildTree(1,taskSubs,new HashMap<>(),locale) + "},";
+            }else{
+                tree+="},";
+            }
+        }
+        return tree;
     }
 
     @Override

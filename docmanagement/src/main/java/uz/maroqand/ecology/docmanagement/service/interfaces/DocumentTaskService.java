@@ -47,6 +47,8 @@ public interface DocumentTaskService {
 
     DocumentTask getTaskByUser(Integer docId, Integer userId);
 
+    String getTreeByDocumentId(List<DocumentTask> documentTasks);
+
     Page<DocumentTask> findFiltered(
             Integer organizationId,
             Integer documentTypeId,

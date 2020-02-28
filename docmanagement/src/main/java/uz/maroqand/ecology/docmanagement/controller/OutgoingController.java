@@ -87,6 +87,8 @@ public class OutgoingController {
         model.addAttribute("registration_number", document.getRegistrationNumber());
         model.addAttribute("registration_date", Common.uzbekistanDateFormat.format(document.getRegistrationDate()));
         model.addAttribute("updated_at", document.getUpdateAt() != null ? document.getUpdateAt() : "");
+        model.addAttribute("document", document);
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("document_id", document.getId());
         model.addAttribute("document_status", document.getStatus());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());

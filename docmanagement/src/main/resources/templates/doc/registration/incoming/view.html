@@ -324,21 +324,33 @@
                             <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                         </span>
                     </h5>
-                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="btn-group" role="group" >
+
+                        <button type="button" class="close pointer mr-2"onclick="treeCloseAll()">
+                            <i class="feather icon-chevrons-up"></i>
+                            <!--<span th:text="#{+}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer mr-2" onclick="treeOpenAll()">
+                            <i class="feather icon-chevrons-down"></i>
+                            <!--<span th:text="#{-}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" >
+                            <!--<span aria-hidden="true">&times;</span>-->
+                            <i class="feather icon-x"></i>
+                        </button>
+                    </div>
                 </div>
+                <div class="col-sm-12 mt-2">
+
+                </div><span></span>
                 <div class="card-body">
-                    <div class="flex-space-between p0 m20-vertical">
+                    <div class="flex-space-between p0 m20-vertical mt-0">
                         <div class="panel">
                             <div id="treeview-selectable" class="treeview"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning btn-sm btn-rounded" data-dismiss="modal">
-                            <i class="fas fa-times"></i>
-                            <span th:text="#{sys_close}">Chiqish</span>
-                        </button>
+
                     </div>
                 </div>
             </div>
@@ -349,173 +361,50 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script src="/static/bootstrap-treeview.js"></script>
 
-<script type="text/javascript">
-
-
-    var alternateData = [
-        {
-            text: 'Parent 2',
-            tags: ['7'],
-            icon: 'fa fa-download',
-        },
-        {
-            text: 'Parent 3',
-            icon: 'fa fa-download',
-            tags: ['11']
-        },
-        {
-            text: 'Parent 4',
-            icon: 'fa fa-upload',
-            tags: ['19'],
-        },
-        {
-            text: 'Parent 5',
-            icon: 'fa fa-upload',
-            tags: ['available','0']
-        },
-        {
-            text: 'Parent 2',
-            tags: ['7'],
-            icon: 'fa fa-download',
-        },
-        {
-            text: 'Parent 3',
-            icon: 'fa fa-download',
-            tags: ['11']
-        },
-        {
-            text: 'Parent 4',
-            icon: 'fa fa-upload',
-            tags: ['19'],
-        },
-        {
-            text: 'Parent 5',
-            icon: 'fa fa-upload',
-            tags: ['available','0']
-        },
-        {
-            text: 'Parent 1',
-            tags: ['2'],
-            icon: 'fa fa-download',
-            nodes: [
-                {
-                    text: 'Child 1',
-                    tags: ['3'],
-                    icon: 'fa fa-download',
-                    nodes: [
-                        {
-                            text: 'Parent 1',
-                            tags: ['2'],
-                            icon: 'fa fa-download',
-                            nodes: [
-                                {
-                                    text: 'Child 1',
-                                    tags: ['3'],
-                                    icon: 'fa fa-download',
-                                    nodes: [
-                                        {
-                                            text: 'Grandchild 1',
-                                            tags: ['6'],
-                                            icon: 'fa fa-download',
-                                        },
-                                        {
-                                            text: 'Grandchild 2',
-                                            tags: ['3'],
-                                            icon: 'fa fa-download',
-                                        }
-                                    ]
-                                },
-                                {
-                                    text: 'Child 2',
-                                    tags: ['3'],
-                                    icon: 'fa fa-download',
-                                }
-                            ]
-                        },
-                        {
-                            text: 'Grandchild 1',
-                            tags: ['6'],
-                            icon: 'fa fa-download',
-                        },
-                        {
-                            text: 'Grandchild 2',
-                            tags: ['3'],
-                            icon: 'fa fa-download',
-                            state: {
-                                checked: false,
-                                disabled: false,
-                                expanded: false,
-                                selected: true,
-                                open: true,
-                            },
-                            selected:true,
-                        }
-                    ]
-                },
-                {
-                    text: 'Child 2',
-                    tags: ['3'],
-                    icon: 'fa fa-download',
-                }
-            ]
-        },
-        {
-            text: 'Parent 2',
-            tags: ['7'],
-            icon: 'fa fa-download',
-        },
-        {
-            text: 'Parent 3',
-            icon: 'fa fa-download',
-            tags: ['11']
-        },
-        {
-            text: 'Parent 4',
-            icon: 'fa fa-upload',
-            tags: ['19'],
-        },
-        {
-            text: 'Parent 5',
-            icon: 'fa fa-upload',
-            tags: ['available','0']
-        }
-    ];
+<script th:inline="javascript">
+    //<![CDATA[
+    var alternateData = [[${tree}]];
+    var alternateData = JSON.stringify(eval("("+alternateData+")"));
 
     $(function() {
-        console.log("defaultData41="+alternateData);
         var initSelectableTree = function() {
             return $('#treeview-selectable').treeview({
                 data: alternateData,
                 selectedBackColor:'#5c66bf',
-                levels: 5,
-                // nodeIcon: 'fa fa-download',
-                // multiSelect: $('#chk-select-multi').is(':checked'),
+                levels: 25,
                 onNodeSelected: function(event, node) {
-                    console.log(node.tags);
+                    editText(node.tags);
                     /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
                 },
                 onNodeUnselected: function (event, node) {
                     /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
                 },
-                onNodeCollapsed: function(event, node) {
-                    $.each(node.nodes, function() {
-                        if (this.state.selected) {
-                            $('#treeview-selectable').treeview('selectNode', [node.nodeId, {
-                                silent: true
-                            }]);
-                            return;
-                        }
-                    });
-                }
             });
         };
         initSelectableTree();
     });
 
+    function editText(docId) {
+        setTimeout(function(){
+            $('#doc_view_button').remove();
+            var nodeText=$('#node_text_'+docId);
+            var nodeButton =nodeText.text() +  "<button id='doc_view_button' class='float-right close'  onclick='getViewPage(" + docId + ")'><i class='fas fa-arrow-right'></i></button>"
+            $('#node_text_'+docId).text("");
+            document.querySelector('#node_text_'+docId).innerHTML = nodeButton;
+        },0.1)
+    }
 
-</script>
+    function treeOpenAll() {
+        $('#treeview-selectable').treeview('expandAll', { levels: 25, silent: true });
+    }
 
-<script th:inline="javascript">
+    function treeCloseAll() {
+        $('#treeview-selectable').treeview('collapseAll', { levels: 1, silent: true });
+    }
+
+    function getViewPage(id){
+        window.location.href='/doc/open_view?id=' + id;
+    }
 
     $('#specialControl').on('click', function () {
         $.get( [[${special_controll_url}]], {id: [[${document.id}]] } ).done(function (data) {
@@ -697,16 +586,7 @@
         $('#percentage-num').html(progress);
     }
 
-   /* function fileNameSubString(fileName) {
-        var lastIndex = fileName.lastIndexOf('.');
-        var subStringName = fileName.substring(0,lastIndex);
-        var getExtension = fileName.substring(lastIndex,fileName.length);
-        if (subStringName.length>10){
-            subStringName = subStringName.substring(0,9)+'..';
-        }
-        subStringName += getExtension;
-        return subStringName;
-    }*/
+    //]]>
 
 </script>
 

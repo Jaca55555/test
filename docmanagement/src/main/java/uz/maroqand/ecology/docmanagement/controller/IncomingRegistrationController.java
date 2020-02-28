@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
@@ -42,6 +44,7 @@ import java.util.*;
 @Controller
 public class IncomingRegistrationController {
 
+    private static DocumentTaskSubService documentTaskSubService;
     private final DocumentService documentService;
     private final JournalService journalService;
     private final DocumentViewService documentViewService;
@@ -56,6 +59,7 @@ public class IncomingRegistrationController {
     private final DocumentLogService documentLogService;
     private final DocumentHelperService documentHelperService;
 
+    private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Autowired
     public IncomingRegistrationController(
             DocumentService documentService,
@@ -174,7 +178,10 @@ public class IncomingRegistrationController {
     }
 
     @RequestMapping(DocUrls.IncomingRegistrationView)
-    public String getViewDocumentPage(@RequestParam(name = "id")Integer id, Model model) {
+    public String getViewDocumentPage(
+            @RequestParam(name = "id")Integer id,
+            Model model
+    ) {
         Document document = documentService.getById(id);
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
@@ -182,6 +189,7 @@ public class IncomingRegistrationController {
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTasks", documentTasks);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
@@ -537,4 +545,5 @@ public class IncomingRegistrationController {
         model.addAttribute("attends", userService.getEmployeeList());
         return DocTemplates.IncomeMailAddTask;
     }*/
+
 }

@@ -9,9 +9,7 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.ControlForm;
-import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
-import uz.maroqand.ecology.docmanagement.constant.ExecuteForm;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
@@ -46,6 +44,79 @@ public class DocumentServiceImpl implements DocumentService {
     public Document getById(Integer id) {
         return documentRepository.findByIdAndDeletedFalse(id);
     }
+
+    @Override
+    public String createTree(Document document) {
+        Document topParent = getTopParentId(document);
+        List<Document> childList = getListByAddDocId(topParent.getId());
+        String tree = buildTree(document,childList);
+        if (!document.getId().equals(topParent.getId())){
+            StringBuilder parent = new StringBuilder();
+            String icon;
+            if (topParent.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+                icon="\'fa fa-upload\'";
+            }else{
+                icon="\'fa fa-download\'";
+            }
+            String regDate = topParent.getRegistrationDate()!=null?Common.uzbekistanDateFormat.format(topParent.getRegistrationDate()):"";
+            parent.append("{ text: \' <span id=\"node_text_").append(topParent.getId()).append("\"> ").append(topParent.getRegistrationNumber()).append(" (").append(regDate).append(")</span>\'").append(" , tags:").append(topParent.getId()).append(", icon:").append(icon);
+            parent.append(",nodes : [").append(tree).append("]}");
+            return "[" + parent.toString() + "]";
+        }else{
+        return "[" + tree + "]";
+        }
+    }
+
+    @Override
+    public String buildTree(Document documentOld,List<Document> documentList) {
+        StringBuilder tree = new StringBuilder();
+        String icon;
+        String state;
+        String button;
+
+        if (documentList==null || documentList.size()==0){
+            if (documentOld.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+                icon="\'fa fa-upload\'";
+            }else{
+                icon="\'fa fa-download\'";
+            }
+            state=", state: {checked: false,disabled: false,expanded: false,selected: true,open: true,}";
+            String regDate = documentOld.getRegistrationDate()!=null?Common.uzbekistanDateFormat.format(documentOld.getRegistrationDate()):"";
+            button="<button id=\"doc_view_button\" class=\"float-right close\" type=\"button\" onclick=\" getViewPage(" +documentOld.getId() +")\" ><i class=\"fas fa-arrow-right\"></i></button>";
+
+            tree.append("{ text: \' <span id=\"node_text_").append(documentOld.getId()).append("\"> ").append(documentOld.getRegistrationNumber()).append(" (").append(regDate).append(")").append(button).append("</span>\' , tags:").append(documentOld.getId()).append(", icon:").append(icon).append(state);
+                tree.append("}");
+
+                return tree.toString();
+        }
+
+            for (Document document: documentList){
+                if (document.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+                    icon="\'fa fa-upload\'";
+                }else{
+                    icon="\'fa fa-download\'";
+                }
+                if (document.getId().equals(documentOld.getId())){
+//                    System.out.println("id==id " + document.getId() + "  == " + documentOld.getId());
+                    state=", state: {checked: false,disabled: false,expanded: false,selected: true,open: true,}";
+                    button="<button id=\"doc_view_button\" class=\"float-right close\" type=\"button\" onclick=\" getViewPage(" +documentOld.getId() +")\" ><i class=\"fas fa-arrow-right\"></i></button>";
+                }else{
+                    state="";
+                    button="";
+                }
+                String regDate = document.getRegistrationDate()!=null?Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"";
+                tree.append("{ text: \' <span id=\"node_text_").append(document.getId()).append("\"> ").append(document.getRegistrationNumber()).append(" (").append(regDate).append(") ").append(button).append("</span>\' , tags:").append(document.getId()).append(", icon:").append(icon).append(state);
+                List<Document> childList = getListByAddDocId(document.getId());
+                if (childList.size()>0){
+                    tree.append(", nodes:[").append(buildTree(documentOld, childList)).append("]},");
+                }else{
+                    tree.append("},");
+                }
+            }
+
+        return tree.toString();
+    }
+
 
     @Override
     public Document createDoc(Integer documentTypeId, Document document, User user) {
@@ -302,5 +373,24 @@ public class DocumentServiceImpl implements DocumentService {
 
         countersList.put("expired", documentRepository.countAllExpiredDocsByType(type, beginDate));
         return countersList;
+    }
+
+    @Override
+    public List<Document> getListByAddDocId(Integer addDocId) {
+        return documentRepository.findByAdditionalDocumentIdAndDeletedFalse(addDocId);
+    }
+
+    @Override
+    public Document getTopParentId(Document document) {
+        System.out.println("---------docId=--------" + document.getId());
+        if (document.getAdditionalDocumentId()==null) return document;
+
+        Document documentParent = getById(document.getAdditionalDocumentId());
+        if (documentParent==null) return document;
+        System.out.println("------parentId=------" + documentParent.getId());
+        if (documentParent.getAdditionalDocumentId()==null){
+            return documentParent;
+        }
+        return getTopParentId(documentParent);
     }
 }

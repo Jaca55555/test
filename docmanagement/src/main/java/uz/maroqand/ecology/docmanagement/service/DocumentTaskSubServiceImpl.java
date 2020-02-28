@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -26,11 +26,13 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     private final DocumentTaskSubRepository documentTaskSubRepository;
     private final DocumentSubService documentSubService;
+    private final HelperService helperService;
 
     @Autowired
-    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService) {
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.documentSubService = documentSubService;
+        this.helperService = helperService;
     }
 
     @Override
@@ -45,8 +47,32 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public String buildTree(Integer level,List<DocumentTaskSub> documentTaskSubList, Map<Integer,DocumentTaskSub> taskSubMap,String locale){
+        String tree="";
+        for (DocumentTaskSub taskSub: documentTaskSubList) {
+            if (taskSub.getLevel().equals(level) && !taskSubMap.containsKey(taskSub.getId())){
+                taskSubMap.put(taskSub.getId(),taskSub);
+                String getReceiverName =  helperService.getUserFullNameById(taskSub.getReceiverId()) + " (" + helperService.getPositionName(taskSub.getReceiver().getPositionId(),locale)+")";
+                tree="[{text:\"" + getReceiverName + "\", tags:" + taskSub.getId();
+                List<DocumentTaskSub> taskSubs = getListByTaskIdAndLevel(taskSub.getTaskId(),(level+1));
+                if (taskSubs.size()>0){
+                    tree+= ",nodes:" + buildTree((level+1),documentTaskSubList,taskSubMap,locale) + "}]";
+                }else{
+                    tree+="}]";
+                }
+            }
+        }
+        return tree;
+    }
+
+    @Override
     public List<DocumentTaskSub> getListByDocId(Integer docId) {
         return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
+    }
+
+    @Override
+    public List<DocumentTaskSub> getListByTaskIdAndLevel(Integer taskId, Integer level) {
+        return documentTaskSubRepository.findByTaskIdAndLevelAndDeletedFalse(taskId,level);
     }
 
     @Override

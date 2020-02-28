@@ -143,6 +143,7 @@ public class InnerRegistrationController {
             return "redirect: " + DocUrls.InnerRegistrationList;
         }
         model.addAttribute("document", document);
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerRegistrationView;

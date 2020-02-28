@@ -5,7 +5,15 @@
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/static/bootstrap-treeview.css">
+
     <style>
+        .panel{
+            overflow-y: auto;
+            overflow-x: auto;
+            width: 100%;
+            height: 600px;
+        }
         .ui-menu-item-wrapper:hover{
             color:white;
             background:#62c462;
@@ -33,7 +41,12 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between mobile-column" style="align-items: center;">
 
-                <h5 class="mb-0">Чиқувчи хат № <span href="" class="card-header-a collapsed" th:text="${registration_number + ' / ' + registration_date}"></span></h5>
+                <h5 class="mb-0">
+                    <span href="" class="card-header-a collapsed" >
+                        <span th:text="#{doc_outgoing.view}">Кирувчи хат №</span>
+                        <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                    </span>
+                </h5>
                 <div class="p10-horizontal mobile-column" id="toRender">
                     <span class="color-red bold" style="text-align: center;">Хужжат статуси</span>
 
@@ -110,16 +123,109 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">
+                            Кирувчи хат №
+                            <span th:text="${document.registrationNumber}"></span>
+                            <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                        </span>
+                    </h5>
+                    <div class="btn-group" role="group" >
+
+                        <button type="button" class="close pointer mr-2"onclick="treeCloseAll()">
+                            <i class="feather icon-chevrons-up"></i>
+                            <!--<span th:text="#{+}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer mr-2" onclick="treeOpenAll()">
+                            <i class="feather icon-chevrons-down"></i>
+                            <!--<span th:text="#{-}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" >
+                            <!--<span aria-hidden="true">&times;</span>-->
+                            <i class="feather icon-x"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2">
+
+                </div><span></span>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical mt-0">
+                        <div class="panel">
+                            <div id="treeview-selectable" class="treeview"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- main content end -->
 
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/static/bootstrap-treeview.js"></script>
 
 <script th:inline="javascript">
+    //<![CDATA[
+    var alternateData = [[${tree}]];
+    var alternateData = JSON.stringify(eval("("+alternateData+")"));
+
+    $(function() {
+        var initSelectableTree = function() {
+            return $('#treeview-selectable').treeview({
+                data: alternateData,
+                selectedBackColor:'#5c66bf',
+                levels: 25,
+                onNodeSelected: function(event, node) {
+                    editText(node.tags);
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
+                },
+                onNodeUnselected: function (event, node) {
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
+                },
+            });
+        };
+        initSelectableTree();
+    });
+
+    function editText(docId) {
+        setTimeout(function(){
+            $('#doc_view_button').remove();
+            var nodeText=$('#node_text_'+docId);
+            var nodeButton =nodeText.text() +  "<button id='doc_view_button' class='float-right close'  onclick='getViewPage(" + docId + ")'><i class='fas fa-arrow-right'></i></button>"
+            $('#node_text_'+docId).text("");
+            document.querySelector('#node_text_'+docId).innerHTML = nodeButton;
+        },0.1)
+    }
+
+    function treeOpenAll() {
+        $('#treeview-selectable').treeview('expandAll', { levels: 25, silent: true });
+    }
+
+    function treeCloseAll() {
+        $('#treeview-selectable').treeview('collapseAll', { levels: 1, silent: true });
+    }
+
+    function getViewPage(id){
+        window.location.href='/doc/open_view?id=' + id;
+    }
+
     let files = [[${files}]];
     let currentStatus = [[${document_status}]];
     let currentId = [[${document_id}]];
+    //]]>
 </script>
 <script>
 

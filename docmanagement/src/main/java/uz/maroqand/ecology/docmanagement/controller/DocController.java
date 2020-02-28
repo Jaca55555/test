@@ -24,10 +24,7 @@ import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
@@ -47,6 +44,7 @@ public class DocController {
     private final DocumentTaskService taskService;
     private final DocumentOrganizationService documentOrganizationService;
     private final HelperService helperService;
+    private final DocumentSubService documentSubService;
 
     @Autowired
     public DocController(
@@ -57,8 +55,8 @@ public class DocController {
             DocumentViewService documentViewService,
             DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService,
-            HelperService helperService
-    ) {
+            HelperService helperService,
+            DocumentSubService documentSubService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -67,6 +65,7 @@ public class DocController {
         this.taskService = taskService;
         this.documentOrganizationService = documentOrganizationService;
         this.helperService = helperService;
+        this.documentSubService = documentSubService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -195,5 +194,32 @@ public class DocController {
         resutl.put("createdAt", Common.uzbekistanDateAndTimeFormat.format(documentLog.getCreatedAt()));
         resutl.put("log", documentLog);
         return resutl;
+    }
+
+    @RequestMapping(value = DocUrls.DocumentOpenView)
+    public String getViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Document document = documentService.getById(id);
+        if (document==null){
+            return "redirect:" + DocUrls.Dashboard;
+        }
+
+        Integer viewTagId= document.getDocumentType().getType().getId();
+        String viewTag = "";
+        switch (viewTagId){
+            case 1: viewTag = "doc_incoming"; break;
+            case 2: viewTag = "doc_outgoing";break;
+            case 3: viewTag = "doc_inner";break;
+            case 4: viewTag = "doc_appeal";break;
+        }
+
+        model.addAttribute("view_tag" ,viewTag);
+        model.addAttribute("document" ,document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+
+
+        return DocTemplates.DocumentOpenView;
     }
 }

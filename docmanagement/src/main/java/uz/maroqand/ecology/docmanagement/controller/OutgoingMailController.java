@@ -243,6 +243,8 @@ public class OutgoingMailController {
         model.addAttribute("registration_date", Common.uzbekistanDateFormat.format(document.getRegistrationDate()));
         model.addAttribute("updated_at", document.getUpdateAt() != null ? document.getUpdateAt() : "");
         model.addAttribute("document_id", document.getId());
+        model.addAttribute("document", document);
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("document_status", document.getStatus());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());

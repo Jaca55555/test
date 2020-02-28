@@ -6,6 +6,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,7 +21,11 @@ public interface DocumentTaskSubService {
 
     DocumentTaskSub update(DocumentTaskSub taskSub);
 
+    String buildTree(Integer level,List<DocumentTaskSub> documentTaskSubList, Map<Integer,DocumentTaskSub> taskSubMap,String locale);
+
     List<DocumentTaskSub> getListByDocId(Integer docId);
+
+    List<DocumentTaskSub> getListByTaskIdAndLevel(Integer docId,Integer level);
 
     void allTaskSubCompleteGetTaskId(Integer taskId);
 

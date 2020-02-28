@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
     List<Document> findAllByDeletedFalse();
 
     Page<Document> findByRegistrationNumberLike(String number, Pageable pageable);
+
+    List<Document> findByAdditionalDocumentIdAndDeletedFalse(Integer addDocId);
 
     Long countAllByDocumentTypeIdAndOrganizationId(Integer typeId, Integer organizationId);
 

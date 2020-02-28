@@ -21,6 +21,10 @@ public interface DocumentService {
 
     Document getById(Integer id);
 
+    String createTree(Document document);
+
+    String buildTree(Document document,List<Document> documentList);
+
     Document createDoc(Integer documentTypeId, Document document, User user);
 
     void update(Document document);
@@ -48,4 +52,8 @@ public interface DocumentService {
     Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet,Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser);
 
     HashMap<String, Object> getCountersByType(Integer type);
+
+    List<Document> getListByAddDocId(Integer addDocId);
+
+    Document getTopParentId(Document docId);
 }

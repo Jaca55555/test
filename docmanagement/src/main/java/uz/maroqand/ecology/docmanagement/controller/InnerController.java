@@ -216,6 +216,7 @@ public class InnerController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
