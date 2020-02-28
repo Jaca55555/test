@@ -15,6 +15,8 @@ public interface DocumentLogService {
 
     List<DocumentLog> getAllByDocId(Integer docId);
 
+    List<DocumentLog> getAllByDocAndTaskId(Integer docId, Integer taskId);
+
     DocumentLog create(DocumentLog documentLog);
 
     DocumentLog update(DocumentLog documentLog);

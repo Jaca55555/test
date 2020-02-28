@@ -42,7 +42,6 @@
                                 <option value=""></option>
                                 <option th:each="i: ${docTypes}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
                     <div class="form-group col-md-4 col-sm-12">
@@ -75,7 +74,6 @@
                                 <option th:value="0" th:text="#{doc.doc_status_inactive}"></option>
                                 <option th:value="1" th:text="#{doc.doc_status_active}"></option>
                             </select>
-                            <i class="gray-arrow fas fa-sort-down color-gray"></i>
                         </div>
                     </div>
                 </div>

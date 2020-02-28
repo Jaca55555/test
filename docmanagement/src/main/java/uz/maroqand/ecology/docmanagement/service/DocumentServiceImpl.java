@@ -240,6 +240,10 @@ public class DocumentServiceImpl implements DocumentService {
                     if (filterDTO.getReplies() != null) {
                         predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
                     }
+
+                    if (filterDTO.getDocumentStatus() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getDocumentStatus()));
+                    }
                 }
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));

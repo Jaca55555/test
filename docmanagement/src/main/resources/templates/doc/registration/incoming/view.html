@@ -227,10 +227,18 @@
                                 <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
                             </div>
                             <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
-                            <div class="w100"></div>
+                                <div class="w100"></div>
                                 <div class="column-2 mt-3">
                                     <span class='fas fa-file-pdf fs30 color-red'></span>
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
+                                </div>
+                            </div>
+                            <div th:if="${log.attachedDoc}!=null" th:remove="tag">
+                                <div class="w100"></div>
+                                <div class="column-2 mt-3 d-flex">
+                                    <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>
+                                    <span class='mdi mdi-file-upload-outline fs30 color-green'></span>
+                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView} + '?id=' + ${log.attachedDoc.id}" th:text="${log.attachedDoc.registrationNumber}"></a>
                                 </div>
                             </div>
                         </div>
@@ -416,6 +424,8 @@
     });
 
     var urlAction = [[${comment_url}]];
+    let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}]] + '?id=';
+
     $(document).ready(function () {
             docFileName([[${document.contentFiles}]]);
         $('#formSend').on('click', function (e) {
@@ -454,6 +464,16 @@
                                     "</div>\n"
                             }
                         }
+                        if (log.attachedDoc!=null) {
+                            let doc = log.attachedDoc;
+                            html += '<div class="w100"></div>\n' +
+                                '   <div class="column-2 mt-3 d-flex">\n' +
+                                '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
+                                '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
+                                '       <a class="d-flex align-self-center" href="'+attachedDocView + doc.id +'">'+ doc.registrationNumber + '</a>\n' +
+                                '   </div>\n';
+                        }
+
                         html +="\n</div>";
                         $('#comments').prepend(html);
                         $('#modal1').modal('toggle');

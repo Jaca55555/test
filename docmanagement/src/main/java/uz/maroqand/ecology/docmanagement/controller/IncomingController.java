@@ -234,10 +234,11 @@ public class IncomingController {
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
-        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), documentTaskSub.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
-        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, new PageRequest(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("isView", true);
         return DocTemplates.IncomingView;
     }
 
@@ -352,10 +353,10 @@ public class IncomingController {
     @RequestMapping(DocUrls.DocumentTaskChange)
     @ResponseBody
     public HashMap<String, Object> changeTaskStatus(
-            @RequestParam(name = "content")String content,
+            @RequestParam(name = "content", required = false)String content,
             @RequestParam(name = "taskStatus")Integer status,
             @RequestParam(name = "taskId")Integer taskId,
-            @RequestParam(name = "addDocId")Integer additionalDocId,
+            @RequestParam(name = "addDocId", required = false)Integer additionalDocId,
             @RequestParam(name = "docId")Integer docId
     ) {
         HashMap<String, Object> response = new HashMap<>();
@@ -365,6 +366,8 @@ public class IncomingController {
         log.setContent(content);
         log.setDocumentId(docId);
         log.setType(2);
+        log.setAttachedDoc(documentService.getById(additionalDocId));
+        log.setAttachedDocId(additionalDocId);
         documentLogService.create(log);
         String logAuthorPos = positionService.getById(user.getPositionId()).getName();
 
