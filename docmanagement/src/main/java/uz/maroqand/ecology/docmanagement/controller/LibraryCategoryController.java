@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,6 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 
 import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
 
@@ -42,24 +42,26 @@ public class LibraryCategoryController {
     public String getLibraryCategoryList(Model model) {
 
         return DocTemplates.LibraryCategoryList;
+
     }
     @RequestMapping(value = DocUrls.LibraryCategoryListAjax,  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String, Object> getDocTypeListAjax(
             Pageable pageable,
-            @RequestParam(name = "type")DocumentTypeEnum typeEnum,
+
             @RequestParam(name = "name")String name,
-            @RequestParam(name = "status")Boolean status
+             @RequestParam(name = "parent")String parent_name
+
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        Page<LibraryCategory> LibraryCategoryPage = libraryCategoryService.getFiltered(name, pageable);
+        Page<LibraryCategory> LibraryCategoryPage = libraryCategoryService.getFiltered(name,parent_name, pageable);
         List<Object[]> JSONArray = new ArrayList<>(LibraryCategoryPage.getContent().size());
         for (LibraryCategory libraryCategory : LibraryCategoryPage.getContent()) {
             JSONArray.add(new Object[]{
                     libraryCategory.getId(),
-
                     libraryCategory.getName(),
-                               });
+                    libraryCategory.getParent()!=null ? libraryCategoryService.getById(libraryCategory.getParent()).getName():""
+            });
         }
 
         result.put("data", JSONArray);
@@ -67,9 +69,10 @@ public class LibraryCategoryController {
     }
 
     @RequestMapping(value = DocUrls.LibraryCategoryNew)
-    public String getNewLibraryCategoryType(Model model) {
+    public String getNewLibraryCategory(Model model) {
         model.addAttribute("action_url", DocUrls.LibraryCategoryNew);
         model.addAttribute("libraryCategory", new LibraryCategory());
+       model.addAttribute("librarycategory",libraryCategoryService.findAll());
         return DocTemplates.LibraryCategoryNew;
     }
     @RequestMapping(value = DocUrls.LibraryCategoryNew, method = RequestMethod.POST)
@@ -79,25 +82,34 @@ public class LibraryCategoryController {
             return "redirect:" + DocUrls.DocTypeList;
         }
         libraryCategory.setCreated_by_id(user.getId());
+
         libraryCategoryService.create(libraryCategory);
+
 //        libraryCategoryService.updateStatusActive();
         return "redirect:" + DocUrls.LibraryCategoryList;
     }
 
-    @RequestMapping(value = DocUrls.LibraryCategoryEdit, method = RequestMethod.GET)
-    public String editLibraryCategory(
-            @RequestParam(name = "id")String id,
-            @RequestParam(name = "createDate")String date,
-            LibraryCategory libraryCategory
+    @RequestMapping(value = DocUrls.LibraryCategoryEdit)
+    public String getEditLibraryCategory(
+            Model model,
+            @RequestParam(name = "id") Integer id
     ) {
-        libraryCategory.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
-        libraryCategory.setCreated_by_id(userService.getCurrentUserFromContext().getId());
-        libraryCategoryService.update(libraryCategory);
-      //  libraryCategoryService.updateStatusActive();
-        libraryCategoryService.updateByIdFromCache(libraryCategory.getId());
+        User user = userService.getCurrentUserFromContext();
+        if (user == null) {
+            return "redirect:" + DocUrls.LibraryCategoryList;
+        }
 
-        return "redirect:" + DocUrls.LibraryCategoryList;
+        LibraryCategory libraryCategory = libraryCategoryService.getById(id);
+        if (libraryCategory == null) {
+            return "redirect:" + DocUrls.LibraryCategoryList;
+        }
+        model.addAttribute("action_url", DocUrls.LibraryCategoryEdit);
+        model.addAttribute("libraryCategory", libraryCategory);
+        model.addAttribute("librarycategory",libraryCategoryService.findAll());
+
+        return DocTemplates.LibraryCategoryEdit;
     }
+
     @RequestMapping(value = DocUrls.LibraryCategoryEdit, method = RequestMethod.POST)
     public String editLibraryCat(
             @RequestParam(name = "id")String id,
@@ -118,7 +130,7 @@ public class LibraryCategoryController {
         if (libraryCategory == null) {
             return "redirect:" + DocUrls.LibraryCategoryList;
         }
-        model.addAttribute("librarycategory", libraryCategory);
+        model.addAttribute("libraryCategory", libraryCategory);
         return DocTemplates.LibraryCategoryView;
     }
     @RequestMapping(value = DocUrls.LibraryCategoryDelete)
@@ -130,7 +142,7 @@ public class LibraryCategoryController {
 
         LibraryCategory libraryCategory = libraryCategoryService.getById(id);
         if (libraryCategory == null) {
-            return "redirect:" + DocUrls.DocTypeList;
+            return "redirect:" + DocUrls.LibraryCategoryList;
         }
         libraryCategory.setDeleted(Boolean.TRUE);
         libraryCategoryService.update(libraryCategory);

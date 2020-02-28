@@ -59,32 +59,21 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
         return libraryCategoryRepository.getOne(id);
     }
 
-    //GetStatusActive
-//    @Override
-//    @Cacheable("documentTypeGetStatusActive")
-//    public List<DocumentType> getStatusActive() {
-//        return documentTypeRepository.findByStatusTrue();
-//    }
-
-
-    //RemoveAllStatusActiveFromCache
-////    @Override
-////    @CacheEvict(value = "documentTypeGetStatusActive", allEntries = true)
-////    public List<LibraryCategory> updateStatusActive() {
-////        return libraryCategoryRepository.findByStatusTrue();
-////    }
 
     @Override
-    public Page<LibraryCategory> getFiltered(String name,Pageable pageable) {
-        return libraryCategoryRepository.findAll(getFilteringSpecification(name), pageable);
+    public Page<LibraryCategory> getFiltered(String name,String parent_name,Pageable pageable) {
+        return libraryCategoryRepository.findAll(getFilteringSpecification(name,parent_name), pageable);
     }
-
+    @Override
+    public List<LibraryCategory> findAll(){
+        return libraryCategoryRepository.findAll();
+    }
     @Override
     public DataTablesOutput<LibraryCategory> getAll(DataTablesInput input) {
         return libraryCategoryRepository.findAll(input);
     }
 
-    private static Specification<LibraryCategory> getFilteringSpecification(String name) {
+    private static Specification<LibraryCategory> getFilteringSpecification(String name,String parent_name) {
         return (Specification<LibraryCategory>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             if (name != null) {
@@ -92,15 +81,26 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
                         criteriaBuilder.lower(root.get("name")),
                         "%" + name.toLowerCase() + "%"));
             }
+
+
             predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 
+    int i=0;
     @Override
     public LibraryCategory create(LibraryCategory libraryCategory) {
         libraryCategory.setDeleted(Boolean.FALSE);
         libraryCategory.setCreatedAt(new Date());
+       if(libraryCategory.getParent()==null) {
+           libraryCategory.setLevel(0);
+       }
+       if(libraryCategory.getParent()!=null){
+           LibraryCategory parent = getById(libraryCategory.getParent());
+           libraryCategory.setLevel(parent.getLevel()+1);
+       }
+
         return libraryCategoryRepository.save(libraryCategory);
     }
 
@@ -108,5 +108,7 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
     public LibraryCategory update(LibraryCategory libraryCategory) {
         return libraryCategoryRepository.save(libraryCategory);
     }
+
+
 
 }

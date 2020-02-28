@@ -48,6 +48,8 @@ public class LibraryCategory {
     private Boolean deleted = false;
     @Column(name="created", columnDefinition = "timestamp without time zone")
     private Date createdAt;
+
+
     public Integer getCreated_by_id() {
         return created_by_id;
     }

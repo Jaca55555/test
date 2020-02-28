@@ -5,7 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
+
+import org.springframework.data.jpa.repository.Query;
 import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
 
 import java.util.List;
@@ -17,10 +18,12 @@ public interface LibraryCategoryService {
 
 
     LibraryCategory create(LibraryCategory libraryCategory);
-   // List<LibraryCategory> updateStatusActive();
-    LibraryCategory updateByIdFromCache(Integer id);
 
+    LibraryCategory updateByIdFromCache(Integer id);
+    List<LibraryCategory> findAll();
     DataTablesOutput<LibraryCategory> getAll(DataTablesInput input);
-   Page<LibraryCategory> getFiltered(String name, Pageable pageable);
+   Page<LibraryCategory> getFiltered(String name,String parent_name, Pageable pageable);
+
+
 }
 

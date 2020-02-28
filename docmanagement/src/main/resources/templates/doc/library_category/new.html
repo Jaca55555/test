@@ -32,7 +32,7 @@
             <div class="card-body">
                 <form th:action="${action_url}" th:method="post" class="card-block" th:object="${libraryCategory}">
                     <input type="hidden" th:if="${libraryCategory.id != null}" th:field="*{id}" th:value="*{id}" />
-                    <input type="hidden" th:if="${libraryCategory.id != null}" name="createDate" th:value="${#dates.format(docType.createdAt,'dd.MM.yyyy')}" />
+                    <input type="hidden" th:if="${libraryCategory.id != null}" name="createDate" th:value="${#dates.format(libraryCategory.createdAt,'dd.MM.yyyy')}" />
                     <div class="row">
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:for="${#ids.next('name')}" th:text="#{doc.library_category_name}"></label>
@@ -59,11 +59,10 @@
                             <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type}"></label>
                             <div class="col-sm-12 p0">
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
-                                        tabindex="-1" aria-hidden="true" >
-                                    <option value="" th:value="*{parent}" th:text="Category">
-
+                                        tabindex="-1" aria-hidden="true" th:field="*{parent}" >
+                                    <option value=""> </option>
+                                    <option th:each="t:${librarycategory}" th:value="${t.id}" th:text="#{${t.name}}">
                                     </option>
-                                    <option></option>
                                 </select>
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>
                             </div>
@@ -72,8 +71,8 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button th:text="#{doc.doc_type_reset_btn}" class="btn btn-dark"></button>
-                            <button th:text="#{doc.doc_type_save_btn}" class="btn btn-success"></button>
+                            <button th:text="#{doc.library_category_reset_btn}" class="btn btn-dark"></button>
+                            <button th:text="#{doc.library_category_save_btn}" class="btn btn-success"></button>
                         </div>
                     </div>
                 </form>
