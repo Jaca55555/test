@@ -93,8 +93,40 @@ public class DocController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().getLanguage();
+        Calendar calendar = Calendar.getInstance();
+        Date dueDateBegin = null;
+        Date dueDateEnd = null;
+        Set<Integer> statuses = new HashSet<>();
+        switch (incomingRegFilter.getTabFilter()) {
+            case 2:
+                statuses.add(TaskStatus.InProgress.getId());
+                break;
+            case 3:
+                statuses = null;
+                dueDateEnd = calendar.getTime();
+                break;
+            case 4:
+                statuses = null;
+                dueDateBegin = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, 3);
+                dueDateEnd = calendar.getTime();
+                break;
+            case 5:
+                statuses.add(TaskStatus.Checking.getId());
+                break;
+            case 6:
+                statuses = null;
+                incomingRegFilter.setInsidePurpose(Boolean.TRUE);
+                break;
+            case 7:
+                statuses.add(TaskStatus.Complete.getId());
+                break;
+            default:
+                statuses = null;
+                break;
+        }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, dueDateBegin, dueDateEnd, null, statuses, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         for (DocumentTask documentTask : documentTaskList) {

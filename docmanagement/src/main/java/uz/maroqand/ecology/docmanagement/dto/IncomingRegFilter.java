@@ -25,6 +25,7 @@ public class IncomingRegFilter {
     private Integer managerId;
     private String taskContent;
     private Integer performerId;
+    private Boolean insidePurpose;
 
     private String receiverId;
     private String type;
