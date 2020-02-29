@@ -168,7 +168,7 @@ public class IncomingRegistrationController {
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent()!=null?document.getContent():"",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    userService.findById(document.getManagerId()).getFullName(),
+                    document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
                     document.getStatus().getName(),
             });
         }

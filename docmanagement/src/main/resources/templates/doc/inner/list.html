@@ -25,10 +25,6 @@
                     <h5 class="mb-0" style="align-self:center">
                         <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" > <span th:text="#{doc_inner.list}">Кирувчи хатлар</span> </a>
                     </h5>
-                    <!--<div>
-                        <input type="text" class="form-control" />
-                        <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                    </div>-->
                 </div>
                 <h5 class="office-h5 default-color"><span th:text="#{doc_inner.statistic}">Ички хужжатлар статистикаси</span></h5>
                 <div class="responsive">
@@ -131,66 +127,69 @@
                     </div>
 
                 </div>
-                <div class="row p10" style="padding-top: 0px;">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
-                        <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
-                        </select>
-                    </div>
+                <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                        </select>
-                    </div>
+                    <div class="row p10" style="padding-top: 0px;">
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
+                            <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                            </select>
+                        </div>
 
-                    <div class="form-group col-md-4 col-sm-12">
-                        <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
-                        <input class="form-control" id="content">
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
-                            <option value="">Танлаш</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row p10" style="padding-top: 0px">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
-                            <option value=""></option>
-                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
-                        </select>
-                    </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                        </div>
 
-                    <div class="form-group col-md-4 col-sm-12">
-                        <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
-                        <div class="row">
-                            <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
-                                <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
-                            </div>
-                            <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
-                                <i class="gray-arrow mdi mdi-calendar color-gray"></i>
-                            </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
+                            <input class="form-control" id="content">
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
+                                <option value="">Танлаш</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12 form-button-container">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4"  onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
+                    <div class="row p10" style="padding-top: 0px">
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
+                                <option value=""></option>
+                                <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
+                            <div class="row">
+                                <div class="col-6" style="padding-left: 0;">
+                                    <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                                </div>
+                                <div class="col-6" style="padding-right:0;">
+                                    <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12 form-button-container">
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4"  onclick="getDatatableConnect()">
+                                <span th:text="#{sys_document.search}">Қидириш</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
