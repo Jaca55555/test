@@ -371,7 +371,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         Calendar calendar = Calendar.getInstance();
         Date beginDate = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
         Date endDate = calendar.getTime();
         countersList.put("nearDate", documentRepository.countAllDocByTypeAndDueDateBetween(type, beginDate, endDate));
 

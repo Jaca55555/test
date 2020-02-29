@@ -40,12 +40,12 @@ public class InnerRegistrationController {
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentSubService documentSubService;
+    private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentHelperService documentHelperService;
-    private final DocumentLogService documentLogService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -55,9 +55,9 @@ public class InnerRegistrationController {
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
         this.documentSubService = documentSubService;
+        this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentHelperService = documentHelperService;
-        this.documentLogService = documentLogService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)

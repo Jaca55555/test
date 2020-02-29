@@ -223,6 +223,9 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             if (incomingRegFilter.getPerformerId() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), incomingRegFilter.getPerformerId()));
             }
+            if (incomingRegFilter.getInsidePurpose() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("insidePurpose"), incomingRegFilter.getInsidePurpose()));
+            }
             /*if (taskSubType != null) {
                 predicates.add(criteriaBuilder.equal(root.get("type"), type));
             }
