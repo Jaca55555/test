@@ -24,7 +24,7 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="/static/doc" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">Девонхона хужжатлар иш столи</a>
+                    <a href="/static/doc" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_incoming.newList}">Девонхона хужжатлар иш столи</a>
                 </h5>
             </div>
             <div class="responsive">
@@ -89,6 +89,19 @@
         return html;
     }
 
+    function renderStatusColumn(data, type, row, meta) {
+        var html = '';
+        var status=row[7];
+        switch (status) {
+            case 0: html='<button type="button" class="btn-rounded btn btn-info">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-success">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light">'+row[6]+'</button>';return html;
+        }
+        return html;
+    }
+
     function datatableConnect() {
         dataDatatableSelector.DataTable({
             processing: true,
@@ -126,7 +139,7 @@
                 },
                 {data: 4, name: 'createdAt',className: "w-15 text-center"},
                 {data: 5, name: 'fullName',className: "w-15 text-center"},
-                {data: 6, name: 'status',className: "w-15 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-15 text-center"},
                 {render: renderActionsColumn, orderable: false, className: "text-center"}
             ],
             language: {

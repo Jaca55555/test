@@ -43,7 +43,7 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
-                <h5 class="mb-0" th:if="${document.id==null}">Ички хужжатларни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_inner.reg}">Ички хужжатларни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${document.id!=null}"><span th:text="#{doc_inner.edit}">Ички хужжатларни тахрирлаш</span> - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
                 <div>
                     <div>
@@ -129,9 +129,9 @@
                     </div>
                 </div>
                 <div class="border-danger m20 p20">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck1" th:field="*{insidePurpose}">
-                        <label class="custom-control-label" for="customCheck1" th:text="#{doc.income_inside_purpose}"></label>
+                    <div class="checkbox checkbox-fill d-inline checkbox-danger">
+                        <input type="checkbox" name="insidePurpose" id="checkbox-fill-1"  th:checked="${document.insidePurpose!=null && document.insidePurpose}">
+                        <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc.income_inside_purpose}">Checked</span></label>
                     </div>
                     <div class="m20-vertical">
                         <span th:text="#{sys_attention}">Диккат:</span>

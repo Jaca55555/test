@@ -4,6 +4,11 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
 
     <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="background"></div>
@@ -438,28 +443,28 @@
                                         <thead>
                                         <tr role="row">
                                             <th></th>
-                                            <th class="sorting_asc" aria-controls="responsive-table-model" style="width: 0px;" >
+                                            <th class="sorting_asc w-15" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.registrationNumber}">Регистрация рақами</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 0px;" >
+                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 350px;" >
+                                            <th class="sorting w-20" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 82px;" >
+                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_date}">Хужжат санаси</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 110px;" >
+                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_executeDate}">Ижро муддати</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 140px; display: none;" >
+                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_execution_status}">Жорий ҳолати</span>
                                             </th>
-                                            <th class="sorting" aria-controls="responsive-table-model" style="width: 300px; display: none;" >
+                                            <th class="sorting" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_resolution}">Резолюция ва иштирокчилар</span>
                                             </th>
-                                            <th></th>
+                                            <!--<th></th>-->
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -492,7 +497,15 @@
                 placeholder: sys_select,
                 allowClear: true
             });
-        })
+        });
+
+        let statuses = {};
+        statuses[0] = [[#{task_status.initial}]];
+        statuses[1] = [[#{task_status.new}]];
+        statuses[2] = [[#{task_status.inProgress}]];
+        statuses[3] = [[#{task_status.checking}]];
+        statuses[4] = [[#{task_status.complete}]];
+        statuses[5] = [[#{task_status.rejected}]];
 
     </script>
     <script th:inline="none">
@@ -504,13 +517,11 @@
 
 
 
-        let statuses = {};
-        statuses[1] = "New";
-        statuses[2] = "InProgress";
-        statuses[3] = "Completed";
 
-        function renderChangeColumn(data, type, row, meta) {
-            let editlink = 'doc/outgoing_mail/change_column'
+
+       /* function renderChangeColumn(data, type, row, meta) {
+            let editlink = 'doc/outgoing_mail/change_status';
+            let databack = row[6];
             let html = '';
             //console.log(row);
            // console.log(meta);
@@ -521,18 +532,18 @@
             let idToChangeOne, idToChangeTwo;
             let current;
             let color_attribute = 'btn-primary';
-            let color = 'color-primary'
-            if(data === 1){
+            let color = 'color-primary';
+            if(databack === 1){
                 current = 1;
-                color_attribute = 'btn-primary'
+                color_attribute = 'btn-primary';
 
-            }else if(data === 2){
+            }else if(databack === 2){
                 current = 2;
-                color_attribute = 'btn-warning'
+                color_attribute = 'btn-warning';
                 color = 'color-yellow'
-            }else if(data == 3){
+            }else if(databack == 3){
                 current = 3;
-                color_attribute = 'btn-success'
+                color_attribute = 'btn-success';
                 color = 'color-green'
             }
 
@@ -562,9 +573,22 @@
                     dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
 
                 })
+        }*/
+
+        function renderStatusColumn(data, type, row, meta) {
+            var html = '';
+            var status=row[8];
+            switch (status) {
+                case 0: html='<button type="button" class="btn-rounded btn btn-info">'+statuses[status]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+statuses[status]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary">'+statuses[status]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light">'+statuses[status]+'</button>';return html;
+            }
+            return html;
         }
-
-
 
 
 
@@ -586,7 +610,7 @@
         function renderActionsColumn(data, type, row, meta) {
             var currentViewLink = viewLink + '?id=' + row[0];
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            // html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
             html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
@@ -666,32 +690,35 @@
                 columns: [
 
                     {data: 0, name: 'id', visible: false},
-                    {data: 1, name: 'registrationNumber',
+                    {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
                             return html;
-                        }
+                        },
+                        className: "w-15 text-center"
                     },
-                    {data: 2, name: 'registrationDate',
+                    {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                             return html;
-                        }
+                        },
+                        className: "w-10 text-center"
                     },
-                    {data: 3, name: 'content'},
-                    {data: 4, name: 'createdAt'},
-                    {data: 5, name: 'dueDate'},
-                    {render: renderChangeColumn, orderable: false},
-                    {data: 7, name: 'resolution',
+                    {data: 3, name: 'document.content',className: "w-20 text-center"},
+                    {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                    {data: 5, name: 'dueDate',className: "w-10 text-center"},
+                    {render: renderStatusColumn, name: "status",className: "w-10 text-center"},
+                    {data: 7, name: 'resolution',orderable: false,
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += row[7];
                             return html;
-                        }
+                        },
+                        className: "text-center"
                     },
-                    {render: renderActionsColumn, orderable: false}
+                    // {render: renderActionsColumn, orderable: false}
                 ],
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

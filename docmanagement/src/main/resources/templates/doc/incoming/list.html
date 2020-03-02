@@ -3,6 +3,11 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title >Кирувчи хатлар</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="background"> </div>
@@ -117,11 +122,11 @@
                         <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
+                                <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
+                                <input class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
@@ -139,23 +144,23 @@
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="performerId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
-                            <select class="form-control" id="performerId" >
-                                <option value="">Танлаш</option>
+                            <select class="form-control " id="performerId" >
+                                <option value="" th:text="#{sys_select}">Танлаш</option>
                                 <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="taskSubType" class="control-label"><span th:text="#{sys_document.taskSubType}">Ижро йўналиши</span></label>
                             <select class="form-control" id="taskSubType">
-                                <option value="">Танлаш</option>
-                                <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="${taskSubType.getName()}"></option>
+                                <option value="" th:text="#{sys_select}">Танлаш</option>
+                                <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="#{${taskSubType.getName()}}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="taskSubStatus" class="control-label" th:text="#{sys_document.taskStatus}">Жорий ҳолати</label>
-                            <select class="form-control" id="taskSubStatus">
-                                <option value="">Танлаш</option>
-                                <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="${taskSubStatus.getName()}"></option>
+                            <select class="form-control " id="taskSubStatus">
+                                <option value="" th:text="#{sys_select}">Танлаш</option>
+                                <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="#{${taskSubStatus.getName()}}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-2 col-sm-12 form-button-container">
@@ -269,15 +274,15 @@
             var html = '';
             var status=row[8];
             switch (status) {
-                case 0: html='<span class="badge badge-info">'+row[6]+'</span>';return html;
-                case 1: html='<span class="badge badge-warning">'+row[6]+'</span>';return html;
-                case 2: html='<span class="badge badge-primary">'+row[6]+'</span>';return html;
-                case 3: html='<span class="badge badge-primary">'+row[6]+'</span>';return html;
-                case 4: html='<span class="badge badge-primary">'+row[6]+'</span>';return html;
-                case 5: html='<span class="badge badge-secondary">'+row[6]+'</span>';return html;
-                case 6: html='<span class="badge badge-success">'+row[6]+'</span>';return html;
-                case 7: html='<span class="badge badge-danger">'+row[6]+'</span>';return html;
-                default: html='<span class="badge badge-light">'+row[6]+'</span>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info">'+row[6]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+row[6]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary">'+row[6]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success">'+row[6]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger">'+row[6]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light">'+row[6]+'</button>';return html;
             }
             return html;
         }

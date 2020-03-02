@@ -222,13 +222,9 @@
         </div>
     <hr class="m20-vertical">
     <div class="flex-center w100 row-wrap">
-        <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"  th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationTask+'?id='+task.id}">Янги
-            топшириқ қўшиш
-
+        <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"  th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationTask+'?id='+task.id}">
+            <span th:text="#{doc_inner.newTask}">Янги топшириқ қўшиш</span>
         </a>
-        <button type="button"
-                class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"
-                data-toggle="modal" data-target="#modal2">Ижро холатини белгилаш</button>
     </div>
 </div>
 
