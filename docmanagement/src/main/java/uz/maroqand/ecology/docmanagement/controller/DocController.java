@@ -139,6 +139,7 @@ public class DocController {
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     helperService.getTranslation(documentTask.getStatusName(documentTask.getStatus()),locale),
                     documentTask.getContent(),
+                    documentTask.getStatus()
             });
         }
 

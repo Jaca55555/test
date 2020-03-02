@@ -51,6 +51,12 @@ public class DocumentSub {
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private DocumentOrganization organization;
 
+   /* @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "document_sub_jt_organization_id",
+            joinColumns = { @JoinColumn(name = "document_sub_id") },
+            inverseJoinColumns = { @JoinColumn(name = "organization_id") })
+    private Set<DocumentOrganization> documentOrganizations;*/
+
     //DocumentOrganization.id
     @Column(name = "organization_id")
     private Integer organizationId;

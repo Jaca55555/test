@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -27,7 +24,6 @@ import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.*;
-import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -154,6 +150,7 @@ public class IncomingRegistrationController {
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
@@ -169,7 +166,8 @@ public class IncomingRegistrationController {
                     document.getContent()!=null?document.getContent():"",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
-                    document.getStatus().getName(),
+                    documentHelperService.getTranslation(document.getStatus().getName(),locale),
+                    document.getStatus().getId()
             });
         }
 

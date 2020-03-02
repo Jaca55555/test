@@ -253,7 +253,7 @@
 
         <hr class="m20-vertical">
         <div class="flex-center w100 row-wrap">
-            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
+            <a th:if="${document.status!=T(uz.maroqand.ecology.docmanagement.constant.DocumentStatus).Completed}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
             <!--<button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2" th:text="#{doc_incoming.newTask}">Ижро холатини белгилаш</button>-->
         </div>
 
