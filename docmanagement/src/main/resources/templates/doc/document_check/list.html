@@ -213,25 +213,25 @@
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
-                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending " class="sorting_asc w-15" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
@@ -341,19 +341,21 @@
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
                         return html;
-                    }
+                    },
+                    className: "w-15 text-center"
                 },
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                         return html;
-                    }
+                    },
+                    className: "w-10 text-center"
                 },
-                {data: 3, name: 'document.content'},
-                {data: 4, name: 'createdAt'},
-                {data: 5, name: 'dueDate'},
-                {render: renderStatusColumn, name: 'status'},
+                {data: 3, name: 'document.content',className: "w-20 text-center"},
+                {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                {data: 5, name: 'dueDate',className: "w-10 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
                 {data: 7, name: 'content',
                     render: function (data, type, row, meta) {
                         var html = '';

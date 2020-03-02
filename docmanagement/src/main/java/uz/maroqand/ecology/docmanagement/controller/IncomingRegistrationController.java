@@ -169,7 +169,7 @@ public class IncomingRegistrationController {
                     document.getContent()!=null?document.getContent():"",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
-                    document.getStatus().getName(),
+                    documentHelperService.getTranslation(document.getStatus().getName(),locale),
             });
         }
 
