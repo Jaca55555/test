@@ -167,23 +167,21 @@
                             <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
+                                    <input class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="date_end" placeholder="гача">
+                                    <input class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="regionId" class="control-label"><span th:text="#{doc_outgoing.documentView}">Хужжат тури</span></label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                    id="document_view_id" aria-hidden="true">
-                                <option value=""></option>
+                            <label for="document_view_id" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
+                            <select class="col-sm-12 singleSelect2" id="document_view_id">
+                                <option value th:text="#{sys_select}"></option>
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
-                            <!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
                     </div>
                     <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -208,11 +206,11 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab"
-                       aria-controls="home" aria-selected="true">Жами</a>
+                       aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;"
-                       role="tab" aria-controls="profile" aria-selected="false">Чикиб кетмаган</a>
+                       role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -283,7 +281,7 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
-
+    let selected = [[#{sys_select}]];
     $('#document_organization_id').select2({
         ajax: {
             url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
@@ -293,6 +291,12 @@
             }, cache: true
         }
     });
+
+    $('.singleSelect2').select2({
+        placeholder: selected,
+        allowClear: true
+    });
+
 
 </script>
 

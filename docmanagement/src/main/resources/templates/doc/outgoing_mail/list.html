@@ -112,19 +112,19 @@
                             <label for="date_begin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
+                                    <input class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="date_end" placeholder="гача">
+                                    <input class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="document_view_id" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" id="document_view_id" aria-hidden="true">
-                                <option value=""></option>
+                            <select class="col-sm-12 singleSelect2" id="document_view_id">
+                                <option value th:text="#{sys_select}"></option>
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
                         </div>
@@ -141,8 +141,8 @@
                             <div class="form-group col-md-4 col-sm-12">
                                 <label for="department_id" class="control-label " th:text="#{doc_outgoing.department}">Хат жунатаётган булим ёки ходим</label>
                                 <div class="col-sm-12 p0">
-                                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
-                                        <option value=""></option>
+                                    <select class="singleSelect2 col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
+                                        <option value th:text="#{sys_select}"></option>
                                         <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
                                     </select>
                                 </div>
@@ -162,7 +162,7 @@
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;" role="tab" aria-controls="profile" aria-selected="false">Чикиб кетмаган</a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -222,6 +222,7 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    let selected= [[#{sys_select}]]
 
     $('#document_organization_id').select2({
         ajax: {
@@ -232,6 +233,12 @@
             }, cache: true
         }
     });
+
+    $('.singleSelect2').select2({
+        placeholder: selected,
+        allowClear: true
+    });
+
 
 </script>
 
