@@ -190,10 +190,8 @@
                 levels: 25,
                 onNodeSelected: function(event, node) {
                     editText(node.tags);
-                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
                 },
                 onNodeUnselected: function (event, node) {
-                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
                 },
             });
         };
@@ -285,13 +283,12 @@
         let lastIndex = fileName.lastIndexOf('.');
         let subStringName = fileName.substring(0,lastIndex);
         let getExtension = fileName.substring(lastIndex,fileName.length);
-        if (subStringName.length>10){
+        if (subStringName.length > 10){
             subStringName = subStringName.substring(0,9)+'..';
         }
         subStringName += getExtension;
         return subStringName;
     }
-
 
     let statuses = {};
     statuses[1] = "New";
@@ -299,57 +296,19 @@
     statuses[3] = "Completed";
 
     function renderChangeColumn(currentStatus){
-        let divToRender = document.querySelector('#toRender');
         let html = document.querySelector('#toRender').innerHTML;
-        let idToChangeOne, idToChangeTwo;
         let current;
-        if(currentStatus === "New"){
-            current = 1;
-            idToChangeOne = 2;
-            idToChangeTwo = 3;
-        }else if(currentStatus === "InProgress"){
+        if(currentStatus === "New" || currentStatus === "InProgress"){
             current = 2;
-            idToChangeOne = 1;
-            idToChangeTwo = 3;
         }else if(currentStatus === "Completed"){
             current = 3;
-            idToChangeOne = 1;
-            idToChangeTwo = 2;
         }
 
         html += `<div class="btn-group mr-2">
                                             <button type="button"
-                         class="btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
-                     <button type="button"
-                         class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                         data-toggle="dropdown" aria-haspopup="true"
-                         aria-expanded="false"><span class="sr-only">Toggle
-                             Dropdown</span></button>
-                     <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
-                         <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
-                       <!--  <button class="dropdown-item">InProgress</button> -->
-                     </div>
-                 </div>`;
+                         class="btn-rounded btn btn-primary">${statuses[current]}</button>
+                  </div>`;
         document.querySelector('#toRender').innerHTML = html;
-    }
-
-    function changeStatus(btn, id, targetStatus){
-        dropDownValues = $(btn).parent();
-        let changeStatusLink = '/doc/outgoing_mail/change_status';
-        fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
-            .then((response) =>{
-                if(response.ok){
-                    return response.json()
-                }
-            })
-            .then((data) => {
-                dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
-                dropDownValues[0].innerHTML = `
-                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
-                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
-                `;
-            })
     }
 
     renderChangeColumn(currentStatus);

@@ -94,7 +94,7 @@
                     <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Сараш фильтри</a>
                 </h5>
             </div>
-            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
@@ -130,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="control-label" th:text="#{doc_outgoing.content}">Хатнинг кискача мазмуни</label>
@@ -147,9 +147,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group col-md-2 col-sm-12 form-button-container">
-                                <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>
-                            </div>
+<!--                            <div class="form-group col-md-2 col-sm-12 form-button-container">-->
+<!--                                <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </form>
@@ -189,7 +189,7 @@
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0" th:text="#{sys_document.taskDeadline}">Ижро муддати
                                             </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0"  th:text="#{sys_document.taskStatus}">Жорий
+                                            <th aria-controls="responsive-table-model" colspan="1" rowspan="1" style="width: 140px;" tabindex="0"  th:text="#{sys_document.taskStatus}">Жорий
                                                 ҳолати
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0" th:text="#{sys_document.resolution}">Резолюция ва
@@ -278,7 +278,6 @@
                 dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                 dropDownValues[0].innerHTML = `
                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
-                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
                 `;
                 dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
 
@@ -288,20 +287,15 @@
     function renderChangeColumn(data, type, row, meta) {
         let editlink = 'doc/outgoing_mail/change_column';
         let html = '';
-        let idToChangeOne, idToChangeTwo;
+        let idToChange;
         let current;
-        if(data === "New"){
-            current = 1;
-            idToChangeOne = 2;
-            idToChangeTwo = 3;
-        }else if(data === "InProgress"){
+
+        if(data === "New" || data === "InProgress"){
             current = 2;
-            idToChangeOne = 1;
-            idToChangeTwo = 3;
+            idToChange = 3;
         }else if(data == "Completed"){
             current = 3;
-            idToChangeOne = 1;
-            idToChangeTwo = 2;
+            idToChange = 2;
         }
 
         html += `<div class="btn-group mb-2 mr-2">
@@ -313,9 +307,7 @@
                          aria-expanded="false"><span class="sr-only">Toggle
                              Dropdown</span></button>
                      <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
-                       <!--  <button class="dropdown-item">InProgress</button> -->
+                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChange})">${statuses[idToChange]}</button>
                      </div>
                  </div>`;
 
@@ -330,7 +322,7 @@
             serverSide: true,
             scrollX: true,
             pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
@@ -339,10 +331,6 @@
 
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
-
-                //    dataToSend.doctype_id = $('#typeId').val().trim();
-                // dataToSend.name = $('#name').val().trim();
-                // dataToSend.status = document.querySelector('#status').value;
 
                 dataToSend.document_organization_id = $('#document_organization_id').val();
                 dataToSend.registration_number = $('#registration_number').val();
@@ -403,6 +391,9 @@
     $(document).ready(function () {
         dataDatatableSelector = $('#dynamicTable');
         thead = dataDatatableSelector.html();
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        });
         datatableConnect();
     });
 
