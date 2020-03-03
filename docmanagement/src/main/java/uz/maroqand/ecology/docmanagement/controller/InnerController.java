@@ -188,7 +188,9 @@ public class InnerController {
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
-                    documentTaskSub.getStatus()
+                    documentTaskSub.getStatus(),
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+
             });
         }
 

@@ -8,6 +8,9 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        a{
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -449,7 +452,7 @@
                                             <th class="sorting w-10" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                             </th>
-                                            <th class="sorting w-20" aria-controls="responsive-table-model" >
+                                            <th class="sorting w-20 font-weight-bold" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
                                             </th>
                                             <th class="sorting w-10" aria-controls="responsive-table-model" >
@@ -487,6 +490,7 @@
         let getListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DashboardDocList}]];
         let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
         let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
+        let statusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).TaskChangeStatus}]];
         var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -519,36 +523,63 @@
 
 
 
-       /* function renderChangeColumn(data, type, row, meta) {
-            let editlink = 'doc/outgoing_mail/change_status';
-            let databack = row[6];
+        function renderChangeColumn(data, type, row, meta) {
+            let databack = row[8];
+            let current=databack;
             let html = '';
-            //console.log(row);
-           // console.log(meta);
-            // console.log(meta);
-
-
-            let stringOne, stringTwo;
             let idToChangeOne, idToChangeTwo;
-            let current;
             let color_attribute = 'btn-primary';
             let color = 'color-primary';
-            if(databack === 1){
-                current = 1;
-                color_attribute = 'btn-primary';
+            switch (databack) {
+                case 0:
+                    color_attribute = 'btn-info';
+                    color = 'color-yellow';
+                    break;
+                case 1:
+                    current=1;
+                    idToChangeOne = 2;
+                    idToChangeTwo = 3;
+                    color_attribute = 'btn-primary';
+                    color = 'color-yellow';
+                    break;
+                case 2:
+                    current=2;
+                    idToChangeOne = 1;
+                    idToChangeTwo = 3;
+                    color_attribute = 'btn-primary';
+                    color = 'color-yellow';
+                    break;
+                case 3:
+                    current=3;
+                    idToChangeOne = 1;
+                    idToChangeTwo = 2;
+                    color_attribute = 'btn-primary';
+                    color = 'color-yellow';
+                    break;
+                case 4:
+                    color_attribute = 'btn-secondary';
+                    color = 'color-yellow';
+                    break;
+                case 5:
+                    color_attribute = 'btn-light';
+                    color = 'color-yellow';
+                    break;
 
-            }else if(databack === 2){
-                current = 2;
-                color_attribute = 'btn-warning';
-                color = 'color-yellow'
-            }else if(databack == 3){
-                current = 3;
-                color_attribute = 'btn-success';
-                color = 'color-green'
             }
-
-
-            html += `<button type="button" class="btn btn-rounded ${color_attribute} btn-sm mb-2 mr-2 m0 w100">${statuses[current]}</button>`;
+            if (databack>=1 && databack<=3){
+                html += `<div class="btn-group mb-2 mr-2 w-100">
+                            <button type="button" class="btn-block btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
+                            <button type="button" class="pl-1 pr-1 btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                             <div class="dropdown-menu">
+                                 <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
+                                 <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
+                             </div>
+                        </div>`;
+            }else{
+                html+=`<button type="button" class="btn-block btn btn-outline-primary btn-rounded btn-sm">${statuses[current]}</button>`;
+            }
 
             return html;
         }
@@ -556,7 +587,7 @@
         function changeStatus(btn, id, targetStatus){
             dropDownValues = $(btn).parent();
 
-            fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
+            fetch(statusLink + `?id=${id}&target_status_id=${targetStatus}`)
                 .then((response) =>{
                     if(response.ok){
                         console.log(response);
@@ -566,33 +597,26 @@
                 .then((data) => {
                     console.log(data);
                     dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
-                    dropDownValues[0].innerHTML = `
-                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
-                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
-                `;
+                    dropDownValues[0].innerHTML = `<button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
+                                                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>`;
                     dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
-
                 })
-        }*/
+        }
 
-        function renderStatusColumn(data, type, row, meta) {
+        /*function renderStatusColumn(data, type, row, meta) {
             var html = '';
             var status=row[8];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info">'+statuses[status]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+statuses[status]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-primary">'+statuses[status]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary">'+statuses[status]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light">'+statuses[status]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+statuses[status]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+statuses[status]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+statuses[status]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+statuses[status]+'</button>';return html;
             }
             return html;
-        }
-
-
-
-
+        }*/
 
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
@@ -614,39 +638,7 @@
             html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
-        function drawColors() {
-            try{
-                setTimeout(function(){
-                    $('#responsive-table-model > tbody  > tr').each(function(row,item) {
-                        if(item.cells[5].children[0].classList[2] === 'btn-success') {
-                            $(item.cells[0].children[0]).addClass('color-green')
-                            $(item.cells[1].children[0]).addClass('color-green')
-                            $(item.cells[3]).addClass('color-green')
-                            $(item.cells[4]).addClass('color-green')
-                            $(item.cells[6]).addClass('color-green')
-                        }
-                        else if(item.cells[5].children[0].classList[2] === 'btn-primary') {
-                            $(item.cells[0].children[0]).addClass('color-primary')
-                            $(item.cells[1].children[0]).addClass('color-primary')
-                            $(item.cells[3]).addClass('color-primary')
-                            $(item.cells[4]).addClass('color-primary')
-                            $(item.cells[6]).addClass('color-primary')
-                        }
-                        else if(item.cells[5].children[0].classList[2] === 'btn-warning') {
-                            $(item.cells[0].children[0]).addClass('color-yellow')
-                            $(item.cells[1].children[0]).addClass('color-yellow')
-                            $(item.cells[3]).addClass('color-yellow')
-                            $(item.cells[4]).addClass('color-yellow')
-                            $(item.cells[6]).addClass('color-yellow')
-                        }
-                        console.log(item.cells[0].children[0])
-                    });
-                },250)
-            }
-            catch(e) {
-                console.log(e)
-            }
-        }
+
         function datatableConnect() {
             dataDatatableSelector.DataTable({
                 processing: true,
@@ -693,7 +685,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                             return html;
                         },
                         className: "w-15 text-center"
@@ -701,29 +693,36 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'">' + row[2]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"
                     },
                     {data: 3, name: 'document.content',className: "w-20 text-center"},
                     {data: 4, name: 'createdAt',className: "w-10 text-center"},
-                    {data: 5, name: 'dueDate',className: "w-10 text-center"},
-                    {render: renderStatusColumn, name: "status",className: "w-10 text-center"},
+                    {data: 5, name: 'dueDate',
+                        render: function (data, type, row, meta) {
+                            var html = row[5] + ' <br/>' + row[9][1];
+                            return html;
+                        },
+                        className: "w-10 text-center"},
+                    {render: renderChangeColumn, name: "status",className: "w-10 text-center"},
                     {data: 7, name: 'resolution',orderable: false,
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += row[7];
                             return html;
                         },
-                        className: "text-center"
+                        className: "text-justify"
                     },
                     // {render: renderActionsColumn, orderable: false}
                 ],
+                rowCallback: function (row, data) {
+                    $(row).children().addClass(data[9][0]);
+                },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
-                },
-                initComplete: drawColors()
+                }
             });
 
         }

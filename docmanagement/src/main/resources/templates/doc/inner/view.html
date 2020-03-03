@@ -306,6 +306,7 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="taskId" th:value="${documentTask.id}"/>
                         <hr class="m20-vertical">
                         <div class="row">
                             <div class="flex-center w100 row-wrap">
@@ -349,7 +350,7 @@
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
-                        <button type="button" style="width:160px" th:text="${documentTaskSub.getStatusName(documentTaskSub.status)}" class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0 col-sm-4"></button>
+                        <button type="button" style="width:160px" th:text="#{${documentTaskSub.getStatusName(documentTaskSub.status)}}" class="btn btn-rounded btn-primary btn-sm mb-2 mr-2 m0 col-sm-4"></button>
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_new_status}">Хужжатнинг янги статуси</span>

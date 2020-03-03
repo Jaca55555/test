@@ -1,6 +1,9 @@
 package uz.maroqand.ecology.docmanagement.service.interfaces;
 
+import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.List;
 
@@ -20,5 +23,7 @@ public interface DocumentLogService {
     DocumentLog create(DocumentLog documentLog);
 
     DocumentLog update(DocumentLog documentLog);
+
+    DocumentLog createLog(DocumentLog documentLog,Integer logTypeId, List<Integer> file_ids, String beforeStatus, String beforeStatusColor, String afterStatus, String afterStatusColor, Integer createdById);
 
 }

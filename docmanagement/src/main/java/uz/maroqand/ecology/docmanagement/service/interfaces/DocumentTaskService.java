@@ -62,4 +62,7 @@ public interface DocumentTaskService {
             Pageable pageable
     );
 
+    //taskOrsubTask==true  task
+    //taskOrsubTask==false  taskSub
+    List<String> getDueColor(Date date, boolean taskOrsubTask, Integer statusId, String locale);
 }

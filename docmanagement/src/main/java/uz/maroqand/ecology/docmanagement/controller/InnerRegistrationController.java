@@ -126,7 +126,9 @@ public class InnerRegistrationController {
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
                     documentTask.getContent(),
-                    documentTask.getStatus()
+                    documentTask.getStatus(),
+                    documentTaskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
+
             });
         }
 

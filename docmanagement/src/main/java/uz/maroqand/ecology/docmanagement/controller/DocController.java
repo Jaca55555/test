@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -45,6 +46,7 @@ public class DocController {
     private final DocumentOrganizationService documentOrganizationService;
     private final HelperService helperService;
     private final DocumentSubService documentSubService;
+    private final DocumentTaskSubService taskSubService;
 
     @Autowired
     public DocController(
@@ -56,7 +58,7 @@ public class DocController {
             DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService,
             HelperService helperService,
-            DocumentSubService documentSubService) {
+            DocumentSubService documentSubService, DocumentTaskSubService taskSubService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -66,6 +68,7 @@ public class DocController {
         this.documentOrganizationService = documentOrganizationService;
         this.helperService = helperService;
         this.documentSubService = documentSubService;
+        this.taskSubService = taskSubService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -129,6 +132,7 @@ public class DocController {
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         for (DocumentTask documentTask : documentTaskList) {
+            System.out.println("id==" + documentTask.getId());
             Document document = documentService.getById(documentTask.getDocumentId());
             JSONArray.add(new Object[]{
                     documentTask.getId(),
@@ -139,7 +143,8 @@ public class DocController {
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     helperService.getTranslation(documentTask.getStatusName(documentTask.getStatus()),locale),
                     documentTask.getContent(),
-                    documentTask.getStatus()
+                    documentTask.getStatus(),
+                    taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
             });
         }
 
@@ -209,23 +214,13 @@ public class DocController {
     ) {
         String locale = LocaleContextHolder.getLocale().getLanguage();
         User user = userService.getCurrentUserFromContext();
-        documentLog.setCreatedById(user.getId());
-        documentLog.setType(1);
-        if (file_ids != null) {
-            Set<File> files = new LinkedHashSet<>();
-            for (Integer id : file_ids) {
-                files.add(fileService.findById(id));
-            }
-            documentLog.setContentFiles(files);
-        }
-        documentLog = documentLogService.create(documentLog);
-        documentLog.setCreatedBy(userService.findById(documentLog.getCreatedById()));
         HashMap<String,Object> resutl = new HashMap<>();
+        DocumentLog documentLog1 = documentLogService.createLog(documentLog,DocumentLogType.Comment.getId(),file_ids,"","","","",user.getId());
         resutl.put("status", "success");
         resutl.put("createName", user.getFullName());
         resutl.put("createPosition", user.getPositionId()!=null?helperService.getUserPositionName(user.getPositionId(),locale):"");
-        resutl.put("createdAt", Common.uzbekistanDateAndTimeFormat.format(documentLog.getCreatedAt()));
-        resutl.put("log", documentLog);
+        resutl.put("createdAt", Common.uzbekistanDateAndTimeFormat.format(documentLog1.getCreatedAt()));
+        resutl.put("log", documentLog1);
         return resutl;
     }
 
@@ -254,5 +249,47 @@ public class DocController {
 
 
         return DocTemplates.DocumentOpenView;
+    }
+
+    @RequestMapping(value = DocUrls.TaskChangeStatus, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody HashMap<String, Object> taskChangeStatus(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "target_status_id")Integer statusId
+    ){
+        System.out.println("id: " + id + ", statusId: " + statusId);
+        HashMap<String, Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        DocumentTask documentTask = taskService.getById(id);
+        switch (statusId){
+            case 1:
+                documentTask.setStatus(TaskStatus.New.getId());
+                result.put("first", helperService.getTranslation(TaskStatus.InProgress.getName(),locale));
+                result.put("firstId", 2);
+                result.put("second", helperService.getTranslation(TaskStatus.Checking.getName(),locale));
+                result.put("secondId", 3);
+                break;
+            case 2:
+                documentTask.setStatus(TaskStatus.InProgress.getId());
+                result.put("first", helperService.getTranslation(TaskStatus.New.getName(),locale));
+                result.put("firstId", 1);
+                result.put("second", helperService.getTranslation(TaskStatus.Checking.getName(),locale));
+                result.put("secondId", 3);
+                break;
+            case 3:
+                documentTask.setStatus(TaskStatus.Checking.getId());
+                result.put("first",helperService.getTranslation(TaskStatus.New.getName(),locale));
+                result.put("firstId", 1);
+                result.put("second", helperService.getTranslation(TaskStatus.InProgress.getName(),locale));
+                result.put("secondId", 2);
+                break;
+        }
+
+        documentTask.setUpdateAt(new Date());
+        documentTask.setUpdateById(userService.getCurrentUserFromContext().getId());
+
+        result.put("updatedAt", Common.uzbekistanDateFormat.format(new Date()));
+        result.put("changedOnStatusId", statusId);
+        taskService.update(documentTask);
+        return result;
     }
 }
