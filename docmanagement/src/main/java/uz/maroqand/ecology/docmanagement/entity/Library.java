@@ -23,8 +23,39 @@ public class Library implements Serializable {
     private String nameRu;
     @Column(name = "namekr")
     private String nameKr;
+    @Column(name = "ftext")
+    private String ftext;
+    @Column(name = "ftextru")
+    private String ftextRu;
+    @Column(name = "ftextkr")
+    private String ftextKr;
+
+    public String getFtext() {
+        return ftext;
+    }
+
+    public void setFtext(String ftext) {
+        this.ftext = ftext;
+    }
+
+    public String getFtextRu() {
+        return ftextRu;
+    }
+
+    public void setFtextRu(String ftextRu) {
+        this.ftextRu = ftextRu;
+    }
+
+    public String getFtextKr() {
+        return ftextKr;
+    }
+
+    public void setFtextKr(String ftextKr) {
+        this.ftextKr = ftextKr;
+    }
+
     @Column(name = "number")
-    private Integer number;
+    private String number;
     @Column(name = "ldate")
     private Date ldate;
     @Column(name = "category_id")
@@ -99,11 +130,11 @@ public class Library implements Serializable {
         this.nameKr = nameKr;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

@@ -53,6 +53,42 @@ public class LibraryServiceImpl implements LibraryService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+    private static Specification<Library> getFilterSpecification(String name,String ftext, String number, Date dateBegin, Date dateEnd,Integer categoryId) {
+        return (Specification<Library>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"));
+            }
+            if (ftext != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("ftext")),
+                        "%" + ftext.toLowerCase() + "%"));
+            }
+            if (number != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("number")),
+                        "%" + number.toLowerCase() + "%"));
+            }
+            if (categoryId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("categoryId"), categoryId));
+            }
+            if(dateBegin != null && dateEnd != null){
+                predicates.add(criteriaBuilder.between(root.get("ldate"), dateBegin ,dateEnd));
+            }
+            if(dateBegin != null && dateEnd == null){
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("ldate"), dateBegin));
+            }
+
+            if(dateBegin == null && dateEnd != null){
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("ldate"), dateEnd));
+            }
+
+            predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
     @Override
     public Library update(Library library) {
         return libraryRepository.save(library);
@@ -64,7 +100,6 @@ public class LibraryServiceImpl implements LibraryService {
         library.setCreatedAt(new Date());
         return libraryRepository.save(library);
     }
-
     @Override
     @CachePut(value = "libraryGetById", key = "#id")
     public Library updateByIdFromCache(Integer id) {
@@ -80,6 +115,10 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Page<Library> getFiltered(String name,Integer categoryId,Pageable pageable) {
         return libraryRepository.findAll(getFilteringSpecification(name,categoryId), pageable);
+    }
+    @Override
+    public Page<Library> getFilter(String name,String ftext, String number, Date dateBegin, Date dateEnd,Integer categoryId,Pageable pageable) {
+        return libraryRepository.findAll(getFilterSpecification(name,ftext,number,dateBegin,dateEnd,categoryId), pageable);
     }
 
 

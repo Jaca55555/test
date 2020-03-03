@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -55,7 +56,6 @@ public class LibraryController {
     public String getCategoryList(Model model,Integer id) {
         model.addAttribute("categories",libraryCategoryService.findAll());
         model.addAttribute("subcategories",libraryCategoryService.findAll());
-//        model.addAttribute("asd",libraryCategoryService.updateByIdFromCache(id));
         return DocTemplates.LibraryWindow;
     }
 //      Lists
@@ -81,6 +81,40 @@ public class LibraryController {
                     library.getName(),
                     library.getNumber(),
                     library.getLdate().toString().substring(0,11)
+            });
+        }
+
+        result.put("data", JSONArray);
+        return result;
+    }
+    @RequestMapping(value = DocUrls.LibraryListAjaxWindow,  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String, Object> getLibraryListAjaxWindow(
+            Pageable pageable,
+            @RequestParam(name = "name")String name,
+            @RequestParam(name = "ftext")String ftext,
+            @RequestParam(name = "number")String number,
+            @RequestParam(name = "dateBegin", required = false) String dateBeginStr,
+            @RequestParam(name = "dateEnd", required = false) String dateEndStr,
+            @RequestParam(name = "categoryId")Integer categoryId
+
+    ) {
+        dateBeginStr = StringUtils.trimToNull(dateBeginStr);
+        dateEndStr = StringUtils.trimToNull(dateEndStr);
+        Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
+        Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
+        HashMap<String, Object> result = new HashMap<>();
+        Page<Library> LibraryPage = libraryService.getFilter(name,ftext,number,dateBegin,dateEnd,categoryId, pageable);
+        List<Object[]> JSONArray = new ArrayList<>(LibraryPage.getContent().size());
+        for (Library library : LibraryPage.getContent()) {
+            JSONArray.add(new Object[]{
+                    library.getId(),
+                    library.getName(),
+                    library.getFtext(),
+                    library.getNumber(),
+                    library.getLdate().toString().substring(0,11),
+                    library.getCreatedAt().toString().substring(0,11),
+                    library.getCategoryId()!=null ? libraryCategoryService.getById(library.getCategoryId()).getName():""
             });
         }
 
@@ -114,8 +148,9 @@ public class LibraryController {
         library.setContentFiles(files);
         library.setCreated_by_id(user.getId());
         library.setLdate(ldate);
+
         libraryService.create(library);
-        return "redirect:" + DocUrls.LibraryList;
+        return "redirect:" + DocUrls.LibraryWindow;
     }
     @RequestMapping(value = DocUrls.LibraryView)
     public String getLibrary(Model model, @RequestParam(name = "id")Integer id) {

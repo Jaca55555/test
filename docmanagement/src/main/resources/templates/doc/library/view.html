@@ -64,6 +64,18 @@
                         <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_created_date}"></span></div>
                         <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(library.createdAt,'dd.MM.yyyy')}"></span></div>
                     </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftext}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftext}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftextRu}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftextRu}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftextKr}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftextKr}"></span></div>
+                    </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" id="fileContainer">
 
                     </div>

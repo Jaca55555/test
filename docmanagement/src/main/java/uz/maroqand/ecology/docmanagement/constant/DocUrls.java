@@ -110,6 +110,7 @@ public class DocUrls {
     private static final String Library = Prefix + "/library";
     public static final String LibraryList = Library + "/list";
     public static final String LibraryListAjax = Library + "/list_ajax";
+    public static final String LibraryListAjaxWindow = Library + "/list_ajax_window";
     public static final String LibraryView = Library + "/view";
     public static final String LibraryNew = Library + "/new";
     public static final String LibraryEdit = Library + "/edit";
