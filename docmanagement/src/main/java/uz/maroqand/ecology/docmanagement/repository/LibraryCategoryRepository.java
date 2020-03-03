@@ -1,10 +1,9 @@
 package uz.maroqand.ecology.docmanagement.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
+
 import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
 
 import java.util.List;

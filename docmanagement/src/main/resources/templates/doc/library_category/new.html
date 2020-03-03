@@ -24,7 +24,7 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12 parent-card">
         <div class="card">
-            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagement.entity.DocumentType"*/-->
+            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagement.entity.LibraryCategory"*/-->
             <div class="card-header flex-space-between-nowrap" id="headingOne" >
                 <h5 class="mb-0" th:if="${libraryCategory.id==null}" th:text="#{doc.doc_type_create}">Кирувчи хатни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${libraryCategory.id!=null}" th:text="#{doc.doc_type_edit}"> - <span th:text="${docType.name}"></span></h5>
@@ -61,7 +61,7 @@
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" th:field="*{parent}" >
                                     <option value=""> </option>
-                                    <option th:each="t:${librarycategory}" th:value="${t.id}" th:text="#{${t.name}}">
+                                    <option th:each="t:${librarycategory}" th:if="${t.parent==null}" th:value="${t.id}" th:text="#{${t.name}}">
                                     </option>
                                 </select>
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>

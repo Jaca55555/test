@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="uz">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap mb-0">
+                <h5 class="mb-0" style="align-self:center">
+                    <a href="" class="card-header-a collapsed" data-toggle="collapse"
+                       data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
+                        Кутубхона - Иш столи
+                    </a>
+                </h5>
+                <div>
+                    <input type="text" class="form-control">
+                    <i class="gray-search fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
+                </div>
+            </div>
+            <div th:each="i:${categories}">
+            <h5 class="office-h5 default-color" th:if="${i.parent==null}" th:text="${i.name}">Кирувчи хатлар статистикаси</h5>
+            <div class="responsive">
+
+                <div class="office-card">
+                    <div class="card dashboard-card border-primary-shadow" th:each="j:${subcategories}" th:if="${i.id==j.parent}" >
+                        <a href="" th:href="@{'/doc/library/list'(id=${j.id})}">
+                        <div class="file-icon-container-small color-purple ml-2"><span class="fas fa-book"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" >
+                            <h4 class="card-title" >10</h4>
+                            <h6 class="card-title"  th:text="${j.name}">Жами чикувчи хатлар</h6>
+                        </div>
+                        </a>
+                    </div>
+
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+
+</body>
+</html>
+
