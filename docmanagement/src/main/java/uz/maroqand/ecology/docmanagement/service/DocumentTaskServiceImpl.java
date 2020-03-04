@@ -177,7 +177,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     @Override
     public List<String> getDueColor(Date date, boolean taskOrTaskSub, Integer statusId,String locale) {
         List<String> result = new ArrayList<>();
-        if (date == null || statusId == null) return null;
+        if (date == null || statusId == null){
+            result.add("");
+            result.add("");
+            return result;
+        }
         Date nowDate = new Date();
         String colorText="";
         String dueText="";
