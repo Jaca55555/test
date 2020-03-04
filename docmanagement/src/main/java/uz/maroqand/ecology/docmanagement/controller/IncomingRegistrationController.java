@@ -54,6 +54,7 @@ public class IncomingRegistrationController {
     private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentOrganizationService documentOrganizationService;
 
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Autowired
@@ -70,8 +71,8 @@ public class IncomingRegistrationController {
             DocumentTaskService taskService,
             DocumentTaskSubService taskSubService,
             DocumentLogService documentLogService,
-            DocumentHelperService documentHelperService
-    ) {
+            DocumentHelperService documentHelperService,
+            DocumentOrganizationService documentOrganizationService) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
@@ -85,6 +86,7 @@ public class IncomingRegistrationController {
         this.organizationService = organizationService;
         this.documentViewService = documentViewService;
         this.documentHelperService = documentHelperService;
+        this.documentOrganizationService = documentOrganizationService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
@@ -118,11 +120,19 @@ public class IncomingRegistrationController {
         String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
+                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+            }
+            docContent+=" "+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
+                    docContent,
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",

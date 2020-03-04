@@ -20,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -98,7 +99,16 @@ public class OutgoingController {
             model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
             model.addAttribute("additional_document_view_link", DocUrls.OutgoingMailView + "?id=" + additionalDocument.getId());
         }
-        model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
+        String document_organization_name="";
+        Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
+        if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
+            for (DocumentOrganization documentOrganization: documentOrganizationSet) {
+                document_organization_name +=documentOrganization.getName() + ", ";
+            }
+        }else if (documentSub.getOrganizationId()!=null){
+            document_organization_name=documentSub.getOrganization().getName();
+        }
+        model.addAttribute("document_organization_name", document_organization_name);
 
         model.addAttribute("department_name", departmentService.getById(document.getDepartmentId()).getName());
         model.addAttribute("performer_name", document.getPerformerName());

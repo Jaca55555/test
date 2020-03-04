@@ -394,7 +394,7 @@
                     },
                     className: "w-10 text-center"
                 },
-                {data: 3, name: 'document.content',className: "w-20 text-center"},
+                {data: 3, name: 'document.content',className: "w-20 text-justify"},
                 {data: 4, name: 'createdAt',className: "w-10 text-center"},
                 {data: 5, name: 'dueDate',
                     render: function (data, type, row, meta) {
@@ -403,7 +403,7 @@
                     },
                     className: "w-10 text-center"},
                 {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',className: "w-20 text-center"},
+                {data: 7, name: 'content',className: "w-20 text-justify"},
                 {render: renderActionsColumn, orderable: false,className: "w-5 text-center"}
             ],
             rowCallback: function (row, data) {

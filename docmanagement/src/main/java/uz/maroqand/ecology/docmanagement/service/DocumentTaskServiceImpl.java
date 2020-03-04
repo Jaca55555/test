@@ -300,7 +300,6 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         String dueText="";
         String soatName = helperService.getTranslation("sys_hours",locale);
         String kunName = helperService.getTranslation("sys_day",locale);
-        System.out.println("interval=" + intervalHours + "  intervalDate=" + intervalDate);
         List<String> result = new ArrayList<>();
 
         if (intervalHours<48){

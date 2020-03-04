@@ -242,6 +242,17 @@ public class DocController {
             case 3: viewTag = "doc_inner";break;
             case 4: viewTag = "doc_appeal";break;
         }
+        DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
+        String document_organization_name="";
+        Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
+        if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
+            for (DocumentOrganization documentOrganization: documentOrganizationSet) {
+                document_organization_name +=documentOrganization.getName() + ", ";
+            }
+        }else if (documentSub.getOrganizationId()!=null){
+            document_organization_name=documentSub.getOrganization().getName();
+        }
+        model.addAttribute("document_organization_name", document_organization_name);
 
         model.addAttribute("view_tag" ,viewTag);
         model.addAttribute("document" ,document);

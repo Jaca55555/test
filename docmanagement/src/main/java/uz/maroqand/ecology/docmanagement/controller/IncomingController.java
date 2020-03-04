@@ -17,10 +17,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
@@ -40,6 +37,7 @@ public class IncomingController {
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentLogService documentLogService;
+    private final DocumentOrganizationService documentOrganizationService;
 
     public IncomingController(
             UserService userService,
@@ -49,8 +47,8 @@ public class IncomingController {
             DocumentSubService documentSubService,
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
-            DocumentLogService documentLogService
-    ) {
+            DocumentLogService documentLogService,
+            DocumentOrganizationService documentOrganizationService) {
         this.userService = userService;
         this.positionService = positionService;
         this.helperService = helperService;
@@ -59,6 +57,7 @@ public class IncomingController {
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
+        this.documentOrganizationService = documentOrganizationService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -182,11 +181,19 @@ public class IncomingController {
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
             Document document = documentService.getById(documentTaskSub.getDocumentId());
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
+                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+            }
+            docContent+=" "+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
+                    docContent,
                     documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
