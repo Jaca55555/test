@@ -231,13 +231,14 @@ public class IncomingController {
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
         model.addAttribute("task", task);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
-        model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), documentTaskSub.getId()));
+        model.addAttribute("logs", documentLogService.getAllByDocAndTaskSubId(document.getId(), documentTaskSub.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
@@ -356,46 +357,41 @@ public class IncomingController {
     @RequestMapping(DocUrls.DocumentTaskChange)
     @ResponseBody
     public HashMap<String, Object> changeTaskStatus(
-            @RequestParam(name = "content", required = false)String content,
             @RequestParam(name = "taskStatus")Integer status,
-            @RequestParam(name = "taskId")Integer taskId,
-            @RequestParam(name = "addDocId", required = false)Integer additionalDocId,
-            @RequestParam(name = "docId")Integer docId
+            @RequestParam(name = "taskSubId")Integer taskSubId,
+            DocumentLog documentLog
     ) {
         HashMap<String, Object> response = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
 
 
-        DocumentTaskSub taskSub = documentTaskSubService.getById(taskId);
+        DocumentTaskSub taskSub = documentTaskSubService.getById(taskSubId);
+        TaskSubStatus oldStatus = TaskSubStatus.getTaskStatus(taskSub.getStatus());
+        TaskSubStatus newStatus = TaskSubStatus.getTaskStatus(status);
         taskSub.setStatus(status);
-        taskSub.setContent(content);
+        taskSub.setContent(documentLog.getContent());
         taskSub.setUpdateById(user.getId());
-        taskSub.setAdditionalDocumentId(additionalDocId);
+        taskSub.setAdditionalDocumentId(documentLog.getAttachedDocId());
         taskSub = documentTaskSubService.update(taskSub);
-
-        DocumentLog log = new DocumentLog();
-        log.setCreatedById(user.getId());
-        log.setContent(content);
-        log.setDocumentId(docId);
-        log.setType(2);
-        log.setAttachedDoc(documentService.getById(additionalDocId));
-        log.setAttachedDocId(additionalDocId);
-        log.setTaskSubId(taskSub.getId());
-        documentLogService.create(log);
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         String logAuthorPos = positionService.getById(user.getPositionId()).getName();
+        DocumentLog documentLog1 =  documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),null,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
 
         DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
-        if (documentTask!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
+        if (documentTask!=null && documentTask.getPerformerId()!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
                 documentTask.setStatus(TaskStatus.Checking.getId());
                 documentTaskService.update(documentTask);
         }
-
+        Document document = documentService.getById(documentLog1.getAttachedDocId());
         response.put("task", taskSub);
         response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
         response.put("status", "success");
-        response.put("log", log);
+        response.put("log", documentLog1);
         response.put("logCreateName", user.getFullName());
         response.put("logCreatePosition", logAuthorPos);
+        response.put("registrationNumber", document!=null?document.getRegistrationNumber():"");
+        response.put("beforeStatus", helperService.getTranslation(documentLog1.getBeforeStatus(),locale));
+        response.put("afterStatus", helperService.getTranslation(documentLog1.getAfterStatus(),locale));
         return response;
     }
 }

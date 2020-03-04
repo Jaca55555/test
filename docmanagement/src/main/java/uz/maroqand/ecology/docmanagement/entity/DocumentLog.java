@@ -56,7 +56,7 @@ public class DocumentLog
     private Integer taskSubId;
 
     @ManyToOne
-    @JoinColumn(name = "task_sub", insertable = false, updatable = false)
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
     private DocumentTask task;
 
     @Column(name = "task_id")

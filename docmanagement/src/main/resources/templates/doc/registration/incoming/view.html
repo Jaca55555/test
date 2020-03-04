@@ -27,10 +27,7 @@
         transform: translate(-50%, -50%);
         display: none;
     }
-    .comment-content{
-        max-height: 600px;
-        overflow: auto;
-    }
+
 </style>
 </head>
 <body>
@@ -217,7 +214,7 @@
                         </div>
                     </div>
                     <div class="card-body comment-content" th:id="'comments'+${task.id}">
-                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}" th:if="${log.taskId==task.id}">
                             <div>
                                 <div class="inline-block">
                                     <i class="fas fa-user-circle fs40 color-gray column-1"></i>
@@ -230,6 +227,23 @@
                             </div>
                             <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
                                 10.05.2019 - 09:35
+                            </div>
+                            <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
+                                <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
+                                    <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.beforeStatus}}"></span>
+                                    </button>
+                                </div>
+                                <div class="col-sm-2" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                    <button type="button" class="btn-block btn btn-light btn-sm btn-rounded">
+                                        <i class="feather icon-arrow-right mr-0"></i>
+                                    </button>
+                                </div>
+                                <div class="col-sm-5 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                    <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.afterStatusColor}">
+                                        <span  th:text="#{${log.afterStatus}}"></span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="w100"></div>
                             <div class="column-2 mt-3">
@@ -247,7 +261,7 @@
                                 <div class="column-2 mt-3 d-flex">
                                     <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>
                                     <span class='mdi mdi-file-upload-outline fs30 color-green'></span>
-                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView} + '?id=' + ${log.attachedDoc.id}" th:text="${log.attachedDoc.registrationNumber}"></a>
+                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView} + '?id=' + ${log.attachedDoc.id}" th:text="${log.attachedDoc.registrationNumber}"></a>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +273,6 @@
         <hr class="m20-vertical">
         <div class="flex-center w100 row-wrap">
             <a th:if="${document.status!=T(uz.maroqand.ecology.docmanagement.constant.DocumentStatus).Completed}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
-            <!--<button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2" th:text="#{doc_incoming.newTask}">Ижро холатини белгилаш</button>-->
         </div>
 
     </div>
@@ -277,7 +290,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <form th:action="${comment_url}" id="commentForm">
+                    <form th:action="${comment_url}" id="commentForm" th:object="${documentLog}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <input type="hidden" name="documentId" th:value="${document.id}">
                         <input type="hidden" name="taskId" id="taskId">
@@ -431,7 +444,7 @@
     });
 
     var urlAction = [[${comment_url}]];
-    let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}]] + '?id=';
+    let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
 
     $(document).ready(function () {
             docFileName([[${document.contentFiles}]]);
@@ -446,22 +459,22 @@
                     console.log(data);
                     if (data.status === 'success') {
                         let log = data.log;
-                        let html =
-"                        <div class=\"comment-item flex-space-between\">\n" +
-"                            <div>\n" +
-"                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
-"                                </i></div>\n" +
-"                                <div class=\"inline-block m10-horizontal\">\n" +
-"                                    <span class=\"color-primary bold\">"+ data.createName +"</span>\n" +
-"                                    <br>\n" +
-"                                    <span>" + data.createPosition + "</span>\n" +
-"                                </div>\n" +
-"                            </div>\n" +
-"                            <div class=\"fs11\">" + data.createdAt + "</div>\n" +
-"                            <div class=\"w100\"></div>\n" +
-"                            <div class=\"column-2 mt-3\">\n" +
-"                                <span>" + log.content + "</span>\n" +
-"                            </div>\n";
+                        let html =" <div class=\"comment-item flex-space-between\">\n" +
+                            "           <div>\n" +
+                            "               <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\"></i>" +
+                            "           </div>" +
+                            "           <div class=\"inline-block m10-horizontal\">\n" +
+                            "               <span class=\"color-primary bold\">"+ data.createName +"</span>\n" +
+                            "               <br>\n" +
+                            "               <span>" + data.createPosition + "</span>\n" +
+                            "           </div>\n" +
+                            "       </div>\n" +
+                            "       <div class=\"fs11\">" + data.createdAt + "</div>\n" +
+                            "       <div class=\"w100\"></div>\n" +
+                            "       <div class=\"column-2 mt-3\">\n" +
+                            "           <span>" + log.content + "</span>\n" +
+                            "       </div>\n";
+
                         if (log.contentFiles != null) {
                             for (let file of log.contentFiles) {
                                 html += "<div class='w100'></div>\n" +
@@ -471,17 +484,8 @@
                                     "</div>\n"
                             }
                         }
-                        if (log.attachedDoc!=null) {
-                            let doc = log.attachedDoc;
-                            html += '<div class="w100"></div>\n' +
-                                '   <div class="column-2 mt-3 d-flex">\n' +
-                                '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
-                                '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
-                                '       <a class="d-flex align-self-center" href="'+attachedDocView + doc.id +'">'+ doc.registrationNumber + '</a>\n' +
-                                '   </div>\n';
-                        }
 
-                        html +="\n</div>";
+                        html +="</div>";
                         $('#comments'+log.taskId).prepend(html);
                         $('#modal1').modal('toggle');
                         $('#taskId').val('');

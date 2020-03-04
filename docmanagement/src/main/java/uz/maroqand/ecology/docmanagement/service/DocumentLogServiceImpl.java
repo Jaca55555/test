@@ -38,12 +38,12 @@ public class DocumentLogServiceImpl implements DocumentLogService {
 
     @Override
     public List<DocumentLog> getAllByDocId(Integer docId) {
-        return logRepository.findAllByDocumentIdOrderByIdDesc(docId);
+        return logRepository.findByDocumentIdOrderByIdDesc(docId);
     }
 
     @Override
-    public List<DocumentLog> getAllByDocAndTaskId(Integer docId, Integer taskId) {
-        return logRepository.findAllByDocumentIdAndTaskSubIdOrderByIdDesc(docId, taskId);
+    public List<DocumentLog> getAllByDocAndTaskSubId(Integer docId, Integer taskSubId) {
+        return logRepository.findAllByDocumentIdAndTaskSubIdOrderByIdDesc(docId, taskSubId);
     }
 
     @Override
