@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="uz">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap mb-0">
+                <h5 class="mb-0" style="align-self:center">
+                    <a href="" class="card-header-a collapsed" data-toggle="collapse"
+                       data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
+                        Кутубхона - Иш столи
+                    </a>
+                </h5>
+            </div>
+            <div th:each="i:${categories}">
+            <h5 class="office-h5 default-color" th:if="${i.parent==null}" th:text="${i.name}">Кирувчи хатлар статистикаси</h5>
+            <div class="responsive">
+
+                <div class="office-card">
+                    <div class="card dashboard-card border-primary-shadow" th:each="j:${subcategories}" th:if="${i.id==j.parent}" >
+                        <a href="" th:href="@{'/doc/library/list'(id=${j.id})}">
+                        <div class="file-icon-container-small color-purple ml-2"><span class="fas fa-book"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" >
+                            <h4 class="card-title" >10</h4>
+                            <h6 class="card-title"  th:text="${j.name}">Жами чикувчи хатлар</h6>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<!--    List-->
+
+    <div class="tab-content" id="myTabContent">
+        <div class="row p10" style="padding-bottom: 0px;">
+            <div class="form-group col-md-2 col-sm-12">
+                <label for="number" class="control-label" th:text="#{doc_library.RegNumber}">Хат рақами</label>
+                <input type="text" class="form-control" id="number" />
+            </div>
+            <div class="form-group col-md-2 col-sm-12">
+                <label for="name" class="control-label"><span th:text="#{doc_library.Name}">Руйхатга олиш рақами</span></label>
+                <input type="text" class="form-control" id="name" />
+            </div>
+            <div class="form-group col-md-3 col-sm-12">
+                <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
+                <div class="row">
+                    <div class="col-6" style="padding-left: 0;">
+                        <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
+                        <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                    </div>
+                    <div class="col-6" style="padding-right:0;">
+                        <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
+                        <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-sm-12">
+                <label for="categoryId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
+                <select class="form-control" id="categoryId" >
+                    <option value="">Танлаш</option>
+                    <option th:each="t:${categories}" th:if="${t.parent!=null}" th:value="${t.id}" th:text="#{${t.name}}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-sm-12 form-group">
+                <label class="control-label">Хатнинг қисқача мазмуни</label>
+                <textarea  class="form-control" name="validation-text"
+                          placeholder="Хатнинг қисқача махзмунини киритинг." id="ftext" ></textarea>
+            </div>
+            <div class="form-group col-md-2 col-sm-12">
+                <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">
+                    <span th:text="#{doc_library.search}">Қидириш</span>
+                </button>
+            </div>
+        </div>
+        <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="table-responsive">
+                <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive">
+                            <table id="responsive-table-model" aria-describedby="responsive-table-model_info"
+                                   class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th th:text="#{doc.id}">ID</th>
+                                    <th th:text="#{doc.library_name}"></th>
+                                    <th th:text="#{doc.library_ftext}"></th>
+                                    <th th:text="#{doc.library_number}"></th>
+                                    <th th:text="#{doc.library_date}"></th>
+                                    <th th:text="#{doc.library_Createddate}"></th>
+                                    <th th:text="#{doc.library_categoryId}"></th>
+
+                                    <th th:text="#{actions}"></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    ListEnd-->
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+
+<script th:inline="javascript">
+    var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryView}]];
+    var ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryListAjaxWindow}]];
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    var dataDatatableSelector;
+    var thead;
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+
+
+    function renderActionsColumn(data, type, row, meta) {
+        var html = '';
+        html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+
+                dataToSend.page = api !== undefined ? api.page() : 0;
+                dataToSend.size = api !== undefined ? api.page.len() : 25;
+
+                dataToSend.name = $('#name').val();
+                dataToSend.number= $('#number').val();
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
+                dataToSend.categoryId = $('#categoryId').val();
+                dataToSend.ftext = $('#ftext').val();
+
+
+
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post(ajaxListLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'name',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    }
+                },
+                {data: 2, name: 'ftext'},
+                {data: 3, name: 'number'},
+                {data: 4, name: 'ldate'},
+                {data: 5, name: 'createdAt'},
+                {data: 6, name: 'categoryId'},
+                {render: renderActionsColumn, orderable: false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#responsive-table-model');
+
+        dataDatatableSelector.css("width", "100%");
+        thead = dataDatatableSelector.html();
+        getDatatableConnect();
+
+
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        })
+    })
+</script>
+</body>
+</html>
+

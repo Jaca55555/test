@@ -102,6 +102,30 @@ public class DocUrls {
     public static final String DocTypeEdit = DocType + "/edit";
     public static final String DocTypeDelete = DocType + "/delete";
 
+    private static final String LibraryCategory = Prefix + "/library_category";
+    public static final String LibraryCategoryList = LibraryCategory + "/list";
+    public static final String LibraryCategoryListAjax = LibraryCategory + "/list_ajax";
+    public static final String LibraryCategoryView = LibraryCategory + "/view";
+    public static final String LibraryCategoryNew = LibraryCategory + "/new";
+    public static final String LibraryCategoryEdit = LibraryCategory + "/edit";
+    public static final String LibraryCategoryDelete = LibraryCategory + "/delete";
+
+
+    private static final String Library = Prefix + "/library";
+    public static final String LibraryList = Library + "/list";
+    public static final String LibraryListAjax = Library + "/list_ajax";
+    public static final String LibraryListAjaxWindow = Library + "/list_ajax_window";
+    public static final String LibraryView = Library + "/view";
+    public static final String LibraryNew = Library + "/new";
+    public static final String LibraryEdit = Library + "/edit";
+    public static final String LibraryDelete = Library + "/delete";
+    public static final String LibraryWindow = Library + "/window";
+    public static final String LibraryFile = Library + "/file";
+    public static final String LibraryFileUpload = LibraryFile + "/upload";
+    public static final String LibraryFileDownload = LibraryFile + "/download";
+    public static final String LibraryFileDelete = LibraryFile + "/delete";
+
+
     private static final String Journal = Prefix + "/journal";
     public static final String JournalList = Journal + "/list";
     public static final String JournalListAjax = Journal + "/list_ajax";

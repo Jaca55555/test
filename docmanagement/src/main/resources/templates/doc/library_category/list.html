@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 class="mb-0" th:text="#{doc.doc_type_list_heading}"></h5>
+                <div>
+                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryNew}" class="btn btn-rounded btn-success btn-sm ml-2 m0" th:text="#{doc.libray_category}"></a>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="row" id="filter">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="name" class="control-label" th:text="#{doc.library_category_name}"></label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control" id="name">
+                            <i class="gray-search fas fa-search  color-gray"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="name" class="control-label" th:text="#{doc.library_category_parent}"></label>
+                        <div class="col-sm-12 p0">
+                            <input type="text" class="form-control" id="parent">
+                            <i class="gray-search fas fa-search  color-gray"></i>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- [ EntityList ] start -->
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="responsive-table-model" aria-describedby="responsive-table-model_info"
+                               class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
+                            <thead>
+                            <tr role="row">
+                                <th th:text="#{doc.id}">ID</th>
+                                <th th:text="#{doc.library_category_parent}"></th>
+                                <th th:text="#{doc.library_category_name}"></th>
+                                <th th:text="#{actions}"></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- [ EntityList ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+
+<script th:inline="javascript">
+    let ajaxListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryListAjax}]];
+    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryEdit}]];
+    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryView}]];
+    let deleteLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryDelete}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    let dataDatatableSelector;
+    let thead;
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        dataTableConnect();
+    }
+
+    function renderActionsColumn(data, type, row, meta) {
+
+        var html = '<div class="btn-group">';
+        html += '<a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="view">'
+            + '<i class="feather icon-eye" style="margin-right: 0;"></i></a>';
+        html += '<a class="btn btn-outline-warning btn-sm" href="'+editLink+'?id='+row[0]+'" title="edit">'
+            + '<i class="feather icon-edit" style="margin-right: 0;"></i></a>';
+        html += '<a class="btn btn-outline-danger btn-sm delete" onclick="return confirm(\'O`chirilsinmi?\')" href="'+deleteLink+'?id='+row[0]+'" title="delete">'
+            + '<i class="feather icon-delete" style="margin-right: 0;"></i></a></div>';
+        return html;
+    }
+
+    function dataTableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            scrollX: true,
+            pageLength: 25,
+            dom: 'lrtip',
+            lengthMenu: [[25, 50, 100], [25, 50, 100]],
+            order: [[0, 'asc']],
+
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'name'},
+                {data: 2, name: 'parent'},
+
+                {render: renderActionsColumn, orderable: false}
+            ],
+            ajax: function (dataToSend, callback, settings) {
+                let api = this.api();
+
+                dataToSend.page = api !== undefined ? api.page() : 0;
+                dataToSend.size = api !== undefined ? api.page.len() : 25;
+
+
+                dataToSend.name = $('#name').val();
+                dataToSend.parent = $('#parent').val();
+
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+                $.get(ajaxListLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#responsive-table-model');
+
+        dataDatatableSelector.css("width", "100%");
+        thead = dataDatatableSelector.html();
+        getDatatableConnect();
+
+
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        })
+    })
+</script>
+</body>
+</html>

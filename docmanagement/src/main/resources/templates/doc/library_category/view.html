@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagement.entity.LibraryCategory"*/-->
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 class="mb-0">
+                    <span class="card-header-a" th:text="#{doc.library_category_view}"></span>
+                    <span class="card-header-a" th:if="__${#locale}__=='uz' or __${#locale}__=='oz'" th:text="${libraryCategory.name}"></span>
+                    <span class="card-header-a" th:if="__${#locale}__=='ru'" th:text="${libraryCategory.nameRu}"></span>
+                </h5>
+
+            </div>
+            <div class="card-body">
+                <div class="row"  th:each="i:${libraryCategory}">
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_category_id}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.id}"></span></div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_category_name}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.name}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_category_name_ru}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.nameRu}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_category_parent}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.parent}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_category_create_date}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(libraryCategory.createdAt,'dd.MM.yyyy')}"></span></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>
