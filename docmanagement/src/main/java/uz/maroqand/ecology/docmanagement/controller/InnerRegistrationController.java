@@ -109,8 +109,46 @@ public class InnerRegistrationController {
         incomingRegFilter.setDateEndStr(StringUtils.trimToNull(registrationDateEnd));
         incomingRegFilter.setContent(StringUtils.trimToNull(content));
         incomingRegFilter.setDocumentOrganizationId(documentOrganizationId);
+
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<Integer> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+        tabFilter = tabFilter!=null?tabFilter:1;
+        switch (tabFilter){
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
+            case 5:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());
+                break;//Ижро назоратида
+            case 7:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Complete.getId());
+                break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
+            default:
+                break;//Жами
+        }
         //todo documentTypeId=3
-        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,null,null,null,null,null,null, pageable);
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,deadlineDateBegin,deadlineDateEnd,null,status,null,null, specialControll,pageable);
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
@@ -143,7 +181,6 @@ public class InnerRegistrationController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-
 
         DocumentTask documentTask = documentTaskService.getById(id);
         if (documentTask == null) {

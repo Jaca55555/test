@@ -115,6 +115,8 @@ public class InnerController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+
 
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
@@ -145,6 +147,9 @@ public class InnerController {
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
                 receiverId=null;
@@ -172,6 +177,7 @@ public class InnerController {
                 status,
                 departmentId,
                 receiverId,
+                specialControll,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -211,12 +217,11 @@ public class InnerController {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
 
-        Document document = documentService.getById(documentTaskSub.getDocumentId());
+        Document document = documentTaskSub.getDocument();
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
-
-        DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+        DocumentTask documentTask = documentTaskSub.getTask();
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
