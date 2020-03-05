@@ -41,9 +41,8 @@
                         <a href="" th:href="@{'/doc/library/list'(id=${j.id})}">
 
                         <div class="file-icon-container-small color-purple ml-2"><span class="fas fa-book"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;"  >
-    <h4 class="card-title" th:text="${j.count}">
-                        </h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" >
+    <h4 class="card-title" th:text="${@libraryServiceImpl.countByCategoryId(j.id)}"> </h4>
                             <h6 class="card-title"  th:text="${j.name}">Жами чикувчи хатлар</h6>
                         </div>
                         </a>

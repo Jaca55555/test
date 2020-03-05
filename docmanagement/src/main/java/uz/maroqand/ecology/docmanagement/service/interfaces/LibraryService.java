@@ -22,4 +22,5 @@ public interface LibraryService {
     Page<Library> getFiltered(String name,Integer categoryId, Pageable pageable);
     Page<Library> getFilter(String name,String ftext, String number, Date dateBegin, Date dateEnd,Integer categoryId,Pageable pageable);
     LibraryCategory getByCategoryId(Integer Id) throws IllegalArgumentException;
+    Integer countByCategoryId(Integer categoryId);
 }

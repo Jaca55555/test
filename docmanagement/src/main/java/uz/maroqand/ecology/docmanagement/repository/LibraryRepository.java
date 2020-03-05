@@ -14,7 +14,7 @@ import java.util.HashMap;
 public interface LibraryRepository extends DataTablesRepository<Library, Integer>, JpaRepository<Library, Integer>, JpaSpecificationExecutor<Library> {
 
 
-
+Integer countByCategoryId(Integer categoryId);
 
 }
 

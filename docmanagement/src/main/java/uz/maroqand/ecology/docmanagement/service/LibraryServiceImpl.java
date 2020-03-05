@@ -122,6 +122,11 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    public Integer countByCategoryId(Integer categoryId) {
+        return  libraryRepository.countByCategoryId(categoryId);
+    }
+
+    @Override
     public DataTablesOutput<Library> getAll(DataTablesInput input) {
         return null;
     }
