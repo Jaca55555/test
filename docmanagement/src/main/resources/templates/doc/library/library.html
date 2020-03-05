@@ -39,9 +39,11 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow" th:each="j:${subcategories}" th:if="${i.id==j.parent}" >
                         <a href="" th:href="@{'/doc/library/list'(id=${j.id})}">
+
                         <div class="file-icon-container-small color-purple ml-2"><span class="fas fa-book"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;" >
-                            <h4 class="card-title" >10</h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;"  >
+    <h4 class="card-title" th:text="${j.count}">
+                        </h4>
                             <h6 class="card-title"  th:text="${j.name}">Жами чикувчи хатлар</h6>
                         </div>
                         </a>
@@ -112,7 +114,6 @@
                                     <th th:text="#{doc.library_date}"></th>
                                     <th th:text="#{doc.library_Createddate}"></th>
                                     <th th:text="#{doc.library_categoryId}"></th>
-
                                     <th th:text="#{actions}"></th>
                                 </tr>
                                 </thead>
@@ -211,8 +212,6 @@
             }
         });
     }
-
-
     $(document).ready(function () {
         dataDatatableSelector = $('#responsive-table-model');
 

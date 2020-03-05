@@ -13,11 +13,14 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.docmanagement.entity.Library;
 
 
+import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
+import uz.maroqand.ecology.docmanagement.repository.LibraryCategoryRepository;
 import uz.maroqand.ecology.docmanagement.repository.LibraryRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.LibraryService;
 
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 @Service
@@ -25,11 +28,20 @@ public class LibraryServiceImpl implements LibraryService {
 
 
     private final LibraryRepository libraryRepository;
+    private final LibraryCategoryRepository libraryCategoryRepository;
 
     @Autowired
-    public LibraryServiceImpl(LibraryRepository libraryRepository) {
+    public LibraryServiceImpl(LibraryRepository libraryRepository,LibraryCategoryRepository libraryCategoryRepository) {
         this.libraryRepository = libraryRepository;
+        this.libraryCategoryRepository = libraryCategoryRepository;
     }
+
+    @Override
+    public LibraryCategory getByCategoryId(Integer CategoryId) throws IllegalArgumentException {
+        if(CategoryId==null) return null;
+        return libraryCategoryRepository.getOne(CategoryId);
+    }
+
     @Override
     @Cacheable(value = "libraryGetById", key = "#id", condition="#id != null", unless="#result == null")
     public Library getById(Integer id) throws IllegalArgumentException {
@@ -95,9 +107,11 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Library create(Library library) {
+    public Library create(Library library,LibraryCategory libraryCategory) {
         library.setDeleted(Boolean.FALSE);
         library.setCreatedAt(new Date());
+        LibraryCategory category=getByCategoryId(library.getCategoryId());
+        libraryCategory.setCount(category.getCount()+1);
         return libraryRepository.save(library);
     }
     @Override
@@ -120,6 +134,8 @@ public class LibraryServiceImpl implements LibraryService {
     public Page<Library> getFilter(String name,String ftext, String number, Date dateBegin, Date dateEnd,Integer categoryId,Pageable pageable) {
         return libraryRepository.findAll(getFilterSpecification(name,ftext,number,dateBegin,dateEnd,categoryId), pageable);
     }
+
+
 
 
 }
