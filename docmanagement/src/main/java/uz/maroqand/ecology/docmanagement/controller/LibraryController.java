@@ -23,8 +23,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.entity.Library;
 import org.springframework.web.multipart.MultipartFile;
-import uz.maroqand.ecology.core.entity.sys.File;
-import uz.maroqand.ecology.core.service.sys.FileService;
+
 import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
 import uz.maroqand.ecology.docmanagement.service.interfaces.LibraryCategoryService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.LibraryService;
@@ -53,9 +52,10 @@ public class LibraryController {
     }
 //    All Categories
     @RequestMapping(value = DocUrls.LibraryWindow)
-    public String getCategoryList(Model model,Integer id) {
+    public String getCategoryList(Model model) {
         model.addAttribute("categories",libraryCategoryService.findAll());
         model.addAttribute("subcategories",libraryCategoryService.findAll());
+//        model.addAttribute("count",libraryService.countByCategoryId());
         return DocTemplates.LibraryWindow;
     }
 //      Lists
@@ -123,17 +123,19 @@ public class LibraryController {
     }
 
     @RequestMapping(value = DocUrls.LibraryNew)
-    public String getNewLibrary(Model model) {
+    public String getNewLibrary(Model model,LibraryCategory libraryCategory) {
         model.addAttribute("action_url", DocUrls.LibraryNew);
         model.addAttribute("library", new Library());
         model.addAttribute("librarycategory",libraryCategoryService.findAll());
+//        libraryCategory.setCount(libraryCategory.getCount()+1);
         return DocTemplates.LibraryNew;
     }
     @RequestMapping(value = DocUrls.LibraryNew, method = RequestMethod.POST)
     public String createNewLibrary(
             Library library,
             @RequestParam(name = "file_ids")List<Integer> file_ids,
-            @RequestParam(name = "ldateStr") String ldateStr
+            @RequestParam(name = "ldateStr") String ldateStr,
+            LibraryCategory libraryCategory
 
     ) {
         Date ldate = DateParser.TryParse(ldateStr, Common.uzbekistanDateFormat);
@@ -149,7 +151,7 @@ public class LibraryController {
         library.setCreated_by_id(user.getId());
         library.setLdate(ldate);
 
-        libraryService.create(library);
+        libraryService.create(library,libraryCategory);
         return "redirect:" + DocUrls.LibraryWindow;
     }
     @RequestMapping(value = DocUrls.LibraryView)
