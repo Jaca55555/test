@@ -188,7 +188,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         date.setHours(23);
         date.setMinutes(59);
         Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
-        if (statusId==1 || statusId==0){ colorText+="font-weight-bold text-primary " ;}
+        if (statusId==1 || statusId==0){ colorText+="font-weight-bold text-primary" ;}
         if (statusId==2){ colorText+="text-primary " ;}
         if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 5)) {
             colorText+="text-success ";
@@ -307,7 +307,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         List<String> result = new ArrayList<>();
 
         if (intervalHours<48){
-            colorText+="text-danger ";
+            colorText+=" text-danger ";
             if (intervalHours<0){
                 dueText= helperService.getTranslation("due_text.passed",locale)+ ": ";
                 dueText+=intervalDate!=0?Math.abs(intervalDate)+" "+kunName:Math.abs(intervalHours)+" "+soatName;
@@ -318,7 +318,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         }else if (intervalHours <=72){
             dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
             dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
-            colorText+="text-warning";
+            colorText+=" text-warning ";
         }
 
         if (intervalHours>72 && intervalHours<=96){
