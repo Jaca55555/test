@@ -15,6 +15,8 @@ public class DocTemplates {
 
     public static final String Dashboard = Prefix + "/office";
 
+    public static final String DocumentOpenView = Prefix + "/all_doc/view";
+
     //kiruvchi xatlar
     public static final String IncomingList = Prefix + Incoming + "/list";
     public static final String IncomingView = Prefix + Incoming + "/view";

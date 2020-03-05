@@ -57,7 +57,7 @@ public class FolderServiceImpl implements FolderService {
                 predicates.add(criteriaBuilder.equal(root.get("id"), id));
 
             if(name != null)
-                predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
 
             if (dateBegin != null && dateEnd == null)
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));

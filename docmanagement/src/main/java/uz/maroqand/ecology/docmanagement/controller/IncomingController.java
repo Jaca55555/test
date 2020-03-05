@@ -17,10 +17,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
@@ -40,6 +37,7 @@ public class IncomingController {
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentLogService documentLogService;
+    private final DocumentOrganizationService documentOrganizationService;
 
     public IncomingController(
             UserService userService,
@@ -49,8 +47,8 @@ public class IncomingController {
             DocumentSubService documentSubService,
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
-            DocumentLogService documentLogService
-    ) {
+            DocumentLogService documentLogService,
+            DocumentOrganizationService documentOrganizationService) {
         this.userService = userService;
         this.positionService = positionService;
         this.helperService = helperService;
@@ -59,6 +57,7 @@ public class IncomingController {
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
+        this.documentOrganizationService = documentOrganizationService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -155,6 +154,9 @@ public class IncomingController {
 
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
+                user.getOrganizationId(),
+                1, //todo documentTypeId=1
+
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,
@@ -178,16 +180,27 @@ public class IncomingController {
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
-            Document document = documentService.getById(documentTaskSub.getDocumentId());
+            Document document = documentTaskSub.getDocument();
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentSub.getOrganization();
+                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+            }
+            docContent+=" №"+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTaskSub.getContent(),
+                    docContent,
                     documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
-                    documentTaskSub.getContent()
+                    documentTaskSub.getContent(),
+                    documentTaskSub.getStatus(),
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+
             });
         }
 
@@ -219,20 +232,24 @@ public class IncomingController {
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
         statuses.add(TaskSubStatus.Agreement);
+        statuses.add(TaskSubStatus.Checking);
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
         model.addAttribute("task", task);
+        model.addAttribute("documentLog", new DocumentLog());
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
-        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
+        model.addAttribute("logs", documentLogService.getAllByDocAndTaskSubId(document.getId(), documentTaskSub.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
-        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, new PageRequest(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("isView", true);
         return DocTemplates.IncomingView;
     }
 
@@ -314,7 +331,7 @@ public class IncomingController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(documentTaskSub.getLevel(),document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;
@@ -347,35 +364,41 @@ public class IncomingController {
     @RequestMapping(DocUrls.DocumentTaskChange)
     @ResponseBody
     public HashMap<String, Object> changeTaskStatus(
-            @RequestParam(name = "content")String content,
             @RequestParam(name = "taskStatus")Integer status,
-            @RequestParam(name = "taskId")Integer taskId,
-            @RequestParam(name = "addDocId")Integer additionalDocId,
-            @RequestParam(name = "docId")Integer docId
+            @RequestParam(name = "taskSubId")Integer taskSubId,
+            DocumentLog documentLog
     ) {
         HashMap<String, Object> response = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
-        DocumentLog log = new DocumentLog();
-        log.setCreatedById(user.getId());
-        log.setContent(content);
-        log.setDocumentId(docId);
-        log.setType(2);
-        documentLogService.create(log);
-        String logAuthorPos = positionService.getById(user.getPositionId()).getName();
 
-        DocumentTaskSub taskSub = documentTaskSubService.getById(taskId);
+
+        DocumentTaskSub taskSub = documentTaskSubService.getById(taskSubId);
+        TaskSubStatus oldStatus = TaskSubStatus.getTaskStatus(taskSub.getStatus());
+        TaskSubStatus newStatus = TaskSubStatus.getTaskStatus(status);
         taskSub.setStatus(status);
-        taskSub.setContent(content);
+        taskSub.setContent(documentLog.getContent());
         taskSub.setUpdateById(user.getId());
-        taskSub.setAdditionalDocumentId(additionalDocId);
-        documentTaskSubService.update(taskSub);
+        taskSub.setAdditionalDocumentId(documentLog.getAttachedDocId());
+        taskSub = documentTaskSubService.update(taskSub);
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        String logAuthorPos = positionService.getById(user.getPositionId()).getName();
+        DocumentLog documentLog1 =  documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),null,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
 
+        DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
+        if (documentTask!=null && documentTask.getPerformerId()!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
+                documentTask.setStatus(TaskStatus.Checking.getId());
+                documentTaskService.update(documentTask);
+        }
+        Document document = documentService.getById(documentLog1.getAttachedDocId());
         response.put("task", taskSub);
         response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
         response.put("status", "success");
-        response.put("log", log);
+        response.put("log", documentLog1);
         response.put("logCreateName", user.getFullName());
         response.put("logCreatePosition", logAuthorPos);
+        response.put("registrationNumber", document!=null?document.getRegistrationNumber():"");
+        response.put("beforeStatus", helperService.getTranslation(documentLog1.getBeforeStatus(),locale));
+        response.put("afterStatus", helperService.getTranslation(documentLog1.getAfterStatus(),locale));
         return response;
     }
 }

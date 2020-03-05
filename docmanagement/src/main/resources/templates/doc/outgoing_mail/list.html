@@ -10,6 +10,9 @@
             color:white;
             background:#62c462;
         }
+         .datepicker>.datepicker-days {
+             display: block;
+         }
     </style>
 </head>
 <body>
@@ -34,17 +37,12 @@
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
                     <a href="/static/doc/" class="collapsed card-header-a"
-                       data-toggle="collapse" data-target="#collapseTopContainer"
+                       data-toggle="collapse" data-target="#collapseOne"
                        aria-expanded="false" aria-controls="collapseOne"><span th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</span></a>
                 </h5>
-                <div>
-                    <input type="text" class="form-control">
-                    <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                </div>
             </div>
             <h5 class="office-h5 default-color" ><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
-                 <div class="row">
                     <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
@@ -54,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                     <div class="office-card">
                     <div class="card dashboard-card border-danger-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -63,16 +61,16 @@
                         </div>
                     </div>
                 </div>
-                    <div class="office-card">
+                     <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;" >
                             <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
-                            <h6 class="card-title"  th:text="#{doc_outgoing.answer_document_count}">Хатга жавоб олинган</h6>
+                            <h6 class="card-title"  th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</h6>
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                     <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -81,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                    <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -90,81 +88,84 @@
                         </div>
                     </div>
                 </div>
-                 </div>
+
             </div>
         </div>
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Сараш фильтри</a>
+                    <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Сараш фильтри</a>
                 </h5>
             </div>
-            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="document_organization_id" class="control-label">Корреспондент</label>
+                            <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
                             <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                                 <option value="" th:text="#{sys_select}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="registration_number" class="control-label">Руйхатга олиш раками</label>
+                            <label for="registration_number" class="control-label"  th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="date_begin" class="control-label">Руйхатга олинган сана</label>
+                            <label for="date_begin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="date_begin" placeholder="Дан">
+                                    <input class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="date_end" placeholder="гача">
+                                    <input class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
-                            <label for="document_view_id" class="control-label">Хужжат тури</label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" id="document_view_id" aria-hidden="true">
-                                <option value=""></option>
+                            <label for="document_view_id" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
+                            <select class="col-sm-12 singleSelect2" id="document_view_id">
+                                <option value th:text="#{sys_select}"></option>
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
                         </div>
-                        <div class="form-group col-md-6 col-sm-12">
-                            <label class="control-label">Хатнинг кискача мазмуни</label>
-                            <div class="col-sm-12 p0">
-                                <input type="text" class="form-control" id="content">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 col-sm-12">
-                            <label for="department_id" class="control-label">Хат жунатаётган булим ёки ходим</label>
-                            <div class="col-sm-12 p0">
-                                <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
-                                    <option value=""></option>
-                                    <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-                                </select>
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="form-group col-md-2 col-sm-12" style="display: flex;align-items: flex-end;">
-                            <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" style="padding: 5px 20px;" th:text="#{sys_document.search}">искать</button>
+                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label class="control-label" th:text="#{doc_outgoing.content}">Хатнинг кискача мазмуни</label>
+                                <div class="col-sm-12 p0">
+                                    <input type="text" class="form-control" id="content">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-12">
+                                <label for="department_id" class="control-label " th:text="#{doc_outgoing.department}">Хат жунатаётган булим ёки ходим</label>
+                                <div class="col-sm-12 p0">
+                                    <select class="singleSelect2 col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
+                                        <option value th:text="#{sys_select}"></option>
+                                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+<!--                            <div class="form-group col-md-2 col-sm-12 form-button-container">-->
+<!--                                <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>-->
+<!--                            </div>-->
                         </div>
-
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="parent-card col-xl-12">
+        <div class="parent-card col-xl-12 mh-1000">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;" role="tab" aria-controls="profile" aria-selected="false">Чикиб кетмаган</a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -176,27 +177,14 @@
                                     <table id="dynamicTable" aria-describedby="responsive-table-model_info" class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
                                         <thead>
                                         <tr role="row">
-                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">id</th>
-                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация рақами
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
-                                                Регистрация санаси
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
-                                                Кирувчи хат маълумотлари
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
-                                                Хужжат санаси
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">Ижро муддати
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0">Жорий
-                                                ҳолати
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0">Резолюция ва
-                                                иштирокчилар
-                                            </th>
+                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1"  tabindex="0">id</th>
+                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-15" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_outgoing.registrationNumber}">Регистрация рақами </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_outgoing.registrationDate}" > Регистрация санаси </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_outgoing.content}">Кирувчи хат маълумотлари</th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0" th:text="#{sys_document.taskDate}"> Хужжат санаси</th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0" th:text="#{sys_document.taskDeadline}">Ижро муддати</th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0"  th:text="#{sys_document.taskStatus}">Жорий ҳолати</th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0" th:text="#{sys_document.outgoing_resolution}">Резолюция ва иштирокчилар</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -224,6 +212,7 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    let selected= [[#{sys_select}]]
 
     $('#document_organization_id').select2({
         ajax: {
@@ -234,6 +223,12 @@
             }, cache: true
         }
     });
+
+    $('.singleSelect2').select2({
+        placeholder: selected,
+        allowClear: true
+    });
+
 
 </script>
 
@@ -247,8 +242,8 @@
         let currentViewLink = viewLink + '?id=' + row[0];
         let currentEditLink = editLink + '?id=' + row[0];
         let html = '';
-        html += `<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
-        html += `<div class="btn-group"><a class="btn btn-outline-warning btn-sm" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
+        html += `<!--<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>-->`;
+        html += `<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
         return html;
     }
 
@@ -273,7 +268,6 @@
                 dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                 dropDownValues[0].innerHTML = `
                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
-                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
                 `;
                 dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
 
@@ -281,26 +275,18 @@
     }
 
     function renderChangeColumn(data, type, row, meta) {
-        let editlink = 'doc/outgoing_mail/change_column'
+        let editlink = 'doc/outgoing_mail/change_column';
         let html = '';
-       // console.log(meta);
-        let stringOne, stringTwo;
-        let idToChangeOne, idToChangeTwo;
+        let idToChange;
         let current;
-        if(data === "New"){
-            current = 1;
-            idToChangeOne = 2;
-            idToChangeTwo = 3;
-        }else if(data === "InProgress"){
+
+        if(data === "New" || data === "InProgress"){
             current = 2;
-            idToChangeOne = 1;
-            idToChangeTwo = 3;
+            idToChange = 3;
         }else if(data == "Completed"){
             current = 3;
-            idToChangeOne = 1;
-            idToChangeTwo = 2;
+            idToChange = 2;
         }
-
 
         html += `<div class="btn-group mb-2 mr-2">
                                             <button type="button"
@@ -311,9 +297,7 @@
                          aria-expanded="false"><span class="sr-only">Toggle
                              Dropdown</span></button>
                      <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
-                       <!--  <button class="dropdown-item">InProgress</button> -->
+                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChange})">${statuses[idToChange]}</button>
                      </div>
                  </div>`;
 
@@ -328,7 +312,7 @@
             serverSide: true,
             scrollX: true,
             pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
@@ -337,10 +321,6 @@
 
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
-
-                //    dataToSend.doctype_id = $('#typeId').val().trim();
-                // dataToSend.name = $('#name').val().trim();
-                // dataToSend.status = document.querySelector('#status').value;
 
                 dataToSend.document_organization_id = $('#document_organization_id').val();
                 dataToSend.registration_number = $('#registration_number').val();
@@ -359,14 +339,35 @@
             },
             columns: [
                 {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'registrationNumber'},
-                {data: 2, name: 'registrationDate'},
-                {data: 3, name: 'content'},
-                {data: 4, name: 'createdAt'},
-                {data: 5, name: 'updateAt'},
-                {render: renderChangeColumn, orderable: false},
-                {data: 7, name: 'performerName'},
-                {render: renderActionsColumn, orderable: false}
+                {data: 1, name: 'registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    },
+                    className: "w-15 text-center"
+                },
+                {data: 2, name: 'registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        return html;
+                    },
+                    className: "w-10 text-center"
+                },
+                {data: 3, name: 'content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[3]+'</a>';
+                        return html;
+                    },
+                    className: "w-20 text-center"
+                },
+                {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                {data: 5, name: 'updateAt',className: "w-10 text-center"},
+                {render: renderChangeColumn, orderable: false,className: "w-10 text-center"},
+                {data: 7, name: 'performerName',className: "w-20 text-center"},
+                {render: renderActionsColumn, orderable: false,className: "w-5 text-center"}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
@@ -383,6 +384,9 @@
     $(document).ready(function () {
         dataDatatableSelector = $('#dynamicTable');
         thead = dataDatatableSelector.html();
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        });
         datatableConnect();
     });
 

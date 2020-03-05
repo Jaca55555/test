@@ -68,26 +68,24 @@ public class DocumentCheckController {
         User user = userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
 
-        statuses.add(TaskSubStatus.New.getId());
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
 
-        statuses.add(TaskSubStatus.InProgress.getId());
-        statuses.add(TaskSubStatus.Waiting.getId());
-        statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
 
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.add(Calendar.DAY_OF_MONTH, -1);
-        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        model.addAttribute("greaterDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateGreaterThanEqual(user.getId(), calendar.getTime()));
+        statuses.add(TaskStatus.Checking.getId());
+        statuses.add(TaskStatus.Complete.getId());
+        statuses.add(TaskStatus.Rejected.getId());
+        model.addAttribute("allCount", documentTaskService.getCountTaskStatus(statuses));
 
         statuses = new LinkedHashSet<>();
-        statuses.add(TaskSubStatus.Checking.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
+        statuses.add(TaskStatus.Checking.getId());
+        model.addAttribute("inProgressCount", documentTaskService.getCountTaskStatus(statuses));
+
+        statuses = new LinkedHashSet<>();
+        statuses.add(TaskStatus.Complete.getId());
+        model.addAttribute("inCompleteCount", documentTaskService.getCountTaskStatus(statuses));
+
+        statuses = new LinkedHashSet<>();
+        statuses.add(TaskStatus.Rejected.getId());
+        model.addAttribute("inRejectedCount", documentTaskService.getCountTaskStatus(statuses));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
@@ -101,17 +99,23 @@ public class DocumentCheckController {
             IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
-
-        System.out.println(incomingRegFilter.getTabFilter());
-        incomingRegFilter.setStatus(TaskStatus.Checking.toString());
+        User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
+        Integer tabFilter = incomingRegFilter.getTabFilter();
         Set<Integer> taskStatuses = new HashSet<>();
-        if (incomingRegFilter.getTabFilter()==null){
+        if (tabFilter==null || tabFilter>3){
             taskStatuses.add(TaskStatus.Checking.getId());
-        }else{
             taskStatuses.add(TaskStatus.Complete.getId());
+            taskStatuses.add(TaskStatus.Rejected.getId());
+        }else if(tabFilter==1){
+            taskStatuses.add(TaskStatus.Checking.getId());
+        }else if(tabFilter==2){
+            taskStatuses.add(TaskStatus.Complete.getId());
+        }else if(tabFilter==3){
+            taskStatuses.add(TaskStatus.Rejected.getId());
         }
-        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
+        //barcha hujjatlar ko'rinishi uchun documentTypeId=null
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -121,11 +125,12 @@ public class DocumentCheckController {
                     documentTask.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTask.getContent(),
+                    document.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? helperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
-                    documentTask.getContent()
+                    documentTask.getContent(),
+                    documentTask.getStatus()
             });
         }
 
@@ -150,17 +155,20 @@ public class DocumentCheckController {
         if (document == null) {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
+        List<TaskStatus> taskStatuses = new ArrayList<>();
+        taskStatuses.add(TaskStatus.Complete);
+        taskStatuses.add(TaskStatus.Rejected);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("task", task);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-        model.addAttribute("task_statuses", TaskStatus.getTaskStatusList());
+        model.addAttribute("task_statuses",taskStatuses);
         return DocTemplates.DocumentCheckView;
     }
 
@@ -168,8 +176,8 @@ public class DocumentCheckController {
     public String documentCheckComplete(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "status") Integer status,
-            @RequestParam(name = "content", required = false) String content,
-            @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids
+            @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids,
+            DocumentLog documentLog
             ){
         User user = userService.getCurrentUserFromContext();
         DocumentTask documentTask = documentTaskService.getById(id);
@@ -182,27 +190,22 @@ public class DocumentCheckController {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
 
+        TaskStatus oldStatus = TaskStatus.getTaskStatus(documentTask.getStatus());
+        TaskStatus newStatus = TaskStatus.getTaskStatus(status);
 
         documentTask.setStatus(status);
         documentTaskService.update(documentTask);
 
-        DocumentLog documentLog = new DocumentLog();
-        documentLog.setContent(content);
-        documentLog.setType(LogType.Agreement.getId());
-        documentLog.setDocumentId(documentTask.getDocumentId());
-        documentLog.setCreatedAt(new Date());
-        documentLog.setCreatedById(user.getId());
-        if (file_ids != null) {
-            Set<File> files = new LinkedHashSet<>();
-            for (Integer fileId : file_ids) {
-                files.add(fileService.findById(fileId));
+        if (documentTask.getStatus().equals(TaskStatus.Complete.getId())){
+            documentTaskSubService.allTaskSubCompleteGetTaskId(documentTask.getId());
+            List<DocumentTask> documentTaskList = documentTaskService.getByDocumetId(document.getId());
+            if (documentTaskList.size()==1){
+                document.setStatus(DocumentStatus.Completed);
+                documentService.update(document);
             }
-            documentLog.setContentFiles(files);
         }
 
-        documentLogService.create(documentLog);
-
-
+        documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),file_ids,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
         return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTask.getId();
 
     }

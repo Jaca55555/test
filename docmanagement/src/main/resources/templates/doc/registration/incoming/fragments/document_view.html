@@ -47,7 +47,7 @@
         <div class="flex-center">
             <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
+            <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
         </div>
     </div>
@@ -66,7 +66,7 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
@@ -75,7 +75,7 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
@@ -88,17 +88,17 @@
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
-                <div class="col-md-6 p0"><span class="bold">Ушбу хатга жавоб тариқасида:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
@@ -119,7 +119,9 @@
                             </div>
                             <div class="card-body" style="display: flex;text-align: left;align-items: center;">
                                 <a class="view-pdf" dat th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
-                                    <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    <div th:id="'file_name_'+${file.id}">
+                                        <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    </div>
                                 </a>
                             </div>
                         </div>

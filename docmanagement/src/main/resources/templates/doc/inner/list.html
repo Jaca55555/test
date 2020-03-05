@@ -3,6 +3,14 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title >Кирувчи хатлар</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        a{
+            color: black;
+        }
+    </style>
 </head>
 <body>
     <div class="background"> </div>
@@ -25,10 +33,6 @@
                     <h5 class="mb-0" style="align-self:center">
                         <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" > <span th:text="#{doc_inner.list}">Кирувчи хатлар</span> </a>
                     </h5>
-                    <!--<div>
-                        <input type="text" class="form-control" />
-                        <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                    </div>-->
                 </div>
                 <h5 class="office-h5 default-color"><span th:text="#{doc_inner.statistic}">Ички хужжатлар статистикаси</span></h5>
                 <div class="responsive">
@@ -121,102 +125,105 @@
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
                                 <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                                <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="row p10" style="padding-top: 0px;">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
-                        <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
-                        </select>
-                    </div>
+                <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                        </select>
-                    </div>
+                    <div class="row p10" style="padding-top: 0px;">
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
+                            <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                            </select>
+                        </div>
 
-                    <div class="form-group col-md-4 col-sm-12">
-                        <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
-                        <input class="form-control" id="content">
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
-                            <option value="">Танлаш</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row p10" style="padding-top: 0px">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
-                            <option value=""></option>
-                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
-                        </select>
-                    </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                        </div>
 
-                    <div class="form-group col-md-4 col-sm-12">
-                        <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
-                        <div class="row">
-                            <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
-                                <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
-                            </div>
-                            <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
-                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
-                            </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
+                            <input class="form-control" id="content">
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
+                                <option value="">Танлаш</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" style="height:33px;padding:0px 20px" onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
+                    <div class="row p10" style="padding-top: 0px">
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
+                                <option value=""></option>
+                                <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
+                            <div class="row">
+                                <div class="col-6" style="padding-left: 0;">
+                                    <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                                </div>
+                                <div class="col-6" style="padding-right:0;">
+                                    <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12 form-button-container">
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4"  onclick="getDatatableConnect()">
+                                <span th:text="#{sys_document.search}">Қидириш</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="parent-card col-xl-12">
+        <div class="parent-card col-xl-12 mh-1000">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_total}">Жами</span></a>
+                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_to_execute}">Ижро учун</span></a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_delayed}">Муддати кеччикан</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys.doc_info_tab_dueDate}">Муддати якинлашаётган</span></a>
+                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_control}">Ижро назоратида</span></a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_performer_info}">Малъумот учун</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys.doc_info_tab_finished}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -225,28 +232,28 @@
                         <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="responsive-table-model" class="display table dt-responsive dataTable no-footer dtr-inline collapsed" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                    <table id="responsive-table-model" class="display table dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                             <tr role="row">
-                                                <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 0px;" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                                <th class="sorting_asc w-15" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 0px;" aria-label="Last name: activate to sort column ascending">
+                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 350px;" aria-label="Position: activate to sort column ascending">
+                                                <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.content}"> Кирувчи хат маълумотлари</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 82px;" aria-label="Office: activate to sort column ascending">
+                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 110px;" aria-label="Age: activate to sort column ascending">
+                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 140px; display: none;" aria-label="Start date: activate to sort column ascending">
+                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" style="width: 300px; display: none;" aria-label="Salary: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                                     <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                                 </th>
                                             </tr>
@@ -294,7 +301,24 @@
 
         function renderActionsColumn(data, type, row, meta) {
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-outline-info btn-sm" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            return html;
+        }
+
+        function renderStatusColumn(data, type, row, meta) {
+            var html = '';
+            var status=row[8];
+            switch (status) {
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+            }
             return html;
         }
 
@@ -326,37 +350,44 @@
                     dataToSend.tabFilter = tabFilter;
                     dataToSend._csrf = $("#global_csrf").val();
 
+                    var order = api != undefined ? api.order() : [[1, 'desc']];
+                    dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
                     $.post("", dataToSend, function(data){
                         callback(data);
                     });
                 },
                 columns: [
-                    {data: 1, name: 'registrationNumber',
+                    {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                             return html;
-                        }
+                        },
+                        className: "w-10 text-center"
                     },
-                    {data: 2, name: 'registrationDate',
+                    {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                             return html;
-                        }
+                        },
+                        className: "w-10 text-center"
                     },
-                    {data: 3, name: 'description'},
-                    {data: 4, name: 'createdAt'},
-                    {data: 5, name: 'dueDate'},
-                    {data: 6, name: 'status'},
-                    {data: 7, name: 'resolution',
+                    {data: 3, name: 'document.content', className: "w-10 text-center"},
+                    {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                    {data: 5, name: 'dueDate',
                         render: function (data, type, row, meta) {
-                            var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';
+                            var html = row[5] + ' <br/>' + row[9][1];
                             return html;
-                        }
-                    }
+                        },
+                        className: "w-10 text-center"},
+                    {render: renderStatusColumn,  name: 'status',className: "w-10 text-center"},
+                    {data: 7, name: 'content',className: "text-center",}
                 ],
+                rowCallback: function (row, data) {
+                    $(row).children().addClass(data[9][0]);
+                },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
                 }

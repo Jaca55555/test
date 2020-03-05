@@ -20,6 +20,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
 
+    List<DocumentTaskSub> findByTaskIdAndLevelAndDeletedFalse(Integer documentId,Integer level);
+
     DocumentTaskSub findByIdAndDeletedFalse(Integer id);
 
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);//Муддати якинлашаётган

@@ -11,18 +11,21 @@ import java.util.Map;
  * (ru)
  */
 public enum TaskStatus {
-    Initial(0,"task_status.initial"),//
-    New(1,"task_status.new"),//Кўрилмаган
-    InProgress(2,"task_status.inProgress"),//Жараёнда,
-    Checking(3,"task_status.checking"),//Назоратдан чиқариш
-    Complete(4,"task_status.complete");//Якунланган
+    Initial(0,"task_status.initial","info"),//
+    New(1,"task_status.new","warning"),//Кўрилмаган
+    InProgress(2,"task_status.inProgress","primary"),//Жараёнда,
+    Checking(3,"task_status.checking","secondary"),//Назоратдан чиқариш
+    Complete(4,"task_status.complete","success"),//Якунланган
+    Rejected(5,"task_status.rejected","danger");//Rad etildi
 
     private Integer id;
     private String name;
+    private String color;
 
-    TaskStatus(Integer id, String name) {
+    TaskStatus(Integer id, String name,String color) {
         this.id = id;
         this.name = name;
+        this.color = color;
     }
 
     public static List<TaskStatus> getTaskStatusList() {
@@ -50,5 +53,9 @@ public enum TaskStatus {
 
     public String getName() {
         return name;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

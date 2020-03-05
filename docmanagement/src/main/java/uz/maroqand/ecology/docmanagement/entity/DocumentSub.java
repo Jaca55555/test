@@ -5,6 +5,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentSubType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 30.04.2019.
@@ -54,6 +55,14 @@ public class DocumentSub {
     //DocumentOrganization.id
     @Column(name = "organization_id")
     private Integer organizationId;
+
+    // chiquvchi uchun
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "document_sub_jt_organization_id",
+            joinColumns = { @JoinColumn(name = "document_sub_id") },
+            inverseJoinColumns = { @JoinColumn(name = "organization_id") })
+    private Set<DocumentOrganization> documentOrganizations;
+
 
     //DocumentOrganization.name
     @Column(name = "organization_name")

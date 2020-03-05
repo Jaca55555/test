@@ -10,74 +10,63 @@
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed">
-                        <span th:text="#{doc_incoming.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                        <span th:text="#{${view_tag}+'.view'}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
         </h5>
-        <div class="p10-horizontal mobile-column">
-            <button th:if="${document.insidePurpose == true}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
-                <i class="fas fa-lock mr-0"></i>
-                <span>ХДФУ</span>
-            </button>
-            <button th:if="${specialControll}!=null" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
-                <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
-            </button>
-        </div>
         <div class="p10-horizontal mobile-column">
             <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
             <div class="btn-group ml-2">
                 <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:text="#{${document.status.getName()}}">Жараёнда</span> </button>
             </div>
-            <button type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0" th:if="${document.executeForm!=null}">
-                <i class="fas fa-clipboard-list mr-0"></i>
-                <span th:text="#{${document.executeForm.getName()}}">форма</span>
-            </button>
         </div>
         <div class="flex-center">
-            <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
+            <!--<a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
-            <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+            <a><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
+            <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>-->
         </div>
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.journal}">Рўйхатга олиш журнали:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.journal'}">Рўйхатга олиш журнали:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.senderOrganizationName'}">Жўнатувчи ташкилот:</span></div>
+                <div class="col-md-6 p0" style="float: right;">
+                    <span th:if="${document_organization_name!=null && document_organization_name!=''}" th:text="${document_organization_name}">"Мароқанд" МЧЖ</span>
+                </div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.documentView'}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.docRegNumber'}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.registrationNumber'}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.docRegDate'}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.registrationDate'}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.performerName'}">Жўнатувчи шахс:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
             </div>
 
@@ -86,19 +75,19 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.performerPhone'}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
         </div>
         <hr class="m20-vertical">
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.description}">Топшириқ шакли:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{${view_tag}+'.description'}">Топшириқ шакли:</span></div>
                 <div><span th:text="${document.content}"></span></div>
             </div>
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{${view_tag}+'.files'}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center">
                     <div class="office-card-file" th:each="file: ${document.contentFiles}">
                         <div class="card dashboard-card">
@@ -115,16 +104,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
-                    <button type="button" class="btn btn-rounded btn-danger fs11">
-                        <i class="fas fa-lock"></i>
-                        Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
-                        девонхонага мурожаат қилинг!
-                    </button>
-                </div>
-
             </div>
         </div>
+    </div>
+    <div class="card-footer text-center">
+        <button type="button" class="btn btn-glow-info btn-info m10-vertical m20-horizontal" onclick="history.go(-1);return false;" >
+            <i class="fa fa-arrow-left"></i>
+            <span th:text="#{sys_back}"></span>
+        </button>
     </div>
 </div>
 

@@ -19,5 +19,7 @@ public interface DocumentLogRepository extends
         JpaRepository<DocumentLog, Integer>,
         JpaSpecificationExecutor<DocumentLog>
 {
-    List<DocumentLog> findAllByDocumentIdOrderByIdDesc(Integer docId);
+    List<DocumentLog> findByDocumentIdOrderByIdDesc(Integer docId);
+
+    List<DocumentLog> findAllByDocumentIdAndTaskSubIdOrderByIdDesc(Integer docId, Integer taskId);
 }

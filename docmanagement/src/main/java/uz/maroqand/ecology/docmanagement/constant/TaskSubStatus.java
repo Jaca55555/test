@@ -11,22 +11,26 @@ import java.util.Map;
  * (ru)
  */
 public enum TaskSubStatus {
-    Initial(0,"task_sub_type.initial"),//
-    New(1,"task_sub_type.new"),//Кўрилмаган
+    Initial(0,"task_sub_status.initial","info"),//
+    New(1,"task_sub_status.new","warning"),//Кўрилмаган
 
-    InProgress(2,"task_sub_type.inProgress"),//Жараёнда, (listda o'zfartirsa bo'ladi)
-    Waiting(3,"task_sub_type.waiting"),//Маълумот сўралган, (listda o'zfartirsa bo'ladi)
-    Agreement(4,"task_sub_type.agreement"),//Келишув жараёнида, (listda o'zfartirsa bo'ladi)
+    InProgress(2,"task_sub_status.inProgress","primary"),//Жараёнда, (listda o'zfartirsa bo'ladi)
+    Waiting(3,"task_sub_status.waiting","primary"),//Маълумот сўралган, (listda o'zfartirsa bo'ladi)
+    Agreement(4,"task_sub_status.agreement","primary"),//Келишув жараёнида, (listda o'zfartirsa bo'ladi)
 
-    Checking(5,"task_sub_type.checking"),//Назоратдан чиқариш
-    Complete(6,"task_sub_type.complete");//Якунланган
+    Checking(5,"task_sub_status.checking","secondary"),//Назоратдан чиқариш
+    Complete(6,"task_sub_status.complete","success"),//Якунланган
+    Rejected(7,"task_sub_status.rejected","danger");//Rad etildi
+
 
     private Integer id;
     private String name;
+    private String color;
 
-    TaskSubStatus(Integer id, String name) {
+    TaskSubStatus(Integer id, String name,String color) {
         this.id = id;
         this.name = name;
+        this.color = color;
     }
 
     public static List<TaskSubStatus> getTaskSubStatusList() {
@@ -56,4 +60,6 @@ public enum TaskSubStatus {
     public String getName() {
         return name;
     }
+
+    public String getColor() { return color; }
 }

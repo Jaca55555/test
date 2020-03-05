@@ -2,7 +2,9 @@ package uz.maroqand.ecology.docmanagement.controller;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +15,10 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
+import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
@@ -152,6 +153,8 @@ public class InnerController {
 
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
+                user.getOrganizationId(),
+                3, //todo documentTypeId=3
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,
@@ -181,11 +184,14 @@ public class InnerController {
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTaskSub.getContent(),
+                    document.getContent(),
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
-                    documentTaskSub.getContent()
+                    documentTaskSub.getContent(),
+                    documentTaskSub.getStatus(),
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+
             });
         }
 
@@ -211,11 +217,21 @@ public class InnerController {
         }
 
         DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+        List<TaskSubStatus> statuses = new LinkedList<>();
+        statuses.add(TaskSubStatus.InProgress);
+        statuses.add(TaskSubStatus.Waiting);
+        statuses.add(TaskSubStatus.Agreement);
+        statuses.add(TaskSubStatus.Checking);
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
+        docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
+        model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);
+        model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
@@ -223,9 +239,11 @@ public class InnerController {
         model.addAttribute("specialControll", true);
         model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
         model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+        model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
+        model.addAttribute("task_statuses", statuses);
+        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("isView", true);
 
-        model.addAttribute("document", document);
-        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         return DocTemplates.InnerView;
     }
 

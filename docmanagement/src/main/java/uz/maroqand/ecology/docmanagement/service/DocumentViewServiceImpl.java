@@ -93,9 +93,9 @@ public class DocumentViewServiceImpl implements DocumentViewService {
             List<Predicate> predicates = new LinkedList<>();
             if(name != null){
                 if(locale.equals("oz"))
-                    predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),"%" + name.toLowerCase() + "%"));
                 else if(locale.equals("ru"))
-                    predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + name + "%"));
+                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nameRu")), "%" + name.toLowerCase() + "%"));
             }
             if(status != null){
                 if(status.equals(1))

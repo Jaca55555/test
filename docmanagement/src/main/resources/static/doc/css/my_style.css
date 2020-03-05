@@ -17,7 +17,8 @@ body {
     position: fixed;
     width:100vw;
     height:300px;
-    background-image: url("../images/cool-background.jpg");
+    /*background-image: url("../images/cool-background.jpg");*/
+    background: linear-gradient(to right, rgb(10, 207, 254) 0%, rgb(73, 90, 255) 100%);
 }
 hr {
     border:0.5px solid rgba(0,0,0,.1);
@@ -39,8 +40,10 @@ hr {
     margin:0;
 }
 .office-h5 {
-    margin:10px 15px;
+    margin:15px 0;
     font-size:17px;
+    text-align: center;
+    font-weight: bold;
 }
 .default-color {
     color:#3f4d67
@@ -126,21 +129,29 @@ hr {
     margin-bottom: 0px;
     font-size: 13.5px;
 }
+h6.card-title {
+    word-break: break-all;
+    margin-bottom: 3px;
+}
 h4.card-title {
     font-size: 16px;
     font-weight: bold;
 }
+#collapseOne {
+    padding-top:0;
+}
 .dashboard-card {
-    display:flex;
+    display: flex;
     justify-content: center;
     flex-direction: row;
     align-content: center;
-    padding:3px;
-    width:100%;
+    padding: 3px;
+    width: 100%;
+    height: 62px;
     margin: auto;
 }
 .pcoded-inner-navbar li:hover i {
-    color:white;
+    color:#04a9f5;
 }
 .dashboard-card:hover {
     -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -243,8 +254,18 @@ h4.card-title {
 .control-label {
     display: inline-flex;
     align-items: flex-end;
-    /*height:40px;*/
+    height:40px;
     color:black;
+}
+.form-button-container {
+    display: flex;
+    align-items: flex-end;
+}
+.form-button-container > button {
+    height:43px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding:0 10px;
 }
 
 
@@ -322,7 +343,7 @@ html, body {
       background: white;
   }
   a.active.nav-link {
-    background: #62c462;
+    background: #04a9f5;
     color:white !important;
    }
    .file-block {
@@ -347,7 +368,7 @@ html, body {
        align-self:center;
    }
    .color-red {
-       color:red;
+       color:#ff5252;
    }
    .color-blue {
        color:lightskyblue;
@@ -356,7 +377,7 @@ html, body {
        color:#512da8;
    }
    .color-primary {
-       color:#04a9f5;
+       color:#23b7e5;
     }
    .color-green {
        color:#62c462;
@@ -366,6 +387,9 @@ html, body {
    }
    .color-yellow {
        color:#ffc107;
+   }
+   .color-white {
+       color: #fff;
    }
    .text-right > .fas.fa-trash-alt {
     margin-right:10px;
@@ -381,10 +405,6 @@ html, body {
      flex:1;
      border:0.5px solid rgba(0,0,0,.1);
      padding: 5px;
-   }
-   .office-h5 {
-       margin-bottom: 5px;
-       margin-top: 5px;
    }
    .flex-center {
        display: flex;
@@ -405,7 +425,7 @@ html, body {
     .gray-search {
         position: absolute;
         font-size: 20px;
-        top:7px;
+        top:11px;
         right:8px;
     }
    .calendar-img1 {
@@ -482,21 +502,35 @@ html, body {
         width:600px;
     }
     .pcoded-micon > .mdi {
-        font-size: 25px;
+        font-size: 18px;
         margin: auto;
     }
+    .mh-1000 {
+        min-height: 1000px;
+    }
     .pcoded-micon > .fas {
-        font-size: 20px;
+        font-size: 15px;
         margin:auto;
     }
     .pcoded-micon > .feather {
-        font-size: 20px;
+        font-size: 15px;
         margin:auto;
+    }
+    #responsive-table-model > tbody > tr > td:last-child {
+        display: flex;
+    }
+    #dynamicTable > tbody > tr > td:last-child {
+        display: flex;
+    }
+    td > div.btn-group {
+        margin-bottom: 2px;
     }
     /*.form-group {
         margin-bottom: 5px;
     }*/
-
+    div.dataTables_scrollBody table tbody tr td {
+        vertical-align: middle;
+    }
 
 
 
@@ -636,4 +670,47 @@ html, body {
 }
 .parsley-errors-list {
     color: #dc3545;
+}
+
+.w-5 {
+    width: 5% !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.w-20 {
+    width: 20% !important;
+}
+
+.w-30 {
+    width: 30% !important;
+}
+.w-35 {
+    width: 25% !important;
+}
+.w-40 {
+    width: 40% !important;
+}
+.w-45 {
+    width: 45% !important;
+}
+.w-55 {
+    width: 55% !important;
+}
+.w-60 {
+    width: 60% !important;
+}
+.w-65 {
+    width: 65% !important;
+}
+
+.comment-content{
+    max-height: 600px;
+    overflow: auto;
 }

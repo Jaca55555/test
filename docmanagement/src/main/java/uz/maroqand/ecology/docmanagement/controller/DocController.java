@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -24,10 +25,7 @@ import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
@@ -47,6 +45,8 @@ public class DocController {
     private final DocumentTaskService taskService;
     private final DocumentOrganizationService documentOrganizationService;
     private final HelperService helperService;
+    private final DocumentSubService documentSubService;
+    private final DocumentTaskSubService taskSubService;
 
     @Autowired
     public DocController(
@@ -57,8 +57,8 @@ public class DocController {
             DocumentViewService documentViewService,
             DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService,
-            HelperService helperService
-    ) {
+            HelperService helperService,
+            DocumentSubService documentSubService, DocumentTaskSubService taskSubService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -67,6 +67,8 @@ public class DocController {
         this.taskService = taskService;
         this.documentOrganizationService = documentOrganizationService;
         this.helperService = helperService;
+        this.documentSubService = documentSubService;
+        this.taskSubService = taskSubService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -90,12 +92,47 @@ public class DocController {
             IncomingRegFilter incomingRegFilter,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(incomingRegFilter, null, null, null, null, null, null, pageable);
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        Calendar calendar = Calendar.getInstance();
+        Date dueDateBegin = null;
+        Date dueDateEnd = null;
+        Set<Integer> statuses = new HashSet<>();
+        switch (incomingRegFilter.getTabFilter()) {
+            case 2:
+                statuses.add(TaskStatus.InProgress.getId());
+                break;
+            case 3:
+                statuses = null;
+                dueDateEnd = calendar.getTime();
+                break;
+            case 4:
+                statuses = null;
+                dueDateBegin = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, 3);
+                dueDateEnd = calendar.getTime();
+                break;
+            case 5:
+                statuses.add(TaskStatus.Checking.getId());
+                break;
+            case 6:
+                statuses = null;
+                incomingRegFilter.setInsidePurpose(Boolean.TRUE);
+                break;
+            case 7:
+                statuses.add(TaskStatus.Complete.getId());
+                break;
+            default:
+                statuses = null;
+                break;
+        }
+        //todo documentTypeId=1
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, dueDateBegin, dueDateEnd, null, statuses, null, null, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         for (DocumentTask documentTask : documentTaskList) {
-            Document document = documentService.getById(documentTask.getDocumentId());
+            Document document = documentTask.getDocument();
             JSONArray.add(new Object[]{
                     documentTask.getId(),
                     document.getRegistrationNumber(),
@@ -103,8 +140,10 @@ public class DocController {
                     document.getContent(),
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatusName(documentTask.getStatus()),
+                    helperService.getTranslation(documentTask.getStatusName(documentTask.getStatus()),locale),
                     documentTask.getContent(),
+                    documentTask.getStatus(),
+                    taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
             });
         }
 
@@ -174,23 +213,93 @@ public class DocController {
     ) {
         String locale = LocaleContextHolder.getLocale().getLanguage();
         User user = userService.getCurrentUserFromContext();
-        documentLog.setCreatedById(user.getId());
-        documentLog.setType(1);
-        if (file_ids != null) {
-            Set<File> files = new LinkedHashSet<>();
-            for (Integer id : file_ids) {
-                files.add(fileService.findById(id));
-            }
-            documentLog.setContentFiles(files);
-        }
-        documentLog = documentLogService.create(documentLog);
-        documentLog.setCreatedBy(userService.findById(documentLog.getCreatedById()));
         HashMap<String,Object> resutl = new HashMap<>();
+        DocumentLog documentLog1 = documentLogService.createLog(documentLog,DocumentLogType.Comment.getId(),file_ids,"","","","",user.getId());
         resutl.put("status", "success");
         resutl.put("createName", user.getFullName());
         resutl.put("createPosition", user.getPositionId()!=null?helperService.getUserPositionName(user.getPositionId(),locale):"");
-        resutl.put("createdAt", Common.uzbekistanDateAndTimeFormat.format(documentLog.getCreatedAt()));
-        resutl.put("log", documentLog);
+        resutl.put("createdAt", Common.uzbekistanDateAndTimeFormat.format(documentLog1.getCreatedAt()));
+        resutl.put("log", documentLog1);
         return resutl;
+    }
+
+    @RequestMapping(value = DocUrls.DocumentOpenView)
+    public String getViewPage(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Document document = documentService.getById(id);
+        if (document==null){
+            return "redirect:" + DocUrls.Dashboard;
+        }
+
+        Integer viewTagId= document.getDocumentType().getType().getId();
+        String viewTag = "";
+        switch (viewTagId){
+            case 1: viewTag = "doc_incoming"; break;
+            case 2: viewTag = "doc_outgoing";break;
+            case 3: viewTag = "doc_inner";break;
+            case 4: viewTag = "doc_appeal";break;
+        }
+        DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
+        String document_organization_name="";
+        Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
+        if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
+            for (DocumentOrganization documentOrganization: documentOrganizationSet) {
+                document_organization_name +=documentOrganization.getName() + ", ";
+            }
+        }else if (documentSub.getOrganizationId()!=null){
+            document_organization_name=documentSub.getOrganization().getName();
+        }
+        model.addAttribute("document_organization_name", document_organization_name);
+
+        model.addAttribute("view_tag" ,viewTag);
+        model.addAttribute("document" ,document);
+        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+
+
+        return DocTemplates.DocumentOpenView;
+    }
+
+    @RequestMapping(value = DocUrls.TaskChangeStatus, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody HashMap<String, Object> taskChangeStatus(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "target_status_id")Integer statusId
+    ){
+        System.out.println("id: " + id + ", statusId: " + statusId);
+        HashMap<String, Object> result = new HashMap<>();
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        DocumentTask documentTask = taskService.getById(id);
+        switch (statusId){
+            case 1:
+                documentTask.setStatus(TaskStatus.New.getId());
+                result.put("first", helperService.getTranslation(TaskStatus.InProgress.getName(),locale));
+                result.put("firstId", 2);
+                result.put("second", helperService.getTranslation(TaskStatus.Checking.getName(),locale));
+                result.put("secondId", 3);
+                break;
+            case 2:
+                documentTask.setStatus(TaskStatus.InProgress.getId());
+                result.put("first", helperService.getTranslation(TaskStatus.New.getName(),locale));
+                result.put("firstId", 1);
+                result.put("second", helperService.getTranslation(TaskStatus.Checking.getName(),locale));
+                result.put("secondId", 3);
+                break;
+            case 3:
+                documentTask.setStatus(TaskStatus.Checking.getId());
+                result.put("first",helperService.getTranslation(TaskStatus.New.getName(),locale));
+                result.put("firstId", 1);
+                result.put("second", helperService.getTranslation(TaskStatus.InProgress.getName(),locale));
+                result.put("secondId", 2);
+                break;
+        }
+
+        documentTask.setUpdateAt(new Date());
+        documentTask.setUpdateById(userService.getCurrentUserFromContext().getId());
+
+        result.put("updatedAt", Common.uzbekistanDateFormat.format(new Date()));
+        result.put("changedOnStatusId", statusId);
+        taskService.update(documentTask);
+        return result;
     }
 }

@@ -20,6 +20,10 @@ public class DocUrls {
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
     public static final String DocumentTaskChange = Prefix + "/task_change";
+    public static final String DocumentOpenView = Prefix + "/open_view";
+
+    public static final String TaskChangeStatus = Prefix + "/task_change_status";
+
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish

@@ -1,6 +1,10 @@
 package uz.maroqand.ecology.docmanagement.dto;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
+
+import java.util.Date;
 
 /**
  * Created by Utkirbek Boltaev on 16.02.2020.
@@ -20,6 +24,8 @@ public class IncomingRegFilter {
     private String content;
     private Integer managerId;
     private String taskContent;
+    private Integer performerId;
+    private Boolean insidePurpose;
 
     private String receiverId;
     private String type;
@@ -28,4 +34,39 @@ public class IncomingRegFilter {
     private String dueDateBeginStr;
     private String dueDateEndStr;
 
+    public Date getDateBegin() {
+        return (dateBeginStr != null) ? DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat) : null;
+    }
+
+    public Date getDateEnd() {
+        return (dateEndStr != null) ? DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat) : null;
+    }
+
+    public Date getDueDateBegin() {
+        return (dueDateBeginStr != null) ? DateParser.TryParse(dueDateBeginStr, Common.uzbekistanDateFormat) : null;
+    }
+
+    public Date getDueDateEnd() {
+        return (dueDateEndStr != null) ? DateParser.TryParse(dueDateEndStr, Common.uzbekistanDateFormat) : null;
+    }
+
+    public void initNull() {
+        this.tabFilter = null;
+        this.documentOrganizationId = null;
+        this.docRegNumber = null;
+        this.registrationNumber = null;
+        this.dateBeginStr = null;
+        this.dateEndStr = null;
+        this.controlForm = null;
+        this.documentViewId = null;
+        this.content = null;
+        this.managerId = null;
+        this.taskContent = null;
+        this.performerId = null;
+        this.receiverId = null;
+        this.type = null;
+        this.status = null;
+        this.dueDateBeginStr = null;
+        this.dueDateEndStr = null;
+    }
 }
