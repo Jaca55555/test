@@ -493,8 +493,6 @@ public class IncomingRegistrationController {
         HashMap<String, Object> response = new HashMap<>();
         Document document = documentService.getById(id);
         document.setSpecialControll(!document.getSpecialControll());
-        System.out.println(document.getPerformerPhone());
-        System.out.println(document.getPerformerPhone().getClass().getName());
         documentService.update(document);
         response.put("status", "success");
         return response;
@@ -523,25 +521,6 @@ public class IncomingRegistrationController {
             return fileService.getFileAsResourceForDownloading(file);
         }
     }
-
-    /*@GetMapping(value = DocUrls.IncomeMailSpecial)
-    @ResponseBody
-    public HashMap<String, Object> changeSpecial(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "enabled")Boolean enabled
-    ) {
-        HashMap<String, Object> response = new HashMap<>();
-        Document document = documentService.getById(id);
-        if (document == null) {
-            response.put("status", "not found");
-            return response;
-        }
-        document.setSpecialControl(enabled);
-        documentService.update(document);
-        response.put("status", "success");
-        response.put("value", enabled);
-        return response;
-    }*/
 
     /*@GetMapping(value = DocUrls.IncomeMailAddTask)
     public String getAddTaskPage(
