@@ -113,8 +113,45 @@ public class IncomingRegistrationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<Integer> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+        Integer tabFilter = incomingRegFilter.getTabFilter()!=null?incomingRegFilter.getTabFilter():1;
+        switch (tabFilter){
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
+            case 5:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());
+                break;//Ижро назоратида
+            case 7:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Complete.getId());
+                break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
+            default:
+                break;//Жами
+        }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();

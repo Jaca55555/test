@@ -234,6 +234,9 @@
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="done-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
             </li>
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -437,7 +440,7 @@
         datatableConnect();
 
         $('#filter').on('change', function () {
-            getDatatableConnect();
+            getDatatableConnect(1);
         })
     })
 </script>

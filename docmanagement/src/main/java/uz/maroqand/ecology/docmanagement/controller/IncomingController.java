@@ -116,7 +116,7 @@ public class IncomingController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
-
+        Boolean specialControll=null;
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
@@ -146,6 +146,9 @@ public class IncomingController {
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
                 receiverId=null;
@@ -174,6 +177,7 @@ public class IncomingController {
                 status,
                 departmentId,
                 receiverId,
+                specialControll,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();

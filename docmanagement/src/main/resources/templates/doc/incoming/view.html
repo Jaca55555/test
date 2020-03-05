@@ -137,7 +137,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && (taskSub1.level+1)=taskSub2.level}">
+                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && (taskSub1.level+1)==taskSub2.level}">
                                             <div class="flex-space-between p0">
                                                 <div>
                                                     <div class="inline-block">
@@ -160,7 +160,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && (taskSub2.level+1)=taskSub3.level}">
+                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && (taskSub2.level+1)==taskSub3.level}">
                                                 <div class="flex-space-between p0">
                                                     <div>
                                                         <div class="inline-block">
