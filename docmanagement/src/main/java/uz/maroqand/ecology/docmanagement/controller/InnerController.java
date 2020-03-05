@@ -217,11 +217,18 @@ public class InnerController {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
 
-        Document document = documentTaskSub.getDocument();
+        Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
             return "redirect: " + DocUrls.IncomingRegistrationList;
         }
-        DocumentTask documentTask = documentTaskSub.getTask();
+
+        DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+        if (document.getInsidePurpose()) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);

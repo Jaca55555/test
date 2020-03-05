@@ -353,6 +353,13 @@ public class InnerRegistrationController {
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
+        if (document.getInsidePurpose()) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
+
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
         model.addAttribute("userList", userList);

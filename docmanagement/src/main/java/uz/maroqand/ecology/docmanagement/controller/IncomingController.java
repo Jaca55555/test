@@ -232,6 +232,12 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+        if (document.getInsidePurpose()) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(task.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -274,6 +280,12 @@ public class IncomingController {
         DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(documentTaskSub.getTaskId(),document.getId());
         if (documentTask == null) {
             return  "redirect:" + DocUrls.IncomingList;
+        }
+
+        if (document.getInsidePurpose()) {
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
         }
 
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
