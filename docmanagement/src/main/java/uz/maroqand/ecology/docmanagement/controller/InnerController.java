@@ -18,6 +18,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
@@ -188,7 +189,9 @@ public class InnerController {
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
-                    documentTaskSub.getStatus()
+                    documentTaskSub.getStatus(),
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+
             });
         }
 
@@ -224,6 +227,7 @@ public class InnerController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);

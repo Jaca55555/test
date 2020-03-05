@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
@@ -171,6 +172,41 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
     }
 
+    //taskOrsubTask==true  task
+    //taskOrsubTask==false  taskSub
+    @Override
+    public List<String> getDueColor(Date date, boolean taskOrTaskSub, Integer statusId,String locale) {
+        List<String> result = new ArrayList<>();
+        if (date == null || statusId == null){
+            result.add("");
+            result.add("");
+            return result;
+        }
+        Date nowDate = new Date();
+        String colorText="";
+        String dueText="";
+        date.setHours(23);
+        date.setMinutes(59);
+        Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
+        if (statusId==1 || statusId==0){ colorText+="font-weight-bold text-primary " ;}
+        if (statusId==2){ colorText+="text-primary " ;}
+        if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 5)) {
+            colorText+="text-success ";
+        }
+        if ((taskOrTaskSub && statusId == 4) || (!taskOrTaskSub && statusId == 6)) {
+            colorText+="text-secondary ";
+        }
+        if ((taskOrTaskSub && (statusId != 3 && statusId !=4)) || (!taskOrTaskSub && (statusId != 5 && statusId != 6))) {
+            List<String> getName = getColorAndText(intervalHours,locale);
+            colorText += getName.get(0);
+            dueText = getName.get(1);
+        }
+
+        result.add(colorText);
+        result.add(dueText);
+        return result;
+    }
+
     private static Specification<DocumentTask> getSpesification(
             final Integer organizationId,
             final Integer documentTypeId,
@@ -262,4 +298,36 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         };
     }
 
+    private List<String> getColorAndText(Long intervalHours,String locale){
+        Integer intervalDate = (int) Math.abs(intervalHours/24);
+        String colorText="";
+        String dueText="";
+        String soatName = helperService.getTranslation("sys_hours",locale);
+        String kunName = helperService.getTranslation("sys_day",locale);
+        List<String> result = new ArrayList<>();
+
+        if (intervalHours<48){
+            colorText+="text-danger ";
+            if (intervalHours<0){
+                dueText= helperService.getTranslation("due_text.passed",locale)+ ": ";
+                dueText+=intervalDate!=0?Math.abs(intervalDate)+" "+kunName:Math.abs(intervalHours)+" "+soatName;
+            }else{
+                dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
+                dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
+            }
+        }else if (intervalHours <=72){
+            dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
+            dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
+            colorText+="text-warning";
+        }
+
+        if (intervalHours>72 && intervalHours<=96){
+            dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
+            dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
+        }
+        result.add(colorText);
+        result.add(dueText);
+
+        return result;
+    }
 }

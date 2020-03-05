@@ -22,6 +22,9 @@ public class DocUrls {
     public static final String DocumentTaskChange = Prefix + "/task_change";
     public static final String DocumentOpenView = Prefix + "/open_view";
 
+    public static final String TaskChangeStatus = Prefix + "/task_change_status";
+
+
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish
     public static final String IncomingTask = Prefix + Incoming + "/task";

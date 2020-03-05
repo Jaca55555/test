@@ -709,3 +709,8 @@ html, body {
 .w-65 {
     width: 65% !important;
 }
+
+.comment-content{
+    max-height: 600px;
+    overflow: auto;
+}
