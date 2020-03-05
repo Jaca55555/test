@@ -132,8 +132,7 @@ public class DocController {
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         for (DocumentTask documentTask : documentTaskList) {
-            System.out.println("id==" + documentTask.getId());
-            Document document = documentService.getById(documentTask.getDocumentId());
+            Document document = documentTask.getDocument();
             JSONArray.add(new Object[]{
                     documentTask.getId(),
                     document.getRegistrationNumber(),

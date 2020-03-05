@@ -180,14 +180,14 @@ public class IncomingController {
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
-            Document document = documentService.getById(documentTaskSub.getDocumentId());
+            Document document = documentTaskSub.getDocument();
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
             String docContent="";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
-                DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
+                DocumentOrganization documentOrganization = documentSub.getOrganization();
                 docContent+=documentOrganization!=null?documentOrganization.getName():"";
             }
-            docContent+=" "+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+=" №"+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
             docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),

@@ -310,7 +310,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             colorText+="text-danger ";
             if (intervalHours<0){
                 dueText= helperService.getTranslation("due_text.passed",locale)+ ": ";
-                dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
+                dueText+=intervalDate!=0?Math.abs(intervalDate)+" "+kunName:Math.abs(intervalHours)+" "+soatName;
             }else{
                 dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
                 dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;

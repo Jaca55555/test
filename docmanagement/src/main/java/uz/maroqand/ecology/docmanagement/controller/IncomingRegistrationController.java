@@ -126,7 +126,7 @@ public class IncomingRegistrationController {
                 DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
                 docContent+=documentOrganization!=null?documentOrganization.getName():"";
             }
-            docContent+=" "+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+=" №"+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
             docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     document.getId(),
