@@ -152,7 +152,7 @@
                        aria-expanded="false" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Сараш фильтри</a>
                 </h5>
             </div>
-            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
@@ -187,17 +187,13 @@
                             </select>
                         </div>
                     </div>
-                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="control-label"><span th:text="#{doc_outgoing.content}">Хужжатнинг қисқача мазмуни</span></label>
                                 <div class="col-sm-12 p0">
                                     <input type="text" class="form-control" id="content">
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2 col-sm-12 form-button-container">
-
-                                <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>
                             </div>
                         </div>
                     </div>
@@ -307,7 +303,6 @@
 
     function renderActionsColumn(data, type, row, meta) {
         let currentViewLink = viewLink + '?id=' + row[0];
-
         let html = '';
 
         html += `<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
@@ -340,40 +335,22 @@
     }
 
     function renderChangeColumn(data, type, row, meta) {
-        let editlink = 'doc/outgoing_mail/change_column'
+
         let html = '';
-        // console.log(meta);
-        let stringOne, stringTwo;
-        let idToChangeOne, idToChangeTwo;
+
         let current;
+
         if(data === "New"){
-            current = 1;
-            idToChangeOne = 2;
-            idToChangeTwo = 3;
+            current = 2;
         }else if(data === "InProgress"){
             current = 2;
-            idToChangeOne = 1;
-            idToChangeTwo = 3;
         }else if(data == "Completed"){
             current = 3;
-            idToChangeOne = 1;
-            idToChangeTwo = 2;
         }
-
 
         html += `<div class="btn-group mb-2 mr-2">
                                             <button type="button"
-                         class="btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
-                     <button type="button"
-                         class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
-                         data-toggle="dropdown" aria-haspopup="true"
-                         aria-expanded="false"><span class="sr-only">Toggle
-                             Dropdown</span></button>
-                     <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
-                       <!--  <button class="dropdown-item">InProgress</button> -->
-                     </div>
+                         class="btn-rounded btn btn-primary">${statuses[current]}</button>
                  </div>`;
 
         return html;
@@ -387,7 +364,7 @@
             serverSide: true,
             scrollX: true,
             pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
@@ -458,7 +435,12 @@
         dataDatatableSelector = $('#dynamicTable');
         thead = dataDatatableSelector.html();
         datatableConnect();
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        });
     });
+
+
 
 </script>
 

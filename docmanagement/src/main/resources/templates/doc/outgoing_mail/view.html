@@ -301,18 +301,12 @@
         let html = document.querySelector('#toRender').innerHTML;
         let idToChangeOne, idToChangeTwo;
         let current;
-        if(currentStatus === "New"){
-            current = 1;
-            idToChangeOne = 2;
-            idToChangeTwo = 3;
-        }else if(currentStatus === "InProgress"){
+        if(currentStatus === "New" || currentStatus === "InProgress"){
             current = 2;
-            idToChangeOne = 1;
-            idToChangeTwo = 3;
+            idToChangeOne = 3;
         }else if(currentStatus === "Completed"){
             current = 3;
-            idToChangeOne = 1;
-            idToChangeTwo = 2;
+            idToChangeOne = 2;
         }
 
         html += `<div class="btn-group mr-2">
@@ -325,8 +319,6 @@
                              Dropdown</span></button>
                      <div class="dropdown-menu">
                          <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
-                         <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChangeTwo})">${statuses[idToChangeTwo]}</button>
-                       <!--  <button class="dropdown-item">InProgress</button> -->
                      </div>
                  </div>`;
         document.querySelector('#toRender').innerHTML = html;
@@ -345,7 +337,6 @@
                 dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                 dropDownValues[0].innerHTML = `
                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
-                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
                 `;
             })
     }

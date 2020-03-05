@@ -407,25 +407,15 @@ public class OutgoingMailController {
         Document document = documentService.getById(id);
         switch (statusId){
             case 1:
-                document.setStatus(DocumentStatus.New);
-                result.put("first", "InProgress");
-                result.put("firstId", 2);
-                result.put("second", "Completed");
-                result.put("secondId", 3);
-                break;
             case 2:
                 document.setStatus(DocumentStatus.InProgress);
-                result.put("first", "New");
-                result.put("firstId", 1);
-                result.put("second", "Completed");
-                result.put("secondId", 3);
+                result.put("first", "Completed");
+                result.put("firstId", 3);
                 break;
             case 3:
                 document.setStatus(DocumentStatus.Completed);
-                result.put("first", "New");
-                result.put("firstId", 1);
-                result.put("second", "InProgress");
-                result.put("secondId", 2);
+                result.put("first", "InProgress");
+                result.put("firstId", 2);
                 break;
         }
 
