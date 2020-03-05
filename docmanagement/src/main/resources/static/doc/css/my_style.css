@@ -518,9 +518,13 @@ html, body {
     }
     #responsive-table-model > tbody > tr > td:last-child {
         display: flex;
+        justify-content: center;
+        height: -webkit-fill-available;
+        align-items: center;
     }
     #dynamicTable > tbody > tr > td:last-child {
         display: flex;
+        justify-content: center;
     }
     td > div.btn-group {
         margin-bottom: 2px;
@@ -531,8 +535,21 @@ html, body {
     div.dataTables_scrollBody table tbody tr td {
         vertical-align: middle;
     }
-
-
+    #responsive-table-model > tbody > tr > td > .btn-group > button {
+        white-space: nowrap;
+    }
+    .text-success > a {
+        color:#28a745!important;
+    }
+    .text-primary > a {
+        color: #007bff!important;
+    }
+    .text-danger > a {
+        color:#dc3545!important;
+    }
+    #responsive-table-model > thead > th {
+        text-align: center;
+    }
 
 
 /* media */

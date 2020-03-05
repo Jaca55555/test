@@ -11,6 +11,9 @@
         a{
             color: black;
         }
+        .block {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
@@ -446,26 +449,26 @@
                                         <thead>
                                         <tr role="row">
                                             <th></th>
-                                            <th class="sorting_asc w-15" aria-controls="responsive-table-model" >
+                                            <th class="sorting_asc" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.registrationNumber}">Регистрация рақами</span>
                                             </th>
-                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
+                                            <th class="sorting" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                             </th>
-                                            <th class="sorting w-20 font-weight-bold" aria-controls="responsive-table-model" >
+                                            <th class="sortingfont-weight-bold" aria-controls="responsive-table-model" style="min-width: 250px;">
                                                 <span th:text="#{sys.doc_description}">Кирувчи хат маълумотлари</span>
                                             </th>
-                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
+                                            <th class="sorting" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_date}">Хужжат санаси</span>
                                             </th>
-                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
+                                            <th class="sorting" aria-controls="responsive-table-model" >
                                                 <span th:text="#{sys.doc_executeDate}">Ижро муддати</span>
                                             </th>
-                                            <th class="sorting w-10" aria-controls="responsive-table-model" >
-                                                <span th:text="#{sys.doc_execution_status}">Жорий ҳолати</span>
+                                            <th class="sorting" aria-controls="responsive-table-model" style="min-width: 250px;">
+                                                <span th:text="#{sys.doc_resolution}">Резолюция ва иштирокчилар</span>
                                             </th>
                                             <th class="sorting" aria-controls="responsive-table-model" >
-                                                <span th:text="#{sys.doc_resolution}">Резолюция ва иштирокчилар</span>
+                                                <span th:text="#{sys.doc_execution_status}">Жорий ҳолати</span>
                                             </th>
                                             <!--<th></th>-->
                                         </tr>
@@ -567,7 +570,7 @@
 
             }
             if (databack>=1 && databack<=3){
-                html += `<div class="btn-group mb-2 mr-2 w-100">
+                html += `<div class="btn-group mb-0 mr-0">
                             <button type="button" class="btn-block btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
                             <button type="button" class="pl-1 pr-1 btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -685,28 +688,27 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'"  >' + row[1]+'</a>';
                             return html;
                         },
-                        className: "w-15 text-center"
+                        className: "text-left"
                     },
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'">' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                             return html;
                         },
-                        className: "w-10 text-center"
+                        className: "text-left"
                     },
-                    {data: 3, name: 'document.content',className: "w-20 text-center"},
-                    {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                    {data: 3, name: 'document.content',className: "text-left"},
+                    {data: 4, name: 'createdAt',className: "text-left"},
                     {data: 5, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = row[5] + ' <br/>' + row[9][1];
                             return html;
                         },
-                        className: "w-10 text-center"},
-                    {render: renderChangeColumn, name: "status",className: "w-10 text-center"},
+                        className: "text-left"},
                     {data: 7, name: 'resolution',orderable: false,
                         render: function (data, type, row, meta) {
                             var html = '';
@@ -715,10 +717,16 @@
                         },
                         className: "text-justify"
                     },
+                    {render: renderChangeColumn, name: "status"},
+
                     // {render: renderActionsColumn, orderable: false}
                 ],
                 rowCallback: function (row, data) {
-                    $(row).children().addClass(data[9][0]);
+                    // $(row).children().addClass(data[9][0]);
+                    $(row).children()[0].classList += ` ${data[9][0]}`
+                    $(row).children()[1].classList += ` ${data[9][0]}`
+                    $(row).children()[3].classList += ` ${data[9][0]}`
+                    $(row).children()[4].classList += ` ${data[9][0]}`
                 },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
