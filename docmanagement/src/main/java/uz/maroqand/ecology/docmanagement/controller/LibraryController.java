@@ -117,7 +117,8 @@ public class LibraryController {
                     library.getCategoryId()!=null ? libraryCategoryService.getById(library.getCategoryId()).getName():""
             });
         }
-
+        result.put("recordsTotal", LibraryPage.getTotalElements());
+        result.put("recordsFiltered", LibraryPage.getTotalElements());
         result.put("data", JSONArray);
         return result;
     }
