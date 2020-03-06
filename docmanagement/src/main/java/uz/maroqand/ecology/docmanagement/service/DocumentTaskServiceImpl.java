@@ -188,7 +188,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         date.setHours(23);
         date.setMinutes(59);
         Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
-        if (statusId==1 || statusId==0){ colorText+="font-weight-bold text-primary" ;}
+        if (statusId==1 || statusId==0){ colorText+="text-primary" ;}
         if (statusId==2){ colorText+="text-primary " ;}
         if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 5)) {
             colorText+="text-success ";

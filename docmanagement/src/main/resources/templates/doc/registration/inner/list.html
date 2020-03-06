@@ -457,7 +457,10 @@
                 {render:renderActionsColumn, orderable: "false"}
             ],
             rowCallback: function (row, data) {
-                $(row).children().addClass(data[9][0]);
+                $(row).children()[0].classList += ` ${data[9][0]}`
+                $(row).children()[1].classList += ` ${data[9][0]}`
+                $(row).children()[3].classList += ` ${data[9][0]}`
+                $(row).children()[4].classList += ` ${data[9][0]}`
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

@@ -516,12 +516,12 @@ html, body {
         font-size: 15px;
         margin:auto;
     }
-    #responsive-table-model > tbody > tr > td:last-child {
-        display: flex;
-        justify-content: center;
-        height: -webkit-fill-available;
-        align-items: center;
-    }
+    /*#responsive-table-model > tbody > tr > td:last-child {*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*height: -webkit-fill-available;*/
+        /*align-items: center;*/
+    /*}*/
     #dynamicTable > tbody > tr > td:last-child {
         display: flex;
         justify-content: center;
@@ -538,6 +538,9 @@ html, body {
     #responsive-table-model > tbody > tr > td > .btn-group > button {
         white-space: nowrap;
     }
+    .bg-success {
+        background-color: #62c462 !important;
+    }
     .text-success > a {
         color:#28a745!important;
     }
@@ -545,6 +548,9 @@ html, body {
         color: #007bff!important;
     }
     .text-danger > a {
+        color:#dc3545!important;
+    }
+    .text-warning > a {
         color:#dc3545!important;
     }
     #responsive-table-model > thead > th {
