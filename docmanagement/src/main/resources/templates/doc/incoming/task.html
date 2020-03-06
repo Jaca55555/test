@@ -221,10 +221,10 @@
                                 '   </td>\n' +
                                 '</tr>';
                             $('#data-table tbody').append(html);
-                            $('#dueDateStr_'+userId).datepicker({
-                                format: 'DD.MM.YYYY',
-                                weekStart: 0,
-                                time: false
+                            $('.date').datepicker({
+                                format: "dd.mm.yyyy",
+                                todayHighlight: true,
+                                autoclose: true
                             });
                             $('#userId').val('').change();
                             $('#selectedUsersIds').val(selectedUsersIds);
