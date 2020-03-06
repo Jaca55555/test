@@ -223,7 +223,7 @@ public class InnerController {
         }
 
         DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(documentTask.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);

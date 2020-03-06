@@ -63,7 +63,8 @@ public class LibraryCategoryController {
                     libraryCategory.getParent()!=null ? libraryCategoryService.getById(libraryCategory.getParent()).getName():""
             });
         }
-
+        result.put("recordsTotal", LibraryCategoryPage.getTotalElements());
+        result.put("recordsFiltered", LibraryCategoryPage.getTotalElements());
         result.put("data", JSONArray);
         return result;
     }

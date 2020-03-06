@@ -19,14 +19,10 @@
                 <span>ХДФУ</span>
             </button>
             <button th:if="${specialControll}!=null" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
-                <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i>
-                <span th:text="#{doc.special_controll}"></span>
+                <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
             </button>
             <!--<button type="button" class="btn btn-rounded btn-success btn-sm ml-2 m0"><i class="feather icon-check-circle mr-0"></i>Махсус назоратда</button>-->
-            <!--<button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0">
-                <i class="feather icon-clock mr-0"></i>
-                <span th:text="${@documentTaskServiceImpl.getDueTranslateNameOrColor(task.id,false,'name',#locale)}">Муддати яқинлашган</span>
-            </button>-->
+            <!--<button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i class="feather icon-clock mr-0"></i>Муддати яқинлашган</button>-->
         </div>
         <div class="p10-horizontal mobile-column">
             <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
@@ -70,7 +66,8 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
+                 th:if="${specialControll!=null and document.docRegNumber!=null and document.docRegNumber!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
@@ -79,7 +76,8 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
+                 th:if="${specialControll!=null and document.docRegDate!=null and document.docRegDate!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
@@ -92,7 +90,8 @@
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
+                 th:if="${specialControll!=null and document.performerName!=null and document.performerName!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
             </div>
@@ -102,7 +101,8 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
+                 th:if="${specialControll!=null and performerPhone!=null and performerPhone!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>

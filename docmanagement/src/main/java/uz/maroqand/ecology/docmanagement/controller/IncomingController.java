@@ -189,10 +189,13 @@ public class IncomingController {
             String docContent="";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentSub.getOrganization();
-                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
             }
-            docContent+=" №"+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
-            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
@@ -224,7 +227,7 @@ public class IncomingController {
             return "redirect:" + DocUrls.IncomingList;
         }
         DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
-        if (task == null) {
+        if (task == null || task.getDocumentId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
 
@@ -232,7 +235,7 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);
@@ -282,7 +285,7 @@ public class IncomingController {
             return  "redirect:" + DocUrls.IncomingList;
         }
 
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             if (user.getId().equals(documentTask.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);
             }
