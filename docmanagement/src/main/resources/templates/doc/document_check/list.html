@@ -81,7 +81,10 @@
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
                     <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="true" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Саралаш фильтри</a>
+                       aria-expanded="true" aria-controls="collapseOne">
+                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
+                    </a>
                 </h5>
             </div>
             <div class="row p10">

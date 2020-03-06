@@ -630,9 +630,14 @@ html, body {
         padding-right: 0;
     }
 }
+
+
 @media (max-width:768px) {
     .mobile-text-center {
         text-align: center;
+    }
+    .mobile2-none {
+        display: none !important;
     }
     }
 @media (max-width:614px) {
