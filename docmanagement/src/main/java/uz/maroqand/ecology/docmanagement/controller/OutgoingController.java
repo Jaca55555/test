@@ -102,11 +102,10 @@ public class OutgoingController {
 
             DocumentType type = additionalDocument.getDocumentType();
             String viewLink;
-
-            if(type.equals(DocumentTypeEnum.IncomingDocuments))
+            if(type.getType().getId()  == DocumentTypeEnum.IncomingDocuments.getId())
                 viewLink = DocUrls.IncomingView;
-            else if(type.equals(DocumentTypeEnum.OutgoingDocuments))
-                viewLink = DocUrls.OutgoingMailView;
+            else if(type.getType().getId() == DocumentTypeEnum.OutgoingDocuments.getId())
+                viewLink = DocUrls.OutgoingView;
             else
                 viewLink = DocUrls.InnerView;
 

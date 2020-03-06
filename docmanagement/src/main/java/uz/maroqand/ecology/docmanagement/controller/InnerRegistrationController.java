@@ -184,12 +184,12 @@ public class InnerRegistrationController {
 
         DocumentTask documentTask = documentTaskService.getById(id);
         if (documentTask == null) {
-            return "redirect: " + DocUrls.InnerRegistrationList;
+            return "redirect:" + DocUrls.InnerRegistrationList;
         }
 
         Document document = documentService.getById(documentTask.getDocumentId());
         if (document == null) {
-            return "redirect: " + DocUrls.InnerRegistrationList;
+            return "redirect:" + DocUrls.InnerRegistrationList;
         }
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());

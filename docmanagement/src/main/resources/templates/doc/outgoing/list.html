@@ -149,7 +149,10 @@
                 <h5 class="mb-0" style="align-self:center">
                     <a href="/static/doc/" class="collapsed card-header-a"
                        data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="false" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Сараш фильтри</a>
+                       aria-expanded="false" aria-controls="collapseOne">
+                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
+                    </a>
                 </h5>
             </div>
             <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
@@ -201,7 +204,7 @@
             </div>
         </div>
 
-        <div class="parent-card col-xl-12 mh-1000">
+        <div class="parent-card col-xl-12 mh-1000 pr-0 pl-0">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
                     <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab"
@@ -396,7 +399,7 @@
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
                         return html;
                     },
-                    className: "w-15 text-center"
+                    className: "w-15 text-left"
                 },
                 {data: 2, name: 'registrationDate',
                     render: function (data, type, row, meta) {
@@ -404,7 +407,7 @@
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                         return html;
                     },
-                    className: "w-10 text-center"
+                    className: "w-10 text-left"
                 },
                 {data: 3, name: 'content',
                     render: function (data, type, row, meta) {
@@ -412,11 +415,11 @@
                         html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[3]+'</a>';
                         return html;
                     },
-                    className: "w-20 text-center"
+                    className: "w-20 text-left"
                 },
-                {data: 4, name: 'createdAt',className: "w-10 text-center"},
-                {data: 5, name: 'updateAt',className: "w-10 text-center"},
-                {render: renderChangeColumn, orderable: false, className: "w-10 text-center"},
+                {data: 4, name: 'createdAt',className: "text-center"},
+                {data: 5, name: 'updateAt',className: "text-center"},
+                {render: renderChangeColumn, orderable: false, className: "text-center"},
                 {data: 7, name: 'performerName'},
             ],
             language: {

@@ -4,6 +4,11 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
 
     <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -22,7 +27,7 @@
 
 <!-- [ Main Content ] start -->
 <div class="pcoded-main-container">
-    <div class="col-xl-12 col-md-12">
+    <div class="col-xl-12 col-md-12 pr-0 pl-0">
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap mb-0">
                 <h5 class="mb-0" style="align-self:center">
@@ -54,34 +59,34 @@
 
 
 <!--            Categories-->
-            <div class="col-xl-12 col-md-12">
-                <div class="card parent-card">
-                    <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
-                        <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" >Kategoriyalar</a></h5>
+            <!--<div class="col-xl-12 col-md-12">-->
+                <!--<div class="card parent-card">-->
+                    <!--<div class="card-header flex-space-between" style="flex-flow: row nowrap;">-->
+                        <!--<h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" >Kategoriyalar</a></h5>-->
 
-                    </div>
-                    <div th:each="i:${categories}">
-                    <h5 class="office-h5 default-color" th:if="${i.parent==null}" th:text="${i.name}">Кирувчи хатлар статистикаси</h5>
-                    <div class="responsive">
-                        <div class="office-card" th:each="j:${categories}" th:if="${i.id==j.parent}">
-                            <a href="" th:href="@{'/doc/library/list'(id=${j.id})}">
-                            <div class="card dashboard-card border-primary-shadow" >
-                                <div class="file-icon-container-small color-primary"><span class="fas fa-book"></span></span>
-                                </div>
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${@libraryServiceImpl.countByCategoryId(j.id)}">10</h4>
-                                    <h6 class="card-title" th:text="${j.name}">Янги хатлар</h6>
-                                </div>
-                            </div>
-                            </a>
-                        </div>
+                    <!--</div>-->
+                    <!--<div th:each="i:${categories}">-->
+                    <!--<h5 class="office-h5 default-color" th:if="${i.parent==null}" th:text="${i.name}">Кирувчи хатлар статистикаси</h5>-->
+                    <!--<div class="responsive">-->
+                        <!--<div class="office-card" th:each="j:${categories}" th:if="${i.id==j.parent}">-->
+                            <!--<a href="" th:href="@{'/doc/library/list'(id=${j.id})}">-->
+                            <!--<div class="card dashboard-card border-primary-shadow" >-->
+                                <!--<div class="file-icon-container-small color-primary"><span class="fas fa-book"></span></span>-->
+                                <!--</div>-->
+                                <!--<div class="card-body" style="display: inline-block;text-align: center;" >-->
+                                    <!--<h4 class="card-title" th:text="${@libraryServiceImpl.countByCategoryId(j.id)}">10</h4>-->
+                                    <!--<h6 class="card-title" th:text="${j.name}">Янги хатлар</h6>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--</a>-->
+                        <!--</div>-->
 
 
 
-                    </div>
-                    </div>
-                </div>
-            </div>
+                    <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 <!--            Categories-->
 
 
@@ -101,20 +106,20 @@
                 <label for="name" class="control-label"><span th:text="#{doc_library.Name}">Руйхатга олиш рақами</span></label>
                 <input type="text" class="form-control" id="name" />
             </div>
-            <div class="form-group col-md-3 col-sm-12">
+            <div class="form-group col-md-4 col-sm-12">
                 <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
                 <div class="row">
                     <div class="col-6" style="padding-left: 0;">
                         <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                        <img class="calendar-img1" src="/static/doc/images/calendar.svg" alt="">
+                        <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                     </div>
                     <div class="col-6" style="padding-right:0;">
                         <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                        <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                        <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-2 col-sm-12">
+            <div class="form-group col-md-4 col-sm-12">
                 <label for="categoryId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
                 <select class="form-control" id="categoryId" >
                     <option value="">Танлаш</option>

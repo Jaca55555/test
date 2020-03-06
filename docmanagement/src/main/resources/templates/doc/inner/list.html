@@ -8,7 +8,7 @@
             display: block;
         }
         a{
-            color: black;
+            color: #007bff;
         }
     </style>
 </head>
@@ -238,25 +238,25 @@
                                     <table id="responsive-table-model" class="display table dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                             <tr role="row">
-                                                <th class="sorting_asc w-15" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                                <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                                 </th>
-                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                                 </th>
-                                                <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.content}"> Кирувчи хат маълумотлари</span>
                                                 </th>
-                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                                 </th>
-                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                                 </th>
-                                                <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" style="width:300px;max-width: 300px" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                                     <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                                 </th>
                                             </tr>
@@ -367,7 +367,7 @@
                             html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                             return html;
                         },
-                        className: "w-10 text-center"
+                        className: "text-left w-10"
                     },
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
@@ -375,21 +375,24 @@
                             html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                             return html;
                         },
-                        className: "w-10 text-center"
+                        className: "text-left w-10"
                     },
-                    {data: 3, name: 'document.content', className: "w-10 text-center"},
-                    {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                    {data: 3, name: 'document.content', className: "text-left w-20"},
+                    {data: 4, name: 'createdAt',className: "text-center w-10"},
                     {data: 5, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = row[5] + ' <br/>' + row[9][1];
                             return html;
                         },
-                        className: "w-10 text-center"},
-                    {render: renderStatusColumn,  name: 'status',className: "w-10 text-center"},
-                    {data: 7, name: 'content',className: "text-center",}
+                        className: "text-left w-10"},
+                    {render: renderStatusColumn,  name: 'status',className: "text-center w-10"},
+                    {data: 7, name: 'content',className: "text-left w-30",}
                 ],
                 rowCallback: function (row, data) {
-                    $(row).children().addClass(data[9][0]);
+                    $(row).children()[0].classList += ` ${data[9][0]}`
+                    $(row).children()[1].classList += ` ${data[9][0]}`
+                    $(row).children()[3].classList += ` ${data[9][0]}`
+                    $(row).children()[4].classList += ` ${data[9][0]}`
                 },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

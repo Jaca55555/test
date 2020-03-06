@@ -236,7 +236,7 @@ public class IncomingRegistrationController {
     ) {
         Document document = documentService.getById(id);
         if (document == null) {
-            return "redirect: " + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
