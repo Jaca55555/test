@@ -115,7 +115,7 @@ public class DocumentCheckController {
             taskStatuses.add(TaskStatus.Rejected.getId());
         }
         //barcha hujjatlar ko'rinishi uchun documentTypeId=null
-        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, null, taskStatuses, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, null, taskStatuses, null, null, null,pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -160,6 +160,7 @@ public class DocumentCheckController {
         taskStatuses.add(TaskStatus.Rejected);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("task", task);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
@@ -175,8 +176,8 @@ public class DocumentCheckController {
     public String documentCheckComplete(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "status") Integer status,
-            @RequestParam(name = "content", required = false) String content,
-            @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids
+            @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids,
+            DocumentLog documentLog
             ){
         User user = userService.getCurrentUserFromContext();
         DocumentTask documentTask = documentTaskService.getById(id);
@@ -189,6 +190,8 @@ public class DocumentCheckController {
             return "redirect:" + DocUrls.DocumentCheckList;
         }
 
+        TaskStatus oldStatus = TaskStatus.getTaskStatus(documentTask.getStatus());
+        TaskStatus newStatus = TaskStatus.getTaskStatus(status);
 
         documentTask.setStatus(status);
         documentTaskService.update(documentTask);
@@ -202,23 +205,7 @@ public class DocumentCheckController {
             }
         }
 
-        DocumentLog documentLog = new DocumentLog();
-        documentLog.setContent(content);
-        documentLog.setType(LogType.Agreement.getId());
-        documentLog.setDocumentId(documentTask.getDocumentId());
-        documentLog.setCreatedAt(new Date());
-        documentLog.setCreatedById(user.getId());
-        if (file_ids != null) {
-            Set<File> files = new LinkedHashSet<>();
-            for (Integer fileId : file_ids) {
-                files.add(fileService.findById(fileId));
-            }
-            documentLog.setContentFiles(files);
-        }
-
-        documentLogService.create(documentLog);
-
-
+        documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),file_ids,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
         return "redirect:" + DocUrls.DocumentCheckView + "?id=" + documentTask.getId();
 
     }

@@ -4,6 +4,14 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
 
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        a{
+            color: black;
+        }
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -226,6 +234,9 @@
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="done-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
             </li>
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -237,28 +248,28 @@
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
-                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-15" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 0px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 350px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 82px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 110px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 140px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" style="width: 300px;" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
-                                        <th style="width: 90px"></th>
+                                        <th class="w-5"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -308,8 +319,8 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
-        html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        // html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 
@@ -317,13 +328,13 @@
         var html = '';
         var status=row[8];
         switch (status) {
-            case 0: html='<span class="badge badge-info">'+row[6]+'</span>';return html;
-            case 1: html='<span class="badge badge-warning">'+row[6]+'</span>';return html;
-            case 2: html='<span class="badge badge-primary">'+row[6]+'</span>';return html;
-            case 3: html='<span class="badge badge-secondary">'+row[6]+'</span>';return html;
-            case 4: html='<span class="badge badge-success">'+row[6]+'</span>';return html;
-            case 5: html='<span class="badge badge-danger">'+row[6]+'</span>';return html;
-            default: html='<span class="badge badge-light">'+row[6]+'</span>';return html;
+            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
     }
@@ -373,30 +384,34 @@
                 {data: 1, name: 'document.registrationNumber',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                         return html;
-                    }
+                    },
+                    className: "w-15 text-center"
                 },
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                         return html;
-                    }
+                    },
+                    className: "w-10 text-center"
                 },
-                {data: 3, name: 'document.content'},
-                {data: 4, name: 'createdAt'},
-                {data: 5, name: 'dueDate'},
-                {render: renderStatusColumn, name: 'status'},
-                {data: 7, name: 'content',
+                {data: 3, name: 'document.content',className: "w-20 text-justify"},
+                {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                {data: 5, name: 'dueDate',
                     render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[7]+'</a>';
+                        var html = row[5] + ' <br/>' + row[9][1];
                         return html;
-                    }
-                },
-                {render: renderActionsColumn, orderable: false}
+                    },
+                    className: "w-10 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
+                {data: 7, name: 'content',className: "w-20 text-justify"},
+                {render: renderActionsColumn, orderable: false,className: "w-5 text-center"}
             ],
+            rowCallback: function (row, data) {
+                $(row).children().addClass(data[9][0]);
+            },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }
@@ -425,7 +440,7 @@
         datatableConnect();
 
         $('#filter').on('change', function () {
-            getDatatableConnect();
+            getDatatableConnect(1);
         })
     })
 </script>

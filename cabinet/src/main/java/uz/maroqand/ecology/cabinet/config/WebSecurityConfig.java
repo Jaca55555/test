@@ -51,7 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.ErrorForbidden).permitAll()
                 .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
                 .antMatchers("/static*/**", "/map").permitAll()
-                .antMatchers("/doc/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/admin/dashboard/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/expertise/dashboard/**").hasAuthority(Permissions.EXPERTISE.name())
+                .antMatchers("/doc/dashboard/**").hasAuthority(Permissions.DOC_MANAGEMENT.name())
                 .antMatchers("/dashboard/**").authenticated()
 
                 .antMatchers("/mgmt/translations/**").hasAuthority(Permissions.ADMIN.name())
@@ -74,6 +76,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/expertise/facture/**").hasAuthority(Permissions.FACTURE_MONITORING.name())
 
                 .antMatchers("/sys/appeal_admin/**").hasAuthority(Permissions.APPEAL_ADMIN.name())
+
+                .antMatchers("/doc/registration/incoming/**").hasAuthority(Permissions.DOC_MANAGEMENT_REGISTER.name())
+                .antMatchers("/doc/outgoing_mail/**").hasAuthority(Permissions.DOC_MANAGEMENT_REGISTER.name())
+                .antMatchers("/doc/registration/inner/**").hasAuthority(Permissions.DOC_MANAGEMENT_INTERNAL.name())
 
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()

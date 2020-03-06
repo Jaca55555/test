@@ -14,13 +14,16 @@ public class DocUrls {
     private static final String Appeal = "/appeal"; //Murojaatlar
     private static final String Orders = "/orders"; //Buyruqlar
     private static final String DocumentCheck="/document_check"; //Document oxirgisi
-    public static final String Dashboard = Prefix + "/office";
+
+    public static final String Dashboard = Prefix + "/dashboard";
     public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
     public static final String FileDownload = Prefix + "/file/download";
     public static final String DocumentTaskChange = Prefix + "/task_change";
     public static final String DocumentOpenView = Prefix + "/open_view";
+
+    public static final String TaskChangeStatus = Prefix + "/task_change_status";
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish
@@ -60,7 +63,6 @@ public class DocUrls {
 
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomingSpecialControll = IncomingRegistration + "/special";
-//    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
@@ -98,6 +100,30 @@ public class DocUrls {
     public static final String DocTypeNew = DocType + "/new";
     public static final String DocTypeEdit = DocType + "/edit";
     public static final String DocTypeDelete = DocType + "/delete";
+
+    private static final String LibraryCategory = Prefix + "/library_category";
+    public static final String LibraryCategoryList = LibraryCategory + "/list";
+    public static final String LibraryCategoryListAjax = LibraryCategory + "/list_ajax";
+    public static final String LibraryCategoryView = LibraryCategory + "/view";
+    public static final String LibraryCategoryNew = LibraryCategory + "/new";
+    public static final String LibraryCategoryEdit = LibraryCategory + "/edit";
+    public static final String LibraryCategoryDelete = LibraryCategory + "/delete";
+
+
+    private static final String Library = Prefix + "/library";
+    public static final String LibraryList = Library + "/list";
+    public static final String LibraryListAjax = Library + "/list_ajax";
+    public static final String LibraryListAjaxWindow = Library + "/list_ajax_window";
+    public static final String LibraryView = Library + "/view";
+    public static final String LibraryNew = Library + "/new";
+    public static final String LibraryEdit = Library + "/edit";
+    public static final String LibraryDelete = Library + "/delete";
+    public static final String LibraryWindow = Library + "/window";
+    private static final String LibraryFile = Library + "/file";
+    public static final String LibraryFileUpload = LibraryFile + "/upload";
+    public static final String LibraryFileDownload = LibraryFile + "/download";
+    public static final String LibraryFileDelete = LibraryFile + "/delete";
+
 
     private static final String Journal = Prefix + "/journal";
     public static final String JournalList = Journal + "/list";
@@ -140,15 +166,15 @@ public class DocUrls {
     public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
     public static final String DocumentOrganizationEditStatus = DocumentOrganizationEdit + "/status";
 
-     private static final String OutgoingMail = Prefix + "/outgoing_mail";
-     public static final String OutgoingMailNew = OutgoingMail + "/new";
-     public static final String OutgoingMailList = OutgoingMail + "/list";
-     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
-     public static final String OutgoingMailView = OutgoingMail + "/view";
-     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
-     public static final String OutgoingMailFile = OutgoingMail + "/file";
-     public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
-     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
-     public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
-     public static final String OutgoingMailChangeStatus = OutgoingMail + "/change_status";
+    private static final String OutgoingMail = Prefix + "/outgoing_mail";
+    public static final String OutgoingMailNew = OutgoingMail + "/new";
+    public static final String OutgoingMailList = OutgoingMail + "/list";
+    public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
+    public static final String OutgoingMailView = OutgoingMail + "/view";
+    public static final String OutgoingMailEdit = OutgoingMail + "/edit";
+    private static final String OutgoingMailFile = OutgoingMail + "/file";
+    public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
+    public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
+    public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
+    public static final String OutgoingMailChangeStatus = OutgoingMail + "/change_status";
 }

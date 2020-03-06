@@ -19,10 +19,14 @@
                 <span>ХДФУ</span>
             </button>
             <button th:if="${specialControll}!=null" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
-                <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
+                <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i>
+                <span th:text="#{doc.special_controll}"></span>
             </button>
             <!--<button type="button" class="btn btn-rounded btn-success btn-sm ml-2 m0"><i class="feather icon-check-circle mr-0"></i>Махсус назоратда</button>-->
-            <!--<button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0"><i class="feather icon-clock mr-0"></i>Муддати яқинлашган</button>-->
+            <!--<button type="button" class="btn btn-warning btn-rounded btn-sm ml-2 m0">
+                <i class="feather icon-clock mr-0"></i>
+                <span th:text="${@documentTaskServiceImpl.getDueTranslateNameOrColor(task.id,false,'name',#locale)}">Муддати яқинлашган</span>
+            </button>-->
         </div>
         <div class="p10-horizontal mobile-column">
             <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
@@ -118,11 +122,16 @@
                                 <span class="fas fa-file-word"></span>
                             </div>
                             <div class="card-body" style="display: flex;text-align: left;align-items: center;">
-                                <a class="view-pdf" dat th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <a class="view-pdf" th:if="${document.insidePurpose == false || document.insidePurpose == null}" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
                                     <div th:id="'file_name_'+${file.id}">
                                         <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
                                     </div>
                                 </a>
+                                <div class="view-pdf" th:if="${document.insidePurpose == true}">
+                                    <div th:id="'file_name_'+${file.id}">
+                                        <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

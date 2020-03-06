@@ -130,12 +130,13 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
+            Boolean specialControll,
             Pageable pageable
     ) {
         return documentTaskSubRepository.findAll(getSpesification(
                 organizationId, documentTypeId,
                 documentOrganizationId, docRegNumber, registrationNumber, dateBegin, dateEnd, taskContent, content, performerId, taskSubType, taskSubStatus,
-                deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
+                deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
     }
 
     private static Specification<DocumentTaskSub> getSpesification(
@@ -158,7 +159,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             final Integer type,
             final Set<Integer> statuses,
             final Integer departmentId,
-            final Integer receiverId
+            final Integer receiverId,
+            final Boolean specialControll
     ) {
         return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
@@ -228,6 +230,9 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                     predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
                 }
 
+                if (specialControll != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
+                }
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

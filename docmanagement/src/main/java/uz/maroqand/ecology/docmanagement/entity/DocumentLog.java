@@ -41,20 +41,38 @@ public class DocumentLog
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
     private Set<File> contentFiles;
 
+    @ManyToOne
+    @JoinColumn(name = "document_id", insertable = false, updatable = false)
+    private Document document;
+
     @Column(name = "document_id")
     private Integer documentId;
-
-    @Column(name = "task_sub_id")
-    private Integer taskSubId;
 
     @ManyToOne
     @JoinColumn(name = "task_sub_id", insertable = false, updatable = false)
     private DocumentTaskSub taskSub;
 
-    @ManyToOne
-    @JoinColumn(name = "document_id", insertable = false, updatable = false)
-    private Document document;
+    @Column(name = "task_sub_id")
+    private Integer taskSubId;
 
+    @ManyToOne
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
+    private DocumentTask task;
+
+    @Column(name = "task_id")
+    private Integer taskId;
+
+    @Column(name = "before_status")
+    private String beforeStatus;
+
+    @Column(name = "before_status_color")
+    private String beforeStatusColor;
+
+    @Column(name = "after_status")
+    private String afterStatus;
+
+    @Column(name = "after_status_color")
+    private String afterStatusColor;
 
     @Column(name = "attached_doc_id")
     private Integer attachedDocId;

@@ -32,23 +32,23 @@
                     <table id="role-table" class="display table nowrap table-striped table-hover" style="width:100%">
                         <thead>
                         <tr>
-                            <th th:text="#{doc.user_id}">Id</th>
-                            <th th:text="#{doc.full_name}">Name</th>
-                            <th th:text="#{doc.status}">Status</th>
+                            <th th:text="#{doc.user_id}" class="w-20 text-center">Id</th>
+                            <th th:text="#{doc.full_name}" class="w-40 text-center">Name</th>
+                            <th th:text="#{doc.status}"  class="w-40 text-center">Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="user : ${users}">
-                            <td th:text="${user.id}"></td>
-                            <td th:text="${user.fullName}"></td>
-                            <td th:if="${isChief}">
+                            <td th:text="${user.id}" class="w-20 text-center"></td>
+                            <td th:text="${user.fullName}" class="w-40 text-center"></td>
+                            <td th:if="${isChief}" class="w-40 text-center">
                                 <div class="custom-control custom-switch" data-action="chief">
                                     <input type="checkbox" name="chief" class="custom-control-input" th:attr="data-id=${user.id}"
                                            th:id="'status_' + ${user.id}" th:checked="${user.isExecuteChief}"/>
                                     <label class="custom-control-label" th:for="'status_' + ${user.id}" th:text="#{doc.change}"></label>
                                 </div>
                             </td>
-                            <td th:if="${isController}">
+                            <td th:if="${isController}" class="w-40 text-center">
                                 <div class="custom-control custom-switch" data-action="controller">
                                     <input type="checkbox" name="controller" class="custom-control-input" th:attr="data-id=${user.id}"
                                            th:id="'status_' + ${user.id}" th:checked="${user.isExecuteController}">

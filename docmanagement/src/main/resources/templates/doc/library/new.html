@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <style>
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -52%);
+            max-width: 115px;
+        }
+        #percentage {
+            position: absolute;
+            top: 88%;
+            left: 8%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .ui-menu-item-wrapper:hover{
+            color:white;
+            background:#62c462;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- MainContent start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-start mobile-column" style="align-items: center;">
+                <h5 class="mb-0"><span class="card-header-a">New Library</span></h5>
+            </div>
+            <div class="card-block">
+                <form enctype="multipart/form-data"  id="document_form"  method="post"
+                      th:action="${action_url}" th:method="post" class="card-block" th:object="${library}"
+                >
+                    <input type="hidden" th:if="${library.id != null}" th:field="*{id}" th:value="*{id}" />
+                    <input type="hidden" th:if="${library.id != null}" name="createDate" th:value="${#dates.format(library.createdAt,'dd.MM.yyyy')}" />
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label"  th:text="#{doc.library_name}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{name}" >
+                                <i class="gray-arrow fas  fa-map color-gray"> </i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label"  th:text="#{doc.library_name_ru}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{nameRu}">
+                                <i class="gray-arrow fas  fa-map color-gray"> </i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label"  th:text="#{doc.library_name_kr}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control"  th:field="*{nameKr}">
+                                <i class="gray-arrow fas  fa-map color-gray"> </i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label"  th:text="#{doc.library_number}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control"  th:field="*{number}">
+                                <i class="gray-arrow fas  fa-map color-gray"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6 form-group">
+                            <label class="control-label" th:text="#{doc_library_date}">Хат рўйхатга олинган сана</label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_library_reg_date}" data-dtp="dtp_lq7TC" required="required" name="ldateStr" th:value="${library.ldate!=null? #dates.format(library.ldate,'yyyy.MM.dd'):''}" >
+                                <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.library_category}"></label>
+                            <div class="col-sm-12 p0">
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                                        tabindex="-1" aria-hidden="true" th:field="*{categoryId}">
+                                    <option value=""> </option>
+                                    <option th:each="t:${librarycategory}" th:if="${t.parent!=null}" th:value="${t.id}" th:text="#{${t.name}}">
+                                    </option>
+                                </select>
+
+                                <i class="gray-arrow fas fa-sort-down color-gray"></i>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label class="control-label">Library Short(Uz)</label>
+                            <textarea  class="form-control" name="validation-text"
+                                       placeholder="Хатнинг қисқача махзмунини киритинг." th:field="*{ftext}"></textarea>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label class="control-label">Library Short(Ru)</label>
+                            <textarea  class="form-control" name="validation-text"
+                                       placeholder="Хатнинг қисқача махзмунини киритинг." th:field="*{ftextRu}"></textarea>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label class="control-label">Library Short(Kr)</label>
+                            <textarea  class="form-control" name="validation-text"
+                                       placeholder="Хатнинг қисқача махзмунини киритинг." th:field="*{ftextKr}"></textarea>
+                        </div>
+                    </div>
+
+                    <hr class="m30-vertical">
+                    <h5 class="mb-0 card-header no-border">Kutubxona fayllarini yuklash</h5>
+                    <div class="row p20" id="file-container">
+                        <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                            <div  class="text-center file-icon-container align-self-center color-gray">
+                                <span class="fas fa-plus" id="addFileButton"></span>
+                                <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="file_ids" class="d-none">
+                        <input type="text" name="file_ids" value="">
+                    </div>
+                    <div id="addFileDiv">
+                        <input type="file" class="d-none" id="addFile2" name="files">
+                    </div>
+                    <div class="row">
+                        <div class="flex-center w100 row-wrap">
+                            <button type="button" class="btn btn-light m10-vertical m20-horizontal" onclick="withdrawal()" >Бекор қилиш</button>
+                            <button type="submit" form="document_form" class="btn btn-success m10-vertical m20-horizontal">Рўйхатга
+                                олиш</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script th:inline="javascript">
+
+
+    function clickPlus() {
+        $('#addFile2').click();
+
+    }
+
+    $(document).ready(function(){
+        hearInputClickFunction();
+        $('#document_organization_id').select2({
+            tags: true,
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+
+        $('#additional_document_id').select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+
+
+
+
+
+
+    }
+    );
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function deleteFunc(id){
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        $('#addFile2').remove();
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+        $('#addFileDiv').append(`
+             <input type="file" class="d-none" id="addFile2" name="files">
+        `);
+        hearInputClickFunction();
+    }
+
+    function hearInputClickFunction(){
+        $('#addFile2').on('change', function () {
+
+            let csrf = $("form input[name='_csrf']").val();
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/doc/outgoing_mail/file/upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+
+                    return xhr;
+                }
+            })
+        });
+    }
+
+    function withdrawal(){
+        window.location = `/doc/outgoing_mail/list`;
+
+    }
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        switch (extension) {
+            case 'jpg': case 'png':
+                extension = '-image';
+                color = 'color-yellow';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+        );
+    }
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
+
+
+</script>
+</body>
+</html>

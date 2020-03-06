@@ -35,7 +35,7 @@
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{${view_tag}+'.senderOrganizationName'}">Жўнатувчи ташкилот:</span></div>
                 <div class="col-md-6 p0" style="float: right;">
-                    <span th:if="${documentSub!=null}" th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span>
+                    <span th:if="${document_organization_name!=null && document_organization_name!=''}" th:text="${document_organization_name}">"Мароқанд" МЧЖ</span>
                 </div>
             </div>
 
@@ -95,11 +95,16 @@
                                 <span class="fas fa-file-word"></span>
                             </div>
                             <div class="card-body" style="display: flex;text-align: left;align-items: center;">
-                                <a class="view-pdf" dat th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <a class="view-pdf" th:if="${document.insidePurpose == false || document.insidePurpose == null}" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
                                     <div th:id="'file_name_'+${file.id}">
                                         <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
                                     </div>
                                 </a>
+                                <div class="view-pdf" th:if="${document.insidePurpose == true}">
+                                    <div th:id="'file_name_'+${file.id}">
+                                        <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

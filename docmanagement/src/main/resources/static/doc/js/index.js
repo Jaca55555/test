@@ -70,10 +70,10 @@ $(document).ready(function() {
     $(".multiselect").select2({
       maximumSelectionLength: 3
       });
-    $('.date').bootstrapMaterialDatePicker({
-                    format: 'DD.MM.YYYY',
-                    weekStart: 0,
-                    time: false
+    $('.date').datepicker({
+        format: "dd.mm.yyyy",
+        todayHighlight: true,
+        autoclose: true
                 });
 });
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -27,7 +24,6 @@ import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.entity.*;
-import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -58,6 +54,7 @@ public class IncomingRegistrationController {
     private final DocumentTaskSubService taskSubService;
     private final DocumentLogService documentLogService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentOrganizationService documentOrganizationService;
 
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Autowired
@@ -74,8 +71,8 @@ public class IncomingRegistrationController {
             DocumentTaskService taskService,
             DocumentTaskSubService taskSubService,
             DocumentLogService documentLogService,
-            DocumentHelperService documentHelperService
-    ) {
+            DocumentHelperService documentHelperService,
+            DocumentOrganizationService documentOrganizationService) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
@@ -89,6 +86,7 @@ public class IncomingRegistrationController {
         this.organizationService = organizationService;
         this.documentViewService = documentViewService;
         this.documentHelperService = documentHelperService;
+        this.documentOrganizationService = documentOrganizationService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
@@ -115,23 +113,70 @@ public class IncomingRegistrationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<Integer> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+        Integer tabFilter = incomingRegFilter.getTabFilter()!=null?incomingRegFilter.getTabFilter():1;
+        switch (tabFilter){
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
+            case 5:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());
+                break;//Ижро назоратида
+            case 7:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Complete.getId());
+                break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
+            default:
+                break;//Жами
+        }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
+                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+            }
+            docContent+=" №"+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
+            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
+                    docContent,
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
                     documentTask.getContent(),
-                    documentTask.getStatus()
+                    documentTask.getStatus(),
+                    taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
+
             });
         }
 
@@ -154,6 +199,7 @@ public class IncomingRegistrationController {
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
@@ -169,7 +215,8 @@ public class IncomingRegistrationController {
                     document.getContent()!=null?document.getContent():"",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
-                    document.getStatus().getName(),
+                    documentHelperService.getTranslation(document.getStatus().getName(),locale),
+                    document.getStatus().getId()
             });
         }
 
@@ -191,6 +238,7 @@ public class IncomingRegistrationController {
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTasks", documentTasks);
@@ -482,8 +530,6 @@ public class IncomingRegistrationController {
         HashMap<String, Object> response = new HashMap<>();
         Document document = documentService.getById(id);
         document.setSpecialControll(!document.getSpecialControll());
-        System.out.println(document.getPerformerPhone());
-        System.out.println(document.getPerformerPhone().getClass().getName());
         documentService.update(document);
         response.put("status", "success");
         return response;
@@ -512,25 +558,6 @@ public class IncomingRegistrationController {
             return fileService.getFileAsResourceForDownloading(file);
         }
     }
-
-    /*@GetMapping(value = DocUrls.IncomeMailSpecial)
-    @ResponseBody
-    public HashMap<String, Object> changeSpecial(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "enabled")Boolean enabled
-    ) {
-        HashMap<String, Object> response = new HashMap<>();
-        Document document = documentService.getById(id);
-        if (document == null) {
-            response.put("status", "not found");
-            return response;
-        }
-        document.setSpecialControl(enabled);
-        documentService.update(document);
-        response.put("status", "success");
-        response.put("value", enabled);
-        return response;
-    }*/
 
     /*@GetMapping(value = DocUrls.IncomeMailAddTask)
     public String getAddTaskPage(

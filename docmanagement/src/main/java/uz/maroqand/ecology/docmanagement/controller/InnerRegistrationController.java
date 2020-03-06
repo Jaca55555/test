@@ -109,8 +109,46 @@ public class InnerRegistrationController {
         incomingRegFilter.setDateEndStr(StringUtils.trimToNull(registrationDateEnd));
         incomingRegFilter.setContent(StringUtils.trimToNull(content));
         incomingRegFilter.setDocumentOrganizationId(documentOrganizationId);
+
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<Integer> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+        tabFilter = tabFilter!=null?tabFilter:1;
+        switch (tabFilter){
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
+            case 5:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());
+                break;//Ижро назоратида
+            case 7:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Complete.getId());
+                break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
+            default:
+                break;//Жами
+        }
         //todo documentTypeId=3
-        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,null,null,null,null,null,null, pageable);
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,deadlineDateBegin,deadlineDateEnd,null,status,null,null, specialControll,pageable);
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
@@ -126,7 +164,9 @@ public class InnerRegistrationController {
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
                     documentTask.getContent(),
-                    documentTask.getStatus()
+                    documentTask.getStatus(),
+                    documentTaskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
+
             });
         }
 
@@ -142,7 +182,6 @@ public class InnerRegistrationController {
             Model model
     ) {
 
-
         DocumentTask documentTask = documentTaskService.getById(id);
         if (documentTask == null) {
             return "redirect: " + DocUrls.InnerRegistrationList;
@@ -155,6 +194,7 @@ public class InnerRegistrationController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("task", documentTask);
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
@@ -313,6 +353,13 @@ public class InnerRegistrationController {
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
+        if (document.getInsidePurpose()) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
+
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
         model.addAttribute("userList", userList);

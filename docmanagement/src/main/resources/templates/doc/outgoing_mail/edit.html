@@ -72,8 +72,9 @@
                         </div>
                         <div class="col-sm-6 form-group">
                             <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
-                            <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
+                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required">
                                 <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
+                                <option th:if="${#lists.size(document_organization_ids)>0}" selected="selected" th:value="${document_organization.id}" th:text="${document_organization.name}" th:each="document_organization : ${document_organization_ids}" ></option>
                             </select>
                         </div>
                         <!-- journal, document_view, communication tools, organization_name fields end -->

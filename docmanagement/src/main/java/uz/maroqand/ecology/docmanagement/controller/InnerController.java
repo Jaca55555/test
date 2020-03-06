@@ -18,6 +18,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
@@ -114,6 +115,8 @@ public class InnerController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+
 
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
@@ -144,6 +147,9 @@ public class InnerController {
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
                 receiverId=null;
@@ -171,6 +177,7 @@ public class InnerController {
                 status,
                 departmentId,
                 receiverId,
+                specialControll,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -188,7 +195,9 @@ public class InnerController {
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
-                    documentTaskSub.getStatus()
+                    documentTaskSub.getStatus(),
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+
             });
         }
 
@@ -214,6 +223,12 @@ public class InnerController {
         }
 
         DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+        if (document.getInsidePurpose()) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -224,6 +239,7 @@ public class InnerController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);

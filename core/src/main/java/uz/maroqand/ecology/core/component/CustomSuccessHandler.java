@@ -6,6 +6,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import uz.maroqand.ecology.core.constant.user.LoginType;
+import uz.maroqand.ecology.core.constant.user.Permissions;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -58,7 +59,30 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         userAdditionalService.updateUserAdditional(user, LoginType.EcoExpertiseLogin, request);
         user.setLastEvent(new Date());
         userService.updateUser(user);
-        return "/dashboard";
+
+        Boolean admin = false;
+        Boolean doc_management = false;
+        Boolean expertise = false;
+        for(Permissions permission: user.getRole().getPermissions()){
+            if(permission.getId().equals(Permissions.ADMIN.getId())){
+                admin = true;
+            }
+            if(permission.getId().equals(Permissions.DOC_MANAGEMENT.getId())){
+                doc_management = true;
+            }
+            if(permission.getId().equals(Permissions.EXPERTISE.getId())){
+                expertise = true;
+            }
+        }
+        if(admin && doc_management.equals(Boolean.FALSE) && expertise.equals(Boolean.FALSE)){
+            return "/admin/dashboard";
+        } else if(expertise && doc_management.equals(Boolean.FALSE) && admin.equals(Boolean.FALSE)){
+            return "/expertise/dashboard";
+        } else if(doc_management && admin.equals(Boolean.FALSE) && expertise.equals(Boolean.FALSE)){
+            return "/doc/dashboard";
+        } else {
+            return "/dashboard";
+        }
     }
 
     protected RedirectStrategy getRedirectStrategy() {

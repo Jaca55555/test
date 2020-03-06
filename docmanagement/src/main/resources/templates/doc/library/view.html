@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <!--/*@thymesVar id="docType" type="uz.maroqand.ecology.docmanagement.entity.Library"*/-->
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 class="mb-0">
+                    <span class="card-header-a" th:text="#{doc.library_category_view}"></span>
+                    <span class="card-header-a" th:if="__${#locale}__=='uz' or __${#locale}__=='oz'" th:text="${library.name}"></span>
+                    <span class="card-header-a" th:if="__${#locale}__=='ru'" th:text="${library.nameRu}"></span>
+                </h5>
+
+            </div>
+            <div class="card-body">
+                <div class="row"  th:each="i:${library}">
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_id}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.id}"></span></div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.librar_name}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.name}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_name_ru}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.nameRu}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_name_kr}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.nameKr}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_number}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.number}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_date}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(library.ldate,'dd.MM.yyyy')}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_created_date}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${#dates.format(library.createdAt,'dd.MM.yyyy')}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftext}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftext}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftextRu}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftextRu}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                        <div class="col-md-6 p0"><span class="bold" th:text="#{doc.library_ftextKr}"></span></div>
+                        <div class="col-md-6 p0" style="float:right"><span th:text="${i.ftextKr}"></span></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" id="fileContainer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script th:inline="javascript">
+    let files = [[${files}]];
+</script>
+<script>
+    function detectExtensionAndColor(extension){
+        let data = {};
+        switch (extension) {
+            case 'jpg': case 'png':
+                data.extension = '-image';
+                data.color = 'color-yellow';
+                break;
+            case 'pdf':
+                data.extension = '-pdf';
+                data.color = 'color-red';
+                break;
+            case 'xlsx':
+                data.extension = "-excel";
+                data.color = "color-green";
+                break;
+            case 'doc':
+            case 'docx':
+                data.extension = "-word";
+                data.color = "color-blue";
+                break;
+            default:
+                data.extension = "";
+                data.color = "color-gray";
+        }
+        return data;
+    }
+
+    function displayFiles(files){
+        for(let i = 0; i < files.length; i++){
+            let extensionAndColor = detectExtensionAndColor(files[i].extension)
+            $('#fileContainer').append(`
+                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
+                                <div class="card dashboard-card">
+                                    <div class="file-icon-container-small ${extensionAndColor.color}"><span
+                                            class="fas fa-file${extensionAndColor.extension}"></span></div>
+                                    <div class="card-body"
+                                         style="display: flex;text-align: left;align-items: center;">
+                                        <h6 class="card-title" >${files[i].name}</h6>
+                                    </div>
+                                </div>
+                            </div>
+            `);
+        }
+    }
+    function downloadFileFunction(id) {
+        window.open(`/doc/library/file/download?id=${id}`);
+    }
+    displayFiles(files);
+
+</script>
+</body>
+</html>
