@@ -227,7 +227,7 @@ public class IncomingController {
             return "redirect:" + DocUrls.IncomingList;
         }
         DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
-        if (task == null) {
+        if (task == null || task.getDocumentId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
 
