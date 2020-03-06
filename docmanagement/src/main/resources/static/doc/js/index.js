@@ -75,6 +75,10 @@ $(document).ready(function() {
         todayHighlight: true,
         autoclose: true
                 });
+    // $('.date').bootstrapMaterialDatePicker({
+    //     weekStart: 0,
+    //     time: false
+    // });
 });
 
 

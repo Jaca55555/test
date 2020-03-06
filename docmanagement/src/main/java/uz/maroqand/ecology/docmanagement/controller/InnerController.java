@@ -214,12 +214,12 @@ public class InnerController {
     ) {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub == null) {
-            return "redirect: " + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
-            return "redirect: " + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
         DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());

@@ -1,3 +1,4 @@
+
 body {
     background: #f4f7fa;
     overflow-x: hidden;
@@ -522,10 +523,10 @@ html, body {
         /*height: -webkit-fill-available;*/
         /*align-items: center;*/
     /*}*/
-    #dynamicTable > tbody > tr > td:last-child {
-        display: flex;
-        justify-content: center;
-    }
+    /*#dynamicTable > tbody > tr > td:last-child {*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+    /*}*/
     td > div.btn-group {
         margin-bottom: 2px;
     }
@@ -556,7 +557,9 @@ html, body {
     #responsive-table-model > thead > th {
         text-align: center;
     }
-
+    table button {
+        white-space: nowrap;
+    }
 
 /* media */
 @media (max-width:1700px) {

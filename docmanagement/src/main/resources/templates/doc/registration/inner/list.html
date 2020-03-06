@@ -299,22 +299,22 @@
                                         <th class="sorting_asc w-15" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                             <span th:text="#{doc_incoming.registrationNumber}"> Регистрация рақами</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
-                                        <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                             <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th></th>
@@ -438,25 +438,25 @@
                         html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                         return html;
                     },
-                    className: "w-15 text-center"
+                    className: "text-left"
                 },
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                         return html;
-                    },className: "w-10 text-center"
+                    },className: "text-left"
                 },
-                {data: 3, name: 'document.content',className: "w-20 text-center"},
-                {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                {data: 3, name: 'document.content',className: "text-left"},
+                {data: 4, name: 'createdAt',className: "text-center"},
                 {data: 5, name: 'dueDate',
                     render: function (data, type, row, meta) {
                         var html = row[5] + ' <br/>' + row[9][1];
                         return html;
                     },
-                    className: "w-10 text-center"},
-                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',className: "w-20 text-center"},
+                    className: "text-center"},
+                {render: renderStatusColumn, name: 'status',className: "text-center"},
+                {data: 7, name: 'content',className: "text-center"},
                 {render:renderActionsColumn, orderable: "false"}
             ],
             rowCallback: function (row, data) {
