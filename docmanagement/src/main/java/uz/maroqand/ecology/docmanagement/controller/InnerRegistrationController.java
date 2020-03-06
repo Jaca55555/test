@@ -349,11 +349,11 @@ public class InnerRegistrationController {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
 
-        Document document = documentService.getById(id);
+        Document document = documentService.getById(documentTask.getDocumentId());
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(documentTask.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);
