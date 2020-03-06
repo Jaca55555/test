@@ -228,7 +228,7 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);
@@ -278,7 +278,7 @@ public class IncomingController {
             return  "redirect:" + DocUrls.IncomingList;
         }
 
-        if (document.getInsidePurpose()) {
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             if (user.getId().equals(documentTask.getPerformerId())) {
                 document.setInsidePurpose(Boolean.FALSE);
             }
