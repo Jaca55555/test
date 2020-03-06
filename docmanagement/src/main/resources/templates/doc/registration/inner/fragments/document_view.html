@@ -58,7 +58,7 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.documentView}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="${specialControll}!=null && *{docRegNumber!=null && docRegNumber!=''}">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="*{specialControll!=null && docRegNumber!=null && docRegNumber!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.docRegNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.registrationNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${specialControll}!=null && ${document.docRegDate!=null}">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${document.specialControll!=null && document.docRegDate!=null}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.docRegDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
@@ -80,7 +80,7 @@
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="${specialControll}!=null && *{performerName!=null && performerName!=''}">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="*{specialControll!=null && performerName!=null && performerName!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.performerName}">Жўнатувчи шахс:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
             </div>
@@ -92,7 +92,7 @@
                 <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="${specialControll}!=null && *{performerPhone!=null && performerPhone!=''}">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"  th:if="*{specialControll!=null && performerPhone!=null && performerPhone!=''}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
