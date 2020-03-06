@@ -87,27 +87,25 @@
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <label>Девонхона</label>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
-                <li class="nav-item pr-3">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fa fa-bars color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
                     </a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationList}">
                         <span class="pcoded-micon"><i class="fa fa-level-down-alt color-green"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
                     </a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailList}">
                         <span class="pcoded-micon"><i class="fa fa-level-up-alt color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
                     </a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationList}">
                         <span class="pcoded-micon"><i class="fa fa-archive color-purple"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_inner.list}">Ички хужжатлар</span>
@@ -118,19 +116,19 @@
                     <label>Руйхатга олиш</label>
                 </li>
 
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}">
                         <span class="pcoded-micon"><i class="fas fa-envelope-open color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.reg}">Кирувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}">
                         <span class="pcoded-micon"><i class="fa fa-envelope color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_outgoing.reg}">Чикувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}">
                         <span class="pcoded-micon"><i class="fa fa-flag color-purple"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_inner.reg}">Ички хужжатларни руйхатга олиш</span>
@@ -142,7 +140,7 @@
                          <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
                      </a>
                  </li>-->
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                <li class="nav-item pr-3" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}">
                         <span class="pcoded-micon"><i class="fa fa-exclamation-circle color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.taskNot}">Ижрога тушмаган</span>
