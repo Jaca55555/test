@@ -161,10 +161,13 @@ public class IncomingRegistrationController {
             String docContent="";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
-                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
             }
-            docContent+=" №"+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
-            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
