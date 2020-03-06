@@ -21,10 +21,12 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 /**
@@ -96,7 +98,18 @@ public class OutgoingController {
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
         if(additionalDocument != null) {
             model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
-            model.addAttribute("additional_document_view_link", DocUrls.OutgoingMailView + "?id=" + additionalDocument.getId());
+
+            DocumentType type = additionalDocument.getDocumentType();
+            String viewLink;
+
+            if(type.equals(DocumentTypeEnum.IncomingDocuments))
+                viewLink = DocUrls.IncomingView;
+            else if(type.equals(DocumentTypeEnum.OutgoingDocuments))
+                viewLink = DocUrls.OutgoingMailView;
+            else
+                viewLink = DocUrls.InnerView;
+
+            model.addAttribute("additional_document_view_link", viewLink + "?id=" + additionalDocument.getId());
         }
         model.addAttribute("document_organization_name", documentSub.getOrganization().getName());
 
