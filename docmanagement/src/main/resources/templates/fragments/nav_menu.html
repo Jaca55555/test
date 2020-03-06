@@ -22,36 +22,38 @@
                     <label>Хужжатлар</label>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fa fa-bars color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link " th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fas fa-inbox color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>
+                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="bg-success border border-primary w-15 text-center " style="height: 15px;border-radius: 3px; line-height: 100%; color:white; padding: 1px 0; font-size: 12px; font-weight: bolder;">12</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}" style="width: 95%" >
                         <span class="pcoded-micon"><i class="fas fa-upload color-green"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>
-
+<!--                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px;border-radius: 3px">12</span>-->
+                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="bg-success border border-primary w-15 text-center" style="height: 15px;border-radius: 3px; line-height: 100%; color:white; padding: 1px 0; font-size: 12px; font-weight: bolder;">
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fa fa-archive color-purple"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_inner.list}">Ички хужжатлар</span>
-                        <span th:text="${@getNotifacationService.countInnerByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>
+<!--                        <span th:text="${@getNotifacationService.countInnerByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px;border-radius: 3px">12</span>-->
+                        <span th:text="${@getNotifacationService.countInnerByStatus()}" class="bg-success border border-primary w-15 text-center" style="height: 15px;border-radius: 3px; line-height: 100%; color:white; padding: 1px 0; font-size: 12px; font-weight: bolder;">
+
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fas fa-check-square color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_check.list}"></span>
                     </a>
@@ -75,8 +77,8 @@
                         <span class="pcoded-mtext">Журналлар буйича</span>
                     </a>
                 </li>-->
-                <li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryWindow}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryWindow}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fas fa-check-square color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{Kutubxona}"></span>
                     </a>
@@ -87,6 +89,8 @@
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
+                <li class="nav-item pr-3">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="width: 95%">
                         <span class="pcoded-micon"><i class="fa fa-bars color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
                     </a>
@@ -141,9 +145,9 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}">
                         <span class="pcoded-micon"><i class="fa fa-exclamation-circle color-yellow"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_incoming.taskNotIncluded}">Ижрога тушмаган</span>
-<!--                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>-->
-                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary w-15 text-center" style="height: 20px;border-radius: 3px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.taskNot}">Ижрога тушмаган</span>
+<!--                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary w-15 text-center" style="height: 20px;border-radius: 3px">12</span>-->
+                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary w-15 text-center" style="height: 15px;border-radius: 3px; line-height: 100%; color:white; padding: 1px 0; font-size: 12px; font-weight: bolder;">
 
                     </a>
                 </li>
