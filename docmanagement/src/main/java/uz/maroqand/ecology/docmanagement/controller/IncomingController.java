@@ -294,7 +294,7 @@ public class IncomingController {
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
 
         model.addAttribute("document", document);
-        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
