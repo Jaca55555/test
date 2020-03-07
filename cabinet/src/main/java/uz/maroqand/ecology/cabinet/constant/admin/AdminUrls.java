@@ -39,6 +39,13 @@ public class AdminUrls {
     public static final String DepartmentGetByOrganization = Department + "/get_department";
 
 
-    private static final String Position = "/position";
+    private static final String Position = Prefix + "/position";
+    public static final String PositionList = Position + "/list";
+    public static final String PositionGet = Position + "/get_ajax_position";
+    public static final String PositionCreate = Position + "/create";
+    public static final String PositionUpdate = Position + "/update";
+    public static final String PositionStatusUpdate = Position + "/status_update";
+    public static final String PositionDelete = Position + "/delete";
+    public static final String PositionView = Position + "/view";
 
 }

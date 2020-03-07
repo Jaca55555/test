@@ -21,5 +21,9 @@ public class AdminTemplates {
     public static final String DepartmentNew = Department + "/new";
     public static final String DepartmentView = Department + "/view";
 
+    //Position
+    private static final String Position = Prefix + "/position";
+    public static final String PositionList = Position + "/list";
+    public static final String PositionView = Position + "/view";
 
 }

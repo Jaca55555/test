@@ -16,6 +16,10 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 
     Position findByIdAndDeletedFalse(Integer id);
 
+    Position findByIdAndOrganizationIdAndDeletedFalse(Integer id, Integer organizationId);
+
     List<Position> findAllByDeletedFalseOrderByIdDesc();
+
+    List<Position> findByOrganizationIdAndDeletedFalseOrderByIdDesc(Integer organizationId);
 
 }
