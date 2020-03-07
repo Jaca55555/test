@@ -202,7 +202,7 @@ public class IncomingRegistrationController {
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
-        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
+//        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
@@ -435,7 +435,7 @@ public class IncomingRegistrationController {
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
             return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();
         }else {
-            return "redirect:" + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationNewList;
         }
     }
 
