@@ -53,7 +53,11 @@ public class PaymentFile {
     private String bankMfo;
 
     //Тўлов суммаси
-    private String amount;
+    private Double amount;
+
+    //Тўлов суммаси
+    @Column(name = "amount_original")
+    private String amountOriginal;
 
     //Документ рақами
     @Column(name = "document_number")
