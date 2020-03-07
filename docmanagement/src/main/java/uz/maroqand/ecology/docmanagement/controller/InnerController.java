@@ -217,6 +217,11 @@ public class InnerController {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
             return "redirect:" + DocUrls.IncomingRegistrationList;
