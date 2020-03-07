@@ -208,9 +208,6 @@
                             <button class="btn-icon" th:onclick="'addComment('+${task.id}+')'" data-toggle="modal" data-target="#modal1">
                                 <i class="fs20 fas fa-edit color-gray"></i>
                             </button>
-                            <button class="btn-icon">
-                                <i class="fas fs20 fa-print color-gray"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="card-body comment-content" th:id="'comments'+${task.id}">
@@ -447,7 +444,7 @@
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
 
     $(document).ready(function () {
-            docFileName([[${document.contentFiles}]]);
+        docFileName([[${document.contentFiles}]]);
         $('#formSend').on('click', function (e) {
             let url = $('#commentForm').prop('action');
             let data = $('#commentForm').serialize();
@@ -488,6 +485,7 @@
                         html +="</div>";
                         $('#comments'+log.taskId).prepend(html);
                         $('#modal1').modal('toggle');
+                        $('#commentForm').trigger('reset');
                         $('#taskId').val('');
                     }
                 }
