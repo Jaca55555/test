@@ -292,6 +292,12 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
             }
 
+            if (incomingRegFilter.getDocumentOrganizationId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.join("document").join("documentSubs").get("organizationId"),
+                        incomingRegFilter.getDocumentOrganizationId()
+                ));
+            }
 
             if (incomingRegFilter.getDocRegNumber() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + incomingRegFilter.getDocRegNumber().toLowerCase() + "%"));
