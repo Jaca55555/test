@@ -21,14 +21,18 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     User findByTinAndLeTin(Integer tin, Integer leTin);
 
+    User findByIdAndOrganizationId(Integer id, Integer organizationId);
+
     List<User> findByTin(Integer tin);
 
     List<User> findAllByDepartmentIdNotNull();
 
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
+
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
 
     List<User> findAllByIsExecuteChiefTrue();
+
     List<User> findAllByIsExecuteControllerTrue();
 
     List<User> findByOrganizationId(Integer organizationId);

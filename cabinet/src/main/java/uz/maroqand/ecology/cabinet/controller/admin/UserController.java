@@ -1,4 +1,5 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.admin;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,19 +20,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminTemplates;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.TableHistory;
 import uz.maroqand.ecology.core.entity.user.EvidinceStatus;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.user.UserEvidence;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.*;
-import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.lang.reflect.Type;
@@ -39,45 +41,51 @@ import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 27.03.2019.
- * (uz) Bitta tashkilotga tegishli foydalanuvchilar
+ * (uz)
+ * (ru)
  */
 @Controller
-public class ExpertiseUserController {
+public class UserController {
 
     private final UserService userService;
     private final PositionService positionService;
     private final DepartmentService departmentService;
     private final RoleService userRoleService;
     private final TableHistoryService tableHistoryService;
+    private final SoatoService soatoService;
     private final OrganizationService organizationService;
     private final ObjectMapper objectMapper;
+    private final UserAdditionalService userAdditionalService;
     private final UserEvidenceService userEvidenceService;
     private final FileService fileService;
 
     @Autowired
-    public ExpertiseUserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, OrganizationService organizationService, ObjectMapper objectMapper, UserEvidenceService userEvidenceService, FileService fileService) {
+    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
         this.userService = userService;
         this.positionService = positionService;
         this.departmentService = departmentService;
         this.tableHistoryService = tableHistoryService;
         this.userRoleService = userRoleService;
+        this.soatoService = soatoService;
         this.organizationService = organizationService;
         this.objectMapper = objectMapper;
+        this.userAdditionalService = userAdditionalService;
         this.userEvidenceService = userEvidenceService;
         this.fileService = fileService;
     }
 
-    @RequestMapping(MgmtUrls.UsersList)
+    @RequestMapping(AdminUrls.UsersList)
     public String getUserListPage(Model model) {
 
         model.addAttribute("departmentList",departmentService.getAll());
+        model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("positionList",positionService.getAll());
         model.addAttribute("roleList",userRoleService.getRoleList());
-        model.addAttribute("add_url",MgmtUrls.UsersNew);
-        return MgmtTemplates.UserList;
+        model.addAttribute("add_url", AdminUrls.UsersNew);
+        return AdminTemplates.UserList;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersListAjax, produces = "application/json")
+    @RequestMapping(value = AdminUrls.UsersListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getUserAjaxList(
             @RequestParam(name = "userId", defaultValue = "", required = false) Integer userId,
@@ -85,17 +93,18 @@ public class ExpertiseUserController {
             @RequestParam(name = "lastname", defaultValue = "", required = false) String lastname,
             @RequestParam(name = "middlename", defaultValue = "", required = false) String middlename,
             @RequestParam(name = "username", defaultValue = "", required = false) String username,
+            @RequestParam(name = "organizationId", defaultValue = "", required = false) Integer organizationId,
             @RequestParam(name = "departmentId", defaultValue = "", required = false) Integer departmentId,
             @RequestParam(name = "positionId", defaultValue = "", required = false) Integer positionId,
             Pageable pageable
     ) {
-        User currentUser = userService.getCurrentUserFromContext();
+
         firstname = StringUtils.trimToNull(firstname);
         lastname = StringUtils.trimToNull(lastname);
         middlename = StringUtils.trimToNull(middlename);
         username = StringUtils.trimToNull(username);
 
-        Page<User> usersPage = userService.findFiltered(userId,firstname,lastname,middlename,username, currentUser.getOrganizationId(),departmentId,positionId,pageable);
+        Page<User> usersPage = userService.findFiltered(userId,firstname,lastname,middlename,username,organizationId,departmentId,positionId,pageable);
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", usersPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", usersPage.getTotalElements()); //Filtered elements
@@ -121,47 +130,47 @@ public class ExpertiseUserController {
         return result;
     }
 
-    @RequestMapping(MgmtUrls.UsersNew)
+    @RequestMapping(AdminUrls.UsersNew)
     public String getUsersNewPage(Model model) {
-        User currentUser = userService.getCurrentUserFromContext();
-        model.addAttribute("departmentList",departmentService.getByOrganizationId(currentUser.getOrganizationId()));
 
-        model.addAttribute("user", new User());
+        model.addAttribute("user",new User());
         model.addAttribute("departmentId",null);
+        model.addAttribute("departmentList",departmentService.getAll());
+        model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("positionList",positionService.getAll());
         model.addAttribute("roleList",userRoleService.getRoleList());
-        model.addAttribute("action_url",MgmtUrls.UsersCreate);
-        model.addAttribute("back_url",MgmtUrls.UsersList);
-        return MgmtTemplates.UserNew;
+        model.addAttribute("action_url", AdminUrls.UsersCreate);
+        model.addAttribute("back_url", AdminUrls.UsersList);
+        return AdminTemplates.UserNew;
     }
 
-    @RequestMapping(MgmtUrls.UsersEdit)
+    @RequestMapping(AdminUrls.UsersEdit)
     public String getUsersEditPage(
             @RequestParam(name = "id") Integer userId,
             Model model
     ) {
-        User currentUser = userService.getCurrentUserFromContext();
-        User user = userService.findById(userId, currentUser.getOrganizationId());
-        if (user == null) {
-            return "redirect:" + MgmtUrls.UsersList;
+        User user = userService.findById(userId);
+        if (user==null) {
+            return "redirect:" + AdminUrls.UsersList;
         }
-        model.addAttribute("departmentList",departmentService.getByOrganizationId(currentUser.getOrganizationId()));
-
         model.addAttribute("user",user);
         model.addAttribute("departmentId",user.getDepartmentId()!=null?user.getDepartmentId():null);
+        model.addAttribute("departmentList",departmentService.getAll());
+        model.addAttribute("organizationList",organizationService.getList());
         model.addAttribute("positionList",positionService.getAll());
         model.addAttribute("roleList",userRoleService.getRoleList());
-        model.addAttribute("action_url",MgmtUrls.UsersUpdate);
-        model.addAttribute("back_url",MgmtUrls.UsersList);
-        return MgmtTemplates.UserNew;
+        model.addAttribute("action_url", AdminUrls.UsersUpdate);
+        model.addAttribute("back_url", AdminUrls.UsersList);
+        return AdminTemplates.UserNew;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersUsernameCheck, produces = "application/json",method = RequestMethod.POST)
+    @RequestMapping(value = AdminUrls.UsersUsernameCheck, produces = "application/json",method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getUsernameCheck(
             @RequestParam(name = "username", defaultValue = "", required = false) String username,
             @RequestParam(name = "id", required = false) Integer userId
     ) {
+        System.out.println("username="+username + " userId=" + userId);
         User user1 =null;
         if (userId!=null){
             user1 = userService.findById(userId);
@@ -183,7 +192,7 @@ public class ExpertiseUserController {
     }
 
     //fileUpload
-    @RequestMapping(value = MgmtUrls.UsersEvidenceFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = AdminUrls.UsersEvidenceFileUpload, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> uploadFile(
             @RequestParam(name = "id",required = false) Integer id,
@@ -191,6 +200,9 @@ public class ExpertiseUserController {
             @RequestParam(name = "file") MultipartFile multipartFile
     ) {
         User user = userService.getCurrentUserFromContext();
+        System.out.println("id==" + id);
+        System.out.println("file_name==" + fileNname);
+        System.out.println("file==" + multipartFile);
         UserEvidence userEvidence = new UserEvidence() ;
 
         HashMap<String, Object> responseMap = new HashMap<>();
@@ -204,6 +216,7 @@ public class ExpertiseUserController {
             }
         }else{
             userEvidence = userEvidenceService.save(userEvidence);
+
         }
 
         File file = fileService.uploadFile(multipartFile, user.getId(),"userEvidence="+userEvidence.getId(),fileNname);
@@ -216,7 +229,7 @@ public class ExpertiseUserController {
             userEvidence = userEvidenceService.save(userEvidence);
 
             responseMap.put("name", file.getName());
-            responseMap.put("link", MgmtUrls.UsersEvidenceFileDownload+ "?file_id=" + file.getId());
+            responseMap.put("link", AdminUrls.UsersEvidenceFileDownload+ "?file_id=" + file.getId());
             responseMap.put("fileId", file.getId());
             responseMap.put("id", userEvidence.getId());
             responseMap.put("status", 1);
@@ -225,7 +238,7 @@ public class ExpertiseUserController {
     }
 
     //fileDownload
-    @RequestMapping(MgmtUrls.UsersEvidenceFileDownload)
+    @RequestMapping(AdminUrls.UsersEvidenceFileDownload)
     public ResponseEntity<Resource> downloadFile(
             @RequestParam(name = "file_id") Integer fileId
     ){
@@ -239,7 +252,7 @@ public class ExpertiseUserController {
     }
 
     //fileDelete
-    @RequestMapping(value = MgmtUrls.UsersEvidenceFileDelete, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = AdminUrls.UsersEvidenceFileDelete, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> deleteFile(
             @RequestParam(name = "id") Integer id,
@@ -274,7 +287,7 @@ public class ExpertiseUserController {
         return responseMap;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersCreate, method = RequestMethod.POST)
+    @RequestMapping(value = AdminUrls.UsersCreate, method = RequestMethod.POST)
     public String createUserMethod(
             @RequestParam(name = "userPassword") String userPassword,
             @RequestParam(name = "userPasswordConfirmation") String userPasswordConfirmation,
@@ -285,12 +298,12 @@ public class ExpertiseUserController {
             @RequestParam(name = "enabled") Integer enebled,
             User userCreate
     ) {
-        User currentUser = userService.getCurrentUserFromContext();
+        User user = userService.getCurrentUserFromContext();
         if(userCreate.getUsername()==null){
-            return "redirect:" + MgmtUrls.UsersList;
+            return "redirect:" + AdminUrls.UsersList;
         }
         if(!userPassword.equals(userPasswordConfirmation)){
-            return "redirect:" + MgmtUrls.UsersList;
+            return "redirect:" + AdminUrls.UsersList;
         }
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         User user1 = new User();
@@ -299,7 +312,7 @@ public class ExpertiseUserController {
             user1.setFirstname(userCreate.getFirstname());
             user1.setLastname(userCreate.getLastname());
             user1.setMiddlename(userCreate.getMiddlename());
-            user1.setOrganizationId(currentUser.getOrganizationId());
+            user1.setOrganizationId(userCreate.getOrganizationId());
             user1.setDepartmentId(departmentId);
             user1.setPositionId(userCreate.getPositionId());
             user1.setRole(userRoleService.getById(roleId));
@@ -323,9 +336,8 @@ public class ExpertiseUserController {
                     null,
                     after,
                     "",
-                    currentUser.getId(),
-                    currentUser.getUserAdditionalId()
-            );
+                    user.getId(),
+                    user.getUserAdditionalId());
             UserEvidence userEvidence = null;
             if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
             if (userEvidence==null) userEvidence = new UserEvidence();
@@ -338,10 +350,11 @@ public class ExpertiseUserController {
             userEvidence.setEvidinceStatus(EvidinceStatus.Create);
             userEvidenceService.save(userEvidence);
         }
-        return "redirect:" + MgmtUrls.UsersList;
+        return "redirect:" + AdminUrls.UsersList;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersUpdate, method = RequestMethod.POST)
+
+    @RequestMapping(value = AdminUrls.UsersUpdate, method = RequestMethod.POST)
     public String userUpdateMethod(
             @RequestParam(name = "id") Integer userId,
             @RequestParam(name = "userEvidenceId") Integer userEvidenceId,
@@ -351,9 +364,9 @@ public class ExpertiseUserController {
             @RequestParam(name = "enabled") Integer enebled,
             User userUpdate
     ) {
-        User currentUser = userService.getCurrentUserFromContext();
+        User user = userService.getCurrentUserFromContext();
         if(userUpdate.getUsername()==null){
-            return "redirect:" + MgmtUrls.UsersList;
+            return "redirect:" + AdminUrls.UsersList;
         }
         User updateUser  = userService.findById(userId);
         String oldUser = "";
@@ -364,14 +377,14 @@ public class ExpertiseUserController {
         }
 
         if (updateUser==null){
-            return "redirect:" + MgmtUrls.UsersList;
+            return "redirect:" + AdminUrls.UsersList;
         }
         User userCheck = userService.findByUsername(userUpdate.getUsername());
         if(userCheck==null || userCheck.getId().equals(userId)){
             updateUser.setLastname(userUpdate.getLastname());
             updateUser.setFirstname(userUpdate.getFirstname());
             updateUser.setMiddlename(userUpdate.getMiddlename());
-            updateUser.setOrganizationId(currentUser.getOrganizationId());
+            updateUser.setOrganizationId(userUpdate.getOrganizationId());
             updateUser.setDepartmentId(departmentId);
             updateUser.setPositionId(userUpdate.getPositionId());
             updateUser.setRole(userRoleService.getById(roleId));
@@ -395,9 +408,8 @@ public class ExpertiseUserController {
                     oldUser,
                     after,
                     "",
-                    currentUser.getId(),
-                    currentUser.getUserAdditionalId()
-            );
+                    user.getId(),
+                    user.getUserAdditionalId());
             UserEvidence userEvidence = null;
             if (userEvidenceId!=null) userEvidence = userEvidenceService.getById(userEvidenceId);
             if (userEvidence==null) userEvidence = new UserEvidence();
@@ -411,10 +423,12 @@ public class ExpertiseUserController {
             userEvidenceService.save(userEvidence);
         }
 
-        return "redirect:" + MgmtUrls.UsersList;
+
+
+        return "redirect:" + AdminUrls.UsersList;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersEditEnebled)
+    @RequestMapping(value = AdminUrls.UsersEditEnebled)
     @ResponseBody
     public String userDelete(
             @RequestParam(name = "id") Integer id,
@@ -451,82 +465,80 @@ public class ExpertiseUserController {
                 after,
                 "",
                 user.getId(),
-                user.getUserAdditionalId()
-        );
+                user.getUserAdditionalId());
         return result.toString();
     }
 
-    @RequestMapping(MgmtUrls.UsersView)
+    @RequestMapping(AdminUrls.UsersView)
     public String getUsersViewPage(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
-        User currentUser = userService.getCurrentUserFromContext();
-        User user = userService.findById(id, currentUser.getOrganizationId());
+        User user = userService.findById(id);
         if (user==null){
-            return "redirect:" + MgmtUrls.UsersList;
+            return "redirect:" + AdminUrls.UsersList;
         }
         Type type = new TypeToken<List<User>>(){}.getType();
         List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.User,id);
         List<UserEvidence> userEvidenceList = userEvidenceService.getListByUserId(user.getId());
+        System.out.println("list" + userEvidenceList.size());
+        System.out.println("list==" + userEvidenceList);
         model.addAttribute("user",user);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
         model.addAttribute("userEvidenceList",userEvidenceList);
-        return MgmtTemplates.UserView;
+        return AdminTemplates.UserView;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersPswEdit)
+    @RequestMapping(value = AdminUrls.UsersPswEdit)
     public String userPswEdit(
             @RequestParam(name = "id")Integer id,
             Model model
     ){
-        User currentUser = userService.getCurrentUserFromContext();
-        User user = userService.findById(id, currentUser.getOrganizationId());
-        if (user == null){
-            return "redirect:"+MgmtUrls.UsersList;
+        User user = userService.findById(id);
+        if (user==null){
+            return "redirect:" + AdminUrls.UsersList;
         }
 
         model.addAttribute("user",user);
-        model.addAttribute("action_url",MgmtUrls.UsersPswUpdate);
-        return MgmtTemplates.UserPswEdit;
+        model.addAttribute("action_url", AdminUrls.UsersPswUpdate);
+        return AdminTemplates.UserPswEdit;
     }
 
-    @RequestMapping(value = MgmtUrls.UsersPswUpdate,method = RequestMethod.POST)
+    @RequestMapping(value = AdminUrls.UsersPswUpdate,method = RequestMethod.POST)
     public String updateUserPsw(
             @RequestParam(name = "userPassword")String userPassword,
             @RequestParam(name = "userPasswordConfirmation")String userPasswordConfirmation,
             User user
     ){
-        if (!userPassword.equals(userPasswordConfirmation)){
-          return "redirect:"+ MgmtUrls.UsersPswEdit + "?error=true";
-        }
-        User oldUser = userService.findById(user.getId());
+          if (!userPassword.equals(userPasswordConfirmation)){
+              return "redirect:"+ AdminUrls.UsersPswEdit + "?error=true";
+          }
+          User oldUser = userService.findById(user.getId());
 
-        String oldUserString = "";
+          String oldUserString = "";
         try {
             oldUserString = objectMapper.writeValueAsString(oldUser);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
-        userService.updateUser(oldUser);
+          oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
+          userService.updateUser(oldUser);
         String after ="";
         try {
             after = objectMapper.writeValueAsString(oldUser);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        tableHistoryService.create(
-              TableHistoryType.edit,
-              TableHistoryEntity.User,
-              oldUser.getId(),
-              oldUserString,
-              after,
-              "Users password updated successfully!!!",
-              oldUser.getId(),
-              oldUser.getUserAdditionalId()
-        );
-        return "redirect:" + MgmtUrls.UsersList;
+          tableHistoryService.create(
+                  TableHistoryType.edit,
+                  TableHistoryEntity.User,
+                  oldUser.getId(),
+                  oldUserString,
+                  after,
+                  "Users password updated successfully!!!",
+                  oldUser.getId(),
+                  oldUser.getUserAdditionalId());
+          return "redirect:" + AdminUrls.UsersList;
     }
 
     /*@RequestMapping(value = MgmtUrls.UserDelete)
@@ -558,5 +570,6 @@ public class ExpertiseUserController {
                 user.getUserAdditionalId());
         return status.toString();
     }*/
+
 
 }

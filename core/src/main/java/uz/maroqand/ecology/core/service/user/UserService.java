@@ -6,7 +6,6 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -20,6 +19,8 @@ public interface UserService {
     List<User> getEmployeeList();
 
     User findById(Integer id);
+
+    User findById(Integer id, Integer organizationId);
 
     User createUser(User user);
 

@@ -21,7 +21,7 @@
 </div>
 <!-- [ Pre-loader ] End -->
 
-<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+<object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
 
 <object th:include="fragments/header :: head" th:remove="tag" ></object>
 
@@ -65,6 +65,14 @@
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label" th:text="#{mntr_user.username}">:</label><br/>
                                                 <input type="text" id="username" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                <select id="organizationId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                </select>
                                             </div>
 
                                             <div class="form-group col-sm-3">
@@ -131,11 +139,11 @@
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
 <script th:inline="javascript">
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersListAjax}]];
-    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEdit}]];
-    var pswEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersPswEdit}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersListAjax}]];
+    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersEdit}]];
+    var pswEditLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersPswEdit}]];
     var labelEdit = [[#{sys_edit}]];
-    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersView}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersView}]];
     var statusActive = [[#{status_active}]];
     var statusNotActive = [[#{status_not_active}]];
     function getCurrentLanguage() {
@@ -191,6 +199,7 @@
                 dataToSend.lastname = $('#lastname').val();
                 dataToSend.middlename = $('#middlename').val();
                 dataToSend.username = $('#username').val();
+                dataToSend.organizationId = $('#organizationId').val();
                 dataToSend.departmentId = $('#departmentId').val();
                 dataToSend.positionId = $('#positionId').val();
 

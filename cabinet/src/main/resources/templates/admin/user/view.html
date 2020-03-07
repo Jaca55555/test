@@ -12,7 +12,7 @@
 </div>
 <!-- [ Pre-loader ] End -->
 <!---->
-<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+<object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
 
 <object th:include="fragments/header :: head" th:remove="tag" ></object>
 
@@ -194,7 +194,7 @@
                                                                                     <th class="text-right"><span th:text="#{mntr_user_evidence.files}"></span></th>
                                                                                     <td class="text-left">
                                                                                         <p class="mt-2 mb-0" th:each="file:${userEvidence.documentFiles}" th:if="${userEvidence.documentFiles!=null}">
-                                                                                            <a th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UsersEvidenceFileDownload + '?file_id=' + file.id}"><i class="fas fa-download"></i><span class="ml-2" th:text="${file.name}"></span></a>
+                                                                                            <a th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersEvidenceFileDownload + '?file_id=' + file.id}"><i class="fas fa-download"></i><span class="ml-2" th:text="${file.name}"></span></a>
                                                                                         </p>
                                                                                     </td>
                                                                                 </tr>

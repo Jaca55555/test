@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-public class DepartmentController {
+public class ExpertiseDepartmentController {
 
     private final DepartmentService departmentService;
     private final UserService userService;
@@ -46,7 +46,7 @@ public class DepartmentController {
     private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public DepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper, TableHistoryService tableHistoryService, UserAdditionalService userAdditionalService) {
+    public ExpertiseDepartmentController(DepartmentService departmentService, UserService userService, HelperService helperService, OrganizationService organizationService, ObjectMapper objectMapper, TableHistoryService tableHistoryService, UserAdditionalService userAdditionalService) {
         this.departmentService = departmentService;
         this.userService = userService;
         this.helperService = helperService;
