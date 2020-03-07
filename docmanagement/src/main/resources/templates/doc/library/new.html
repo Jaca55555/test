@@ -265,7 +265,7 @@
         let fileName = data.data.name;
         let color;
         switch (extension) {
-            case 'jpg': case 'png':
+            case 'jpg': case 'png': case 'jpeg':
                 extension = '-image';
                 color = 'color-yellow';
                 break;
@@ -273,6 +273,7 @@
                 extension = '-pdf';
                 color = 'color-red';
                 break;
+            case 'xls':
             case 'xlsx':
                 extension = '-excel';
                 color = 'color-green';
@@ -281,6 +282,14 @@
             case 'docx':
                 extension = '-word';
                 color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
                 break;
             default:
                 extension = '';
