@@ -8,10 +8,18 @@ package uz.maroqand.ecology.cabinet.constant.admin;
 public class AdminTemplates {
     private static final String Prefix = "admin";
 
+    //User
     private static final String User = Prefix + "/user";
     public static final String UserList = User + "/list";
     public static final String UserNew = User + "/new";
     public static final String UserPswEdit = User + "/psw_edit";
     public static final String UserView = User + "/view";
+
+    //Department
+    private static final String Department = Prefix + "/department";
+    public static final String DepartmentList = Department + "/list";
+    public static final String DepartmentNew = Department + "/new";
+    public static final String DepartmentView = Department + "/view";
+
 
 }

@@ -27,7 +27,17 @@ public class AdminUrls {
     public static final String UsersView = Users + "/view";
 
 
-    private static final String Department = "/department";
+    //Department
+    private static final String Department = Prefix + "/department";
+    public static final String DepartmentList = Department + "/list";
+    public static final String DepartmentListAjax = Department + "/ajax_list";
+    public static final String DepartmentNew = Department + "/new";
+    public static final String DepartmentEdit = Department + "/edit";
+    public static final String DepartmentCreate = Department + "/create";
+    public static final String DepartmentUpdate = Department + "/update";
+    public static final String DepartmentView = Department + "/view";
+    public static final String DepartmentGetByOrganization = Department + "/get_department";
+
 
     private static final String Position = "/position";
 
