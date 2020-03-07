@@ -10,6 +10,7 @@ public class AdminUrls {
 
     private static final String Organization = "/organization";
 
+    //Users
     private static final String Users = Prefix + "/users";
     public static final String UsersList = Users + "/list";
     public static final String UsersListAjax = Users + "/ajax_list";
@@ -26,7 +27,6 @@ public class AdminUrls {
     public static final String UsersEditEnebled = Users + "/enebled";
     public static final String UsersView = Users + "/view";
 
-
     //Department
     private static final String Department = Prefix + "/department";
     public static final String DepartmentList = Department + "/list";
@@ -38,7 +38,7 @@ public class AdminUrls {
     public static final String DepartmentView = Department + "/view";
     public static final String DepartmentGetByOrganization = Department + "/get_department";
 
-
+    //Position
     private static final String Position = Prefix + "/position";
     public static final String PositionList = Position + "/list";
     public static final String PositionGet = Position + "/get_ajax_position";
@@ -47,5 +47,15 @@ public class AdminUrls {
     public static final String PositionStatusUpdate = Position + "/status_update";
     public static final String PositionDelete = Position + "/delete";
     public static final String PositionView = Position + "/view";
+
+    //Roles
+    private static final String Roles = Prefix + "/roles";
+    public static final String RolesList = Roles + "/list";
+    public static final String RolesListAjax = Roles + "/ajax_list";
+    public static final String RolesNew = Roles + "/new";
+    public static final String RolesEdit = Roles + "/edit";
+    public static final String RolesCreate = Roles + "/create";
+    public static final String RolesUpdate = Roles + "/update";
+    public static final String RolesView = Roles + "/view";
 
 }

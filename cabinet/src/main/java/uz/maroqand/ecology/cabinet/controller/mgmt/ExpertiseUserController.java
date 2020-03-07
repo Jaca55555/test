@@ -69,10 +69,11 @@ public class ExpertiseUserController {
 
     @RequestMapping(MgmtUrls.UsersList)
     public String getUserListPage(Model model) {
+        User user = userService.getCurrentUserFromContext();
 
-        model.addAttribute("departmentList",departmentService.getAll());
-        model.addAttribute("positionList",positionService.getAll());
-        model.addAttribute("roleList",userRoleService.getRoleList());
+        model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("positionList", positionService.getByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("roleList", userRoleService.getRoleList());
         model.addAttribute("add_url",MgmtUrls.UsersNew);
         return MgmtTemplates.UserList;
     }
@@ -124,14 +125,14 @@ public class ExpertiseUserController {
     @RequestMapping(MgmtUrls.UsersNew)
     public String getUsersNewPage(Model model) {
         User currentUser = userService.getCurrentUserFromContext();
-        model.addAttribute("departmentList",departmentService.getByOrganizationId(currentUser.getOrganizationId()));
 
         model.addAttribute("user", new User());
         model.addAttribute("departmentId",null);
-        model.addAttribute("positionList",positionService.getAll());
-        model.addAttribute("roleList",userRoleService.getRoleList());
-        model.addAttribute("action_url",MgmtUrls.UsersCreate);
-        model.addAttribute("back_url",MgmtUrls.UsersList);
+        model.addAttribute("departmentList",departmentService.getByOrganizationId(currentUser.getOrganizationId()));
+        model.addAttribute("positionList", positionService.getByOrganizationId(currentUser.getOrganizationId()));
+        model.addAttribute("roleList", userRoleService.getRoleList());
+        model.addAttribute("action_url", MgmtUrls.UsersCreate);
+        model.addAttribute("back_url", MgmtUrls.UsersList);
         return MgmtTemplates.UserNew;
     }
 
@@ -149,8 +150,8 @@ public class ExpertiseUserController {
 
         model.addAttribute("user",user);
         model.addAttribute("departmentId",user.getDepartmentId()!=null?user.getDepartmentId():null);
-        model.addAttribute("positionList",positionService.getAll());
-        model.addAttribute("roleList",userRoleService.getRoleList());
+        model.addAttribute("positionList",positionService.getByOrganizationId(currentUser.getOrganizationId()));
+        model.addAttribute("roleList", userRoleService.getRoleList());
         model.addAttribute("action_url",MgmtUrls.UsersUpdate);
         model.addAttribute("back_url",MgmtUrls.UsersList);
         return MgmtTemplates.UserNew;

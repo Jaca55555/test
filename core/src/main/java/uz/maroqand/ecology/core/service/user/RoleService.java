@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface RoleService {
 
-    public DataTablesOutput<Role> getAll(DataTablesInput input);
+    DataTablesOutput<Role> getAll(DataTablesInput input);
+
+    DataTablesOutput<Role> getAll(Integer organizationId, DataTablesInput input);
 
     Role getById(Integer id);
 

@@ -26,4 +26,11 @@ public class AdminTemplates {
     public static final String PositionList = Position + "/list";
     public static final String PositionView = Position + "/view";
 
+    //Roles
+    private static final String Roles = Prefix + "/roles";
+    public static final String RolesList = Roles + "/list";
+    public static final String RolesNew = Roles + "/new";
+    public static final String RolesView = Roles + "/view";
+
+
 }
