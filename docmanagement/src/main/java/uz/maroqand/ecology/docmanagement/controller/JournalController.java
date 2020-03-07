@@ -64,7 +64,7 @@ public class JournalController {
         for (Journal journal : journalPage.getContent()) {
             JSONArray.add(new Object[]{
                     journal.getId(),
-                    journal.getDocumentType().getName(),
+                    journal.getDocumentTypeId()!=null?journal.getDocumentType().getName():"",
                     journal.getName(),
                     journal.getPrefix(),
                     journal.getSuffix(),

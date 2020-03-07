@@ -34,7 +34,7 @@
                     <div class="card-header flex-space-between align-center" style="height:65px;">
                         <h5><span th:text="#{doc_incoming.task_number}"></span>&nbsp;№ 1</h5>
                     </div>
-                    <form method="post" th:action="${action_url}">
+                    <form method="post" th:action="${action_url}" id="taskAddForm" data-parsley-validate="">
                         <div class="card-block">
                             <div class="row">
                                 <div class="executor col-6 m10-vertical">
@@ -83,60 +83,11 @@
                                     <div class="table-responsive">
                                         <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
                                             <tbody>
-                                            <!--<tr id="tr_">
-                                                <td style="width: 30%">
-                                                    <div class="flex-space-between p0">
-                                                        <div>
-                                                            <div class="inline-block">
-                                                                <i class="fas fa-user-circle fs40 color-gray"></i>
-                                                            </div>
-                                                            <div class="inline-block m10-horizontal">
-                                                                <span class="color-green bold">Каримов Г. П.</span>
-                                                                <br>
-                                                                <span>Эксперт 1</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td style="width: 30%">
-                                                    <div class="btn-group mb-2 mr-2">
-                                                        <button type="button" class="btn btn-outline-primary left-radius table-modal-button">
-                                                            <i class="fas fa-cog" style="margin-right: 1em"></i>
-                                                            Ijrochi
-                                                        </button>
-                                                        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <span class="sr-only"> Toggle  Dropdown</span>
-                                                        </button>
-                                                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                            <button class="dropdown-item" onclick="selectType(1)">Action</button>
-                                                            <button class="dropdown-item" onclick="selectType(2)">Another action</button>
-                                                        </div>
-                                                        <input type="hidden" name="performer" id="performer"/>
-                                                    </div>
-                                                </td>
-                                                <td style="width: 35%">
-                                                    <div class="col-md-12 mb-3">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text" id="validationTooltipUsernamePrepend">
-                                                                    <i class="feather icon-clock fs20 mr-2"></i>
-                                                                </span>
-                                                            </div>
-                                                            <input class="form-control datepicker date" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
-                                                            &lt;!&ndash;<img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">&ndash;&gt;
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td style="width: 5%">
-                                                    <button class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray"></i></button>
-                                                </td>
-                                            </tr>-->
                                             </tbody>
-
                                         </table>
                                     </div>
                                     <br/>
-                                    <div class="row">
+                                    <div class="row" id="addUsers">
                                         <div class="col-9 pl-0">
                                             <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
                                                 <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
@@ -157,7 +108,7 @@
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
                                 <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
-                                <button type="submit" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
+                                <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
                     </form>
@@ -168,6 +119,8 @@
 </div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script th:inline="javascript">
     var selectedUsersIds = [];
     var task_sub_type_performer = [[#{task_sub_type.performer}]];
@@ -178,6 +131,14 @@
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
     });
+
+    function addTaskSubmit() {
+        if ($('#selectedUsersIds').val()!=''){
+            $('#taskAddForm').submit();
+        }else{
+            $('#addUsers').css('border','1px solid red');
+        }
+    }
 
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationUserName}]];
     $('#add_user').on('click',function () {
@@ -269,14 +230,15 @@
                                 '   </td>\n' +
                                 '</tr>';
                             $('#data-table tbody').append(html);
-                            $('#dueDateStr_'+userId).data({
-                                format: 'DD.MM.YYYY',
-                                weekStart: 0,
-                                time: false
+                            $('.date').datepicker({
+                                format: "dd.mm.yyyy",
+                                todayHighlight: true,
+                                autoclose: true
                             });
                             $('#userId').val('').change();
                             $('#selectedUsersIds').val(selectedUsersIds);
                         }
+                        $('#addUsers').css('border','0px');
                     }
                 },
                 error: function () {

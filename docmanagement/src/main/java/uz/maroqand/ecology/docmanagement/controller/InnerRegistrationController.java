@@ -186,6 +186,10 @@ public class InnerRegistrationController {
         if (documentTask == null) {
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
+        if (documentTask.getStatus().equals(TaskStatus.New)){
+            documentTask.setStatus(TaskStatus.InProgress.getId());
+            documentTaskService.update(documentTask);
+        }
 
         Document document = documentService.getById(documentTask.getDocumentId());
         if (document == null) {
@@ -386,6 +390,10 @@ public class InnerRegistrationController {
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
 
+        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
+            documentTask.setStatus(TaskStatus.InProgress.getId());
+            documentTaskService.update(documentTask);
+        }
 
         Integer userId = null;
         Integer performerType = null;

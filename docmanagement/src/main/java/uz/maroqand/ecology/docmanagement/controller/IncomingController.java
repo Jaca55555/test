@@ -226,6 +226,10 @@ public class IncomingController {
         if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New)){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
         DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
         if (task == null || task.getDocumentId()==null) {
             return "redirect:" + DocUrls.IncomingList;
@@ -294,7 +298,7 @@ public class IncomingController {
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
 
         model.addAttribute("document", document);
-        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
@@ -315,6 +319,11 @@ public class IncomingController {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub==null){
             return "redirect:" + DocUrls.IncomingList;
+        }
+
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New)){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
         }
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());
