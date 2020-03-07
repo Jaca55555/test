@@ -45,7 +45,7 @@ import java.util.*;
  * (ru)
  */
 @Controller
-public class UserController {
+public class ExpertiseUserController {
 
     private final UserService userService;
     private final PositionService positionService;
@@ -60,7 +60,7 @@ public class UserController {
     private final FileService fileService;
 
     @Autowired
-    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
+    public ExpertiseUserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
         this.userService = userService;
         this.positionService = positionService;
         this.departmentService = departmentService;
