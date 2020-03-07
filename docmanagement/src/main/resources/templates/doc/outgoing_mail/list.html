@@ -36,13 +36,13 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="/static/doc/" class="collapsed card-header-a"
-                       data-toggle="collapse" data-target="#collapseOne"
-                       aria-expanded="false" aria-controls="collapseOne">
-                        <span th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</span>
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <span th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</span>
                 </h5>
+                <a href="/static/doc/" class="collapsed card-header-a"
+                   data-toggle="collapse" data-target="#collapseOne"
+                   aria-expanded="false" aria-controls="collapseOne">
+                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                </a>
             </div>
             <h5 class="office-h5 default-color" ><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
@@ -97,11 +97,11 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                 </h5>
+                <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                </a>
             </div>
             <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
                 <!-- filters card begins here -->
@@ -180,7 +180,7 @@
                         <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="dynamicTable" aria-describedby="responsive-table-model_info" class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
+                                    <table id="dynamicTable" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                         <thead>
                                         <tr role="row">
                                             <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1"  tabindex="0">id</th>
@@ -361,20 +361,22 @@
                     },
                     className: "text-left"
                 },
-                {data: 3, name: 'content',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[3]+'</a>';
-                        return html;
-                    },
-                    className: "text-left"
-                },
+                {data: 3, name: 'content',className: "text-left"},
                 {data: 4, name: 'createdAt',className: "text-center"},
                 {data: 5, name: 'updateAt',className: "text-center"},
                 {render: renderChangeColumn, orderable: false,className: "text-center"},
                 {data: 7, name: 'performerName',className: "text-left"},
                 {render: renderActionsColumn, orderable: false,className: "text-center"}
             ],
+            rowCallback: function (row, data) {
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
+            },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }

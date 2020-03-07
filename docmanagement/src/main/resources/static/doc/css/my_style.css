@@ -392,6 +392,9 @@ html, body {
    .color-white {
        color: #fff;
    }
+   .color-orange {
+       color:#f89406;
+   }
    .text-right > .fas.fa-trash-alt {
     margin-right:10px;
     margin-top: 10px;
@@ -561,6 +564,25 @@ html, body {
         white-space: nowrap;
     }
 
+    table tr {
+        cursor: pointer;
+    }
+    .form-control.is-invalid, .was-validated .form-control:invalid {
+        background-image: none;
+    }
+    .form-control.is-invalid, .was-validated .form-control:invalid {
+        border-color: #ced4da;
+    }
+    div.dataTables_wrapper div.dataTables_processing {
+        display: none !important;
+    }
+    #responsive-table-model > .btn-group>.btn-group:not(:first-child), .btn-group>.btn:not(:first-child) {
+        max-width: 30px;
+        min-width: 30px;
+    }
+    .file-icon-container-small > span.fa,.file-icon-container-small > span.fas {
+        font-size:30px;
+    }
 /* media */
 @media (max-width:1700px) {
     .card-svg  {
