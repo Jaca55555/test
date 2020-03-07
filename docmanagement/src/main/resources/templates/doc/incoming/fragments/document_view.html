@@ -31,10 +31,10 @@
             <div class="btn-group ml-2">
                 <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:text="#{${document.status.getName()}}">Жараёнда</span> </button>
             </div>
-            <button type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0" th:if="${document.executeForm!=null}">
+            <span type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0" th:if="${document.controlForm!=null}">
                 <i class="fas fa-clipboard-list mr-0"></i>
-                <span th:text="#{${document.executeForm.getName()}}">форма</span>
-            </button>
+                <span th:text="#{${document.controlForm.getName()}}">форма</span>
+            </span>
         </div>
         <div class="flex-center">
             <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
