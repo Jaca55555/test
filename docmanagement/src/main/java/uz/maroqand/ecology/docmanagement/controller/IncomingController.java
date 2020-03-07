@@ -38,6 +38,7 @@ public class IncomingController {
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentDescriptionService documentDescriptionService;
 
     public IncomingController(
             UserService userService,
@@ -48,7 +49,7 @@ public class IncomingController {
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
             DocumentLogService documentLogService,
-            DocumentOrganizationService documentOrganizationService) {
+            DocumentOrganizationService documentOrganizationService, DocumentDescriptionService documentDescriptionService) {
         this.userService = userService;
         this.positionService = positionService;
         this.helperService = helperService;
@@ -58,6 +59,7 @@ public class IncomingController {
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentDescriptionService = documentDescriptionService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -151,7 +153,7 @@ public class IncomingController {
                 break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
-                receiverId=null;
+//                receiverId=null;
                 break;//Жами
         }
 
@@ -226,7 +228,7 @@ public class IncomingController {
         if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-        if (documentTaskSub.getStatus().equals(TaskSubStatus.New)){
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
@@ -301,6 +303,7 @@ public class IncomingController {
         model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + documentTaskSub.getId());
@@ -321,7 +324,7 @@ public class IncomingController {
             return "redirect:" + DocUrls.IncomingList;
         }
 
-        if (documentTaskSub.getStatus().equals(TaskSubStatus.New)){
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }

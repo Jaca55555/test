@@ -186,7 +186,7 @@ public class InnerRegistrationController {
         if (documentTask == null) {
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
-        if (documentTask.getStatus().equals(TaskStatus.New)){
+        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
             documentTask.setStatus(TaskStatus.InProgress.getId());
             documentTaskService.update(documentTask);
         }
@@ -353,6 +353,11 @@ public class InnerRegistrationController {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
 
+        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
+            documentTask.setStatus(TaskStatus.InProgress.getId());
+            documentTaskService.update(documentTask);
+        }
+
         Document document = documentService.getById(documentTask.getDocumentId());
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
@@ -369,6 +374,7 @@ public class InnerRegistrationController {
         model.addAttribute("userList", userList);
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("document", document);
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + documentTask.getId());
