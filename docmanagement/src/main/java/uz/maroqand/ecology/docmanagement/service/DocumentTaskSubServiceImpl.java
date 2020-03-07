@@ -168,6 +168,9 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                     //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
                     predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
                 }
+                if (documentOrganizationId != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("document").join("documentSubs").get("organizationId"), documentOrganizationId));
+                }
                 if (documentTypeId != null) {
                     //kiruvchi va chiquvchi hujjatlar ajratish uchun
                     predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
