@@ -61,8 +61,8 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
 
 
     @Override
-    public Page<LibraryCategory> getFiltered(String name,String parent_name,Pageable pageable) {
-        return libraryCategoryRepository.findAll(getFilteringSpecification(name,parent_name), pageable);
+    public Page<LibraryCategory> getFiltered(String name,Pageable pageable) {
+        return libraryCategoryRepository.findAll(getFilteringSpecification(name), pageable);
     }
     @Override
     public List<LibraryCategory> findAll(){
@@ -73,7 +73,7 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
         return libraryCategoryRepository.findAll(input);
     }
 
-    private static Specification<LibraryCategory> getFilteringSpecification(String name,String parent_name) {
+    private static Specification<LibraryCategory> getFilteringSpecification(String name) {
         return (Specification<LibraryCategory>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             if (name != null) {
