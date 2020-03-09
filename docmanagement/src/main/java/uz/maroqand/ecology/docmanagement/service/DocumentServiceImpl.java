@@ -335,7 +335,7 @@ public class DocumentServiceImpl implements DocumentService {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             if(registrationNumber != null){
-                predicates.add(criteriaBuilder.like(root.get("registrationNumber"), "%" + registrationNumber + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
             }
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
