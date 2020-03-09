@@ -26,6 +26,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public DataTablesOutput<Role> getAll(Integer organizationId, DataTablesInput input) {
+        return roleRepository.findAll(input);
+    }
+
+    @Override
     public Role getById(Integer id) {
         return roleRepository.findById(id).get();
     }

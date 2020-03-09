@@ -351,6 +351,7 @@ html, body {
        width:150px;
        height:150px;
        border:2px solid #ced4da;
+       margin-top:5px;
        margin-right:20px;
    }
    .text-center {

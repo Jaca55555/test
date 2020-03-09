@@ -9,10 +9,10 @@
         #upload-gif{
             position: relative;
             float: left;
-            top: 50%;
+            top: 30px;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 115px;
+            max-width: 85px;
         }
         #percentage {
             position: absolute;
@@ -222,6 +222,14 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
             let csrf = $("form input[name='_csrf']").val();
             let files = $(this)[0].files[0];
             let fd = new FormData();
@@ -234,22 +242,7 @@
                 processData: false,
                 contentType: false,
                 enctype: 'multipart/form-data',
-                success: function (data) {
-                    files.files = [];
-                    var file = data.file;
-                    $('#fileIds').append("<option selected='selected' value='"+file.id+"'>"+file.description+"</option>");
-                    $('#file-container').append(
-"                    <div class=\"file-block\">\n" +
-"                        <div class=\"text-right\"><span class='fas fa-trash-alt' data-id='"+file.id+"'></span></div>\n" +
-"                        <div class=\"text-center file-icon-container color-red\">" +
-"                           <span class=\"fas fa-file-pdf\"></span>\n" +
-"                        </div>\n" +
-"                        <div class=\"text-center\">\n" +
-"                            <span>"+fileNameSubString(file.name)+"</span>\n" +
-"                        </div>\n" +
-"                    </div>\n"
-                    );
-                },
+                success: detectExtensionAndDisplay,
                 beforeSend: function () {
                     $('#plus-icon').hide();
                     $('#upload-gif').show();
@@ -321,6 +314,56 @@
         subStringName += getExtension;
         return subStringName;
     }*/
+
+    function detectExtensionAndDisplay(data){
+        console.log(data);
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        switch (extension) {
+            case 'jpg': case 'png': case 'jpeg':
+                extension = '-image';
+                color = 'color-yellow';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xls':
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
+        $('#file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+        );
+    }
+
 
 </script>
 

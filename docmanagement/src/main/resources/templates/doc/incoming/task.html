@@ -36,7 +36,7 @@
                             <span th:text="#{doc_incoming.doc_task_and_performers}">Топшириқ ва иштирокчилар</span> №
                         </h5>
                     </div>
-                    <form method="post" th:action="${action_url}">
+                    <form method="post" th:action="${action_url}" id="taskAddForm" data-parsley-validate="">
                         <div class="card-block">
                             <div class="row">
                                 <div class="executor col-6 m10-vertical">
@@ -89,7 +89,7 @@
                                         </table>
                                     </div>
                                     <br/>
-                                    <div class="row">
+                                    <div class="row" id="addUsers">
                                         <div class="col-10 pl-0">
                                             <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
                                                 <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
@@ -107,11 +107,11 @@
                         <input type="hidden" id="typeControl" value=""/>
                         <input  type="hidden" name="selectedUsersIds" value="" id="selectedUsersIds"/>
                         <input  type="hidden" th:field="${documentTaskSub.id}" />
-                        <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
+                        <input  type="hidden" name="taskId" th:value="${task.id}" />
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
                                 <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
-                                <button type="submit" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
+                                <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
                     </form>
@@ -122,6 +122,8 @@
 </div>
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script th:inline="javascript">
     var selectedUsersIds = [];
     var task_sub_type_performer = [[#{task_sub_type.performer}]];
@@ -131,6 +133,15 @@
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
     });
+
+    function addTaskSubmit() {
+        if ($('#selectedUsersIds').val()!=''){
+            $('#taskAddForm').submit();
+        }else{
+            $('#addUsers').css('border','1px solid red');
+        }
+    }
+
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTaskUserName}]];
     $('#add_user').on('click',function () {
         var userId = $('#userId').val();
@@ -212,7 +223,7 @@
                                 '                       <i class="feather icon-clock fs20"></i>\n' +
                                 '                   </span>\n' +
                                 '               </div>\n' +
-                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required"/>\n' +
+                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" />\n' +
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>\n' +
@@ -222,13 +233,14 @@
                                 '</tr>';
                             $('#data-table tbody').append(html);
                             $('#dueDateStr_'+userId).datepicker({
-                                format: 'DD.MM.YYYY',
-                                weekStart: 0,
-                                time: false
+                                format: "dd.mm.yyyy",
+                                todayHighlight: true,
+                                autoclose: true
                             });
                             $('#userId').val('').change();
                             $('#selectedUsersIds').val(selectedUsersIds);
                         }
+                        $('#addUsers').css('border','0px');
                     }
                 },
                 error: function () {

@@ -184,9 +184,9 @@ public class OutgoingMailController {
 
             DocumentType type = additionalDocument.getDocumentType();
             String viewLink;
-            if(type.getType().getId()  == DocumentTypeEnum.IncomingDocuments.getId())
+            if(type.getType()  == DocumentTypeEnum.IncomingDocuments.getId())
                 viewLink = DocUrls.IncomingView;
-            else if(type.getType().getId() == DocumentTypeEnum.OutgoingDocuments.getId())
+            else if(type.getType() == DocumentTypeEnum.OutgoingDocuments.getId())
                 viewLink = DocUrls.OutgoingMailView;
             else
                 viewLink = DocUrls.InnerView;

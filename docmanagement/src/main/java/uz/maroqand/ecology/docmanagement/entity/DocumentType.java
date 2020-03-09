@@ -24,8 +24,10 @@ public class DocumentType {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    //todo ko'p joyda DocumentTypeEnum.id ishlatilgani uchun o'zgarirdim
+    //DocumentTypeEnum
     @Column(name = "type")
-    private DocumentTypeEnum type;
+    private Integer type;
 
     private String name;
 

@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminTemplates;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.constant.user.Permissions;
@@ -27,8 +27,15 @@ import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.validation.Valid;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+/**
+ * Created by Utkirbek Boltaev on 27.03.2019.
+ * (uz) Xamma rollar
+ */
 @Controller
 public class RolesController {
 
@@ -49,46 +56,46 @@ public class RolesController {
         this.userAdditionalService = userAdditionalService;
     }
 
-    @RequestMapping(MgmtUrls.RolesList)
+    @RequestMapping(AdminUrls.RolesList)
     public String getUnitList() {
-        return MgmtTemplates.RolesList;
+        return AdminTemplates.RolesList;
     }
 
-    @RequestMapping(value = MgmtUrls.RolesListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = AdminUrls.RolesListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public DataTablesOutput<Role> listDatatable(@Valid DataTablesInput input){
         System.out.println("RoleListAjax---");
         return roleService.getAll(input);
     }
 
-    @RequestMapping(MgmtUrls.RolesNew)
+    @RequestMapping(AdminUrls.RolesNew)
     public String rolesNew(Model model) {
         Role role = new Role();
         model.addAttribute("role", role);
         model.addAttribute("permissions", Permissions.getPermissionsList());
-        model.addAttribute("action_url", MgmtUrls.RolesCreate);
-        model.addAttribute("back_url", MgmtUrls.RolesList);
-        return MgmtTemplates.RolesNew;
+        model.addAttribute("action_url", AdminUrls.RolesCreate);
+        model.addAttribute("back_url", AdminUrls.RolesList);
+        return AdminTemplates.RolesNew;
     }
 
-    @RequestMapping(MgmtUrls.RolesEdit)
+    @RequestMapping(AdminUrls.RolesEdit)
     public String rolesEdit(
             Model model,
             @RequestParam(name = "id", required = true) Integer roleId
     ) {
         Role role = roleService.getById(roleId);
         if (role == null) {
-            return "redirect:" + MgmtUrls.RolesList;
+            return "redirect:" + AdminUrls.RolesList;
         }
 
         model.addAttribute("role", role);
         model.addAttribute("permissions", Permissions.getPermissionsList());
-        model.addAttribute("action_url", MgmtUrls.RolesUpdate);
-        model.addAttribute("back_url", MgmtUrls.RolesList);
-        return MgmtTemplates.RolesNew;
+        model.addAttribute("action_url", AdminUrls.RolesUpdate);
+        model.addAttribute("back_url", AdminUrls.RolesList);
+        return AdminTemplates.RolesNew;
     }
 
-    @RequestMapping(MgmtUrls.RolesCreate)
+    @RequestMapping(AdminUrls.RolesCreate)
     public String rolesCreate(
             Role role,
             @RequestParam(name = "checkedList") List<Integer> checkedList
@@ -122,10 +129,10 @@ public class RolesController {
                 user.getId(),
                 user.getUserAdditionalId());
 
-        return "redirect:" + MgmtUrls.RolesList;
+        return "redirect:" + AdminUrls.RolesList;
     }
 
-    @RequestMapping(MgmtUrls.RolesUpdate)
+    @RequestMapping(AdminUrls.RolesUpdate)
     public String rolesUpdate(
             @RequestParam(name = "id") Integer id,
             Role role,
@@ -134,7 +141,7 @@ public class RolesController {
         User user = userService.getCurrentUserFromContext();
         Role role1 = roleService.getById(id);
         if (role1==null){
-            return "redirect:" + MgmtUrls.RolesList;
+            return "redirect:" + AdminUrls.RolesList;
         }
         String oldRole = "";
         try {
@@ -170,24 +177,24 @@ public class RolesController {
                 user.getId(),
                 user.getUserAdditionalId());
 
-        return "redirect:" + MgmtUrls.RolesList;
+        return "redirect:" + AdminUrls.RolesList;
     }
 
 
-    @RequestMapping(MgmtUrls.RolesView)
+    @RequestMapping(AdminUrls.RolesView)
     public String getRolesViewPage(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         Role role = roleService.getById(id);
         if (role==null){
-            return "redirect:" + MgmtUrls.RolesList;
+            return "redirect:" + AdminUrls.RolesList;
         }
         Type type = new TypeToken<List<Role>>(){}.getType();
         List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.UserRole,id);
 
         model.addAttribute("role",role);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return MgmtTemplates.RolesView;
+        return AdminTemplates.RolesView;
     }
 }
