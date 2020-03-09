@@ -101,14 +101,10 @@ public class OutgoingController {
             model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
             Integer additionalDocumentTypeId = additionalDocument.getDocumentTypeId();
             String viewLink;
-            if(type.getType()  == DocumentTypeEnum.IncomingDocuments.getId())
-                viewLink = DocUrls.IncomingView;
-            else if(type.getType() == DocumentTypeEnum.OutgoingDocuments.getId())
-                viewLink = DocUrls.OutgoingView;
             if(additionalDocumentTypeId.equals(DocumentTypeEnum.IncomingDocuments.getId()))
-                viewLink = DocUrls.IncomingRegistrationView;
+                viewLink = DocUrls.IncomingView;
             else if(additionalDocumentTypeId.equals(DocumentTypeEnum.OutgoingDocuments.getId()))
-                viewLink = DocUrls.OutgoingMailView;
+                viewLink = DocUrls.OutgoingView;
             else
                 viewLink = DocUrls.InnerView;
 
