@@ -153,6 +153,10 @@ public class InnerController {
             default:
                 departmentId = user.getDepartmentId();
                 receiverId=null;
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
                 break;//Жами
         }
 
