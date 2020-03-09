@@ -124,11 +124,11 @@ public class LibraryController {
     }
 
     @RequestMapping(value = DocUrls.LibraryNew)
-    public String getNewLibrary(Model model,LibraryCategory libraryCategory) {
+    public String getNewLibrary(Model model) {
         model.addAttribute("action_url", DocUrls.LibraryNew);
         model.addAttribute("library", new Library());
         model.addAttribute("librarycategory",libraryCategoryService.findAll());
-//        libraryCategory.setCount(libraryCategory.getCount()+1);
+
         return DocTemplates.LibraryNew;
     }
     @RequestMapping(value = DocUrls.LibraryNew, method = RequestMethod.POST)

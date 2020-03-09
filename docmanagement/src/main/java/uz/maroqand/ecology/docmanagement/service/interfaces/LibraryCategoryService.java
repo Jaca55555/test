@@ -19,10 +19,6 @@ public interface LibraryCategoryService {
     LibraryCategory updateByIdFromCache(Integer id);
     List<LibraryCategory> findAll();
     DataTablesOutput<LibraryCategory> getAll(DataTablesInput input);
-   Page<LibraryCategory> getFiltered(String name,String parent_name, Pageable pageable);
-
-
-
-
+   Page<LibraryCategory> getFiltered(String name, Pageable pageable);
 }
 

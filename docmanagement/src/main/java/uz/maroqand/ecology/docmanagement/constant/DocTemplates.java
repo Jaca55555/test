@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagement.constant;
 
+import java.sql.Ref;
+
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz)
@@ -12,6 +14,7 @@ public class DocTemplates {
     private static final String Outgoing = "/outgoing";
     private static final String Inner = "/inner";
     private static final String DocumentCheck="/document_check";
+    private static final String Reference= "/reference";
 
     public static final String Dashboard = Prefix + "/office";
 
@@ -41,7 +44,21 @@ public class DocTemplates {
     public static final String IncomingRegistrationView = IncomingRegistration + "/view";
     public static final String IncomingRegistrationNew = IncomingRegistration + "/new";
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
+    //Murojaatlarni ro'yhatga olish
+    private static final String ReferenceRegistration = Prefix + Registration + Reference;
+    public static final String ReferenceRegistrationNew = ReferenceRegistration + "/new";
+    public static final String ReferenceRegistrationNewList = ReferenceRegistration + "/new_list";
+    public static final String ReferenceRegistrationList = ReferenceRegistration + "/list";
 
+
+
+
+
+
+
+
+
+    //Murojaatlarni ro'yhatga olish
     private static final String CommunicationToolsPrefix = Prefix + "/communication_tools";
     public static final String CommunicationToolsList = CommunicationToolsPrefix + "/list";
     public static final String CommunicationToolsNew = CommunicationToolsPrefix + "/new";

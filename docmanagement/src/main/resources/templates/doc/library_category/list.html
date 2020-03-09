@@ -41,13 +41,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-4 col-sm-12">
-                        <label for="name" class="control-label" th:text="#{doc.library_category_parent}"></label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" id="parent">
-                            <i class="gray-search fas fa-search  color-gray"></i>
-                        </div>
-                    </div>
 
                 </div>
                 <!-- [ EntityList ] start -->
@@ -58,8 +51,8 @@
                             <thead>
                             <tr role="row">
                                 <th th:text="#{doc.id}">ID</th>
-                                <th th:text="#{doc.library_category_parent}"></th>
                                 <th th:text="#{doc.library_category_name}"></th>
+                                <th th:text="#{doc.library_category_parent}"></th>
                                 <th th:text="#{actions}"></th>
                             </tr>
                             </thead>
@@ -136,7 +129,7 @@
 
 
                 dataToSend.name = $('#name').val();
-                dataToSend.parent = $('#parent').val();
+                // dataToSend.parent = $('#parent').val();
 
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
