@@ -126,9 +126,9 @@
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
-                        <select class="form-control" id="additionalDocumentId" name="additionalDocumentId">
+                        <select class="singleSelect select2-hidden-accessible" id="additionalDocumentId" name="additionalDocumentId">
+                            <option value=""></option>
                             <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
-                            <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
                 </div>

@@ -450,6 +450,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());

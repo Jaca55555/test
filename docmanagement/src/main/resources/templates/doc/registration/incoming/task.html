@@ -50,24 +50,17 @@
                                                 <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(document.managerId,#locale)}">Руководитель организации</span>
                                             </div>
                                         </div>
-                                        <!--<div class="flex-space-between p0 align-center column-2">
-                                            <button type="button" class="btn-icon">
-                                                <i class="fas fs20 fa-edit color-gray"></i>
-                                            </button>
-                                            <button type="button" class="btn-icon">
-                                                <i class="fas fs20 fa-trash-alt color-gray"></i>
-                                            </button>
-                                        </div>-->
                                     </div>
                                     <br/>
                                     <div class="form-group">
-                                        <label class="control-label" th:text="#{doc_incoming.task_content_type}">Топшириқ / Кўрсатма / Резолюция матни</label>
-                                        <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                                            <option value="" th:text="#{sys_select}"></option>
+                                        <label class="control-label" th:text="#{doc_incoming.doc_task_and_content}"></label>
+                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="description_content">
+                                            <option value=""></option>
+                                            <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                    <textarea class="form-control" rows="4" name="content"></textarea>
+                                        <textarea class="form-control" rows="4" name="content" id="description_textarea" required="required" minlength="5"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" th:text="#{doc_incoming.task_deadline}"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
@@ -132,8 +125,16 @@
         docFileName([[${document.contentFiles}]]);
     });
 
+    $('#description_content').on('change',function () {
+        var text=this.options[this.selectedIndex].text;
+        $('#description_textarea').val(text);
+    });
+
+
     function addTaskSubmit() {
-        if ($('#selectedUsersIds').val()!=''){
+        $('#dateBegin').parsley().validate();
+        $('#description_textarea').parsley().validate()
+        if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){
             $('#taskAddForm').submit();
         }else{
             $('#addUsers').css('border','1px solid red');
@@ -142,8 +143,11 @@
 
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationUserName}]];
     $('#add_user').on('click',function () {
+        $('#dateBegin').parsley().validate();
+        $('#description_textarea').parsley().validate();
         var userId = $('#userId').val();
-        if (userId!="" && userId!=null){
+        if ( $('#dateBegin').parsley().isValid() && userId!="" && userId!=null){
+            var dateDue=$('#dateBegin').val();
             $.ajax({
                 url: url,
                 data: {
@@ -221,7 +225,7 @@
                                 '                       <i class="feather icon-clock fs20"></i>\n' +
                                 '                   </span>\n' +
                                 '               </div>\n' +
-                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required"/>\n' +
+                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'"/>\n' +
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>\n' +
