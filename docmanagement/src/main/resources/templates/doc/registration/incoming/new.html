@@ -264,10 +264,10 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
-            // if (this.files[0].size > 10000000) {
-            //     swal("Файл не должен занимать больше 10 мб.",'', "warning");
-            //     return false;
-            // }
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
             if(this.files[0].size === 0){
                 swal("Файл не должен быть пустым", "", "warning");
                 return false;
