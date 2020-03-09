@@ -46,9 +46,11 @@ public class DocTemplates {
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
     //Murojaatlarni ro'yhatga olish
     private static final String ReferenceRegistration = Prefix + Registration + Reference;
-    public static final String ReferenceRegistrationNew = ReferenceRegistration + "/new";
-    public static final String ReferenceRegistrationNewList = ReferenceRegistration + "/new_list";
     public static final String ReferenceRegistrationList = ReferenceRegistration + "/list";
+    public static final String ReferenceRegistrationNewList = ReferenceRegistration + "/new_list";
+    public static final String ReferenceRegistrationView = ReferenceRegistration + "/view";
+    public static final String ReferenceRegistrationNew = ReferenceRegistration + "/new";
+    public static final String ReferenceRegistrationTask = ReferenceRegistration + "/task";
 
 
 

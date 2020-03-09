@@ -67,19 +67,20 @@ public class DocUrls {
 
     //Murojaatlarni ro'yhatga olish
     private static final String ReferenceRegistration = Prefix + Registration + Reference;
+    public static final String ReferenceRegistrationList = ReferenceRegistration + "/list";
+    public static final String ReferenceRegistrationNewList = ReferenceRegistration + "/new_list";
+    public static final String ReferenceRegistrationView = ReferenceRegistration + "/view";
     public static final String ReferenceRegistrationNew = ReferenceRegistration + "/new";
     public static final String ReferenceRegistrationNewTask = ReferenceRegistration + "/new_and_task";
-    public static final String ReferenceRegistrationList = ReferenceRegistration + "/list";
-    public static final String ReferenceRegistrationView = ReferenceRegistration + "/view";
+    public static final String ReferenceRegistrationEdit = ReferenceRegistration + "/edit";
+    public static final String ReferenceRegistrationEditTask = ReferenceRegistration + "/edit_and_task";
+    public static final String ReferenceRegistrationTask = ReferenceRegistration + "/task";
+    public static final String ReferenceRegistrationTaskSubmit = ReferenceRegistration + "/task_submit";
+    public static final String ReferenceRegistrationUserName = ReferenceRegistration + "/user_name";
+    public static final String ReferenceMailFileUpload = ReferenceRegistration + "/file";
+    public static final String ReferenceSpecialControll = ReferenceRegistration + "/special";
 
-
-
-
-
-
-
-
-    //Murojaatlarni ro'yjhatga olish
+    //Murojaatlarni ro'yhatga olish
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
     public static final String OutgoingRegistrationList = OutgoingRegistration + "/list";

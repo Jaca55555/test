@@ -133,6 +133,20 @@ public class DocumentServiceImpl implements DocumentService {
         document.setDeleted(Boolean.FALSE);
         return documentRepository.save(document);
     }
+    @Override
+    public Document createReference(Integer documentTypeId, Document document, User user) {
+        document.setOrganizationId(user.getOrganizationId());
+        document.setDocumentTypeId(documentTypeId);
+        document.setStatus(DocumentStatus.New);
+
+        document.setRegistrationDate(new Date());
+
+        document.setCreatedById(user.getId());
+        document.setCreatedAt(new Date());
+        document.setDeleted(Boolean.FALSE);
+        return documentRepository.save(document);
+    }
+
 
     @Override
     public void update(Document document) {

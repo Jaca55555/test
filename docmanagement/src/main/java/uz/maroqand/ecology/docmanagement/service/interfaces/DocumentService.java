@@ -26,7 +26,7 @@ public interface DocumentService {
     String buildTree(Document document,List<Document> documentList);
 
     Document createDoc(Integer documentTypeId, Document document, User user);
-
+    Document createReference(Integer documentTypeId, Document document, User user);
     void update(Document document);
 
     Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
