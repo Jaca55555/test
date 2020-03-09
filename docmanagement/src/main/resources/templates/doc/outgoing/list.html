@@ -151,11 +151,15 @@
                     <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
 
                 </h5>
-                <a href="/static/doc/" class="collapsed card-header-a"
-                   data-toggle="collapse" data-target="#collapseOne"
-                   aria-expanded="false" aria-controls="collapseOne">
-                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                </a>            </div>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a href="/static/doc/" class="collapsed card-header-a"
+                       data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne">
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
+                    </a>
+                </div>
+            </div>
             <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
@@ -185,7 +189,7 @@
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="document_view_id" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
-                            <select class="col-sm-12 singleSelect2" id="document_view_id">
+                            <select class="col-sm-12 singleSelect" id="document_view_id">
                                 <option value th:text="#{sys_select}"></option>
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
@@ -360,7 +364,10 @@
         return html;
     }
 
-
+    function clearFilter() {
+        $('#accordion .singleSelect').val(null).select2();
+        $('#accordion input').val('');
+    }
 
     function datatableConnect(status) {
         cDataTable = dataDatatableSelector.DataTable({

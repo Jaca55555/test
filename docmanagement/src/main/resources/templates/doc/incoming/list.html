@@ -106,9 +106,12 @@
                     <h5 class="mb-0">
                         <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                     </h5>
-                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <div>
+                        <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                        <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                            <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
+                        </a>
+                    </div>
                 </div>
                 <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-3 col-sm-12">
@@ -151,21 +154,21 @@
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="performerId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
-                            <select class="form-control " id="performerId" >
+                            <select class="form-control singleSelect" id="performerId" >
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                                 <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="taskSubType" class="control-label"><span th:text="#{sys_document.taskSubType}">Ижро йўналиши</span></label>
-                            <select class="form-control" id="taskSubType">
+                            <select class="form-control singleSelect" id="taskSubType">
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                                 <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="#{${taskSubType.getName()}}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="taskSubStatus" class="control-label" th:text="#{sys_document.taskStatus}">Жорий ҳолати</label>
-                            <select class="form-control " id="taskSubStatus">
+                            <select class="form-control singleSelect" id="taskSubStatus">
                                 <option value="" th:text="#{sys_select}">Танлаш</option>
                                 <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="#{${taskSubStatus.getName()}}"></option>
                             </select>
@@ -302,6 +305,11 @@
             html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
             return html;
         }*/
+
+        function clearFilter() {
+            $('#accordionExample .singleSelect').val(null).select2();
+            $('#accordionExample input').val('');
+        }
 
         function datatableConnect() {
             dataDatatableSelector.DataTable({
