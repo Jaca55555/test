@@ -3,15 +3,15 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{sys_site_main_title}">Murojaatlar Ro'yxati</title>
     <style>
         #upload-gif{
             position: relative;
             float: left;
-            top: 50%;
+            top: 30px;
             left: 50%;
-            transform: translate(-50%, -53%);
-            max-width: 115px;
+            transform: translate(-50%, -50%);
+            max-width: 85px;
         }
         #percentage {
             position: absolute;
@@ -49,46 +49,58 @@
             <div class="card-header flex-space-between">
                 <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
-
+                <!--<div>
+                    <div>
+                        <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
+                        <button class="btn-icon"><i class="fas fs20 fa-print color-gray"></i></button>
+                    </div>
+                </div>-->
             </div>
             <form action="" th:object="${document}" th:method="post" class="card-block" data-parsley-validate="">
                 <div th:if="${document.id != null}">
-                    <div th:if="${document.id != null}">
-                        <input type="hidden" th:field="*{id}" />
-                        <input type="hidden" name="docSubId" th:value="${documentSub.id}"/>
-                        <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
-                    </div>
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" name="docSubId" th:value="${documentSub.id}"/>
+                    <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_sub.communication}">Кирувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible"  required="required" th:field="${documentSub.communicationToolId}" >
+                    <div class="col-sm-6 form-group col-lg-6">
+                        <label class="control-label" th:text="#{doc_incoming.communication_tool}"></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}" required="required" data-parsley-errors-container="#communicationToolIdError">
                             <option value=""></option>
-                            <option th:each="t:${communicationToolList}" th:text="${t.name}" th:value="${t.id}"></option>
+                            <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
+                            <div class="row"> <div class="col-md-4" id="communicationToolIdError"></div> </div>
                         </select>
-                        <div class="row"> <div class="col-md-4" id="journalIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="doc_refenence_view" >Кирувчи хатларни тури</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" required="required" data-parsley-errors-container="#documentViewError" th:field="*{documentViewId}">
+                        <label class="control-label" th:text="#{doc_incoming.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required" data-parsley-errors-container="#documentViewError">
                             <option value=""></option>
-                            <option th:each="t:${documentViewList}" th:text="${t.name}" th:value="${t.id}"></option>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
                         <div class="row"> <div class="col-md-4" id="documentViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_reference.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{docRegNumber}" required="required">
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_reference.reg_doc_date}">Хат рўйхатга олинган сана</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required">
+                            <input class="form-control date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
+                </div>
+
+
+
+<!--                OFF-->
+
+
+
+                <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.organization}"></label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required" data-parsley-errors-container="#documentOrganizationIdError">
@@ -97,46 +109,37 @@
                         </select>
                         <div class="row"> <div class="col-md-4" id="documentOrganizationIdError"></div> </div>
                     </div>
-
-
-
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_reference.reg_doc_address}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('address')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control"  required="required">
+                            <input type="text" class="form-control" name="address" required="required">
                         </div>
                     </div>
-
-
-
-                    <div class="col-sm-6 col-lg-6 form-group">
-                    <label class="control-label" th:text="#{doc_referencre.reg_doc_fullName}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
-                    <div class="col-sm-12 p0">
-                        <input type="text" class="form-control"  required="required" th:field="*{performerName}">
-                    </div>
                 </div>
+                <!--Off-->
 
 
-                    <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_doc_phone_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control"  required="required" th:field="*{performerPhone}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 form-group new-desc">
-                        <label class="control-label" th:text="#{doc_incoming.reg_doc_text}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
-                        <textarea class="form-control" rows="4" name="content" maxlength="500" th:text="*{content}" id="description_textarea" required="required"></textarea>
-                    </div>
-                </div>
-
-
+               <div class="row">
                 <div class="form-group col-sm-12 col-md-6">
-                    <label class="control-label" th:text="#{doc_reference.reg_additional_doc}"> </label>
-                    <select class="form-control" id="additionalDocumentId" name="additionalDocumentId">
-                        <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
-                        <option value="" th:text="#{sys_select}"></option>
-                    </select>
+                    <label class="control-label" th:text="#{doc_incoming.reg_performer_name}"> </label>
+                    <input type="text" class="form-control" th:field="*{performerName}" >
+                </div>
+                <div class="form-group col-sm-12 col-md-6">
+                    <label class="control-label" th:text="#{doc_incoming.reg_performer_phone}"> </label>
+                    <input type="text" class="form-control" th:field="*{performerPhone}">
+                </div>
+               </div>
+                <div class="col-sm-12 form-group new-desc">
+                    <textarea class="form-control" rows="4" name="content" maxlength="500" th:text="*{content}" id="description_textarea" required="required"></textarea>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
+                        <select class="singleSelect select2-hidden-accessible" id="additionalDocumentId" name="additionalDocumentId">
+                            <option value=""></option>
+                            <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
+                        </select>
+                    </div>
                 </div>
 
                 <hr class="m30-vertical">
@@ -214,7 +217,7 @@
                         <a th:href="${cancel_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" th:if="${document.id==null}" th:text="#{doc_income.create}">Рўйхатга олиш</button>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
-                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc_income.save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
+                        <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc_income.save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>
             </form>
@@ -226,10 +229,11 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
 <script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
-<script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+<script src="/static/doc/assets/plugins/bootstrap-maxlength/js/bootstrap-maxlength.min.js"></script>
+
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
 
@@ -262,6 +266,14 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
             let csrf = $("form input[name='_csrf']").val();
             let files = $(this)[0].files[0];
             let fd = new FormData();
@@ -302,14 +314,15 @@
             let fileName = data.data.name;
             let color;
             switch (extension) {
-                case 'jpg':
+                case 'jpg': case 'png': case 'jpeg':
                     extension = '-image';
-                    color = 'color-blue';
+                    color = 'color-yellow';
                     break;
                 case 'pdf':
                     extension = '-pdf';
                     color = 'color-red';
                     break;
+                case 'xls':
                 case 'xlsx':
                     extension = '-excel';
                     color = 'color-green';
@@ -318,6 +331,14 @@
                 case 'docx':
                     extension = '-word';
                     color = 'color-blue';
+                    break;
+                case 'pptx':
+                    extension = '-powerpoint';
+                    color = 'color-red';
+                    break;
+                case 'zip': case '7z': case 'rar':
+                    extension = '-archive';
+                    color = 'color-purple';
                     break;
                 default:
                     extension = '';
@@ -389,6 +410,18 @@
         var progress = Math.round(percent);
         $('#percentage-num').html(progress);
     }
+
+    /*function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }*/
 </script>
+
 </body>
 </html>
