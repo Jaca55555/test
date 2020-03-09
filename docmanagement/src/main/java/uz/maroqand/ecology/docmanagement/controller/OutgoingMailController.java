@@ -265,7 +265,7 @@ public class OutgoingMailController {
         //setting document type
         document.setDocumentTypeId(DocumentTypeEnum.OutgoingDocuments.getId());
         document.setDocumentType(documentTypeService.getById(document.getDocumentTypeId()));
-        document.setStatus(DocumentStatus.New);
+        document.setStatus(DocumentStatus.InProgress);
         document.setPerformerName(userService.findById(document.getPerformerId()).getFullName());
         //setting document sub
         DocumentSub docSub = new DocumentSub();

@@ -8,7 +8,7 @@
             display: block;
         }
         a{
-            color: black;
+            color: #007bff;
         }
     </style>
 </head>
@@ -104,10 +104,12 @@
         <!-- filters card begins here -->
         <div class="card" style="border-radius: 5px">
             <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
-                <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h5 class="mb-0">
                     <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
-                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
-                </a></h5>
+                </h5>
+                <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                </a>
                 <!--<div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>-->
             </div>
             <div class="row p10" style="padding-bottom: 0px;">
@@ -292,7 +294,7 @@
                     <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="responsive-table-model" class="display table dt-responsive dataTable no-footer dtr-inline collapsed" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                <table id="responsive-table-model" class="display table table-hover dt-responsive dataTable no-footer dtr-inline collapsed" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
@@ -460,10 +462,13 @@
                 {render:renderActionsColumn, orderable: "false"}
             ],
             rowCallback: function (row, data) {
-                $(row).children()[0].classList += ` ${data[9][0]}`
-                $(row).children()[1].classList += ` ${data[9][0]}`
-                $(row).children()[3].classList += ` ${data[9][0]}`
-                $(row).children()[4].classList += ` ${data[9][0]}`
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
