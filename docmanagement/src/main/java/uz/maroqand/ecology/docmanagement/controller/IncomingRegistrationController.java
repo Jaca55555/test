@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -148,6 +150,10 @@ public class IncomingRegistrationController {
                 specialControll=Boolean.TRUE;
                 break;//Якунланган
             default:
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
                 break;//Жами
         }
         //todo documentTypeId=1

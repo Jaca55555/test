@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -145,6 +147,10 @@ public class InnerRegistrationController {
                 specialControll=Boolean.TRUE;
                 break;//Якунланган
             default:
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
                 break;//Жами
         }
         //todo documentTypeId=3

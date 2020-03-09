@@ -399,7 +399,7 @@
             thead = dataDatatableSelector.html();
             datatableConnect();
             $('#filter').on('change', function () {
-                getDatatableConnect();
+                $('#myTab a.active').trigger('click');
             })
         });
     </script>
