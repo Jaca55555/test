@@ -295,6 +295,8 @@
                 }, cache: true
             }
         });
+
+        $('input[name=executeFormId]:first, input[name=controlFormId]:first').trigger('click');
     });
 
     function uploadProgressHandler(event)
