@@ -54,7 +54,7 @@ public class DocumentServiceImpl implements DocumentService {
             StringBuilder parent = new StringBuilder();
             System.out.println(topParent.getId() + "  " + topParent.getDocumentTypeId());
             String icon;
-            if (topParent.getDocumentTypeId()!=null &&  topParent.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+            if (topParent.getDocumentTypeId()!=null &&  topParent.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
                 icon="\'fa fa-upload\'";
             }else{
                 icon="\'fa fa-download\'";
@@ -76,7 +76,7 @@ public class DocumentServiceImpl implements DocumentService {
         String button;
 
         if (documentList==null || documentList.size()==0){
-            if (documentOld.getDocumentTypeId()!=null && documentOld.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+            if (documentOld.getDocumentTypeId()!=null && documentOld.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
                 icon="\'fa fa-upload\'";
             }else{
                 icon="\'fa fa-download\'";
@@ -92,7 +92,7 @@ public class DocumentServiceImpl implements DocumentService {
         }
 
             for (Document document: documentList){
-                if (documentOld.getDocumentTypeId()!=null && document.getDocumentTypeId()!=null &&  document.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments)){
+                if (documentOld.getDocumentTypeId()!=null && document.getDocumentTypeId()!=null &&  document.getDocumentType().getType().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
                     icon="\'fa fa-upload\'";
                 }else{
                     icon="\'fa fa-download\'";
