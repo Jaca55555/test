@@ -56,7 +56,9 @@ public class DocController {
             DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService,
             HelperService helperService,
-            DocumentSubService documentSubService, DocumentTaskSubService taskSubService) {
+            DocumentSubService documentSubService,
+            DocumentTaskSubService taskSubService
+    ) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -230,7 +232,7 @@ public class DocController {
             return "redirect:" + DocUrls.Dashboard;
         }
 
-        Integer viewTagId= document.getDocumentType().getType().getId();
+        Integer viewTagId= document.getDocumentType().getType();
         String viewTag = "";
         switch (viewTagId){
             case 1: viewTag = "doc_incoming"; break;

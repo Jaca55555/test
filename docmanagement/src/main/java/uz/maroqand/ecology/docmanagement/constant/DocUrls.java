@@ -22,6 +22,8 @@ public class DocUrls {
     public static final String FileDownload = Prefix + "/file/download";
     public static final String DocumentTaskChange = Prefix + "/task_change";
     public static final String DocumentOpenView = Prefix + "/open_view";
+    private static final String Reference = "/reference"; //murojaatlar
+
 
     public static final String TaskChangeStatus = Prefix + "/task_change_status";
 
@@ -60,10 +62,24 @@ public class DocUrls {
     public static final String IncomingRegistrationTask = IncomingRegistration + "/task";
     public static final String IncomingRegistrationTaskSubmit = IncomingRegistration + "/task_submit";
     public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
-
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomingSpecialControll = IncomingRegistration + "/special";
 
+    //Murojaatlarni ro'yhatga olish
+    private static final String ReferenceRegistration = Prefix + Registration + Reference;
+    public static final String ReferenceRegistrationNew = ReferenceRegistration + "/new";
+    public static final String ReferenceRegistrationNewTask = ReferenceRegistration + "/new_and_task";
+    public static final String ReferenceRegistrationList = ReferenceRegistration + "/list";
+    public static final String ReferenceRegistrationView = ReferenceRegistration + "/view";
+
+
+
+
+
+
+
+
+    //Murojaatlarni ro'yjhatga olish
     //Chiquvchi hujjatlarni ro'yhatga olish
     private static final String OutgoingRegistration = Prefix + Registration + Outgoing;
     public static final String OutgoingRegistrationList = OutgoingRegistration + "/list";

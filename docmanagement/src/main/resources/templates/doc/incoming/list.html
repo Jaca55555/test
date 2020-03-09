@@ -8,7 +8,7 @@
             display: block;
         }
         a{
-            color: black;
+            color: #007bff;
         }
     </style>
 </head>
@@ -40,7 +40,7 @@
                 <div class="responsive">
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
-                            <div class="file-icon-container-small color-primary"><span class="feather icon-mail"></span>
+                            <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${newDocumentCount}">10</h4>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="office-card">
                         <div class="card dashboard-card border-danger-shadow">
-                            <div class="file-icon-container-small color-red"><span class="fas fa-pencil-alt"></span>
+                            <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${inProgressDocumentCount}"></h4>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="office-card">
                         <div class="card dashboard-card border-warning-shadow">
-                            <div class="file-icon-container-small color-yellow"><span class="fas fa-clock"></span></div>
+                            <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${lessDeadlineDocumentCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.near_date_count}">Муддати яқинлашган</h6>
@@ -69,17 +69,16 @@
                     </div>
                     <div class="office-card">
                         <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
-                            </div>
+                            <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}">></h4>
+                                <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.expired_count}">Муддатдан кечиккан</h6>
                             </div>
                         </div>
                     </div>
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
-                            <div class="file-icon-container-small color-primary"><span class="feather icon-mail"></span>
+                            <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${checkingDocumentCount}">></h4>
@@ -89,7 +88,7 @@
                     </div>
                     <div class="office-card">
                         <div class="card dashboard-card border-danger-shadow">
-                            <div class="file-icon-container-small color-red"><span class="fas fa-pencil-alt"></span>
+                            <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${allDocumentCount}">></h4>
@@ -105,11 +104,11 @@
             <div class="card" style="border-radius: 5px">
                 <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
                     <h5 class="mb-0">
-                        <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                            <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
-                            <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
-                        </a>
+                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                     </h5>
+                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                    </a>
                 </div>
                 <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-3 col-sm-12">
@@ -214,7 +213,7 @@
                         <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="responsive-table-model" class="table table-striped table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                    <table id="responsive-table-model" class="table table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
@@ -368,10 +367,13 @@
                     {data: 7, name: 'content',className: "text-justify"},
                 ],
                 rowCallback: function (row, data) {
-                    $(row).children()[0].classList += ` ${data[9][0]}`
-                    $(row).children()[1].classList += ` ${data[9][0]}`
-                    $(row).children()[3].classList += ` ${data[9][0]}`
-                    $(row).children()[4].classList += ` ${data[9][0]}`
+                    $(row).on('click', function () {
+                        location.href = $(row).children()[0].firstElementChild.href
+                    })
+                    // $(row).children()[0].classList += ` ${data[9][0]}`
+                    // $(row).children()[1].classList += ` ${data[9][0]}`
+                    // $(row).children()[3].classList += ` ${data[9][0]}`
+                    // $(row).children()[4].classList += ` ${data[9][0]}`
                 },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

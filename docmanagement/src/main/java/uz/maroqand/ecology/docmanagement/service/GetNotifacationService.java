@@ -36,10 +36,9 @@ public class GetNotifacationService {
         return documentTaskSubRepository.countByReceiverIdAndStatusAndType(user.getId(), TaskSubStatus.New.getId(), DocumentTypeEnum.OutgoingDocuments.getId());
     }
     public Integer countIncomingNotByStatus(){
-        System.out.println("#################################################");
-        System.out.println(documentRepository.countByStatus(DocumentStatus.New));
-        System.out.println("#################################################");
+
         return documentRepository.countByStatus(DocumentStatus.New);
+
     }
 
 }

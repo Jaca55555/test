@@ -4,27 +4,31 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
     <link rel="stylesheet" href="/static/bootstrap-treeview.css">
-<style>
-    .panel{
-        overflow-y: auto;
-        overflow-x: auto;
-        width: 100%;
-        height: 600px;
-    }
+    <style>
+        .panel{
+            overflow-y: auto;
+            overflow-x: auto;
+            width: 100%;
+            height: 600px;
+        }
 
-    #upload-gif{
-        position: relative;
-        float: left;
-        top: 25px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-width: 85px;
-    }
-    #percentage {
-        display: none;
-    }
+        #upload-gif{
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 115px;
+        }
+        #percentage {
+            position: absolute;
+            top: 74%;
+            left: 11%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
 
-</style>
+    </style>
 </head>
 <body>
 <div class="background"></div>
@@ -75,7 +79,7 @@
                                             <i class="fas fa-cog fs20 color-gray pointer"></i>
                                             <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
                                         </div>
-                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs20 color-gray"></i>
+                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
                                             <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                         </div>
                                     </div>
@@ -86,7 +90,7 @@
                                     <div class="w100"></div>
                                 </div>
                             </div>
-                            <div th:if="${#lists.size(documentTaskSubs)>0}" class="col-md-12">
+                            <div th:if="${#lists.size(documentTaskSubs)>0}">
                                 <div th:if="${task.id==taskSub.taskId && taskSub.level!=null && taskSub.level==1}" th:each="taskSub : ${documentTaskSubs}">
                                     <div class="executor col-12 m10-vertical pr-0">
                                         <div class="flex-space-between p0">
@@ -106,7 +110,7 @@
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span>
                                                 </div>
                                                 <div class="align-center height-fit">
-                                                    <i class="feather icon-clock fs20 color-gray"></i>
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
@@ -131,7 +135,7 @@
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub1.status)}}">Жараёнда</span>
                                                 </div>
                                                 <div class="align-center height-fit">
-                                                    <i class="feather icon-clock fs20 color-gray"></i>
+                                                    <i class="feather icon-clock fs30 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
@@ -154,7 +158,7 @@
                                                         <span class="m10-horizontal mobile-none" th:if="${taskSub2.status!=null}" th:text="#{${taskSub2.getStatusName(taskSub2.status)}}">Жараёнда</span>
                                                     </div>
                                                     <div class="align-center height-fit">
-                                                        <i class="feather icon-clock fs20 color-gray"></i>
+                                                        <i class="feather icon-clock fs30 color-gray"></i>
                                                         <span class="m10-horizontal" th:text="${taskSub2.dueDate!=null ? #dates.format(taskSub2.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                     </div>
                                                 </div>
@@ -177,7 +181,7 @@
                                                             <span class="m10-horizontal mobile-none" th:if="${taskSub3.status!=null}" th:text="#{${taskSub3.getStatusName(taskSub3.status)}}">Жараёнда</span>
                                                         </div>
                                                         <div class="align-center height-fit">
-                                                            <i class="feather icon-clock fs20 color-gray"></i>
+                                                            <i class="feather icon-clock fs30 color-gray"></i>
                                                             <span class="m10-horizontal" th:text="${taskSub3.dueDate!=null ? #dates.format(taskSub3.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                         </div>
                                                     </div>
@@ -203,6 +207,9 @@
                         <div class="btn-group" role="group">
                             <button class="btn-icon" th:onclick="'addComment('+${task.id}+')'" data-toggle="modal" data-target="#modal1">
                                 <i class="fs20 fas fa-edit color-gray"></i>
+                            </button>
+                            <button class="btn-icon">
+                                <i class="fas fs20 fa-print color-gray"></i>
                             </button>
                         </div>
                     </div>
@@ -481,7 +488,6 @@
                         html +="</div>";
                         $('#comments'+log.taskId).prepend(html);
                         $('#modal1').modal('toggle');
-                        $('#commentForm').trigger('reset');
                         $('#taskId').val('');
                     }
                 }
@@ -499,14 +505,7 @@
     }
 
     $('#addFile2').on('change', function () {
-        if (this.files[0].size > 10000000) {
-            swal("Файл не должен занимать больше 10 мб.",'', "warning");
-            return false;
-        }
-        if(this.files[0].size === 0){
-            swal("Файл не должен быть пустым", "", "warning");
-            return false;
-        }
+
         let csrf = $("form input[name='_csrf']").val();
         let files = document.querySelector('#addFile2').files[0];
         let fd = new FormData();
@@ -577,15 +576,17 @@
         let fileName = data.data.name;
         let color;
         switch (extension) {
-            case 'jpg': case 'png': case 'jpeg':
+            case 'bmp':
+            case 'jpg':
+            case 'png':
                 extension = '-image';
-                color = 'color-yellow';
+                color = 'color-blue';
                 break;
             case 'pdf':
                 extension = '-pdf';
                 color = 'color-red';
                 break;
-            case 'xls':
+            case "xls":
             case 'xlsx':
                 extension = '-excel';
                 color = 'color-green';
@@ -594,14 +595,6 @@
             case 'docx':
                 extension = '-word';
                 color = 'color-blue';
-                break;
-            case 'pptx':
-                extension = '-powerpoint';
-                color = 'color-red';
-                break;
-            case 'zip': case '7z': case 'rar':
-                extension = '-archive';
-                color = 'color-purple';
                 break;
             default:
                 extension = '';

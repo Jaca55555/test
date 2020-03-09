@@ -49,12 +49,12 @@ public class LibraryCategoryController {
     public HashMap<String, Object> getDocTypeListAjax(
             Pageable pageable,
 
-            @RequestParam(name = "name")String name,
-             @RequestParam(name = "parent")String parent_name
+            @RequestParam(name = "name")String name
+//             @RequestParam(name = "parent")String parent_name
 
     ) {
         HashMap<String, Object> result = new HashMap<>();
-        Page<LibraryCategory> LibraryCategoryPage = libraryCategoryService.getFiltered(name,parent_name, pageable);
+        Page<LibraryCategory> LibraryCategoryPage = libraryCategoryService.getFiltered(name, pageable);
         List<Object[]> JSONArray = new ArrayList<>(LibraryCategoryPage.getContent().size());
         for (LibraryCategory libraryCategory : LibraryCategoryPage.getContent()) {
             JSONArray.add(new Object[]{
@@ -147,7 +147,6 @@ public class LibraryCategoryController {
         }
         libraryCategory.setDeleted(Boolean.TRUE);
         libraryCategoryService.update(libraryCategory);
-      //  libraryCategoryService.updateStatusActive();
         libraryCategoryService.updateByIdFromCache(libraryCategory.getId());
         return "redirect:" + DocUrls.LibraryCategoryList;
     }

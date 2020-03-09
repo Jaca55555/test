@@ -61,7 +61,7 @@
                                 <select class="singleSelect col-sm-12 select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" th:field="*{parent}" >
                                     <option value=""> </option>
-                                    <option th:each="t:${librarycategory}" th:if="${t.parent==null}" th:value="${t.id}" th:text="#{${t.name}}">
+                                    <option th:each="t:${librarycategory}" th:if="${t.parent==null and t.deleted==false}" th:value="${t.id}" th:text="#{${t.name}}">
                                     </option>
                                 </select>
                                 <i class="gray-arrow fas fa-sort-down color-gray"></i>

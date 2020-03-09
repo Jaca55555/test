@@ -9,7 +9,7 @@
             display: block;
         }
         a{
-            color: black;
+            color: #007bff;
         }
     </style>
 </head>
@@ -105,11 +105,11 @@
         <form class="card" style="border-radius: 5px" id="filter">
             <div class="card-header flex-space-between-nowrap" id="headingOne">
                 <h5 class="mb-0">
-                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                 </h5>
+                <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                </a>
             </div>
             <div class="row p10">
                 <div class="form-group col-md-3 col-sm-12">
@@ -247,7 +247,7 @@
                     <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-striped table-hover dataTable" role="grid" style="width: 100%;">
+                                <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
@@ -331,13 +331,13 @@
         var html = '';
         var status=row[8];
         switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info  btn-sm">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-warning  btn-sm">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-primary  btn-sm">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-secondary  btn-sm">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-success  btn-sm">'+row[6]+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-danger  btn-sm">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light  btn-sm">'+row[6]+'</button>';return html;
+            case 0: html='<button type="button" class="btn-rounded btn btn-block btn-info  btn-sm">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-block btn-warning  btn-sm">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-block btn-primary  btn-sm">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-block btn-secondary  btn-sm">'+row[6]+'</button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-block btn-success  btn-sm">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-block btn-danger  btn-sm">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-block btn-light  btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
     }
@@ -387,7 +387,7 @@
                 {data: 1, name: 'document.registrationNumber',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'">' + row[1]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -395,7 +395,7 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -413,10 +413,13 @@
                 {render: renderActionsColumn, orderable: false,className: "text-center"}
             ],
             rowCallback: function (row, data) {
-                $(row).children()[0].classList += ` ${data[9][0]}`
-                $(row).children()[1].classList += ` ${data[9][0]}`
-                $(row).children()[3].classList += ` ${data[9][0]}`
-                $(row).children()[4].classList += ` ${data[9][0]}`
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

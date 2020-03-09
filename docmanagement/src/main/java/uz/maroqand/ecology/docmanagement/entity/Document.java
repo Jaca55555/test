@@ -67,6 +67,9 @@ public class Document {
     @Column(name = "document_view_id")
     private Integer documentViewId;
 
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<DocumentSub> documentSubs;
+
     //hujjat statusi
     @Column(name = "status")
     private DocumentStatus status;
