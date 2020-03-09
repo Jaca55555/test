@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
@@ -27,6 +24,7 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -138,7 +136,67 @@ public class RegApplicationMonitoringController {
         List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByRegApplicationId(regApplication.getId());
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationLogList",regApplicationLogList);
-
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringView;
     }
+
+    @GetMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "/{id}")
+    public String getMonitoringEditPage( @PathVariable("id") Integer id, Model model ) {
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
+        }
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("regApplication", regApplication);
+        return ExpertiseTemplates.ExpertiseRegApplicationMonitoringEdit;
+    }
+
+    @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "/{id}")
+    public String updateRegApplication(
+            @PathVariable("id") Integer id,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+        }
+
+        if(coordinates!=null && !coordinates.isEmpty()) {
+            Client client = regApplication.getApplicant();
+            Coordinate coordinate = new Coordinate();
+            coordinate.setRegApplicationId(regApplication.getId());
+            coordinate.setClientId(regApplication.getApplicantId());
+            coordinate.setClientName(client != null ? client.getName() : null);
+            coordinate.setRegionId(client != null ? client.getRegionId() : null);
+            coordinate.setSubRegionId(client != null ? client.getSubRegionId() : null);
+            coordinate.setName(name);
+            coordinate.setNumber(regApplication.getContractNumber());
+            coordinate.setLongitude(coordinates.get(0).toString());
+            coordinate.setLatitude(coordinates.get(1).toString());
+            Coordinate savedCoordinate = coordinateRepository.save(coordinate);
+
+            for (int i = 2; i < coordinates.size(); i++) {
+                CoordinateLatLong coordinateLatLong = new CoordinateLatLong();
+                coordinateLatLong.setCoordinateId(savedCoordinate.getId());
+                coordinateLatLong.setLongitude(coordinates.get(i++).toString());
+                coordinateLatLong.setLatitude(coordinates.get(i).toString());
+                coordinateLatLongRepository.save(coordinateLatLong);
+            }
+        }
+
+        regApplication.setUpdateById(user.getId());
+        regApplication.setUpdateAt(new Date());
+        regApplication.setName(name);
+        regApplicationService.update(regApplication);
+
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
+    }
+
 }
