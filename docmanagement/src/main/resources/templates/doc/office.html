@@ -298,9 +298,13 @@
                     <h5 class="mb-0">
                         <span th:text="#{doc.doc_filter_header}">Саралаш фильтри</span>
                     </h5>
-                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt fs20 color-primary" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <div>
+                        <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                        <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                            <span class="pcoded-micon"><i class="fa fa-level-down-alt fs20 color-primary"></i></span>
+                        </a>
+                    </div>
+
                 </div>
                 <div class="row p10">
                     <div class="form-group col-md-3 col-sm-12">
@@ -346,8 +350,8 @@
                         <div class="form-group col-md-2 col-sm-12">
                             <label for="documentViewId" class="control-label" th:text="#{doc.doc_type}">Хужжат тури</label>
                             <div class="col-sm-12 p0">
-                                <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentViewId" tabindex="-1" aria-hidden="true">
-                                    <option></option>
+                                <select class="singleSelect col-sm-12" id="documentViewId">
+                                    <option value="" th:text="#{sys_select}"></option>
                                     <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                                 </select>
                             </div>
@@ -645,7 +649,10 @@
             html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
-
+        function clearFilter() {
+            $('#filter .singleSelect').val(null).select2();
+            $('#filter input').val('');
+        }
         function datatableConnect() {
             dataDatatableSelector.DataTable({
                 processing: true,
