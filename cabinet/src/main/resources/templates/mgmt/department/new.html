@@ -78,22 +78,6 @@
                                                     <input id="nameRu" required="required" class="form-control" type="text" th:field="*{nameRu}" data-parsley-maxlength="255"/>
                                                 </div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-4 text-right">
-                                                    <label class="col-form-label">
-                                                        <span th:text="#{mntr_department.organization}"></span>
-                                                        <span class="required">*</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <select class="form-control" required="" id="organizationId" th:field="*{organizationId}">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${@helperService.getOrganizationName(organization.id,#locale)}" th:selected="${department.organizationId!=null and department.organizationId==organization.id}"></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
                                             <div class="form-group row">
                                                 <div class="col-md-4 text-right">
                                                     <label class="col-form-label">
@@ -103,6 +87,7 @@
                                                 <div class="col-md-4">
                                                     <select class="form-control" name="parentId" id="parentId">
                                                         <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="parent : ${departmentList}" th:value="${parent.id}" th:text="${parent.getNameTranslation(#locale)}" th:selected="${department.parentId!=null and department.parentId==parent.id}"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -133,72 +118,6 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/parsley/parsley.min.js}"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
-<script th:inline="javascript">
-    var url = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentGetByOrganization}]];
-    var locale = getCurrentLanguage();
-    var organizationId = [[${department.organizationId}]];
-    var parentId = [[${department.parentId}]];
-    function getCurrentLanguage() {
-        return [[__${#locale}__]];
-    }
-    $(document).ready(function () {
-        if (organizationId!="" && organizationId!=null){
-            getDepartment();
-        }
-        // $('#organizationId').select2();
-    });
-    $('#organizationId').change(function () {
-        getDepartment();
-    });
 
-    function getDepartment() {
-        var organizationId = $('#organizationId').val();
-        var srSelector = $('#parentId');
-        srSelector.find('option').hide();
-        srSelector.find('option:selected').prop('selected',false);
-        srSelector.find('option:first').show();
-        if (organizationId!="" && organizationId!=null){
-            var html = '';
-            $.ajax({
-                url: url,
-                data: {
-                    id: organizationId,
-                    _csrf: $('#global_csrf').val()
-                },
-                type: 'post',
-                dataType: 'json',
-                cache: true,
-                success: function (response) {
-                    // console.log(response);
-                    $.each(response, function (index, value) {
-                        html += '<option value="' + value.id + '"' ;
-                        if ((parentId!='' || parentId!=null) && (parentId==value.id)){
-                            html+='selected="selected"';
-                        }
-                        if (locale === 'ru'){
-                            html+='>' + value.nameRu + '</option>'
-                        } else{
-                            if (locale === 'en'){
-                                html+='>' + value.nameEn + '</option>'
-                            }else {
-                                if (locale === 'oz') {
-                                    html += '>' + value.nameOz + '</option>'
-                                } else {
-                                    html += '>' + value.name + '</option>'
-                                }
-                            }
-                        }
-
-                    });
-                    $('#parentId').find(':first-child').after(html);
-                    // $('#parentId').select2();
-
-                },
-                error: function () {
-                }
-            });
-        }
-    }
-</script>
 </body>
 </html>

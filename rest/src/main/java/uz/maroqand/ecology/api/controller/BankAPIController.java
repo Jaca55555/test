@@ -12,10 +12,7 @@ import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
-import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.core.util.HttpRequestHelper;
-import uz.maroqand.ecology.core.util.Parser;
+import uz.maroqand.ecology.core.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -84,7 +81,11 @@ public class BankAPIController {
                 paymentFile.setBankMfo(paymentNew.getBank().getMfo());
 
                 paymentFile.setBankId(paymentNew.getId());
-                paymentFile.setAmount(paymentNew.getAmount());
+                try {
+                    paymentFile.setAmount(Double.parseDouble(paymentNew.getAmount())/100);
+                } catch (Exception e){}
+
+                paymentFile.setAmountOriginal(paymentNew.getAmount());
                 paymentFile.setDocumentNumber(paymentNew.getDocument_number());
                 Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormat);
                 paymentFile.setPaymentDate(date);
@@ -111,7 +112,7 @@ public class BankAPIController {
                 }
             }
             if(invoice!=null){
-                paymentService.pay(invoice.getId(), Parser.stringToDouble(paymentFile.getAmount()), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
             }
 
         }

@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findById(Integer id, Integer organizationId) {
+        return userRepository.findByIdAndOrganizationId(id, organizationId);
+    }
+
+    @Override
     public User createUser(User user) {
         return userRepository.save(user);
     }

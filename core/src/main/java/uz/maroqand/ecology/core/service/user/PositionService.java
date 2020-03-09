@@ -13,8 +13,12 @@ public interface PositionService {
 
     Position getById(Integer id);
 
+    Position getById(Integer id, Integer organizationId);
+
     Position save(Position position);
 
     List<Position> getAll();
+
+    List<Position> getByOrganizationId(Integer organizationId);
 
 }

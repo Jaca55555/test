@@ -15,10 +15,10 @@
     #upload-gif{
         position: relative;
         float: left;
-        top: 50%;
+        top: 30px;
         left: 50%;
         transform: translate(-50%, -50%);
-        max-width: 115px;
+        max-width: 85px;
     }
     #percentage {
         position: absolute;
@@ -505,7 +505,14 @@
     }
 
     $('#addFile2').on('change', function () {
-
+        if (this.files[0].size > 10000000) {
+            swal("Файл не должен занимать больше 10 мб.",'', "warning");
+            return false;
+        }
+        if(this.files[0].size === 0){
+            swal("Файл не должен быть пустым", "", "warning");
+            return false;
+        }
         let csrf = $("form input[name='_csrf']").val();
         let files = document.querySelector('#addFile2').files[0];
         let fd = new FormData();
@@ -576,17 +583,15 @@
         let fileName = data.data.name;
         let color;
         switch (extension) {
-            case 'bmp':
-            case 'jpg':
-            case 'png':
+            case 'jpg': case 'png': case 'jpeg':
                 extension = '-image';
-                color = 'color-blue';
+                color = 'color-yellow';
                 break;
             case 'pdf':
                 extension = '-pdf';
                 color = 'color-red';
                 break;
-            case "xls":
+            case 'xls':
             case 'xlsx':
                 extension = '-excel';
                 color = 'color-green';
@@ -595,6 +600,14 @@
             case 'docx':
                 extension = '-word';
                 color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
                 break;
             default:
                 extension = '';

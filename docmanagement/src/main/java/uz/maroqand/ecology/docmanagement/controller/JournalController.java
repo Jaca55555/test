@@ -93,6 +93,9 @@ public class JournalController {
         if (user == null) {
             return "redirect:" + DocUrls.JournalList;
         }
+        if(journal.getNumbering()==null){
+            journal.setNumbering(1);
+        }
         journal.setCreatedById(user.getId());
         journalService.create(journal);
         journalService.updateStatusActive(journal.getDocumentTypeId());

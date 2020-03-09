@@ -39,13 +39,6 @@
                                                 <input type="text" class="form-control" id="id" />
                                             </div>
                                             <div class="form-group col-sm-3">
-                                                <label class="control-label"  th:text="#{mntr_department.organization}"></label><br/>
-                                                <select class="form-control" required="" id="organizationId">
-                                                    <option value="" th:text="#{sys_select}"></option>
-                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${@helperService.getOrganizationName(organization.id,#locale)}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-3">
                                                 <label class="control-label" >
                                                     <span th:text="#{mntr_department.parent}"></span>
                                                     <span class="required">*</span>
@@ -118,7 +111,6 @@
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
 <script th:inline="javascript">
-    var url = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentGetByOrganization}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentEdit}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentView}]];
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).DepartmentListAjax}]];
@@ -127,52 +119,6 @@
         return [[__${#locale}__]];
     }
 
-    $('#organizationId').change(function () {
-        getDepartment();
-    });
-
-    function getDepartment() {
-        var organizationId = $('#organizationId').val();
-        var srSelector = $('#parentId');
-        srSelector.find('option').hide();
-        srSelector.find('option:first').show();
-        if (organizationId!="" && organizationId!=null){
-            var html = '';
-            $.ajax({
-                url: url,
-                data: {
-                    id: organizationId,
-                    _csrf: $('#global_csrf').val()
-                },
-                type: 'post',
-                dataType: 'json',
-                cache: true,
-                success: function (response) {
-                    // console.log(response);
-                    $.each(response, function (index, value) {
-                        html += '<option value="' + value.id + '"' ;
-                        if (locale === 'ru'){
-                            html+='>' + value.nameRu + '</option>'
-                        } else{
-                            if (locale === 'en'){
-                                html+='>' + value.nameEn + '</option>'
-                            }else {
-                                if (locale === 'oz') {
-                                    html += '>' + value.nameOz + '</option>'
-                                } else {
-                                    html += '>' + value.name + '</option>'
-                                }
-                            }
-                        }
-                    });
-                    $('#parentId').find(':first-child').after(html);
-
-                },
-                error: function () {
-                }
-            });
-        }
-    }
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
@@ -212,7 +158,6 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
 
                 dataToSend.id = $('#id').val();
-                dataToSend.organizationId = $('#organizationId').val();
                 dataToSend.parentId = $('#parentId').val();
                 dataToSend.name = $('#name').val();
                 dataToSend.nameOz = $('#nameOz').val();

@@ -30,6 +30,11 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public Position getById(Integer id, Integer organizationId) {
+        return positionRepository.findByIdAndOrganizationIdAndDeletedFalse(id, organizationId);
+    }
+
+    @Override
     public Position save(Position position) {
         return positionRepository.save(position);
     }
@@ -39,5 +44,9 @@ public class PositionServiceImpl implements PositionService {
         return positionRepository.findAllByDeletedFalseOrderByIdDesc();
     }
 
+    @Override
+    public List<Position> getByOrganizationId(Integer organizationId) {
+        return positionRepository.findByOrganizationIdAndDeletedFalseOrderByIdDesc(organizationId);
+    }
 
 }
