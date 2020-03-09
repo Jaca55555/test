@@ -79,7 +79,4 @@
 
     </dependencies>
 
-    <build>
-        <finalName>core</finalName>
-    </build>
 </project>

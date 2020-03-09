@@ -9,19 +9,14 @@
         #upload-gif{
             position: relative;
             float: left;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translate(-50%, -50%);
             max-width: 85px;
         }
         #percentage {
-            position: absolute;
-            top: 61%;
-            left: 8%;
-            transform: translate(-50%, -50%);
             display: none;
         }
-
     </style>
 </head>
 <body>
@@ -295,6 +290,8 @@
                 }, cache: true
             }
         });
+
+        $('input[name=executeFormId]:first, input[name=controlFormId]:first').trigger('click');
     });
 
     function uploadProgressHandler(event)

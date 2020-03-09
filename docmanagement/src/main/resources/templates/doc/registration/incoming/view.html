@@ -15,16 +15,12 @@
     #upload-gif{
         position: relative;
         float: left;
-        top: 30px;
+        top: 25px;
         left: 50%;
         transform: translate(-50%, -50%);
         max-width: 85px;
     }
     #percentage {
-        position: absolute;
-        top: 74%;
-        left: 11%;
-        transform: translate(-50%, -50%);
         display: none;
     }
 
@@ -207,9 +203,6 @@
                         <div class="btn-group" role="group">
                             <button class="btn-icon" th:onclick="'addComment('+${task.id}+')'" data-toggle="modal" data-target="#modal1">
                                 <i class="fs20 fas fa-edit color-gray"></i>
-                            </button>
-                            <button class="btn-icon">
-                                <i class="fas fs20 fa-print color-gray"></i>
                             </button>
                         </div>
                     </div>
@@ -447,7 +440,7 @@
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
 
     $(document).ready(function () {
-            docFileName([[${document.contentFiles}]]);
+        docFileName([[${document.contentFiles}]]);
         $('#formSend').on('click', function (e) {
             let url = $('#commentForm').prop('action');
             let data = $('#commentForm').serialize();
@@ -488,6 +481,7 @@
                         html +="</div>";
                         $('#comments'+log.taskId).prepend(html);
                         $('#modal1').modal('toggle');
+                        $('#commentForm').trigger('reset');
                         $('#taskId').val('');
                     }
                 }

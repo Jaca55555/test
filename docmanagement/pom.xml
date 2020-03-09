@@ -33,8 +33,4 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <finalName>docmanagement</finalName>
-    </build>
 </project>
