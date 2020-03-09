@@ -59,10 +59,14 @@ public interface DocumentTaskService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
+            Boolean specialControll,
             Pageable pageable
     );
 
     //taskOrsubTask==true  task
     //taskOrsubTask==false  taskSub
     List<String> getDueColor(Date date, boolean taskOrsubTask, Integer statusId, String locale);
+
+    String getDueTranslateNameOrColor(Integer id,boolean taskOrsubTask, String nameOrColor,String locale);
+
 }

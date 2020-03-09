@@ -54,12 +54,12 @@
                                             <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
                                         </div>
                                     </div>
-                                    <div class="flex-space-between p0 align-center column-1">
+                                    <div class="flex-space-between p0 align-center column-1 fs20">
                                         <div style="height: fit-content;display: flex;align-items: center;">
                                             <i class="fas fa-cog fs20 color-gray pointer"></i>
                                             <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
                                         </div>
-                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs30 color-gray"></i>
+                                        <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs20 color-gray"></i>
                                             <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub.status!=null}" th:text="#{${taskSub.getStatusName(taskSub.status)}}">Жараёнда</span>
                                                 </div>
                                                 <div class="align-center height-fit">
-                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <i class="feather icon-clock fs20 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
@@ -115,7 +115,7 @@
                                                     <span class="m10-horizontal mobile-none" th:if="${taskSub1.status!=null}" th:text="#{${taskSub1.getStatusName(taskSub1.status)}}">Жараёнда</span>
                                                 </div>
                                                 <div class="align-center height-fit">
-                                                    <i class="feather icon-clock fs30 color-gray"></i>
+                                                    <i class="feather icon-clock fs20 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
                                             </div>
@@ -138,7 +138,7 @@
                                                         <span class="m10-horizontal mobile-none" th:if="${taskSub2.status!=null}" th:text="#{${taskSub2.getStatusName(taskSub2.status)}}">Жараёнда</span>
                                                     </div>
                                                     <div class="align-center height-fit">
-                                                        <i class="feather icon-clock fs30 color-gray"></i>
+                                                        <i class="feather icon-clock fs20 color-gray"></i>
                                                         <span class="m10-horizontal" th:text="${taskSub2.dueDate!=null ? #dates.format(taskSub2.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                     </div>
                                                 </div>
@@ -161,7 +161,7 @@
                                                             <span class="m10-horizontal mobile-none" th:if="${taskSub3.status!=null}" th:text="#{${taskSub3.getStatusName(taskSub3.status)}}">Жараёнда</span>
                                                         </div>
                                                         <div class="align-center height-fit">
-                                                            <i class="feather icon-clock fs30 color-gray"></i>
+                                                            <i class="feather icon-clock fs20 color-gray"></i>
                                                             <span class="m10-horizontal" th:text="${taskSub3.dueDate!=null ? #dates.format(taskSub3.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                         </div>
                                                     </div>
@@ -509,16 +509,15 @@
         let color;
         switch (extension) {
             case 'bmp':
-            case 'jpg':
-            case 'png':
+            case 'jpg': case 'png': case 'jpeg':
                 extension = '-image';
-                color = 'color-blue';
+                color = 'color-yellow';
                 break;
             case 'pdf':
                 extension = '-pdf';
                 color = 'color-red';
                 break;
-            case "xls":
+            case 'xls':
             case 'xlsx':
                 extension = '-excel';
                 color = 'color-green';
@@ -527,6 +526,14 @@
             case 'docx':
                 extension = '-word';
                 color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
                 break;
             default:
                 extension = '';

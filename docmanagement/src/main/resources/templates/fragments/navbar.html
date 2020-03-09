@@ -8,16 +8,16 @@
             <a class="mobile-menu" id="mobile-collapse1" href="#"><span></span></a>
             <a href="#" class="b-brand">
                 <div class="b-bg">
-                    <i class="feather icon-trending-up"></i>
+                    <span><i class="fa fa-leaf"></i></span>
                 </div>
-                <span class="b-title">Datta Able</span>
+                <span class="b-title">ЭКО ЭКСПЕРТИЗА</span>
             </a>
         </div>
         <a class="mobile-menu" id="mobile-header" href="">
             <i class="feather icon-more-horizontal"></i>
         </a>
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto mobile2-none">
                 <li><span th:text="${#dates.createNow()}"></span></li>
                 <li><span th:utext="${#request.userPrincipal.name}"></span> - <span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
             </ul>

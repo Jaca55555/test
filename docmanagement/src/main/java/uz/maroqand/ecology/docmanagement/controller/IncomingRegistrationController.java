@@ -113,8 +113,45 @@ public class IncomingRegistrationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<Integer> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControll=null;
+        Integer tabFilter = incomingRegFilter.getTabFilter()!=null?incomingRegFilter.getTabFilter():1;
+        switch (tabFilter){
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
+            case 5:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());
+                break;//Ижро назоратида
+            case 7:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.Complete.getId());
+                break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
+            default:
+                break;//Жами
+        }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, null, null, null, null, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -124,10 +161,13 @@ public class IncomingRegistrationController {
             String docContent="";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
-                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
             }
-            docContent+=" №"+ document.getDocRegNumber().trim() + " " + documentHelperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
-            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
@@ -162,7 +202,7 @@ public class IncomingRegistrationController {
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
-        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
+//        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
@@ -196,7 +236,7 @@ public class IncomingRegistrationController {
     ) {
         Document document = documentService.getById(id);
         if (document == null) {
-            return "redirect: " + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
@@ -395,7 +435,7 @@ public class IncomingRegistrationController {
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
             return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();
         }else {
-            return "redirect:" + DocUrls.IncomingRegistrationList;
+            return "redirect:" + DocUrls.IncomingRegistrationNewList;
         }
     }
 
@@ -410,6 +450,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());
@@ -493,8 +534,6 @@ public class IncomingRegistrationController {
         HashMap<String, Object> response = new HashMap<>();
         Document document = documentService.getById(id);
         document.setSpecialControll(!document.getSpecialControll());
-        System.out.println(document.getPerformerPhone());
-        System.out.println(document.getPerformerPhone().getClass().getName());
         documentService.update(document);
         response.put("status", "success");
         return response;
@@ -523,25 +562,6 @@ public class IncomingRegistrationController {
             return fileService.getFileAsResourceForDownloading(file);
         }
     }
-
-    /*@GetMapping(value = DocUrls.IncomeMailSpecial)
-    @ResponseBody
-    public HashMap<String, Object> changeSpecial(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "enabled")Boolean enabled
-    ) {
-        HashMap<String, Object> response = new HashMap<>();
-        Document document = documentService.getById(id);
-        if (document == null) {
-            response.put("status", "not found");
-            return response;
-        }
-        document.setSpecialControl(enabled);
-        documentService.update(document);
-        response.put("status", "success");
-        response.put("value", enabled);
-        return response;
-    }*/
 
     /*@GetMapping(value = DocUrls.IncomeMailAddTask)
     public String getAddTaskPage(

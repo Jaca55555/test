@@ -143,7 +143,6 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         String tree = "";
         String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask: documentTasks){
-            System.out.println("------------" + documentTask.getId());
             String getReceiverName =  helperService.getUserFullNameById(documentTask.getChiefId()) +" ("+ helperService.getPositionName(documentTask.getChief().getPositionId(),locale)+")";
             tree+= "{ text :\"" + getReceiverName + " \",tags:" + documentTask.getId();
             List<DocumentTaskSub> taskSubs = taskSubService.getListByDocIdAndTaskId(documentTask.getDocumentId(),documentTask.getId());
@@ -167,9 +166,10 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
+            Boolean specialControll,
             Pageable pageable
     ) {
-        return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId), pageable);
+        return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
     }
 
     //taskOrsubTask==true  task
@@ -188,7 +188,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         date.setHours(23);
         date.setMinutes(59);
         Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
-        if (statusId==1 || statusId==0){ colorText+="font-weight-bold text-primary " ;}
+        if (statusId==1 || statusId==0){ colorText+="text-primary" ;}
         if (statusId==2){ colorText+="text-primary " ;}
         if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 5)) {
             colorText+="text-success ";
@@ -207,6 +207,64 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return result;
     }
 
+    @Override
+    public String getDueTranslateNameOrColor(Integer id, boolean taskOrsubTask,String nameOrColor, String locale) {
+        if (id==null){
+            if (nameOrColor.equals("name")){
+                return "";
+            }else{
+                return "danger";
+            }
+        }
+        Date dueDate;
+        Date nowDate = new Date();
+        if (taskOrsubTask){
+            DocumentTask task = getById(id);
+            if (task==null || task.getDueDate()==null){
+                if (nameOrColor.equals("name")){
+                    return "";
+                }else{
+                    return "danger";
+                }
+            }
+            dueDate=task.getDueDate();
+        }else{
+            DocumentTaskSub taskSub = taskSubService.getById(id);
+            if (taskSub==null || taskSub.getDueDate()==null){
+                if (nameOrColor.equals("name")){
+                    return "";
+                }else{
+                    return "danger";
+                }
+            }
+            dueDate=taskSub.getDueDate();
+        }
+
+        Long interval = (dueDate.getTime()-nowDate.getTime())/3600000;
+        System.out.println("dueDate= " + Common.uzbekistanDateFormat.format(dueDate));
+        System.out.println("nowDate= " + Common.uzbekistanDateFormat.format(nowDate));
+
+        if (interval<=0){
+            if (nameOrColor.equals("name")){
+                return helperService.getTranslation("sys_due.passed",locale);
+            }else{
+                return "danger";
+            }
+        }else if (interval<=72){
+            if (nameOrColor.equals("name")){
+                return helperService.getTranslation("sys_due.left",locale);
+            }else{
+                return "warning";
+            }
+        }
+
+        if (nameOrColor.equals("name")){
+            return "";
+        }else{
+            return "danger";
+        }
+    }
+
     private static Specification<DocumentTask> getSpesification(
             final Integer organizationId,
             final Integer documentTypeId,
@@ -218,7 +276,8 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             final Integer type,
             final Set<Integer> statuses,
             final Integer departmentId,
-            final Integer receiverId
+            final Integer receiverId,
+            final Boolean specialControll
     ) {
         return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
@@ -293,6 +352,10 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
             }
 
+            if (specialControll != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
+            }
+
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
@@ -307,7 +370,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         List<String> result = new ArrayList<>();
 
         if (intervalHours<48){
-            colorText+="text-danger ";
+            colorText+=" text-danger ";
             if (intervalHours<0){
                 dueText= helperService.getTranslation("due_text.passed",locale)+ ": ";
                 dueText+=intervalDate!=0?Math.abs(intervalDate)+" "+kunName:Math.abs(intervalHours)+" "+soatName;
@@ -318,7 +381,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         }else if (intervalHours <=72){
             dueText=helperService.getTranslation("due_text.left",locale)+ ": ";
             dueText+=intervalDate!=0?intervalDate.toString()+" "+kunName:intervalHours.toString()+" "+soatName;
-            colorText+="text-warning";
+            colorText+=" text-warning ";
         }
 
         if (intervalHours>72 && intervalHours<=96){

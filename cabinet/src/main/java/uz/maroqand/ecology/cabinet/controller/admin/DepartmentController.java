@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.cabinet.controller.mgmt;
+package uz.maroqand.ecology.cabinet.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtTemplates;
-import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminTemplates;
+import uz.maroqand.ecology.cabinet.constant.admin.AdminUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.Organization;
@@ -56,14 +56,14 @@ public class DepartmentController {
         this.userAdditionalService = userAdditionalService;
     }
 
-    @RequestMapping(MgmtUrls.DepartmentList)
+    @RequestMapping(AdminUrls.DepartmentList)
     public String getDepartmentList(Model model) {
         model.addAttribute("organizationList",organizationService.getList());
-        model.addAttribute("add_url",MgmtUrls.DepartmentNew);
-        return MgmtTemplates.DepartmentList;
+        model.addAttribute("add_url", AdminUrls.DepartmentNew);
+        return AdminTemplates.DepartmentList;
     }
 
-    @RequestMapping(value = MgmtUrls.DepartmentListAjax, produces = "application/json")
+    @RequestMapping(value = AdminUrls.DepartmentListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getDepartmentListAjaxt(
             @RequestParam(name = "id", required = false) Integer departmentId,
@@ -105,35 +105,35 @@ public class DepartmentController {
         return result;
     }
 
-    @RequestMapping(MgmtUrls.DepartmentNew)
+    @RequestMapping(AdminUrls.DepartmentNew)
     public String departmentNew(Model model) {
         Department department= new Department();
         model.addAttribute("department", department);
         model.addAttribute("organizationList",organizationService.getList());
-        model.addAttribute("action_url", MgmtUrls.DepartmentCreate);
-        model.addAttribute("back_url", MgmtUrls.DepartmentList);
-        return MgmtTemplates.DepartmentNew;
+        model.addAttribute("action_url", AdminUrls.DepartmentCreate);
+        model.addAttribute("back_url", AdminUrls.DepartmentList);
+        return AdminTemplates.DepartmentNew;
     }
 
-    @RequestMapping(MgmtUrls.DepartmentEdit)
+    @RequestMapping(AdminUrls.DepartmentEdit)
     public String departmentEdit(
             Model model,
             @RequestParam(name = "id") Integer departmentId
     ) {
         Department department = departmentService.getById(departmentId);
         if (department == null) {
-            return "redirect:" + MgmtUrls.DepartmentList;
+            return "redirect:" + AdminUrls.DepartmentList;
         }
 
         model.addAttribute("department", department);
         model.addAttribute("organizationList",organizationService.getList());
-        model.addAttribute("action_url", MgmtUrls.DepartmentUpdate);
-        model.addAttribute("back_url", MgmtUrls.DepartmentList);
-        return MgmtTemplates.DepartmentNew;
+        model.addAttribute("action_url", AdminUrls.DepartmentUpdate);
+        model.addAttribute("back_url", AdminUrls.DepartmentList);
+        return AdminTemplates.DepartmentNew;
     }
 
 
-    @RequestMapping(MgmtUrls.DepartmentCreate)
+    @RequestMapping(AdminUrls.DepartmentCreate)
     public String departmentCreate(Department department) {
 
         User user = userService.getCurrentUserFromContext();
@@ -167,10 +167,10 @@ public class DepartmentController {
         );
 
 
-        return "redirect:" + MgmtUrls.DepartmentList;
+        return "redirect:" + AdminUrls.DepartmentList;
     }
 
-    @RequestMapping(MgmtUrls.DepartmentUpdate)
+    @RequestMapping(AdminUrls.DepartmentUpdate)
     public String departmentUpdate(
             @RequestParam(name = "id") Integer departmentId,
             Department department
@@ -178,7 +178,7 @@ public class DepartmentController {
         User user = userService.getCurrentUserFromContext();
         Department oldDepartment= departmentService.getById(departmentId);
         if (oldDepartment == null) {
-            return "redirect:" + MgmtUrls.DepartmentList;
+            return "redirect:" + AdminUrls.DepartmentList;
         }
 
         String oldDepartmentStr="";
@@ -217,10 +217,10 @@ public class DepartmentController {
                 user.getUserAdditionalId()
         );
 
-        return "redirect:" + MgmtUrls.DepartmentList;
+        return "redirect:" + AdminUrls.DepartmentList;
     }
 
-    @PostMapping(value = MgmtUrls.DepartmentGetByOrganization)
+    @PostMapping(value = AdminUrls.DepartmentGetByOrganization)
     @ResponseBody
     public List<Department> getList(
 
@@ -233,20 +233,20 @@ public class DepartmentController {
         return departmentList;
     }
 
-    @RequestMapping(MgmtUrls.DepartmentView)
+    @RequestMapping(AdminUrls.DepartmentView)
     public String getDepartmentViewPage(
             @RequestParam(name = "id") Integer id,
             Model model
     ){
         Department department = departmentService.getById(id);
         if (department==null){
-            return "redirect:" + MgmtUrls.DepartmentList;
+            return "redirect:" + AdminUrls.DepartmentList;
         }
         Type type = new TypeToken<List<Department>>(){}.getType();
         List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Department,id);
 
         model.addAttribute("department",department);
         model.addAttribute("beforeAndAfterList",beforeAndAfterList);
-        return MgmtTemplates.DepartmentView;
+        return AdminTemplates.DepartmentView;
     }
 }

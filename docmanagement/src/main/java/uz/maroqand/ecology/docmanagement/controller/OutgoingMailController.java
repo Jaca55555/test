@@ -181,7 +181,18 @@ public class OutgoingMailController {
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
         if(additionalDocument != null) {
             model.addAttribute("additional_document_registration_number", additionalDocument.getRegistrationNumber());
-            model.addAttribute("additional_document_view_link", DocUrls.OutgoingMailView + "?id=" + additionalDocument.getId());
+
+            Integer additionalDocumentTypeId = additionalDocument.getDocumentTypeId();
+            String viewLink;
+
+            if(additionalDocumentTypeId.equals(DocumentTypeEnum.IncomingDocuments.getId()))
+                viewLink = DocUrls.IncomingRegistrationView;
+            else if(additionalDocumentTypeId.equals(DocumentTypeEnum.OutgoingDocuments.getId()))
+                viewLink = DocUrls.OutgoingMailView;
+            else
+                viewLink = DocUrls.InnerView;
+
+            model.addAttribute("additional_document_view_link", viewLink + "?id=" + additionalDocument.getId());
         }
         String document_organization_name="";
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();

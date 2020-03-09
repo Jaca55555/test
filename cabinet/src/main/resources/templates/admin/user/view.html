@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+<!---->
+<object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5><span th:text="#{mntr_user_view}"></span><span th:text="${':' + user.id}"></span></h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="col-sm-12">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-uppercase show active" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="true"><span th:text="#{mntr_user_info}"></span></a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-uppercase show" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false"><span th:text="#{sys_history}"></span></a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent" style="padding: 15px 5px;">
+                                                <div class="tab-pane fade active show" id="user" role="tabpanel" aria-labelledby="activity-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" th:object="${user}">
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="2" class="text-center"><h5 th:text="#{mntr_user_info}"></h5></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.firstname}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:text="${user.firstname}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.lastname}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:text="${user.lastname}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.middlename}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:text="${user.middlename}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-right"><span th:text="#{mntr_user.organization}"></span>:</th>
+                                                                <td class="text-left"><span th:if="*{organizationId!=null}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.department}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:if="*{departmentId!=null}" th:text="${@helperService.getDepartmentName(user.departmentId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.position}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:if="*{positionId!=null}" th:text="${@helperService.getPositionName(user.positionId,#locale)}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.role}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:if="*{role!=null}" th:text="${user.role.name}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.enabled}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left">
+                                                                    <span class="badge badge-pill badge-success" th:if="*{enabled!=null and enabled}" th:text="#{sys_active}"></span>
+                                                                    <span class="badge badge-pill badge-danger" th:if="*{enabled!=null and !enabled}" th:text="#{sys_not_active}"></span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.phone}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:text="${user.phone}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.email}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:text="${user.email}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.username}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:text="${user.username}"></span></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${beforeAndAfterList!=null}" class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                                    <div class="col-sm-12">
+                                                        <div class="accordion" id="accordionExample">
+                                                            <div class="card" style="margin:5px 0px; border: 0.5px solid #dee2e6;" th:each="elem,iter:${beforeAndAfterList}">
+                                                                <div th:id="'heading-'+${iter['index']}">
+                                                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" th:data-target="'#collapse-'+${iter['index']}" aria-expanded="false" th:aria-controls="'collapse-'+${iter['index']}">
+                                                                        <span th:text="${elem['registeredDate']}"></span>&nbsp; - &nbsp;
+                                                                        <span th:text="${elem['userName']}"></span>
+                                                                    </button>
+                                                                </div>
+                                                                <div th:id="'collapse-'+${iter['index']}" class="card-body collapse" th:aria-labelledby="'heading-'+${iter['index']}" data-parent="#accordionExample" >
+                                                                    <div class="table-responsive">
+                                                                        <table class="table info-table" >
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th  class="text-right" style="width: 30%"><h5></h5></th>
+                                                                                    <th  class="text-center" style="width: 35%"><h5 th:text="#{sys_before}"></h5></th>
+                                                                                        <th  class="text-center" style="width: 35%"><h5 th:text="#{sys_after}"></h5></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.firstname}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].firstname}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].firstname}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.lastname}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].lastname}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].lastname}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.middlename}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].middlename}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].middlename}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.organization}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].organizationId!=null}" th:text="${@helperService.getOrganizationName(elem['before'].organizationId,#locale)}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null and elem['after'].organizationId!=null}" th:text="${@helperService.getOrganizationName(elem['after'].organizationId,#locale)}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.department}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].departmentId!=null}" th:text="${@helperService.getDepartmentName(elem['before'].departmentId,#locale)}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null and elem['after'].departmentId!=null}" th:text="${@helperService.getDepartmentName(elem['after'].departmentId,#locale)}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.position}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].positionId!=null}" th:text="${@helperService.getPositionName(elem['before'].positionId,#locale)}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null and elem['after'].positionId!=null}" th:text="${@helperService.getPositionName(elem['after'].positionId,#locale)}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.enabled}"></span>:</td>
+                                                                                    <td class="text-center">
+                                                                                        <span th:if="${elem['before']!=null and elem['before'].enabled!=null and elem['before'].enabled}" class="badge badge-pill badge-success" th:text="#{sys_active}"></span>
+                                                                                        <span th:if="${elem['before']!=null and elem['before'].enabled!=null and !elem['before'].enabled}" class="badge badge-pill badge-danger" th:text="#{sys_not_active}"></span>
+                                                                                    </td>
+                                                                                    <td class="text-center">
+                                                                                        <span th:if="${elem['after']!=null and elem['after'].enabled!=null and elem['after'].enabled}" class="badge badge-pill badge-success" th:text="#{sys_active}"></span>
+                                                                                        <span th:if="${elem['after']!=null and elem['after'].enabled!=null and !elem['after'].enabled}" class="badge badge-pill badge-danger" th:text="#{sys_not_active}"></span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.phone}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].phone}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].phone}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.email}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].email}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].email}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_user.username}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].username}"></span></td>
+                                                                                    <td class="text-center"><span th:if="${elem['after']!=null}" th:text="${elem['after'].username}"></span></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        </br>
+                                                                        <h4 class="text-center" th:text="#{mntr_user_evidence}"></h4>
+                                                                        <div class="table-responsive" th:if="${userEvidenceList!=null}">
+                                                                            <table class="table info-table" >
+                                                                                <tbody th:each="userEvidence:${userEvidenceList}" th:if="${elem['tableHistoryId']!=null and userEvidence.tableHistoryId==elem['tableHistoryId']}">
+                                                                                    <tr>
+                                                                                        <th style="width: 50%;" class="text-right"><span th:text="#{mntr_user_evidence.reason}"></span></th>
+                                                                                        <td style="width: 50%;" class="text-left"><span  th:text="${userEvidence.reason}"></span></td>
+                                                                                    </tr>
+                                                                                <tr>
+                                                                                    <th class="text-right"><span th:text="#{mntr_user_evidence.files}"></span></th>
+                                                                                    <td class="text-left">
+                                                                                        <p class="mt-2 mb-0" th:each="file:${userEvidence.documentFiles}" th:if="${userEvidence.documentFiles!=null}">
+                                                                                            <a th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersEvidenceFileDownload + '?file_id=' + file.id}"><i class="fas fa-download"></i><span class="ml-2" th:text="${file.name}"></span></a>
+                                                                                        </p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br>
+                                                                    <h5 class="text-center">UserAdditional info</h5>
+                                                                    <div class="table-responsive text-nowrap">
+                                                                        <table class="table table-columned" >
+                                                                            <thead>
+                                                                                <tr class="text-center">
+                                                                                    <th th:text="#{user_name}"></th>
+                                                                                    <th th:text="#{sys_info}"></th>
+                                                                                    <th th:text="#{sys_ipClient}"></th>
+                                                                                    <th th:text="#{ sys_userAgent}"></th>
+                                                                                    <th th:text="#{sys_loginType}"></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <td th:text="${elem['userName']}"></td>
+                                                                                <td style="word-break: break-all; width: 30%" th:text="${elem['userAdditional'].info}"></td>
+                                                                                <td th:text="${elem['userAdditional'].ipClient}"></td>
+                                                                                <td th:text="${elem['userAdditional'].userAgent}"></td>
+                                                                                <td th:text="#{sys_loginType_} + ${elem['userAdditional'].loginType}"></td>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        audit();
+    });
+    function audit() {
+        $('.info-table tbody').find('tr').each(function () {
+            var td = $(this).find('td');
+            if(td.length > 2 && ($(td[1]).html() != $(td[2]).html())) {
+                $(td[1]).addClass('table-success');
+                $(td[2]).addClass('table-success');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

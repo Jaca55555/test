@@ -116,10 +116,10 @@
 
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'name'},
+                {data: 1, name: 'name', className: 'text-center'},
                 {data: 2, name: 'parent'},
 
-                {render: renderActionsColumn, orderable: false}
+                {render: renderActionsColumn, orderable: false, className: 'text-center'}
             ],
             ajax: function (dataToSend, callback, settings) {
                 let api = this.api();

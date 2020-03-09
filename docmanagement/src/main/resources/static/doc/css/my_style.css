@@ -1,3 +1,4 @@
+
 body {
     background: #f4f7fa;
     overflow-x: hidden;
@@ -516,12 +517,16 @@ html, body {
         font-size: 15px;
         margin:auto;
     }
-    #responsive-table-model > tbody > tr > td:last-child {
-        display: flex;
-    }
-    #dynamicTable > tbody > tr > td:last-child {
-        display: flex;
-    }
+    /*#responsive-table-model > tbody > tr > td:last-child {*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*height: -webkit-fill-available;*/
+        /*align-items: center;*/
+    /*}*/
+    /*#dynamicTable > tbody > tr > td:last-child {*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+    /*}*/
     td > div.btn-group {
         margin-bottom: 2px;
     }
@@ -531,9 +536,30 @@ html, body {
     div.dataTables_scrollBody table tbody tr td {
         vertical-align: middle;
     }
-
-
-
+    #responsive-table-model > tbody > tr > td > .btn-group > button {
+        white-space: nowrap;
+    }
+    .bg-success {
+        background-color: #62c462 !important;
+    }
+    .text-success > a {
+        color:#28a745!important;
+    }
+    .text-primary > a {
+        color: #007bff!important;
+    }
+    .text-danger > a {
+        color:#dc3545!important;
+    }
+    .text-warning > a {
+        color:#dc3545!important;
+    }
+    #responsive-table-model > thead > th {
+        text-align: center;
+    }
+    table button {
+        white-space: nowrap;
+    }
 
 /* media */
 @media (max-width:1700px) {
@@ -607,9 +633,14 @@ html, body {
         padding-right: 0;
     }
 }
+
+
 @media (max-width:768px) {
     .mobile-text-center {
         text-align: center;
+    }
+    .mobile2-none {
+        display: none !important;
     }
     }
 @media (max-width:614px) {

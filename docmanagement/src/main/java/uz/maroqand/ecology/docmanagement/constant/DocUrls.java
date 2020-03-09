@@ -14,7 +14,8 @@ public class DocUrls {
     private static final String Appeal = "/appeal"; //Murojaatlar
     private static final String Orders = "/orders"; //Buyruqlar
     private static final String DocumentCheck="/document_check"; //Document oxirgisi
-    public static final String Dashboard = Prefix + "/office";
+
+    public static final String Dashboard = Prefix + "/dashboard";
     public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
@@ -25,7 +26,6 @@ public class DocUrls {
 
 
     public static final String TaskChangeStatus = Prefix + "/task_change_status";
-
 
     public static final String IncomingList = Prefix + Incoming + "/list"; //kiruvchi xatlar
     public static final String IncomingView = Prefix + Incoming + "/view"; //kiruvchi xatni ko'rish
@@ -64,7 +64,6 @@ public class DocUrls {
     public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
     public static final String IncomingSpecialControll = IncomingRegistration + "/special";
-//    public static final String IncomeMailAddTask = IncomingRegistration + "/task";
 
     //Murojaatlarni ro'yhatga olish
     private static final String ReferenceRegistration = Prefix + Registration + Reference;
@@ -136,7 +135,7 @@ public class DocUrls {
     public static final String LibraryEdit = Library + "/edit";
     public static final String LibraryDelete = Library + "/delete";
     public static final String LibraryWindow = Library + "/window";
-    public static final String LibraryFile = Library + "/file";
+    private static final String LibraryFile = Library + "/file";
     public static final String LibraryFileUpload = LibraryFile + "/upload";
     public static final String LibraryFileDownload = LibraryFile + "/download";
     public static final String LibraryFileDelete = LibraryFile + "/delete";
@@ -183,15 +182,15 @@ public class DocUrls {
     public static final String DocumentOrganizationEdit = DocumentOrganization + "/edit";
     public static final String DocumentOrganizationEditStatus = DocumentOrganizationEdit + "/status";
 
-     private static final String OutgoingMail = Prefix + "/outgoing_mail";
-     public static final String OutgoingMailNew = OutgoingMail + "/new";
-     public static final String OutgoingMailList = OutgoingMail + "/list";
-     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
-     public static final String OutgoingMailView = OutgoingMail + "/view";
-     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
-     public static final String OutgoingMailFile = OutgoingMail + "/file";
-     public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
-     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
-     public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
-     public static final String OutgoingMailChangeStatus = OutgoingMail + "/change_status";
+    private static final String OutgoingMail = Prefix + "/outgoing_mail";
+    public static final String OutgoingMailNew = OutgoingMail + "/new";
+    public static final String OutgoingMailList = OutgoingMail + "/list";
+    public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
+    public static final String OutgoingMailView = OutgoingMail + "/view";
+    public static final String OutgoingMailEdit = OutgoingMail + "/edit";
+    private static final String OutgoingMailFile = OutgoingMail + "/file";
+    public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
+    public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
+    public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
+    public static final String OutgoingMailChangeStatus = OutgoingMail + "/change_status";
 }

@@ -38,6 +38,7 @@ public class IncomingController {
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentDescriptionService documentDescriptionService;
 
     public IncomingController(
             UserService userService,
@@ -48,7 +49,7 @@ public class IncomingController {
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
             DocumentLogService documentLogService,
-            DocumentOrganizationService documentOrganizationService) {
+            DocumentOrganizationService documentOrganizationService, DocumentDescriptionService documentDescriptionService) {
         this.userService = userService;
         this.positionService = positionService;
         this.helperService = helperService;
@@ -58,6 +59,7 @@ public class IncomingController {
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentDescriptionService = documentDescriptionService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -116,7 +118,7 @@ public class IncomingController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
-
+        Boolean specialControll=null;
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
@@ -146,9 +148,12 @@ public class IncomingController {
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
+            case 8:
+                specialControll=Boolean.TRUE;
+                break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
-                receiverId=null;
+//                receiverId=null;
                 break;//Жами
         }
 
@@ -174,6 +179,7 @@ public class IncomingController {
                 status,
                 departmentId,
                 receiverId,
+                specialControll,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -185,10 +191,13 @@ public class IncomingController {
             String docContent="";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentSub.getOrganization();
-                docContent+=documentOrganization!=null?documentOrganization.getName():"";
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
             }
-            docContent+=" №"+ document.getDocRegNumber().trim() + " " + helperService.getTranslation("sys_date",locale) + ": " + (document.getDocRegDate()!=null?Common.uzbekistanDateFormat.format(document.getDocRegDate()):"");
-            docContent+="\n" + (document.getContent()!=null?document.getContent().trim():"");
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
@@ -219,14 +228,24 @@ public class IncomingController {
         if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
         DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
-        if (task == null) {
+        if (task == null || task.getDocumentId()==null) {
             return "redirect:" + DocUrls.IncomingList;
         }
 
         Document document = documentService.getById(task.getDocumentId());
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
+        }
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(task.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
         }
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
@@ -272,12 +291,19 @@ public class IncomingController {
             return  "redirect:" + DocUrls.IncomingList;
         }
 
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
+            if (user.getId().equals(documentTask.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
+
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
 
         model.addAttribute("document", document);
-        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
+        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + documentTaskSub.getId());
@@ -296,6 +322,11 @@ public class IncomingController {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub==null){
             return "redirect:" + DocUrls.IncomingList;
+        }
+
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
         }
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());

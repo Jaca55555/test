@@ -8,10 +8,10 @@
         #upload-gif{
             position: relative;
             float: left;
-            top: 50%;
+            top: 30px;
             left: 50%;
-            transform: translate(-50%, -53%);
-            max-width: 115px;
+            transform: translate(-50%, -50%);
+            max-width: 85px;
         }
         #percentage {
             position: absolute;
@@ -89,7 +89,7 @@
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
+                            <input class="form-control date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
@@ -126,9 +126,9 @@
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
                         <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
-                        <select class="form-control" id="additionalDocumentId" name="additionalDocumentId">
+                        <select class="singleSelect select2-hidden-accessible" id="additionalDocumentId" name="additionalDocumentId">
+                            <option value=""></option>
                             <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
-                            <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
                 </div>
@@ -229,10 +229,10 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
 <script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
-<script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+<script src="/static/doc/assets/plugins/bootstrap-maxlength/js/bootstrap-maxlength.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
@@ -266,6 +266,14 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
             let csrf = $("form input[name='_csrf']").val();
             let files = $(this)[0].files[0];
             let fd = new FormData();
@@ -306,14 +314,15 @@
             let fileName = data.data.name;
             let color;
             switch (extension) {
-                case 'jpg':
+                case 'jpg': case 'png': case 'jpeg':
                     extension = '-image';
-                    color = 'color-blue';
+                    color = 'color-yellow';
                     break;
                 case 'pdf':
                     extension = '-pdf';
                     color = 'color-red';
                     break;
+                case 'xls':
                 case 'xlsx':
                     extension = '-excel';
                     color = 'color-green';
@@ -322,6 +331,14 @@
                 case 'docx':
                     extension = '-word';
                     color = 'color-blue';
+                    break;
+                case 'pptx':
+                    extension = '-powerpoint';
+                    color = 'color-red';
+                    break;
+                case 'zip': case '7z': case 'rar':
+                    extension = '-archive';
+                    color = 'color-purple';
                     break;
                 default:
                     extension = '';

@@ -24,8 +24,13 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * Created by Utkirbek Boltaev on 29.03.2019.
+ * (uz) Tashkiloga tegishli bo'lgan positions
+ */
 @Controller
-public class PositionController {
+public class ExpertisePositionController {
 
     private final PositionService positionService;
     private final UserService userService;
@@ -34,7 +39,7 @@ public class PositionController {
     private final UserAdditionalService userAdditionalService;
 
     @Autowired
-    public PositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
+    public ExpertisePositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
         this.positionService = positionService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
@@ -44,10 +49,11 @@ public class PositionController {
 
     @RequestMapping(MgmtUrls.PositionList)
     public String getUserListPage(Model model) {
-        model.addAttribute("positionList",positionService.getAll());
-        model.addAttribute("create_url",MgmtUrls.PositionCreate);
-        model.addAttribute("edit_url",MgmtUrls.PositionUpdate);
-        model.addAttribute("get_url",MgmtUrls.PositionGet);
+        User user = userService.getCurrentUserFromContext();
+        model.addAttribute("positionList", positionService.getByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("create_url", MgmtUrls.PositionCreate);
+        model.addAttribute("edit_url", MgmtUrls.PositionUpdate);
+        model.addAttribute("get_url", MgmtUrls.PositionGet);
         return MgmtTemplates.PositionList;
     }
 
@@ -58,6 +64,7 @@ public class PositionController {
     ){
         User user = userService.getCurrentUserFromContext();
         Position position = new Position();
+        position.setOrganizationId(user.getOrganizationId());
         position.setName(name);
         position.setNameRu(nameRu);
         position.setDeleted(Boolean.FALSE);
@@ -68,6 +75,7 @@ public class PositionController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         tableHistoryService.create(
           TableHistoryType.add,
           TableHistoryEntity.Position,
@@ -99,7 +107,7 @@ public class PositionController {
         @RequestParam(name = "nameRu") String nameRu
     ){
         User user = userService.getCurrentUserFromContext();
-        Position position = positionService.getById(id);
+        Position position = positionService.getById(id, user.getOrganizationId());
         if (position==null){
             return "redirect:" + MgmtUrls.PositionList;
         }
@@ -138,7 +146,8 @@ public class PositionController {
             @RequestParam(name = "id") Integer positionId,
             Model model
     ){
-        Position position = positionService.getById(positionId);
+        User user = userService.getCurrentUserFromContext();
+        Position position = positionService.getById(positionId, user.getOrganizationId());
         if (position==null){
             return "redirect:" + MgmtUrls.PositionList;
         }

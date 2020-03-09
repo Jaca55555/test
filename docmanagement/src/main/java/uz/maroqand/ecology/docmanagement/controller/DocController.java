@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -58,7 +56,9 @@ public class DocController {
             DocumentTaskService taskService,
             DocumentOrganizationService documentOrganizationService,
             HelperService helperService,
-            DocumentSubService documentSubService, DocumentTaskSubService taskSubService) {
+            DocumentSubService documentSubService,
+            DocumentTaskSubService taskSubService
+    ) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -82,7 +82,6 @@ public class DocController {
         model.addAttribute("innerCount", documentService.getCountersByType(DocumentTypeEnum.InnerDocuments.getId()));
         model.addAttribute("outgoingCount", documentService.getCountersByType(DocumentTypeEnum.OutgoingDocuments.getId()));
         model.addAttribute("appealCount", documentService.getCountersByType(DocumentTypeEnum.AppealDocuments.getId()));
-
         return DocTemplates.Dashboard;
     }
 
@@ -128,7 +127,7 @@ public class DocController {
                 break;
         }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, dueDateBegin, dueDateEnd, null, statuses, null, null, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, dueDateBegin, dueDateEnd, null, statuses, null, null, null,pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         for (DocumentTask documentTask : documentTaskList) {
@@ -233,7 +232,7 @@ public class DocController {
             return "redirect:" + DocUrls.Dashboard;
         }
 
-        Integer viewTagId= document.getDocumentType().getType().getId();
+        Integer viewTagId= document.getDocumentType().getType();
         String viewTag = "";
         switch (viewTagId){
             case 1: viewTag = "doc_incoming"; break;

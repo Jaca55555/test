@@ -64,7 +64,7 @@ public class JournalController {
         for (Journal journal : journalPage.getContent()) {
             JSONArray.add(new Object[]{
                     journal.getId(),
-                    journal.getDocumentType().getName(),
+                    journal.getDocumentTypeId()!=null?journal.getDocumentType().getName():"",
                     journal.getName(),
                     journal.getPrefix(),
                     journal.getSuffix(),
@@ -92,6 +92,9 @@ public class JournalController {
         User user = userService.getCurrentUserFromContext();
         if (user == null) {
             return "redirect:" + DocUrls.JournalList;
+        }
+        if(journal.getNumbering()==null){
+            journal.setNumbering(1);
         }
         journal.setCreatedById(user.getId());
         journalService.create(journal);

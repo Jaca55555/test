@@ -42,7 +42,6 @@ public class MgmtUrls {
     public static final String DepartmentCreate = Department + "/create";
     public static final String DepartmentUpdate = Department + "/update";
     public static final String DepartmentView = Department + "/view";
-    public static final String DepartmentGetByOrganization = Department + "/get_department";
 
 
     //Roles

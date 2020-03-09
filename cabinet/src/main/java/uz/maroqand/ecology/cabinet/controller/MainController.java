@@ -31,7 +31,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String getPage() {
-        return "redirect: /login";
+        return "redirect:/login";
     }
 
     @RequestMapping("/login")
@@ -41,7 +41,12 @@ public class MainController {
     }
 
     @RequestMapping("/dashboard")
-    public String getDashboardPage(Model model) {
+    public String getDashboardPage() {
+        return "dashboard";
+    }
+
+    @RequestMapping("/expertise/dashboard")
+    public String getExpertiseDashboardPage(Model model) {
         User user = userService.getCurrentUserFromContext();
         LogType logType = userService.getUserLogType(user);
 
@@ -57,7 +62,12 @@ public class MainController {
 
         model.addAttribute("newElements", regApplicationPage.getTotalElements());
         model.addAttribute("logType", logType);
-        return "dashboard";
+        return "expertise_dashboard";
+    }
+
+    @RequestMapping("/admin/dashboard")
+    public String getAdminDashboardPage() {
+        return "admin/dashboard";
     }
 
     @RequestMapping("/map")

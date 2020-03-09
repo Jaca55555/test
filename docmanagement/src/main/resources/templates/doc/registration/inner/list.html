@@ -104,7 +104,10 @@
         <!-- filters card begins here -->
         <div class="card" style="border-radius: 5px">
             <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
-                <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" th:text="#{sys_document.filterHeader}">Саралаш фильтри</a></h5>
+                <h5 class="mb-0"><a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary" style="position: relative;top:3px;"></i></span>
+                </a></h5>
                 <!--<div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>-->
             </div>
             <div class="row p10" style="padding-bottom: 0px;">
@@ -279,6 +282,9 @@
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="contact2-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
             </li>
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -293,22 +299,22 @@
                                         <th class="sorting_asc w-15" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                             <span th:text="#{doc_incoming.registrationNumber}"> Регистрация рақами</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                         </th>
-                                        <th class="sorting w-10" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
-                                        <th class="sorting w-20" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                             <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th></th>
@@ -432,29 +438,32 @@
                         html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                         return html;
                     },
-                    className: "w-15 text-center"
+                    className: "text-left"
                 },
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                         return html;
-                    },className: "w-10 text-center"
+                    },className: "text-left"
                 },
-                {data: 3, name: 'document.content',className: "w-20 text-center"},
-                {data: 4, name: 'createdAt',className: "w-10 text-center"},
+                {data: 3, name: 'document.content',className: "text-left"},
+                {data: 4, name: 'createdAt',className: "text-center"},
                 {data: 5, name: 'dueDate',
                     render: function (data, type, row, meta) {
                         var html = row[5] + ' <br/>' + row[9][1];
                         return html;
                     },
-                    className: "w-10 text-center"},
-                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',className: "w-20 text-center"},
+                    className: "text-center"},
+                {render: renderStatusColumn, name: 'status',className: "text-center"},
+                {data: 7, name: 'content',className: "text-center"},
                 {render:renderActionsColumn, orderable: "false"}
             ],
             rowCallback: function (row, data) {
-                $(row).children().addClass(data[9][0]);
+                $(row).children()[0].classList += ` ${data[9][0]}`
+                $(row).children()[1].classList += ` ${data[9][0]}`
+                $(row).children()[3].classList += ` ${data[9][0]}`
+                $(row).children()[4].classList += ` ${data[9][0]}`
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

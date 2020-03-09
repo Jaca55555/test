@@ -94,7 +94,7 @@
     function detectExtensionAndColor(extension){
         let data = {};
         switch (extension) {
-            case 'jpg': case 'png':
+            case 'jpg': case 'png': case 'bmp':
                 data.extension = '-image';
                 data.color = 'color-yellow';
                 break;
@@ -102,7 +102,7 @@
                 data.extension = '-pdf';
                 data.color = 'color-red';
                 break;
-            case 'xlsx':
+            case 'xlsx': case 'xls':
                 data.extension = "-excel";
                 data.color = "color-green";
                 break;
@@ -110,6 +110,14 @@
             case 'docx':
                 data.extension = "-word";
                 data.color = "color-blue";
+                break;
+            case 'pptx':
+                data.extension = '-powerpoint';
+                data.color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                data.extension = '-archive';
+                data.color = 'color-purple';
                 break;
             default:
                 data.extension = "";

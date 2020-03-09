@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <style>
+        .table{
+            margin-bottom: 0px;
+            width: 100%;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body class="layout-6">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                            <div class="row" sec:authorize="hasAnyAuthority('ADMIN')">
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" href="#">
+                                                            <i class="mdi mdi-office-building" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.organizationList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersList}">
+                                                            <i class="mdi mdi-account-multiple" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.usersList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).TranslationsList}">
+                                                            <i class="mdi mdi-translate" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{mgmt_translations}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).RolesList}">
+                                                            <i class="mdi mdi-stack-overflow" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.roleList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).MinWageList}">
+                                                            <i class="mdi mdi-credit-card-plus" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{mgmt_min_wage}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).DepartmentList}">
+                                                            <i class="mdi mdi-trello" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.departmentList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-xl-4">
+                                                    <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                        <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).PositionList}">
+                                                            <i class="mdi mdi-account-card-details" style="font-size: 40px;padding-bottom: 25px;color: #1de9b6;"></i>
+                                                            <h5  style="margin-top: 25px;" th:text="#{sys_menu.positionList}"></h5>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+</body>
+</html>
