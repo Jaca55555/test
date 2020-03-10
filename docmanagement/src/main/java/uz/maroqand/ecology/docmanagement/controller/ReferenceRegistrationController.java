@@ -286,7 +286,7 @@ public class ReferenceRegistrationController {
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "address" ) String address,
             @RequestParam(name = "additionalDocumentId", required = false) Integer additionalDocumentId,
-            @RequestParam(name = "performerName", required = false) String performerName,
+            @RequestParam(name = "fullName", required = false) String fullName,
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
@@ -311,7 +311,7 @@ public class ReferenceRegistrationController {
         document.setContentId(contentId);
         document.setContent(content);
         document.setAdditionalDocumentId(additionalDocumentId);
-        document.setPerformerName(performerName);
+
         document.setPerformerPhone(performerPhone);
         document.setManagerId(managerId);
         document.setControlId(controlId);
@@ -345,6 +345,7 @@ public class ReferenceRegistrationController {
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
         documentSub.setOrganizationId(documentOrganizationId1);
+        documentSub.setFullName(fullName);
         documentSub.setAddress(address);
         documentSubService.create(document.getId(), documentSub, user);
 
@@ -375,12 +376,13 @@ public class ReferenceRegistrationController {
         }
         if (documentSub.getOrganizationId()!=null){
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
+
         }
+
         model.addAttribute("document", document);
         model.addAttribute("additionalDocument", additionalDocument);
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
-
         model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
