@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -299,10 +300,10 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 ));
             }
 
-            if (incomingRegFilter.getDocRegNumber() != null) {
+            if (StringUtils.trimToNull(incomingRegFilter.getDocRegNumber()) != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + incomingRegFilter.getDocRegNumber().toLowerCase() + "%"));
             }
-            if (incomingRegFilter.getRegistrationNumber() != null) {
+            if (StringUtils.trimToNull(incomingRegFilter.getRegistrationNumber()) != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + incomingRegFilter.getRegistrationNumber().toLowerCase() + "%"));
             }
 
@@ -315,10 +316,10 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             if (incomingRegFilter.getDateBegin() != null && incomingRegFilter.getDateEnd() != null) {
                 predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), incomingRegFilter.getDateBegin(), incomingRegFilter.getDateEnd()));
             }
-            if (incomingRegFilter.getContent() != null) {
+            if (StringUtils.trimToNull(incomingRegFilter.getContent()) != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + incomingRegFilter.getContent().toLowerCase() + "%"));
             }
-            if (incomingRegFilter.getTaskContent() != null) {
+            if (StringUtils.trimToNull(incomingRegFilter.getTaskContent()) != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + incomingRegFilter.getTaskContent() + "%"));
             }
             if (incomingRegFilter.getPerformerId() != null) {

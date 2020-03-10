@@ -105,9 +105,12 @@
                     <h5 class="mb-0">
                         <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                     </h5>
-                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt fs20 color-primary" style="position: relative;top:3px;"></i></span>
-                    </a>
+                    <div>
+                        <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                        <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                            <span class="pcoded-micon"><i class="fa fa-level-down-alt fs20 color-primary"></i></span>
+                        </a>
+                    </div>
                 </div>
                 <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-4 col-sm-12">
@@ -329,6 +332,11 @@
             return html;
         }
 
+        function clearFilter() {
+            $('#accordionExample .singleSelect').val(null).select2();
+            $('#accordionExample input').val('');
+        }
+
         function datatableConnect() {
             dataDatatableSelector.DataTable({
                 processing: true,
@@ -425,7 +433,7 @@
             thead = dataDatatableSelector.html();
             datatableConnect();
             $('#filter').on('change', function () {
-                getDatatableConnect();
+                $('#myTab a.active').trigger('click');
             })
         });
     </script>

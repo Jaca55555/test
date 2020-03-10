@@ -584,6 +584,9 @@ html, body {
     .file-icon-container-small > span.fa,.file-icon-container-small > span.fas {
         font-size:30px;
     }
+    .fit-content {
+        width: fit-content;
+    }
 /* media */
 @media (max-width:1700px) {
     .card-svg  {

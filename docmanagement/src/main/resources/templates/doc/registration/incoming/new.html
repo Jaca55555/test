@@ -135,7 +135,7 @@
                     </div>
                     <div class="form-group col-sm-12 col-md-6">
                         <label class="control-label" th:text="#{doc_incoming.reg_performer_phone}"> </label>
-                        <input type="text" class="form-control" th:field="*{performerPhone}">
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="+999(99) 999-99-99" th:field="*{performerPhone}" data-inputmask="'mask' : '+999(99) 999-99-99'">
                     </div>
                 </div>
                 <hr class="m30-vertical">
@@ -228,8 +228,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
-
+<script src="/static/doc/js/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
 
@@ -239,7 +241,7 @@
             placeholder: sys_select,
             allowClear: true
         });
-
+        $('#phoneNumber').inputmask("+999(99) 999-99-99");
         var files = [[${document.contentFiles}]];
         if (files!=null && files.length>0){
             $.each(files,function (index,val) {
