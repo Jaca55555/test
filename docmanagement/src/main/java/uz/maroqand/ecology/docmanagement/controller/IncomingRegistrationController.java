@@ -436,7 +436,7 @@ public class IncomingRegistrationController {
             documentOrganizationId1 = organizationService.create(documentOrganization).getId();
         }
 
-        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
+        documentService.updateAllParameters(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
             return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();
