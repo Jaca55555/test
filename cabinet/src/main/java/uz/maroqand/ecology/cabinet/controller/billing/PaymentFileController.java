@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -101,6 +102,17 @@ public class PaymentFileController {
         result.put("recordsFiltered", paymentFilePage.getTotalElements()); //Filtered elements
         result.put("data",convenientForJSONArray);
         return result;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileView+"/{id}")
+    public String getPaymentFileViewPage(@PathVariable("id") Integer id, Model model ){
+        PaymentFile paymentFile = paymentFileService.getById(id);
+        if(paymentFile==null){
+            return "redirect: " + BillingUrls.PaymentFileList;
+        }
+
+        model.addAttribute("paymentFile", paymentFile);
+        return BillingTemplates.PaymentFileView;
     }
 
 }

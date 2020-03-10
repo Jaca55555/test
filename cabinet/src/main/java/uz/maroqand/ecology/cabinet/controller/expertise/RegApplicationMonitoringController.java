@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.CommentType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -19,6 +18,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -47,9 +47,11 @@ public class RegApplicationMonitoringController {
     private final CommentService commentService;
     private final InvoiceService invoiceService;
     private final ProjectDeveloperService projectDeveloperService;
+    private final SoatoService soatoService;
+    private final ObjectExpertiseService objectExpertiseService;
+    private final ActivityService activityService;
 
-
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -61,23 +63,36 @@ public class RegApplicationMonitoringController {
         this.commentService = commentService;
         this.invoiceService = invoiceService;
         this.projectDeveloperService = projectDeveloperService;
+        this.soatoService = soatoService;
+        this.objectExpertiseService = objectExpertiseService;
+        this.activityService = activityService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
-    public String expertiseRegApplicationMonitoringList() {
+    public String expertiseRegApplicationMonitoringList(Model model) {
+        List<LogStatus> logStatusList = new ArrayList<>();
+        logStatusList.add(LogStatus.Initial);
+        logStatusList.add(LogStatus.Approved);
+        logStatusList.add(LogStatus.Denied);
 
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions", soatoService.getSubRegions());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
+        model.addAttribute("statusList", logStatusList);
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringList;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringListAjax, produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String,Object> expertiseRegApplicationMonitoringListAjax(
+            FilterDto filterDto,
             Pageable pageable
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getId(), null,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,null,null,null,user.getId(), null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements

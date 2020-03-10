@@ -33,6 +33,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         this.paymentFileRepository = paymentFileRepository;
     }
 
+    public PaymentFile getById(Integer id){
+        return paymentFileRepository.getOne(id);
+    }
+
     public PaymentFile create(PaymentFile paymentFile){
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);
