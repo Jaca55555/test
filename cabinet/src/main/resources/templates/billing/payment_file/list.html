@@ -142,24 +142,18 @@
 
 <script th:inline="javascript">
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileListAjax}]];
-    var labelView = [[#{sys_view}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileView}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
-
     var dataDatatableSelector;
     var thead;
-    var dateToday = false;
-    var dateThisMonth = false;
 
     function renderActionsColumn(data, type, row, meta) {
-        // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
-        var html = '';
-        html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
-        return html;
+        return '<a class="btn btn-info btn-sm mr-1" href="'+viewLink+'/'+row[0]+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
     }
 
     function datatableConnect() {

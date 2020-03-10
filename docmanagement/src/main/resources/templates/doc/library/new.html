@@ -83,7 +83,7 @@
                         <div class="col-sm-6 col-lg-6 form-group">
                             <label class="control-label" th:text="#{doc_library_date}">Хат рўйхатга олинган сана</label>
                             <div class="col-sm-12 p0">
-                                <input type="text" class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_library_reg_date}" data-dtp="dtp_lq7TC" required="required" name="ldateStr" th:value="${library.ldate!=null? #dates.format(library.ldate,'yyyy.MM.dd'):''}" >
+                                <input autocomplete="off" type="text" class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_library_reg_date}" data-dtp="dtp_lq7TC" required="required" name="ldateStr" th:value="${library.ldate!=null? #dates.format(library.ldate,'yyyy.MM.dd'):''}" >
                                 <img class="calendar-img2" src="/static/doc/images/calendar.svg" alt="">
                             </div>
                         </div>

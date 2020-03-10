@@ -30,11 +30,9 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
-                <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_inner.list}"> </a></h5>
-                <!--<div>
-                    <input type="text" class="form-control" />
-                    <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                </div>-->
+                <h5 class="mb-0" style="align-self:center">
+                    <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_inner.list}"> </a>
+                </h5>
             </div>
             <h5 class="office-h5 default-color" th:text="#{doc_inner.documentsCount}">Кирувчи хатлар статистикаси</h5>
             <div class="responsive">
@@ -102,164 +100,169 @@
     </div>
     <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
         <!-- filters card begins here -->
-        <div class="card" style="border-radius: 5px">
-            <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
-                <h5 class="mb-0">
-                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
-                </h5>
-                <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                </a>
-                <!--<div style="display: flex;"><button class="btn-icon"><i class="feather icon-search fs20 font-green"></i></button><button class="btn-icon"><i class="fas fa-times fs20 font-red m10-horizontal"></i></button></div>-->
-            </div>
-            <div class="row p10" style="padding-bottom: 0px;">
-                <div class="form-group col-md-4 col-sm-12">
-                    <label for="documentOrganizationId" class="control-label"><span th:text="#{sys.documentOrganizationId}">Хужжат чиқарувчи орган / ташкилот / бўлим номи</span></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentOrganizationId">
-                        <option value="" th:text="#{sys_select}"></option>
-                    </select>
+        <form class="card" style="border-radius: 5px" id="filter">
+            <div class="card" style="border-radius: 5px">
+                <div class="card-header flex-space-between" id="headingOne">
+                    <h5 class="mb-0">
+                        <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                    </h5>
+                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                    </a>
                 </div>
-                <div class="form-group col-md-2 col-sm-12">
-                    <label for="docRegNumber" class="control-label"><span th:text="#{sys.docRegNumber}">Хужжат рақами</span></label>
-                    <input type="text" class="form-control" id="docRegNumber" />
-                </div>
-                <div class="form-group col-md-2 col-sm-12">
-                    <label for="registrationNumber" class="control-label"><span th:text="#{sys.registrationNumber}">Руйхатга олиш рақами</span></label>
-                    <input type="text" class="form-control" id="registrationNumber" />
-                </div>
-                <div class="form-group col-md-2 col-sm-12">
-                    <label for="dateBegin" class="control-label"><span th:text="#{sys.registrationDate}">Рўйхатга олинган сана</span></label>
-                    <div class="row">
-                        <div class="col-6" style="padding-left: 0;">
-                            <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
-                            <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
-                        </div>
-                        <div class="col-6" style="padding-right:0;">
-                            <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
-                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-2 col-sm-12">
-                    <label class="control-label"><span th:text="#{sys.executeControl}">Назорат карточкаси</span></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                            aria-hidden="true" name="executeController">
-                        <option value=""></option>
-                        <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
-                    </select>
-                </div>
-            </div>
-            <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="row p10" style="padding-top: 0px;">
 
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
-                        <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                            <option value=""></option>
-                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-6 col-sm-12">
-                        <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
-                        <input class="form-control" id="content">
-                    </div>
-                </div>
-                <div class="row p10" style="padding-top: 0px">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
-                            <option value=""></option>
-                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
-                        </select>
-                    </div>
-
+                <div class="row p10" >
                     <div class="form-group col-md-4 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="resolution">
-                            <option value="">Танлаш</option>
+                        <label for="documentOrganizationId" class="control-label"><span th:text="#{sys.documentOrganizationId}">Хужжат чиқарувчи орган / ташкилот / бўлим номи</span></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentOrganizationId">
+                            <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
-
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys_document.resolution}">Ижрочилар</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executors">
-                            <option value="">Танлаш</option>
-                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
-                        </select>
-                    </div>
-
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_executePath}">Ижро йўналиши</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
-                            <option value="">Танлаш</option>
-                        </select>
+                        <label for="docRegNumber" class="control-label"><span th:text="#{sys.docRegNumber}">Хужжат рақами</span></label>
+                        <input type="text" class="form-control" id="docRegNumber" />
                     </div>
-                </div>
-                <div class="row p10" style="padding-top: 0px">
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                            <option value=""></option>
-                        </select>
+                        <label for="registrationNumber" class="control-label"><span th:text="#{sys.registrationNumber}">Руйхатга олиш рақами</span></label>
+                        <input type="text" class="form-control" id="registrationNumber" />
                     </div>
-
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
+                        <label for="dateBegin" class="control-label"><span th:text="#{sys.registrationDate}">Рўйхатга олинган сана</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_executeControlStatus}">Ижро назорати холати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executeStatus">
-                            <option value="">Танлаш</option>
-                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                        <label for="controlForm" class="control-label"><span th:text="#{doc_inner.reg_execute_form}">Назорат карточкаси</span></label>
+                        <select class="col-sm-12 singleSelect col-sm-12 select2-hidden-accessible" id="controlForm" >
+                            <option value="" th:text="#{sys_select}"></option>
+                            <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
                         </select>
-                    </div>
-
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_insidePurposeStatus}">ХДФУ холати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="insidePurposeStatus">
-                            <option value="">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_co_executorStatus}">Хамкор ижрочилар холати</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="coexecutorStatus">
-                            <option value="">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys.doc_replies}">Хужжатга йўлланган жавоблар</span></label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="replies">
-                            <option value="">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12 form-button-container">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
                     </div>
                 </div>
+
+                <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="row p10">
+
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
+                            <input class="form-control" id="content">
+                        </div>
+
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
+                            <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
+                                <option value=""></option>
+                                <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row p10" style="padding-top: 0px">
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
+                                <option value=""></option>
+                                <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="resolution">
+                                <option value="">Танлаш</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys_document.resolution}">Ижрочилар</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executors">
+                                <option value="">Танлаш</option>
+                                <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_executePath}">Ижро йўналиши</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
+                                <option value="">Танлаш</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row p10" style="padding-top: 0px">
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
+                            <div class="row">
+                                <div class="col-6" style="padding-left: 0;">
+                                    <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                                </div>
+                                <div class="col-6" style="padding-right:0;">
+                                    <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                    <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_executeControlStatus}">Ижро назорати холати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executeStatus">
+                                <option value="">Танлаш</option>
+                                <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_insidePurposeStatus}">ХДФУ холати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="insidePurposeStatus">
+                                <option value="">Танлаш</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_co_executorStatus}">Хамкор ижрочилар холати</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="coexecutorStatus">
+                                <option value="">Танлаш</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label class="control-label"><span th:text="#{sys.doc_replies}">Хужжатга йўлланган жавоблар</span></label>
+                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="replies">
+                                <option value="">Танлаш</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12 form-button-container">
+                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
+                                <span th:text="#{sys_document.search}">Қидириш</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     <div class="parent-card col-xl-12 mh-1000">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -294,29 +297,29 @@
                     <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table id="responsive-table-model" class="display table table-hover dt-responsive dataTable no-footer dtr-inline collapsed" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                     <thead>
                                     <tr role="row">
                                         <th>ID</th>
-                                        <th class="sorting_asc w-15" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationNumber}"> Регистрация рақами</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" style="width:300px;max-width: 300px;min-width: 200px;" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th></th>
@@ -385,6 +388,10 @@
             default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
+    }
+    function clearFilter() {
+        $('#accordionExample .singleSelect').val(null).select2();
+        $('#accordionExample input').val('');
     }
 
     function datatableConnect() {

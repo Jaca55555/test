@@ -47,6 +47,11 @@ public class DocumentLogServiceImpl implements DocumentLogService {
     }
 
     @Override
+    public List<DocumentLog> getAllByDocAndTaskId(Integer docId, Integer taskId) {
+        return logRepository.findAllByDocumentIdAndTaskIdOrderByIdDesc(docId, taskId);
+    }
+
+    @Override
     public DocumentLog create(DocumentLog documentLog) {
         documentLog.setCreatedAt(new Date());
         return logRepository.save(documentLog);

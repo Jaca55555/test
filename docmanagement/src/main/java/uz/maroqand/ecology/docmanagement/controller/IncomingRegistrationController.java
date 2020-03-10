@@ -208,7 +208,6 @@ public class IncomingRegistrationController {
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
-//        docFilterDTO.setDocumentStatus(DocumentStatus.Completed);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();
@@ -217,6 +216,8 @@ public class IncomingRegistrationController {
         for (Document document : documentList) {
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
             DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            String documentTypeName="";
+
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
@@ -225,7 +226,8 @@ public class IncomingRegistrationController {
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
                     documentHelperService.getTranslation(document.getStatus().getName(),locale),
-                    document.getStatus().getId()
+                    document.getStatus().getId(),
+                    document.getDocumentTypeId()!=null?document.getDocumentType().getNameTranslation(locale):""
             });
         }
 
@@ -243,6 +245,13 @@ public class IncomingRegistrationController {
         Document document = documentService.getById(id);
         if (document == null) {
             return "redirect:" + DocUrls.IncomingRegistrationList;
+        }
+        if (document.getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){
+            return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + id;
+        }
+
+        if (document.getDocumentTypeId().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
+            return "redirect:" + DocUrls.OutgoingMailView + "?id=" + id;
         }
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
@@ -436,7 +445,7 @@ public class IncomingRegistrationController {
             documentOrganizationId1 = organizationService.create(documentOrganization).getId();
         }
 
-        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
+        documentService.updateAllParameters(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.IncomingRegistrationEditTask)){
             return "redirect:" + DocUrls.IncomingRegistrationTask + "?id=" + document1.getId();

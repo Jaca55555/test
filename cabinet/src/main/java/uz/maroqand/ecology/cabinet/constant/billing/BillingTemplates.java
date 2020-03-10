@@ -8,8 +8,8 @@ package uz.maroqand.ecology.cabinet.constant.billing;
 public class BillingTemplates {
     private static final String Prefix = "billing";
 
-
     private static final String PaymentFile = Prefix + "/payment_file";
     public static final String PaymentFileList = PaymentFile + "/list";
+    public static final String PaymentFileView = PaymentFile + "/view";
 
 }

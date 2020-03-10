@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                        <h5 th:text="#{reg_application_number}+': ' + ${paymentFile.id}"></h5>
+                                        <hr>
+
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payment_id}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.paymentId}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_payer.bank}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.bankId}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payment.documentNumber}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.documentNumber}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_number}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.invoice}">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_payer.tin}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.payerTin}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payerName}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.payerName}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_payer.bank_account}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.bankAccount}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_mfo}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.bankMfo}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_invoice.amount}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.amount}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payment_date}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.paymentDate}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payment_detail}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.details}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{sys_payment.createdAt}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.createdAt}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+</body>
+</html>

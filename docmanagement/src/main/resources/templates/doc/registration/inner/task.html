@@ -34,13 +34,13 @@
             <div class="col-xl-12 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between align-center" style="height:65px;">
-                        <h5>Топшириқ ва иштирокчилар № 1</h5>
+                        <h5><span th:text="#{doc_inner.task_number}"></span>&nbsp;№ № 1</h5>
                     </div>
                     <form method="post" th:action="${action_url}" id="taskAddForm" data-parsley-validate="">
                         <div class="card-block">
                             <div class="row">
                                 <div class="executor col-6 m10-vertical">
-                                    <h5>Топшириқ / кўрсатма № 1</h5><br/>
+                                    <h5><span th:text="#{doc_inner.task_manager}"></span>&nbsp;№ 1</h5><br/>
                                     <div class="flex-space-between p0">
                                         <div>
                                             <div class="inline-block">
@@ -49,7 +49,7 @@
                                             <div class="inline-block m10-horizontal">
                                                 <span class="color-green bold" th:if="${document.managerId!=null}" th:text="${@helperService.getUserFullNameById(document.managerId)}">Абдуллаев А. А.</span>
                                                 <br>
-                                                <span>Ташкилот рахбари</span>
+                                                <span  th:if="${document.managerId!=null}" th:text="*{@helperService.getUserPositionName(document.managerId,#locale)}">Руководитель организации</span>
                                             </div>
                                         </div>
                                         <div class="flex-space-between p0 align-center column-2">
@@ -71,14 +71,14 @@
                                     <div class="form-group">
                                         <label class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
                                         <div class="col-sm-12 p0">
-                                            <input class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
+                                            <input autocomplete="off" class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
                                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="executor col-6 m10-vertical">
-                                    <h5>Иштирокчилар</h5><br/>
+                                    <h5 th:text="#{doc_inner.task_sub_receivers}">Иштирокчилар</h5><br/>
                                     <div class="table-responsive">
                                         <table id="data-table" class="table table-hover dataTable" style="width: 100%">
                                             <tbody>
@@ -94,7 +94,7 @@
                                             </select>
                                         </div>
                                         <div class="col-2 p-0">
-                                            <button type="button" class="btn btn-outline-secondary btn-block" id="add_user">Qo'shish</button>
+                                            <button type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user" >Qo'shish</button>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                         <input type="hidden" id="typePerformer" value=""/>
                         <input type="hidden" id="typeControl" value=""/>
                         <input  type="hidden" name="selectedUsersIds" value="" id="selectedUsersIds"/>
-                        <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
+                        <input  type="hidden" th:field="${document.id}" />
 
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
@@ -230,7 +230,7 @@
                                 '                       <i class="feather icon-clock fs20"></i>\n' +
                                 '                   </span>\n' +
                                 '               </div>\n' +
-                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'"/>\n' +
+                                '               <input autocomplete="off" class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'"/>\n' +
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>\n' +

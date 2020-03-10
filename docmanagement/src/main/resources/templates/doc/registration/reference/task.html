@@ -65,7 +65,7 @@
                                     <div class="form-group">
                                         <label class="control-label" th:text="#{doc_reference.task_deadline}"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
                                         <div class="col-sm-12 p0">
-                                            <input class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
+                                            <input  autocomplete="off" class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
                                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                         </div>
                                     </div>
@@ -225,7 +225,7 @@
                                 '                       <i class="feather icon-clock fs20"></i>\n' +
                                 '                   </span>\n' +
                                 '               </div>\n' +
-                                '               <input class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'"/>\n' +
+                                '               <input  autocomplete="off" class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'"/>\n' +
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>\n' +

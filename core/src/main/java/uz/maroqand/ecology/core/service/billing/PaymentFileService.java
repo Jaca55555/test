@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public interface PaymentFileService {
 
+    PaymentFile getById(Integer id);
+
     PaymentFile create(PaymentFile paymentFile);
 
     Page<PaymentFile> findFiltered(

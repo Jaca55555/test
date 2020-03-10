@@ -256,8 +256,9 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Waiting);
         statuses.add(TaskSubStatus.Agreement);
         statuses.add(TaskSubStatus.Checking);
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
+        List<Integer> docTypes = new ArrayList<>();
+        docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
+        docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
         model.addAttribute("task", task);
@@ -268,10 +269,11 @@ public class IncomingController {
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
-        model.addAttribute("logs", documentLogService.getAllByDocAndTaskSubId(document.getId(), documentTaskSub.getId()));
+        model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), task.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
-        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        System.out.println("check getting additional doc list");
+        model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
         return DocTemplates.IncomingView;
     }

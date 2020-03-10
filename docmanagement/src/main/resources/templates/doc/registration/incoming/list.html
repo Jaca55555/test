@@ -107,15 +107,18 @@
                 <h5 class="mb-0">
                     <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                 </h5>
-                <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                </a>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                    </a>
+                </div>
             </div>
             <div class="row p10">
                 <div class="form-group col-md-3 col-sm-12">
                     <label for="documentOrganizationId" class="control-label" th:text="#{doc_incoming.senderOrganizationName}">Корреспондент</label>
                     <div class="col-sm-12 p0">
-                        <select class="form-control" id="documentOrganizationId">
+                        <select class="form-control si" id="documentOrganizationId">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
@@ -132,11 +135,11 @@
                     <label class="control-label" th:text="#{doc_incoming.registrationDate}">Келиб тушган сана</label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
-                            <input class="form-control datepicker date" id="dateBeginStr" placeholder="Дан">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateBeginStr" placeholder="Дан">
                             <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                         </div>
                         <div class="col-6" style="padding-right:0;">
-                            <input class="form-control datepicker date" id="dateEndStr" placeholder="гача">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateEndStr" placeholder="гача">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
@@ -195,11 +198,11 @@
                         <label class="control-label"><span th:text="#{sys_document.doc_executeDate}">Ижро муддати</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан">
+                                <input autocomplete="off" class="form-control datepicker date" id="executeDateBegin" placeholder="Дан">
                                 <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача">
+                                <input autocomplete="off" class="form-control datepicker date" id="executeDateEnd" placeholder="гача">
                                 <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
@@ -340,6 +343,27 @@
             default: html='<button type="button" class="btn-rounded btn btn-block btn-light  btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
+    }
+
+    function clearFilter() {
+        $('.singleSelect').val(null).select2();
+        $('#executeControlStatus').val(null).select2();
+        $('#executeType').val(null).select2();
+        $('#executeStatus').val(null).select2();
+        $('#managerId').val(null).select2();
+        $('#executorId').val(null).select2();
+        $('#controlForm').val(null).select2();
+        $('#filter input').val('');
+        $('#documentOrganizationId').val(null).select2({
+            ajax: {
+                url: getOrganization,
+                type: "POST",
+                data: function (params) {
+                    return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+                }, cache: true
+            }
+        });
+        $('#filter').trigger('change');
     }
 
     function datatableConnect() {

@@ -47,7 +47,7 @@
                                                     <label class="col-form-label" th:text="#{sys_legal_entity_name}">Фирменное наименование предприятия</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input class="form-control" required="" th:value="${regApplication.applicant.name}" readonly="readonly">
+                                                    <input class="form-control" required="" th:value="${regApplication.applicant!=null? regApplication.applicant.name:''}" readonly="readonly">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -55,7 +55,7 @@
                                                     <label class="col-form-label" th:text="#{sys_about.objectExpertise}"></label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getObjectExpertise(regApplication.objectId,#locale)}">
+                                                    <input class="form-control only-number" readonly="readonly" th:value="${regApplication.objectId!=null? @helperService.getObjectExpertise(regApplication.objectId,#locale):''}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -63,7 +63,7 @@
                                                     <label class="col-form-label" th:text="#{sys_about.activity}"></label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input class="form-control only-number" readonly="readonly" th:value="${@helperService.getActivity(regApplication.activityId,#locale)}">
+                                                    <input class="form-control only-number" readonly="readonly" th:value="${regApplication.activityId!=null? @helperService.getActivity(regApplication.activityId,#locale):''}">
                                                 </div>
                                             </div>
                                             <div class="form-group row" >
@@ -79,7 +79,7 @@
                                                     <label class="col-form-label" th:text="#{sys_about.material}"></label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input class="form-control" readonly="readonly" th:value="${@helperService.getMaterials(regApplication.materials,#locale)}" >
+                                                    <input class="form-control" readonly="readonly" th:value="${regApplication.materials!=null? @helperService.getMaterials(regApplication.materials,#locale):''}" >
                                                 </div>
                                             </div>
 
