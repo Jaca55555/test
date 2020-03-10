@@ -47,7 +47,7 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
 
-        <object th:include="doc/registration/incoming/fragments/document_view :: document_view" th:remove="tag" ></object>
+        <object th:include="doc/registration/reference/fragments/document_view :: document_view" th:remove="tag" ></object>
 
         <div class="row flex-space-between" th:if="${#lists.size(documentTasks)>0}" th:each="task,iter : ${documentTasks}">
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
@@ -55,7 +55,7 @@
 
                     <div class="card-header flex-space-between align-center" style="height:65px;">
                         <h5>
-                            <span th:text="#{doc_incoming.task_number}"></span>&nbsp;&nbsp;№
+                            <span th:text="#{doc_reference.task_number}"></span>&nbsp;&nbsp;№
                             <span th:text="${iter.index+1}"></span>
                         </h5>
                     </div>
@@ -272,7 +272,7 @@
 
         <hr class="m20-vertical">
         <div class="flex-center w100 row-wrap">
-            <a th:if="${document.status!=T(uz.maroqand.ecology.docmanagement.constant.DocumentStatus).Completed}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationTask+'?id='+document.id}" th:text="#{doc_incoming.newTask}"> Янги топшириқ қўшиш  </a>
+            <a th:if="${document.status!=T(uz.maroqand.ecology.docmanagement.constant.DocumentStatus).Completed}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationTask+'?id='+document.id}" th:text="#{doc_reference.newTask}"> Янги топшириқ қўшиш  </a>
         </div>
 
     </div>

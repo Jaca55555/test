@@ -56,6 +56,11 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     }
 
     @Override
+    public List<DocumentSub> findAll() {
+        return documentSubRepository.findAll();
+    }
+
+    @Override
     public DocumentSub update(DocumentSub documentSub, User user){
         documentSub.setUpdateById(user.getId());
         documentSub.setUpdateAt(new Date());

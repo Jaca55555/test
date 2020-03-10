@@ -12,6 +12,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
@@ -173,6 +174,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
     }
 
+    @Override
+    public Page<DocumentTask> findFilteredReference(Integer organizationId, Integer documentTypeId, ReferenceRegFilterDTO referenceRegFilterDTO, Date deadlineDateBegin, Date deadlineDateEnd, Integer type, Set<Integer> status, Integer departmentId, Integer receiverId, Boolean specialControll, Pageable pageable) {
+        return taskRepository.findAll(getSpesificationReference(organizationId, documentTypeId, referenceRegFilterDTO, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
+    }
+
     //taskOrsubTask==true  task
     //taskOrsubTask==false  taskSub
     @Override
@@ -327,6 +333,107 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             }
             if (incomingRegFilter.getInsidePurpose() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("document").get("insidePurpose"), incomingRegFilter.getInsidePurpose()));
+            }
+            /*if (taskSubType != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (taskSubStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
+            }*/
+
+
+            if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));
+            }
+            if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));
+            }
+            if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
+            }
+
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (statuses != null) {
+                predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
+            }
+            if (departmentId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+            }
+            if (receiverId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+            }
+
+            if (specialControll != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
+            }
+
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+    private static Specification<DocumentTask> getSpesificationReference(
+            final Integer organizationId,
+            final Integer documentTypeId,
+
+            final ReferenceRegFilterDTO referenceRegFilterDTO,
+
+            final Date deadlineDateBegin,
+            final Date deadlineDateEnd,
+            final Integer type,
+            final Set<Integer> statuses,
+            final Integer departmentId,
+            final Integer receiverId,
+            final Boolean specialControll
+    ) {
+        return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+
+            System.out.println(referenceRegFilterDTO.getRegistrationNumber() + "  -");
+            if (organizationId != null) {
+                //tashkilotga tegishli xatlar
+                predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+            }
+            if (documentTypeId != null) {
+                //kiruvchi, chiquvchi, ichki hujjatlar
+                predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
+            }
+
+            if (referenceRegFilterDTO.getDocumentOrganizationId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.join("document").join("documentSubs").get("organizationId"),
+                        referenceRegFilterDTO.getDocumentOrganizationId()
+                ));
+            }
+
+            if (StringUtils.trimToNull(referenceRegFilterDTO.getDocRegNumber()) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + referenceRegFilterDTO.getDocRegNumber().toLowerCase() + "%"));
+            }
+            if (StringUtils.trimToNull(referenceRegFilterDTO.getRegistrationNumber()) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + referenceRegFilterDTO.getRegistrationNumber().toLowerCase() + "%"));
+            }
+
+            if (referenceRegFilterDTO.getDateBegin() != null && referenceRegFilterDTO.getDateEnd() == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), referenceRegFilterDTO.getDateBegin()));
+            }
+            if (referenceRegFilterDTO.getDateEnd() != null && referenceRegFilterDTO.getDateBegin() == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), referenceRegFilterDTO.getDateEnd()));
+            }
+            if (referenceRegFilterDTO.getDateBegin() != null && referenceRegFilterDTO.getDateEnd() != null) {
+                predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), referenceRegFilterDTO.getDateBegin(), referenceRegFilterDTO.getDateEnd()));
+            }
+            if (StringUtils.trimToNull(referenceRegFilterDTO.getContent()) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + referenceRegFilterDTO.getContent().toLowerCase() + "%"));
+            }
+            if (StringUtils.trimToNull(referenceRegFilterDTO.getTaskContent()) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + referenceRegFilterDTO.getTaskContent() + "%"));
+            }
+            if (referenceRegFilterDTO.getPerformerId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), referenceRegFilterDTO.getPerformerId()));
+            }
+            if (referenceRegFilterDTO.getInsidePurpose() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("insidePurpose"), referenceRegFilterDTO.getInsidePurpose()));
             }
             /*if (taskSubType != null) {
                 predicates.add(criteriaBuilder.equal(root.get("type"), type));

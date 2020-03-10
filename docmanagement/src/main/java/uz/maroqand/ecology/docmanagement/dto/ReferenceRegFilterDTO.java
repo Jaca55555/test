@@ -25,7 +25,7 @@ public class ReferenceRegFilterDTO {
     private String type;
     private String status;
     private String fullName;
-
+    private String content;
     private String dueDateBeginStr;
     private String dueDateEndStr;
 
