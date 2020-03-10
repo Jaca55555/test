@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -138,7 +139,7 @@ public class OutgoingMailController {
                 departmentId,
                 null,
                 specificPageable);
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
             Document document = documentSub.getDocument();
@@ -150,7 +151,7 @@ public class OutgoingMailController {
                     document.getContent() != null ? document.getContent() : "",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    document.getStatus(),
+                    documentHelperService.getTranslation(document.getStatus().getName(), locale),
                     (document.getPerformerName() != null ?document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }
