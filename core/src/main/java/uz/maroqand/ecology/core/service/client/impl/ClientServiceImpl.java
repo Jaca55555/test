@@ -213,6 +213,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
+    public Client updateGnk(Client client){
+        client.setUpdateAt(new Date());
+        return clientRepository.save(client);
+    }
+
     @Override
     public Page<Client> findFiltered(
             ApplicantType type,
@@ -254,7 +259,7 @@ public class ClientServiceImpl implements ClientService {
                     predicates.add(criteriaBuilder.equal(root.get("tin"), tin));
                 }
 
-                if(type!=null){
+                if(name!=null){
                     predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"+name.toLowerCase()+"%"));
                 }
 

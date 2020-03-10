@@ -1,9 +1,14 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +20,10 @@ import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
+import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
+import uz.maroqand.ecology.core.dto.gnk.GnkRootResponseObject;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Coordinate;
-import uz.maroqand.ecology.core.entity.expertise.CoordinateLatLong;
-import uz.maroqand.ecology.core.entity.expertise.ObjectExpertise;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -28,6 +32,7 @@ import uz.maroqand.ecology.core.service.client.ClientAuditService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.gnk.GnkService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.util.Common;
@@ -55,8 +60,11 @@ public class ApplicantController {
     private final InvoiceService invoiceService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final GnkService gnkService;
 
-    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository) {
+    private static final Logger logger = LogManager.getLogger(ApplicantController.class);
+
+    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, GnkService gnkService) {
         this.clientService = clientService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -66,6 +74,7 @@ public class ApplicantController {
         this.invoiceService = invoiceService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.gnkService = gnkService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ApplicantList)
@@ -173,4 +182,55 @@ public class ApplicantController {
         return ExpertiseTemplates.ApplicantView;
     }
 
+
+    @RequestMapping(value = ExpertiseUrls.ApplicantUpdateTax)
+    public String updateTax() {
+        Gson gson = new Gson();
+        int i = 0;
+        do {
+            PageRequest pageRequest = new PageRequest(i, 100, Sort.Direction.ASC, "id");
+            Page<Client> clientPage = clientService.findFiltered(null,null,null,null,null,null,null,null,null, pageRequest);
+            for (Client client : clientPage) {
+                try {
+                    if (client.getName() == null && client.getTin() != null) {
+
+                        logger.info("tin="+client.getTin());
+                        GnkResponseObject gnkResponseObject = gnkService.getLegalEntityByTin(client.getTin());
+                        logger.info("gnkResponseObject="+ gson.toJson(gnkResponseObject) );
+                        if(gnkResponseObject.getRoot().size()>0){
+                            GnkRootResponseObject object = gnkResponseObject.getRoot().get(0);
+
+                            client.setName(object.getName());
+                            client.setRegionId(Integer.parseInt(object.getObl_code()));
+                            client.setSubRegionId(object.getSubRegioId());
+                            client.setOpfId(object.getOpfId());
+                            client.setDirectorFullName(object.getDirector());
+                            client.setOked(object.getOked());
+                            client.setPhone(object.getPhone());
+                            client.setEmail(object.getEmail());
+                            client.setAddress(object.getAddress());
+
+                            client.setMfo(object.getMfo());
+                            client.setBankAccount(object.getAccount());
+                            client.setBankName(object.getBankname());
+
+                            clientService.updateGnk(client);
+                        }
+                    }
+                }catch (Exception e){ e.printStackTrace(); }
+            }
+            if (!clientPage.hasNext()) {
+                if (i > 0) {
+                    i = 0;
+                    continue;
+                }
+                break;
+            }
+            i++;
+        }
+        while (true);
+
+
+        return "redirect:"+ExpertiseUrls.ApplicantList;
+    }
 }

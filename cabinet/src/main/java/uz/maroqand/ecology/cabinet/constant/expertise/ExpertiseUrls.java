@@ -80,6 +80,7 @@ public class ExpertiseUrls {
     public static final String ApplicantList = Applicant + "/list";
     public static final String ApplicantListAjax = Applicant + "/list_ajax";
     public static final String ApplicantView = Applicant + "/view";
+    public static final String ApplicantUpdateTax = Applicant + "/update_tax";
 
     //Employee control
     private static final String EmployeeControl= Prefix + "/employee_control";
