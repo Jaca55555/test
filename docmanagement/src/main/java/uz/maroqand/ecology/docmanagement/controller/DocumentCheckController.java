@@ -174,13 +174,12 @@ public class DocumentCheckController {
 
     @RequestMapping(value = DocUrls.DocumentCheckComplete, method = RequestMethod.POST)
     public String documentCheckComplete(
-            @RequestParam(name = "id") Integer id,
             @RequestParam(name = "status") Integer status,
             @RequestParam(name = "status_file_ids", required = false) List<Integer> file_ids,
             DocumentLog documentLog
             ){
         User user = userService.getCurrentUserFromContext();
-        DocumentTask documentTask = documentTaskService.getById(id);
+        DocumentTask documentTask = documentTaskService.getById(documentLog.getTaskId());
         if (documentTask==null){
             return "redirect:" + DocUrls.DocumentCheckList;
         }

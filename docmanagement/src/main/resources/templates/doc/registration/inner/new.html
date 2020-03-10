@@ -48,44 +48,47 @@
                 </div>
             </div>
             <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
-            <form th:action="${action_url}" th:object="${document}" th:method="post" class="card-block">
+            <form th:action="${action_url}" th:object="${document}" th:method="post" class="card-block" data-parsley-validate="">
                 <div th:if="${document.id != null}">
                     <input type="hidden" th:field="*{id}" th:value="*{id}"/>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_journal}">Хужжатлар категориясини танланг</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{journalId}" required="required" data-parsley-errors-container="#journalIdError">
                             <option value=""></option>
                             <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
+                        <div id="journalIdError"></div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_document_view}" th:for="${#ids.seq('documentType')}">Хужжат турини танланг</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required" data-parsley-errors-container="#documentViewIdError">
                             <option value=""></option>
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
+                        <div id="documentViewIdError"></div>
                     </div>
 
                     <div class="col-sm-12 form-group">
                         <label class="control-label"><span th:text="#{sys.documentOrganizationId}">Хужжат чиқарувчи орган / ташкилот / бўлим номи</span></label>
-                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required">
+                        <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required" data-parsley-errors-container="#documentOrganizationIdError">
                             <option value="" th:text="#{sys_select}"></option>
                             <option th:if="${docOrganization!=null}" th:value="${docOrganization.id}" th:text="${docOrganization.name}"></option>
                         </select>
+                        <div id="documentOrganizationIdError"></div>
                     </div>
                 </div>
                 <div class="col-sm-12 form-group">
                     <label class="control-label" th:text="#{document.income_description}"></label>
-                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{contentId}">
+                    <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{contentId}" id="description_content">
                         <option value=""></option>
                         <option th:each="type : ${descriptionList}" th:value="${type.id}" th:text="${type.content}"></option>
                     </select>
                 </div>
 
                 <div class="col-sm-12 form-group new-desc">
-                    <textarea class="form-control" rows="4" th:field="*{content}"></textarea>
+                    <textarea class="form-control" rows="4" th:field="*{content}" id="description_textarea" required="required" minlength="3" maxlength="500"></textarea>
                 </div>
 
                 <div class="row">
@@ -139,14 +142,15 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_inner.chief}">Хужжатни қабул қилиш учун маъсул рахбар</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required" data-parsley-errors-container="#managerIdError">
                             <option value=""></option>
                             <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
+                        <div id="managerIdError"></div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_inner.execute_controller}">Ижро назорати учун маъсул шахс</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{controlId}">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{controlId}"  >
                             <option value=""></option>
                             <option th:each="i: ${executeController}" th:value="${i.id}" th:text="${i.fullName}"></option>
                         </select>
@@ -156,14 +160,14 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item : ${T(uz.maroqand.ecology.docmanagement.constant.ExecuteForm).values()}">
-                            <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item}" class="custom-control-input">
+                            <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item}" class="custom-control-input" th:checked="${item==document.executeForm}">
                             <label class="custom-control-label" th:for="${'executeForm' + item.id}" th:text="#{${item.name}}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item: ${T(uz.maroqand.ecology.docmanagement.constant.ControlForm).values()}">
-                            <input type="radio" name="controlForm" th:id="${'controlForm' + item.id}" th:value="${item}" class="custom-control-input">
+                            <input type="radio" name="controlForm" th:id="${'controlForm' + item.id}" th:value="${item}" class="custom-control-input" th:checked="${item==document.controlForm}">
                             <label class="custom-control-label" th:for="${'controlForm' + item.id}" th:text="#{${item.name}}"></label>
                         </div>
                     </div>
@@ -171,7 +175,7 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
-                        <button type="reset" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</button>
+                        <a th:href="${back_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" th:if="${document.id==null}" th:text="#{doc.income_create}">Рўйхатга олиш</button>
                         <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
                         <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc.income_save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
@@ -186,7 +190,8 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
 <script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
 <script type="text/javascript" th:inline="javascript">
 
@@ -259,6 +264,13 @@
                 }
 
             })
+        });
+
+
+        $('#description_content').on('change',function () {
+            var text=this.options[this.selectedIndex].text;
+            var dec = $('#description_textarea').val();
+            $('#description_textarea').val(dec + text);
         });
 
         $(document).on('click', '.fa-trash-alt', function () {
