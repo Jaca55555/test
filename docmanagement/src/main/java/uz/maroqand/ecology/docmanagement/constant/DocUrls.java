@@ -97,6 +97,8 @@ public class DocUrls {
     public static final String InnerRegistrationTask = InnerRegistration + "/task";
     public static final String InnerRegistrationTaskSubmit = InnerRegistration + "/task_submit";
     public static final String InnerRegistrationUserName = InnerRegistration + "/user_name";
+    public static final String InnerRegistrationControll = InnerRegistration + "/special";
+
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

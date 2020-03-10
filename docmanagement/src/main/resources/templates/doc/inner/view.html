@@ -354,7 +354,7 @@
                             <div class="inline-block m10-horizontal">
                                 <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
                                 <br>
-                                <span>Ташкилот рахбари</span>
+                                <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
                             </div>
                         </div>
                         <div>
@@ -477,10 +477,7 @@
         $('#modal2').on('hidden.bs.modal', function() {
             $('.addDocSelect').select2('destroy');
         });
-        $('.status-button').on('click', function () {
-            $('#taskStatus').val($(this).data('id'));
-            $('#newStatusText').text($(this).text());
-        });
+
 
         $('#submitChange').on('click', function () {
             let form = $('#changeStatusForm');
@@ -515,7 +512,6 @@
                                 '       </div>\n' +
                                 '   </div>';
                         }
-
                         let html =
                             "                        <div class=\"comment-item flex-space-between\">\n" +
                             "                            <div>\n" +
@@ -562,6 +558,11 @@
             })
         });
 
+
+        $('.status-button').on('click', function () {
+            $('#taskStatus').val($(this).data('id'));
+            $('#newStatusText').text($(this).text());
+        });
 
         $('#formSend').on('click', function (e) {
             let url = $('#commentForm').prop('action');
@@ -618,6 +619,15 @@
     }
 
     $('#addFile2').on('change', function () {
+
+        if (this.files[0].size > 10000000) {
+            swal("Файл не должен занимать больше 10 мб.",'', "warning");
+            return false;
+        }
+        if(this.files[0].size === 0){
+            swal("Файл не должен быть пустым", "", "warning");
+            return false;
+        }
 
         let csrf = $("form input[name='_csrf']").val();
         let files = document.querySelector('#addFile2').files[0];

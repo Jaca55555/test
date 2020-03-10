@@ -22,4 +22,6 @@ public interface DocumentLogRepository extends
     List<DocumentLog> findByDocumentIdOrderByIdDesc(Integer docId);
 
     List<DocumentLog> findAllByDocumentIdAndTaskSubIdOrderByIdDesc(Integer docId, Integer taskId);
+
+    List<DocumentLog> findAllByDocumentIdAndTaskIdOrderByIdDesc(Integer docId, Integer taskId);
 }

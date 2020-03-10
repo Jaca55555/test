@@ -35,7 +35,8 @@
                                 <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                     <thead>
                                     <tr role="row">
-                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-15" colspan="1" rowspan="1" tabindex="0">
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0" th:text="#{doc.doc_type_type}"> </th>
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-10" colspan="1" rowspan="1" tabindex="0">
                                             <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами </span>
                                         </th>
                                         <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
@@ -93,11 +94,11 @@
         var html = '';
         var status=row[7];
         switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-success">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light">'+row[6]+'</button>';return html;
+            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-sm">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-sm">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-sm">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-success btn-sm">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
     }
@@ -123,11 +124,12 @@
                 });
             },
             columns: [
+                {data: 8, name: 'documentTypeId',className: "w-10 text-center"},
                 {data: 1, name: 'registrationNumber',
                     render: function ( data, type, row, meta ) {
                     return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[1]+'</a>'
                     },
-                    className: "w-15 text-center"
+                    className: "w-10 text-center"
                 },
                 {data: 2, name: 'registrationDate',
                     render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[2]+'</a>'},
@@ -138,7 +140,7 @@
                     className: "w-20 text-center"
                 },
                 {data: 4, name: 'createdAt',className: "w-15 text-center"},
-                {data: 5, name: 'fullName',className: "w-15 text-center"},
+                {data: 5, name: 'managerId',className: "w-15 text-center"},
                 {render: renderStatusColumn, name: 'status',className: "w-15 text-center"},
                 {render: renderActionsColumn, orderable: false, className: "text-center"}
             ],
