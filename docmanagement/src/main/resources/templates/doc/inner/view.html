@@ -197,8 +197,10 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal"  href="#" th:text="#{doc_innew.newTask}">Янги топшириқ қўшиш</a>
-                            <button type="button" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2" >
+                            <a th:if="${documentTask.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerTask+'?id='+documentTaskSub.id}">
+                                <span th:text="#{doc_inner.newTask}">Ижро учун йўналтириш</span>
+                            </a>
+                            <button th:if="${documentTaskSub.status!=6}" type="button" class="btn btn-glow-secondary btn-secondary  m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
                                 <span th:text="#{doc_inner.doc_log_add}">Ижро холатини белгилаш</span>
                             </button>
                         </div>
@@ -333,6 +335,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
     <div class="modal-dialog col-xl-6 col-12" role="document">
         <div class="modal-content">
@@ -370,7 +373,7 @@
                         <span th:text="#{doc.document_task_new_status}">Хужжатнинг янги статуси</span>
                         <div class="btn-group mb-2 mr-2 col-sm-4">
                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split rounded-pill table-modal-button">
+                                    class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split rounded-pill table-modal-button" style="max-width: none">
                                 <span id="newStatusText" class="pl-3" th:text="#{doc.select_new_status}"></span>
                             </button>
                             <div class="dropdown-menu">
@@ -394,7 +397,7 @@
                     <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="m10-vertical"><span th:text="#{doc.task_change_reason}">Ижро ҳолатининг ўзгариши сабаби</span></div>
 
-                    <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}"></textarea>
+                    <textarea class="form-control" name="content" th:placeholder="#{doc.write_task_change_reason}" required="" minlength="3" maxlength="500"></textarea>
                     <hr class="m20-vertical">
                     <div class="row">
                         <div class="flex-center w100 row-wrap">
@@ -478,87 +481,6 @@
             $('.addDocSelect').select2('destroy');
         });
 
-
-        $('#submitChange').on('click', function () {
-            let form = $('#changeStatusForm');
-            let formData = form.serialize();
-            $.ajax({
-                url: form.attr('action'),
-                data: formData,
-                method: 'post',
-                success: function (data) {
-                    console.log(data);
-                    if (data.status === 'success') {
-                        // show logs
-                        let log = data.log;
-                        let registrationNumber = data.registrationNumber;
-                        let statuses ="";
-                        if (log.type=2){
-                            statuses='<div class="row col-sm-12">' +
-                                '       <div class="col-sm-5 p-0">' +
-                                '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.beforeStatusColor+'">\n' +
-                                '               <span >'+data.beforeStatus+'</span>' +
-                                '           </button>' +
-                                '       </div>\n' +
-                                '       <div class="col-sm-2">\n' +
-                                '           <button type="button" class="btn-block btn btn-light btn-sm btn-rounded">\n' +
-                                '               <i class="feather icon-arrow-right mr-0"></i>\n' +
-                                '           </button>\n' +
-                                '       </div>\n' +
-                                '       <div class="col-sm-5 p-0">\n' +
-                                '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.afterStatusColor+'">' +
-                                '               <span >'+data.afterStatus+'</span>\n' +
-                                '           </button>\n' +
-                                '       </div>\n' +
-                                '   </div>';
-                        }
-                        let html =
-                            "                        <div class=\"comment-item flex-space-between\">\n" +
-                            "                            <div>\n" +
-                            "                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
-                            "                                </i></div>\n" +
-                            "                                <div class=\"inline-block m10-horizontal\">\n" +
-                            "                                    <span class=\"color-primary bold\">"+ data.logCreateName +"</span>\n" +
-                            "                                    <br>\n" +
-                            "                                    <span>" + data.logCreatePosition + "</span>\n" +
-                            "                                </div>\n" +
-                            "                            </div>\n" +
-                            "                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +statuses+
-                            "                            <div class=\"w100\"></div>\n" +
-                            "                            <div class=\"column-2 mt-3\">\n" +
-                            "                                <span>" + log.content + "</span>\n" +
-                            "                            </div>";
-
-                        if (log.contentFiles!=null && log.contentFiles.length>0){
-                            $.each(log.contentFiles,function (element,val) {
-                                html+='<div class="w100"></div>\n' +
-                                    '<div class="column-2 mt-3">\n' +
-                                    '    <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
-                                    '    <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
-                                    '</div>\n';
-                            })
-                        }
-
-                        if (log.attachedDocId!=null) {
-                            html += '<div class="w100"></div>\n' +
-                                '   <div class="column-2 mt-3 d-flex">\n' +
-                                '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
-                                '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
-                                '       <a class="d-flex align-self-center" href="'+attachedDocView + log.attachedDocId +'">'+ registrationNumber + '</a>\n' +
-                                '   </div>\n';
-                        }
-                        html += "\n</div>";
-
-                        $('#comments').prepend(html);
-                        $('#currentStatus').text(data.taskStatus);
-
-                        $('#modal2').modal('toggle');
-                    }
-                }
-            })
-        });
-
-
         $('.status-button').on('click', function () {
             $('#taskStatus').val($(this).data('id'));
             $('#newStatusText').text($(this).text());
@@ -612,6 +534,85 @@
         });
 
         docFileName([[${document.contentFiles}]]);
+    });
+
+    $('#submitChange').on('click', function () {
+        let form = $('#changeStatusForm');
+        let formData = form.serialize();
+        $.ajax({
+            url: form.attr('action'),
+            data: formData,
+            method: 'post',
+            success: function (data) {
+                console.log(data);
+                if (data.status === 'success') {
+                    // show logs
+                    let log = data.log;
+                    let registrationNumber = data.registrationNumber;
+                    let statuses ="";
+                    if (log.type=2){
+                        statuses='<div class="row col-sm-12">' +
+                            '       <div class="col-sm-5 p-0">' +
+                            '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.beforeStatusColor+'">\n' +
+                            '               <span >'+data.beforeStatus+'</span>' +
+                            '           </button>' +
+                            '       </div>\n' +
+                            '       <div class="col-sm-2">\n' +
+                            '           <button type="button" class="btn-block btn btn-light btn-sm btn-rounded">\n' +
+                            '               <i class="feather icon-arrow-right mr-0"></i>\n' +
+                            '           </button>\n' +
+                            '       </div>\n' +
+                            '       <div class="col-sm-5 p-0">\n' +
+                            '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.afterStatusColor+'">' +
+                            '               <span >'+data.afterStatus+'</span>\n' +
+                            '           </button>\n' +
+                            '       </div>\n' +
+                            '   </div>';
+                    }
+                    let html =
+                        "                        <div class=\"comment-item flex-space-between\">\n" +
+                        "                            <div>\n" +
+                        "                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
+                        "                                </i></div>\n" +
+                        "                                <div class=\"inline-block m10-horizontal\">\n" +
+                        "                                    <span class=\"color-primary bold\">"+ data.logCreateName +"</span>\n" +
+                        "                                    <br>\n" +
+                        "                                    <span>" + data.logCreatePosition + "</span>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n" +
+                        "                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +statuses+
+                        "                            <div class=\"w100\"></div>\n" +
+                        "                            <div class=\"column-2 mt-3\">\n" +
+                        "                                <span>" + log.content + "</span>\n" +
+                        "                            </div>";
+
+                    if (log.contentFiles!=null && log.contentFiles.length>0){
+                        $.each(log.contentFiles,function (element,val) {
+                            html+='<div class="w100"></div>\n' +
+                                '<div class="column-2 mt-3">\n' +
+                                '    <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                '    <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                '</div>\n';
+                        })
+                    }
+
+                    if (log.attachedDocId!=null) {
+                        html += '<div class="w100"></div>\n' +
+                            '   <div class="column-2 mt-3 d-flex">\n' +
+                            '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
+                            '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
+                            '       <a class="d-flex align-self-center" href="'+attachedDocView + log.attachedDocId +'">'+ registrationNumber + '</a>\n' +
+                            '   </div>\n';
+                    }
+                    html += "\n</div>";
+
+                    $('#comments').prepend(html);
+                    $('#currentStatus').text(data.taskStatus);
+
+                    $('#modal2').modal('toggle');
+                }
+            }
+        })
     });
 
     function clickPlus() {
