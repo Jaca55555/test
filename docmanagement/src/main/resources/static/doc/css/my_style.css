@@ -87,6 +87,9 @@ hr {
 .p10 {
     padding:10px;
 }
+.p5 {
+    padding:5px;
+}
 .p0 {
     padding:0;
 }
@@ -577,9 +580,9 @@ html, body {
     div.dataTables_wrapper div.dataTables_processing {
         display: none !important;
     }
-    #responsive-table-model > .btn-group>.btn-group:not(:first-child), .btn-group>.btn:not(:first-child) {
-        max-width: 30px;
+    div.btn-group> button.dropdown-toggle {
         min-width: 30px;
+        max-width: 30px;
     }
     .file-icon-container-small > span.fa,.file-icon-container-small > span.fas {
         font-size:30px;

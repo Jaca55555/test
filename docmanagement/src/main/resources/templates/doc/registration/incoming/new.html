@@ -65,7 +65,7 @@
                             <option value=""></option>
                             <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
-                        <div class="row"> <div class="col-md-4" id="journalIdError"></div> </div>
+                        <div class="row"> <div class="col-md-4 p0" id="journalIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
@@ -73,7 +73,7 @@
                             <option value=""></option>
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
-                        <div class="row"> <div class="col-md-4" id="documentViewError"></div> </div>
+                        <div class="row"> <div class="col-md-4 p0" id="documentViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
@@ -85,7 +85,7 @@
                     <div class="col-sm-6 col-lg-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
-                            <input class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
+                            <input  autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
-                        <div class="row"> <div class="col-md-4" id="documentOrganizationIdError"></div> </div>
+                        <div class="row"> <div class="col-md-4 p0" id="documentOrganizationIdError"></div> </div>
                     </div>
                 </div>
 
@@ -177,10 +177,11 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required" data-parsley-errors-container="#managerIdViewError">
                             <option value=""></option>
                             <option th:each="manager: ${managerUserList}" th:value="${manager.id}" th:text="${manager.getFullName()}" th:selected="${document.managerId!=null && manager.id==document.managerId}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-4 p-0" id="managerIdViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_control}">Ижро назорати учун маъсул шахс</label>
@@ -231,7 +232,6 @@
 <script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
 <script src="/static/doc/js/jquery.inputmask.bundle.min.js"></script>
-<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
 
@@ -264,6 +264,14 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
             let csrf = $("form input[name='_csrf']").val();
             let files = $(this)[0].files[0];
             let fd = new FormData();
@@ -304,9 +312,9 @@
             let fileName = data.data.name;
             let color;
             switch (extension) {
-                case 'jpg':
+                case 'jpg': case 'png': case 'jpeg':
                     extension = '-image';
-                    color = 'color-blue';
+                    color = 'color-yellow';
                     break;
                 case 'pdf':
                     extension = '-pdf';
@@ -320,6 +328,14 @@
                 case 'docx':
                     extension = '-word';
                     color = 'color-blue';
+                    break;
+                case 'pptx':
+                    extension = '-powerpoint';
+                    color = 'color-red';
+                    break;
+                case 'zip': case '7z': case 'rar':
+                    extension = '-archive';
+                    color = 'color-purple';
                     break;
                 default:
                     extension = '';

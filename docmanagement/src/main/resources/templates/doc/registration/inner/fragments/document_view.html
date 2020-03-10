@@ -111,7 +111,7 @@
                             <div class="file-icon-container-small color-blue">
                                 <span class="fas fa-file-word"></span>
                             </div>
-                            <div class="card-body" style="display: flex;text-align: left;align-items: center;">
+                            <div class="card-body" style="padding:1.25rem;">
                                 <a class="view-pdf" th:if="${document.insidePurpose == false || document.insidePurpose == null}" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
                                     <div th:id="'file_name_'+${file.id}">
                                         <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>

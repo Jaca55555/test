@@ -131,11 +131,11 @@
                         <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
-                                <input class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
+                                <input autocomplete="off" class="form-control datepicker date" id="dateBegin" placeholder="Дан" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                             </div>
                             <div class="col-6" style="padding-right:0;">
-                                <input class="form-control datepicker date" id="dateEnd" placeholder="гача" />
+                                <input autocomplete="off" class="form-control datepicker date" id="dateEnd" placeholder="гача" />
                                 <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                 </div>
                 <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 
-                    <div class="row p10" style="padding-top: 0px;">
+                    <div class="row" style="padding-top: 0px;">
                         <div class="form-group col-md-3 col-sm-12">
                             <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
                             <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
@@ -172,7 +172,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row p10" style="padding-top: 0px">
+                    <div class="row" style="padding-top: 0px">
                         <div class="form-group col-md-3 col-sm-12">
                             <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
                             <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
@@ -185,11 +185,11 @@
                             <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
+                                    <input autocomplete="off" class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
+                                    <input autocomplete="off" class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
