@@ -125,16 +125,16 @@
             columns: [
                 {data: 1, name: 'registrationNumber',
                     render: function ( data, type, row, meta ) {
-                    return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[1]+'</span>'
+                    return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[1]+'</a>'
                     },
                     className: "w-15 text-center"
                 },
                 {data: 2, name: 'registrationDate',
-                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[2]+'</span>'},
+                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[2]+'</a>'},
                     className: "w-10 text-center"
                 },
                 {data: 3, name: 'content',
-                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[3]+'</span>'},
+                    render: function ( data, type, row, meta ) {return '<span href="'+viewLink + '?id=' + row[0]+'">'+row[3]+'</span>'},
                     className: "w-20 text-center"
                 },
                 {data: 4, name: 'createdAt',className: "w-15 text-center"},
@@ -142,6 +142,11 @@
                 {render: renderStatusColumn, name: 'status',className: "w-15 text-center"},
                 {render: renderActionsColumn, orderable: false, className: "text-center"}
             ],
+            rowCallback: function (row, data) {
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+            },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }

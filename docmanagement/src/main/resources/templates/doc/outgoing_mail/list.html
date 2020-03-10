@@ -99,11 +99,14 @@
                 <h5 class="mb-0" style="align-self:center">
                     <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
                 </h5>
-                <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                </a>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
+                    </a>
+                </div>
             </div>
-            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
+            <div class="col-xl-12 col-md-12 accordion parent-card pb-0" id="accordion">
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
@@ -121,11 +124,11 @@
                             <label for="date_begin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
@@ -234,6 +237,21 @@
         placeholder: selected,
         allowClear: true
     });
+    function clearFilter() {
+        $('#filter .singleSelect').val(null).select2();
+        $('#filter .singleSelect2').val(null).select2();
+        $('#filter input').val('');
+        $('#document_organization_id').val(null).select2({
+            ajax: {
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+                type: "POST",
+                data: function (params) {
+                    return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                }, cache: true
+            }
+        });
+        $('#filter').trigger('change');
+    }
 
 
 </script>

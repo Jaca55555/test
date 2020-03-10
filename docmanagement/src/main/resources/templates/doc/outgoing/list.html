@@ -178,11 +178,11 @@
                             <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
-                                    <input class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                                 </div>
                                 <div class="col-6" style="padding-right:0;">
-                                    <input class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
                                     <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                                 </div>
                             </div>
@@ -367,6 +367,7 @@
     function clearFilter() {
         $('#accordion .singleSelect').val(null).select2();
         $('#accordion input').val('');
+        $('#filter').trigger('change');
     }
 
     function datatableConnect(status) {
