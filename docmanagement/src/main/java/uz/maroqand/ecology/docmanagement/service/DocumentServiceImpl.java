@@ -270,6 +270,7 @@ public class DocumentServiceImpl implements DocumentService {
     public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId){
         return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationId(getCastedDate(),docTypeId, organizationId);
     }
+
     @Override
     public Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId){
         return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationId(documentTypeId, organizationId);
@@ -296,7 +297,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Document updateAllparamert(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet, Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser) {
+    public Document updateAllParameters(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet, Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser) {
         Document document1 = getById(document.getId());
         document1.setJournalId(document.getJournalId());
         document1.setDocumentViewId(document.getDocumentViewId());
