@@ -139,8 +139,10 @@
                 <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
                     <button type="button" class="btn btn-rounded btn-danger fs11">
                         <i class="fas fa-lock"></i>
+                        <span th:text="#{sys_document.inside_purpose_warning_text}">
                         Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
                         девонхонага мурожаат қилинг!
+                        </span>
                     </button>
                 </div>
 
