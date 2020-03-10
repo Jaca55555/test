@@ -55,4 +55,6 @@ public interface DocumentService {
     List<Document> getListByAddDocId(Integer addDocId);
 
     Document getTopParentId(Document docId);
+
+    Page<Document> findAllByDocumentTypeIn(List<Integer> types, Pageable pageable);
 }

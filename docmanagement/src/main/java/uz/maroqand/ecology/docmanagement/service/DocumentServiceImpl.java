@@ -411,4 +411,9 @@ public class DocumentServiceImpl implements DocumentService {
         }
         return getTopParentId(documentParent);
     }
+
+    @Override
+    public Page<Document> findAllByDocumentTypeIn(List<Integer> types, Pageable pageable) {
+        return documentRepository.findAllByDocumentTypeIdInAndDeletedFalse(types, pageable);
+    }
 }
