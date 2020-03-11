@@ -273,7 +273,6 @@ public class IncomingController {
         model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), task.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
-        System.out.println("check getting additional doc list");
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
         return DocTemplates.IncomingView;
