@@ -14,14 +14,14 @@ public class YTProxy {
     private TsaProxyService service;
     private TsaProxy port;
 
-    public YTProxy() {
+    /*public YTProxy() {
         try {
             service = new TsaProxyService();
             port = service.getTsaProxyPort();
         }catch (Exception e){
             e.getStackTrace();
         }
-    }
+    }*/
 
     public static synchronized YTProxy getInstance(){
         if (client==null){

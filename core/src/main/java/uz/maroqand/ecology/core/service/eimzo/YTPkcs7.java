@@ -20,7 +20,7 @@ public class YTPkcs7 {
         port = service.getPkcs7Port();*/
 
         // in not working
-        initialize();
+//        initialize();
     }
 
     private void initialize() {
