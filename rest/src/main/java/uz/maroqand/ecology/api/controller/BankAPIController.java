@@ -87,7 +87,7 @@ public class BankAPIController {
 
                 paymentFile.setAmountOriginal(paymentNew.getAmount());
                 paymentFile.setDocumentNumber(paymentNew.getDocument_number());
-                Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormat);
+                Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormatBank);
                 paymentFile.setPaymentDate(date);
                 paymentFile.setDetails(paymentNew.getDetails());
 
