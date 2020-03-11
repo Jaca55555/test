@@ -33,6 +33,12 @@ public class DocUrls {
     public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
     public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
 
+    public static final String ReferenceList = Prefix + Reference + "/list"; //kiruvchi xatlar
+    public static final String ReferenceView = Prefix + Reference + "/view"; //kiruvchi xatni ko'rish
+    public static final String ReferenceTask = Prefix + Reference + "/task";
+    public static final String ReferenceTaskSubmit = Prefix + Reference + "/task_submit";
+    public static final String ReferenceTaskUserName = Prefix + Reference + "/user_name";
+
     public static final String DocumentCheckList = Prefix + DocumentCheck + "/list"; //kiruvchi xatlar
     public static final String DocumentCheckView = Prefix + DocumentCheck + "/view"; //kiruvchi xatni ko'rish
     public static final String DocumentCheckComplete = Prefix + DocumentCheck + "/complete";

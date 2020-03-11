@@ -163,4 +163,19 @@ public class Library implements Serializable {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getNameTranslation(String locale) {
+        switch (locale) {
+
+            case "uz":
+                return name;
+
+            case "oz":
+                return nameKr;
+
+            case "ru":
+            default:
+                return nameRu;
+        }
+    }
 }

@@ -24,7 +24,10 @@ public class DocTemplates {
     public static final String IncomingList = Prefix + Incoming + "/list";
     public static final String IncomingView = Prefix + Incoming + "/view";
     public static final String IncomingTask = Prefix + Incoming + "/task";
-
+    //Murojaatlar
+    public static final String ReferenceList = Prefix + Reference + "/list";
+    public static final String ReferenceView = Prefix + Reference + "/view";
+    public static final String ReferenceTask = Prefix + Reference + "/task";
 
     //xatlarni tasdiqlash
     public static final String DocumentCheckList=Prefix + DocumentCheck+"/list";

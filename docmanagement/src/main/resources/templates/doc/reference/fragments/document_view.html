@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="document_view">
+
+<div class="card parent-card">
+    <div class="card-header flex-space-between mobile-column" style="align-items: center;">
+        <h5 class="mb-0">
+                    <span href="" class="card-header-a collapsed">
+                        <span th:text="#{doc_incoming.view}">Murojaatlar</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                    </span>
+        </h5>
+        <div class="p10-horizontal mobile-column">
+            <button th:if="${#bools.isTrue(document.insidePurpose)}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
+                <i class="fas fa-lock mr-0"></i>
+                <span>ХДФУ</span>
+            </button>
+            <span th:if="${#bools.isTrue(document.specialControll)}" type="button" class="btn-rounded btn-danger btn-sm ml-2 m0" id="specialControl">
+                <i class="feather icon-check-circle mr-0 pr-2"></i><span th:text="#{doc.special_controll}"></span>
+            </span>
+            <button th:if="${task.status!=T(uz.maroqand.ecology.docmanagement.constant.TaskStatus).Complete.getId() &&  @documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'name',#locale)!=''}" type="button" th:class="'btn  btn-rounded btn-sm ml-2 m0 btn-'+${@documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'color',#locale)}"  >
+                <i class="feather icon-clock mr-0"></i>
+                <span th:text="${@documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'name',#locale)}">Муддати яқинлашган</span>
+            </button>
+        </div>
+        <div class="p10-horizontal mobile-column">
+            <span class="color-red bold" style="text-align: center;" th:text="#{sys_document_status}">Хужжат статуси</span>
+            <div class="btn-group ml-2">
+                <button type="button" class="btn btn-outline-primary left-radius right-radius table-modal-button"><i class="fas fa-cog"></i> <span th:text="#{${document.status.getName()}}">Жараёнда</span> </button>
+            </div>
+            <span type="button" class="btn btn-rounded btn-outline-danger btn-sm ml-2 mr-0 mb-0" th:if="${document.controlForm!=null}">
+                <i class="fas fa-clipboard-list mr-0"></i>
+                <span th:text="#{${document.controlForm.getName()}}">форма</span>
+            </span>
+        </div>
+        <div class="flex-center">
+            <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
+            <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
+            <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
+            <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+        </div>
+    </div>
+    <div class="card-block">
+        <div class="row" th:object="${document}">
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.journal}">Рўйхатга олиш журнали:</span></div>
+                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
+                <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0" style="float:right">
+                    <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0" style="float:right">
+                    <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
+            </div>
+        </div>
+        <hr class="m20-vertical">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.description}">Топшириқ шакли:</span></div>
+                <div><span th:text="${document.content}"></span></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
+                <div class="flex-start mobile-flex-center" id="fileContainer">
+
+                </div>
+                <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
+                    <button type="button" class="btn btn-rounded btn-danger fs11">
+                        <i class="fas fa-lock"></i>
+                        <span th:text="#{sys_document.inside_purpose_warning_text}">
+                        Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
+                        девонхонага мурожаат қилинг!
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/doc/assets/js/vendor-all.min.js"></script>
+<script th:inline="javascript">
+    let files = [[${document.contentFiles}]];
+</script>
+<script th:inline="none">
+    console.log(files)
+    function displayFiles(files){
+        for(let i = 0; i < files.length; i++){
+            let fileName= files[i].name;
+            let extensionAndColor = detectExtensionAndColor(files[i].extension)
+            $('#fileContainer').append(`
+                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
+                                <div class="card dashboard-card">
+                                    <div class="file-icon-container-small ${extensionAndColor.color}"><span
+                                            class="fas fa-file${extensionAndColor.extension}"></span></div>
+                                    <div class="card-body"
+                                         style="padding:1.25rem;">
+                                        <h6 class="card-title" >` + fileNameSubString(fileName) + `</h6>
+                                    </div>
+                                </div>
+                            </div>
+            `);
+        }
+    }
+    function detectExtensionAndColor(extension){
+        let data = {};
+        switch (extension) {
+            case 'jpg': case 'png': case 'bmp':
+                data.extension = '-image';
+                data.color = 'color-yellow';
+                break;
+            case 'pdf':
+                data.extension = '-pdf';
+                data.color = 'color-red';
+                break;
+            case 'xlsx': case 'xls':
+                data.extension = "-excel";
+                data.color = "color-green";
+                break;
+            case 'doc':
+            case 'docx':
+                data.extension = "-word";
+                data.color = "color-blue";
+                break;
+            case 'pptx':
+                data.extension = '-powerpoint';
+                data.color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                data.extension = '-archive';
+                data.color = 'color-purple';
+                break;
+            default:
+                data.extension = "";
+                data.color = "color-gray";
+        }
+        return data;
+    }
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function fileNameSubString(fileName) {
+        let lastIndex = fileName.lastIndexOf('.');
+        let subStringName = fileName.substring(0,lastIndex);
+        let getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length > 10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
+    displayFiles(files);
+
+</script>
+</body>
+</html>
