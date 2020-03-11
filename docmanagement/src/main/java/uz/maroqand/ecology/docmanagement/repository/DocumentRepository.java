@@ -59,4 +59,6 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 
     @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id LEFT JOIN DocumentTask dtk ON dtk.documentId = d.id WHERE dt.type.id = ?1 AND d.status <> uz.maroqand.ecology.docmanagement.constant.DocumentStatus.Completed AND dtk.dueDate < ?2 AND d.deleted = FALSE")
     Integer countAllExpiredDocsByType(Integer type, Date date);
+
+    Page<Document> findAllByDocumentTypeIdInAndDeletedFalse(List<Integer> types, Pageable pageable);
 }

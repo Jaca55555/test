@@ -235,8 +235,9 @@ public class InnerController {
         statuses.add(TaskSubStatus.Waiting);
         statuses.add(TaskSubStatus.Agreement);
         statuses.add(TaskSubStatus.Checking);
-        DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentTypeEnum(DocumentTypeEnum.OutgoingDocuments);
+        List<Integer> docTypes = new ArrayList<>();
+        docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
+        docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
@@ -253,7 +254,7 @@ public class InnerController {
         model.addAttribute("cancel_url",DocUrls.InnerList );
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
-        model.addAttribute("docList", documentService.findFiltered(docFilterDTO, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
+        model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
         System.out.println("-------------");
 
