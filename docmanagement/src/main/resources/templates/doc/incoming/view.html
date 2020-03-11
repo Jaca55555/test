@@ -253,7 +253,7 @@
                             </div>
                             <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
                                 <div class="w100"></div>
-                                <div class="column-2 mt-3">
+                                <div class="column-2 mt-3 fileContainer">
                                     <span class='fas fa-file-pdf fs30 color-red'></span>
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
                                 </div>
@@ -516,7 +516,8 @@
     var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
     $(document).ready(function () {
-            docFileName([[${document.contentFiles}]]);
+        docFileName([[${document.contentFiles}]]);
+        $('.fileContainer a').text(fileNameSubString($('.fileContainer a').text()));
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
                 placeholder: "Танланг",
@@ -649,7 +650,7 @@
                             html+='<div class="w100"></div>' +
                                 '  <div class="column-2 mt-3">\n' +
                                 '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
-                                '       <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
                                 '  </div>';
                         })
                     }
