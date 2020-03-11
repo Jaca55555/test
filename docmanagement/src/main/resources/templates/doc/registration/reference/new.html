@@ -64,7 +64,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group col-lg-6">
-                        <label class="control-label" th:text="#{doc_incoming.communication_tool}"></label>
+                        <label class="control-label" th:text="#{doc_reference.communication_tool}"></label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="${documentSub.communicationToolId}" required="required" data-parsley-errors-container="#communicationToolIdError">
                             <option value=""></option>
                             <option th:each="communicationTool: ${communicationToolList}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
@@ -72,7 +72,7 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
+                        <label class="control-label" th:text="#{doc_reference.documentView}" th:for="${#ids.seq('documentType')}">Кирувчи хатларни тури</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{documentViewId}" required="required" data-parsley-errors-container="#documentViewError">
                             <option value=""></option>
                             <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
@@ -80,39 +80,33 @@
                         <div class="row"> <div class="col-md-4" id="documentViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <label class="control-label" th:text="#{doc_reference.reg_doc_number}" th:for="${#ids.next('registration_number')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{docRegNumber}" required="required">
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_doc_date}">Хат рўйхатга олинган сана</label>
+                        <label class="control-label" th:text="#{doc_reference.reg_doc_date}">Хат рўйхатга олинган сана</label>
                         <div class="col-sm-12 p0">
                             <input class="form-control date" id="dateBegin" th:placeholder="#{doc_income.reg_date}" data-dtp="dtp_lq7TC" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" name="docRegDateStr" required="required"  th:value="${document.docRegDate!=null? #dates.format(document.docRegDate,'dd.MM.yyyy'):''}">
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
                     </div>
                 </div>
-
-
-
 <!--                OFF-->
-
-
-
                 <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_incoming.organization}"></label>
+                        <label class="control-label" for="documentOrganizationId" th:text="#{doc_reference.organization}"></label>
                         <select class="form-control" id="documentOrganizationId" name="documentOrganizationId" required="required" data-parsley-errors-container="#documentOrganizationIdError">
                             <option th:if="${documentOrdanization!=null}" th:value="${documentOrdanization.id}" th:text="${documentOrdanization.name}" selected="selected"></option>
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                         <div class="row"> <div class="col-md-4" id="documentOrganizationIdError"></div> </div>
                     </div>
-                    <div class="col-sm-6 col-lg-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_doc_number}" th:for="${#ids.next('address')}">Кирувчи хатларни руйхатга олиш раками</label>
+                    <div class="col-sm-6 col-lg-6 form-group" th:object="${documentSub}">
+                        <label class="control-label" th:text="#{doc_incoming.address}" th:for="${#ids.next('address')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" name="address" required="required">
+                            <input type="text" class="form-control" th:field="*{address}" required="required">
                         </div>
                     </div>
                 </div>
@@ -120,13 +114,13 @@
 
 
                <div class="row">
-                <div class="form-group col-sm-12 col-md-6">
-                    <label class="control-label" th:text="#{doc_incoming.reg_performer_name}"> </label>
-                    <input type="text" class="form-control" th:field="*{performerName}" >
+                <div class="form-group col-sm-12 col-md-6" th:object="${documentSub}">
+                    <label class="control-label" th:text="#{doc_reference.reg_performer_name}"> </label>
+                    <input type="text" class="form-control" th:field="*{fullName}" >
                 </div>
                 <div class="form-group col-sm-12 col-md-6">
-                    <label class="control-label" th:text="#{doc_incoming.reg_performer_phone}"> </label>
-                    <input type="text" class="form-control" th:field="*{performerPhone}">
+                    <label class="control-label" th:text="#{doc_reference.reg_performer_phone}"> </label>
+                    <input type="text" class="form-control" placeholder="+999(99) 999-99-99" th:field="*{performerPhone}" data-inputmask="'mask' : '+999(99) 999-99-99'">
                 </div>
                </div>
                 <div class="col-sm-12 form-group new-desc">
@@ -134,7 +128,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12 col-md-6">
-                        <label class="control-label" th:text="#{doc_incoming.reg_additional_doc}"> </label>
+                        <label class="control-label" th:text="#{doc_reference.reg_additional_doc}"> </label>
                         <select class="singleSelect select2-hidden-accessible" id="additionalDocumentId" name="additionalDocumentId">
                             <option value=""></option>
                             <option th:if="${additionalDocument!=null}" th:value="${additionalDocument.id}"  th:text="${additionalDocumentText}" selected="selected"></option>
@@ -143,7 +137,7 @@
                 </div>
 
                 <hr class="m30-vertical">
-                <h5 class="mb-0 card-header no-border" th:text="#{doc_incoming.reg_files}" style="padding: 5px 20px;">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
+                <h5 class="mb-0 card-header no-border" th:text="#{doc_reference.reg_files}" style="padding: 5px 20px;">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20" id="file-container">
                     <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
                     </select>
@@ -180,14 +174,14 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
+                        <label class="control-label" th:text="#{doc_reference.reg_manager}">Кирувчи хатни қабул қилиш учун маъсул рахбар</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required">
                             <option value=""></option>
                             <option th:each="manager: ${managerUserList}" th:value="${manager.id}" th:text="${manager.getFullName()}" th:selected="${document.managerId!=null && manager.id==document.managerId}"></option>
                         </select>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_control}">Ижро назорати учун маъсул шахс</label>
+                        <label class="control-label" th:text="#{doc_reference.reg_control}">Ижро назорати учун маъсул шахс</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" name="controlId">
                             <option value=""></option>
                             <option th:each="control: ${controlUserList}" th:value="${control.id}" th:text="${control.getFullName()}" th:selected="${document.controlId!=null && control.id==document.controlId}"></option>
@@ -196,14 +190,14 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
+                        <label class="control-label" th:text="#{doc_reference.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="executeForm : ${executeForms}">
                             <input type="radio" name="executeFormId" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
                             <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
+                        <label class="control-label" th:text="#{doc_reference.reg_control_form}">Назорат карточкасининг шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="controlForm: ${controlForms}">
                             <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
                             <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="#{${controlForm.name}}"></label>
@@ -233,6 +227,7 @@
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script src="/static/doc/assets/plugins/bootstrap-maxlength/js/bootstrap-maxlength.min.js"></script>
+<script src="/static/doc/js/jquery.inputmask.bundle.min.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
@@ -243,7 +238,7 @@
             placeholder: sys_select,
             allowClear: true
         });
-
+        $('#phoneNumber').inputmask("+999(99) 999-99-99");
         var files = [[${document.contentFiles}]];
         if (files!=null && files.length>0){
             $.each(files,function (index,val) {

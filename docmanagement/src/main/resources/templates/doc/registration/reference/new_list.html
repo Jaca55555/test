@@ -65,8 +65,8 @@
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 
 <script th:inline="javascript">
-    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
-    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
+    let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationView}]];
+    let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }

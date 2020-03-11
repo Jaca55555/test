@@ -296,9 +296,9 @@
 
 
     let statuses = {};
-    statuses[1] = [[#{document_status.new}]];
-    statuses[2] = [[#{document_status.inProgress}]];
-    statuses[3] = [[#{document_status.completed}]];
+    statuses[1] = [[#{task_status.new}]];
+    statuses[2] = [[#{task_status.inProgress}]];
+    statuses[3] = [[#{task_status.complete}]];
 
 
 </script>
@@ -313,7 +313,7 @@
         let currentViewLink = viewLink + '?id=' + row[0];
         let html = '';
 
-        html += `<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
+        html += `<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink}" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
 
         return html;
     }
@@ -348,11 +348,11 @@
 
         let current;
 
-        if(data === "New"){
+        if(data === "document_status.new"){
             current = 2;
-        }else if(data === "InProgress"){
+        }else if(data === "document_status.inProgress"){
             current = 2;
-        }else if(data == "Completed"){
+        }else if(data == "document_status.completed"){
             current = 3;
         }
 

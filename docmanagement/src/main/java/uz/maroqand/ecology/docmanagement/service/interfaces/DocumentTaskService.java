@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 
@@ -62,6 +63,20 @@ public interface DocumentTaskService {
             Boolean specialControll,
             Pageable pageable
     );
+    Page<DocumentTask> findFilteredReference(
+            Integer organizationId,
+            Integer documentTypeId,
+            ReferenceRegFilterDTO referenceRegFilterDTO,
+            Date deadlineDateBegin,
+            Date deadlineDateEnd,
+            Integer type,
+            Set<Integer> status,
+            Integer departmentId,
+            Integer receiverId,
+            Boolean specialControll,
+            Pageable pageable
+    );
+
 
     //taskOrsubTask==true  task
     //taskOrsubTask==false  taskSub

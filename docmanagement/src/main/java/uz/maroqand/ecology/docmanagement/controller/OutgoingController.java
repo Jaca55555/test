@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +23,11 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
+import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 /**
@@ -42,13 +42,15 @@ public class OutgoingController {
     private final DepartmentService departmentService;
     private final DocumentViewService documentViewService;
     private final DocumentSubService documentSubService;
+    private final DocumentHelperService documentHelperService;
 
-    public OutgoingController(DocumentService documentService, UserService userService, DepartmentService departmentService, DocumentViewService documentViewService, DocumentSubService documentSubService){
+    public OutgoingController(DocumentService documentService, UserService userService, DepartmentService departmentService, DocumentViewService documentViewService, DocumentSubService documentSubService, DocumentHelperService documentHelperService){
         this.documentService = documentService;
         this.userService = userService;
         this.departmentService = departmentService;
         this.documentViewService = documentViewService;
         this.documentSubService = documentSubService;
+        this.documentHelperService = documentHelperService;
     }
 
 
@@ -167,6 +169,7 @@ public class OutgoingController {
                 performerId,
                 specificPageable);
 
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
             Document document = documentSub.getDocument();
@@ -178,7 +181,7 @@ public class OutgoingController {
                     document.getContent() != null ? document.getContent() : "",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    document.getStatus(),
+                    documentHelperService.getTranslation(document.getStatus().getName(), locale),
                     (document.getPerformerName() != null ?document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }

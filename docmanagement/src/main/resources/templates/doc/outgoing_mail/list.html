@@ -253,6 +253,11 @@
         $('#filter').trigger('change');
     }
 
+    let statuses = {};
+    statuses[1] = [[#{task_status.new}]];
+    statuses[2] = [[#{task_status.inProgress}]];
+    statuses[3] = [[#{task_status.complete}]];
+
 
 </script>
 
@@ -270,11 +275,6 @@
         html += `<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
         return html;
     }
-
-    let statuses = {};
-    statuses[1] = "New";
-    statuses[2] = "InProgress";
-    statuses[3] = "Completed";
 
     function changeStatus(btn, id, targetStatus){
         dropDownValues = $(btn).parent();
@@ -304,10 +304,10 @@
         let idToChange;
         let current;
 
-        if(data === "New" || data === "InProgress"){
+        if(data === "document_status.new" || data === "document_status.inProgress"){
             current = 2;
             idToChange = 3;
-        }else if(data == "Completed"){
+        }else if(data == "document_status.completed"){
             current = 3;
             idToChange = 2;
         }
@@ -387,13 +387,13 @@
                 {render: renderActionsColumn, orderable: false,className: "text-center"}
             ],
             rowCallback: function (row, data) {
-                $(row).on('click', function () {
+                $(row).on('click', function (e) {
+                    if($(e.target).is('button')){
+                        e.preventDefault();
+                        return;
+                    }
                     location.href = $(row).children()[0].firstElementChild.href
-                })
-                // $(row).children()[0].classList += ` ${data[9][0]}`
-                // $(row).children()[1].classList += ` ${data[9][0]}`
-                // $(row).children()[3].classList += ` ${data[9][0]}`
-                // $(row).children()[4].classList += ` ${data[9][0]}`
+                });
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
