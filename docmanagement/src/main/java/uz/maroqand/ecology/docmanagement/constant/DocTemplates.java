@@ -120,6 +120,8 @@ public class DocTemplates {
 
     public static final String InnerList = Prefix + Inner + "/list";
     public static final String InnerView = Prefix + Inner + "/view";
+    public static final String InnerTask = Prefix + Inner + "/task";
+
 
     //ichki xatlar
     public static final String InnerRegistrationNew = Prefix + Registration + Inner + "/new";

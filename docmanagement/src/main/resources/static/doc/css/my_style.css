@@ -774,3 +774,7 @@ html, body {
     max-height: 600px;
     overflow: auto;
 }
+.statusSpan{
+    width: 100%;
+    font-style:italic ;
+}
