@@ -20,7 +20,7 @@ public interface DocumentSubService {
     DocumentSub create(Integer organizationId, DocumentSub documentSub, User user);
 
     DocumentSub update(DocumentSub documentSub, User user);
-
+    List<DocumentSub> findAll();
     Specification<DocumentSub> getSpecificationOrganization( final Integer documentOrganizationId );
 
     List<DocumentSub> findByDocumentId(Integer documentId);
