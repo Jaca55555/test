@@ -14,14 +14,14 @@ public class YTCryptoAuth {
     private CryptoAuthService service;
     private CryptoAuth port;
 
-    public YTCryptoAuth() {
+    /*public YTCryptoAuth() {
         try {
             service = new CryptoAuthService();
             port = service.getCryptoAuthPort();
         }catch (Exception e){
             e.getStackTrace();
         }
-    }
+    }*/
 
     public static synchronized YTCryptoAuth getInstance(){
         if (client==null){
