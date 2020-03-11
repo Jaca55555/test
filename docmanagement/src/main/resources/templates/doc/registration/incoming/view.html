@@ -253,8 +253,8 @@
                             </div>
                             <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
                                 <div class="w100"></div>
-                                <div class="row col-sm-12  mt-2">
-                                    <span class='fas fa-file-pdf fs30 color-red mr-1'></span>
+                                <div class="column-2 mt-3 fileContainer">
+                                    <span class='fas fa-file-pdf fs30 color-red'></span>
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
                                 </div>
                             </div>
@@ -452,6 +452,7 @@
 
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
+        $('.fileContainer a').text(fileNameSubString($('.fileContainer a').text()));
         $('#formSend').on('click', function (e) {
             let url = $('#commentForm').prop('action');
             let data = $('#commentForm').serialize();
@@ -482,9 +483,9 @@
                         if (log.contentFiles != null) {
                             for (let file of log.contentFiles) {
                                 html += "<div class='w100'></div>\n" +
-                                    "<div class='column-2 mt-3'>\n" +
+                                    "<div class='column-2 mt-3 fileContainer'>\n" +
                                     "    <span class='fas fa-file-pdf fs30 color-red'></span>\n" +
-                                    "    <a href='[(${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload})]?id=" + file.id + "'>" + file.name + "</a>\n" +
+                                    "    <a href='[(${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload})]?id=" + file.id + "'>" + fileNameSubString(file.name) + "</a>\n" +
                                     "</div>\n"
                             }
                         }
