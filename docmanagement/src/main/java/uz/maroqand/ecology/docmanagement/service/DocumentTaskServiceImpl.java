@@ -242,8 +242,6 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         }
 
         Long interval = (dueDate.getTime()-nowDate.getTime())/3600000;
-        System.out.println("dueDate= " + Common.uzbekistanDateFormat.format(dueDate));
-        System.out.println("nowDate= " + Common.uzbekistanDateFormat.format(nowDate));
 
         if (interval<=0){
             if (nameOrColor.equals("name")){
