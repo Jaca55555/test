@@ -317,7 +317,7 @@
                 serverSide: true,
                 scrollX: true,
                 pageLength: 25,
-                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom: 'lrtip',
                 ajax : function (dataToSend, callback, settings) {
@@ -378,10 +378,7 @@
                     $(row).on('click', function () {
                         location.href = $(row).children()[0].firstElementChild.href
                     })
-                    // $(row).children()[0].classList += ` ${data[9][0]}`
-                    // $(row).children()[1].classList += ` ${data[9][0]}`
-                    // $(row).children()[3].classList += ` ${data[9][0]}`
-                    // $(row).children()[4].classList += ` ${data[9][0]}`
+
                 },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

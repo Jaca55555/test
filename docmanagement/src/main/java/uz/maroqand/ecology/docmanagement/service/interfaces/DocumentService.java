@@ -7,6 +7,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 
 import java.util.Date;
@@ -57,4 +58,29 @@ public interface DocumentService {
     Document getTopParentId(Document docId);
 
     Page<Document> findAllByDocumentTypeIn(List<Integer> types, Pageable pageable);
+
+    Page<Document> findFiltered(
+            Integer organizationId,
+            Integer documentTypeId,
+
+            Integer documentOrganizationId,
+            String docRegNumber,
+            String registrationNumber,
+            Date dateBegin,
+            Date dateEnd,
+            String taskContent,
+            String content,
+            Integer performerId,
+            Integer taskSubType,
+            Integer taskSubStatus,
+
+            Date deadlineDateBegin,
+            Date deadlineDateEnd,
+            Integer type,
+            Set<Integer> status,
+            Integer departmentId,
+            Integer receiverId,
+            Boolean specialControll,
+            Pageable pageable
+    );
 }

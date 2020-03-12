@@ -30,7 +30,6 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
 
-    Integer countByReceiverIdAndStatus(Integer receiverId, Integer statuses);//Янги хатлар, Жараёндаги, Ижро этилган
     Integer countByReceiverIdAndStatusAndType(Integer receiverId, Integer statuses,Integer type);//Янги хатлар, Жараёндаги, Ижро этилган
 
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар

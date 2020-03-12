@@ -10,7 +10,7 @@
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed">
-                        <span th:text="#{doc_incoming.view}">Murojaatlar</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                        <span th:text="#{doc_appeal.view}">Murojaatlar</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
         </h5>
         <div class="p10-horizontal mobile-column">
@@ -45,45 +45,45 @@
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.journal}">Рўйхатга олиш журнали:</span></div>
-                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
-            </div>
+<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">-->
+<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.journal}">Рўйхатга олиш журнали:</span></div>-->
+<!--                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">-->
+<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>-->
+<!--                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>-->
+<!--            </div>-->
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.documentView}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.docRegNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.registrationNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.docRegDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.registrationDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
-            </div>
+<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null" th:object="${documentSub}">-->
+<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerName}">Жўнатувчи шахс:</span></div>-->
+<!--                <div class="col-md-6 p0" style="float: right;"><span th:text="*{fullName}">Иванов Иван Иванович</span></div>-->
+<!--            </div>-->
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
@@ -91,18 +91,18 @@
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
         </div>
         <hr class="m20-vertical">
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.description}">Топшириқ шакли:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.description}">Топшириқ шакли:</span></div>
                 <div><span th:text="${document.content}"></span></div>
             </div>
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center" id="fileContainer">
 
                 </div>
@@ -180,7 +180,7 @@
     }
 
     function downloadFileFunction(id) {
-        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+        window.open(`/doc/reference/file/download?id=${id}`);
     }
 
     function fileNameSubString(fileName) {
