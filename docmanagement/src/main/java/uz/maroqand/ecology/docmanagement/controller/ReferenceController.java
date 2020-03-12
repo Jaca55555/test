@@ -247,6 +247,8 @@ public class ReferenceController {
         if (document == null) {
             return "redirect:" + DocUrls.ReferenceList;
         }
+        DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
+
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
@@ -265,6 +267,7 @@ public class ReferenceController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentSub",documentSub);
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));

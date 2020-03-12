@@ -49,10 +49,10 @@
 <!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.journal}">Рўйхатга олиш журнали:</span></div>-->
 <!--                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>-->
 <!--            </div>-->
-<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">-->
-<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>-->
-<!--                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>-->
-<!--            </div>-->
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:object="${documentSub}">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
+            </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.documentView}">Хужжат тури:</span></div>
@@ -80,10 +80,10 @@
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null" th:object="${documentSub}">-->
-<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerName}">Жўнатувчи шахс:</span></div>-->
-<!--                <div class="col-md-6 p0" style="float: right;"><span th:text="*{fullName}">Иванов Иван Иванович</span></div>-->
-<!--            </div>-->
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null" th:object="${documentSub}">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerName}">Жўнатувчи шахс:</span></div>
+                <div class="col-md-6 p0" style="float: right;"><span th:text="*{fullName}">Иванов Иван Иванович</span></div>
+            </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
