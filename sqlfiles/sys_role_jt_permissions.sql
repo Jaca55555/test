@@ -1,4 +1,3 @@
-
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_AGREEMENT_COMPLETE');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_AGREEMENT');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'APPEAL_ADMIN');

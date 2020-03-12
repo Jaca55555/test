@@ -499,7 +499,7 @@
 
     <script th:inline="javascript">
         let getListLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DashboardDocList}]];
-        let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationView}]];
+        let viewLink = [[${viewLink_}]];
         let editLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationEdit}]];
         let statusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).TaskChangeStatus}]];
         var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
@@ -531,7 +531,7 @@
         var tabFilter;
 
 
-
+        console.log(viewLink);
 
 
         function renderChangeColumn(data, type, row, meta) {

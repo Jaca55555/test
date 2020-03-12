@@ -229,7 +229,7 @@ public class IncomingController {
             Model model
     ) {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
-        if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
+        if (documentTaskSub == null || documentTaskSub.getTaskId() == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
