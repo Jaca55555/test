@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+
+        <object th:include="doc/inner/fragments/document_view :: document_view" th:remove="tag" ></object>
+
+        <div class="row flex-space-between">
+            <div class="col-xl-12 col-sm-12 pl-0 pl-15-mobile">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between align-center" style="height:65px;">
+                        <h5>
+                            <span th:text="#{doc_inner.doc_task_and_performers}">Топшириқ ва иштирокчилар</span> №
+                        </h5>
+                    </div>
+                    <form method="post" th:action="${action_url}" id="taskAddForm" data-parsley-validate="">
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="executor col-6 m10-vertical">
+                                    <h5 th:text="#{doc_inner.doc_task_and_indication}">Топшириқ / кўрсатма</h5><br/>
+                                    <div class="flex-space-between p0">
+                                        <div>
+                                            <div class="inline-block">
+                                                <i class="fas fa-user-circle fs40 color-gray"></i>
+                                            </div>
+                                            <div class="inline-block m10-horizontal">
+                                                <span class="color-green bold" th:if="${documentTaskSub.receiverId!=null}" th:text="${@helperService.getUserFullNameById(documentTaskSub.receiverId)}">Абдуллаев А. А.</span>
+                                                <br>
+                                                <span  th:if="${documentTaskSub.receiverId!=null}" th:text="${@helperService.getUserPositionName(documentTaskSub.receiverId,#locale)}">Руководитель организации</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-space-between p0 align-center column-2">
+                                            <button type="button" class="btn-icon">
+                                                <i class="fas fs20 fa-edit color-gray"></i>
+                                            </button>
+                                            <button type="button" class="btn-icon">
+                                                <i class="fas fs20 fa-trash-alt color-gray pr-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="form-group">
+                                        <label class="control-label" th:text="#{doc_inner.doc_task_and_content}"></label>
+                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="description_content">
+                                            <option value=""></option>
+                                            <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                    <textarea class="form-control" rows="4" name="content" id="description_textarea" required="required" minlength="5"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
+                                        <div class="col-sm-12 p0">
+                                            <input autocomplete="off" class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
+                                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="executor col-6 m10-vertical">
+                                    <h5 th:text="#{doc_inner.performers}">Иштирокчилар</h5><br/>
+                                    <div class="table-responsive">
+                                        <table id="data-table" class="table table-hover dataTable" style="width: 100%">
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <br/>
+                                    <div class="row" id="addUsers">
+                                        <div class="col-10 pl-0">
+                                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
+                                                <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                                <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 p-0">
+                                            <button type="button" class="btn btn-outline-secondary btn-block" id="add_user">Qo'shish</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="typePerformer" value=""/>
+                        <input type="hidden" id="typeControl" value=""/>
+                        <input  type="hidden" name="selectedUsersIds" value="" id="selectedUsersIds"/>
+                        <input  type="hidden" th:field="${documentTaskSub.id}" />
+                        <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
+                        <div class="card-footer">
+                            <div class="flex-center w100 row-wrap">
+                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
+                                <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Modals ] end -->
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script th:inline="javascript">
+    var selectedUsersIds = [];
+    var task_sub_type_performer = [[#{task_sub_type.performer}]];
+    var task_sub_type_performer_partner = [[#{task_sub_type.performer_partner}]];
+    var task_sub_type_control = [[#{task_sub_type.control}]];
+    var task_sub_type_info = [[#{task_sub_type.info}]];
+    $(document).ready(function () {
+        docFileName([[${document.contentFiles}]]);
+    });
+
+    $('#description_content').on('change',function () {
+        var text=this.options[this.selectedIndex].text;
+        $('#description_textarea').val(text);
+    });
+
+    function addTaskSubmit() {
+        $('#dateBegin').parsley().validate();
+        $('#description_textarea').parsley().validate()
+        if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){
+            $('#taskAddForm').submit();
+        }else{
+            $('#addUsers').css('border','1px solid red');
+        }
+    }
+
+    var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTaskUserName}]];
+    $('#add_user').on('click',function () {
+        $('#dateBegin').parsley().validate();
+        $('#description_textarea').parsley().validate()
+        var userId = $('#userId').val();
+        if ( $('#dateBegin').parsley().isValid() && userId!="" && userId!=null){
+            var dateDue=$('#dateBegin').val();
+            $.ajax({
+                url: url,
+                data: {
+                    id: userId,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    if (response.status==1){
+                        var userId=response.userId;
+                        var userFullName=response.userFullName;
+                        var position=response.position;
+                        var html='';
+                        if (selectedUsersIds.indexOf(userId)<0){
+                            selectedUsersIds.push(userId);
+                            html='<tr id="tr_'+userId+'">' +
+                                '   <td style="width: 30%">\n' +
+                                '       <div class="flex-space-between p0">\n' +
+                                '           <div>\n' +
+                                '               <div class="inline-block">\n' +
+                                '                   <i class="fas fa-user-circle fs40 color-gray"></i>\n' +
+                                '               </div>\n' +
+                                '               <div class="inline-block m10-horizontal">\n' +
+                                '                   <span class="color-green bold">'+userFullName+'</span>\n' +
+                                '                   <br>\n' +
+                                '                   <span>'+position+'</span>\n' +
+                                '               </div> <input type="hidden" name="user_id'+userId+'" value="'+userId+'"/>\n' +
+                                '           </div>\n' +
+                                '       </div>\n' +
+                                '   </td>';
+                            if ($('#typePerformer').val()==''){
+                                html+='<td style="width: 30%">\n' +
+                                    '       <div class="btn-group mb-2 mr-2" id="status_div_'+userId+'">\n' +
+                                    '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                                    '               <i class="fas fa-cog" style="margin-right: 1em"></i>\n' + task_sub_type_performer +
+                                    '           </button>\n' +
+                                    '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                                    '               <span class="sr-only"></span>\n' +
+                                    '           </button>\n' +
+                                    '           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+                                    '           </div>\n' +
+                                    '           <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="0"/>\n' +
+                                    '       </div>\n' +
+                                    '   </td>';
+                                $('#typePerformer').val(userId);
+                            }else{
+                                html+='<td style="width: 30%">\n' +
+                                    '       <div class="btn-group mb-2 mr-2" id="status_div_'+userId+'">\n' +
+                                    '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                                    '               <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>\n' + task_sub_type_info +
+                                    '           </button>\n' +
+                                    '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                                    '               <span class="sr-only"></span>\n' +
+                                    '           </button>\n' +
+                                    '           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                                    '           </div>\n' +
+                                    '           <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="3"/>\n' +
+                                    '       </div>\n' +
+                                    '   </td>';
+                            }
+
+                            html+='   <td style="width: 35%">\n' +
+                                '       <div class="col-md-12 mb-3">\n' +
+                                '           <div class="input-group">\n' +
+                                '               <div class="input-group-prepend">\n' +
+                                '                   <span class="input-group-text p-1" id="validationTooltipUsernamePrepend">\n' +
+                                '                       <i class="feather icon-clock fs20"></i>\n' +
+                                '                   </span>\n' +
+                                '               </div>\n' +
+                                '               <input autocomplete="off" class="form-control datepicker date" data-dtp="dtp_lq7TC" id="dueDateStr_'+userId+'" name="dueDateStr_'+userId+'" required="required" value="'+dateDue+'" />\n' +
+                                '           </div>\n' +
+                                '       </div>\n' +
+                                '   </td>\n' +
+                                '   <td style="width: 5%">\n' +
+                                '       <button class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
+                                '   </td>\n' +
+                                '</tr>';
+                            $('#data-table tbody').append(html);
+                            $('#dueDateStr_'+userId).datepicker({
+                                format: "dd.mm.yyyy",
+                                todayHighlight: true,
+                                autoclose: true
+                            });
+                            $('#userId').val('').change();
+                            $('#selectedUsersIds').val(selectedUsersIds);
+                        }
+                        $('#addUsers').css('border','0px');
+                    }
+                },
+                error: function () {
+                }
+            });
+        }else{
+            console.log("000")
+        }
+    });
+
+    function selectType(userId,typeId) {
+        var performer = $('#performer_'+userId).val();
+        var typeControl = $('#typeControl').val();
+        var typePerformer = $('#typePerformer').val();
+        if (selectedUsersIds.indexOf(userId)>-1){
+            //performer qilmoqchi
+            if (typeId==0){
+                if (typePerformer==''){
+                    if (performer==2){ $('#typeControl').val('');}
+                    $('#typePerformer').val(userId);
+                    setType(userId,typeId);
+                }
+            }else
+                //control
+                if(typeId==2){
+                    if (typeControl==''){
+                        if (performer==0){  $('#typePerformer').val('');}
+                        $('#typeControl').val(userId);
+                        setType(userId,typeId);
+
+                    }
+            }else{
+                if (performer==0) { $('#typePerformer').val('');}
+                if (performer==2){ $('#typeControl').val('');}
+                    setType(userId,typeId);
+                }
+        }
+
+    }
+    function deleteSelectedUser(id) {
+        if (selectedUsersIds.indexOf(id)>-1){
+            selectedUsersIds.splice(selectedIds.indexOf(id),1);
+            $('#selectedUsersIds').val(selectedUsersIds);
+            $('#tr_'+id).remove();
+
+            if ($('#typePreformer').val()==id){
+                $('#typePreformer').val('');
+            }
+            if ($('#typeControl').val()==id){
+                $('#typeControl').val('');
+            }
+        }
+    }
+
+    function setType(userId,typeId){
+        var html = '';
+        if (typeId==0){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-cog" style="margin-right: 1em"></i>' + task_sub_type_performer +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="0"/>';
+
+        }else if(typeId==1){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-cogs" style="margin-right: 1em"></i>' + task_sub_type_performer_partner +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="1"/>';
+
+        }else if(typeId==2){
+
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-check-circle" style="margin-right: 1em"></i>' + task_sub_type_control +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',3)">'+task_sub_type_info+'</button>\n' +
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="2"/>';
+
+        }else{
+            html = '<button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                '       <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>' + task_sub_type_info +
+                '   </button>\n' +
+                '   <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                '       <span class="sr-only"></span>\n' +
+                '   </button>\n' +
+                '   <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                '       <button type="button" class="dropdown-item" onclick="selectType('+userId+',0)">'+task_sub_type_performer+'</button>\n' +
+
+                '   </div>\n' +
+                '   <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="3"/>';
+
+        }
+        $('#status_div_'+userId).html(html);
+    }
+</script>
+</body>
+</html>

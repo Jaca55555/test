@@ -126,7 +126,11 @@ public class DocumentServiceImpl implements DocumentService {
         document.setOrganizationId(user.getOrganizationId());
         document.setDocumentTypeId(documentTypeId);
         document.setStatus(DocumentStatus.New);
-
+        if (document.getControlId()!=null){
+            document.setSpecialControll(Boolean.TRUE);
+        }else{
+            document.setSpecialControll(Boolean.FALSE);
+        }
         document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
         document.setRegistrationDate(new Date());
 

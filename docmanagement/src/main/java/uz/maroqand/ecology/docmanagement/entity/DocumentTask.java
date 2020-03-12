@@ -69,7 +69,7 @@ public class DocumentTask {
     @Column(name = "created_by_id")
     private Integer createdById;
 
-    @Column(name="creatщed_at", columnDefinition = "timestamp without time zone")
+    @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 
     @Column(name = "update_by_id")

@@ -231,38 +231,47 @@
 
                             <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
                                 <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
-                                    <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.beforeStatusColor}">
+                                    <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
                                         <span th:text="#{${log.beforeStatus}}"></span>
-                                    </button>
+                                    </span>
+                                    <!--<button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.beforeStatus}}"></span>
+                                    </button>-->
                                 </div>
                                 <div class="col-sm-2" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
-                                    <button type="button" class="btn-block btn btn-light btn-sm btn-rounded">
+                                    <span class="statusSpan badge badge-light">
+                                        <i class="feather icon-chevrons-right mr-0"></i>
+                                    </span>
+                                    <!--<button type="button" class="btn-block btn btn-light btn-sm btn-rounded">
                                         <i class="feather icon-arrow-right mr-0"></i>
-                                    </button>
+                                    </button>-->
                                 </div>
                                 <div class="col-sm-5 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
-                                    <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.afterStatusColor}">
+                                     <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.afterStatus}}"></span>
+                                    </span>
+                                    <!--<button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.afterStatusColor}">
                                         <span  th:text="#{${log.afterStatus}}"></span>
-                                    </button>
+                                    </button>-->
                                 </div>
                             </div>
 
                             <div class="w100"></div>
-                            <div class="column-2 mt-3">
+                            <div class="row col-sm-12  mt-2">
                                 <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
                             </div>
                             <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
                                 <div class="w100"></div>
-                                <div class="column-2 mt-3">
-                                    <span class='fas fa-file-pdf fs30 color-red'></span>
+                                <div class="row col-sm-12  mt-2">
+                                    <span class='fas fa-file-pdf fs30 color-red mr-1'></span>
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
                                 </div>
                             </div>
-                            <div th:if="${log.attachedDoc}!=null" th:remove="tag">
+                            <div th:if="${log.attachedDocId}!=null" th:remove="tag">
                                 <div class="w100"></div>
-                                <div class="column-2 mt-3 d-flex">
-                                    <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>
-                                    <span class='mdi mdi-file-upload-outline fs30 color-green'></span>
+                                <div class="row col-sm-12  mt-2 d-flex">
+                                    <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>&nbsp;&nbsp;
+                                    <span class='mdi mdi-file-upload-outline fs30 color-green mr-1'></span>
                                     <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView} + '?id=' + ${log.attachedDocId}" th:text="${log.attachedDoc.registrationNumber}"></a>
                                 </div>
                             </div>
@@ -410,7 +419,7 @@
                             <button type="reset" class="btn btn-light m10-vertical m20-horizontal close" data-dismiss="modal">
                                 <span th:text="#{sys_cancel}">Бекор қилиш</span>
                             </button>
-                            <button type="submit" id="submitChange" class="btn btn-primary m10-vertical m20-horizontal">
+                            <button type="submit" class="btn btn-primary m10-vertical m20-horizontal">
                                 <span th:text="#{sys_save}">Қўшиш</span>
                             </button>
                         </div>

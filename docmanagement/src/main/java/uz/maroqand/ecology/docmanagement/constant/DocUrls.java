@@ -52,6 +52,9 @@ public class DocUrls {
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
     public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
+    public static final String InnerTask = Prefix + Inner + "/task";
+    public static final String InnerTaskSubmit = Prefix + Inner + "/task_submit";
+    public static final String InnerTaskUserName = Prefix + Inner + "/user_name";
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
