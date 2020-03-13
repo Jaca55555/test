@@ -287,8 +287,12 @@ public class InnerController {
         }
 
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
-
+        boolean IsExecuteForm = false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            IsExecuteForm = true;
+        }
         model.addAttribute("document", document);
+        model.addAttribute("IsExecuteForm", IsExecuteForm);
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
