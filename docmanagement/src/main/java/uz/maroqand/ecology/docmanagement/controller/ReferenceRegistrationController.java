@@ -85,10 +85,10 @@ public class ReferenceRegistrationController {
     @RequestMapping(value = DocUrls.ReferenceRegistrationList, method = RequestMethod.GET)
     public String getReferenceRegistrationListPage(Model model) {
 
-        model.addAttribute("newCount", taskService.countNew());
-        model.addAttribute("inProcess", taskService.countInProcess());
+        model.addAttribute("newCount", taskService.countNewForReference());
+        model.addAttribute("inProcess", taskService.countInProcessForReference());
         model.addAttribute("nearDate", taskService.countNearDate());
-        model.addAttribute("expired", taskService.countExpired());
+        model.addAttribute("expired", taskService.countExecutedForReference());
         model.addAttribute("executed", taskService.countExecuted());
         model.addAttribute("total", taskService.countTotal());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());

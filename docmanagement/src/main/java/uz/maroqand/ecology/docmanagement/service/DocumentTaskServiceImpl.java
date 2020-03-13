@@ -72,6 +72,17 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return taskRepository.save(task);
     }
 
+    @Override
+    public Integer countNewForReference() {
+        Set<Integer> status = new HashSet<>();
+        status.add(TaskStatus.Initial.getId());
+        Integer Initial=taskRepository.countByReceiverIdAndStatusForReference(status);
+        status.clear();
+        status.add(TaskStatus.New.getId());
+        Integer New=taskRepository.countByReceiverIdAndStatusForReference(status);
+        return New+Initial;
+    }
+
     public Integer countNew() {
         Set<Integer> status = new HashSet<>();
         status.add(TaskStatus.Initial.getId());
@@ -83,6 +94,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         Set<Integer> status = new LinkedHashSet<>();
         status.add(TaskStatus.InProgress.getId());
         return taskRepository.countByStatusInAndDeletedFalse(status);
+    }
+    public Integer countInProcessForReference() {
+        Set<Integer> status = new LinkedHashSet<>();
+        status.add(TaskStatus.InProgress.getId());
+        return taskRepository.countByReceiverIdAndStatusForReference(status);
     }
 
     public Integer countNearDate() {
@@ -102,8 +118,14 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         status.add(TaskStatus.Complete.getId());
         return taskRepository.countByStatusInAndDeletedFalse(status);
     }
+    public Integer countExecutedForReference() {
+        Set<Integer> status = new LinkedHashSet<>();
+        status.add(TaskStatus.Complete.getId());
+        return taskRepository.countByStatusInAndDeletedFalse(status);
+    }
 
     public Integer countTotal() {
+
         return taskRepository.countByDeletedFalse();
     }
 

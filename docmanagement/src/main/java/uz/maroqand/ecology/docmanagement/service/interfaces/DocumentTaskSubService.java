@@ -62,7 +62,9 @@ public interface DocumentTaskSubService {
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);
 
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);
+    Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses);
 
     Integer countByReceiverId(Integer receiverId);
-
+    Integer countByReceiverIdAll(Integer receiverId);
+    Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);
 }

@@ -68,17 +68,24 @@ public class ReferenceController {
         User user = userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-
+        Integer New=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        model.addAttribute("newDocumentCount", New);
+        statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
+        Integer InProgress=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
         statuses.add(TaskSubStatus.Waiting.getId());
+        Integer Waiting=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
         statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
+        Integer Agreement=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
+        Integer all=InProgress+Waiting+Agreement;
+        model.addAttribute("inProgressDocumentCount", all);
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
-        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
+        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(),calendar1.getTime()));
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -86,8 +93,9 @@ public class ReferenceController {
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.Checking.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
+
+        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses));
+        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverIdAll(user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());

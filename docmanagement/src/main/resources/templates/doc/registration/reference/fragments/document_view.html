@@ -53,7 +53,7 @@
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+        <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:object="${documentSub}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
             </div>

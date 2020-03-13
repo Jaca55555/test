@@ -27,15 +27,15 @@ public interface DocumentTaskService {
     List<DocumentTask> getByStatusNotInactive();
 
     Integer countNew();
-
+    Integer countNewForReference();
     Integer countInProcess();
-
+    Integer countInProcessForReference();
     Integer countNearDate();
 
     Integer countExpired();
 
     Integer countExecuted();
-
+    Integer countExecutedForReference();
     Integer countTotal();
 
     Integer getCountTaskStatus(Set<Integer> taskStatusSet);

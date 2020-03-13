@@ -262,5 +262,18 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         return documentTaskSubRepository.countByReceiverId(receiverId);
     }
 
+    @Override
+    public Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses) {
+        return documentTaskSubRepository.countByReceiverIdAndStatus(receiverId,statuses);
+    }
 
+    @Override
+    public Integer countByReceiverIdAll(Integer receiverId) {
+        return documentTaskSubRepository.countByReceiverIdAll(receiverId);
+    }
+
+    @Override
+    public Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now) {
+        return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqualFor(receiverId,now);
+    }
 }
