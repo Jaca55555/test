@@ -5,6 +5,11 @@
     <title>Title</title>
 </head>
 <body th:fragment="document_view">
+<style>
+    .modal-dialog{
+        max-width: 600px;
+    }
+</style>
 
 <div class="card parent-card">
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
@@ -38,6 +43,7 @@
         </div>
         <div class="flex-center">
             <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
+<!--            <a href="#" data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>-->
             <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
@@ -137,5 +143,60 @@
     </div>
 </div>
 
+<!--&lt;!&ndash; [ Modals ] start &ndash;&gt;
+<div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog" aria-resolutionModal="modal1" aria-hidden="true" >
+    <div class="modal-dialog col-xl-6 col-12" role="document" th:object="${resolutionDocument}">
+        <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
+                    <h4 th:text="*{organizationName}"></h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mt-2" th:if="*{controlUser!=''}">
+                        <h5 th:text="*{executeFormName}"></h5>
+                        <h5 style="font-weight: bold" th:text="*{controlUser}"></h5>
+                    </div>
+                    <h5 >
+                        <span  th:text="#{doc_inner.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
+                        <span th:text="*{content}"></span>
+                    </h5>
+                    <br/><br/>
+                    <div class="text-center mt-2"  th:if="*{#lists.size(performers)>0}">
+                        <h5 th:text="#{doc_inner.performers}"></h5>
+                        <h5 style="font-weight: bold"  >
+                            <span th:each="performer : ${resolutionDocument.performers}" th:text="${performer}+',  '"></span>
+                        </h5>
+                    </div>
+                    <br/>
+                    <div class="text-right mt-2"  >
+                        <h5 th:text="#{doc_inner.chief}"></h5>
+                        <h5 style="font-weight: bold" th:text="*{managerName}" ></h5>
+                    </div>
+
+                    <br/>
+                    <div class="row mt-2"  >
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width: 10%; text-align: right"><span th:text="#{sys_facture.date}">Data</span>:</td>
+                                <td style="width: 20%" class="pl-2"><span th:text="*{registrationDate}"></span></td>
+                                <td style="width: 70%"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 10%; text-align: right"><span>№</span>:
+                                <td style="width: 20%" class="pl-2"><span th:text="*{registrationNumber}"></span></td>
+                                <td style="width: 70%"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 10%; text-align: right"><span th:text="#{sys.doc_executeDate}">CROK</span>:</td>
+                                <td style="width: 20%" class="pl-2"><span th:text="*{dueDate}"></span></td>
+                                <td style="width: 70%"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
 </body>
 </html>

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
+import uz.maroqand.ecology.docmanagement.dto.ResolutionDTO;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -86,5 +87,7 @@ public interface DocumentTaskService {
     String getDueTranslateNameOrColor(Integer id,boolean taskOrsubTask, String nameOrColor,String locale);
 
     StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId);
+
+    ResolutionDTO resolutionCreateByTaskId(Integer taskId,String locale);
 
 }

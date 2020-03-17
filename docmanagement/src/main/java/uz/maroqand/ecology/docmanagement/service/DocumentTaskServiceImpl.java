@@ -7,14 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
+import uz.maroqand.ecology.docmanagement.dto.ResolutionDTO;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -40,13 +42,15 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     private final DocumentService documentService;
     private final HelperService helperService;
     private final DocumentTaskSubService taskSubService;
+    private final UserService userService;
 
     @Autowired
-    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService, HelperService helperService, DocumentTaskSubService taskSubService) {
+    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService, HelperService helperService, DocumentTaskSubService taskSubService, UserService userService) {
         this.taskRepository = taskRepository;
         this.documentService = documentService;
         this.helperService = helperService;
         this.taskSubService = taskSubService;
+        this.userService = userService;
     }
 
     @Override
@@ -336,6 +340,38 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             }
         }
         return statisticInner;
+    }
+
+    @Override
+    public ResolutionDTO resolutionCreateByTaskId(Integer taskId,String locale) {
+        ResolutionDTO resolutionDTO = new ResolutionDTO();
+        DocumentTask documentTask = getById(taskId);
+        if (documentTask==null || documentTask.getDocumentId()==null) return resolutionDTO;
+        Document document = documentTask.getDocument();
+        if (document==null) return resolutionDTO;
+        if (document.getOrganization()!=null){
+            resolutionDTO.setOrganizationName(document.getOrganization().getNameTranslation(locale));
+        }
+        if (documentTask.getChiefId()!=null){
+            resolutionDTO.setControlUser(documentTask.getChief().getShortName());
+        }
+        resolutionDTO.setExecuteFormName(document.getExecuteForm()!=null?helperService.getTranslation(document.getExecuteForm().getName(),locale):"");
+        resolutionDTO.setContent(documentTask.getContent());
+        List<DocumentTaskSub> documentTaskSubList = taskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
+        List<String> performers = new ArrayList<>();
+        for (DocumentTaskSub documentTaskSub:documentTaskSubList){
+            if (documentTaskSub.getReceiverId()!=null){
+                performers.add(documentTaskSub.getReceiver().getShortName());
+            }
+
+        }
+        resolutionDTO.setPerformers(performers);
+        User manager = userService.findById(document.getManagerId());
+        resolutionDTO.setManagerName(manager!=null?manager.getFullName():"");
+        resolutionDTO.setRegistrationNumber(document.getRegistrationNumber());
+        resolutionDTO.setRegistrationDate(document.getRegistrationDate()!=null?Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"");
+        resolutionDTO.setDueDate(documentTask.getDueDate()!=null?Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"");
+        return resolutionDTO;
     }
 
     private static Specification<DocumentTask> getSpesification(

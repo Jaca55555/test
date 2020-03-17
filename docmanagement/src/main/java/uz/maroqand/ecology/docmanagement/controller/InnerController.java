@@ -237,9 +237,11 @@ public class InnerController {
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
 
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
         model.addAttribute("documentLog", new DocumentLog());
+        model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(documentTask.getId(),locale));
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);
