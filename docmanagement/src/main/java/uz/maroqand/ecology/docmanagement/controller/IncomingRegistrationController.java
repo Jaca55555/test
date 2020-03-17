@@ -203,11 +203,11 @@ public class IncomingRegistrationController {
     @RequestMapping(value = DocUrls.IncomingRegistrationNewList, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getIncomingRegistrationNewListAjax(Pageable pageable){
-        System.out.println(pageable.getSort());
-
+        User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        docFilterDTO.setChief(user.getId());
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();

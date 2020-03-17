@@ -19,6 +19,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     List<DocumentTaskSub> findByDocumentIdAndDeletedFalseOrderByIdAsc(Integer documentId);
 
+    List<DocumentTaskSub> findByReceiverIdAndDeletedFalseOrderByIdAsc(Integer receiverId);
+
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
 
     List<DocumentTaskSub> findByTaskIdAndLevelAndDeletedFalse(Integer documentId,Integer level);

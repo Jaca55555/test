@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.Date;
@@ -65,6 +66,9 @@ public interface DocumentTaskSubService {
     Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses);
 
     Integer countByReceiverId(Integer receiverId);
+
+    StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId);
+
     Integer countByReceiverIdAll(Integer receiverId);
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);
 }
