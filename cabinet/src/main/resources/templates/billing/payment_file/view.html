@@ -114,7 +114,7 @@
                                                 <label class="col-form-label" th:text="#{sys_invoice.amount}"></label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.amount}">
+                                                <input class="form-control" readonly="readonly" th:value="${#numbers.formatDecimal(paymentFile.amount, 1, 'WHITESPACE', 2, 'POINT' )}">
                                             </div>
                                         </div>
                                         <div class="form-group row" >

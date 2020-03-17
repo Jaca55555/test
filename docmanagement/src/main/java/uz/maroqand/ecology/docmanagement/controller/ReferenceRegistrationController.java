@@ -22,7 +22,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
+import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
@@ -30,13 +30,6 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
-
-/**
- * Created by Namazov Jamshid
- * email: <jamwid07@mail.ru>
- * date: 24.12.2019
- */
-
 @Controller
 public class ReferenceRegistrationController {
 
@@ -92,10 +85,10 @@ public class ReferenceRegistrationController {
     @RequestMapping(value = DocUrls.ReferenceRegistrationList, method = RequestMethod.GET)
     public String getReferenceRegistrationListPage(Model model) {
 
-        model.addAttribute("newCount", taskService.countNew());
-        model.addAttribute("inProcess", taskService.countInProcess());
+        model.addAttribute("newCount", taskService.countNewForReference());
+        model.addAttribute("inProcess", taskService.countInProcessForReference());
         model.addAttribute("nearDate", taskService.countNearDate());
-        model.addAttribute("expired", taskService.countExpired());
+        model.addAttribute("expired", taskService.countExecutedForReference());
         model.addAttribute("executed", taskService.countExecuted());
         model.addAttribute("total", taskService.countTotal());
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
@@ -108,7 +101,7 @@ public class ReferenceRegistrationController {
     @RequestMapping(value = DocUrls.ReferenceRegistrationList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getReferenceRegistrationList(
-            IncomingRegFilter incomingRegFilter,
+            ReferenceRegFilterDTO referenceRegFilterDTO,
             Pageable pageable
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -118,7 +111,7 @@ public class ReferenceRegistrationController {
         Set<Integer> status = null;
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-        Integer tabFilter = incomingRegFilter.getTabFilter()!=null?incomingRegFilter.getTabFilter():1;
+        Integer tabFilter = referenceRegFilterDTO.getTabFilter()!=null?referenceRegFilterDTO.getTabFilter():1;
         switch (tabFilter){
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -150,8 +143,8 @@ public class ReferenceRegistrationController {
             default:
                 break;//Жами
         }
-        //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
+        //todo documentTypeId=4
+        Page<DocumentTask> documentTaskPage = taskService.findFilteredReference(user.getOrganizationId(), 4,referenceRegFilterDTO, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -249,8 +242,8 @@ public class ReferenceRegistrationController {
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         model.addAttribute("specialControll", true);
-        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
-        model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
+        model.addAttribute("special_controll_url", DocUrls.ReferenceSpecialControll);
+        model.addAttribute("cancel_url",DocUrls.ReferenceRegistrationList );
         return DocTemplates.ReferenceRegistrationView;
     }
 
@@ -260,7 +253,7 @@ public class ReferenceRegistrationController {
         model.addAttribute("document", new Document());
         model.addAttribute("documentSub", new DocumentSub());
 
-        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
+//        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -286,7 +279,7 @@ public class ReferenceRegistrationController {
             @RequestParam(name = "content", required = false) String content,
             @RequestParam(name = "address" ) String address,
             @RequestParam(name = "additionalDocumentId", required = false) Integer additionalDocumentId,
-            @RequestParam(name = "performerName", required = false) String performerName,
+            @RequestParam(name = "fullName", required = false) String fullName,
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
@@ -311,7 +304,6 @@ public class ReferenceRegistrationController {
         document.setContentId(contentId);
         document.setContent(content);
         document.setAdditionalDocumentId(additionalDocumentId);
-        document.setPerformerName(performerName);
         document.setPerformerPhone(performerPhone);
         document.setManagerId(managerId);
         document.setControlId(controlId);
@@ -329,7 +321,7 @@ public class ReferenceRegistrationController {
         document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
         document.setRegistrationNumber(docRegNumber);
-        document = documentService.createReference(1, document, user);
+        document = documentService.createReference(4, document, user);
 
         Integer documentOrganizationId1;
         try {
@@ -345,6 +337,7 @@ public class ReferenceRegistrationController {
         DocumentSub documentSub = new DocumentSub();
         documentSub.setCommunicationToolId(communicationToolId);
         documentSub.setOrganizationId(documentOrganizationId1);
+        documentSub.setFullName(fullName);
         documentSub.setAddress(address);
         documentSubService.create(document.getId(), documentSub, user);
 
@@ -362,6 +355,7 @@ public class ReferenceRegistrationController {
             return "redirect:" + DocUrls.ReferenceRegistrationList;
         }
 
+
         DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
         model.addAttribute("document", document);
         model.addAttribute("documentSub",documentSub);
@@ -375,13 +369,14 @@ public class ReferenceRegistrationController {
         }
         if (documentSub.getOrganizationId()!=null){
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
+
         }
+
         model.addAttribute("document", document);
         model.addAttribute("additionalDocument", additionalDocument);
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
-
-        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
+//        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -432,7 +427,7 @@ public class ReferenceRegistrationController {
             documentOrganizationId1 = organizationService.create(documentOrganization).getId();
         }
 
-        documentService.updateAllparamert(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
+        documentService.updateAllParameters(document,docSubId,executeForm,controlForm,files,communicationToolId,documentOrganizationId1,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),user);
 
         if(httpServletRequest.getRequestURL().toString().equals(DocUrls.ReferenceRegistrationEditTask)){
             return "redirect:" + DocUrls.ReferenceRegistrationTask + "?id=" + document1.getId();
@@ -554,31 +549,6 @@ public class ReferenceRegistrationController {
         return response;
     }
 
-//    @GetMapping(value = DocUrls.FileDownload)
-//    @ResponseBody
-//    public ResponseEntity<Resource> downloadFile(@RequestParam(name = "id")Integer id) {
-//        File file = fileService.findById(id);
-//        if (file == null) {
-//            return null;
-//        } else {
-//            return fileService.getFileAsResourceForDownloading(file);
-//        }
-//    }
 
-    /*@GetMapping(value = DocUrls.IncomeMailAddTask)
-    public String getAddTaskPage(
-            Model model,
-            @RequestParam(name = "id")Integer id
-    ) {
-        Document document = documentService.getById(id);
-        if (document == null) {
-            return  "redirect:" + DocUrls.IncomeMailList;
-        }
-
-        model.addAttribute("doc", document);
-        model.addAttribute("task", document.getTask());
-        model.addAttribute("attends", userService.getEmployeeList());
-        return DocTemplates.IncomeMailAddTask;
-    }*/
 
 }

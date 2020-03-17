@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -82,6 +84,11 @@ public class DocController {
         model.addAttribute("innerCount", documentService.getCountersByType(DocumentTypeEnum.InnerDocuments.getId()));
         model.addAttribute("outgoingCount", documentService.getCountersByType(DocumentTypeEnum.OutgoingDocuments.getId()));
         model.addAttribute("appealCount", documentService.getCountersByType(DocumentTypeEnum.AppealDocuments.getId()));
+
+        Role role = userService.getCurrentUserFromContext().getRole();
+        String specifiedView = role.getPermissions().contains(Permissions.DOC_MANAGEMENT_REGISTER) ?DocUrls.IncomingRegistrationView : DocUrls.IncomingView;
+        model.addAttribute("viewLink_", specifiedView);
+
         return DocTemplates.Dashboard;
     }
 
@@ -130,10 +137,21 @@ public class DocController {
         Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, dueDateBegin, dueDateEnd, null, statuses, null, null, null,pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
+
+        Role role = userService.getCurrentUserFromContext().getRole();
+        Boolean hasPermission = role.getPermissions().contains(Permissions.DOC_MANAGEMENT_REGISTER);
+
+        Set<Integer> collectedIds = new TreeSet<>();
+        if(hasPermission)
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentTask.getDocument();
+            if(collectedIds.contains(document.getId()))
+                continue;
+            else
+                collectedIds.add(document.getId());
+
             JSONArray.add(new Object[]{
-                    documentTask.getId(),
+                    document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent(),
@@ -145,9 +163,35 @@ public class DocController {
                     taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
             });
         }
+        else{
+            for (DocumentTask documentTask : documentTaskList) {
+                Document document = documentTask.getDocument();
 
+                if(collectedIds.contains(document.getId()))
+                    continue;
+                else
+                    collectedIds.add(document.getId());
+
+                List<DocumentTaskSub> taskSubs = taskSubService.getListByDocId(document.getId());
+
+                for(DocumentTaskSub sub: taskSubs){
+                    JSONArray.add(new Object[]{
+                            sub.getId(),
+                            document.getRegistrationNumber(),
+                            document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                            document.getContent(),
+                            documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
+                            documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
+                            helperService.getTranslation(documentTask.getStatusName(documentTask.getStatus()),locale),
+                            documentTask.getContent(),
+                            documentTask.getStatus(),
+                            taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
+                    });
+                }
+            }
+        }
         result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
+        result.put("recordsFiltered", JSONArray.size()); //Filtered elements
         result.put("data", JSONArray);
         return result;
     }

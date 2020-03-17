@@ -103,26 +103,8 @@
             </div>
             <div class="col-md-6 col-sm-12">
                 <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
-                <div class="flex-start mobile-flex-center">
-                    <div class="office-card-file" th:each="file: ${document.contentFiles}">
-                        <div class="card dashboard-card">
-                            <div class="file-icon-container-small color-blue">
-                                <span class="fas fa-file-word"></span>
-                            </div>
-                            <div class="card-body" style="display: flex;text-align: left;align-items: center;">
-                                <a class="view-pdf" th:if="${document.insidePurpose == false || document.insidePurpose == null}" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
-                                    <div th:id="'file_name_'+${file.id}">
-                                        <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
-                                    </div>
-                                </a>
-                                <div class="view-pdf" th:if="${document.insidePurpose == true}">
-                                    <div th:id="'file_name_'+${file.id}">
-                                        <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex-start mobile-flex-center" id="fileContainer">
+
                 </div>
                 <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
                     <button type="button" class="btn btn-rounded btn-danger fs11">
@@ -138,6 +120,81 @@
         </div>
     </div>
 </div>
+<script src="/static/doc/assets/js/vendor-all.min.js"></script>
+<script th:inline="javascript">
+    let files = [[${document.contentFiles}]];
+</script>
+<script th:inline="none">
+    console.log(files)
+    function displayFiles(files){
+        for(let i = 0; i < files.length; i++){
+            let fileName= files[i].name;
+            let extensionAndColor = detectExtensionAndColor(files[i].extension)
+            $('#fileContainer').append(`
+                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
+                                <div class="card dashboard-card">
+                                    <div class="file-icon-container-small ${extensionAndColor.color}"><span
+                                            class="fas fa-file${extensionAndColor.extension}"></span></div>
+                                    <div class="card-body"
+                                         style="padding:1.25rem;">
+                                        <h6 class="card-title" >` + fileNameSubString(fileName) + `</h6>
+                                    </div>
+                                </div>
+                            </div>
+            `);
+        }
+    }
+    function detectExtensionAndColor(extension){
+        let data = {};
+        switch (extension) {
+            case 'jpg': case 'png': case 'bmp':
+                data.extension = '-image';
+                data.color = 'color-yellow';
+                break;
+            case 'pdf':
+                data.extension = '-pdf';
+                data.color = 'color-red';
+                break;
+            case 'xlsx': case 'xls':
+                data.extension = "-excel";
+                data.color = "color-green";
+                break;
+            case 'doc':
+            case 'docx':
+                data.extension = "-word";
+                data.color = "color-blue";
+                break;
+            case 'pptx':
+                data.extension = '-powerpoint';
+                data.color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                data.extension = '-archive';
+                data.color = 'color-purple';
+                break;
+            default:
+                data.extension = "";
+                data.color = "color-gray";
+        }
+        return data;
+    }
 
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function fileNameSubString(fileName) {
+        let lastIndex = fileName.lastIndexOf('.');
+        let subStringName = fileName.substring(0,lastIndex);
+        let getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length > 10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }
+    displayFiles(files);
+
+</script>
 </body>
 </html>

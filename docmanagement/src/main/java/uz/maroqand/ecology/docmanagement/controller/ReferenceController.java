@@ -10,65 +10,82 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
-import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import java.util.*;
 
+/**
+ * Created by Utkirbek Boltaev on 13.12.2019.
+ * (uz) Kiruvchi xatlar
+ */
 @Controller
-public class InnerController {
+public class ReferenceController {
 
     private final UserService userService;
+    private final PositionService positionService;
+    private final HelperService helperService;
     private final DocumentService documentService;
     private final DocumentSubService documentSubService;
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
-    private final DocumentViewService documentViewService;
-    private final JournalService journalService;
-    private final CommunicationToolService communicationToolService;
-    private final DocumentDescriptionService documentDescriptionService;
-    private final DocumentHelperService documentHelperService;
     private final DocumentLogService documentLogService;
+    private final DocumentOrganizationService documentOrganizationService;
+    private final DocumentDescriptionService documentDescriptionService;
 
-    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
+    public ReferenceController(
+            UserService userService,
+            PositionService positionService,
+            HelperService helperService,
+            DocumentService documentService,
+
+            DocumentSubService documentSubService,
+            DocumentTaskService documentTaskService,
+            DocumentTaskSubService documentTaskSubService,
+            DocumentLogService documentLogService,
+            DocumentOrganizationService documentOrganizationService, DocumentDescriptionService documentDescriptionService) {
         this.userService = userService;
+        this.positionService = positionService;
+        this.helperService = helperService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.documentTaskService = documentTaskService;
         this.documentTaskSubService = documentTaskSubService;
-        this.documentViewService = documentViewService;
-        this.journalService = journalService;
-        this.communicationToolService = communicationToolService;
-        this.documentDescriptionService = documentDescriptionService;
-        this.documentHelperService = documentHelperService;
         this.documentLogService = documentLogService;
+        this.documentOrganizationService = documentOrganizationService;
+        this.documentDescriptionService = documentDescriptionService;
     }
 
-    @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
-    public String getInnerListPage(Model model) {
+    @RequestMapping(value = DocUrls.ReferenceList, method = RequestMethod.GET)
+    public String getReferenceListPage(Model model) {
         User user = userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
-
         statuses.add(TaskSubStatus.New.getId());
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        statuses = new LinkedHashSet<>();
+        Integer New=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        model.addAttribute("newDocumentCount", New);
+        statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
+        Integer InProgress=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
         statuses.add(TaskSubStatus.Waiting.getId());
+        Integer Waiting=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
         statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
+        Integer Agreement=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        statuses.clear();
+        Integer all=InProgress+Waiting+Agreement;
+        model.addAttribute("inProgressDocumentCount", all);
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
-        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
+        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(),calendar1.getTime()));
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -76,33 +93,31 @@ public class InnerController {
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.Checking.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
+
+        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses));
+        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverIdAll(user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
-        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
-        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        return DocTemplates.InnerList;
+        return DocTemplates.ReferenceList;
     }
 
-    @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = DocUrls.ReferenceList, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public HashMap<String, Object> getInnerListAjax(
-            @RequestParam(name = "documentOrganizationId",required = false,defaultValue = "") Integer documentOrganizationId,
-            @RequestParam(name = "docRegNumber",required = false,defaultValue = "") String docRegNumber,
-            @RequestParam(name = "registrationNumber",required = false,defaultValue = "") String registrationNumber,
-            @RequestParam(name = "dateBegin",required = false,defaultValue = "") String dateBeginStr,
-            @RequestParam(name = "dateEnd",required = false,defaultValue = "") String dateEndStr,
-            @RequestParam(name = "taskContent",required = false,defaultValue = "") String taskContent,
-            @RequestParam(name = "content",required = false,defaultValue = "") String content,
-            @RequestParam(name = "performerId",required = false,defaultValue = "") Integer performerId,
-            @RequestParam(name = "taskSubType",required = false,defaultValue = "") Integer taskSubType,
-            @RequestParam(name = "taskSubStatus",required = false,defaultValue = "") Integer taskSubStatus,
-            @RequestParam(name = "tabFilter",required = false,defaultValue = "") Integer tabFilter,
+    public HashMap<String, Object> getReferenceRegistrationList(
+            @RequestParam(name = "documentOrganizationId",required = false) Integer documentOrganizationId,
+            @RequestParam(name = "docRegNumber") String docRegNumber,
+            @RequestParam(name = "registrationNumber") String registrationNumber,
+            @RequestParam(name = "dateBegin") String dateBeginStr,
+            @RequestParam(name = "dateEnd") String dateEndStr,
+            @RequestParam(name = "taskContent") String taskContent,
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "performerId") Integer performerId,
+            @RequestParam(name = "taskSubType") Integer taskSubType,
+            @RequestParam(name = "taskSubStatus") Integer taskSubStatus,
+            @RequestParam(name = "tabFilter") Integer tabFilter,
+            @RequestParam(name = "fullName", required = false) String fullName,
             Pageable pageable
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -114,8 +129,6 @@ public class InnerController {
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-
-
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
@@ -150,7 +163,7 @@ public class InnerController {
                 break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
-                /*receiverId=null;*/
+//                receiverId=null;
                 pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
                         Sort.Order.asc("status"),
                         Sort.Order.desc("dueDate")
@@ -161,7 +174,8 @@ public class InnerController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                3, //todo documentTypeId=3
+                4, //todo documentTypeId=1
+
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,
@@ -182,20 +196,30 @@ public class InnerController {
                 specialControll,
                 pageable
         );
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
+        String locale = LocaleContextHolder.getLocale().getLanguage();
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
-            Document document = documentService.getById(documentTaskSub.getDocumentId());
+            Document document = documentTaskSub.getDocument();
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentSub.getOrganization();
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
+            }
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
-                    documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
-                    documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
-                    documentTaskSub.getStatus()!=null ? documentHelperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    docContent,
+                    documentTaskSub.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
+                    documentTaskSub.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
+                    documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
@@ -209,27 +233,36 @@ public class InnerController {
         return result;
     }
 
-    @RequestMapping(DocUrls.InnerView)
-    public String getInnerViewPage(
-            @RequestParam(name = "id")Integer id,
+    @RequestMapping(DocUrls.ReferenceView)
+    public String getIncomingViewPage(
+            @RequestParam(name = "id")Integer taskSubId,
             Model model
     ) {
-        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
-        if (documentTaskSub == null) {
-            return "redirect:" + DocUrls.InnerList;
+        DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
+        if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
+            return "redirect:" + DocUrls.ReferenceList;
         }
-
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
-
-        Document document = documentService.getById(documentTaskSub.getDocumentId());
-        if (document == null) {
-            return "redirect:" + DocUrls.InnerList;
+        DocumentTask task = documentTaskService.getById(documentTaskSub.getTaskId());
+        if (task == null || task.getDocumentId()==null) {
+            return "redirect:" + DocUrls.ReferenceList;
         }
 
-        DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());
+        Document document = documentService.getById(task.getDocumentId());
+        if (document == null) {
+            return "redirect:" + DocUrls.ReferenceList;
+        }
+        DocumentSub documentSub =  documentSubService.getByDocumentIdForIncoming(document.getId());
+
+        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
+            User user = userService.getCurrentUserFromContext();
+            if (user.getId().equals(task.getPerformerId())) {
+                document.setInsidePurpose(Boolean.FALSE);
+            }
+        }
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -238,30 +271,29 @@ public class InnerController {
         List<Integer> docTypes = new ArrayList<>();
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
+        docTypes.add(DocumentTypeEnum.IncomingDocuments.getId());
 
-        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
+        List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("documentSub",documentSub);
+        model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
-        model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-        model.addAttribute("special_controll_url", DocUrls.InnerRegistrationControll);
-        model.addAttribute("cancel_url",DocUrls.InnerList );
+        model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), task.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
+        System.out.println("check getting additional doc list");
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        System.out.println("-------------");
-
-        return DocTemplates.InnerView;
+        return DocTemplates.ReferenceView;
     }
 
-    @RequestMapping(value = DocUrls.InnerTask)
+    @RequestMapping(value = DocUrls.ReferenceTask)
     public String addTask(
             @RequestParam(name = "id")Integer taskSubId,
             Model model
@@ -269,15 +301,15 @@ public class InnerController {
         User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
         if (documentTaskSub == null) {
-            return  "redirect:" + DocUrls.InnerList;
+            return  "redirect:" + DocUrls.ReferenceList;
         }
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
-            return  "redirect:" + DocUrls.InnerList;
+            return  "redirect:" + DocUrls.ReferenceList;
         }
         DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(documentTaskSub.getTaskId(),document.getId());
         if (documentTask == null) {
-            return  "redirect:" + DocUrls.InnerList;
+            return  "redirect:" + DocUrls.ReferenceList;
         }
 
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
@@ -287,24 +319,20 @@ public class InnerController {
         }
 
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
-        boolean IsExecuteForm = false;
-        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
-            IsExecuteForm = true;
-        }
+
         model.addAttribute("document", document);
-        model.addAttribute("IsExecuteForm", IsExecuteForm);
-        model.addAttribute("documentTask", documentTask);
+        model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("action_url", DocUrls.InnerTaskSubmit);
-        model.addAttribute("back_url", DocUrls.InnerView+"?id=" + documentTaskSub.getId());
-        return DocTemplates.InnerTask;
+        model.addAttribute("action_url", DocUrls.ReferenceTaskSubmit);
+        model.addAttribute("back_url", DocUrls.ReferenceView+"?id=" + documentTaskSub.getId());
+        return DocTemplates.ReferenceTask;
     }
 
-    @RequestMapping(value = DocUrls.InnerTaskSubmit)
-    public String innerTaskSubmit(
+    @RequestMapping(value = DocUrls.ReferenceTaskSubmit)
+    public String referenceTaskSubmit(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "taskId") Integer taskId,
             @RequestParam(name = "content") String content,
@@ -314,7 +342,7 @@ public class InnerController {
         User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(id);
         if (documentTaskSub==null){
-            return "redirect:" + DocUrls.InnerList;
+            return "redirect:" + DocUrls.ReferenceList;
         }
 
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
@@ -324,7 +352,7 @@ public class InnerController {
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document==null){
-            return "redirect:" + DocUrls.InnerList;
+            return "redirect:" + DocUrls.ReferenceList;
         }
 
         System.out.println("id=" + id);
@@ -333,7 +361,7 @@ public class InnerController {
 
         DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
         if (documentTask==null){
-            return "redirect:" + DocUrls.InnerList;
+            return "redirect:" + DocUrls.ReferenceList;
         }
         Integer userId = null;
         Integer performerType = null;
@@ -363,10 +391,10 @@ public class InnerController {
             }
         }
 
-        return "redirect:" + DocUrls.InnerView + "?id=" + documentTaskSub.getId();
+        return "redirect:" + DocUrls.ReferenceView + "?id=" + documentTaskSub.getId();
     }
 
-    @RequestMapping(value = DocUrls.InnerTaskUserName)
+    @RequestMapping(value = DocUrls.ReferenceTaskUserName)
     @ResponseBody
     public HashMap<String,Object> getUserName(@RequestParam(name = "id") Integer userId){
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -385,4 +413,43 @@ public class InnerController {
         return result;
     }
 
+    @RequestMapping(DocUrls.ReferenceTaskChange)
+    @ResponseBody
+    public HashMap<String, Object> changeTaskStatusReference(
+            @RequestParam(name = "taskStatus")Integer status,
+            @RequestParam(name = "taskSubId")Integer taskSubId,
+            DocumentLog documentLog
+    ) {
+        HashMap<String, Object> response = new HashMap<>();
+        User user = userService.getCurrentUserFromContext();
+
+        DocumentTaskSub taskSub = documentTaskSubService.getById(taskSubId);
+        TaskSubStatus oldStatus = TaskSubStatus.getTaskStatus(taskSub.getStatus());
+        TaskSubStatus newStatus = TaskSubStatus.getTaskStatus(status);
+        taskSub.setStatus(status);
+        taskSub.setContent(documentLog.getContent());
+        taskSub.setUpdateById(user.getId());
+        taskSub.setAdditionalDocumentId(documentLog.getAttachedDocId());
+        taskSub = documentTaskSubService.update(taskSub);
+        String locale = LocaleContextHolder.getLocale().getLanguage();
+        String logAuthorPos = positionService.getById(user.getPositionId()).getName();
+        DocumentLog documentLog1 =  documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),null,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
+
+        DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
+        if (documentTask!=null && documentTask.getPerformerId()!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
+            documentTask.setStatus(TaskStatus.Checking.getId());
+            documentTaskService.update(documentTask);
+        }
+        Document document = documentService.getById(documentLog1.getAttachedDocId());
+        response.put("task", taskSub);
+        response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
+        response.put("status", "success");
+        response.put("log", documentLog1);
+        response.put("logCreateName", user.getFullName());
+        response.put("logCreatePosition", logAuthorPos);
+        response.put("registrationNumber", document!=null?document.getRegistrationNumber():"");
+        response.put("beforeStatus", helperService.getTranslation(documentLog1.getBeforeStatus(),locale));
+        response.put("afterStatus", helperService.getTranslation(documentLog1.getAfterStatus(),locale));
+        return response;
+    }
 }

@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.repository;
 
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 
@@ -25,11 +26,11 @@ public interface DocumentTaskRepository extends DataTablesRepository<DocumentTas
     DocumentTask findByIdAndDocumentIdAndDeletedFalse(Integer id, Integer docId);
 
     Integer countByStatusInAndDeletedFalse(Set<Integer> status);
-
     Integer countByDueDateBetweenAndStatusNotAndDeletedFalse(Date begin, Date end, Integer statusId);
 
     Integer countByDueDateBeforeAndStatusNotAndDeletedFalse(Date now, Integer statusId);
 
     Integer countByDeletedFalse();
-
+    @Query("SELECT COUNT(d) FROM DocumentTask d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND  d.status=?1")
+    Integer countByReceiverIdAndStatusForReference(Set<Integer> statuses);
 }

@@ -70,7 +70,8 @@ public class InnerRegistrationController {
         model.addAttribute("greaterDeadlineDocumentCount", documentTaskService.countExpired());
         model.addAttribute("checkingDocumentCount", documentTaskService.countExecuted());
         model.addAttribute("allDocumentCount", documentTaskService.countTotal());
-
+        model.addAttribute("executeForms", ControlForm.getControlFormList());
+        model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("chief", userService.getEmployeeList());
         model.addAttribute("executes", userService.getEmployeeList());
         return DocTemplates.InnerRegistrationList;
@@ -161,11 +162,22 @@ public class InnerRegistrationController {
         String locale = LocaleContextHolder.getLocale().getLanguage();
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
+            }
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+            docContent+=document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     documentTask.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
+                    docContent,
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
@@ -188,39 +200,36 @@ public class InnerRegistrationController {
             Model model
     ) {
 
-        DocumentTask documentTask = documentTaskService.getById(id);
-        if (documentTask == null) {
-            return "redirect:" + DocUrls.InnerRegistrationList;
-        }
-        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
-            documentTask.setStatus(TaskStatus.InProgress.getId());
-            documentTaskService.update(documentTask);
-        }
+        System.out.println("id==" + id);
 
-        Document document = documentService.getById(documentTask.getDocumentId());
+
+        Document document = documentService.getById(id);
         if (document == null) {
             return "redirect:" + DocUrls.InnerRegistrationList;
         }
 
+        List<DocumentTask> documentTasks = documentTaskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
         model.addAttribute("documentLog", new DocumentLog());
-        model.addAttribute("task", documentTask);
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+        model.addAttribute("documentTasks", documentTasks);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
-        model.addAttribute("specialControll", true);
-        model.addAttribute("special_controll_url", DocUrls.IncomingSpecialControll);
+        model.addAttribute("special_controll_url", DocUrls.InnerRegistrationControll);
         model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
         return DocTemplates.InnerRegistrationView;
     }
 
     @RequestMapping(DocUrls.InnerRegistrationNew)
     public String getInnerRegistrationNewPage(Model model) {
-        model.addAttribute("document", new Document());
+        Document document = new Document();
+        document.setControlForm(ControlForm.FormNot);
+        document.setExecuteForm(ExecuteForm.Performance);
+        model.addAttribute("document", document);
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -229,6 +238,7 @@ public class InnerRegistrationController {
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("action_url", DocUrls.InnerRegistrationNew);
+        model.addAttribute("back_url", DocUrls.InnerRegistrationList);
         return DocTemplates.InnerRegistrationNew;
     }
 
@@ -259,6 +269,7 @@ public class InnerRegistrationController {
             document.setControlForm(controlForm);
         }
         document.setStatus(DocumentStatus.New);
+        document.setSpecialControll(Boolean.FALSE);
         documentService.createDoc(3, document, user);
 
         DocumentSub documentSub = new DocumentSub();
@@ -354,58 +365,43 @@ public class InnerRegistrationController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-        DocumentTask documentTask = documentTaskService.getById(id);
-        if (documentTask == null) {
-            return  "redirect:" + DocUrls.InnerRegistrationList;
-        }
 
-        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
-            documentTask.setStatus(TaskStatus.InProgress.getId());
-            documentTaskService.update(documentTask);
-        }
-
-        Document document = documentService.getById(documentTask.getDocumentId());
+        Document document = documentService.getById(id);
         if (document == null) {
             return  "redirect:" + DocUrls.InnerRegistrationList;
         }
-        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
-            User user = userService.getCurrentUserFromContext();
-            if (user.getId().equals(documentTask.getPerformerId())) {
-                document.setInsidePurpose(Boolean.FALSE);
-            }
-        }
 
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-
+        boolean IsExecuteForm = false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            IsExecuteForm = true;
+        }
         model.addAttribute("userList", userList);
-        model.addAttribute("documentTask", documentTask);
         model.addAttribute("document", document);
+        model.addAttribute("IsExecuteForm", IsExecuteForm);
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
-        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + documentTask.getId());
+        model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
         return DocTemplates.InnerRegistrationTask;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationTaskSubmit)
     public String innerRegistrationTaskSubmit(
             @RequestParam(name = "content") String content,
-            @RequestParam(name = "taskId") Integer taskId,
+            @RequestParam(name = "id") Integer id,
             @RequestParam(name = "docRegDateStr") String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
 
         User user = userService.getCurrentUserFromContext();
 
-        DocumentTask documentTask = documentTaskService.getById(taskId);
-        if (documentTask==null){
-            return "redirect:" + DocUrls.InnerRegistrationList;
+        Document document = documentService.getById(id);
+        if (document == null){
+            return "redirect:" + DocUrls.IncomingRegistrationList;
         }
 
-        if (documentTask.getStatus().equals(TaskStatus.New.getId())){
-            documentTask.setStatus(TaskStatus.InProgress.getId());
-            documentTaskService.update(documentTask);
-        }
+        DocumentTask documentTask = documentTaskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
 
         Integer userId = null;
         Integer performerType = null;
@@ -438,8 +434,12 @@ public class InnerRegistrationController {
                 }
             }
         }
+        if(!document.getStatus().equals(DocumentStatus.InProgress)){
+            document.setStatus(DocumentStatus.InProgress);
+            documentService.update(document);
+        }
 
-        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + documentTask.getId();
+        return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationUserName)
@@ -459,6 +459,17 @@ public class InnerRegistrationController {
         result.put("userFullName",user.getFullName());
         result.put("position", user.getPositionId()!=null?user.getPosition().getNameTranslation(locale):"");
         return result;
+    }
+
+    @GetMapping(value = DocUrls.InnerRegistrationControll)
+    @ResponseBody
+    public HashMap<String, Object> innerRegistrationControll(@RequestParam(name = "id")Integer id) {
+        HashMap<String, Object> response = new HashMap<>();
+        Document document = documentService.getById(id);
+        document.setSpecialControll(document.getSpecialControll()!=null?(!document.getSpecialControll()):(Boolean.FALSE));
+        documentService.update(document);
+        response.put("status", "success");
+        return response;
     }
 
 }

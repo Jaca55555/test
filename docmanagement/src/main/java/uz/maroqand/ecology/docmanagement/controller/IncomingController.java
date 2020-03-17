@@ -20,6 +20,7 @@ import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -229,7 +230,7 @@ public class IncomingController {
             Model model
     ) {
         DocumentTaskSub documentTaskSub = documentTaskSubService.getById(taskSubId);
-        if (documentTaskSub == null || documentTaskSub.getTaskId()==null) {
+        if (documentTaskSub == null || documentTaskSub.getTaskId() == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
@@ -398,13 +399,12 @@ public class IncomingController {
     }
 
     @RequestMapping(DocUrls.DocumentTaskChange)
-    @ResponseBody
-    public HashMap<String, Object> changeTaskStatus(
+    public String changeTaskStatus(
+            HttpServletRequest httpServletRequest,
             @RequestParam(name = "taskStatus")Integer status,
             @RequestParam(name = "taskSubId")Integer taskSubId,
             DocumentLog documentLog
     ) {
-        HashMap<String, Object> response = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
 
 
@@ -416,25 +416,19 @@ public class IncomingController {
         taskSub.setUpdateById(user.getId());
         taskSub.setAdditionalDocumentId(documentLog.getAttachedDocId());
         taskSub = documentTaskSubService.update(taskSub);
-        String locale = LocaleContextHolder.getLocale().getLanguage();
-        String logAuthorPos = positionService.getById(user.getPositionId()).getName();
-        DocumentLog documentLog1 =  documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),null,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
+        documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),null,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());
 
         DocumentTask documentTask = documentTaskService.getById(taskSub.getTaskId());
         if (documentTask!=null && documentTask.getPerformerId()!=null && documentTask.getPerformerId().equals(user.getId()) && TaskSubStatus.getTaskStatus(status).equals(TaskSubStatus.Checking)){
                 documentTask.setStatus(TaskStatus.Checking.getId());
                 documentTaskService.update(documentTask);
         }
-        Document document = documentService.getById(documentLog1.getAttachedDocId());
-        response.put("task", taskSub);
-        response.put("taskStatus", helperService.getTranslation(taskSub.getStatusName(taskSub.getStatus()),LocaleContextHolder.getLocale().toLanguageTag()));
-        response.put("status", "success");
-        response.put("log", documentLog1);
-        response.put("logCreateName", user.getFullName());
-        response.put("logCreatePosition", logAuthorPos);
-        response.put("registrationNumber", document!=null?document.getRegistrationNumber():"");
-        response.put("beforeStatus", helperService.getTranslation(documentLog1.getBeforeStatus(),locale));
-        response.put("afterStatus", helperService.getTranslation(documentLog1.getAfterStatus(),locale));
-        return response;
+
+
+        if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingView)){
+            return "redirect:" + DocUrls.IncomingView + "?id=" + taskSub.getId();
+        }else {
+            return "redirect:" + DocUrls.InnerView + "?id=" + taskSub.getId();
+        }
     }
 }

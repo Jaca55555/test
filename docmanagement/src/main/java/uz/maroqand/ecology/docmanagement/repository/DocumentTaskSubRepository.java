@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
@@ -30,7 +31,6 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
 
-    Integer countByReceiverIdAndStatus(Integer receiverId, Integer statuses);//Янги хатлар, Жараёндаги, Ижро этилган
     Integer countByReceiverIdAndStatusAndType(Integer receiverId, Integer statuses,Integer type);//Янги хатлар, Жараёндаги, Ижро этилган
 
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
@@ -38,4 +38,11 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     DocumentTaskSub findByReceiverIdAndDocumentIdAndDeletedFalse(Integer userId, Integer docId);
     List<DocumentTaskSub> findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(Integer docId, Integer taskId);
 
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1 AND d.status=?2")
+    Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses);
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1")
+    Integer countByReceiverIdAll(Integer receiverId);
+
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1 AND DATEDIFF(d.dueDate,now=?2)<1")
+    Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId, Date now);
 }

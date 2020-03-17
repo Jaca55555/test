@@ -30,13 +30,13 @@
         <div class="col-xl-12 col-md-12">
             <div class="card parent-card">
                 <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
-                    <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_incoming.list}">Кирувчи хатлар</a></h5>
+                    <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_reference.list}">Кирувчи хатлар</a></h5>
                     <!--<div>
                         <input type="text" class="form-control" />
                         <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
                     </div>-->
                 </div>
-                <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Кирувчи хатлар статистикаси</h5>
+                <h5 class="office-h5 default-color" th:text="#{doc_reference.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${newDocumentCount}">10</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.new_documents_count}">Янги хатлар</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.new_documents_count}">Янги хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${inProgressDocumentCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.in_progress_count}">Жараёндаги</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.in_progress_count}">Жараёндаги</h6>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                             <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${lessDeadlineDocumentCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.near_date_count}">Муддати яқинлашган</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.near_date_count}">Муддати яқинлашган</h6>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.expired_count}">Муддатдан кечиккан</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.expired_count}">Муддатдан кечиккан</h6>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${checkingDocumentCount}">></h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.completed_count}">Ижро этилган</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.completed_count}">Ижро этилган</h6>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
                                 <h4 class="card-title" th:text="${allDocumentCount}">></h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.all_doc_count}">Жами кирувчи хатлар</h6>
+                                <h6 class="card-title" th:text="#{doc_reference.all_doc_count}">Жами кирувчи хатлар</h6>
                             </div>
                         </div>
                     </div>
@@ -115,21 +115,21 @@
                 </div>
                 <div class="row p10" style="padding-bottom: 0px;">
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="documentOrganizationId" class="control-label" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот номи</label>
+                        <label for="documentOrganizationId" class="control-label" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот номи</label>
                         <select class="form-control" id="documentOrganizationId">
                             <option value="" th:text="#{sys_select}"></option>
                         </select>
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="docRegNumber" class="control-label" th:text="#{doc_incoming.docRegNumber}">Хат рақами</label>
+                        <label for="docRegNumber" class="control-label" th:text="#{doc_reference.docRegNumber}">Хат рақами</label>
                         <input type="text" class="form-control" id="docRegNumber" />
                     </div>
                     <div class="form-group col-md-2 col-sm-12">
-                        <label for="registrationNumber" class="control-label"><span th:text="#{doc_incoming.registrationNumber}">Руйхатга олиш рақами</span></label>
+                        <label for="registrationNumber" class="control-label"><span th:text="#{doc_reference.registrationNumber}">Руйхатга олиш рақами</span></label>
                         <input type="text" class="form-control" id="registrationNumber" />
                     </div>
                     <div class="form-group col-md-3 col-sm-12">
-                        <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
+                        <label for="dateBegin" class="control-label"><span th:text="#{doc_reference.registrationDate}">Рўйхатга олинган сана</span></label>
                         <div class="row">
                             <div class="col-6" style="padding-left: 0;">
                                 <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />
@@ -149,7 +149,7 @@
                 <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="row" style="padding-top: 0px;">
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="content" class="control-label" th:text="#{doc_incoming.content}">Хатнинг қисқача мазмуни</label>
+                            <label for="content" class="control-label" th:text="#{doc_reference.content}">Хатнинг қисқача мазмуни</label>
                             <input type="text" class="form-control" id="content" />
                         </div>
                         <div class="form-group col-md-2 col-sm-12">
@@ -220,13 +220,13 @@
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
-                                                    <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
+                                                    <span th:text="#{doc_reference.registrationNumber}">Регистрация рақами</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
-                                                    <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
+                                                    <span th:text="#{doc_reference.registrationDate}">Регистрация санаси</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
-                                                    <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
+                                                    <span th:text="#{doc_reference.content}">Кирувчи хат маълумотлари</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
@@ -259,7 +259,7 @@
     <script th:src="@{/static/datatables/datatables.min.js}"></script>
 
     <script th:inline="javascript">
-        var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}]];
+        var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}]];
         var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -317,7 +317,7 @@
                 serverSide: true,
                 scrollX: true,
                 pageLength: 25,
-                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom: 'lrtip',
                 ajax : function (dataToSend, callback, settings) {
@@ -378,10 +378,7 @@
                     $(row).on('click', function () {
                         location.href = $(row).children()[0].firstElementChild.href
                     })
-                    // $(row).children()[0].classList += ` ${data[9][0]}`
-                    // $(row).children()[1].classList += ` ${data[9][0]}`
-                    // $(row).children()[3].classList += ` ${data[9][0]}`
-                    // $(row).children()[4].classList += ` ${data[9][0]}`
+
                 },
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

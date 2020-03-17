@@ -35,13 +35,12 @@ public class DocumentDescriptionController
         this.userService = userService;
     }
 
-    @GetMapping(DocUrls.DocDescriptionList)
+    @RequestMapping(value = DocUrls.DocDescriptionList,method = RequestMethod.GET)
     public String getDescriptions() {
-
         return DocTemplates.DocDescriptionList;
     }
 
-    @PostMapping(DocUrls.DocDescriptionListAjax)
+    @RequestMapping(value = DocUrls.DocDescriptionListAjax,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getDescriptionAjax(
             @RequestParam(name = "content")String content,
@@ -54,7 +53,7 @@ public class DocumentDescriptionController
             JSONArray.add(new Object[]{
                     description.getId(),
                     description.getContent(),
-                    Common.uzbekistanDateFormat.format(description.getCreatedAt())
+                    description.getCreatedAt()!=null?Common.uzbekistanDateFormat.format(description.getCreatedAt()):""
             });
         }
         response.put("recordsTotal", page.getTotalElements());
@@ -94,9 +93,9 @@ public class DocumentDescriptionController
     }
 
     @PostMapping(DocUrls.DocDescriptionEdit)
-    public String updateDescription(DocumentDescription description, @RequestParam(name = "createDate")String date) {
+    public String updateDescription(DocumentDescription description) {
         description.setCreatedById(userService.getCurrentUserFromContext().getId());
-        description.setCreatedAt(DateParser.TryParse(date, Common.uzbekistanDateFormat));
+        description.setCreatedAt(new Date());
         descriptionService.save(description);
         return "redirect:" + DocUrls.DocDescriptionList;
     }

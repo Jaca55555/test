@@ -33,6 +33,13 @@ public class DocUrls {
     public static final String IncomingTaskSubmit = Prefix + Incoming + "/task_submit";
     public static final String IncomingTaskUserName = Prefix + Incoming + "/user_name";
 
+    public static final String ReferenceList = Prefix + Reference + "/list";
+    public static final String ReferenceView = Prefix + Reference + "/view";
+    public static final String ReferenceTask = Prefix + Reference + "/task";
+    public static final String ReferenceTaskSubmit = Prefix + Reference + "/task_submit";
+    public static final String ReferenceTaskUserName = Prefix + Reference + "/user_name";
+    public static final String ReferenceTaskChange= Prefix+Reference+"task_change";
+
     public static final String DocumentCheckList = Prefix + DocumentCheck + "/list"; //kiruvchi xatlar
     public static final String DocumentCheckView = Prefix + DocumentCheck + "/view"; //kiruvchi xatni ko'rish
     public static final String DocumentCheckComplete = Prefix + DocumentCheck + "/complete";
@@ -45,6 +52,9 @@ public class DocUrls {
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
     public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
+    public static final String InnerTask = Prefix + Inner + "/task";
+    public static final String InnerTaskSubmit = Prefix + Inner + "/task_submit";
+    public static final String InnerTaskUserName = Prefix + Inner + "/user_name";
     public static final String AppealList = Prefix + Appeal + "/list"; //Murojaatlar
     public static final String OrdersList = Prefix + Orders + "/list"; //Buyruqlar
 
@@ -97,6 +107,8 @@ public class DocUrls {
     public static final String InnerRegistrationTask = InnerRegistration + "/task";
     public static final String InnerRegistrationTaskSubmit = InnerRegistration + "/task_submit";
     public static final String InnerRegistrationUserName = InnerRegistration + "/user_name";
+    public static final String InnerRegistrationControll = InnerRegistration + "/special";
+
 
     //Murojaatlarni ro'yhatga olish
     private static final String AppealRegistration = Prefix + Registration + Appeal;

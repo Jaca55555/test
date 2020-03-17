@@ -57,13 +57,13 @@
                     </a>
                 </li>
 
-                <!--<li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).AppealList}">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceList}">
                         <span class="pcoded-micon"><i class="fas fa-clipboard-list color-purple"></i></span>
-                        <span class="pcoded-mtext">Муррожатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_reference.list}">Мурожаaтлар</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OrdersList}">
                         <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
                         <span class="pcoded-mtext">Буйруклар</span>
@@ -132,19 +132,18 @@
                         <span class="pcoded-mtext" th:text="#{doc_inner.reg}">Ички хужжатларни руйхатга олиш</span>
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).AppealRegistrationList}">
+                <li class="nav-item">
+                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}">
                          <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
                          <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
                      </a>
-                 </li>-->
+                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}">
                         <span class="pcoded-micon"><i class="fa fa-exclamation-circle color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.taskNotIncluded}">Ижрога тушмаган</span>
 <!--                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>-->
                         <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="color-gray w-15 text-center rounded-pill">12</span>
-
                     </a>
                 </li>
                 <!--<li class="nav-item">
@@ -220,6 +219,7 @@
                         <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryCategoryList}" th:text="#{doc_library.category_list}"></a></li>
                         <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Chiefs}" th:text="#{doc_user_mngm.chiefs_list}"></a></li>
                         <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Controllers}" th:text="#{doc_user_mngm.controllers_list}"></a></li>
+                        <li><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocDescriptionList}" th:text="#{doc.description_list}"></a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

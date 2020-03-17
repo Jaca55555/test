@@ -10,7 +10,7 @@
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed">
-                        <span th:text="#{doc_incoming.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                        <span th:text="#{doc_reference.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
         </h5>
         <div class="p10-horizontal mobile-column">
@@ -53,46 +53,42 @@
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.journal}">Рўйхатга олиш журнали:</span></div>
-                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
+        <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:object="${documentSub}">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.documentView}">Хужжат тури:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.documentView}">Хужжат тури:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{@documentHelperService.getDocumentViewName(documentViewId)}">Тижорат таклифи</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
                  th:if="${specialControll!=null and document.docRegNumber!=null and document.docRegNumber!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.docRegNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{docRegNumber}">IN-12345</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationNumber}">Рўйхатга олиш рақами:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.registrationNumber}">Рўйхатга олиш рақами:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="*{registrationNumber}">IN-12345</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
                  th:if="${specialControll!=null and document.docRegDate!=null and document.docRegDate!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.docRegDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.docRegDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.registrationDate}">Рўйхатга олинган сана:</span></div>
                 <div class="col-md-6 p0" style="float:right">
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
                  th:if="${specialControll!=null and document.performerName!=null and document.performerName!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerName}">Жўнатувчи шахс:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
             </div>
 
@@ -103,25 +99,25 @@
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
                  th:if="${specialControll!=null and performerPhone!=null and performerPhone!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
         </div>
         <hr class="m20-vertical">
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.description}">Топшириқ шакли:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.description}">Топшириқ шакли:</span></div>
                 <div><span th:text="${document.content}"></span></div>
             </div>
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center">
                     <div class="office-card-file" th:each="file: ${document.contentFiles}">
                         <div class="card dashboard-card">
                             <div class="file-icon-container-small color-blue">
                                 <span class="fas fa-file-word"></span>
                             </div>
-                            <div class="card-body" style="display: flex;text-align: left;align-items: center;">
+                            <div class="card-body" style="padding:1.25rem;">
                                 <a class="view-pdf" th:if="${document.insidePurpose == false || document.insidePurpose == null}" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
                                     <div th:id="'file_name_'+${file.id}">
                                         <h6 class="card-title" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </h6>
