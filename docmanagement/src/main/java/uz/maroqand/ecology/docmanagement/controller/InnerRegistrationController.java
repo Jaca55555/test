@@ -64,6 +64,7 @@ public class InnerRegistrationController {
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
     public String getIncomeListPage(Model model) {
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("newDocumentCount", documentTaskService.countNew());
         model.addAttribute("inProgressDocumentCount", documentTaskService.countInProcess());
         model.addAttribute("lessDeadlineDocumentCount", documentTaskService.countNearDate());
@@ -73,6 +74,8 @@ public class InnerRegistrationController {
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("chief", userService.getEmployeeList());
+        model.addAttribute("statistic", documentTaskService.countAllInnerByReceiverId(user.getId()));
+
         model.addAttribute("executes", userService.getEmployeeList());
         return DocTemplates.InnerRegistrationList;
     }
@@ -120,22 +123,38 @@ public class InnerRegistrationController {
         Boolean specialControll=null;
         tabFilter = tabFilter!=null?tabFilter:1;
         switch (tabFilter){
+            case 9: status = new LinkedHashSet<>();
+                status.add(TaskStatus.Initial.getId());
+                status.add(TaskStatus.New.getId());
+                break;
+            case 2:  status = new LinkedHashSet<>();
+                status.add(TaskStatus.InProgress.getId());
+                break;
             case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                calendar.add(Calendar.DATE, 1);
+                deadlineDateEnd = calendar.getTime();
+                deadlineDateEnd.setHours(23);
+                deadlineDateEnd.setMinutes(59);
+                deadlineDateEnd.setSeconds(0);
+                calendar.add(Calendar.DATE, -2);
                 deadlineDateBegin = calendar.getTime();
+                deadlineDateBegin.setHours(23);
+                deadlineDateBegin.setMinutes(59);
+                deadlineDateBegin.setSeconds(59);
+
                 status = new LinkedHashSet<>();
+                status.add(TaskStatus.Initial.getId());
                 status.add(TaskStatus.New.getId());
                 status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
-                break;//Муддати кеччикан
+                break;//Муддати якинлашаётган
             case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                calendar.add(Calendar.DATE, -1);
                 deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
+                status.add(TaskStatus.Initial.getId());
                 status.add(TaskStatus.New.getId());
                 status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
-                break;//Муддати якинлашаётган
+                break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskStatus.Checking.getId());
@@ -155,7 +174,18 @@ public class InnerRegistrationController {
                 break;//Жами
         }
         //todo documentTypeId=3
-        Page<DocumentTask> documentPage = documentTaskService.findFiltered(user.getOrganizationId(),3, incomingRegFilter,deadlineDateBegin,deadlineDateEnd,null,status,null,null, specialControll,pageable);
+        Page<DocumentTask> documentPage = documentTaskService.findFiltered(
+                user.getOrganizationId(),
+                3,
+                incomingRegFilter,
+                deadlineDateBegin,
+                deadlineDateEnd,
+                null,
+                status,
+                null,
+                null,
+                specialControll,
+                pageable);
 
         List<DocumentTask> documentTaskList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
@@ -174,7 +204,7 @@ public class InnerRegistrationController {
             docContent+=document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
             docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
-                    documentTask.getId(),
+                    document.getId(),
                     document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     docContent,
@@ -199,9 +229,6 @@ public class InnerRegistrationController {
             @RequestParam(name = "id")Integer id,
             Model model
     ) {
-
-        System.out.println("id==" + id);
-
 
         Document document = documentService.getById(id);
         if (document == null) {
@@ -372,13 +399,13 @@ public class InnerRegistrationController {
         }
 
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-        boolean IsExecuteForm = false;
+        boolean isExecuteForm = false;
         if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
-            IsExecuteForm = true;
+            isExecuteForm = true;
         }
         model.addAttribute("userList", userList);
         model.addAttribute("document", document);
-        model.addAttribute("IsExecuteForm", IsExecuteForm);
+        model.addAttribute("isExecuteForm", isExecuteForm);
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
@@ -390,7 +417,7 @@ public class InnerRegistrationController {
     public String innerRegistrationTaskSubmit(
             @RequestParam(name = "content") String content,
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestParam(name = "docRegDateStr", required = false) String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
 
@@ -400,7 +427,10 @@ public class InnerRegistrationController {
         if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-
+        boolean isExecuteForm=false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            isExecuteForm = true;
+        }
         DocumentTask documentTask = documentTaskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
 
         Integer userId = null;
@@ -418,6 +448,13 @@ public class InnerRegistrationController {
             }
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
+                if (!isExecuteForm){
+                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
+
             }
 
             if (tagName.equals("dueDateStr")){

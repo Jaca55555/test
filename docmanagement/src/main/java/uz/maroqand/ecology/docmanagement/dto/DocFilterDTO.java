@@ -22,7 +22,7 @@ public class DocFilterDTO {
     private Integer documentType;
     private String correspondentType;
     private String content;
-    private String chief;
+    private Integer chief;
     private String executors;
     private String resolution;
     private String executePath;

@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
+import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
@@ -59,7 +62,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 
     @Override
     public List<DocumentTask> getByDocumetId(Integer docId) {
-        return taskRepository.findByDocumentId(docId);
+        return taskRepository.findByDocumentIdOrderByIdAsc(docId);
     }
 
     @Override
@@ -270,6 +273,71 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         }
     }
 
+    @Override
+    public StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId) {
+        StaticInnerInTaskSubDto statisticInner = new StaticInnerInTaskSubDto();
+        if (receiverId==null) return statisticInner;
+        List<DocumentTask> documentTaskList = taskRepository.findByChiefIdAndDeletedFalseOrderByIdAsc(receiverId);
+        for (DocumentTask documentTask: documentTaskList){
+            if (documentTask.getDocument().getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){//todo vaqtincha to'g'rilash kerak
+                statisticInner.setAllCount(statisticInner.getAllCount()+1);                         //barcha ichki xatlar
+
+                if (documentTask.getStatus()!=null){
+                    if (documentTask.getStatus().equals(TaskStatus.New.getId())
+                            || documentTask.getStatus().equals(TaskStatus.Initial.getId())){
+                        statisticInner.setNewCount(statisticInner.getNewCount()+1);                     //yangi
+                    }
+
+                    if (documentTask.getStatus().equals(TaskStatus.InProgress.getId())){
+                        statisticInner.setInProgressCount(statisticInner.getInProgressCount()+1);       //jarayondagilar
+                    }
+
+                    if (documentTask.getStatus().equals(TaskStatus.Checking.getId())){
+                        statisticInner.setCheckingCount(statisticInner.getCheckingCount()+1);                     //ijro etilganlar
+                    }
+
+                }
+
+                Date nowDate = new Date();
+                nowDate.setHours(0);
+                nowDate.setMinutes(0);
+                nowDate.setSeconds(0);
+                Date dueDate = documentTask.getDueDate();
+                if (dueDate!=null){
+                    dueDate.setHours(23);
+                    dueDate.setMinutes(59);
+                }
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.add(Calendar.DATE, 1);
+                Date lessDate =calendar1.getTime();
+                lessDate.setHours(0);
+                lessDate.setMinutes(0);
+                lessDate.setSeconds(0);
+
+                if (dueDate!=null && documentTask.getStatus()!=null
+                        && !documentTask.getStatus().equals(TaskStatus.Checking.getId())
+                        && !documentTask.getStatus().equals(TaskStatus.Complete.getId())
+                ){
+//                    System.out.println("now date==" + nowDate);
+//                    System.out.println("less date==" + lessDate);
+//                    System.out.println("due date==" + dueDate);
+                    if ((dueDate.before(lessDate) || dueDate.equals(lessDate))
+                            && (dueDate.after(nowDate) || dueDate.equals(nowDate))
+                    ) {
+                        statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);
+//                        System.out.println("less id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
+                    }else if(dueDate.before(nowDate)){
+//                        System.out.println("greater id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
+                        statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
+                    }
+                    System.out.println("------------------------------");
+
+                }
+            }
+        }
+        return statisticInner;
+    }
+
     private static Specification<DocumentTask> getSpesification(
             final Integer organizationId,
             final Integer documentTypeId,
@@ -360,7 +428,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
             }
             if (receiverId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+                predicates.add(criteriaBuilder.equal(root.get("chiefId"), receiverId));
             }
 
             if (specialControll != null) {

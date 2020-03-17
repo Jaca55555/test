@@ -56,32 +56,11 @@ public class InnerController {
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
     public String getInnerListPage(Model model) {
         User user = userService.getCurrentUserFromContext();
-        Set<Integer> statuses = new LinkedHashSet<>();
-
-        statuses.add(TaskSubStatus.New.getId());
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        statuses = new LinkedHashSet<>();
-        statuses.add(TaskSubStatus.InProgress.getId());
-        statuses.add(TaskSubStatus.Waiting.getId());
-        statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.add(Calendar.DAY_OF_MONTH, -1);
-        model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        model.addAttribute("greaterDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateGreaterThanEqual(user.getId(), calendar.getTime()));
-
-        statuses = new LinkedHashSet<>();
-        statuses.add(TaskSubStatus.Checking.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-        model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
+        model.addAttribute("statistic", documentTaskSubService.countAllInnerByReceiverId(user.getId()));
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
@@ -114,40 +93,59 @@ public class InnerController {
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-
+        System.out.println("tabfilter==" + tabFilter);
 
         switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
-            case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
-                status = new LinkedHashSet<>();
+            case 9: status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
+                break;
+            case 2:  status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
-                break;//Муддати кеччикан
-            case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                break;
+            case 3:
+                calendar.add(Calendar.DATE, 1);
                 deadlineDateEnd = calendar.getTime();
+                deadlineDateEnd.setHours(23);
+                deadlineDateEnd.setMinutes(59);
+                deadlineDateEnd.setSeconds(0);
+                calendar.add(Calendar.DATE, -2);
+                deadlineDateBegin = calendar.getTime();
+                deadlineDateBegin.setHours(23);
+                deadlineDateBegin.setMinutes(59);
+                deadlineDateBegin.setSeconds(59);
+
                 status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати якинлашаётган
+            case 4:
+                calendar.add(Calendar.DATE, -1);
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.Initial.getId());
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
                 break;//Ижро назоратида
-            case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
+            /*case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
             case 7:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
             case 8:
                 specialControll=Boolean.TRUE;
-                break;//Якунланган
+                break;//Якунланган*/
             default:
                 departmentId = user.getDepartmentId();
                 /*receiverId=null;*/
@@ -256,7 +254,6 @@ public class InnerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        System.out.println("-------------");
 
         return DocTemplates.InnerView;
     }
@@ -287,12 +284,12 @@ public class InnerController {
         }
 
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
-        boolean IsExecuteForm = false;
+        boolean isExecuteForm = false;
         if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
-            IsExecuteForm = true;
+            isExecuteForm = true;
         }
         model.addAttribute("document", document);
-        model.addAttribute("IsExecuteForm", IsExecuteForm);
+        model.addAttribute("isExecuteForm", isExecuteForm);
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
@@ -308,7 +305,7 @@ public class InnerController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "taskId") Integer taskId,
             @RequestParam(name = "content") String content,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestParam(name = "docRegDateStr", required = false) String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
         User user = userService.getCurrentUserFromContext();
@@ -335,6 +332,10 @@ public class InnerController {
         if (documentTask==null){
             return "redirect:" + DocUrls.InnerList;
         }
+        boolean isExecuteForm=false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            isExecuteForm = true;
+        }
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -350,6 +351,12 @@ public class InnerController {
             }
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
+                if (!isExecuteForm){
+                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
             }
 
             if (tagName.equals("dueDateStr")){
