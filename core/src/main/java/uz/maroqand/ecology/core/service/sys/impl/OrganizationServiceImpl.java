@@ -1,12 +1,20 @@
 package uz.maroqand.ecology.core.service.sys.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.repository.sys.OrganizationRepository;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -50,6 +58,33 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public Organization save(Organization organization) {
+        return  organizationRepository.save(organization);
+    }
+
+    private static Specification<Organization> getFilteringSpecification(String name, String address, String account) {
+        return (Specification<Organization>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+            if (name != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"));
+            }
+            if (address != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("address")),
+                        "%" + address.toLowerCase() + "%"));
+            }
+            if (account != null) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("account")),
+                        "%" + account.toLowerCase() + "%"));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+    @Override
     public Organization getByName(String name){
         return organizationRepository.getByName(name);
     }
@@ -57,6 +92,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Organization create(Organization organization){
         return organizationRepository.save(organization);
     }
+    @Override
+    public Page<Organization> getFiltered(String name,String account,String address,Pageable pageable) {
+        return organizationRepository.findAll(getFilteringSpecification(name,address,account), pageable);
+    }
+
 
 
 

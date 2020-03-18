@@ -30,12 +30,15 @@ public class SoatoServiceImpl implements SoatoService {
 
     @Cacheable("SoatoServiceImpl.getRegions")
     public List<Soato> getRegions() {
-        return soatoRepository.findByLevelOrderByNameAsc(1);
+        return soatoRepository.getAll();
     }
 
     @Cacheable("SoatoServiceImpl.getSubRegions")
     public List<Soato> getSubRegions() {
         return soatoRepository.findByLevelOrderByNameAsc(2);
+    }
+    public List<Soato> getSubregionsbyregionId(Long id){
+        return soatoRepository.findByParentId(id);
     }
 
 }

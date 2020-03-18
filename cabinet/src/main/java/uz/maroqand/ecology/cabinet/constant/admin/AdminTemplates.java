@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.cabinet.constant.admin;
 
+import uz.maroqand.ecology.core.entity.sys.Organization;
+
 /**
  * Created by Utkirbek Boltaev on 07.03.2020.
  * (uz)
@@ -31,6 +33,12 @@ public class AdminTemplates {
     public static final String RolesList = Roles + "/list";
     public static final String RolesNew = Roles + "/new";
     public static final String RolesView = Roles + "/view";
+
+    //Organization
+    private static final String Organization = Prefix + "/organization";
+    public static final String OrganizationList = Organization + "/list";
+    public static final String OrganizationNew = Organization + "/new";
+    public static final String OrganizationView = Organization + "/view";
 
 
 }

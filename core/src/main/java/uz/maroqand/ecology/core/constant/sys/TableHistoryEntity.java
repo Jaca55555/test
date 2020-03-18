@@ -15,5 +15,6 @@ public enum TableHistoryEntity {
     Position,
     Department,
     Material,
-    Offer
+    Offer,
+    Organization
 }

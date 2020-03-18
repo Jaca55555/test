@@ -11,5 +11,5 @@ public interface SoatoService {
     List<Soato> getRegions();
 
     List<Soato> getSubRegions();
-
+    List<Soato> getSubregionsbyregionId(Long id);
 }
