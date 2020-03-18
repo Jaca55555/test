@@ -252,6 +252,8 @@ public class IncomingController {
                 document.setInsidePurpose(Boolean.FALSE);
             }
         }
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -275,6 +277,7 @@ public class IncomingController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
+        model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(task.getId(),locale));
         return DocTemplates.IncomingView;
     }
 
