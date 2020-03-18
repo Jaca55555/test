@@ -486,19 +486,19 @@
                         <h5 style="font-weight: bold" th:text="*{controlUser}"></h5>
                     </div>
                     <h5 >
-                        <span  th:text="#{doc_inner.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
+                        <span  th:text="#{doc_incoming.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
                         <span th:text="*{content}"></span>
                     </h5>
                     <br/><br/>
                     <div class="text-center mt-2"  th:if="*{#lists.size(performers)>0}">
-                        <h5 th:text="#{doc_inner.performers}"></h5>
+                        <h5 th:text="#{doc_incoming.performers}"></h5>
                         <h5 style="font-weight: bold"  >
                             <span th:each="performer : ${resolutionDocument.performers}" th:text="${performer}+',  '"></span>
                         </h5>
                     </div>
                     <br/>
                     <div class="text-right mt-2"  >
-                        <h5 th:text="#{doc_inner.chief}"></h5>
+                        <h5 th:text="#{doc_incoming.chief}"></h5>
                         <h5 style="font-weight: bold" th:text="*{managerName}" ></h5>
                     </div>
 
