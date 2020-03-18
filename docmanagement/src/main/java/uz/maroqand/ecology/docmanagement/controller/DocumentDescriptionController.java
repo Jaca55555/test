@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -46,13 +47,14 @@ public class DocumentDescriptionController
             @RequestParam(name = "content")String content,
             Pageable pageable
     ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> response = new HashMap<>();
         Page<DocumentDescription> page = descriptionService.getDescriptionFilterPage(content, pageable);
         List<Object[]> JSONArray = new ArrayList<>(page.getContent().size());
         for (DocumentDescription description : page.getContent()) {
             JSONArray.add(new Object[]{
                     description.getId(),
-                    description.getContent(),
+                    description.getNameTranslation(locale),
                     description.getCreatedAt()!=null?Common.uzbekistanDateFormat.format(description.getCreatedAt()):""
             });
         }
