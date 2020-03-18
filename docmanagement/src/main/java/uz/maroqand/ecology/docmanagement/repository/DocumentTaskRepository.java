@@ -19,7 +19,9 @@ import java.util.Set;
 @Repository
 public interface DocumentTaskRepository extends DataTablesRepository<DocumentTask, Integer>, JpaRepository<DocumentTask, Integer> {
 
-    List<DocumentTask> findByDocumentId(Integer docId);
+    List<DocumentTask> findByDocumentIdOrderByIdAsc(Integer docId);
+
+    List<DocumentTask> findByChiefIdAndDeletedFalseOrderByIdAsc(Integer docId);
 
     DocumentTask findByDocumentIdAndChiefId(Integer docId, Integer userId);
 

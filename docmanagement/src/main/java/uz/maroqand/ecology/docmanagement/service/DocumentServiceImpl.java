@@ -215,7 +215,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
 
                     if (filterDTO.getChief() != null) {
-                        predicates.add(criteriaBuilder.equal(root, filterDTO.getChief()));
+                        predicates.add(criteriaBuilder.equal(root.get("managerId"), filterDTO.getChief()));
                     }
 
                     if (filterDTO.getExecutors() != null) {
@@ -232,6 +232,10 @@ public class DocumentServiceImpl implements DocumentService {
 
                     if (filterDTO.getExecuteStatus() != null) {
                         predicates.add(criteriaBuilder.equal(root, filterDTO.getExecuteStatus()));
+                    }
+
+                    if (filterDTO.getDocumentType() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocumentType()));
                     }
 
                     Date executeDateBegin = DateParser.TryParse(filterDTO.getExecuteDateBegin(), Common.uzbekistanDateFormat);

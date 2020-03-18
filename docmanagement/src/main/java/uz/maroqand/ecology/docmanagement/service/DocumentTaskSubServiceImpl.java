@@ -7,9 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
+import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
+import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
@@ -27,12 +32,14 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     private final DocumentTaskSubRepository documentTaskSubRepository;
     private final DocumentSubService documentSubService;
     private final HelperService helperService;
+    private final DocumentService documentService;
 
     @Autowired
-    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService) {
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService, DocumentService documentService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.documentSubService = documentSubService;
         this.helperService = helperService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -164,6 +171,9 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     ) {
         return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
+
+            System.out.println("deadlineDateBegin=" + deadlineDateBegin);
+            System.out.println("deadlineDateEnd=" + deadlineDateEnd);
                 if (organizationId != null) {
                     //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
                     predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
@@ -211,10 +221,10 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
 
                 if (deadlineDateBegin != null && deadlineDateEnd == null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
                 }
                 if (deadlineDateEnd != null && deadlineDateBegin == null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));//kichik yoki teng
                 }
                 if (deadlineDateBegin != null && deadlineDateEnd != null) {
                     predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
@@ -260,6 +270,73 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public Integer countByReceiverId(Integer receiverId){
         return documentTaskSubRepository.countByReceiverId(receiverId);
+    }
+
+    @Override
+    public StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId) {
+        StaticInnerInTaskSubDto statisticInner = new StaticInnerInTaskSubDto();
+        if (receiverId==null) return statisticInner;
+        List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByReceiverIdAndDeletedFalseOrderByIdAsc(receiverId);
+        for (DocumentTaskSub documentTaskSub: documentTaskSubList){
+            if (documentTaskSub.getDocument().getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){//todo vaqtincha to'g'rilash kerak
+                statisticInner.setAllCount(statisticInner.getAllCount()+1);                         //barcha ichki xatlar
+
+                if (documentTaskSub.getStatus()!=null){
+                    if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())
+                            || documentTaskSub.getStatus().equals(TaskSubStatus.Initial.getId())){
+                        statisticInner.setNewCount(statisticInner.getNewCount()+1);                     //yangi
+                    }
+
+                    if (documentTaskSub.getStatus().equals(TaskSubStatus.InProgress.getId())
+                            || documentTaskSub.getStatus().equals(TaskSubStatus.Waiting.getId())
+                            || documentTaskSub.getStatus().equals(TaskSubStatus.Agreement.getId())){
+                        statisticInner.setInProgressCount(statisticInner.getInProgressCount()+1);       //jarayondagilar
+                    }
+
+                    if (documentTaskSub.getStatus().equals(TaskSubStatus.Checking.getId())){
+                        statisticInner.setCheckingCount(statisticInner.getCheckingCount()+1);                     //ijro etilganlar
+                    }
+
+                }
+
+                Date nowDate = new Date();
+                nowDate.setHours(0);
+                nowDate.setMinutes(0);
+                nowDate.setSeconds(0);
+                Date dueDate = documentTaskSub.getDueDate();
+                if (dueDate!=null){
+                    dueDate.setHours(23);
+                    dueDate.setMinutes(59);
+                }
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.add(Calendar.DATE, 1);
+                Date lessDate =calendar1.getTime();
+                lessDate.setHours(0);
+                lessDate.setMinutes(0);
+                lessDate.setSeconds(0);
+
+                if (dueDate!=null && documentTaskSub.getStatus()!=null
+                        && !documentTaskSub.getStatus().equals(TaskSubStatus.Checking.getId())
+                            && !documentTaskSub.getStatus().equals(TaskSubStatus.Complete.getId())
+                ){
+//                    System.out.println("now date==" + nowDate);
+//                    System.out.println("less date==" + lessDate);
+//                    System.out.println("due date==" + dueDate);
+                    if ((dueDate.before(lessDate) || dueDate.equals(lessDate))
+                            && (dueDate.after(nowDate) || dueDate.equals(nowDate))
+                    ) {
+                    statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);
+//                        System.out.println("less id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
+                    }else if(dueDate.before(nowDate)){
+//                        System.out.println("greater id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
+                        statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
+                    }
+                    System.out.println("------------------------------");
+
+                }
+            }
+        }
+        return statisticInner;
     }
 
     @Override
