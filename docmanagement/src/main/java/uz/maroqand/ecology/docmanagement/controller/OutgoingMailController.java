@@ -225,6 +225,7 @@ public class OutgoingMailController {
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
+        model.addAttribute("chiefs", userService.getEmployeesForDocManage("chief"));
 
         return DocTemplates.OutgoingMailNew;
     }
@@ -237,9 +238,6 @@ public class OutgoingMailController {
                                   @RequestParam(name = "file_ids")List<Integer> file_ids){
 
         User user = userService.getCurrentUserFromContext();
-
-
-
 
         Set<File> files = new HashSet<File>();
         for(Integer id: file_ids) {
