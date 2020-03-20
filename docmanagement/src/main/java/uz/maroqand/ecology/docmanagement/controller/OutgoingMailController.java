@@ -285,8 +285,10 @@ public class OutgoingMailController {
         }
         docSub.setDocumentOrganizations(documentOrganizationSet);
         docSub.setCommunicationToolId(communicationToolId);
-
-        Document savedDocument = documentService.createDoc2(2, DocumentStatus.InProgress, document, user, position_id, departmentService.getById(document.getDepartmentId()).getPrefixCode());
+        String prefixCode = departmentService.getById(document.getDepartmentId()).getPrefixCode();
+        if(prefixCode == null)
+            prefixCode = departmentService.getById(document.getDepartmentId()).getId().toString();
+        Document savedDocument = documentService.createDoc2(2, DocumentStatus.InProgress, document, user, position_id, prefixCode);
         docSub.setDocumentId(savedDocument.getId());
         docSub.setDocument(savedDocument);
         documentSubService.createDocumentSub(docSub);
