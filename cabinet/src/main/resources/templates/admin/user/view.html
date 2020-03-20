@@ -64,6 +64,10 @@
                                                                 <td style="width: 50%" class="text-left"><span  th:text="${user.middlename}"></span></td>
                                                             </tr>
                                                             <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_user.gender}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span  th:text="${user.gender}?'Male':'Female'"></span></td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th class="text-right"><span th:text="#{mntr_user.organization}"></span>:</th>
                                                                 <td class="text-left"><span th:if="*{organizationId!=null}" th:text="${@helperService.getOrganizationName(user.organizationId,#locale)}"></span></td>
                                                             </tr>

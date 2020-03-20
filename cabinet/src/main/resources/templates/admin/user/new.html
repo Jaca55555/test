@@ -171,6 +171,16 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="budgetFalse" th:field="*{gender}" value="False" class="custom-control-input" th:checked="${user.gender!=null and user.gender==false}" required="" >
+                                                            <label class="custom-control-label" for="budgetFalse" th:text="#{Female}"> </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="budgetTrue" th:field="*{gender}" value="True" class="custom-control-input" th:checked="${user.gender!=null and user.gender==true}" required="" >
+                                                            <label class="custom-control-label" for="budgetTrue" th:text="#{Male}"> </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastname" class="control-label" >
                                                                 <span th:text="#{mntr_user.department}"></span>
