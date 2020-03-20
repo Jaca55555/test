@@ -102,7 +102,7 @@
                             <select class="form-control singleSelect" tabindex="-1"
                                     aria-hidden="true" th:field="*{departmentId}" required>
                                 <option value="" th:text="#{department_id_select}">department select</option>
-                                <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                                <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.prefixCode + ' ' + department.name}"></option>
                             </select>
                     </div>
                     <div class="col-md-6"></div>
@@ -125,7 +125,14 @@
                                <!-- <i class="gray-search fas fa-search  color-gray"></i> -->
                             </div>
                         </div>
-
+                        <div class="col-md-6"></div>
+                        <div class="col-sm-6 form-group" >
+                            <label for="position" class="control-label" th:text="#{doc_outgoing.from_whom}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
+                            <select id="position" class="form-control singleSelect" name="position_id" required>
+                                <option value=""></option>
+                                <option th:each="position: ${positions}" th:value="${position.id}" th:text="${position.id + ' '+ position.name}"></option>
+                            </select>
+                        </div>
                 </div>
                 <!-- files input start -->
                 <hr class="m30-vertical">

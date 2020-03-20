@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Position;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
@@ -49,6 +51,7 @@ public class OutgoingMailController {
     private final DocumentDescriptionService descService;
     private final DocumentSubService documentSubService;
     private final DocumentHelperService documentHelperService;
+    private final PositionService positionService;
 
     @Autowired
     public OutgoingMailController(
@@ -63,7 +66,8 @@ public class OutgoingMailController {
             DepartmentService departmentService,
             DocumentDescriptionService descService,
             DocumentSubService documentSubService,
-            DocumentHelperService documentHelperService
+            DocumentHelperService documentHelperService,
+            PositionService positionService
     ){
         this.documentService = documentService;
         this.journalService = journalService;
@@ -77,6 +81,7 @@ public class OutgoingMailController {
         this.descService = descService;
         this.documentSubService = documentSubService;
         this.documentHelperService = documentHelperService;
+        this.positionService = positionService;
     }
 
 
@@ -225,7 +230,9 @@ public class OutgoingMailController {
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
         model.addAttribute("performers", userService.getEmployeesForForwarding(organizationId));
-        model.addAttribute("chiefs", userService.getEmployeesForDocManage("chief"));
+        List<Position> positions = positionService.getAll();
+        Collections.reverse(positions);
+        model.addAttribute("positions", positions);
 
         return DocTemplates.OutgoingMailNew;
     }
@@ -235,8 +242,9 @@ public class OutgoingMailController {
     public String newOutgoingMail(Document document,
                                   @RequestParam(name = "communication_tool_id")Integer communicationToolId,
                                   @RequestParam(name = "document_organization_id")List<String> documentOrganizationIds,
-                                  @RequestParam(name = "file_ids")List<Integer> file_ids){
-
+                                  @RequestParam(name = "file_ids")List<Integer> file_ids,
+                                  @RequestParam(name = "position_id")Integer position_id){
+        System.out.println(position_id);
         User user = userService.getCurrentUserFromContext();
 
         Set<File> files = new HashSet<File>();
@@ -278,8 +286,7 @@ public class OutgoingMailController {
         docSub.setDocumentOrganizations(documentOrganizationSet);
         docSub.setCommunicationToolId(communicationToolId);
 
-        Document savedDocument = documentService.createDoc(2, document, user);
-
+        Document savedDocument = documentService.createDoc2(2, DocumentStatus.InProgress, document, user, position_id, departmentService.getById(document.getDepartmentId()).getPrefixCode());
         docSub.setDocumentId(savedDocument.getId());
         docSub.setDocument(savedDocument);
         documentSubService.createDocumentSub(docSub);
