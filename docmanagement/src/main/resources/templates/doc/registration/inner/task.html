@@ -138,7 +138,7 @@
 
     function addTaskSubmit() {
         $('#dateBegin').parsley().validate();
-        $('#description_textarea').parsley().validate()
+        $('#description_textarea').parsley().validate();
         if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){
             $('#taskAddForm').submit();
         }else{
@@ -149,7 +149,7 @@
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationUserName}]];
     $('#add_user').on('click',function () {
         $('#dateBegin').parsley().validate();
-        $('#description_textarea').parsley().validate()
+        $('#description_textarea').parsley().validate();
         var userId = $('#userId').val();
         if ( $('#dateBegin').parsley().isValid() && userId!="" && userId!=null){
             var dateDue=$('#dateBegin').val();

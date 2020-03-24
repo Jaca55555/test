@@ -372,9 +372,13 @@ public class InnerRegistrationController {
         }
 
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-
+        boolean IsExecuteForm = false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            IsExecuteForm = true;
+        }
         model.addAttribute("userList", userList);
         model.addAttribute("document", document);
+        model.addAttribute("IsExecuteForm", IsExecuteForm);
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
