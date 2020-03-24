@@ -38,7 +38,7 @@
                                             <div class="row" sec:authorize="hasAnyAuthority('ADMIN')">
                                                 <div class="col-md-4 col-xl-4">
                                                     <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
-                                                        <a class="card-block text-center" href="#">
+                                                        <a class="card-block text-center" href="#" th:href="${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).OrganizationList}">
                                                             <i class="mdi mdi-office-building" style="font-size: 40px;padding-bottom: 25px;color: #f4c22b"></i>
                                                             <h5  style="margin-top: 25px;" th:text="#{sys_menu.organizationList}"></h5>
                                                         </a>

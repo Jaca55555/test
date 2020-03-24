@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.admin.AdminTemplates;
 import uz.maroqand.ecology.cabinet.constant.admin.AdminUrls;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
-import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
-import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -27,15 +24,11 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.entity.LibraryCategory;
+
 
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
