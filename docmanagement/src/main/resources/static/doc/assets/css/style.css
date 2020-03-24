@@ -2426,6 +2426,7 @@ p.text-muted {
   margin-right: 7px;
   border-radius: 4px;
   width: 40px;
+  min-width: 40px;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
