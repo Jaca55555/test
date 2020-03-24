@@ -72,7 +72,7 @@
                                     <div class="form-group">
                                     <textarea class="form-control" rows="4" name="content" id="description_textarea" required="required" minlength="5"></textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" th:if="${isExecuteForm}">
                                         <label class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
                                         <div class="col-sm-12 p0">
                                             <input autocomplete="off" class="form-control datepicker date" id="dateBegin"  data-dtp="dtp_lq7TC" name="docRegDateStr" required="required"/>
@@ -80,6 +80,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <input th:if="${!isExecuteForm}"  id="dateBegin" type="hidden" />
 
                                 <div class="executor col-6 m10-vertical">
                                     <h5 th:text="#{doc_inner.performers}">Иштирокчилар</h5><br/>
@@ -91,15 +93,20 @@
                                     </div>
                                     <br/>
                                     <div class="row" id="addUsers">
-                                        <div class="col-10 pl-0">
-                                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
+                                        <div class="col-12 pl-0">
+                                            <select  th:if="${isExecuteForm}" class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
+                                                <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
+                                                <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
+                                            </select>
+                                            <select  th:if="${!isExecuteForm}" class="singleSelect col-sm-12 select2-hidden-accessible" id="userIdPerformer">
                                                 <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
                                                 <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
                                             </select>
                                         </div>
-                                        <div class="col-2 p-0">
-                                            <button type="button" class="btn btn-outline-secondary btn-block" id="add_user">Qo'shish</button>
-                                        </div>
+                                       <!-- <div class="col-2 p-0">
+                                            <button  th:if="${isExecuteForm}"type="button" class="btn btn-outline-secondary btn-block" id="add_user"><span th:text="#{sys_add}">Qo'shish</span></button>
+                                            <button th:if="${!isExecuteForm}" type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user1"><span th:text="#{sys_add}">Qo'shish</span></button>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +118,7 @@
                         <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
-                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
+<!--                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>-->
                                 <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
@@ -151,7 +158,7 @@
     }
 
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTaskUserName}]];
-    $('#add_user').on('click',function () {
+    $('#userId').on('change',function () {
         $('#dateBegin').parsley().validate();
         $('#description_textarea').parsley().validate()
         var userId = $('#userId').val();
@@ -239,7 +246,7 @@
                                 '       </div>\n' +
                                 '   </td>\n' +
                                 '   <td style="width: 5%">\n' +
-                                '       <button class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
+                                '       <button type="button" class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
                                 '   </td>\n' +
                                 '</tr>';
                             $('#data-table tbody').append(html);
@@ -258,7 +265,70 @@
                 }
             });
         }else{
-            console.log("000")
+            $('#userId').val('').change();
+            console.log("0001")
+        }
+    });
+
+
+    $('#userIdPerformer').on('change',function () {
+        $('#description_textarea').parsley().validate();
+        var userId = $('#userIdPerformer').val();
+        if (userId!="" && userId!=null && $('#description_textarea').parsley().isValid()){
+            $.ajax({
+                url: url,
+                data: {
+                    id: userId,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    if (response.status==1){
+                        var userId=response.userId;
+                        var userFullName=response.userFullName;
+                        var position=response.position;
+                        var html='';
+                        if (selectedUsersIds.indexOf(userId)<0){
+                            selectedUsersIds.push(userId);
+                            html='<tr id="tr_'+userId+'">' +
+                                '   <td style="width: 40%">\n' +
+                                '       <div class="flex-space-between p0">\n' +
+                                '           <div>\n' +
+                                '               <div class="inline-block">\n' +
+                                '                   <i class="fas fa-user-circle fs40 color-gray"></i>\n' +
+                                '               </div>\n' +
+                                '               <div class="inline-block m10-horizontal">\n' +
+                                '                   <span class="color-green bold">'+userFullName+'</span>\n' +
+                                '                   <br>\n' +
+                                '                   <span>'+position+'</span>\n' +
+                                '               </div> <input type="hidden" name="user_id'+userId+'" value="'+userId+'"/>\n' +
+                                '           </div>\n' +
+                                '           <input type="hidden" name="performer_'+userId+'" id="performer_'+userId+'" value="3"/>\n' +
+                                '       </div>\n' +
+                                '   </td>';
+                            html+='<td style="width: 40%">\n' +
+                                '<button type="button" class="btn-block btn btn-outline-primary btn-rounded btn-sm">'+task_sub_type_info+'</button>'+
+                                '   </td>';
+
+                            html+='   <td style="width: 20%">\n' +
+                                '       <button type="button" class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
+                                '   </td>\n' +
+                                '</tr>';
+                            $('#data-table tbody').append(html);
+                            $('#userIdPerformer').val('').change();
+                            $('#selectedUsersIds').val(selectedUsersIds);
+                        }
+                        $('#addUsers').css('border','0px');
+                    }
+                },
+                error: function () {
+                }
+            });
+        }else{
+            $('#userIdPerformer').val('').change();
+            console.log("0002")
         }
     });
 
@@ -293,7 +363,7 @@
     }
     function deleteSelectedUser(id) {
         if (selectedUsersIds.indexOf(id)>-1){
-            selectedUsersIds.splice(selectedIds.indexOf(id),1);
+            selectedUsersIds.splice(selectedUsersIds.indexOf(id),1);
             $('#selectedUsersIds').val(selectedUsersIds);
             $('#tr_'+id).remove();
 

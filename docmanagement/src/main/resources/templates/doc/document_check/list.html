@@ -36,7 +36,7 @@
             </div>
             <h5 class="office-h5 default-color" th:text="#{doc_check.documentsCount}">Кирувчи хатлар статистикаси</h5>
             <div class="responsive">
-                <div class="office-card">
+                <div class="office-card" onclick="$('#all-tab').click()">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                <div class="office-card"  onclick="$('#executing-tab').click()">
                     <div class="card dashboard-card border-warning-shadow">
                         <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                <div class="office-card"  onclick="$('#executing-tab1').click()">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="office-card">
+                <div class="office-card"  onclick="$('#executing-tab2').click()">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                         <div class="card-body" style="display: inline-block;text-align: center;">
@@ -209,10 +209,10 @@
                 <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_completed}"></span></a>
+                <a class="nav-link text-uppercase show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_completed}"></span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_rejected}">Ижро учун</span></a>
+                <a class="nav-link text-uppercase show" id="executing-tab2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_rejected}">Ижро учун</span></a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">

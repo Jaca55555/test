@@ -122,5 +122,11 @@ public class User {
         if (middlename!=null) fullName+=middlename+" ";
         return fullName;
     }
+    public String getShortName(){
+        String shortName = " ";
+        if (lastname!=null) shortName+=lastname.substring(0,1).toUpperCase() + ".";
+        if (firstname!=null) shortName+=firstname+" ";
+        return shortName;
+    }
 
 }

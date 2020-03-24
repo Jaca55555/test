@@ -81,15 +81,15 @@
                                     </div>
                                     <br/>
                                     <div class="row" id="addUsers">
-                                        <div class="col-9 pl-0">
+                                        <div class="col-12 pl-0">
                                             <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId">
                                                 <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>
                                                 <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
                                             </select>
                                         </div>
-                                        <div class="col-3 p-0">
+                                        <!--<div class="col-3 p-0">
                                             <button type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user" th:text="#{sys_add}">Qo'shish</button>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                         <input  type="hidden" th:field="${document.id}" />
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
-                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>
+<!--                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>-->
                                 <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
@@ -133,7 +133,9 @@
 
     function addTaskSubmit() {
         $('#dateBegin').parsley().validate();
-        $('#description_textarea').parsley().validate()
+        $('#description_textarea').parsley().validate();
+        console.log($('#dateBegin').parsley().isValid())
+        console.log($('#description_textarea').parsley().isValid())
         if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){
             $('#taskAddForm').submit();
         }else{
@@ -142,7 +144,7 @@
     }
 
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationUserName}]];
-    $('#add_user').on('click',function () {
+    $('#userId').on('change',function () {
         $('#dateBegin').parsley().validate();
         $('#description_textarea').parsley().validate();
         var userId = $('#userId').val();
@@ -230,7 +232,7 @@
                                 '       </div>\n' +
                                 '   </td>\n' +
                                 '   <td style="width: 5%">\n' +
-                                '       <button class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
+                                '       <button type="button" class="btn-icon"><i class="fas fs20 fa-trash-alt color-gray" onclick="deleteSelectedUser('+userId+')"> </i></button>\n' +
                                 '   </td>\n' +
                                 '</tr>';
                             $('#data-table tbody').append(html);
@@ -284,7 +286,7 @@
     }
     function deleteSelectedUser(id) {
         if (selectedUsersIds.indexOf(id)>-1){
-            selectedUsersIds.splice(selectedIds.indexOf(id),1);
+            selectedUsersIds.splice(selectedUsersIds.indexOf(id),1);
             $('#selectedUsersIds').val(selectedUsersIds);
             $('#tr_'+id).remove();
 

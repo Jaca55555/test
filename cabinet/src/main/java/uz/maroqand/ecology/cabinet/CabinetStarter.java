@@ -31,7 +31,7 @@ import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
         repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
 @EntityScan(basePackages = {"uz.maroqand.ecology.core.entity","uz.maroqand.ecology.docmanagement.entity"})
 @EnableCaching(proxyTargetClass = true)
-public class CabinetStarter {
+public class CabinetStarter { 
 
     private static final Logger logger = LogManager.getLogger(CabinetStarter.class);
 
