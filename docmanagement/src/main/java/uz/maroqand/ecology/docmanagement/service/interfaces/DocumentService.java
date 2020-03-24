@@ -27,6 +27,8 @@ public interface DocumentService {
     String buildTree(Document document,List<Document> documentList);
 
     Document createDoc(Integer documentTypeId, Document document, User user);
+
+    Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user, Integer positionIdForPrefix, String departmentPrefixCode);
     Document createReference(Integer documentTypeId, Document document, User user);
     void update(Document document);
 

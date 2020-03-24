@@ -307,53 +307,6 @@
             })
         });
 
-        function detectExtensionAndDisplay(data){
-            let extension = data.data.extension;
-            let fileName = data.data.name;
-            let color;
-            switch (extension) {
-                case 'jpg': case 'png': case 'jpeg':
-                    extension = '-image';
-                    color = 'color-yellow';
-                    break;
-                case 'pdf':
-                    extension = '-pdf';
-                    color = 'color-red';
-                    break;
-                case 'xlsx':
-                    extension = '-excel';
-                    color = 'color-green';
-                    break;
-                case 'doc':
-                case 'docx':
-                    extension = '-word';
-                    color = 'color-blue';
-                    break;
-                case 'pptx':
-                    extension = '-powerpoint';
-                    color = 'color-red';
-                    break;
-                case 'zip': case '7z': case 'rar':
-                    extension = '-archive';
-                    color = 'color-purple';
-                    break;
-                default:
-                    extension = '';
-                    color = 'color-gray';
-            }
-            $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
-            $('#file-container').append(
-                `<div class="file-block" id="file_block_${data.data.id}">
-                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
-                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
-                        </div>
-                        <div class="text-center">
-                            <span>` + fileNameSubString(fileName) + `</span>
-                        </div>
-                    </div>`
-            );
-        }
-
         $('#description').on('change', function () {
             if ($(this).val() === 'new') {
                 $('.new-desc').removeClass('d-none');
@@ -420,6 +373,109 @@
         subStringName += getExtension;
         return subStringName;
     }*/
+
+    let dropArea = document.querySelector('.file-button');
+
+    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false)
+    })
+
+    function preventDefaults (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false)
+
+    function handleDrop(e) {
+        let dt = e.dataTransfer
+        let files = dt.files
+        console.log(files);
+        let csrf = $("form input[name='_csrf']").val();
+        let fd = new FormData();
+        fd.append("file", files[0]);
+        fd.append("_csrf", csrf);
+        $.ajax({
+            url: "/doc/outgoing_mail/file/upload",
+            type: 'post',
+            data: fd,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: detectExtensionAndDisplay,
+            beforeSend: function () {
+                $('#addFileButton').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#addFileButton').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+        })
+
+
+
+        // handleFiles(files)
+    }
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        switch (extension) {
+            case 'jpg': case 'png': case 'jpeg':
+                extension = '-image';
+                color = 'color-yellow';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
+        $('#file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+        );
+    }
+
 </script>
 
 </body>
