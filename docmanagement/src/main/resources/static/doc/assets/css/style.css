@@ -2437,7 +2437,7 @@ p.text-muted {
   justify-content: center;
 }
 .pcoded-navbar .pcoded-inner-navbar li > a > .pcoded-micon + .pcoded-mtext {
-  width:190px;
+  width:170px;
 }
 .pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu > a:after {
   content: "\e844";
@@ -2469,16 +2469,16 @@ p.text-muted {
   margin: 0;
   display: block;
 }
-.pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu .pcoded-submenu li > a:before {
-  content: "";
-  border-radius: 50%;
-  position: absolute;
-  top: 16px;
-  left: 35px;
-  width: 5px;
-  height: 5px;
-  background: #62c462;
-}
+/*.pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu .pcoded-submenu li > a:before {*/
+/*  content: "";*/
+/*  border-radius: 50%;*/
+/*  position: absolute;*/
+/*  top: 16px;*/
+/*  left: 35px;*/
+/*  width: 5px;*/
+/*  height: 5px;*/
+/*  background: #62c462;*/
+/*}*/
 .pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu .pcoded-submenu li .pcoded-submenu > li > a {
   padding: 7px 7px 7px 80px;
 }

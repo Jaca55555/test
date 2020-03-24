@@ -778,3 +778,14 @@ html, body {
     width: 100%;
     font-style:italic ;
 }
+.rounded-notification {
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: #3ebfea;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:19px;
+    font-size: 80%;
+}
