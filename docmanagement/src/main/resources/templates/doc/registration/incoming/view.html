@@ -387,7 +387,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="resolution">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 th:text="#{doc_incoming.company_title}"></h5>
+            </div>
+
+            <div class="modal-body d-flex flex-column text-center">
+                <p class="">Nazorat uchun</p>
+                <p class="">U. Utayevga</p>
+                <p class="">Poruchenie Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla, officia?</p>
+                <p class="">Ijro uchun</p>
+                <p class="">T. Sapayev, B. Alimov</p>
+                <p class="">Rahbar</p>
+                <p class="align-self-end">Qo'chqorov Baxrom</p>
+            </div>
+
+            <div class="modal-footer justify-content-start">
+                <p>Data: 01.12.2019</p>
+            </div>
+
+        </div>
+    </div>
+</div>
 <!-- [ Modals ] end -->
+
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
