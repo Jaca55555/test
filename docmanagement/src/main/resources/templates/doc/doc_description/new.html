@@ -40,9 +40,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col form-group">
+                            <label class="control-label" th:for="${#ids.next('contentOz')}" th:text="#{doc.description_nameOz}"></label>
+                            <textarea rows="5" class="form-control" th:field="*{contentOz}" th:placeholder="#{doc.description_contentOz_placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="control-label" th:for="${#ids.next('contentRu')}" th:text="#{doc.description_nameRu}"></label>
+                            <textarea rows="5" class="form-control" th:field="*{contentRu}" th:placeholder="#{doc.description_contentRu_placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col align-self-center">
-                            <button th:text="#{doc.journal_reset_btn}" class="btn btn-dark" type="reset"></button>
-                            <button th:text="#{doc.journal_save_btn}" class="btn btn-success" type="submit"></button>
+                            <button th:text="#{doc.description_reset_btn}" class="btn btn-dark" type="reset"></button>
+                            <button th:text="#{doc.description_save_btn}" class="btn btn-success" type="submit"></button>
                         </div>
                     </div>
                 </form>

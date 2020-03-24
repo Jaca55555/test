@@ -50,14 +50,14 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_PERFORMER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}">
                         <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_check.list}"></span>
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceList}">
                         <span class="pcoded-micon"><i class="feather icon-file-text color-purple"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_reference.list}">Мурожаaтлар</span>
@@ -75,7 +75,7 @@
                         <span class="pcoded-mtext">Журналлар буйича</span>
                     </a>
                 </li>-->
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_LIBRARY')" >
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryWindow}">
                         <span class="pcoded-micon"><i class="feather icon-book color-green"></i></span>
                         <span class="pcoded-mtext" th:text="#{Kutubxona}"></span>

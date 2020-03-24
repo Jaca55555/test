@@ -7,9 +7,16 @@ package uz.maroqand.ecology.cabinet.constant.admin;
  */
 public class AdminUrls {
     private static final String Prefix = "/admin";
-
-    private static final String Organization = "/organization";
-
+    //Organization
+    private static final String Organization = Prefix+ "/organization";
+    public static final String OrganizationList = Organization + "/list";
+    public static final String OrganizationListAjax = Organization + "/ajax_list";
+    public static final String OrganizationNew = Organization + "/new";
+    public static final String OrganizationEdit = Organization + "/edit";
+    public static final String OrganizationCreate = Organization + "/create";
+    public static final String OrganizationUpdate = Organization + "/update";
+    public static final String OrganizationView = Organization + "/view";
+    public static final String OrganizationtGetByRegion = Organization + "/get_region";
     //Users
     private static final String Users = Prefix + "/users";
     public static final String UsersList = Users + "/list";

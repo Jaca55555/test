@@ -25,10 +25,23 @@ public class DocumentDescription {
 
     @Column(name = "content")
     private String content;
-
+    @Column(name = "content_ru")
+    private String contentRu;
+    @Column(name = "content_oz")
+    private String contentOz;
     @Column(name = "created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 
     @Column(name = "created_by_id")
     private Integer createdById;
+    public String getNameTranslation(String locale){
+        switch (locale) {
+            case "ru":
+                return contentRu;
+            case "oz":
+                return contentOz;
+            default:
+                return content;
+        }
+    }
 }

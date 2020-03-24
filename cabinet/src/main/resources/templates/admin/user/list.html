@@ -111,6 +111,8 @@
                                                     <th th:text="#{mntr_user.department}"></th>
                                                     <th th:text="#{mntr_user.position}"></th>
                                                     <th th:text="#{mntr_user.phone}"></th>
+                                                    <th th:text="#{mntr_user.gender}"></th>
+
                                                     <th th:text="#{mntr_user.status}"></th>
                                                     <th th:text="#{mntr_user.lastEvent}"></th>
                                                     <th></th>
@@ -146,6 +148,8 @@
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UsersView}]];
     var statusActive = [[#{status_active}]];
     var statusNotActive = [[#{status_not_active}]];
+    var male = [[#{Male}]];
+    var female = [[#{female}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -175,7 +179,10 @@
     }
 
     function renderStatusColumn(data, type, row, meta) {
-        return row[7]?statusActive:statusNotActive;
+        return row[8]?statusActive:statusNotActive;
+    }
+    function renderGenderColumn(data, type, row, meta) {
+        return row[7]?male:female;
     }
 
     function datatableConnect() {
@@ -218,8 +225,9 @@
                 {data: 4, name: 'departmentId'},
                 {data: 5, name: 'positionId'},
                 {data: 6, name: 'phone'},
+                {render: renderGenderColumn, name:'gender'},
                 {render: renderStatusColumn, name: 'enable'},
-                {data: 8, name: 'lastEvent'},
+                {data: 9, name: 'lastEvent'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

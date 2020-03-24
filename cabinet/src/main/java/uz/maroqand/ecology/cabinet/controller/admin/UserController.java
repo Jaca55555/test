@@ -121,6 +121,7 @@ public class UserController {
                     user.getDepartmentId()!=null? departmentService.getById(user.getDepartmentId()).getName():"",
                     user.getPositionId()!=null? positionService.getById(user.getPositionId()).getName():"",
                     user.getPhone(),
+                    user.getGender(),
                     user.getEnabled(),
                     user.getLastEvent()!=null? Common.uzbekistanDateAndTimeFormat.format(user.getLastEvent()):""
             });
@@ -296,6 +297,7 @@ public class UserController {
             @RequestParam(name = "reason") String reason,
             @RequestParam(name = "roleId") Integer roleId,
             @RequestParam(name = "enabled") Integer enebled,
+            @RequestParam(name = "gender")Boolean gender,
             User userCreate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -321,6 +323,7 @@ public class UserController {
             user1.setEmail(userCreate.getEmail());
             user1.setUsername(userCreate.getUsername());
             user1.setPassword(encoder.encode(userPassword));
+            user1.setGender(gender);
             user1 = userService.createUser(user1);
 
             String after="";

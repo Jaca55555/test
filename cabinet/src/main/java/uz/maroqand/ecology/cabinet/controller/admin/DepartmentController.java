@@ -223,9 +223,9 @@ public class DepartmentController {
     @PostMapping(value = AdminUrls.DepartmentGetByOrganization)
     @ResponseBody
     public List<Department> getList(
-
+        @RequestParam("id")Integer organizationId
     ){
-        int organizationId = 1;
+
         Organization organization = organizationService.getById(organizationId);
         if (organization==null) return null;
 
