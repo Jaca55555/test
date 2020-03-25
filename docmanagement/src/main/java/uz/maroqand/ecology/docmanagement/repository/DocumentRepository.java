@@ -40,11 +40,19 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
 
     Long countAllByDocumentTypeIdAndOrganizationIdAndDepartmentId(Integer documentTypeId, Integer organizationId, Integer departmentId);
 
+    Long countAllByDocumentTypeIdAndOrganizationIdAndDepartmentIdNotAndPerformerId(Integer documentTypeId, Integer organizationId, Integer departmentId, Integer performerId);
+
     Long countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(Integer typeId, DocumentStatus status, Integer organizationId, Integer departmentId);
+
+    Long countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentIdNotAndPerformerId(Integer typeId, DocumentStatus status, Integer organizationId,Integer departmentId, Integer performerId);
 
     Long countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentId(Date time, Integer documentTypeId, Integer organizationId, Integer departmentId);
 
+    Long countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentIdNotAndPerformerId(Date time, Integer documentTypeId, Integer organizationId,Integer departmentId, Integer performerId);
+
     Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(Integer documentTypeId, Integer organizationId, Integer departmentId);
+
+    Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentIdNotAndPerformerId(Integer documentTypeId, Integer organizationId,Integer departmentId, Integer performerId);
 
     Integer countByStatus(DocumentStatus status);
 

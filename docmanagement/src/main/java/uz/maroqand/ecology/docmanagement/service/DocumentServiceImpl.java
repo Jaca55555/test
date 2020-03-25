@@ -194,7 +194,7 @@ public class DocumentServiceImpl implements DocumentService {
     ) {
         return documentRepository.findAll(getSpesification(filterDTO), pageable);
     }
-
+    //fucking grammar, i fixed it 10 times!
     private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
@@ -324,23 +324,27 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId){
-        return documentRepository.countAllByDocumentTypeIdAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId);
+    public Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId, Integer performerId){
+        return documentRepository.countAllByDocumentTypeIdAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId)
+              +  documentRepository.countAllByDocumentTypeIdAndOrganizationIdAndDepartmentIdNotAndPerformerId(documentTypeId, organizationId, departmentId, performerId);
     }
 
     @Override
-    public Long countAllByStatus(Integer typeId, DocumentStatus status,Integer organizationId, Integer departmentId){
-        return documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(typeId, status, organizationId, departmentId);
+    public Long countAllByStatus(Integer typeId, DocumentStatus status,Integer organizationId, Integer departmentId, Integer performerId){
+        return documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(typeId, status, organizationId, departmentId)
+                + documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentIdNotAndPerformerId(typeId, status, organizationId,departmentId, performerId);
     }
 
     @Override
-    public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId){
-        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentId(getCastedDate(), docTypeId, organizationId, departmentId);
+    public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId, Integer performerId){
+        return documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentId(getCastedDate(), docTypeId, organizationId, departmentId)
+                + documentRepository.countAllByCreatedAtAfterAndDocumentTypeIdAndOrganizationIdAndDepartmentIdNotAndPerformerId(getCastedDate(), docTypeId, organizationId,departmentId, performerId);
     }
 
     @Override
-    public  Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId){
-        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId);
+    public  Long countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId, Integer performerId){
+        return documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentId(documentTypeId, organizationId, departmentId)
+                + documentRepository.countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentIdNotAndPerformerId(documentTypeId, organizationId,departmentId, performerId);
     }
 
     @Override

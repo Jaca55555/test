@@ -61,11 +61,12 @@ public class OutgoingController {
         Integer departmentId = user.getDepartmentId();
         Integer organizationId = user.getOrganizationId();
         Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
-        long totalOutgoing = documentService.countAll(outgoingMailType, organizationId, departmentId);
-        long haveAdditionalDocument =  documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId, departmentId);
+        Integer userId = user.getId();
+        long totalOutgoing = documentService.countAll(outgoingMailType, organizationId, departmentId, userId);
+        long haveAdditionalDocument =  documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId, departmentId, userId);
 
-        model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId));
-        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId));
+        model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId, userId));
+        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId, userId));
 
         model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
         //additional document is null, 'answer not accepted translation tag'
