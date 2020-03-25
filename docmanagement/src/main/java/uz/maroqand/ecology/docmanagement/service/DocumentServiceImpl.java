@@ -126,12 +126,13 @@ public class DocumentServiceImpl implements DocumentService {
         document.setOrganizationId(user.getOrganizationId());
         document.setDocumentTypeId(documentTypeId);
         document.setStatus(DocumentStatus.New);
-        if (document.getControlId()!=null){
+        if (document.getControlId() != null){
             document.setSpecialControll(Boolean.TRUE);
         }else{
             document.setSpecialControll(Boolean.FALSE);
         }
         document.setRegistrationNumber(journalService.getRegistrationNumberByJournalId(document.getJournalId()));
+
         document.setRegistrationDate(new Date());
 
         document.setCreatedById(user.getId());
@@ -139,6 +140,32 @@ public class DocumentServiceImpl implements DocumentService {
         document.setDeleted(Boolean.FALSE);
         return documentRepository.save(document);
     }
+
+    public Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user, Integer positionIdForPrefix, String departmentPrefixCode){
+
+        document.setOrganizationId(user.getOrganizationId());
+        document.setDocumentTypeId(documentTypeId);
+        document.setStatus(status);
+
+        if (document.getControlId() != null){
+            document.setSpecialControll(Boolean.TRUE);
+        }else{
+            document.setSpecialControll(Boolean.FALSE);
+        }
+        String chiefPrefix = String.format("%02d", positionIdForPrefix);
+        String journalSuffix = journalService.getRegistrationNumberByJournalId(document.getJournalId());
+        document.setRegistrationNumber(String.format("%s-%s-%s", chiefPrefix, departmentPrefixCode, journalSuffix));
+
+        document.setRegistrationDate(new Date());
+
+        document.setCreatedById(user.getId());
+        document.setCreatedAt(new Date());
+        document.setDeleted(Boolean.FALSE);
+
+        return documentRepository.save(document);
+    }
+
+
     @Override
     public Document createReference(Integer documentTypeId, Document document, User user) {
         document.setOrganizationId(user.getOrganizationId());

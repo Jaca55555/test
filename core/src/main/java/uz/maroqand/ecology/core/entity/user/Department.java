@@ -80,6 +80,9 @@ public class Department {
     @Column(name = "updated_by_id")
     private Integer updatedById;
 
+    @Column(name = "code")
+    private String prefixCode;
+
     @Override
     public String toString() {
         return "{tags:" + id + ", text:\'" + name + "\', nodes:"
