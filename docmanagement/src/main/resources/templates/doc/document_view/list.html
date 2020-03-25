@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
-    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <title th:text="#{document_view.list}">Kanselariya</title>
 </head>
 <body>
 <div class="background"></div>
@@ -26,8 +26,8 @@
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
                 <h5 class="mb-0" style="align-self:center">
-                    <a href="" class="card-header-a">
-                        Communication_tools_list
+                    <a href="" class="card-header-a" th:text="#{document_view.list}">
+                        document_view_list
                     </a>
                 </h5>
                 <div>
