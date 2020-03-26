@@ -33,7 +33,7 @@ public class GetNotifacationService {
     }
     public Long countIncomingByStatus2(){
         User user = userService.getCurrentUserFromContext();
-        return documentService.countAllByStatus(DocumentTypeEnum.IncomingDocuments.getId(), DocumentStatus.New, user.getOrganizationId(), user.getDepartmentId(), user.getId());
+        return documentService.countAllByStatus(DocumentTypeEnum.IncomingDocuments.getId(), DocumentStatus.New, user.getOrganizationId());
     }
 
 

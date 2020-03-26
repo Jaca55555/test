@@ -172,9 +172,14 @@ public class OutgoingController {
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
+        Integer userId = userService.getCurrentUserFromContext().getId();
         for (DocumentSub documentSub : documentSubPage) {
             Document document = documentSub.getDocument();
             if(document == null) continue;
+            if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
+                if(document.getCreatedById() != userId && document.getPerformerId() != userId)
+                    continue;
+            }
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
