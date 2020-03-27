@@ -82,21 +82,12 @@
                     <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
-                 th:if="${specialControll!=null and document.performerName!=null and document.performerName!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerName}">Жўнатувчи шахс:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerName}">Иванов Иван Иванович</span></div>
-            </div>
+
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
-            </div>
-            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical"
-                 th:if="${specialControll!=null and document.performerPhone!=null and document.performerPhone!=''}">
-                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
             </div>
         </div>
         <hr class="m20-vertical">
