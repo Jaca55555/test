@@ -43,60 +43,6 @@
             </div>
             <h5 class="office-h5 default-color"><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
             <div class="responsive">
-             <!--   <div class="office-card">
-                    <div class="card dashboard-card border-primary-shadow">
-                        <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${inProgress}">10</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-danger-shadow">
-                        <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${todayDocuments}">20</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-warning-shadow">
-                        <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">30</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_document_count}">Жавоб тариқасида</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;" >
-                            <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title">40</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</span></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
-                            <h6 class="card-title"><span th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</span></h6>
-                        </div>
-                    </div>
-                </div> -->
                     <div class="office-card">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="fas fa-clock"></span></div>
@@ -326,12 +272,11 @@
         fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
             .then((response) =>{
                 if(response.ok){
-                    console.log(response);
                     return response.json()
                 }
             })
             .then((data) => {
-                console.log(data);
+
                 dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                 dropDownValues[0].innerHTML = `
                     <button class="dropdown-item btn-block" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
@@ -358,7 +303,7 @@
 
         html += `<div class="btn-group mb-2 mr-2">
                                             <button type="button"
-                         class="btn-rounded btn btn-primary">${statuses[current]}</button>
+                         class="btn-rounded btn btn-primary">${data}</button>
                  </div>`;
 
         return html;
