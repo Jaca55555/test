@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="{doc.new_library}">Kiruvchi Xatlar Ro'yxati</title>
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
     <style>
@@ -43,7 +43,7 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-start mobile-column" style="align-items: center;">
-                <h5 class="mb-0"><span class="card-header-a">New Library</span></h5>
+                <h5 class="mb-0"><span class="card-header-a" th:text="{doc.new_library}">New Library</span></h5>
             </div>
             <div class="card-block">
                 <form enctype="multipart/form-data"  id="document_form"  method="post"

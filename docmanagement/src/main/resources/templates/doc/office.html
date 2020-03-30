@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
-    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <title th:text="#{sys_document.dashboard}">Kanselariya</title>
     <style>
         .datepicker>.datepicker-days {
             display: block;
@@ -578,7 +578,7 @@
 
             }
             if (databack>=1 && databack<=3){
-                html += `<div class="btn-group mb-0 mr-0 btn-block">
+             html += `<div class="btn-group mb-0 mr-0 btn-block">
                             <button type="button" class="btn-block btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
                             <button type="button" class="pl-1 pr-1 btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" max-width: 40px !important;">
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -614,7 +614,7 @@
                 })
         }
 
-        /*function renderStatusColumn(data, type, row, meta) {
+        function renderStatusColumn(data, type, row, meta) {
             var html = '';
             var status=row[8];
             switch (status) {
@@ -627,7 +627,7 @@
                 default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+statuses[status]+'</button>';return html;
             }
             return html;
-        }*/
+        }
 
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
@@ -729,7 +729,7 @@
                         },
                         className: "text-justify"
                     },
-                    {render: renderChangeColumn, name: "status",
+                    {render: renderStatusColumn, name: "status",
                         className: "text-center"},
 
                     // {render: renderActionsColumn, orderable: false}

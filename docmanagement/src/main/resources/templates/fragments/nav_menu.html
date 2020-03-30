@@ -6,7 +6,7 @@
         <div class="navbar-brand header-logo" >
             <a class="logo_a" href="#">
                 <img alt="" src="/static/doc/images/logo.png">
-                <span class="b-title">ЭКОЭКСПЕРТИЗА</span>
+                <span class="b-title" th:text="#{eco_ex.doc_management}">ЭКОЭКСПЕРТИЗА</span>
             </a>
             <!-- <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span> </a> -->
         </div>
@@ -31,14 +31,14 @@
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}">
                         <span class="pcoded-micon"><i class="feather icon-download color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="color-gray rounded-pill w-15 text-center" style="height: 20px">12</span>
+                        <span th:text="${@getNotifacationService.countIncomingByStatus2()}" class="color-gray rounded-pill w-15 text-center" style="height: 20px">12</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}">
                         <span class="pcoded-micon"><i class="feather icon-upload color-green"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="color-gray rounded-pill w-15 text-center" style="height: 20px">12</span>
+                        <span th:text="${@getNotifacationService.countOutgoingByStatus2()}" class="color-gray rounded-pill w-15 text-center" style="height: 20px">12</span>
 
                     </a>
                 </li>
