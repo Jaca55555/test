@@ -104,7 +104,7 @@
             <div class="col-md-6 col-sm-12">
                 <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center" id="fileContainer">
-
+                <div id="modalContainer"> </div>
                 </div>
                 <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
                     <button type="button" class="btn btn-rounded btn-danger fs11">
@@ -130,8 +130,8 @@
         for(let i = 0; i < files.length; i++){
             let fileName= files[i].name;
             let extensionAndColor = detectExtensionAndColor(files[i].extension)
-            $('#fileContainer').append(`
-                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
+            $('#fileContainer').append(`<button class="btn" data-toggle="modal" data-target="#myModal`+i+`">
+                <div  class="office-card-file" >
                                 <div class="card dashboard-card">
                                     <div class="file-icon-container-small ${extensionAndColor.color}"><span
                                             class="fas fa-file${extensionAndColor.extension}"></span></div>
@@ -140,10 +140,31 @@
                                         <h6 class="card-title" >` + fileNameSubString(fileName) + `</h6>
                                     </div>
                                 </div>
-                            </div>
+                            </div></button>
+            `);
+            $('#modalContainer').append(`
+            <div class="modal fade" id="myModal`+i+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">`+files[i].name+`</h4>
+                    </div>
+                    <div class="modal-body">
+                        <iframe src="`+files[i].path+`" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
             `);
         }
     }
+
     function detectExtensionAndColor(extension){
         let data = {};
         switch (extension) {
@@ -179,9 +200,6 @@
         return data;
     }
 
-    function downloadFileFunction(id) {
-        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
-    }
 
     function fileNameSubString(fileName) {
         let lastIndex = fileName.lastIndexOf('.');

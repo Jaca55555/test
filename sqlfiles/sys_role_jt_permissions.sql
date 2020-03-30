@@ -11,6 +11,7 @@ INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, '
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'DOC_MANAGEMENT_APPEAL');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE_USER');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'DOC_MANAGEMENT_PERFORMER');
+INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'DOC_MANAGEMENT_CHECKED');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'EXPERTISE');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'ENTERPRISE_REGISTER');
 INSERT INTO public.sys_role_jt_permissions (role_id, permission_id) VALUES (1, 'ADMIN');
