@@ -134,7 +134,7 @@
                             </select>
                         </div>
                 </div>
-                    <div class="border-warning m20 p20" style="margin-left:15px">
+                    <div class=" m20 p20" id="borderBox" style="margin-left:15px">
                         <div class="checkbox checkbox-fill d-inline checkbox-danger">
                             <input type="checkbox" name="insidePurpose" id="checkbox-fill-1" th:checked="${document!=null && document.insidePurpose!=null && document.insidePurpose}">
                             <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc_outgoing.reg_inside_purpose}">Checked</span></label>
@@ -453,6 +453,13 @@
        // handleFiles(files)
     }
 
+    document.querySelector('#checkbox-fill-1').addEventListener('click', function(e){
+        if(this.checked){
+            document.querySelector('#borderBox').classList.add('border-warning');
+        }else{
+            document.querySelector('#borderBox').classList.remove('border-warning');
+        }
+    });
 
 
 </script>

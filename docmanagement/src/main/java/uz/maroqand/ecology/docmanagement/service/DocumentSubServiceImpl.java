@@ -9,6 +9,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import org.springframework.data.domain.Example;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -18,9 +19,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Join;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.criteria.MapJoin;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 14.02.2020.
@@ -132,7 +132,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 pageable);
     }
 
-    Specification<DocumentSub> filteringSpecificationForOutgoingForm(
+    public Specification<DocumentSub> filteringSpecificationForOutgoingForm(
             Integer documentTypeId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
@@ -148,18 +148,23 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             List<Predicate> predicates = new LinkedList<>();
 
             Join<DocumentSub, Document> joinDocument = root.join("document");
+            Join<DocumentSub, Set<DocumentOrganization>> joinOrganizations = root.join("documentOrganizations");
 
             if(documentOrganizationId != null)
-                predicates.add(criteriaBuilder.equal(root.get("organizationId"), documentOrganizationId));
+                predicates.add(criteriaBuilder.equal(joinOrganizations.get("id"), documentOrganizationId));
+
             if(documentTypeId != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentTypeId"), documentTypeId));
             if(documentStatusIdToExclude != null)
                 predicates.add(criteriaBuilder.notEqual(joinDocument.get("status"), documentStatusIdToExclude));
             if(registrationNumber != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("registrationNumber"), registrationNumber));
-            if(dateEnd != null)
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(joinDocument.get("registrationDate"), dateEnd));
-            if(dateBegin != null)
+            if(dateEnd != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateEnd);
+                calendar.add(Calendar.DATE, 1);
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(joinDocument.get("registrationDate"), calendar.getTime()));
+            }if(dateBegin != null)
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(joinDocument.get("registrationDate"), dateBegin));
             if(documentViewId != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentViewId"), documentViewId));
@@ -169,6 +174,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 Predicate p = criteriaBuilder.or(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId), criteriaBuilder.equal(joinDocument.get("performerId"), performerId));
                 predicates.add(p);
             }
+            else if(departmentId != null && performerId == null){
+                predicates.add(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId));
+            }
+            predicates.toArray(new Predicate[0]);
             Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             return overAll;
         };

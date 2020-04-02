@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.List;
+import java.util.Collections;
+
 
 @Controller
 public class InnerRegistrationController {
@@ -180,9 +182,8 @@ public class InnerRegistrationController {
                 incomingRegFilter,
                 deadlineDateBegin,
                 deadlineDateEnd,
-                null,
                 status,
-                null,
+                user.getDepartmentId(),
                 null,
                 specialControll,
                 pageable);
@@ -289,6 +290,7 @@ public class InnerRegistrationController {
         document.setContentFiles(files);
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
+        document.setDepartmentId(user.getDepartmentId());
         if (executeForm!=null){
             document.setExecuteForm(executeForm);
         }

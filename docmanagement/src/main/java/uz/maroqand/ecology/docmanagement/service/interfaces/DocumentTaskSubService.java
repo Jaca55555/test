@@ -34,8 +34,7 @@ public interface DocumentTaskSubService {
 
     Page<DocumentTaskSub> findFiltered(
             Integer organizationId,
-            Integer documentTypeId,
-
+            List<Integer> documentTypeId,
             Integer documentOrganizationId,
             String docRegNumber,
             String registrationNumber,
@@ -53,7 +52,7 @@ public interface DocumentTaskSubService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
-            Boolean specialControll,
+            Boolean specialControl,
             Pageable pageable
     );
 

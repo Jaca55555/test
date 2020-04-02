@@ -530,10 +530,6 @@
         let thead;
         var tabFilter;
 
-
-        console.log(viewLink);
-
-
         function renderChangeColumn(data, type, row, meta) {
             let databack = row[8];
             let current=databack;
@@ -601,12 +597,10 @@
             fetch(statusLink + `?id=${id}&target_status_id=${targetStatus}`)
                 .then((response) =>{
                     if(response.ok){
-                        console.log(response);
                         return response.json()
                     }
                 })
                 .then((data) => {
-                    console.log(data);
                     dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                     dropDownValues[0].innerHTML = `<button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
                                                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>`;
@@ -649,6 +643,17 @@
             html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
+        function linkByType(documentTypeId){
+            if(documentTypeId === 1)
+                return 'incoming/view'
+            else if(documentTypeId === 2)
+                return 'outgoing/view';
+            else if(documentTypeId === 3)
+                return 'inner/view';
+            else
+                return 'reference/view';
+        }
+
         function clearFilter() {
             $('#filter .singleSelect').val(null).select2();
             $('#filter input').val('');
@@ -660,7 +665,7 @@
                 serverSide: true,
                 scrollX: true,
                 pageLength: 25,
-                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom: 'lrtip',
                 ajax : function (dataToSend, callback, settings) {
@@ -700,7 +705,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'"  >' + row[1]+'</a>';
+                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'"  >' + row[1]+'</a>';
                             return html;
                         },
                         className: "text-left fit-content"
@@ -708,7 +713,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "text-left"

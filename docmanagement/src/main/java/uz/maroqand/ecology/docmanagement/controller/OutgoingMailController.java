@@ -470,7 +470,7 @@ public class OutgoingMailController {
         }
     }
 
-    Date castDate(String dateString){
+    static Date castDate(String dateString){
         if(dateString == null)
             return null;
         else return DateParser.TryParse(dateString, Common.uzbekistanDateFormat);

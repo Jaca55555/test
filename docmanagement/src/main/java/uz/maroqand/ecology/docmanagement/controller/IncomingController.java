@@ -165,7 +165,7 @@ public class IncomingController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                1, //todo documentTypeId=1
+                Collections.singletonList(1), //todo documentTypeId=1
 
                 documentOrganizationId,
                 docRegNumber,

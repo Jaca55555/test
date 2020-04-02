@@ -21,6 +21,7 @@ import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
@@ -193,19 +194,18 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             IncomingRegFilter incomingRegFilter,
             Date deadlineDateBegin,
             Date deadlineDateEnd,
-            Integer type,
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
             Boolean specialControll,
             Pageable pageable
     ) {
-        return taskRepository.findAll(getSpesification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
+        return taskRepository.findAll(getSpecification(organizationId, documentTypeId, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, departmentId, receiverId,specialControll), pageable);
     }
 
     @Override
     public Page<DocumentTask> findFilteredReference(Integer organizationId, Integer documentTypeId, ReferenceRegFilterDTO referenceRegFilterDTO, Date deadlineDateBegin, Date deadlineDateEnd, Integer type, Set<Integer> status, Integer departmentId, Integer receiverId, Boolean specialControll, Pageable pageable) {
-        return taskRepository.findAll(getSpesificationReference(organizationId, documentTypeId, referenceRegFilterDTO, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
+        return taskRepository.findAll(getSpecificationReference(organizationId, documentTypeId, referenceRegFilterDTO, deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
     }
 
     //taskOrsubTask==true  task
@@ -396,15 +396,12 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return resolutionDTO;
     }
 
-    private static Specification<DocumentTask> getSpesification(
+    private static Specification<DocumentTask> getSpecification(
             final Integer organizationId,
             final Integer documentTypeId,
-
             final IncomingRegFilter incomingRegFilter,
-
             final Date deadlineDateBegin,
             final Date deadlineDateEnd,
-            final Integer type,
             final Set<Integer> statuses,
             final Integer departmentId,
             final Integer receiverId,
@@ -419,10 +416,9 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
             }
             if (documentTypeId != null) {
-                //kiruvchi, chiquvchi, ichki hujjatlar
+                //kiruvchi, chiquvchi(ой да что вы говорите, таки работает он для исходящих), ichki hujjatlar
                 predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
             }
-
             if (incomingRegFilter.getDocumentOrganizationId() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.join("document").join("documentSubs").get("organizationId"),
@@ -476,14 +472,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
             }
 
-            if (type != null) {
-                predicates.add(criteriaBuilder.equal(root.get("type"), type));
-            }
             if (statuses != null) {
                 predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
             }
             if (departmentId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+                predicates.add(criteriaBuilder.equal(root.get("document").get("departmentId"), departmentId));
             }
             if (receiverId != null) {
                 predicates.add(criteriaBuilder.equal(root.get("chiefId"), receiverId));
@@ -497,7 +490,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
-    private static Specification<DocumentTask> getSpesificationReference(
+    private static Specification<DocumentTask> getSpecificationReference(
             final Integer organizationId,
             final Integer documentTypeId,
 

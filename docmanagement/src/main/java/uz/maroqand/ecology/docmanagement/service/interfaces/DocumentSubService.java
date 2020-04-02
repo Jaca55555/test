@@ -33,4 +33,17 @@ public interface DocumentSubService {
 
     DocumentSub findOneByDocumentId(Integer documentId);
 
+    Specification<DocumentSub> filteringSpecificationForOutgoingForm(
+            Integer documentTypeId,
+            Integer documentStatusIdToExclude,
+            Integer documentOrganizationId,
+            String registrationNumber,
+            Date dateBegin,
+            Date dateEnd,
+            Integer documentViewId,
+            String content,
+            Integer departmentId,
+            Integer performerId
+    );
+
 }

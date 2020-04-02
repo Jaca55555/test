@@ -63,6 +63,7 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     }
 
     @Override
+    @CacheEvict(value = "documentViewStatusActive", allEntries = true)
     public DocumentView create(DocumentView documentView) {
         documentView.setDeleted(Boolean.FALSE);
         documentView.setCreatedAt(new Date());

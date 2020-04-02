@@ -12,6 +12,7 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
@@ -118,7 +119,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public Page<DocumentTaskSub> findFiltered(
             Integer organizationId,
-            Integer documentTypeId,
+            List<Integer> documentTypeIds,
 
             Integer documentOrganizationId,
             String docRegNumber,
@@ -140,15 +141,15 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             Boolean specialControll,
             Pageable pageable
     ) {
-        return documentTaskSubRepository.findAll(getSpesification(
-                organizationId, documentTypeId,
+        return documentTaskSubRepository.findAll(getSpecification(
+                organizationId, documentTypeIds,
                 documentOrganizationId, docRegNumber, registrationNumber, dateBegin, dateEnd, taskContent, content, performerId, taskSubType, taskSubStatus,
                 deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
     }
 
-    private static Specification<DocumentTaskSub> getSpesification(
+    private Specification<DocumentTaskSub> getSpecification(
             final Integer organizationId,
-            final Integer documentTypeId,
+            final List<Integer> documentTypeIds,
 
             final Integer documentOrganizationId,
             final String docRegNumber,
@@ -172,82 +173,85 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
 
-            System.out.println("deadlineDateBegin=" + deadlineDateBegin);
-            System.out.println("deadlineDateEnd=" + deadlineDateEnd);
-                if (organizationId != null) {
-                    //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
-                    predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+            if (organizationId != null) {
+                //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
+                predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+            }
+            if (documentOrganizationId != null) {
+                predicates.add(criteriaBuilder.equal(root.join("document").join("documentSubs").get("organizationId"), documentOrganizationId));
+            }
+            if (documentTypeIds != null) {
+                //kiruvchi va chiquvchi hujjatlar ajratish uchun
+                List<Predicate> p = new ArrayList<>(documentTypeIds.size());
+                for (Integer documentTypeId : documentTypeIds){
+                    if (documentTypeId != 2)
+                        p.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
                 }
-                if (documentOrganizationId != null) {
-                    predicates.add(criteriaBuilder.equal(root.join("document").join("documentSubs").get("organizationId"), documentOrganizationId));
-                }
-                if (documentTypeId != null) {
-                    //kiruvchi va chiquvchi hujjatlar ajratish uchun
-                    predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
-                }
+                predicates.add(criteriaBuilder.or(p.toArray(new Predicate[0])));
+            }
 
-                if (StringUtils.trimToNull(docRegNumber) != null) {
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + docRegNumber.toLowerCase() + "%"));
-                }
-                if (StringUtils.trimToNull(registrationNumber) != null) {
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
-                }
+            if (StringUtils.trimToNull(docRegNumber) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + docRegNumber.toLowerCase() + "%"));
+            }
+            if (StringUtils.trimToNull(registrationNumber) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
+            }
 
-                if (dateBegin != null && dateEnd == null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateBegin));
-                }
-                if (dateEnd != null && dateBegin == null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateEnd));
-                }
-                if (dateBegin != null && dateEnd != null) {
-                    predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
-                }
-                if (StringUtils.trimToNull(content) != null) {
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + content.toLowerCase() + "%"));
-                }
+            if(dateEnd != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateEnd);
+                calendar.add(Calendar.DATE, 1);
+                predicates.add(criteriaBuilder.lessThan(root.get("document").get("registrationDate"), calendar.getTime()));
+            }if(dateBegin != null)
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate"), dateBegin));
 
-                if (StringUtils.trimToNull(taskContent) != null) {
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + taskContent.toLowerCase() + "%"));
-                }
-                if (performerId != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
-                }
-                if (taskSubType != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
-                }
-                if (taskSubStatus != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
-                }
+            if (StringUtils.trimToNull(content) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + content.toLowerCase() + "%"));
+            }
 
+            if (StringUtils.trimToNull(taskContent) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + taskContent.toLowerCase() + "%"));
+            }
+            if (performerId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
+            }
+            if (taskSubType != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (taskSubStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
+            }
 
-                if (deadlineDateBegin != null && deadlineDateEnd == null) {
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
-                }
-                if (deadlineDateEnd != null && deadlineDateBegin == null) {
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));//kichik yoki teng
-                }
-                if (deadlineDateBegin != null && deadlineDateEnd != null) {
-                    predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
-                }
+            if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
+            }
+            if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));//kichik yoki teng
+            }
+            if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
+            }
 
-                if (type != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
-                }
-                if (statuses != null) {
-                    predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
-                }
-                if (departmentId != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
-                }
-                if (receiverId != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
-                }
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (statuses != null) {
+                predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
+            }
+            if (departmentId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+            }
+            if (receiverId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+            }
 
-                if (specialControll != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
-                }
-                predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            if (specialControll != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
+            }
+
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

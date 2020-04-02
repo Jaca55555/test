@@ -58,11 +58,10 @@ public interface DocumentTaskService {
             IncomingRegFilter incomingRegFilter,
             Date deadlineDateBegin,
             Date deadlineDateEnd,
-            Integer type,
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
-            Boolean specialControll,
+            Boolean specialControl,
             Pageable pageable
     );
     Page<DocumentTask> findFilteredReference(
@@ -75,7 +74,7 @@ public interface DocumentTaskService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
-            Boolean specialControll,
+            Boolean specialControl,
             Pageable pageable
     );
 
