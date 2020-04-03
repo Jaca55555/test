@@ -66,7 +66,7 @@ public interface DocumentTaskSubService {
 
     Integer countByReceiverId(Integer receiverId);
 
-    StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId);
+    StaticInnerInTaskSubDto countAllByTypeAndReceiverId(Integer documentTypeId, Integer receiverId);
 
     Integer countByReceiverIdAll(Integer receiverId);
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);

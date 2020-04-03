@@ -60,7 +60,7 @@ public class InnerController {
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
-        model.addAttribute("statistic", documentTaskSubService.countAllInnerByReceiverId(user.getId()));
+        model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(),user.getId()));
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());

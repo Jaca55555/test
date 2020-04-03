@@ -277,12 +277,12 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId) {
+    public StaticInnerInTaskSubDto countAllByTypeAndReceiverId(Integer documentTypeId, Integer receiverId) {
         StaticInnerInTaskSubDto statisticInner = new StaticInnerInTaskSubDto();
         if (receiverId==null) return statisticInner;
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByReceiverIdAndDeletedFalseOrderByIdAsc(receiverId);
         for (DocumentTaskSub documentTaskSub: documentTaskSubList){
-            if (documentTaskSub.getDocument().getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){//todo vaqtincha to'g'rilash kerak
+            if (documentTaskSub.getDocument().getDocumentTypeId().equals(documentTypeId)){//todo vaqtincha to'g'rilash kerak
                 statisticInner.setAllCount(statisticInner.getAllCount()+1);                         //barcha ichki xatlar
 
                 if (documentTaskSub.getStatus()!=null){

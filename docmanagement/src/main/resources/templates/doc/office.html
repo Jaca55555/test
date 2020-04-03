@@ -65,7 +65,7 @@
                         <div class="card dashboard-card border-primary-shadow">
                              <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.new}">10</h4>
+                                <h4 class="card-title" th:text="${incoming.newCount}">10</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_new}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.inProcess}">20</h4>
+                                <h4 class="card-title" th:text="${incoming.inProgressCount}">20</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_in_process}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.nearDate}">30</h4>
+                                <h4 class="card-title" th:text="${incoming.lessDeadlineCount}">30</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_near_date}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.expired}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.greaterDeadlineCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_expired}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.complete}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.checkingCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_completed}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.all}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.allCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_total}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${inner.newCount}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${inner.inProgressCount}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@
                             <div class="card dashboard-card border-warning-shadow">
                                 <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.nearDate}">30</h4>
+                                    <h4 class="card-title" th:text="${inner.lessDeadlineCount}">30</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.expired}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.greaterDeadlineCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.checkingCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.allCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${appeal.newCount}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${appeal.inProgressCount}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@
                             <div class="card dashboard-card border-warning-shadow">
                                 <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.nearDate}">30</h4>
+                                    <h4 class="card-title" th:text="${appeal.lessDeadlineCount}">30</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.expired}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.greaterDeadlineCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -216,7 +216,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.checkingCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.allCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${outgoingCountNew}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${outgoingInProgress}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -273,7 +273,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${outgoingCompleted}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${outgoingAll}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>

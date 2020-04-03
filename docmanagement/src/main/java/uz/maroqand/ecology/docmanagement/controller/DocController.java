@@ -76,15 +76,25 @@ public class DocController {
 
     @RequestMapping(DocUrls.Dashboard)
     public String getDepartmentList(Model model) {
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId = user.getOrganizationId(), departmentId = user.getDepartmentId(), userId = user.getId();
+
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("organizationList", documentOrganizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
 
-        model.addAttribute("incomingCount", documentService.getCountersByType(DocumentTypeEnum.IncomingDocuments.getId()));
-        model.addAttribute("innerCount", documentService.getCountersByType(DocumentTypeEnum.InnerDocuments.getId()));
+        model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), userId));
+
+        model.addAttribute("inner", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(), userId));
+
+        model.addAttribute("outgoingCountNew", documentService.countAllTodaySDocuments(2, organizationId, departmentId, userId));
+        model.addAttribute("outgoingInProgress", documentService.countAllByStatus(2, DocumentStatus.InProgress, organizationId, departmentId, userId));
+        model.addAttribute("outgoingCompleted", documentService.countAllByStatus(2, DocumentStatus.Completed, organizationId, departmentId, userId));
+        model.addAttribute("outgoingAll", documentService.countAll(2, organizationId, departmentId, userId));
         model.addAttribute("outgoingCount", documentService.getCountersByType(DocumentTypeEnum.OutgoingDocuments.getId()));
-        model.addAttribute("appealCount", documentService.getCountersByType(DocumentTypeEnum.AppealDocuments.getId()));
+
+        model.addAttribute("appeal", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.AppealDocuments.getId(), userId));
 
         Role role = userService.getCurrentUserFromContext().getRole();
         String specifiedView = role.getPermissions().contains(Permissions.DOC_MANAGEMENT_REGISTER) ?DocUrls.IncomingRegistrationView : DocUrls.IncomingView;
@@ -309,7 +319,6 @@ public class DocController {
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
             Document document = documentService.getById(documentTaskSub.getDocumentId());
-            System.out.println(document.getDocumentTypeId());
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
