@@ -17,7 +17,7 @@ public interface UserService {
     List<User> getListByDepartmentAllParent(Integer departmentId);
 
     List<User> getEmployeeList();
-
+    List<User> getAll();
     User findById(Integer id);
 
     User findById(Integer id, Integer organizationId);

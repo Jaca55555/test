@@ -365,6 +365,7 @@ public class UserController {
             @RequestParam(name = "departmentId") Integer departmentId,
             @RequestParam(name = "roleId") Integer roleId,
             @RequestParam(name = "enabled") Integer enebled,
+            @RequestParam(name="gender")Boolean gender,
             User userUpdate
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -394,6 +395,7 @@ public class UserController {
             updateUser.setEnabled(enebled==1?Boolean.TRUE:Boolean.FALSE);
             updateUser.setPhone(userUpdate.getPhone());
             updateUser.setEmail(userUpdate.getEmail());
+            updateUser.setGender(gender);
             updateUser.setUsername(userUpdate.getUsername());
             userService.updateUser(updateUser);
 
