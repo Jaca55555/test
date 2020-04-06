@@ -121,11 +121,20 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6 form-group">
-            <label class="control-label" th:text="#{doc_incoming.journal}">Кирувчи хатларни руйхатга олиш журнали</label>
-            <select class="singleSelect col-sm-12 select2-hidden-accessible"  required="required" data-parsley-errors-container="#journalIdError">
+            <form th:action="${action_url}" th:method="post" class="card-block">
+
+                <label class="control-label" th:text="#{change_performer}">Кирувчи хатларни руйхатга олиш журнали</label>
+            <select class="singleSelect col-sm-12 select2-hidden-accessible"  required="required" name="userid" >
                 <option value=""></option>
-                <option th:each="user: ${performers}" th:value="${user.id}" th:text="${user.lastname}"></option>
+                <option th:each="user: ${performers}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
             </select>
+                <div class="row">
+                    <div class="col align-self-center">
+                        <button th:text="#{doc.reset_btn}" class="btn btn-dark"></button>
+                        <button th:text="#{doc.save_btn}" class="btn btn-success"></button>
+                    </div>
+                </div>
+            </form>
         </div>
         </div>
 

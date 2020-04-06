@@ -24,6 +24,9 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerTask;
+import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerView;
+
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz) Kiruvchi xatlar
@@ -159,7 +162,7 @@ public class ChangePerformerController {
         result.put("data", JSONArray);
         return result;
     }
-    @RequestMapping(DocUrls.ChangePerformerView)
+    @RequestMapping(ChangePerformerView)
     public String getIncomingViewPage(
             @RequestParam(name = "id")Integer taskSubId,
             Model model
@@ -178,9 +181,6 @@ public class ChangePerformerController {
         }
 
         Document document = documentService.getById(task.getDocumentId());
-        if (document == null) {
-            return "redirect:" + DocUrls.IncomingList;
-        }
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
@@ -211,8 +211,22 @@ public class ChangePerformerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("performers",userService.getAll());
+        model.addAttribute("performers",userService.getEmployeesForForwarding(document.getOrganizationId()));
+        model.addAttribute("action_url",ChangePerformerTask);
         return DocTemplates.ChangePerformerView;
+    }
+    @PostMapping(ChangePerformerTask)
+    public String changePerformer(
+            DocumentTaskSub documentTaskSub,
+            @RequestParam(name = "userid")Integer userid
+    ) {
+//        System.out.println(id);
+        documentTaskSub.setReceiverId(userid);
+        documentTaskSub.setStatus(1);
+        documentTaskSubService.update(documentTaskSub);
+
+
+        return "redirect:" + DocUrls.ChangePerformerList;
     }
 
 }
