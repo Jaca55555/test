@@ -157,14 +157,16 @@ public class IncomingRegistrationController {
                 break;//Жами
         }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, null, status, null, null,specialControll, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, user.getDepartmentId(), null,specialControll, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
+
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
             String docContent="";
+            System.out.println(document.getDocumentTypeId());
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
                 docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
@@ -246,13 +248,13 @@ public class IncomingRegistrationController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
-        if (document.getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){
-            return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + id;
-        }
-
-        if (document.getDocumentTypeId().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
-            return "redirect:" + DocUrls.OutgoingMailView + "?id=" + id;
-        }
+//        if (document.getDocumentTypeId().equals(DocumentTypeEnum.InnerDocuments.getId())){
+//            return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + id;
+//        }
+//
+//        if (document.getDocumentTypeId().equals(DocumentTypeEnum.OutgoingDocuments.getId())){
+//            return "redirect:" + DocUrls.OutgoingMailView + "?id=" + id;
+//        }
         List<DocumentTask> documentTasks = taskService.getByDocumetId(document.getId());
         List<DocumentTaskSub> documentTaskSubs = taskSubService.getListByDocId(document.getId());
         model.addAttribute("document", document);
@@ -331,7 +333,7 @@ public class IncomingRegistrationController {
         document.setManagerId(managerId);
         document.setControlId(controlId);
         document.setInsidePurpose(insidePurpose);
-
+        document.setDepartmentId(user.getDepartmentId());
         if(executeFormId!=null){
             document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
         }

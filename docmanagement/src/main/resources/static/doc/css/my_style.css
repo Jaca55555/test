@@ -134,7 +134,7 @@ hr {
     font-size: 13.5px;
 }
 h6.card-title {
-    word-break: break-all;
+    /*word-break: break-all;*/
     margin-bottom: 3px;
 }
 h4.card-title {

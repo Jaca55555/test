@@ -3,7 +3,8 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
-    <title th:text="#{sys_site_main_title}">Categories</title>
+    <title th:if="${libraryCategory.id==null}" th:text="#{doc.doc_type_create}">Categories</title>
+    <title th:if="${libraryCategory.id!=null}" th:text="#{doc.doc_type_edit}"></title>
 </head>
 <body>
 <div class="background"></div>

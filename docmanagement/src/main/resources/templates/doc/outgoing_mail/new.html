@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc_outgoing.reg}">Kiruvchi Xatlar Ro'yxati</title>
     <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
     <style>
@@ -134,6 +134,17 @@
                             </select>
                         </div>
                 </div>
+                    <div class=" m20 p20" id="borderBox" style="margin-left:15px">
+                        <div class="checkbox checkbox-fill d-inline checkbox-danger">
+                            <input type="checkbox" name="insidePurpose" id="checkbox-fill-1" th:checked="${document!=null && document.insidePurpose!=null && document.insidePurpose}">
+                            <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc_outgoing.reg_inside_purpose}">Checked</span></label>
+                        </div>
+                        <div class="m20-vertical">
+                            <span th:text="#{sys_attention}">Диккат:</span>
+                            <br>
+                            <span th:text="#{doc_incoming.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                        </div>
+                    </div>
                 <!-- files input start -->
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border" th:text="#{doc_outgoing.files}">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
@@ -442,6 +453,13 @@
        // handleFiles(files)
     }
 
+    document.querySelector('#checkbox-fill-1').addEventListener('click', function(e){
+        if(this.checked){
+            document.querySelector('#borderBox').classList.add('border-warning');
+        }else{
+            document.querySelector('#borderBox').classList.remove('border-warning');
+        }
+    });
 
 
 </script>

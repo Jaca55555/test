@@ -60,7 +60,7 @@ public class InnerController {
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
-        model.addAttribute("statistic", documentTaskSubService.countAllInnerByReceiverId(user.getId()));
+        model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(),user.getId()));
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
@@ -93,7 +93,6 @@ public class InnerController {
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-        System.out.println("tabfilter==" + tabFilter);
 
         switch (tabFilter){
             case 9: status = new LinkedHashSet<>();
@@ -159,7 +158,7 @@ public class InnerController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                3, //todo documentTypeId=3
+                Collections.singletonList(3), //todo documentTypeId=3
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,

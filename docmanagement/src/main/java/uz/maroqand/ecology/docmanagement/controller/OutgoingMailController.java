@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -145,10 +142,15 @@ public class OutgoingMailController {
                 null,
                 specificPageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        Integer userId = userService.getCurrentUserFromContext().getId();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
             Document document = documentSub.getDocument();
             if(document == null) continue;
+            if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
+                    if(document.getCreatedById() != userId && document.getPerformerId() != userId)
+                        continue;
+            }
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
@@ -238,14 +240,16 @@ public class OutgoingMailController {
     }
 
     @Transactional
-    @RequestMapping(value = DocUrls.OutgoingMailNew, method = RequestMethod.POST)
+    @PostMapping(DocUrls.OutgoingMailNew)
     public String newOutgoingMail(Document document,
                                   @RequestParam(name = "communication_tool_id")Integer communicationToolId,
                                   @RequestParam(name = "document_organization_id")List<String> documentOrganizationIds,
                                   @RequestParam(name = "file_ids")List<Integer> file_ids,
                                   @RequestParam(name = "position_id")Integer position_id){
-        System.out.println(position_id);
+
         User user = userService.getCurrentUserFromContext();
+
+        boolean insidePurpose = document.getInsidePurpose() != null ? document.getInsidePurpose() : false;
 
         Set<File> files = new HashSet<File>();
         for(Integer id: file_ids) {
@@ -288,6 +292,7 @@ public class OutgoingMailController {
         String prefixCode = departmentService.getById(document.getDepartmentId()).getPrefixCode();
         if(prefixCode == null)
             prefixCode = departmentService.getById(document.getDepartmentId()).getId().toString();
+        document.setInsidePurpose(insidePurpose);
         Document savedDocument = documentService.createDoc2(2, DocumentStatus.InProgress, document, user, position_id, prefixCode);
         docSub.setDocumentId(savedDocument.getId());
         docSub.setDocument(savedDocument);
@@ -341,6 +346,9 @@ public class OutgoingMailController {
         //updating journal
         documentForUpdate.setJournalId(document.getJournalId());
         documentForUpdate.setJournal(journalService.getById(document.getJournalId()));
+
+        boolean insidePurpose = document.getInsidePurpose() != null ? document.getInsidePurpose() : false;
+        documentForUpdate.setInsidePurpose(insidePurpose);
 
         //updating document view
         documentForUpdate.setDocumentViewId(document.getDocumentViewId());
@@ -462,7 +470,7 @@ public class OutgoingMailController {
         }
     }
 
-    Date castDate(String dateString){
+    static Date castDate(String dateString){
         if(dateString == null)
             return null;
         else return DateParser.TryParse(dateString, Common.uzbekistanDateFormat);

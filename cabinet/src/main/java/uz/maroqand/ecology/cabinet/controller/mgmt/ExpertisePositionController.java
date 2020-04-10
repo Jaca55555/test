@@ -92,12 +92,12 @@ public class ExpertisePositionController {
     @RequestMapping(MgmtUrls.PositionGet)
     @ResponseBody
     public HashMap<String,Object> getPosition(@RequestParam(name = "id",required = true) Integer id){
-        HashMap<String,Object> resutl = new HashMap<>();
+        HashMap<String,Object> result = new HashMap<>();
         Position position = positionService.getById(id);
-        resutl.put("id",position.getId());
-        resutl.put("name",position.getName());
-        resutl.put("nameRu",position.getNameRu());
-        return resutl;
+        result.put("id",position.getId());
+        result.put("name",position.getName());
+        result.put("nameRu",position.getNameRu());
+        return result;
     }
 
     @RequestMapping(MgmtUrls.PositionUpdate)

@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
-    <title th:text="#{sys_site_main_title}">Kanselariya</title>
+    <title th:text="#{sys_document.dashboard}">Kanselariya</title>
     <style>
         .datepicker>.datepicker-days {
             display: block;
@@ -65,7 +65,7 @@
                         <div class="card dashboard-card border-primary-shadow">
                              <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.new}">10</h4>
+                                <h4 class="card-title" th:text="${incoming.newCount}">10</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_new}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.inProcess}">20</h4>
+                                <h4 class="card-title" th:text="${incoming.inProgressCount}">20</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_in_process}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.nearDate}">30</h4>
+                                <h4 class="card-title" th:text="${incoming.lessDeadlineCount}">30</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_near_date}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.expired}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.greaterDeadlineCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_expired}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.complete}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.checkingCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_completed}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incomingCount.all}">40</h4>
+                                <h4 class="card-title" th:text="${incoming.allCount}">40</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.count_total}">Жами чикувчи хатлар</h6>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${inner.newCount}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${inner.inProgressCount}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@
                             <div class="card dashboard-card border-warning-shadow">
                                 <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.nearDate}">30</h4>
+                                    <h4 class="card-title" th:text="${inner.lessDeadlineCount}">30</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.expired}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.greaterDeadlineCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.checkingCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${innerCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${inner.allCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_inner.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${appeal.newCount}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${appeal.inProgressCount}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -198,7 +198,7 @@
                             <div class="card dashboard-card border-warning-shadow">
                                 <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.nearDate}">30</h4>
+                                    <h4 class="card-title" th:text="${appeal.lessDeadlineCount}">30</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_near_date}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.expired}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.greaterDeadlineCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_expired}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -216,7 +216,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.checkingCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${appealCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${appeal.allCount}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_appeal.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@
                             <div class="card dashboard-card border-primary-shadow">
                                 <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.new}">10</h4>
+                                    <h4 class="card-title" th:text="${outgoingCountNew}">10</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_new}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                             <div class="card dashboard-card border-danger-shadow">
                                 <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.inProcess}">20</h4>
+                                    <h4 class="card-title" th:text="${outgoingInProgress}">20</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_in_process}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -273,7 +273,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.complete}">40</h4>
+                                    <h4 class="card-title" th:text="${outgoingCompleted}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_completed}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                             <div class="card dashboard-card border-green-shadow">
                                 <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
                                 <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${outgoingCount.all}">40</h4>
+                                    <h4 class="card-title" th:text="${outgoingAll}">40</h4>
                                     <h6 class="card-title" th:text="#{doc_outgoing.count_total}">Жами чикувчи хатлар</h6>
                                 </div>
                             </div>
@@ -530,10 +530,6 @@
         let thead;
         var tabFilter;
 
-
-        console.log(viewLink);
-
-
         function renderChangeColumn(data, type, row, meta) {
             let databack = row[8];
             let current=databack;
@@ -578,7 +574,7 @@
 
             }
             if (databack>=1 && databack<=3){
-                html += `<div class="btn-group mb-0 mr-0 btn-block">
+             html += `<div class="btn-group mb-0 mr-0 btn-block">
                             <button type="button" class="btn-block btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
                             <button type="button" class="pl-1 pr-1 btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" max-width: 40px !important;">
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -601,12 +597,10 @@
             fetch(statusLink + `?id=${id}&target_status_id=${targetStatus}`)
                 .then((response) =>{
                     if(response.ok){
-                        console.log(response);
                         return response.json()
                     }
                 })
                 .then((data) => {
-                    console.log(data);
                     dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
                     dropDownValues[0].innerHTML = `<button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
                                                     <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>`;
@@ -614,7 +608,7 @@
                 })
         }
 
-        /*function renderStatusColumn(data, type, row, meta) {
+        function renderStatusColumn(data, type, row, meta) {
             var html = '';
             var status=row[8];
             switch (status) {
@@ -627,7 +621,7 @@
                 default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+statuses[status]+'</button>';return html;
             }
             return html;
-        }*/
+        }
 
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
@@ -649,6 +643,17 @@
             html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
+        function linkByType(documentTypeId){
+            if(documentTypeId === 1)
+                return 'incoming/view'
+            else if(documentTypeId === 2)
+                return 'outgoing/view';
+            else if(documentTypeId === 3)
+                return 'inner/view';
+            else
+                return 'reference/view';
+        }
+
         function clearFilter() {
             $('#filter .singleSelect').val(null).select2();
             $('#filter input').val('');
@@ -660,7 +665,7 @@
                 serverSide: true,
                 scrollX: true,
                 pageLength: 25,
-                lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+                lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom: 'lrtip',
                 ajax : function (dataToSend, callback, settings) {
@@ -700,7 +705,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'"  >' + row[1]+'</a>';
+                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'"  >' + row[1]+'</a>';
                             return html;
                         },
                         className: "text-left fit-content"
@@ -708,7 +713,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "text-left"
@@ -729,7 +734,7 @@
                         },
                         className: "text-justify"
                     },
-                    {render: renderChangeColumn, name: "status",
+                    {render: renderStatusColumn, name: "status",
                         className: "text-center"},
 
                     // {render: renderActionsColumn, orderable: false}

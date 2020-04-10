@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc_incoming.reg}">Kiruvchi Xatlar Ro'yxati</title>
     <style>
         #upload-gif{
             position: relative;
@@ -196,9 +196,9 @@
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="flex-center w100 row-wrap">
-                        <a th:href="${cancel_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc_income.create}">Рўйхатга олиш</button>
-                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>
+<!--                        <a th:href="${cancel_url}" class="btn btn-light m10-vertical m20-horizontal" th:text="#{doc.cancel}">Бекор қилиш</a>-->
+<!--                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" th:if="${document.id==null}" th:text="#{doc_income.create}">Рўйхатга олиш</button>-->
+<!--                        <button class="btn btn-outline-success m10-vertical m20-horizontal" type="submit" th:if="${document.id!=null}" th:text="#{doc.income_save}">Саклаш</button>-->
                         <button class="btn btn-success m10-vertical m20-horizontal" type="submit" th:formaction="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewTask}" id="nextStep" th:if="${document.id==null}" th:text="#{doc_income.save_and_proseed}">Рўйхатга олиш ва ижрочиларни белгилаш</button>
                     </div>
                 </div>

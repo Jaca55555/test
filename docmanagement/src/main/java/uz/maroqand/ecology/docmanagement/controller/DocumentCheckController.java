@@ -115,7 +115,7 @@ public class DocumentCheckController {
             taskStatuses.add(TaskStatus.Rejected.getId());
         }
         //barcha hujjatlar ko'rinishi uchun documentTypeId=null
-        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, null, taskStatuses, null, null, null,pageable);
+        Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, taskStatuses, null, null, null,pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();

@@ -68,7 +68,7 @@ public class ReferenceController {
         User user = userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-        Integer New=documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+        Integer New = documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
         model.addAttribute("newDocumentCount", New);
         statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
@@ -174,8 +174,7 @@ public class ReferenceController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                4, //todo documentTypeId=1
-
+                Collections.singletonList(4), //todo documentTypeId=1
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,

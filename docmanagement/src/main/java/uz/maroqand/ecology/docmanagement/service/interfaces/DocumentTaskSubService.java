@@ -34,8 +34,7 @@ public interface DocumentTaskSubService {
 
     Page<DocumentTaskSub> findFiltered(
             Integer organizationId,
-            Integer documentTypeId,
-
+            List<Integer> documentTypeId,
             Integer documentOrganizationId,
             String docRegNumber,
             String registrationNumber,
@@ -53,7 +52,7 @@ public interface DocumentTaskSubService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
-            Boolean specialControll,
+            Boolean specialControl,
             Pageable pageable
     );
     Page<DocumentTaskSub> findFilter(
@@ -89,7 +88,7 @@ public interface DocumentTaskSubService {
 
     Integer countByReceiverId(Integer receiverId);
 
-    StaticInnerInTaskSubDto countAllInnerByReceiverId(Integer receiverId);
+    StaticInnerInTaskSubDto countAllByTypeAndReceiverId(Integer documentTypeId, Integer receiverId);
 
     Integer countByReceiverIdAll(Integer receiverId);
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);

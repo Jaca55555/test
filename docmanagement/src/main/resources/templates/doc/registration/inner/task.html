@@ -144,13 +144,13 @@
     });
 
     function addTaskSubmit() {
-        $('#dateBegin').parsley().validate();
+       /*$('#dateBegin').parsley().validate();
         $('#description_textarea').parsley().validate();
-        if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){
-            $('#taskAddForm').submit();
-        }else{
+        if ($('#dateBegin').parsley().isValid() && $('#selectedUsersIds').val()!=''){*/
+        $('#taskAddForm').submit();
+       /*}else{
             $('#addUsers').css('border','1px solid red');
-        }
+        } */
     }
 
     var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationUserName}]];
