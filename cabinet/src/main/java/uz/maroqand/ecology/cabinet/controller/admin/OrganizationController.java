@@ -117,8 +117,9 @@ public class OrganizationController {
     @PostMapping(value = AdminUrls.OrganizationtGetByRegion)
     @ResponseBody
     public List<Soato> getList(
+            @RequestParam("id")Integer regionId
     ){
-        int regionId = 1;
+
         Soato soato=soatoService.getById(regionId);
         if (soato==null) return null;
 

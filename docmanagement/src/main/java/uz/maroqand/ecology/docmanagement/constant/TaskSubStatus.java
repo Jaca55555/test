@@ -20,8 +20,8 @@ public enum TaskSubStatus {
 
     Checking(5,"task_sub_status.checking","secondary"),//Назоратдан чиқариш
     Complete(6,"task_sub_status.complete","success"),//Якунланган
-    Rejected(7,"task_sub_status.rejected","danger");//Rad etildi
-
+    Rejected(7,"task_sub_status.rejected","danger"),//Rad etildi
+    ForChangePerformer(8,"task_sub_status.performer","light");
 
     private Integer id;
     private String name;

@@ -240,7 +240,7 @@
                                                             </label>
                                                             <select id="subregion" class="form-control"   name="subRegionId">
                                                                 <option value="" th:text="#{sys_select}"></option>
-                                                                <option value="1"></option>
+
                                                             </select>
                                                         </div>
                                                     </div>
@@ -297,7 +297,6 @@
 <script th:inline="javascript">
     var url = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).OrganizationtGetByRegion}]];
     var locale = getCurrentLanguage();
-    var regionId=1;
     var subRegionId=[[${subRegionId}]];
 
     $(document).ready(function () {

@@ -116,6 +116,15 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public Page<DocumentTaskSub> findFilter(Integer organizationId, Integer documentOrganizationId, String docRegNumber, String registrationNumber, Date dateBegin, Date dateEnd, String taskContent, String content, Integer performerId, Integer taskSubType, Integer taskSubStatus, Date deadlineDateBegin, Date deadlineDateEnd, Integer type, Set<Integer> status, Integer departmentId, Integer receiverId, Boolean specialControll, Pageable pageable) {
+        return documentTaskSubRepository.findAll(getSpestification(
+                organizationId,
+                documentOrganizationId, docRegNumber, registrationNumber, dateBegin, dateEnd, taskContent, content, performerId, taskSubType, taskSubStatus,
+                deadlineDateBegin, deadlineDateEnd, type, status, departmentId, receiverId,specialControll), pageable);
+
+    }
+
+    @Override
     public Page<DocumentTaskSub> findFiltered(
             Integer organizationId,
             Integer documentTypeId,
@@ -250,6 +259,107 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    private static Specification<DocumentTaskSub> getSpestification(
+            final Integer organizationId,
+
+            final Integer documentOrganizationId,
+            final String docRegNumber,
+            final String registrationNumber,
+            final Date dateBegin,
+            final Date dateEnd,
+            final String taskContent,
+            final String content,
+            final Integer performerId,
+            final Integer taskSubType,
+            final Integer taskSubStatus,
+
+            final Date deadlineDateBegin,
+            final Date deadlineDateEnd,
+            final Integer type,
+            final Set<Integer> statuses,
+            final Integer departmentId,
+            final Integer receiverId,
+            final Boolean specialControll
+    ) {
+        return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
+
+            System.out.println("deadlineDateBegin=" + deadlineDateBegin);
+            System.out.println("deadlineDateEnd=" + deadlineDateEnd);
+            if (organizationId != null) {
+                //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
+                predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
+            }
+            if (documentOrganizationId != null) {
+                predicates.add(criteriaBuilder.equal(root.join("document").join("documentSubs").get("organizationId"), documentOrganizationId));
+            }
+
+            if (StringUtils.trimToNull(docRegNumber) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("docRegNumber")), "%" + docRegNumber.toLowerCase() + "%"));
+            }
+            if (StringUtils.trimToNull(registrationNumber) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
+            }
+
+            if (dateBegin != null && dateEnd == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateBegin));
+            }
+            if (dateEnd != null && dateBegin == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("document").get("registrationDate").as(Date.class), dateEnd));
+            }
+            if (dateBegin != null && dateEnd != null) {
+                predicates.add(criteriaBuilder.between(root.get("document").get("registrationDate").as(Date.class), dateBegin, dateEnd));
+            }
+            if (StringUtils.trimToNull(content) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("document").<String>get("content")), "%" + content.toLowerCase() + "%"));
+            }
+
+            if (StringUtils.trimToNull(taskContent) != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.<String>get("content")), "%" + taskContent.toLowerCase() + "%"));
+            }
+            if (performerId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("task").get("performerId"), performerId));
+            }
+            if (taskSubType != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (taskSubStatus != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
+            }
+
+
+            if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
+            }
+            if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateEnd));//kichik yoki teng
+            }
+            if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
+            }
+
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
+            if (statuses != null) {
+                predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
+            }
+            if (departmentId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("departmentId"), departmentId));
+            }
+            if (receiverId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+            }
+
+            if (specialControll != null) {
+                predicates.add(criteriaBuilder.equal(root.get("document").get("specialControll"),specialControll));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
 
     //statistics
     @Override

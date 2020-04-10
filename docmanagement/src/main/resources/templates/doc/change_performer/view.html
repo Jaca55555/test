@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <link rel="stylesheet" href="/static/bootstrap-treeview.css">
+<style>
+    .panel{
+        overflow-y: auto;
+        overflow-x: auto;
+        width: 100%;
+        height: 600px;
+    }
+    .select2-dropdown {z-index: 1074;}
+    .status-button {cursor: pointer;}
+
+    #upload-gif{
+        position: relative;
+        float: left;
+        top: 25px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 85px;
+    }
+    #percentage {
+        display: none;
+    }
+</style>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+
+        <object th:include="doc/change_performer/document_view :: document_view" th:remove="tag" ></object>
+
+    </div>
+</div>
+
+<!-- [ Modals ] start -->
+
+<!-- Status modal -->
+
+<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog col-xl-6 col-12" role="document">
+        <div class="modal-content">
+            <div class="card parent-card m0">
+                <div class="card-header flex-space-between-nowrap mb-0">
+                    <h5 class="mb-0" style="align-self:center">
+                        <span href="#" class="card-header-a">
+                        <span th:text="#{doc_incoming.view}">Кирувчи хат №</span>
+                            <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
+                        </span>
+                    </h5>
+                    <div class="btn-group" role="group" >
+
+                        <button type="button" class="close pointer mr-2"onclick="treeCloseAll()">
+                            <i class="feather icon-chevrons-up"></i>
+                            <!--<span th:text="#{+}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer mr-2" onclick="treeOpenAll()">
+                            <i class="feather icon-chevrons-down"></i>
+                            <!--<span th:text="#{-}">all</span>-->
+                        </button>
+                        <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" >
+                            <!--<span aria-hidden="true">&times;</span>-->
+                            <i class="feather icon-x"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2">
+
+                </div><span></span>
+                <div class="card-body">
+                    <div class="flex-space-between p0 m20-vertical mt-0">
+                        <div class="panel">
+                            <div id="treeview-selectable" class="treeview"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-secondary"  th:text="#{sys_close}">Close</button>
+<!-- [ Modals ] end -->
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script src="/static/bootstrap-treeview.js"></script>
+
+<script th:inline="javascript" type="text/javascript">
+    //<![CDATA[
+    var alternateData = [[${tree}]];
+    var alternateData = JSON.stringify(eval("("+alternateData+")"));
+
+    $(function() {
+        var initSelectableTree = function() {
+            return $('#treeview-selectable').treeview({
+                data: alternateData,
+                selectedBackColor:'#5c66bf',
+                levels: 25,
+                onNodeSelected: function(event, node) {
+                    editText(node.tags);
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');*/
+                },
+                onNodeUnselected: function (event, node) {
+                    /* $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');*/
+                },
+            });
+        };
+        initSelectableTree();
+    });
+
+    function editText(docId) {
+        setTimeout(function(){
+            $('#doc_view_button').remove();
+            var nodeText=$('#node_text_'+docId);
+            var nodeButton =nodeText.text() +  "<button id='doc_view_button' class='float-right close'  onclick='getViewPage(" + docId + ")'><i class='fas fa-arrow-right'></i></button>"
+            $('#node_text_'+docId).text("");
+            document.querySelector('#node_text_'+docId).innerHTML = nodeButton;
+        },0.1)
+    }
+
+    function treeOpenAll() {
+        $('#treeview-selectable').treeview('expandAll', { levels: 25, silent: true });
+    }
+
+    function treeCloseAll() {
+        $('#treeview-selectable').treeview('collapseAll', { levels: 1, silent: true });
+    }
+
+    function getViewPage(id){
+        window.location.href='/doc/open_view?id=' + id;
+    }
+
+    var urlAction = [[${comment_url}]];
+    var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
+    let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
+    $(document).ready(function () {
+        docFileName([[${document.contentFiles}]]);
+        $('.fileContainer a').text(fileNameSubString($('.fileContainer a').text()));
+        $('#modal2').on('show.bs.modal', function() {
+            $('.addDocSelect').select2({
+                placeholder: "Танланг",
+                allowClear: true
+            });
+        });
+
+        $('#modal2').on('hidden.bs.modal', function() {
+            $('.addDocSelect').select2('destroy');
+        });
+
+        $('#submitChange').on('click', function () {
+            let form = $('#changeStatusForm');
+            let formData = form.serialize();
+            $.ajax({
+                url: form.attr('action'),
+                data: formData,
+                method: 'post',
+                success: function (data) {
+                    console.log(data);
+                    if (data.status === 'success') {
+                        // show logs
+                        let log = data.log;
+                        let registrationNumber = data.registrationNumber;
+                        let statuses ="";
+                        if (log.type=2){
+                            statuses='<div class="row col-sm-12">' +
+                                '       <div class="col-sm-5 p-0">' +
+                                '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.beforeStatusColor+'">\n' +
+                                '               <span >'+data.beforeStatus+'</span>' +
+                                '           </button>' +
+                                '       </div>\n' +
+                                '       <div class="col-sm-2">\n' +
+                                '           <button type="button" class="btn-block btn btn-light btn-sm btn-rounded">\n' +
+                                '               <i class="feather icon-arrow-right mr-0"></i>\n' +
+                                '           </button>\n' +
+                                '       </div>\n' +
+                                '       <div class="col-sm-5 p-0">\n' +
+                                '           <button type="button" class="btn-block btn-sm btn-rounded btn btn-'+log.afterStatusColor+'">' +
+                                '               <span >'+data.afterStatus+'</span>\n' +
+                                '           </button>\n' +
+                                '       </div>\n' +
+                                '   </div>';
+                        }
+                        let html =
+"                        <div class=\"comment-item flex-space-between\">\n" +
+"                            <div>\n" +
+"                                <div class=\"inline-block\"><i class=\"fas fa-user-circle fs40 color-gray column-1\">\n" +
+"                                </i></div>\n" +
+"                                <div class=\"inline-block m10-horizontal\">\n" +
+"                                    <span class=\"color-primary bold\">"+ data.logCreateName +"</span>\n" +
+"                                    <br>\n" +
+"                                    <span>" + data.logCreatePosition + "</span>\n" +
+"                                </div>\n" +
+"                            </div>\n" +
+"                            <div class=\"fs11\">" + moment(log.createdAt, 'x').format('DD.MM.YYYY HH:mm') + "</div>\n" +statuses+
+"                            <div class=\"w100\"></div>\n" +
+"                            <div class=\"column-2 mt-3\">\n" +
+"                                <span>" + log.content + "</span>\n" +
+"                            </div>";
+
+                        if (log.contentFiles!=null && log.contentFiles.length>0){
+                            $.each(log.contentFiles,function (element,val) {
+                                html+='<div class="w100"></div>\n' +
+                                      '<div class="column-2 mt-3">\n' +
+                                      '    <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                      '    <a href="'+download+'?id=' + val.id +'">'+val.name+'</a>\n' +
+                                      '</div>\n';
+                            })
+                        }
+
+                        if (log.attachedDocId!=null) {
+                            html += '<div class="w100"></div>\n' +
+                                '   <div class="column-2 mt-3 d-flex">\n' +
+                                '       <span class="d-flex align-self-center">[(#{sys_document.attached_doc})]</span>' +
+                                '       <span class="mdi mdi-file-upload-outline fs30 color-green"></span>\n' +
+                                '       <a class="d-flex align-self-center" href="'+attachedDocView + log.attachedDocId +'">'+ registrationNumber + '</a>\n' +
+                                '   </div>\n';
+                        }
+                        html += "\n</div>";
+
+                        $('#comments').prepend(html);
+                        $('#currentStatus').text(data.taskStatus);
+
+                        $('#modal2').modal('toggle');
+                    }
+                }
+            })
+        });
+
+        $('.status-button').on('click', function () {
+            $('#taskStatus').val($(this).data('id'));
+            $('#newStatusText').text($(this).text());
+        })
+    });
+
+    $('#formSend').on('click', function (e) {
+        let url = $('#commentForm').prop('action');
+        let data = $('#commentForm').serialize();
+        $.ajax({
+            url: urlAction,
+            data: data,
+            method: 'post',
+            success: function (data) {
+                console.log(data);
+                console.log(data.status);
+                if(data != undefined && data.status=="success"){
+                    // show logs
+                    var log = data.log;
+                    var html =' <div class="comment-item flex-space-between">\n' +
+                        '           <div>\n' +
+                        '               <div class="inline-block">\n' +
+                        '                   <i class="fas fa-user-circle fs40 color-gray column-1"></i>\n' +
+                        '               </div>\n' +
+                        '               <div class="inline-block m10-horizontal">\n' +
+                        '                   <span class="color-primary bold">'+data.createName+'</span>\n' +
+                        '                   <br>\n' +
+                        '                   <span>'+data.createPosition+'</span>\n' +
+                        '               </div>\n' +
+                        '           </div>\n' +
+                        '           <div class="fs11" >\n' + data.createdAt + '</div>\n' +
+                        '           <div class="w100"></div>\n' +
+                        '           <div class="column-2 mt-3">\n' +
+                        '               <span >'+log.content+' </span>\n' +
+                        '           </div>';
+
+                    if (log.contentFiles!=null && log.contentFiles.length>0){
+                        html+='';
+                        $.each(log.contentFiles,function (element,val) {
+                            html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';
+                        })
+                    }
+                    html+='</div>';
+                    $('#comments').prepend(html);
+                    $('#closeCommentModal').click();
+                }
+            }
+        });
+        e.preventDefault();
+    });
+
+    function clickPlus() {
+        $('#addFile2').click();
+    }
+
+    $('#addFile2').on('change', function () {
+        if (this.files[0].size > 10000000) {
+            swal("Файл не должен занимать больше 10 мб.",'', "warning");
+            return false;
+        }
+        if(this.files[0].size === 0){
+            swal("Файл не должен быть пустым", "", "warning");
+            return false;
+        }
+        let csrf = $("form input[name='_csrf']").val();
+        let files = document.querySelector('#addFile2').files[0];
+        let fd = new FormData();
+        fd.append("file", files);
+        fd.append("_csrf", csrf);
+        $.ajax({
+            url: "/doc/outgoing_mail/file/upload",
+            type: 'post',
+            data: fd,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: detectExtensionAndDisplay,
+            beforeSend: function () {
+                $('#addFileButton').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#addFileButton').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+
+                return xhr;
+            }
+        })
+    });
+
+    function downloadFileFunction(id) {
+        window.open(`/doc/outgoing_mail/file/download?id=${id}`);
+    }
+
+    function deleteFunc(id) {
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+    }
+
+    $('#document_organization_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
+    $('#additional_document_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationAdditionalDocument}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        let name = data.data.name;
+        switch (extension) {
+            case 'jpg': case 'png': case 'jpeg':
+                extension = '-image';
+                color = 'color-yellow';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xls':
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
+        $('#file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fa fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+        );
+    }
+
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+    //]]>
+
+</script>
+
+</body>
+</html>

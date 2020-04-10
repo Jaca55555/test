@@ -465,6 +465,11 @@ public class IncomingRegistrationController {
 
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
+        model.addAttribute("tasksubtype",document.getExecuteForm());
+
+        model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+
+        System.out.println(document.getExecuteForm().getName());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);

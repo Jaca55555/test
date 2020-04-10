@@ -42,8 +42,8 @@ public enum Permissions {
     DOC_MANAGEMENT_APPEAL(44, 3, "sys_permissions.docManagementAppeal"), //Мурожаатларни рўйхатга олиш
     DOC_MANAGEMENT_LIBRARY(45, 3, "sys_permissions.docManagementLibrary"), //Кутубхона маълумотларини рўйхатга олиш
     DOC_MANAGEMENT_PERFORMER(46, 3, "sys_permissions.docManagementPerformer"), //Хужжатларни ижрога йўналтириш
-    DOC_MANAGEMENT_SETTINGS(47, 3, "sys_permissions.docManagementSettings"); //Электрон Хужжатлар Юритиш Тизимининг созламаларини ўзгартириш
-
+    DOC_MANAGEMENT_SETTINGS(47, 3, "sys_permissions.docManagementSettings"), //Электрон Хужжатлар Юритиш Тизимининг созламаларини ўзгартириш
+    DOC_MANAGEMENT_CHECKED(48,3,"sys_permissions.docManagementCheck"); //Ijro nazoratida dostup alohida//
     private Integer id;
     private Integer type;
     private String name;

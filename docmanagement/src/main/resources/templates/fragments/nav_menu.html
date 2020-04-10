@@ -50,13 +50,18 @@
                     </a>
                 </li>
 
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_PERFORMER')">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}">
                         <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_check.list}"></span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                                   <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}">
+                                       <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
+                                       <span class="pcoded-mtext">Ijrochini o'zgartirish</span>
+                                   </a>
+                               </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceList}">
                         <span class="pcoded-micon"><i class="feather icon-file-text color-purple"></i></span>

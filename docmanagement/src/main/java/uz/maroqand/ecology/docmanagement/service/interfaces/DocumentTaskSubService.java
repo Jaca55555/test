@@ -56,6 +56,28 @@ public interface DocumentTaskSubService {
             Boolean specialControll,
             Pageable pageable
     );
+    Page<DocumentTaskSub> findFilter(
+            Integer organizationId,
+            Integer documentOrganizationId,
+            String docRegNumber,
+            String registrationNumber,
+            Date dateBegin,
+            Date dateEnd,
+            String taskContent,
+            String content,
+            Integer performerId,
+            Integer taskSubType,
+            Integer taskSubStatus,
+
+            Date deadlineDateBegin,
+            Date deadlineDateEnd,
+            Integer type,
+            Set<Integer> status,
+            Integer departmentId,
+            Integer receiverId,
+            Boolean specialControll,
+            Pageable pageable
+    );
 
     //statistics
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);
