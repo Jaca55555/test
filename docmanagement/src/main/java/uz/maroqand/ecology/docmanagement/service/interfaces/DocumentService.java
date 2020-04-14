@@ -54,6 +54,8 @@ public interface DocumentService {
 
     Document updateAllParameters(Document document, Integer docSubId, Integer executeForm, Integer controlForm, Set<File> fileSet,Integer communicationToolId, Integer documentOrganizationId, Date docRegDate, User updateUser);
 
+    Date getCastedDate();
+
     HashMap<String, Object> getCountersByType(Integer type);
 
     List<Document> getListByAddDocId(Integer addDocId);

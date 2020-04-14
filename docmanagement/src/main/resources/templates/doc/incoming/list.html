@@ -43,7 +43,7 @@
                             <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${newDocumentCount}">10</h4>
+                                <h4 class="card-title" th:text="${incoming.newCount}">10</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.new_documents_count}">Янги хатлар</h6>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${inProgressDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${incoming.inProgressCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.in_progress_count}">Жараёндаги</h6>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${lessDeadlineDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${incoming.lessDeadlineCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.near_date_count}">Муддати яқинлашган</h6>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${incoming.greaterDeadlineCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.expired_count}">Муддатдан кечиккан</h6>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${checkingDocumentCount}">></h4>
+                                <h4 class="card-title" th:text="${incoming.checkingCount}">></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.completed_count}">Ижро этилган</h6>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${allDocumentCount}">></h4>
+                                <h4 class="card-title" th:text="${incoming.allCount}">></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.all_doc_count}">Жами кирувчи хатлар</h6>
                             </div>
                         </div>

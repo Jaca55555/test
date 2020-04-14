@@ -74,7 +74,7 @@ public interface DocumentTaskSubService {
             Set<Integer> status,
             Integer departmentId,
             Integer receiverId,
-            Boolean specialControll,
+            Boolean specialControl,
             Pageable pageable
     );
 

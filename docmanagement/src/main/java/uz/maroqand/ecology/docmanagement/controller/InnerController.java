@@ -105,17 +105,17 @@ public class InnerController {
                 status.add(TaskSubStatus.Agreement.getId());
                 break;
             case 3:
-                calendar.add(Calendar.DATE, 1);
+//                calendar.add(Calendar.DATE, 1);
+//                deadlineDateEnd = calendar.getTime();
+//                deadlineDateEnd.setHours(23);
+//                deadlineDateEnd.setMinutes(59);
+//                deadlineDateEnd.setSeconds(0);
+//                calendar.add(Calendar.DATE, -2);
+//                deadlineDateBegin = calendar.getTime();
+//                deadlineDateBegin.setHours(23);
+//                deadlineDateBegin.setMinutes(59);
+//                deadlineDateBegin.setSeconds(59);
                 deadlineDateEnd = calendar.getTime();
-                deadlineDateEnd.setHours(23);
-                deadlineDateEnd.setMinutes(59);
-                deadlineDateEnd.setSeconds(0);
-                calendar.add(Calendar.DATE, -2);
-                deadlineDateBegin = calendar.getTime();
-                deadlineDateBegin.setHours(23);
-                deadlineDateBegin.setMinutes(59);
-                deadlineDateBegin.setSeconds(59);
-
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
@@ -124,8 +124,10 @@ public class InnerController {
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати якинлашаётган
             case 4:
-                calendar.add(Calendar.DATE, -1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
@@ -180,7 +182,7 @@ public class InnerController {
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
+        System.out.println(tabFilter);
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {

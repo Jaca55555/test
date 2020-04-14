@@ -231,6 +231,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
             }
 
+
             if (deadlineDateBegin != null && deadlineDateEnd == null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
             }
@@ -289,8 +290,6 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         return (Specification<DocumentTaskSub>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
 
-            System.out.println("deadlineDateBegin=" + deadlineDateBegin);
-            System.out.println("deadlineDateEnd=" + deadlineDateEnd);
             if (organizationId != null) {
                 //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
                 predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
@@ -331,7 +330,6 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
             if (taskSubStatus != null) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), taskSubStatus));
             }
-
 
             if (deadlineDateBegin != null && deadlineDateEnd == null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dueDate").as(Date.class), deadlineDateBegin));//katta yoki teng
@@ -413,41 +411,52 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
                 }
 
-                Date nowDate = new Date();
-                nowDate.setHours(0);
-                nowDate.setMinutes(0);
-                nowDate.setSeconds(0);
-                Date dueDate = documentTaskSub.getDueDate();
-                if (dueDate!=null){
-                    dueDate.setHours(23);
-                    dueDate.setMinutes(59);
-                }
-                Calendar calendar1 = Calendar.getInstance();
-                calendar1.add(Calendar.DATE, 1);
-                Date lessDate =calendar1.getTime();
-                lessDate.setHours(0);
-                lessDate.setMinutes(0);
-                lessDate.setSeconds(0);
+//                Date nowDate = new Date();
+//                nowDate.setHours(0);
+//                nowDate.setMinutes(0);
+//                nowDate.setSeconds(0);
+//                Date dueDate = documentTaskSub.getDueDate();
+//                if (dueDate!=null){
+//                    dueDate.setHours(23);
+//                    dueDate.setMinutes(59);
+//                }
+//                Calendar calendar1 = Calendar.getInstance();
+//                calendar1.add(Calendar.DATE, 1);
+//                Date lessDate =calendar1.getTime();
+//                lessDate.setHours(0);
+//                lessDate.setMinutes(0);
+//                lessDate.setSeconds(0);
+//
+//                if (dueDate!=null && documentTaskSub.getStatus()!=null
+//                        && !documentTaskSub.getStatus().equals(TaskSubStatus.Checking.getId())
+//                            && !documentTaskSub.getStatus().equals(TaskSubStatus.Complete.getId())
+//                ){
+//                    if ((dueDate.before(lessDate) || dueDate.equals(lessDate))
+//                            && (dueDate.after(nowDate) || dueDate.equals(nowDate))
+//                    ) {
+//                    statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);
+//
+//                    }else if(dueDate.before(nowDate)){
+//
+//                        statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
+//                    }
+//
+//                }
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                Date currentDate = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -2);
+                Date nearestDate = calendar.getTime();
 
-                if (dueDate!=null && documentTaskSub.getStatus()!=null
-                        && !documentTaskSub.getStatus().equals(TaskSubStatus.Checking.getId())
-                            && !documentTaskSub.getStatus().equals(TaskSubStatus.Complete.getId())
-                ){
-//                    System.out.println("now date==" + nowDate);
-//                    System.out.println("less date==" + lessDate);
-//                    System.out.println("due date==" + dueDate);
-                    if ((dueDate.before(lessDate) || dueDate.equals(lessDate))
-                            && (dueDate.after(nowDate) || dueDate.equals(nowDate))
-                    ) {
+                Date currentDocumentTaskSubDueDate = documentTaskSub.getDueDate();
+                System.out.println("current date: " + currentDate);
+                System.out.println("nearest date: " + nearestDate);
+                System.out.println("current document task sub date:" + currentDocumentTaskSubDueDate);
+                if(currentDocumentTaskSubDueDate.before(currentDate))
+                    statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
+                if(currentDate.before(nearestDate) && currentDate.after(currentDate))
                     statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);
-//                        System.out.println("less id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
-                    }else if(dueDate.before(nowDate)){
-//                        System.out.println("greater id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
-                        statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
-                    }
-                    System.out.println("------------------------------");
 
-                }
             }
         }
         return statisticInner;
