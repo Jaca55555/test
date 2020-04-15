@@ -137,7 +137,7 @@
                         <span class="pcoded-mtext" th:text="#{doc_inner.reg}">Ички хужжатларни руйхатга олиш</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                      <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}">
                          <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
                          <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
