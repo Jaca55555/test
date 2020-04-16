@@ -88,6 +88,7 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Checking.getId());
         model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
+        model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
@@ -121,7 +122,10 @@ public class IncomingController {
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
         switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
+            case 2: type = TaskSubType.Performer.getId();
+                status = new LinkedHashSet<>();
+            status.add(TaskSubStatus.InProgress.getId());
+                break;
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateBegin = calendar.getTime();
@@ -151,6 +155,10 @@ public class IncomingController {
                 break;//Якунланган
             case 8:
                 specialControll=Boolean.TRUE;
+                break;//Якунланган
+            case 9:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
                 break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();

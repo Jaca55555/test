@@ -38,60 +38,60 @@
                 </div>
                 <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
-                    <div class="office-card">
+                    <div class="office-card" id="newDocs">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${newDocumentCount}">10</h4>
+                                <h4 class="card-title" th:text="${statistic.newCount}">10</h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.new_documents_count}">Янги хатлар</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card"  onclick="$('#profile-tab').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${inProgressDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${statistic.inProgressCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.in_progress_count}">Жараёндаги</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#home-tab1').click()">
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${lessDeadlineDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${statistic.lessDeadlineCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.near_date_count}">Муддати яқинлашган</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#contact-tab').click()">
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${greaterDeadlineDocumentCount}"></h4>
+                                <h4 class="card-title" th:text="${statistic.greaterDeadlineCount}"></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.expired_count}">Муддатдан кечиккан</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#profile-tab1').click()">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${checkingDocumentCount}">></h4>
+                                <h4 class="card-title" th:text="${statistic.checkingCount}">></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.completed_count}">Ижро этилган</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#home-tab').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
                             </div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${allDocumentCount}">></h4>
+                                <h4 class="card-title" th:text="${statistic.allCount}">></h4>
                                 <h6 class="card-title" th:text="#{doc_incoming.all_doc_count}">Жами кирувчи хатлар</h6>
                             </div>
                         </div>
@@ -192,22 +192,22 @@
                     <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(4)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
+                    <a class="nav-link text-uppercase" id="home-tab1" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(3)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
+                    <a class="nav-link text-uppercase show" id="profile-tab1" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab1" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab2" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="contact-tab3" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -410,6 +410,13 @@
                 $('#myTab a.active').trigger('click');
             })
         });
+
+        $('#newDocs').on('click',function () {
+            $('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active');
+            getTabDatatableConnect(9);
+        });
+
     </script>
 </body>
 </html>
