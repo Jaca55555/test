@@ -31,14 +31,14 @@
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}">
                         <span class="pcoded-micon"><i class="feather icon-download color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.list}">Кирувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countIncomingByStatus2()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}">
                         <span class="pcoded-micon"><i class="feather icon-upload color-green"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_outgoing.list}">Чикувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countOutgoingByStatus2()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
 
                     </a>
                 </li>
