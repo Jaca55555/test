@@ -66,6 +66,8 @@
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceList}">
                         <span class="pcoded-micon"><i class="feather icon-file-text color-purple"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_reference.list}">Мурожаaтлар</span>
+                        <span th:text="${@getNotifacationService.countAppealByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+
                     </a>
                 </li>
                 <!--<li class="nav-item">

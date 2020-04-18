@@ -59,6 +59,12 @@ public class GetNotifacationService {
         statuses.add(TaskSubStatus.New.getId());
         return documentTaskSubRepository.countByReceiverIdAndStatusAndType(2,user.getId(), statuses,0);
     }
+    public Integer countAppealByStatus(){
+        User user =userService.getCurrentUserFromContext();
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.New.getId());
+        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(4,user.getId(), statuses,0);
+    }
 
     public Long countOutgoingByStatus2(){
        User user = userService.getCurrentUserFromContext();
