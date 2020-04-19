@@ -458,33 +458,38 @@ public class IncomingRegistrationController {
 
     @RequestMapping(value = DocUrls.IncomingRegistrationTask)
     public String addTask( @RequestParam(name = "id")Integer id, Model model ) {
-        Document document = documentService.getById(id);
-        if (document == null) {
-            return  "redirect:" + DocUrls.IncomingRegistrationList;
-        }
+            Document document = documentService.getById(id);
+            if (document == null) {
+                return  "redirect:" + DocUrls.IncomingRegistrationList;
+            }
 
-        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
+            List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
+            boolean isExecuteForm = false;
+            if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+                isExecuteForm = true;
+            }
+    //        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
 
-        model.addAttribute("document", document);
-        model.addAttribute("userList", userList);
-        model.addAttribute("tasksubtype",document.getExecuteForm());
+            model.addAttribute("document", document);
+            model.addAttribute("userList", userList);
+            model.addAttribute("tasksubtype",document.getExecuteForm());
+            model.addAttribute("isExecuteForm", isExecuteForm);
+            model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
 
-        model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+            System.out.println(document.getExecuteForm().getName());
+            model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+            model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
+            model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
+            model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());
 
-        System.out.println(document.getExecuteForm().getName());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
-        model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
-        model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());
-
-        return DocTemplates.IncomingRegistrationTask;
+            return DocTemplates.IncomingRegistrationTask;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationTaskSubmit)
     public String IncomingRegistrationTaskSubmit(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "content") String content,
-            @RequestParam(name = "docRegDateStr") String docRegDateStr,
+            @RequestParam(name = "docRegDateStr",required = false) String docRegDateStr,
             @RequestBody MultiValueMap<String, String> formData
     ){
         User user = userService.getCurrentUserFromContext();
@@ -492,6 +497,7 @@ public class IncomingRegistrationController {
         if (document == null){
             return "redirect:" + DocUrls.IncomingRegistrationList;
         }
+        System.out.println(docRegDateStr);
         DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
@@ -506,11 +512,12 @@ public class IncomingRegistrationController {
             if (tagName.equals("user")){
                 userId=Integer.parseInt(value);
             }
+
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
             }
 
-            if (tagName.equals("dueDateStr")){
+//            if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
                     taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
@@ -523,7 +530,7 @@ public class IncomingRegistrationController {
                      dueDate = null;
                 }
             }
-        }
+//        }
         if(!document.getStatus().equals(DocumentStatus.InProgress)){
             document.setStatus(DocumentStatus.InProgress);
             documentService.update(document);

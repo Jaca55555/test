@@ -117,7 +117,7 @@
                                             </div>-->
                                         </div>
                                     </div>
-                                    <div class="executor col-12 m10-vertical pr-0" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && documentTask.id==taskSub1.taskId && taskSub1.level!=null && (taskSub.level+1)==taskSub1.level}">
+                                    <div class="executor col-12 m10-vertical pr-0" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId && taskSub1.level!=null && (taskSub.level+1)==taskSub1.level}">
                                         <div class="flex-space-between p0">
                                             <div>
                                                 <div class="inline-block">
@@ -140,7 +140,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && documentTask.id==taskSub2.taskId && taskSub2.level!=null && (taskSub1.level+1)==taskSub2.level}">
+                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && taskSub2.level!=null && (taskSub1.level+1)==taskSub2.level}">
                                             <div class="flex-space-between p0">
                                                 <div>
                                                     <div class="inline-block">
@@ -163,7 +163,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && documentTask.id==taskSub3.taskId && taskSub3.level!=null && (taskSub2.level+1)==taskSub3.level}">
+                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && taskSub3.level!=null && (taskSub2.level+1)==taskSub3.level}">
                                                 <div class="flex-space-between p0">
                                                     <div>
                                                         <div class="inline-block">
@@ -194,7 +194,7 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a th:if="${documentTask.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerTask+'?id='+documentTaskSub.id}">
+                            <a th:if="${task.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerTask+'?id='+documentTaskSub.id}">
                                 <span th:text="#{doc_inner.newTask}">Ижро учун йўналтириш</span>
                             </a>
                             <button th:if="${documentTaskSub.status!=6}" type="button" class="btn btn-glow-secondary btn-secondary  m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
