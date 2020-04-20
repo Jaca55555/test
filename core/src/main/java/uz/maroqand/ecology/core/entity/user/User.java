@@ -115,6 +115,9 @@ public class User {
     @Transient
     private Integer userAdditionalId;
 
+    //lang selected
+    private String lang;
+
     public String getFullName(){
         String fullName = " ";
         if (lastname!=null) fullName+=lastname + " ";
@@ -124,8 +127,8 @@ public class User {
     }
     public String getShortName(){
         String shortName = " ";
-        if (lastname!=null) shortName+=lastname.substring(0,1).toUpperCase() + ".";
-        if (firstname!=null) shortName+=firstname+" ";
+        if (firstname!=null) shortName+=firstname.substring(0,1).toUpperCase() + ".";
+        if (lastname!=null) shortName+=lastname+" ";
         return shortName;
     }
 

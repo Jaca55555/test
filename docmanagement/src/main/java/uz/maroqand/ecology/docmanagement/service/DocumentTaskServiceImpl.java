@@ -14,6 +14,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubType;
 import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.ReferenceRegFilterDTO;
 import uz.maroqand.ecology.docmanagement.dto.ResolutionDTO;
@@ -380,16 +381,25 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         resolutionDTO.setExecuteFormName(document.getExecuteForm()!=null?helperService.getTranslation(document.getExecuteForm().getName(),locale):"");
         resolutionDTO.setContent(documentTask.getContent());
         List<DocumentTaskSub> documentTaskSubList = taskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
-        List<String> performers = new ArrayList<>();
+        String performers = "";
+        String controls = "";
         for (DocumentTaskSub documentTaskSub:documentTaskSubList){
             if (documentTaskSub.getReceiverId()!=null){
-                performers.add(documentTaskSub.getReceiver().getShortName());
+                performers+=documentTaskSub.getReceiver().getShortName()+",";
+                if (documentTaskSub.getType().equals(TaskSubType.Control.getId())){
+                    controls+=documentTaskSub.getReceiver().getShortName()+",";
+                }
             }
 
+
         }
-        resolutionDTO.setPerformers(performers);
+        resolutionDTO.setPerformers(!performers.isEmpty()?performers.substring(0,performers.length()-1):"");
+        resolutionDTO.setControlUser(!controls.isEmpty()?controls.substring(0,controls.length()-1):"");
         User manager = userService.findById(document.getManagerId());
-        resolutionDTO.setManagerName(manager!=null?manager.getFullName():"");
+        if (manager!=null){
+            resolutionDTO.setManagerName(manager.getFullName());
+            resolutionDTO.setManagerPosition(manager.getPositionId()!=null?manager.getPosition().getNameTranslation(locale):"");
+        }
         resolutionDTO.setRegistrationNumber(document.getRegistrationNumber());
         resolutionDTO.setRegistrationDate(document.getRegistrationDate()!=null?Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"");
         resolutionDTO.setDueDate(documentTask.getDueDate()!=null?Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"");

@@ -445,7 +445,6 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 //                        System.out.println("greater id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
                         statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
                     }
-                    System.out.println("------------------------------");
 
                 }
             }

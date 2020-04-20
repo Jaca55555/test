@@ -155,23 +155,23 @@
                         </div>
                         <div class="card-body">
                             <div class="text-center mt-2" th:if="${resolutionDocument.controlUser!=null && resolutionDocument.controlUser!=''}">
-                                <h5 th:text="*{executeFormName}"></h5>
+                                <h5 th:text="#{doc_inner.controls}"></h5>
                                 <h5 style="font-weight: bold" th:text="${resolutionDocument.controlUser}"></h5>
-                            </div>
+                            </div><br/>
                             <h5 >
                                 <span  th:text="#{doc_inner.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
                                 <span th:text="${resolutionDocument.content}"></span>
                             </h5>
                             <br/><br/>
-                            <div class="text-center mt-2"  th:if="${#lists.size(resolutionDocument.performers)>0}">
+                            <div class="text-center mt-2" >
                                 <h5 th:text="#{doc_inner.performers}"></h5>
                                 <h5 style="font-weight: bold"  >
-                                    <span th:each="performer : ${resolutionDocument.performers}" th:text="${performer}+',  '"></span>
+                                    <span  th:text="${resolutionDocument.performers}"></span>
                                 </h5>
                             </div>
                             <br/>
                             <div class="text-right mt-2"  >
-                                <h5 th:text="#{doc_inner.chief}"></h5>
+                                <h5 th:text="${resolutionDocument.managerPosition}"></h5>
                                 <h5 style="font-weight: bold" th:text="${resolutionDocument.managerName}" ></h5>
                             </div>
 

@@ -75,8 +75,20 @@ public class DocController {
     }
 
     @RequestMapping(DocUrls.Dashboard)
-    public String getDepartmentList(Model model) {
+    public String getDepartmentList(
+            Model model,
+            @RequestParam(name = "lang", required = false) String lang
+    ) {
         User user = userService.getCurrentUserFromContext();
+        if (lang==null || lang.isEmpty()){
+            if (user.getLang()==null || user.getLang().isEmpty()){
+                user.setLang("oz");
+                userService.updateUser(user);
+                return "redirect:"+DocUrls.Dashboard+"?lang=oz";
+
+            }
+            return "redirect:"+DocUrls.Dashboard+"?lang="+user.getLang();
+        }
         Integer organizationId = user.getOrganizationId(), departmentId = user.getDepartmentId(), userId = user.getId();
 
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
@@ -489,5 +501,19 @@ public class DocController {
         result.put("changedOnStatusId", statusId);
         documentTaskService.update(documentTask);
         return result;
+    }
+
+    @RequestMapping(value = DocUrls.DocLangSelect)
+    public String selectLang(
+            @RequestParam(name = "lang") String lang,
+            @RequestParam(name = "currentUrl") String currentUrl
+    ){
+        lang=lang.substring(0,2);
+        System.out.println("lang==" + lang);
+        System.out.println("currentUrl==" + currentUrl);
+        User user = userService.getCurrentUserFromContext();
+        user.setLang(lang);
+        userService.updateUser(user);
+        return "redirect:" + currentUrl;
     }
 }

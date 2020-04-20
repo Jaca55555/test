@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -41,8 +42,17 @@ public class MainController {
     }
 
     @RequestMapping("/dashboard")
-    public String getDashboardPage() {
-        return "dashboard";
+    public String getDashboardPage(@RequestParam (name = "lang",required = false) String lang) {
+        User user = userService.getCurrentUserFromContext();
+        if (lang!=null && !lang.isEmpty()) return "dashboard";
+        System.out.println(user.getLang());
+        if (user.getLang()==null || user.getLang().isEmpty()){
+            user.setLang("oz");
+            userService.updateUser(user);
+            return "redirect:dashboard?lang=oz";
+
+        }
+        return "redirect:dashboard?lang="+user.getLang();
     }
 
     @RequestMapping("/expertise/dashboard")

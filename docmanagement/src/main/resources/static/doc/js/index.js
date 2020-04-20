@@ -96,9 +96,10 @@ function switchLanguage(targetLanguage) {
     } else {
         currentUrl += '?lang='+targetLanguage;
     }
+    console.log(targetLanguage);
     if (urlAndHash.length > 1) currentUrl += '#' + urlAndHash[1];
 
-    window.location.href = currentUrl;
+    window.location.href = '/doc/lang_select?lang='+targetLanguage+'&currentUrl='+currentUrl;
 }
 
 function fileNameSubString(fileName) {

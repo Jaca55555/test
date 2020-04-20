@@ -17,6 +17,7 @@ public class DocUrls {
     private static final String ChangePerformer = "/change_performer"; //kiruvchi xujjatlar
 
     public static final String Dashboard = Prefix + "/dashboard";
+    public static final String DocLangSelect = Prefix + "/lang_select";
     public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
