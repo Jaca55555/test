@@ -69,6 +69,7 @@ public class IncomingController {
         Set<Integer> statuses = new LinkedHashSet<>();
 
         statuses.add(TaskSubStatus.New.getId());
+        model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), user.getId()));
         model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
 
         statuses.add(TaskSubStatus.InProgress.getId());
@@ -120,15 +121,14 @@ public class IncomingController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
-        Boolean specialControll=null;
+        Boolean specialControl = null;
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();
                 status = new LinkedHashSet<>();
             status.add(TaskSubStatus.InProgress.getId());
                 break;
             case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
+                deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
@@ -136,8 +136,10 @@ public class IncomingController {
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати кеччикан
             case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
@@ -154,7 +156,7 @@ public class IncomingController {
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControl = Boolean.TRUE;
                 break;//Якунланган
             case 9:
                 status = new LinkedHashSet<>();
@@ -192,12 +194,15 @@ public class IncomingController {
                 status,
                 departmentId,
                 receiverId,
-                specialControll,
+                specialControl,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
+
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
+
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
+
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
             Document document = documentTaskSub.getDocument();
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());

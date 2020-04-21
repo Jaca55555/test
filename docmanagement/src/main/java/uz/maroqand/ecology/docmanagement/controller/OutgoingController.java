@@ -113,7 +113,7 @@ public class OutgoingController {
 
             model.addAttribute("additional_document_view_link", viewLink + "?id=" + additionalDocument.getId());
         }
-        String document_organization_name="";
+        String document_organization_name = "";
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
         if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
             for (DocumentOrganization documentOrganization: documentOrganizationSet) {

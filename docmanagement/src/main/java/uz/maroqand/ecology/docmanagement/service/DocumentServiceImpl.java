@@ -398,7 +398,7 @@ public class DocumentServiceImpl implements DocumentService {
         };
     }
 
-    private Date getCastedDate(){
+    public Date getCastedDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.set(Calendar.MILLISECOND, 0);

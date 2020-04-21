@@ -69,6 +69,9 @@ public class ReferenceController {
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
         Integer New = documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
+
+        model.addAttribute("reference", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.AppealDocuments.getId(), user.getId()));
+
         model.addAttribute("newDocumentCount", New);
         statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
@@ -128,12 +131,11 @@ public class ReferenceController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
-        Boolean specialControll=null;
+        Boolean specialControl = null;
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
+                deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
@@ -141,8 +143,10 @@ public class ReferenceController {
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати кеччикан
             case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
@@ -159,7 +163,7 @@ public class ReferenceController {
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControl = Boolean.TRUE;
                 break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
@@ -192,7 +196,7 @@ public class ReferenceController {
                 status,
                 departmentId,
                 receiverId,
-                specialControll,
+                specialControl,
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
