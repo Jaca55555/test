@@ -48,17 +48,15 @@
         <div class="row flex-space-between" th:if="${#lists.size(documentTasks)>0}" th:each="task,iter : ${documentTasks}">
             <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
-
                     <div class="card-header flex-space-between align-center" style="height:65px;">
                         <h5>
-                            <span th:text="#{doc_incoming.task_number}"></span>&nbsp;&nbsp;№
+                            <span th:text="#{doc_task_number}"></span>&nbsp;&nbsp;№
                             <span th:text="${iter.index+1}"></span>
                         </h5>
                     </div>
-
                     <div class="card-block">
                         <div class="row" >
-                            <div class="executor col-12 m10-vertical" th:object="${task}">
+                            <div class="executor col-12 m10-vertical"  th:object="${task}">
                                 <div class="flex-space-between p0" style="flex-flow:row wrap">
                                     <div>
                                         <div class="inline-block">
@@ -70,7 +68,7 @@
                                             <span  th:if="*{chiefId!=null}" th:text="*{@helperService.getUserPositionName(chiefId,#locale)}">Руководитель организации</span>
                                         </div>
                                     </div>
-                                    <div class="flex-space-between p0 align-center column-1">
+                                    <div class="flex-space-between p0 align-center column-1 fs20">
                                         <div style="height: fit-content;display: flex;align-items: center;">
                                             <i class="fas fa-cog fs20 color-gray pointer"></i>
                                             <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
@@ -86,7 +84,7 @@
                                     <div class="w100"></div>
                                 </div>
                             </div>
-                            <div th:if="${#lists.size(documentTaskSubs)>0}" class="col-md-12">
+                            <div th:if="${#lists.size(documentTaskSubs)>0}" class="col-sm-12">
                                 <div th:if="${task.id==taskSub.taskId && taskSub.level!=null && taskSub.level==1}" th:each="taskSub : ${documentTaskSubs}">
                                     <div class="executor col-12 m10-vertical pr-0">
                                         <div class="flex-space-between p0">
@@ -113,7 +111,7 @@
                                             <div class="w100"></div>
                                         </div>
                                     </div>
-                                    <div class="executor col-12 m10-vertical pr-0" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId && (taskSub.level +1)==taskSub1.level}">
+                                    <div class="executor col-12 m10-vertical pr-0" th:each="taskSub1 : ${documentTaskSubs}" th:if="${taskSub1.senderId==taskSub.receiverId && task.id==taskSub1.taskId && taskSub1.level!=null &&  taskSub1.level==(taskSub.level+1)}">
                                         <div class="flex-space-between p0">
                                             <div>
                                                 <div class="inline-block">
@@ -136,7 +134,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && (taskSub1.level +1)==taskSub2.level}">
+                                        <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && taskSub2.level!=null &&  taskSub2.level==(taskSub1.level+1)}">
                                             <div class="flex-space-between p0">
                                                 <div>
                                                     <div class="inline-block">
@@ -159,7 +157,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && (taskSub2.level +1)==taskSub3.level}">
+                                            <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && taskSub3.level!=null &&  taskSub3.level==(taskSub2.level+1)}">
                                                 <div class="flex-space-between p0">
                                                     <div>
                                                         <div class="inline-block">
@@ -168,7 +166,7 @@
                                                         <div class="inline-block m10-horizontal">
                                                             <span class="color-purple bold" th:if="${taskSub3.receiverId!=null}" th:text="${@helperService.getUserFullNameById(taskSub3.receiverId)}">Абдуллаев А. А.</span>
                                                             <br>
-                                                            <span th:if="${taskSub3.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub3.receiverId,#locale)}">Ташкилот рахбари</span>
+                                                            <span th:if="${taskSub2.receiverId!=null}" th:text="${@helperService.getUserPositionName(taskSub3.receiverId,#locale)}">Ташкилот рахбари</span>
                                                         </div>
                                                     </div>
                                                     <div class="flex-space-between p0 align-center column-3">
@@ -189,10 +187,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
             <div class="col-xl-4 col-sm-12 pr-0 pr-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
@@ -221,6 +217,7 @@
                             <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
                                 10.05.2019 - 09:35
                             </div>
+
                             <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
                                 <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
                                     <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
@@ -247,14 +244,15 @@
                                     </button>-->
                                 </div>
                             </div>
+
                             <div class="w100"></div>
                             <div class="row col-sm-12  mt-2">
                                 <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
                             </div>
                             <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag">
                                 <div class="w100"></div>
-                                <div class="column-2 mt-3 fileContainer">
-                                    <span class='fas fa-file-pdf fs30 color-red'></span>
+                                <div class="row col-sm-12  mt-2">
+                                    <span class='fas fa-file-pdf fs30 color-red mr-1'></span>
                                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
                                 </div>
                             </div>
@@ -263,7 +261,7 @@
                                 <div class="row col-sm-12  mt-2 d-flex">
                                     <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>&nbsp;&nbsp;
                                     <span class='mdi mdi-file-upload-outline fs30 color-green mr-1'></span>
-                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView} + '?id=' + ${log.attachedDoc.id}" th:text="${log.attachedDoc.registrationNumber}"></a>
+                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView} + '?id=' + ${log.attachedDocId}" th:text="${log.attachedDoc.registrationNumber}"></a>
                                 </div>
                             </div>
                         </div>

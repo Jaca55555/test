@@ -12,6 +12,8 @@ import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 
 import javax.swing.text.Document;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 public class GetNotifacationService {
@@ -29,7 +31,9 @@ public class GetNotifacationService {
     }
     public Integer countIncomingByStatus(){
         User user =userService.getCurrentUserFromContext();
-        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(user.getId(), TaskSubStatus.New.getId(),DocumentTypeEnum.IncomingDocuments.getId());
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.New.getId());
+        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(1,user.getId(), statuses,0);
     }
     public Long countIncomingByStatus2(){
         User user = userService.getCurrentUserFromContext();
@@ -39,7 +43,9 @@ public class GetNotifacationService {
 
     public Integer countInnerByStatus(){
         User user =userService.getCurrentUserFromContext();
-        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(user.getId(), TaskSubStatus.New.getId(), DocumentTypeEnum.InnerDocuments.getId());
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.New.getId());
+        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(3,user.getId(),statuses ,0);
     }
 
     public Long countInnerByStatus2(){
@@ -49,7 +55,15 @@ public class GetNotifacationService {
 
     public Integer countOutgoingByStatus(){
         User user =userService.getCurrentUserFromContext();
-        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(user.getId(), TaskSubStatus.New.getId(), DocumentTypeEnum.OutgoingDocuments.getId());
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.New.getId());
+        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(2,user.getId(), statuses,0);
+    }
+    public Integer countAppealByStatus(){
+        User user =userService.getCurrentUserFromContext();
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.New.getId());
+        return documentTaskSubRepository.countByReceiverIdAndStatusAndType(4,user.getId(), statuses,0);
     }
 
     public Long countOutgoingByStatus2(){
@@ -58,9 +72,7 @@ public class GetNotifacationService {
     }
 
     public Integer countIncomingNotByStatus(){
-
         return documentRepository.countByStatus(DocumentStatus.New);
-
     }
 
 }

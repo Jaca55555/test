@@ -254,6 +254,11 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+         if(document.getExecuteForm().getId().equals(1)){
+            documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+            documentTaskSubService.update(documentTaskSub);}
+        }
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
@@ -278,6 +283,7 @@ public class IncomingController {
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
+
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
@@ -360,6 +366,11 @@ public class IncomingController {
         if (documentTask==null){
             return "redirect:" + DocUrls.IncomingList;
         }
+        boolean isExecuteForm=false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            isExecuteForm = true;
+        }
+
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -375,6 +386,12 @@ public class IncomingController {
             }
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
+                if (!isExecuteForm){
+                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
             }
 
             if (tagName.equals("dueDateStr")){

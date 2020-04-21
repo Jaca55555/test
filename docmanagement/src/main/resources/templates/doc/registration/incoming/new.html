@@ -184,13 +184,15 @@
                             <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
-                        <div class="custom-control custom-radio custom-control-inline" th:each="controlForm: ${controlForms}">
-                            <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
-                            <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="#{${controlForm.name}}"></label>
-                        </div>
+                </div>
+                <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label" th:text="#{doc_incoming.reg_control_form}">Назорат карточкасининг шакли</label> <br>
+                    <div class="custom-control custom-radio custom-control-inline" th:each="controlForm: ${controlForms}">
+                        <input type="radio" th:value="${controlForm.id}" name="controlFormId" th:id="'controlForm'+${controlForm.id}" class="custom-control-input" th:checked="${document.controlForm!=null && controlForm.id==document.controlForm.id}">
+                        <label class="custom-control-label" th:for="'controlForm'+${controlForm.id}" th:text="#{${controlForm.name}}"></label>
                     </div>
+                </div>
                 </div>
                 <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <hr class="m30-vertical">
