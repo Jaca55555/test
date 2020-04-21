@@ -117,6 +117,7 @@ public class DocController {
             @RequestParam(name = "taskSubType",required = false,defaultValue = "") Integer taskSubType,
             @RequestParam(name = "taskSubStatus",required = false,defaultValue = "") Integer taskSubStatus,
             @RequestParam(name = "tabFilter",required = false,defaultValue = "") Integer tabFilter,
+            @RequestParam(name = "documentTypeId", required = false) Integer documentTypeId,
             Pageable pageable
     ) {
 //        User user = userService.getCurrentUserFromContext();
@@ -227,7 +228,28 @@ public class DocController {
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
-        Boolean specialControll=null;
+        Boolean specialControll = null;
+
+        List<Integer> documentTypeIds = new ArrayList<>(4);
+        if(documentTypeId == null)
+            documentTypeId = -1;
+        switch(documentTypeId){
+            case 1:
+                documentTypeIds.add(1);
+                break;
+            case 2:
+                documentTypeIds.add(2);
+                break;
+            case 3:
+                documentTypeIds.add(3);
+                break;
+            case 4:
+                documentTypeIds.add(4);
+                break;
+            default:
+                documentTypeIds.addAll(Arrays.asList(1,2,3,4));
+        }
+
 
         switch (tabFilter){
             case 9: status = new LinkedHashSet<>();
@@ -292,7 +314,7 @@ public class DocController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                Arrays.asList(1, 2, 3, 4), //todo documentTypeId=3
+                documentTypeIds, //todo documentTypeId = 3
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,

@@ -94,12 +94,27 @@ public class IncomingRegistrationController {
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
     public String getIncomingRegistrationListPage(Model model) {
 
-        model.addAttribute("newCount", taskService.countNew());
-        model.addAttribute("inProcess", taskService.countInProcess());
-        model.addAttribute("nearDate", taskService.countNearDate());
-        model.addAttribute("expired", taskService.countExpired());
-        model.addAttribute("executed", taskService.countExecuted());
-        model.addAttribute("total", taskService.countTotal());
+        Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
+        Integer departmentId = userService.getCurrentUserFromContext().getDepartmentId();
+
+        Calendar calendar = Calendar.getInstance();
+        Date end = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date begin = calendar.getTime();
+
+
+        model.addAttribute("new_", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.New.getId()));
+
+        model.addAttribute("inProgress", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.InProgress.getId()));
+
+        model.addAttribute("nearDueDate", taskService.countAllTasksByDocumentTypeIdAndDueDateBetween(organizationId, departmentId, 1, begin, end));
+
+        model.addAttribute("expired", taskService.countAllTasksByDocumentTypeIdAndDueDateBefore(organizationId, departmentId, 1, end));
+
+        model.addAttribute("completed", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.Complete.getId()));
+
+        model.addAttribute("all", taskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 1));
+
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
@@ -119,20 +134,30 @@ public class IncomingRegistrationController {
         Date deadlineDateEnd = null;
         Set<Integer> status = null;
         Calendar calendar = Calendar.getInstance();
-        Boolean specialControll=null;
-        Integer tabFilter = incomingRegFilter.getTabFilter()!=null?incomingRegFilter.getTabFilter():1;
+        Boolean specialControl = null;
+
+        Integer tabFilter = incomingRegFilter.getTabFilter() != null ? incomingRegFilter.getTabFilter() : 9;
         switch (tabFilter){
+            case 1:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                break;
+            case 2:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.InProgress.getId());
+                break;
             case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
+                deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskStatus.New.getId());
                 status.add(TaskStatus.InProgress.getId());
                 status.add(TaskStatus.Checking.getId());
                 break;//Муддати кеччикан
             case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
                 status.add(TaskStatus.New.getId());
                 status.add(TaskStatus.InProgress.getId());
@@ -147,8 +172,14 @@ public class IncomingRegistrationController {
                 status.add(TaskStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControl = Boolean.TRUE;
                 break;//Якунланган
+            case 9:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;
             default:
                 pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
                         Sort.Order.asc("status"),
@@ -157,7 +188,7 @@ public class IncomingRegistrationController {
                 break;//Жами
         }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, user.getDepartmentId(), null,specialControll, pageable);
+        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, user.getDepartmentId(), null, specialControl, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -165,8 +196,7 @@ public class IncomingRegistrationController {
         for (DocumentTask documentTask : documentTaskList) {
             Document document = documentService.getById(documentTask.getDocumentId());
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
-            String docContent="";
-            System.out.println(document.getDocumentTypeId());
+            String docContent = "";
             if (documentSub!=null && documentSub.getOrganizationId()!=null){
                 DocumentOrganization documentOrganization = documentOrganizationService.getById(documentSub.getOrganizationId());
                 docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
@@ -174,7 +204,7 @@ public class IncomingRegistrationController {
             if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
                 docContent+=" №"+ document.getDocRegNumber().trim()+",";
             }
-            docContent+=document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent += document.getDocRegDate()!=null?( " " + documentHelperService.getTranslation("sys_date", locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
             docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
                     document.getId(),
@@ -183,7 +213,7 @@ public class IncomingRegistrationController {
                     docContent,
                     documentTask.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(documentTask.getCreatedAt()):"",
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
-                    documentTask.getStatus()!=null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
+                    documentTask.getStatus() != null ? documentHelperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
                     documentTask.getContent(),
                     documentTask.getStatus(),
                     taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)

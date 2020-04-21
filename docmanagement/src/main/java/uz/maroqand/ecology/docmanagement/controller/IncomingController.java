@@ -154,6 +154,10 @@ public class IncomingController {
             case 8:
                 specialControl = Boolean.TRUE;
                 break;//Якунланган
+            case 9: status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.Initial.getId());
+                status.add(TaskSubStatus.New.getId());
+                break;
             default:
                 departmentId = user.getDepartmentId();
 //                receiverId=null;
@@ -190,12 +194,11 @@ public class IncomingController {
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
+        Long current = System.currentTimeMillis();
 
-        List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubs.getSize());
 
-        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
-
-        for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
+        for (DocumentTaskSub documentTaskSub : documentTaskSubs) {
             Document document = documentTaskSub.getDocument();
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
             String docContent="";
@@ -222,7 +225,7 @@ public class IncomingController {
 
             });
         }
-
+        System.out.println(System.currentTimeMillis() - current);
         result.put("recordsTotal", documentTaskSubs.getTotalElements()); //Total elements
         result.put("recordsFiltered", documentTaskSubs.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);

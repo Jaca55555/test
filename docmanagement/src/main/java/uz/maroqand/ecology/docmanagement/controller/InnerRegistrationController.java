@@ -67,12 +67,27 @@ public class InnerRegistrationController {
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
     public String getIncomeListPage(Model model) {
         User user = userService.getCurrentUserFromContext();
-        model.addAttribute("newDocumentCount", documentTaskService.countNew());
-        model.addAttribute("inProgressDocumentCount", documentTaskService.countInProcess());
-        model.addAttribute("lessDeadlineDocumentCount", documentTaskService.countNearDate());
-        model.addAttribute("greaterDeadlineDocumentCount", documentTaskService.countExpired());
-        model.addAttribute("checkingDocumentCount", documentTaskService.countExecuted());
-        model.addAttribute("allDocumentCount", documentTaskService.countTotal());
+        Integer organizationId = user.getOrganizationId();
+        Integer departmentId = user.getDepartmentId();
+
+        Calendar calendar = Calendar.getInstance();
+        Date end = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date begin = calendar.getTime();
+
+        model.addAttribute("new_", documentTaskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 3, TaskStatus.New.getId()));
+
+        model.addAttribute("inProgress", documentTaskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 3, TaskStatus.InProgress.getId()));
+
+        model.addAttribute("nearDueDate", documentTaskService.countAllTasksByDocumentTypeIdAndDueDateBetween(organizationId, departmentId, 3, begin, end));
+
+        model.addAttribute("expired", documentTaskService.countAllTasksByDocumentTypeIdAndDueDateBefore(organizationId, departmentId, 3, end));
+
+        model.addAttribute("completed", documentTaskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 3, TaskStatus.Complete.getId()));
+
+        model.addAttribute("all", documentTaskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 3));
+
+
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("chief", userService.getEmployeeList());
@@ -122,41 +137,35 @@ public class InnerRegistrationController {
         Date deadlineDateEnd = null;
         Set<Integer> status = null;
         Calendar calendar = Calendar.getInstance();
-        Boolean specialControll=null;
-        tabFilter = tabFilter!=null?tabFilter:1;
+        Boolean specialControl = null;
+        tabFilter = tabFilter != null ? tabFilter : 9;
+
         switch (tabFilter){
-            case 9: status = new LinkedHashSet<>();
-                status.add(TaskStatus.Initial.getId());
+            case 1:
+                status = new LinkedHashSet<>();
                 status.add(TaskStatus.New.getId());
                 break;
-            case 2:  status = new LinkedHashSet<>();
+            case 2:
+                status = new LinkedHashSet<>();
                 status.add(TaskStatus.InProgress.getId());
                 break;
             case 3:
-                calendar.add(Calendar.DATE, 1);
-                deadlineDateEnd = calendar.getTime();
-                deadlineDateEnd.setHours(23);
-                deadlineDateEnd.setMinutes(59);
-                deadlineDateEnd.setSeconds(0);
-                calendar.add(Calendar.DATE, -2);
-                deadlineDateBegin = calendar.getTime();
-                deadlineDateBegin.setHours(23);
-                deadlineDateBegin.setMinutes(59);
-                deadlineDateBegin.setSeconds(59);
-
-                status = new LinkedHashSet<>();
-                status.add(TaskStatus.Initial.getId());
-                status.add(TaskStatus.New.getId());
-                status.add(TaskStatus.InProgress.getId());
-                break;//Муддати якинлашаётган
-            case 4:
-                calendar.add(Calendar.DATE, -1);
                 deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.Initial.getId());
                 status.add(TaskStatus.New.getId());
                 status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
                 break;//Муддати кеччикан
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати якинлашаётган
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskStatus.Checking.getId());
@@ -166,8 +175,14 @@ public class InnerRegistrationController {
                 status.add(TaskStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControl = Boolean.TRUE;
                 break;//Якунланган
+            case 9:
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;
             default:
                 pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
                         Sort.Order.asc("status"),
@@ -185,7 +200,7 @@ public class InnerRegistrationController {
                 status,
                 user.getDepartmentId(),
                 null,
-                specialControll,
+                specialControl,
                 pageable);
 
         List<DocumentTask> documentTaskList = documentPage.getContent();

@@ -46,8 +46,9 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${newCount}"></h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active'); getTabDatatableConnect(1)">
+                            <h4 class="card-title" th:text="${new_}"></h4>
                             <h6 class="card-title" th:text="#{doc_incoming.new_documents_count}">Жами хатлар</h6>
                         </div>
                     </div>
@@ -55,8 +56,8 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-danger-shadow">
                         <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${inProcess}">20</h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#executing-tab').click()">
+                            <h4 class="card-title" th:text="${inProgress}">20</h4>
                             <h6 class="card-title" th:text="#{doc_incoming.in_progress_count}">Жами хатлар</h6>
                         </div>
                     </div>
@@ -64,8 +65,8 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-warning-shadow">
                         <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${nearDate}">30</h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#near-due-tab').click()">
+                            <h4 class="card-title" th:text="${nearDueDate}">30</h4>
                             <h6 class="card-title" th:text="#{doc_incoming.near_date_count}">Жами хатлар</h6>
                         </div>
                     </div>
@@ -73,7 +74,7 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#delayed-tab').click()">
                             <h4 class="card-title" th:text="${expired}">40</h4>
                             <h6 class="card-title" th:text="#{doc_incoming.expired_count}">Жами хатлар</h6>
                         </div>
@@ -82,8 +83,8 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${executed}">40</h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#done-tab').click()">
+                            <h4 class="card-title" th:text="${completed}">40</h4>
                             <h6 class="card-title" th:text="#{doc_incoming.completed_count}">Жами хатлар</h6>
                         </div>
                     </div>
@@ -91,8 +92,8 @@
                 <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${total}">40</h4>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="$('#all-tab').click()">
+                            <h4 class="card-title" th:text="${all}">40</h4>
                             <h6 class="card-title" th:text="#{doc_incoming.all_doc_count}">Жами хатлар</h6>
                         </div>
                     </div>
@@ -220,16 +221,16 @@
     <div class="parent-card col-xl-12 mh-1000">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(9)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
             </li>
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="delayed-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
+                <a class="nav-link text-uppercase" id="near-due-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase" id="nead-due-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
+                <a class="nav-link text-uppercase show" id="delayed-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
             </li>
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="execute-control-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
