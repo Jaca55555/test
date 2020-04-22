@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
-import com.sun.javaws.IconUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;

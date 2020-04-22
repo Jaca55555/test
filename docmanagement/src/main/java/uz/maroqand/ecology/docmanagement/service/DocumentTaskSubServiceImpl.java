@@ -450,7 +450,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
                 Date currentDocumentTaskSubDueDate = documentTaskSub.getDueDate();
 
-                if(currentDocumentTaskSubDueDate.before(currentDate))
+                if(currentDocumentTaskSubDueDate!=null && currentDocumentTaskSubDueDate.before(currentDate))
                     statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
                 if(currentDate.before(nearestDate) && currentDate.after(currentDate))
                     statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);
