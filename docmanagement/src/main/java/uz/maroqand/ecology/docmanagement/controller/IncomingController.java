@@ -89,6 +89,7 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Checking.getId());
         model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
+        model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
@@ -154,10 +155,10 @@ public class IncomingController {
             case 8:
                 specialControl = Boolean.TRUE;
                 break;//Якунланган
-            case 9: status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.Initial.getId());
+            case 9:
+                status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.New.getId());
-                break;
+                break;//Якунланган
             default:
                 departmentId = user.getDepartmentId();
 //                receiverId=null;
@@ -194,7 +195,6 @@ public class IncomingController {
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
-        Long current = System.currentTimeMillis();
 
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubs.getSize());
 
@@ -225,7 +225,7 @@ public class IncomingController {
 
             });
         }
-        System.out.println(System.currentTimeMillis() - current);
+
         result.put("recordsTotal", documentTaskSubs.getTotalElements()); //Total elements
         result.put("recordsFiltered", documentTaskSubs.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
@@ -253,6 +253,11 @@ public class IncomingController {
         Document document = documentService.getById(task.getDocumentId());
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+         if(document.getExecuteForm().getId().equals(1)){
+            documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+            documentTaskSubService.update(documentTaskSub);}
         }
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
@@ -360,6 +365,11 @@ public class IncomingController {
         if (documentTask==null){
             return "redirect:" + DocUrls.IncomingList;
         }
+        boolean isExecuteForm=false;
+        if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
+            isExecuteForm = true;
+        }
+
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
@@ -375,6 +385,12 @@ public class IncomingController {
             }
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
+                if (!isExecuteForm){
+                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
             }
 
             if (tagName.equals("dueDateStr")){

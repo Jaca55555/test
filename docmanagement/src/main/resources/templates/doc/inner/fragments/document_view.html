@@ -11,7 +11,7 @@
     }
 </style>
 
-<div class="card parent-card">
+<div class="card parent-card" id="for_doc_print">
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed">
@@ -46,10 +46,10 @@
             <a th:if="${resolutionDocument!=null}" href="#" data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+            <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
         </div>
     </div>
-    <div class="card-block">
+    <div class="card-block" >
         <div class="row" th:object="${document}">
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_inner.journal}">Рўйхатга олиш журнали:</span></div>
@@ -155,23 +155,23 @@
                         </div>
                         <div class="card-body">
                             <div class="text-center mt-2" th:if="${resolutionDocument.controlUser!=null && resolutionDocument.controlUser!=''}">
-                                <h5 th:text="*{executeFormName}"></h5>
+                                <h5 th:text="#{doc_inner.controls}"></h5>
                                 <h5 style="font-weight: bold" th:text="${resolutionDocument.controlUser}"></h5>
-                            </div>
+                            </div><br/>
                             <h5 >
                                 <span  th:text="#{doc_inner.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
                                 <span th:text="${resolutionDocument.content}"></span>
                             </h5>
                             <br/><br/>
-                            <div class="text-center mt-2"  th:if="${#lists.size(resolutionDocument.performers)>0}">
+                            <div class="text-center mt-2" >
                                 <h5 th:text="#{doc_inner.performers}"></h5>
                                 <h5 style="font-weight: bold"  >
-                                    <span th:each="performer : ${resolutionDocument.performers}" th:text="${performer}+',  '"></span>
+                                    <span  th:text="${resolutionDocument.performers}"></span>
                                 </h5>
                             </div>
                             <br/>
                             <div class="text-right mt-2"  >
-                                <h5 th:text="#{doc_inner.chief}"></h5>
+                                <h5 th:text="${resolutionDocument.managerPosition}"></h5>
                                 <h5 style="font-weight: bold" th:text="${resolutionDocument.managerName}" ></h5>
                             </div>
 
@@ -203,13 +203,11 @@
 </div>
 <script th:inline="javascript">
     let files = [[${document.contentFiles}]];
-</script>
-<script th:inline="none">
     console.log(files)
     function displayFiles(files){
         for(let i = 0; i < files.length; i++){
             let fileName= files[i].name;
-            let extensionAndColor = detectExtensionAndColor(files[i].extension)
+            let extensionAndColor = detectExtensionAndColor(files[i].extension);
             $('#fileContainer').append(`<button class="btn" data-toggle="modal" data-target="#myModal`+i+`">
                 <div  class="office-card-file" >
                                 <div class="card dashboard-card">

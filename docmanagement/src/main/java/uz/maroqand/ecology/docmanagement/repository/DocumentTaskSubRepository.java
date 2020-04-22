@@ -32,8 +32,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);//Муддати кеччикан
 
     Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
-
-    Integer countByReceiverIdAndStatusAndType(Integer receiverId, Integer statuses,Integer type);//Янги хатлар, Жараёндаги, Ижро этилган
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =?1 AND d.deleted = FALSE AND d.receiverId=?2 AND d.status=?3 AND d.type=?4")
+    Integer countByReceiverIdAndStatusAndType(Integer d_id,Integer receiverId, Set<Integer> statuses,Integer type);//Янги хатлар, Жараёндаги, Ижро этилган
 
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
 

@@ -120,7 +120,7 @@
     var task_sub_type_performer_partner = [[#{task_sub_type.performer_partner}]];
     var task_sub_type_control = [[#{task_sub_type.control}]];
     var task_sub_type_info = [[#{task_sub_type.info}]];
-    let tasksubtype = [[${tasksubtype}]];
+    let tasksubtype = [[${tasksubtype1}]];
     console.log(tasksubtype);
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
@@ -183,7 +183,7 @@
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>';
-                         if(tasksubtype!="Information")  {
+                         if(tasksubtype!="sys_execute_form.information")  {
                              if ($('#typePerformer').val()==''){
                                 html+='<td style="width: 30%">\n' +
                                     '       <div class="btn-group mb-2 mr-2" id="status_div_'+userId+'">\n' +
@@ -249,7 +249,7 @@
                              }
                          }
 
-                            if(tasksubtype!="Information"){
+                            if(tasksubtype!="sys_execute_form.information"){
                             html+='   <td style="width: 35%">\n' +
                                 '       <div class="col-md-12 mb-3">\n' +
                                 '           <div class="input-group">\n' +

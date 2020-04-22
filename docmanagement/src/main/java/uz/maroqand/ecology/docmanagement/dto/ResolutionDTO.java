@@ -11,8 +11,9 @@ public class ResolutionDTO {
     private String controlUser;
     private String executeFormName;
     private String content;
-    private List<String> performers;
+    private String performers;
     private String managerName;
+    private String managerPosition;
     private String registrationNumber;
     private String registrationDate;
     private String dueDate;
@@ -22,8 +23,9 @@ public class ResolutionDTO {
         this.controlUser = "";
         this.executeFormName = "";
         this.content = "";
-        this.performers = new ArrayList<>();
+        this.performers = "";
         this.managerName = "";
+        this.managerPosition = "";
         this.registrationNumber = "";
         this.registrationDate = "";
         this.dueDate = "";
