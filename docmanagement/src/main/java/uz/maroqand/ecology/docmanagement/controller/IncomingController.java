@@ -254,11 +254,11 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+
          if(document.getExecuteForm().getId().equals(1)){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);}
-        }
+
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
