@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.TinParser;
 
 import java.util.*;
 
@@ -51,14 +53,19 @@ public class ConclusionController {
             @RequestParam(name = "id", required = false) Integer id,
             @RequestParam(name = "dateBegin", required = false) String dateBeginStr,
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
+            @RequestParam(name = "tin", required = false) String tinStr,
+            @RequestParam(name = "name", required = false) String name,
             Pageable pageable
     ){
+
+        Integer tin = TinParser.trimIndividualsTinToNull(tinStr);
+        name = StringUtils.trimToNull(name);
 
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
 
         HashMap<String, Object> result = new HashMap<>();
-        Page<Conclusion> conclusionPage = conclusionService.findFiltered(id, dateBegin, dateEnd, pageable);
+        Page<Conclusion> conclusionPage = conclusionService.findFiltered(id, dateBegin, dateEnd,tin,name, pageable);
         Calendar c = Calendar.getInstance();
         c.set(c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate(),0,0,0);
         List<Conclusion> conclusionList = conclusionPage.getContent();
@@ -74,7 +81,8 @@ public class ConclusionController {
                     regApplication.getMaterials(),
                     regApplication.getCategory() !=null ? regApplication.getCategory().getName() : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
-                    conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE
+                    conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
+                    regApplication.getApplicant().getName()
             });
         }
 

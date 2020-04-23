@@ -56,6 +56,14 @@
                                                 <input type="text" class="form-control" id="id" />
                                             </div>
                                             <div class="form-group col-sm-2">
+                                                <label class="control-label" th:text="#{sys_legal_entity_name}">ID</label><br/>
+                                                <input type="text" class="form-control" id="name" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label"  th:text="#{sys_tin}">ID</label><br/>
+                                                <input type="text" class="form-control" id="tin" />
+                                            </div>
+                                            <div class="form-group col-sm-2">
                                                 <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
                                                 <input type="text" class="form-control datepicker" id="dateBegin" />
                                             </div>
@@ -65,7 +73,7 @@
                                             </div>
                                             <div class="clearfix"></div>
 
-                                            <div class="col-sm-6 text-right">
+                                            <div class="col-sm-2 text-right">
                                                 <label class="control-label">&nbsp;</label><br/>
                                                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                     <span th:text="#{sys_search}">Поиск</span>
@@ -80,6 +88,7 @@
                                                     <th th:text="#{conclusion.number}"></th>
                                                     <th th:text="#{conclusion.date}"></th>
                                                     <th th:text="#{sys_tin}"></th>
+                                                    <th th:text="#{sys_legal_entity_name}"></th>
                                                     <th th:text="#{sys_company_name}"></th>
                                                     <th th:text="#{conclusion.material}"></th>
                                                     <th th:text="#{conclusion.category}"></th>
@@ -132,7 +141,7 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><a href="#" class="btn btn-info btn-sm mr-1" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a href="'+currentViewLink+'" class="btn btn-info btn-sm mr-1" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 
@@ -166,6 +175,8 @@
                 dataToSend.id = $("#id").val();
                 dataToSend.dateBegin = $("#dateBegin").val();
                 dataToSend.dateEnd = $("#dateEnd").val();
+                dataToSend.name = $("#name").val();
+                dataToSend.tin = $("#tin").val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -180,6 +191,7 @@
                 {data: 1, name: 'number'},
                 {data: 2, name: 'date'},
                 {data: 3, orderable:false},
+                {data: 9, orderable:false},
                 {data: 4, orderable:false},
                 {data: 5, orderable:false},
                 {data: 6, orderable:false},

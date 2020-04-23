@@ -8,6 +8,26 @@
         .pad-top{
             padding-top: calc(.375rem + 1px);
         }
+        .border-bottom-styled {
+            border-bottom: 1px solid #000;
+            width: 100%;
+            margin-top: 20px
+        }
+        div.page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        div.page.size-A4 {
+            width: 21cm;
+            /*height: 29.7cm;*/
+            padding: 1.5cm 2cm;
+            overflow: auto;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -32,94 +52,21 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
-
-                            <!-- [ sample-page ] start -->
-                            <!--<div class="col-sm-12">
+                            <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <h5 th:text="${'№: ' + coordinate.number}"></h5>
-                                        <hr>
-                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link show" id="coordinate-tab" data-toggle="tab" href="#coordinates" role="tab" aria-controls="coordinates" aria-selected="false" th:text="#{sys_coordinates}"></a>
-                                            </li>
-                                        </ul>
-
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade active show" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
-                                                <div class="container col-md-12">
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.conclusion_number}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${coordinate.number}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.conclusion_date}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${#dates.format(coordinate.date, 'dd.MM.yyyy')}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{sys_company_name}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${coordinate.clientName}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.object_expertise}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${object_expertise}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.materials_type}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${materials_type}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.category}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${category}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.activity}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${activity}" readonly="">
-                                                    </div>
-
-                                                    <div class="form-group col-md-12 row">
-                                                        <label class="col-md-4 text-right col-form-label" th:text="#{coordinate.object_name}"></label>
-                                                        <input type="text" class="form-control col-md-6" th:value="${object_name}" readonly="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="coordinates" role="tabpanel" aria-labelledby="coordinate-tab">
-                                                <div id="map" class="map" style="width: 100%; height: 600px;"></div>
-                                                <br>
-                                                <h3 class="text-center" th:text="#{geographical_coordinates}"></h3>
-                                                <div id="coordinate-list" class="col-md-12 container">
-                                                    &lt;!&ndash;<div class="col-md-12 row">
-                                                        <div class="col-md-2">
-                                                            <label class="col-form-label">&nbsp;</label>
-                                                            <h4 class="text-right pad-top">#1</h4>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label class="col-form-label" th:text="#{coordinate_long}"></label>
-                                                            <input type="text" class="form-control" readonly="">
-                                                        </div>
-                                                        <div class="col-md-3 offset-md-2">
-                                                            <label class="col-form-label" th:text="#{coordinate_lat}"></label>
-                                                            <input type="text" class="form-control" readonly="">
-                                                        </div>
-                                                    </div>&ndash;&gt;
-                                                </div>
-                                            </div>
+                                        <div class="col-md-12 " th:if="${conclusion!=null}">
+                                            <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
+                                                <i class="feather icon-printer"></i>
+                                                <span th:text="#{sys_print}"> print</span>
+                                            </button>
                                         </div>
-
+                                        <div class=" page size-A4 text-center" style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}">
+                                            <object th:include="expertise/reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
+                                        </div>
                                     </div>
                                 </div>
-
-                            </div>-->
-                            <!-- [ sample-page ] end -->
+                            </div>
                         </div>
                         <!-- [ Main Content ] end -->
                     </div>
@@ -130,106 +77,32 @@
 </div>
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
-<script src="/static/ol/ol.js"></script>
+<script type="text/javascript" src="/static/plugins/printThis.js"></script>
 <script th:inline="javascript">
-    var coordinateLatLongList = [[${coordinateLatLongList}]];
-    var coordinateLat = [[${coordinate.latitude}]];
-    var coordinateLong = [[${coordinate.longitude}]];
-
-    var coordinateLongText = [[#{coordinate_long}]];
-    var coordinateLatText = [[#{coordinate_lat}]];
-</script>
-<script>
-    var Map = ol.Map;
-    var View = ol.View;
-    var Draw = ol.interaction.Draw;
-    var TileLayer = ol.layer.Tile;
-    var VectorLayer = ol.layer.Vector;
-    var OSM = ol.source.OSM;
-    var VectorSource = ol.source.Vector;
-
-    var raster = new TileLayer({
-        source: new OSM()
+    $('#conclusion_print_btn').on('click',function () {
+        $("#conclusion").printThis({
+            debug: false,               // show the iframe for debugging
+            importCSS: true,            // import parent page css
+            importStyle: true,         // import style tags
+            printContainer: false,       // print outer container/$.selector
+            loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+            pageTitle: "",              // add title to print page
+            removeInline: false,        // remove inline styles from print elements
+            removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+            printDelay: 333,            // variable print delay
+            header: null,               // prefix to html
+            footer: null,               // postfix to html
+            base: false,                // preserve the BASE tag or accept a string for the URL
+            formValues: true,           // preserve input/form values
+            canvas: true,              // copy canvas content
+            doctypeString: '',       // enter a different doctype for older markup
+            removeScripts: true,       // remove script tags from print content
+            copyTagClasses: false,      // copy classes from the html & body tag
+            beforePrintEvent: null,     // function for printEvent in iframe
+            beforePrint: null,          // function called before iframe is filled
+            afterPrint: null            // function called before iframe is removed
+        });
     });
-
-    var source = new VectorSource({wrapX: false});
-
-    var vector = new VectorLayer({
-        source: source
-    });
-
-    var polyCoords = [];
-    // var coords = "41.30881,69.28178 41.30860,69.28136 41.30790,69.28209 41.30812,69.28250".split(' ');
-    // var coords = "69.28178,41.30881 69.28136,41.30860 69.28209,41.30790 69.28250,41.30812".split(' ');
-    var coords = [];
-
-    coords.push(coordinateLat + "," + coordinateLong);
-    for(var i in coordinateLatLongList){
-        coords.push(coordinateLatLongList[i].latitude + "," + coordinateLatLongList[i].longitude);
-    }
-
-    for (var i in coords) {
-        var c = coords[i].split(',');
-        polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
-
-        $('#coordinate-list').append('<div class="col-md-12 row form-group">\n' +
-            '                                                <div class="col-md-2">\n' +
-            '                                                    <h4 class="text-right pad-top">#'+(parseInt(i)+1)+'</h4>\n' +
-            '                                                </div>\n' +
-            '                                                <div class="col-md-3">\n' +
-            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[1])+'">\n' +
-            '                                                </div>\n' +
-            '                                                <div class="col-md-3 offset-md-2">\n' +
-            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[0])+'">\n' +
-            '                                                </div>\n' +
-            '                                            </div>')
-    }
-
-    var feature = new ol.Feature({
-        geometry: new ol.geom.Polygon([polyCoords])
-    });
-
-    var layer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: [feature]
-        })
-    });
-
-
-    var map = new Map({
-        layers: [raster, vector, layer],
-        target: 'map',
-        view: new View({
-            // center: ol.proj.fromLonLat([coordinateLat, coordinateLong]),
-            center: ol.proj.transform([parseFloat(coordinateLat), parseFloat(coordinateLong)], 'EPSG:4326', 'EPSG:3857'),
-            zoom: 16
-        })
-    });
-
-    var draw = new Draw({
-        source: source,
-        type: "Polygon"
-    });
-    // map.addInteraction(draw);
-
-    map.on("click", function () {
-        var features = vector.getSource().getFeatures();
-        features.forEach(function (feature) {
-            console.log(feature.getGeometry().getCoordinates()[0][0]);
-            var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
-            console.log(lonlat[0]);
-            console.log(lonlat[1]);
-        })
-    });
-
-    document.addEventListener('keydown', function(e) {
-        if (e.which == 8)
-            vector.getSource().clear();
-    });
-    
-    $('#coordinate-tab').click(function () {
-        setTimeout( function() { map.updateSize();}, 200);
-    })
 
 </script>
 </body>
