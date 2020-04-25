@@ -49,7 +49,7 @@
                     <div class="office-card">
                     <div class="card dashboard-card border-primary-shadow">
                         <div class="file-icon-container-small color-red"><span class="fas fa-clock"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(1)">
                             <h4 class="card-title" th:text="${inProgress}">10</h4>
                             <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</h6>
                         </div>
@@ -58,7 +58,7 @@
                      <div class="office-card">
                     <div class="card dashboard-card border-danger-shadow">
                         <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(2)">
                             <h4 class="card-title" th:text="${todayDocuments}">20</h4>
                             <h6 class="card-title" th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</h6>
                         </div>
@@ -67,7 +67,7 @@
                      <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;" >
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(3)">
                             <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
                             <h6 class="card-title"  th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</h6>
                         </div>
@@ -76,7 +76,7 @@
                      <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-69-document-text"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(4)">
                             <h4 class="card-title" th:text="${answerNotAccepted}">40</h4>
                             <h6 class="card-title" th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</h6>
                         </div>
@@ -85,7 +85,7 @@
                     <div class="office-card">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(5)">
                             <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
                             <h6 class="card-title"  th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</h6>
                         </div>
@@ -171,10 +171,10 @@
         <div class="parent-card col-xl-12 mh-1000 pr-0 pl-0">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect();return false;" role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
+                    <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect(6)" role="tab" aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(3);return false;" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
+                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(7)" role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -330,7 +330,7 @@
 
 
 
-    function datatableConnect(status) {
+    function datatableConnect(tab) {
         cDataTable = dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -352,6 +352,7 @@
                 dataToSend.date_end = $('#date_end').val();
                 dataToSend.document_view_id = $('#document_view_id').val();
                 dataToSend.content = $('#content').val();
+                dataToSend.tab = tab;
                 dataToSend.department_id = $('#department_id').val();
                 dataToSend.document_status_id_to_exclude = status;
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -401,10 +402,10 @@
         });
     }
 
-    function getDatatableConnect(status = null) {
+    function getDatatableConnect(tabNumber = null) {
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
-        datatableConnect(status);
+        datatableConnect(tabNumber);
     }
 
     $(document).ready(function () {

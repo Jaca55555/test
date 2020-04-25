@@ -449,10 +449,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 Date nearestDate = calendar.getTime();
 
                 Date currentDocumentTaskSubDueDate = documentTaskSub.getDueDate();
-                System.out.println("current date: " + currentDate);
-                System.out.println("nearest date: " + nearestDate);
-                System.out.println("current document task sub date:" + currentDocumentTaskSubDueDate);
-                if(currentDocumentTaskSubDueDate.before(currentDate))
+
+                if(currentDocumentTaskSubDueDate!=null && currentDocumentTaskSubDueDate.before(currentDate))
                     statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
                 if(currentDate.before(nearestDate) && currentDate.after(currentDate))
                     statisticInner.setLessDeadlineCount(statisticInner.getLessDeadlineCount()+1);

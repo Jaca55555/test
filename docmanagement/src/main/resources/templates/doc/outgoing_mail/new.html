@@ -233,7 +233,6 @@
 
     function clickPlus() {
         $('#addFile2').click();
-
     }
 
     $(document).ready(function(){
@@ -320,7 +319,6 @@
                         uploadProgressHandler,
                         false
                     );
-
                     return xhr;
                 }
             })
@@ -380,6 +378,7 @@
                     </div>`
         );
     }
+
     function uploadProgressHandler(event)
     {
         let percent = (event.loaded / event.total) * 100;

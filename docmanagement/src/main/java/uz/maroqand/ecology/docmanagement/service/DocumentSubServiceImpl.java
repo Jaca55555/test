@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.service;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +117,9 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             String content,
             Integer departmentId,
             Integer performerId,
+            List<DocumentStatus> statuses,
+            Boolean hasAdditionalDocument,
+            Boolean findTodayS,
             Pageable pageable
     ){
         return documentSubRepository.findAll(filteringSpecificationForOutgoingForm(
@@ -127,7 +131,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
                 documentViewId,
                 content,
                 departmentId,
-                performerId
+                performerId,
+                statuses,
+                hasAdditionalDocument,
+                findTodayS
                 ),
                 pageable);
     }
@@ -142,7 +149,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Integer documentViewId,
             String content,
             Integer departmentId,
-            Integer performerId
+            Integer performerId,
+            List<DocumentStatus> statuses,
+            Boolean hasAdditionalDocument,
+            Boolean findTodayS
     ){  return (root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new LinkedList<>();
@@ -177,6 +187,27 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             else if(departmentId != null && performerId == null){
                 predicates.add(criteriaBuilder.equal(joinDocument.get("departmentId"), departmentId));
             }
+
+            if(hasAdditionalDocument != null){
+                if(hasAdditionalDocument)
+                    predicates.add(criteriaBuilder.isNotNull(joinDocument.get("additionalDocumentId")));
+                else
+                    predicates.add(criteriaBuilder.isNull(joinDocument.get("additionalDocumentId")));
+            }
+            if(statuses != null){
+                predicates.add(criteriaBuilder.in(joinDocument.get("status")).value(statuses));
+            }
+
+            if(findTodayS != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.set(Calendar.MILLISECOND, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR, 0);
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(joinDocument.get("registrationDate"),calendar.getTime()));
+            }
+
             predicates.toArray(new Predicate[0]);
             Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             return overAll;
@@ -187,5 +218,36 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     public DocumentSub findOneByDocumentId(Integer documentId){
         return documentSubRepository.findOneByDocumentId(documentId);
     }
+
+    public void defineFilterInputForOutgoingListTabs(Integer tabNumber, MutableBoolean hasAdditionalDocument, MutableBoolean findTodayS, List<DocumentStatus> statuses, MutableBoolean hasAdditionalNotRequired, MutableBoolean findTodaySNotRequired){
+        if(tabNumber == null || tabNumber == 1){
+            hasAdditionalNotRequired.setTrue();
+            findTodaySNotRequired.setTrue();
+            statuses.add(DocumentStatus.InProgress);
+        }else if(tabNumber == 2){
+            statuses.addAll(Arrays.asList(DocumentStatus.InProgress, DocumentStatus.Completed));
+            findTodayS.setTrue();
+            hasAdditionalNotRequired.setTrue();
+        }else if(tabNumber == 3) {
+            hasAdditionalDocument.setTrue();
+            findTodaySNotRequired.setTrue();
+            statuses.addAll(Arrays.asList(DocumentStatus.InProgress, DocumentStatus.Completed));
+        }else if(tabNumber == 4){
+            hasAdditionalDocument.setFalse();
+            findTodaySNotRequired.setTrue();
+            statuses.addAll(Arrays.asList(DocumentStatus.InProgress, DocumentStatus.Completed));
+        }else if(tabNumber == 5 || tabNumber == 6){
+            findTodaySNotRequired.setTrue();
+            hasAdditionalNotRequired.setTrue();
+            statuses.addAll(Arrays.asList(DocumentStatus.InProgress, DocumentStatus.Completed));
+        }else if(tabNumber == 7){
+            findTodaySNotRequired.setTrue();
+            hasAdditionalNotRequired.setTrue();
+            statuses.add(DocumentStatus.Completed);
+        }
+    }
+
+
+
 
 }

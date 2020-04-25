@@ -5,6 +5,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -116,9 +117,11 @@ public class OutgoingMailController {
             @RequestParam(name = "document_view_id", required = false)Integer documentViewId,
             @RequestParam(name = "content", required = false)String content,
             @RequestParam(name = "department_id", required = false)Integer departmentId,
+            @RequestParam(name = "tab", required = false)Integer tab,
             Pageable pageable
     ){
         registrationNumber = StringUtils.trimToNull(registrationNumber);
+
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
@@ -126,6 +129,17 @@ public class OutgoingMailController {
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
+
+        MutableBoolean hasAdditionalDocument = new MutableBoolean();
+        MutableBoolean findTodayS = new MutableBoolean();
+        MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
+        MutableBoolean  findTodaySNotRequired = new MutableBoolean();
+        List<DocumentStatus> statuses = new ArrayList<>(2);
+
+        documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
+
+        Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
+        Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
@@ -140,6 +154,9 @@ public class OutgoingMailController {
                 content,
                 departmentId,
                 null,
+                statuses,
+                hasAdditional,
+                findTodayS_,
                 specificPageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Integer userId = userService.getCurrentUserFromContext().getId();

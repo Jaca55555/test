@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -142,6 +143,7 @@ public class OutgoingController {
             @RequestParam(name = "date_end", required = false)String dateEnd,
             @RequestParam(name = "document_view_id", required = false)Integer documentViewId,
             @RequestParam(name = "content", required = false)String content,
+            @RequestParam(name = "tab", required = false)Integer tab,
             Pageable pageable
     ){
         registrationNumber = StringUtils.trimToNull(registrationNumber);
@@ -157,6 +159,18 @@ public class OutgoingController {
         User user = userService.getCurrentUserFromContext();
         Integer departmentId = user.getDepartmentId();
         Integer performerId = user.getId();
+
+        MutableBoolean hasAdditionalDocument = new MutableBoolean();
+        MutableBoolean findTodayS = new MutableBoolean();
+        MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
+        MutableBoolean  findTodaySNotRequired = new MutableBoolean();
+        List<DocumentStatus> statuses = new ArrayList<>(2);
+
+        documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
+
+        Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
+        Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
+
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 documentStatusIdToExclude,
@@ -168,6 +182,9 @@ public class OutgoingController {
                 content,
                 departmentId,
                 performerId,
+                statuses,
+                hasAdditional,
+                findTodayS_,
                 specificPageable);
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();

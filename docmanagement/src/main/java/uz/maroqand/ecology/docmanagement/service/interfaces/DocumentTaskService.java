@@ -89,4 +89,12 @@ public interface DocumentTaskService {
 
     ResolutionDTO resolutionCreateByTaskId(Integer taskId,String locale);
 
+    Long countAllTasksByDocumentTypeId(Integer organizationId, Integer departmentId, Integer documentTypeId);
+
+    Long countAllTasksByDocumentTypeIdAndDueDateBetween(Integer organizationId, Integer departmentId, Integer documentTypeId, Date dateBegin, Date dateEnd);
+
+    Long countAllTasksByDocumentTypeIdAndDueDateBefore(Integer organizationId, Integer departmentId, Integer documentTypeId, Date date);
+
+    Long countAllTasksByDocumentTypeIdAndTaskStatus(Integer organizationId, Integer departmentId, Integer documentTypeId, Integer status);
+
 }

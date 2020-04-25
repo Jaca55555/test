@@ -123,10 +123,7 @@ public class IncomingController {
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
         switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();
-                status = new LinkedHashSet<>();
-            status.add(TaskSubStatus.InProgress.getId());
-                break;
+            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
                 deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
@@ -199,11 +196,9 @@ public class IncomingController {
         );
         String locale = LocaleContextHolder.getLocale().getLanguage();
 
-        List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubs.getSize());
 
-        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
-
-        for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
+        for (DocumentTaskSub documentTaskSub : documentTaskSubs) {
             Document document = documentTaskSub.getDocument();
             DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
             String docContent="";
@@ -259,11 +254,11 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-        if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+
          if(document.getExecuteForm().getId().equals(1)){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);}
-        }
+
         if (Boolean.TRUE.equals(document.getInsidePurpose())) {
             User user = userService.getCurrentUserFromContext();
             if (user.getId().equals(task.getPerformerId())) {
@@ -288,7 +283,6 @@ public class IncomingController {
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
-
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);

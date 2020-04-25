@@ -320,7 +320,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                     }
 
                     if (documentTask.getStatus().equals(TaskStatus.Checking.getId())){
-                        statisticInner.setCheckingCount(statisticInner.getCheckingCount()+1);                     //ijro etilganlar
+                        statisticInner.setCheckingCount(statisticInner.getCheckingCount()+1);                     //ijro etilganlar, judayam zor
                     }
 
                 }
@@ -357,7 +357,6 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 //                        System.out.println("greater id=" + documentTaskSub.getId() + "  due=" + Common.uzbekistanDateFormat.format(dueDate));
                         statisticInner.setGreaterDeadlineCount(statisticInner.getGreaterDeadlineCount()+1);
                     }
-                    System.out.println("------------------------------");
 
                 }
             }
@@ -420,13 +419,12 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         return (Specification<DocumentTask>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
 
-            System.out.println(incomingRegFilter.getRegistrationNumber() + "  -");
             if (organizationId != null) {
                 //tashkilotga tegishli xatlar
                 predicates.add(criteriaBuilder.equal(root.get("document").get("organizationId"), organizationId));
             }
             if (documentTypeId != null) {
-                //kiruvchi, chiquvchi(ой да что вы говорите, таки работает он для исходящих), ichki hujjatlar
+                //kiruvchi, ichki hujjatlar
                 predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
             }
             if (incomingRegFilter.getDocumentOrganizationId() != null) {
@@ -481,7 +479,6 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
             if (deadlineDateBegin != null && deadlineDateEnd != null) {
                 predicates.add(criteriaBuilder.between(root.get("dueDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
             }
-
             if (statuses != null) {
                 predicates.add(criteriaBuilder.in(root.get("status")).value(statuses));
             }
@@ -633,5 +630,21 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         result.add(dueText);
 
         return result;
+    }
+
+    public Long countAllTasksByDocumentTypeId(Integer organizationId, Integer departmentId, Integer documentTypeId){
+        return taskRepository.countAllDocumentTaskByDocumentType(organizationId, departmentId, documentTypeId);
+    }
+
+    public Long countAllTasksByDocumentTypeIdAndDueDateBetween(Integer organizationId, Integer departmentId, Integer documentTypeId, Date dateBegin, Date dateEnd){
+        return taskRepository.countAllDocumentTaskByDocumentTypeAndDueDateBetween(organizationId, departmentId, documentTypeId, dateBegin, dateEnd);
+    }
+
+    public Long countAllTasksByDocumentTypeIdAndDueDateBefore(Integer organizationId, Integer departmentId, Integer documentTypeId, Date date){
+        return taskRepository.countAllDocumentTaskByDocumentTypeAndDueDateBefore(organizationId, departmentId, documentTypeId, date);
+    }
+
+    public Long countAllTasksByDocumentTypeIdAndTaskStatus(Integer organizationId, Integer departmentId, Integer documentTypeId, Integer status){
+        return taskRepository.countAllDocumentTaskByDocumentTypeIdAndStatus(organizationId, departmentId, documentTypeId, status);
     }
 }

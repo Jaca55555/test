@@ -415,12 +415,22 @@
         $('#percentage-num').html(progress);
     }
 
+    /*function fileNameSubString(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+        var subStringName = fileName.substring(0,lastIndex);
+        var getExtension = fileName.substring(lastIndex,fileName.length);
+        if (subStringName.length>10){
+            subStringName = subStringName.substring(0,9)+'..';
+        }
+        subStringName += getExtension;
+        return subStringName;
+    }*/
 
     let dropArea = document.querySelector('.file-button');
 
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false)
-    });
+    })
 
     function preventDefaults (e) {
         e.preventDefault()
@@ -802,5 +812,6 @@
         $('#status_div_'+userId).html(html);
     }
 </script>
+
 </body>
 </html>
