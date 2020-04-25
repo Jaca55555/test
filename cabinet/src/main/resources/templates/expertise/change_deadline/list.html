@@ -59,13 +59,13 @@
                                             <table id="fixed-header" class="display table table-striped table-hover" style="width:100%">
                                                 <thead>
                                                 <tr>
-                                                    <th>Id</th>
-                                                    <th th:text="#{change_deadline_date.regApplicationId}"></th>
-                                                    <th th:text="#{change_deadline_date.reason}"></th>
-                                                    <th th:text="#{change_deadline_date.beforeDeadlineDate}"></th>
-                                                    <th th:text="#{change_deadline_date.afterDeadlineDate}"></th>
-                                                    <th th:text="#{change_deadline_date.status}"></th>
-                                                    <th></th>
+                                                    <th style="width: 5%">Id</th>
+                                                    <th th:text="#{change_deadline_date.regApplicationId}" style="width: 10%"></th>
+                                                    <th th:text="#{change_deadline_date.reason}" style="width: 50%"></th>
+                                                    <th th:text="#{change_deadline_date.beforeDeadlineDate}" style="width: 10%"></th>
+                                                    <th th:text="#{change_deadline_date.afterDeadlineDate}" style="width: 10%"></th>
+                                                    <th th:text="#{change_deadline_date.status}" style="width: 10%"></th>
+                                                    <th style="width: 5%"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -157,13 +157,13 @@
                 });
             },
             columns: [
-                {data: 0, name: 'id'},
-                {data: 1, name: 'regApplicationId'},
-                {data: 2, name: 'reason'},
-                {data: 4, name: 'beforeDeadlineDate'},
-                {data: 3, name: 'afterDeadlineDate'},
-                {render: statusActionsColumn, orderable: false},
-                {render: renderActionsColumn, orderable: false}
+                {data: 0, name: 'id',className:"w-5"},
+                {data: 1, name: 'regApplicationId',className:"w-10"},
+                {data: 2, name: 'reason',className:"w-50"},
+                {data: 4, name: 'beforeDeadlineDate',className:"w-10"},
+                {data: 3, name: 'afterDeadlineDate',className:"w-10"},
+                {render: statusActionsColumn, orderable: false,className:"w-10"},
+                {render: renderActionsColumn, orderable: false,className:"w-5"}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

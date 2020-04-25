@@ -66,6 +66,7 @@ public class NotificationServiceImpl implements NotificationService {
             Integer reviewerId,
             NotificationType type,
             String title,
+            Integer applicationNumber,
             String message,
             String url,
             Integer userId
@@ -76,6 +77,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         notification.setReviewerId(reviewerId);
         notification.setTitle(title);
+        notification.setApplicationNumber(applicationNumber);
         notification.setMessage(message);
         notification.setUrl(url);
 

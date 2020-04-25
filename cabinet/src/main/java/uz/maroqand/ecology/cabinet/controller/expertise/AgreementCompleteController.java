@@ -232,16 +232,18 @@ public class AgreementCompleteController {
             notificationService.create(
                     regApplication.getCreatedById(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.new", locale),
-                    "Sizning " + regApplication.getId() + " raqamli arizangizga ko'rib chiqildi",
+                    "sys_notification.new",
+                    regApplication.getId(),
+                    "sys_notification_message.finished",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.performerInfo", locale),
-                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlandi",
+                    "sys_notification.performerInfo",
+                    regApplication.getId(),
+                     "sys_notification_message.performer_confirm",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );
@@ -259,8 +261,9 @@ public class AgreementCompleteController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.performerInfo", locale),
-                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
+                    "sys_notification.performerInfo",
+                    regApplication.getId(),
+                    "sys_notification_message.performer_not_confirm",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );
