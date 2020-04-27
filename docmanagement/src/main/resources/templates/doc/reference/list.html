@@ -38,7 +38,8 @@
                 </div>
                 <h5 class="office-h5 default-color" th:text="#{doc_reference.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active'); getTabDatatableConnect(9)">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
                             </div>
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_2').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
                             </div>
@@ -58,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_3').click()">
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
@@ -67,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_4').click()">
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
@@ -76,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_7').click()">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
@@ -86,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_1').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
                             </div>
