@@ -273,7 +273,7 @@ public class DocController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;
-            case 3:
+          /*   case 3:
                 calendar.add(Calendar.DATE, 1);
                 deadlineDateEnd = calendar.getTime();
                 deadlineDateEnd.setHours(23);
@@ -301,17 +301,36 @@ public class DocController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати кеччикан */
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати якинлашаётган
+            case 4:
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
                 break;//Ижро назоратида
-            /*case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
+            /*case 6: type = TaskSubType.Info.getId();break;*///Малъумот учун
             case 7:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
-            case 8:
+           /* case 8:
                 specialControll=Boolean.TRUE;
                 break;//Якунланган*/
             default:
