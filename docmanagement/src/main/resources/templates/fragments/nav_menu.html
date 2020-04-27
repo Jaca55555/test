@@ -59,7 +59,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')">
                                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}">
                                        <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
-                                       <span class="pcoded-mtext">Ijrochini o'zgartirish</span>
+                                       <span class="pcoded-mtext" th:text="#{doc_change.perfomer}">Ijrochini o'zgartirish</span>
                                    </a>
                                </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
@@ -142,7 +142,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                      <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}">
                          <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
-                         <span class="pcoded-mtext">Мурожаатларни руйхатга олиш</span>
+                         <span class="pcoded-mtext" th:text="#{doc_appeal.reg}" >Мурожаатларни руйхатга олиш</span>
                      </a>
                  </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
