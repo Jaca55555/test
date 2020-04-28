@@ -105,6 +105,7 @@ public class ExpertiseUrls {
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionListAjax = Conclusion + "/list_ajax";
     public static final String ConclusionView = Conclusion + "/view";
+    public static final String ConclusionNewList = Conclusion + "/new_list";
 
 
     private static final String ExpertiseRegApplication = ExpertiseReg + "/application";

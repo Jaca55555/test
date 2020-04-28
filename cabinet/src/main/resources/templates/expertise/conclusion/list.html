@@ -48,6 +48,10 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 th:text="#{conclusion_list}"></h5>
+                                        <a class="btn btn-primary float-right" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionNewList}">
+                                            <i class="feather icon-plus"></i>
+                                            <span th:text="#{conclusion.add}"></span>
+                                        </a>
                                     </div>
                                     <div class="card-body">
                                         <form method="post" class="row">

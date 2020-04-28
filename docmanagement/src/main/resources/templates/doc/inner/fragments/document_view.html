@@ -148,7 +148,13 @@
 <div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog" aria-resolutionModal="modal1" aria-hidden="true" >
     <div class="modal-dialog col-xl-6 col-12" role="document" th:object="${resolutionDocument}">
         <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
-                <div class="card parent-card m0">
+            <div class="card">
+                <div class="text-right p-3">
+                    <a href="#" onclick="printThisDiv('for_print')">
+                        <i class="fas fa-print fs30 color-gray m10-horizontal pointer"></i>
+                    </a>
+                </div>
+                <div class="parent-card m0" id="for_print">
                     <div th:if="${resolutionDocument!=null}">
                         <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
                             <h4 th:text="${resolutionDocument.organizationName!=null?resolutionDocument.organizationName:''}"></h4>
@@ -196,6 +202,7 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

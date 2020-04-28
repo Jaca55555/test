@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -38,8 +40,9 @@ public class InnerController {
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentHelperService documentHelperService;
     private final DocumentLogService documentLogService;
+    private final FileService fileService;
 
-    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
+    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService, FileService fileService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
@@ -51,6 +54,7 @@ public class InnerController {
         this.documentDescriptionService = documentDescriptionService;
         this.documentHelperService = documentHelperService;
         this.documentLogService = documentLogService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)

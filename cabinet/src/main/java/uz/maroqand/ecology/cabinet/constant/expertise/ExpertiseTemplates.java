@@ -64,6 +64,7 @@ public class ExpertiseTemplates {
     private static final String Conclusion = Prefix + "/conclusion";
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionView = Conclusion + "/view";
+    public static final String ConclusionNewList = Conclusion + "/new_list";
 
 
     public static final String ExpertiseRegApplicationDashboard = ExpertiseReg + "/dashboard";

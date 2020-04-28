@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -537,5 +539,16 @@ public class DocController {
         user.setLang(lang);
         userService.updateUser(user);
         return "redirect:" + currentUrl;
+    }
+
+    @RequestMapping(value = DocUrls.FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, File> fileUpload(@RequestParam(name = "file") MultipartFile file){
+
+        File file_ = fileService.uploadFile(file, userService.getCurrentUserFromContext().getId(), file.getOriginalFilename(), file.getContentType());
+        HashMap<String, File> res = new HashMap<>();
+        res.put("data", file_);
+
+        return res;
     }
 }

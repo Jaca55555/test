@@ -13,11 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -32,13 +38,17 @@ public class ConclusionController {
     private final RegApplicationService regApplicationService;
     private final ClientService clientService;
     private final ConclusionService conclusionService;
+    private final RegApplicationLogService regApplicationLogService;
+    private final HelperService helperService;
 
     @Autowired
-    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService) {
+    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.conclusionService = conclusionService;
+        this.regApplicationLogService = regApplicationLogService;
+        this.helperService = helperService;
     }
 
 
@@ -113,4 +123,43 @@ public class ConclusionController {
 
         return ExpertiseTemplates.ConclusionView;
     }
+    @RequestMapping(ExpertiseUrls.ConclusionNewList)
+    public String getConclusionNewList(Model model){
+        User user = userService.getCurrentUserFromContext();
+        List<RegApplication> regApplicationList = regApplicationService.getListByPerformerId(user.getId());
+        List<Object[]> regApplicationNewList = new ArrayList<>(regApplicationList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (RegApplication regApplication:regApplicationList){
+            RegApplicationLog regApplicationLog;
+            if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
+                regApplicationLog=regApplicationLogService.getById(regApplication.getPerformerLogIdNext());
+            } else {
+                regApplicationLog=regApplicationLogService.getById(regApplication.getPerformerLogId());
+            }
+//            th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}"
+            if (regApplicationLog!=null && (regApplicationLog.getStatus().equals(LogStatus.Initial)
+                    || regApplicationLog.getStatus().equals(LogStatus.Resend))
+                    || (regApplication.getAgreementStatus()!=null && regApplication.getAgreementStatus().equals(LogStatus.Denied))){
+                    Client client = clientService.getById(regApplication.getApplicantId());
+                            regApplicationNewList.add(new Object[]{
+                            regApplication.getId(),
+                            client.getTin(),
+                            client.getName(),
+                            regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
+                            regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+                            regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                            regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                            regApplication.getAgreementStatus() != null ? helperService.getTranslation(regApplication.getAgreementStatus().getAgreementName(),locale):"",
+                            regApplication.getAgreementStatus() != null ? regApplication.getAgreementStatus().getId():"",
+                            regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
+                            regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
+                    });
+            }
+        }
+
+        model.addAttribute("regApplicationNewList",regApplicationNewList);
+
+        return ExpertiseTemplates.ConclusionNewList;
+    }
+
 }

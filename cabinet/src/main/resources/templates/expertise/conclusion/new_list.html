@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{conclusion_new_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped custom-table " id="conclusionNew">
+                                                <thead>
+                                                <tr>
+                                                    <th th:text="#{reg_application.number}"></th>
+                                                    <th th:text="#{sys_tin}"></th>
+                                                    <th th:text="#{sys_legal_entity_name}"></th>
+                                                    <th th:text="#{sys_about.material}"></th>
+                                                    <th th:text="#{sys_about.activity}"></th>
+                                                    <th th:text="#{sys_list.registration_date}"></th>
+                                                    <th th:text="#{sys_list.deadline_date}"></th>
+                                                    <th ></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody th:if="${#lists.size(regApplicationNewList)>0}">
+                                                <tr th:each="regApplication :${regApplicationNewList}">
+                                                    <th th:utext="${regApplication[0]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[1]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[2]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[3]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[4]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[5]}" style="width: 20%;"></th>
+                                                    <th th:utext="${regApplication[6]}" style="width: 20%;"></th>
+                                                    <td class="text-center">
+                                                        <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerView+'?id='+regApplication[0]}" ><i class="feather icon-edit" style="margin: 0px"></i></a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center col-md-12">
+                                            <a class="btn btn-danger text-white" href="#" onclick="history.go(-1);return false;" th:text="#{sys_back}"></a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_position" style="display: none" id="modal"></button>
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<object th:include="mgmt/position/position_add :: position_add" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+
+<!--<script th:src="@{/static/datatables/jquery.spring-friendly.min.js}"></script>-->
+
+<script th:inline="javascript">
+    var getPositionLink = [[${get_url}]];
+
+    function positionAdd() {
+        $('#modal').click();
+        addPosition();
+    }
+
+    function positionEdit(id) {
+        $.get(getPositionLink + "?id=" + id,function (data) {
+            $('#modal').click();
+            console.log(data);
+            editPosition(data.id,data.name,data.nameRu);
+        });
+    }
+
+    function getDatatableConnect() {
+        location.reload();
+    }
+
+</script>
+</body>
+</html>
