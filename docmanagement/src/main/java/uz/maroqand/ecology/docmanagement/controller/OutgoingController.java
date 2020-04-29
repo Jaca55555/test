@@ -97,7 +97,7 @@ public class OutgoingController {
         model.addAttribute("document", document);
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("document_id", document.getId());
-        model.addAttribute("document_status", document.getStatus());
+        model.addAttribute("document_status", document.getStatus().getName());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());

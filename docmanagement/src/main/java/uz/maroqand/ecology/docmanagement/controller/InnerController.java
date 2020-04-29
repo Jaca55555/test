@@ -316,10 +316,6 @@ public class InnerController {
             return "redirect:" + DocUrls.InnerList;
         }
 
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
-
         DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
         if (documentTask==null){
             return "redirect:" + DocUrls.InnerList;

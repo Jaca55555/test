@@ -117,6 +117,15 @@
                         <div id="fileContainer" class="flex-start mobile-flex-center">
 
                         </div>
+                        <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
+                            <button type="button" class="btn btn-rounded btn-danger fs11">
+                                <i class="fas fa-lock"></i>
+                                <span th:text="#{sys_document.inside_purpose_warning_text}">
+                        Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
+                        девонхонага мурожаат қилинг!
+                        </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <hr class="m20-vertical">
@@ -184,6 +193,10 @@
     //<![CDATA[
     var alternateData = [[${tree}]];
     var alternateData = JSON.stringify(eval("("+alternateData+")"));
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
 
     $(function() {
         var initSelectableTree = function() {
@@ -308,21 +321,45 @@
 
     function renderChangeColumn(currentStatus){
         let html = document.querySelector('#toRender').innerHTML;
-        let current;
-        if(currentStatus === "New" || currentStatus === "InProgress"){
-            current = 2;
-        }else if(currentStatus === "Completed"){
-            current = 3;
-        }
+
+        let text = translateToSentOrNotSent(currentStatus);
 
         html += `<div class="btn-group mr-2">
                                             <button type="button"
-                         class="btn-rounded btn btn-primary">${statuses[current]}</button>
+                         class="btn-rounded btn btn-primary">${text}</button>
                   </div>`;
         document.querySelector('#toRender').innerHTML = html;
     }
 
     renderChangeColumn(currentStatus);
+
+    function translateToSentOrNotSent(text_) {
+        let currentLanguage = getCurrentLanguage();
+        let text = '';
+
+        if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
+            if (currentLanguage === 'oz') {
+                text = 'Жунатилмаган';
+            } else if (currentLanguage === 'uz') {
+                text = 'Junatilmagan';
+            } else if (currentLanguage === 'ru') {
+                text = 'Неотправлено';
+            }
+            return text;
+        }else if(text_ === "document_status.completed"){
+            if(currentLanguage === 'oz') {
+                text = 'Жунатилган';
+            }
+            else if(currentLanguage === 'uz'){
+                text = 'Junatilgan';
+            }else if(currentLanguage === 'ru'){
+                text = 'Отправлено';
+            }
+            return text;
+        }else return '';
+    }
+
+
 
 </script>
 </body>

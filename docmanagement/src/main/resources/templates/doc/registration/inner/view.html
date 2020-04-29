@@ -73,7 +73,7 @@
                                             <span class="m10-horizontal mobile-none" th:if="*{status!=null}" th:text="#{*{getStatusName(status)}}"></span>
                                         </div>
                                         <div style="height: fit-content;display: flex;align-items: center;"><i class="feather icon-clock fs20 color-gray"></i>
-                                            <span class="m10-horizontal" th:text="*{dueDate!=null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
+                                            <span class="m10-horizontal" th:text="*{dueDate != null ? #dates.format(dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                         </div>
                                     </div>
                                     <div class="w100"></div>
@@ -217,7 +217,7 @@
                                 10.05.2019 - 09:35
                             </div>
 
-                            <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
+                            <div class="row col-sm-12" th:if="${log.type!=null && log.type == T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
                                 <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
                                     <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
                                         <span th:text="#{${log.beforeStatus}}"></span>
