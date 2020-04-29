@@ -549,9 +549,7 @@ public class DocController {
             @RequestParam(name = "lang") String lang,
             @RequestParam(name = "currentUrl") String currentUrl
     ){
-        lang=lang.substring(0,2);
-        System.out.println("lang==" + lang);
-        System.out.println("currentUrl==" + currentUrl);
+        lang = lang.substring(0,2);
         User user = userService.getCurrentUserFromContext();
         user.setLang(lang);
         userService.updateUser(user);

@@ -139,6 +139,10 @@ public class OutgoingMailController {
 
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
+        if(tab == 7){
+            statuses.clear();
+            statuses.add(DocumentStatus.InProgress);
+        }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
@@ -172,11 +176,11 @@ public class OutgoingMailController {
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    document.getRegistrationDate() != null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()) : "",
                     document.getContent() != null ? document.getContent() : "",
-                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
-                    document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    documentHelperService.getTranslation(document.getStatus().getName(), locale),
+                    document.getCreatedAt() != null ? Common.uzbekistanDateFormat.format(document.getCreatedAt()) : "",
+                    document.getUpdateAt() != null ? Common.uzbekistanDateFormat.format(document.getUpdateAt()) : "",
+                    document.getStatus().getName(),
                     (document.getPerformerName() != null ?document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }
@@ -201,7 +205,7 @@ public class OutgoingMailController {
         model.addAttribute("document_id", document.getId());
         model.addAttribute("document", document);
         model.addAttribute("tree", documentService.createTree(document));
-        model.addAttribute("document_status", document.getStatus());
+        model.addAttribute("document_status", document.getStatus().getName());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
@@ -220,7 +224,7 @@ public class OutgoingMailController {
 
             model.addAttribute("additional_document_view_link", viewLink + "?id=" + additionalDocument.getId());
         }
-        String document_organization_name="";
+        String document_organization_name = "";
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
         if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
             for (DocumentOrganization documentOrganization: documentOrganizationSet) {
@@ -447,19 +451,19 @@ public class OutgoingMailController {
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "target_status_id")Integer statusId
     ){
-        System.out.println("id: " + id + ", statusId: " + statusId);
+
         HashMap<String, Object> result = new HashMap<>();
         Document document = documentService.getById(id);
         switch (statusId){
             case 1:
             case 2:
                 document.setStatus(DocumentStatus.InProgress);
-                result.put("first", "Completed");
+                result.put("first", DocumentStatus.Completed.getName());
                 result.put("firstId", 3);
                 break;
             case 3:
                 document.setStatus(DocumentStatus.Completed);
-                result.put("first", "InProgress");
+                result.put("first", DocumentStatus.InProgress.getName());
                 result.put("firstId", 2);
                 break;
         }
