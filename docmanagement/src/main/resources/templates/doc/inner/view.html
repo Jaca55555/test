@@ -488,6 +488,7 @@
 
     var urlAction = [[${comment_url}]];
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
+    var contentFiles = [[${document.contentFiles}]];
 
     //<![CDATA[
     $(document).ready(function () {
@@ -818,6 +819,7 @@
         window.location.href='/doc/open_view?id=' + id;
     }
     //]]>
+    displayFiles(contentFiles);
 
 </script>
 </body>

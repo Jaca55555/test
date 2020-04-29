@@ -434,7 +434,7 @@ public class IncomingRegistrationController {
             document.setStatus(DocumentStatus.InProgress);
             documentService.update(document);
         }
-        return "redirect:" + DocUrls.IncomingRegistrationList;
+        return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
 
 
         /*if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingRegistrationNewTask)){

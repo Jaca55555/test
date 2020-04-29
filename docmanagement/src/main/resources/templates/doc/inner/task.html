@@ -70,7 +70,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                    <textarea class="form-control" rows="4" name="content" id="description_textarea" required="required" minlength="5"></textarea>
+                                        <textarea class="form-control" rows="4" name="content" id="description_textarea" required="required" minlength="5"></textarea>
                                     </div>
                                     <div class="form-group" th:if="${isExecuteForm}">
                                         <label class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
@@ -103,10 +103,10 @@
                                                 <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
                                             </select>
                                         </div>
-                                       <!-- <div class="col-2 p-0">
-                                            <button  th:if="${isExecuteForm}"type="button" class="btn btn-outline-secondary btn-block" id="add_user"><span th:text="#{sys_add}">Qo'shish</span></button>
-                                            <button th:if="${!isExecuteForm}" type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user1"><span th:text="#{sys_add}">Qo'shish</span></button>
-                                        </div>-->
+                                        <!-- <div class="col-2 p-0">
+                                             <button  th:if="${isExecuteForm}"type="button" class="btn btn-outline-secondary btn-block" id="add_user"><span th:text="#{sys_add}">Qo'shish</span></button>
+                                             <button th:if="${!isExecuteForm}" type="button" class="btn btn-outline-secondary btn-block btn-sm" id="add_user1"><span th:text="#{sys_add}">Qo'shish</span></button>
+                                         </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                         <input  type="hidden" name="taskId" th:value="${documentTask.id}" />
                         <div class="card-footer">
                             <div class="flex-center w100 row-wrap">
-<!--                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>-->
+                                <!--                                <a class="btn btn-secondary m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_cancel}" th:href="${back_url}">Бекор қилиш</a>-->
                                 <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                             </div>
                         </div>
@@ -138,6 +138,7 @@
     var task_sub_type_performer_partner = [[#{task_sub_type.performer_partner}]];
     var task_sub_type_control = [[#{task_sub_type.control}]];
     var task_sub_type_info = [[#{task_sub_type.info}]];
+    var contentFiles = [[${document.contentFiles}]];
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
     });
@@ -255,7 +256,7 @@
                                 todayHighlight: true,
                                 autoclose: true
                             });
-                            $('#userId').val('').change();
+                            $('#userId').val('');
                             $('#selectedUsersIds').val(selectedUsersIds);
                         }
                         $('#addUsers').css('border','0px');
@@ -265,7 +266,7 @@
                 }
             });
         }else{
-            $('#userId').val('').change();
+            $('#userId').val('');
             console.log("0001")
         }
     });
@@ -317,7 +318,7 @@
                                 '   </td>\n' +
                                 '</tr>';
                             $('#data-table tbody').append(html);
-                            $('#userIdPerformer').val('').change();
+                            $('#userIdPerformer').val('');
                             $('#selectedUsersIds').val(selectedUsersIds);
                         }
                         $('#addUsers').css('border','0px');
@@ -327,7 +328,7 @@
                 }
             });
         }else{
-            $('#userIdPerformer').val('').change();
+            $('#userIdPerformer').val('');
             console.log("0002")
         }
     });
@@ -345,19 +346,19 @@
                     setType(userId,typeId);
                 }
             }else
-                //control
-                if(typeId==2){
-                    if (typeControl==''){
-                        if (performer==0){  $('#typePerformer').val('');}
-                        $('#typeControl').val(userId);
-                        setType(userId,typeId);
+            //control
+            if(typeId==2){
+                if (typeControl==''){
+                    if (performer==0){  $('#typePerformer').val('');}
+                    $('#typeControl').val(userId);
+                    setType(userId,typeId);
 
-                    }
+                }
             }else{
                 if (performer==0) { $('#typePerformer').val('');}
                 if (performer==2){ $('#typeControl').val('');}
-                    setType(userId,typeId);
-                }
+                setType(userId,typeId);
+            }
         }
 
     }
@@ -443,6 +444,9 @@
         }
         $('#status_div_'+userId).html(html);
     }
+
+    displayFiles(contentFiles);
+
 </script>
 </body>
 </html>
