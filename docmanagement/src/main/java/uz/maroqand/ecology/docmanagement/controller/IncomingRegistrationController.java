@@ -398,17 +398,30 @@ public class IncomingRegistrationController {
         documentSub.setOrganizationId(documentOrganizationId1);
         documentSubService.create(document.getId(), documentSub, user);
 
-        DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        DocumentTask documentTask = null;
+//        DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
         Integer userId = null;
         Integer performerType = null;
         Date dueDate = null;
+        String descriptionTextareaTask = null;
+        Date taskDocRegDateStr = null;
         Map<String,String> map = formData.toSingleValueMap();
         for (Map.Entry<String,String> mapEntry: map.entrySet()) {
 
             String[] paramName =  mapEntry.getKey().split("_");
             String  tagName = paramName[0];
             String value= mapEntry.getValue().replaceAll(" ","");
-
+            if (tagName.equals("descriptionTextareaTask")){
+                descriptionTextareaTask = value;
+            }
+            if (tagName.equals("taskDocRegDateStr")){
+                taskDocRegDateStr = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+            }
+            if (tagName.equals("taskNumber")){
+                documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),descriptionTextareaTask,taskDocRegDateStr,document.getManagerId(),user.getId());
+                descriptionTextareaTask = "";
+                taskDocRegDateStr = null;
+            }
             if (tagName.equals("user")){
                 userId=Integer.parseInt(value);
             }
@@ -418,8 +431,8 @@ public class IncomingRegistrationController {
 
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
-                if (userId!=null && performerType!=null){
-                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                if (userId!=null && performerType!=null && documentTask!=null){
+                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);
@@ -434,7 +447,7 @@ public class IncomingRegistrationController {
             document.setStatus(DocumentStatus.InProgress);
             documentService.update(document);
         }
-        return "redirect:" + DocUrls.IncomingRegistrationView + "?id=" + document.getId();
+        return "redirect:" + DocUrls.IncomingRegistrationList;
 
 
         /*if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingRegistrationNewTask)){
