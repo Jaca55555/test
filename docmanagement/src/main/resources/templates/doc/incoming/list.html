@@ -322,7 +322,7 @@
                 order: [[5, 'desc']],
                 dom: 'lrtip',
                 ajax : function (dataToSend, callback, settings) {
-                    var api = this.api();
+                    let api = this.api();
 
                     dataToSend.page = api !== undefined ? api.page() : 0;
                     dataToSend.size = api !== undefined ? api.page.len() : 25;
@@ -348,6 +348,7 @@
                     });
                 },
                 columns: [
+
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
