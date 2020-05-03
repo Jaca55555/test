@@ -7,9 +7,12 @@ import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.constant.TaskStatus;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
 import javax.swing.text.Document;
 import java.util.LinkedHashSet;
@@ -21,13 +24,15 @@ public class GetNotifacationService {
     private final UserService userService;
     private final DocumentRepository documentRepository;
     private final DocumentService documentService;
-
-
-    public GetNotifacationService(DocumentTaskSubRepository documentTaskSubRepository,UserService userService,DocumentRepository documentRepository, DocumentService documentService){
+    private  final DocumentTaskService documentTaskService;
+    private final DocumentTaskSubService documentTaskSubService;
+    public GetNotifacationService(DocumentTaskSubService documentTaskSubService,DocumentTaskSubRepository documentTaskSubRepository,DocumentTaskService documentTaskService,UserService userService,DocumentRepository documentRepository, DocumentService documentService){
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.userService = userService;
+        this.documentTaskService=documentTaskService;
         this.documentRepository = documentRepository;
         this.documentService = documentService;
+        this.documentTaskSubService=documentTaskSubService;
     }
     public Integer countIncomingByStatus(){
         User user =userService.getCurrentUserFromContext();
@@ -69,6 +74,15 @@ public class GetNotifacationService {
     public Long countOutgoingByStatus2(){
        User user = userService.getCurrentUserFromContext();
         return documentService.countAllByStatus(DocumentTypeEnum.OutgoingDocuments.getId(), DocumentStatus.InProgress, user.getOrganizationId(), user.getDepartmentId(), user.getId());
+    }
+    public Integer countDocCheckByStatus(){
+        User user =userService.getCurrentUserFromContext();
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskStatus.Checking.getId());
+        return documentTaskService.getCountTaskStatus(statuses);
+    }
+    public Integer countPerformerByStatus(){
+        return documentTaskSubService.getCountByStatus();
     }
 
     public Integer countIncomingNotByStatus(){
