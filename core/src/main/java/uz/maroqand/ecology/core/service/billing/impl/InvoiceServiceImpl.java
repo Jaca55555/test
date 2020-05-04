@@ -21,6 +21,7 @@ import uz.maroqand.ecology.core.service.billing.ContractService;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.MinWageService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
@@ -44,6 +45,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final OrganizationService organizationService;
     private final HelperService helperService;
     private final MinWageService minWageService;
+    private final RegApplicationService regApplicationService;
 
     @Autowired
     public InvoiceServiceImpl(
@@ -52,14 +54,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             ContractService contractService,
             OrganizationService organizationService,
             HelperService helperService,
-            MinWageService minWageService
-    ) {
+            MinWageService minWageService,
+            RegApplicationService regApplicationService) {
         this.invoiceRepository = invoiceRepository;
         this.paymentService = paymentService;
         this.contractService = contractService;
         this.organizationService = organizationService;
         this.helperService = helperService;
         this.minWageService = minWageService;
+        this.regApplicationService = regApplicationService;
     }
 
     @Override
@@ -170,6 +173,20 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.save(invoice);
 
         paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
+
+        return invoice;
+    }
+
+    @Override
+    public List<Invoice> getListByStatus(InvoiceStatus invoiceStatus) {
+        return invoiceRepository.findAllByStatusAndDeletedFalse(invoiceStatus);
+    }
+
+    @Override
+    public Invoice cancelInvoice(Invoice invoice) {
+        invoice.setStatus(InvoiceStatus.Canceled);
+        invoice.setCanceledDate(new Date());
+        invoice = invoiceRepository.save(invoice);
 
         return invoice;
     }

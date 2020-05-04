@@ -23,9 +23,13 @@ public interface RegApplicationService {
 
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 
+    RegApplication getByOneInvoiceId(Integer invoiceId);
+
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);
+
+    RegApplication cancelApplicationByInvoiceId(Integer invoiceId);
 
     List<RegApplication> getListByPerformerId(Integer performerId);
 

@@ -67,6 +67,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByOneInvoiceId(Integer invoiceId) {
+        return regApplicationRepository.findByInvoiceIdAndDeletedFalse(invoiceId);
+    }
+
+    @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
@@ -112,6 +117,16 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public RegApplication getById(Integer id) {
         if(id==null) return null;
         return regApplicationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public RegApplication cancelApplicationByInvoiceId(Integer invoiceId) {
+        RegApplication regApplication = getByOneInvoiceId(invoiceId);
+        if (regApplication==null) return null;
+        regApplication.setStatus(RegApplicationStatus.Canceled);
+        update(regApplication);
+        System.out.println("==cancelApplicationByInvoiceId==");
+        return regApplication;
     }
 
     @Override

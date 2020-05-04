@@ -921,8 +921,9 @@ public class RegApplicationController {
             notificationService.create(
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.newCommentApplicant", locale),
-                    regApplication.getId() + " raqamli ariza arizachisidan chat orqali xabar yuborildi.",
+                    "sys_notification.newCommentApplicant",
+                    regApplication.getId() ,
+                    " raqamli ariza arizachisidan chat orqali xabar yuborildi.",
                     "/expertise/performer/view?id=" + regApplication.getId(),
                     user.getId()
             );
