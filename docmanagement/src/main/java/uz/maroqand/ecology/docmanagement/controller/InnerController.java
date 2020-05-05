@@ -15,10 +15,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
-import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
+import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -38,8 +35,9 @@ public class InnerController {
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentHelperService documentHelperService;
     private final DocumentLogService documentLogService;
+    private final DocumentTaskContentService documentTaskContentService;
 
-    public InnerController(UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
+    public InnerController(DocumentTaskContentService documentTaskContentService, UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
@@ -51,6 +49,7 @@ public class InnerController {
         this.documentDescriptionService = documentDescriptionService;
         this.documentHelperService = documentHelperService;
         this.documentLogService = documentLogService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
@@ -297,7 +296,7 @@ public class InnerController {
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerTaskSubmit);
         model.addAttribute("back_url", DocUrls.InnerView+"?id=" + documentTaskSub.getId());

@@ -39,8 +39,10 @@ public class ReferenceController {
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentTaskContentService documentTaskContentService;
 
     public ReferenceController(
+            DocumentTaskContentService documentTaskContentService,
             UserService userService,
             PositionService positionService,
             HelperService helperService,
@@ -61,6 +63,7 @@ public class ReferenceController {
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentDescriptionService = documentDescriptionService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.ReferenceList, method = RequestMethod.GET)
@@ -327,7 +330,7 @@ public class ReferenceController {
         model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.ReferenceTaskSubmit);
         model.addAttribute("back_url", DocUrls.ReferenceView+"?id=" + documentTaskSub.getId());

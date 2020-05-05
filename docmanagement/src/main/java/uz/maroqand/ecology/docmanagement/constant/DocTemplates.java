@@ -111,6 +111,12 @@ public class DocTemplates {
     public static final String DocDescriptionEdit = DocDescription + "/new";
     public static final String DocDescriptionView = DocDescription + "/view";
 
+    private static final String DocTaskContent = Prefix + "/doc_task_content";
+    public static final String DocTaskContentList = DocTaskContent + "/list";
+    public static final String DocTaskContentNew = DocTaskContent + "/new";
+    public static final String DocTaskContentEdit = DocTaskContent + "/new";
+    public static final String DocTaskContentView = DocTaskContent + "/view";
+
     private static final String OutgoingMail = Prefix + "/outgoing_mail";
     public static final String OutgoingMailNew = OutgoingMail + "/new";
     public static final String OutgoingMailList = OutgoingMail + "/list";

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:if="${taskContent.id==null}" th:text="#{doc.journal_create}"></title>
+    <title th:if="${taskContent.id==null}" th:text="#{doc.journal_create}"></title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 class="mb-0" th:if="${taskContent.id==null}" th:text="#{doc.journal_create}"></h5>
+                <h5 class="mb-0" th:if="${taskContent.id!=null}" th:text="#{doc.journal_edit}"> - <span th:text="${taskContent.id}"></span></h5>
+            </div>
+            <div class="card-body">
+                <!--/*@thymesVar id="taskContent" type="uz.maroqand.ecology.docmanagement.entity.DocumentDescription"*/-->
+                <form th:action="${action_url}" th:method="post" class="card-block" th:object="${taskContent}">
+                    <input type="hidden" th:if="${taskContent.id != null}" th:field="*{id}" th:value="*{id}"/>
+                    <input type="hidden" th:if="${taskContent.id != null}" name="createDate" th:value="${#dates.format(taskContent.createdAt,'dd.MM.yyyy')}"/>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="control-label" th:for="${#ids.next('content')}" th:text="#{doc.task_content_name}"></label>
+                            <textarea rows="5" class="form-control" th:field="*{content}" th:placeholder="#{doc.task_content_placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="control-label" th:for="${#ids.next('contentOz')}" th:text="#{doc.task_content_nameOz}"></label>
+                            <textarea rows="5" class="form-control" th:field="*{contentOz}" th:placeholder="#{doc.task__contentOz_placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="control-label" th:for="${#ids.next('contentRu')}" th:text="#{doc.task_content_nameRu}"></label>
+                            <textarea rows="5" class="form-control" th:field="*{contentRu}" th:placeholder="#{doc.task_content_contentRu_placeholder}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col align-self-center">
+                            <button th:text="#{doc.task_content_reset_btn}" class="btn btn-dark" type="reset"></button>
+                            <button th:text="#{doc.task_content_save_btn}" class="btn btn-success" type="submit"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+</body>
+</html>

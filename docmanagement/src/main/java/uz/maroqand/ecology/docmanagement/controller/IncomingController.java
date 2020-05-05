@@ -40,8 +40,10 @@ public class IncomingController {
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
+    private final DocumentTaskContentService documentTaskContentService;
 
     public IncomingController(
+            DocumentTaskContentService documentTaskContentService,
             UserService userService,
             PositionService positionService,
             HelperService helperService,
@@ -61,6 +63,7 @@ public class IncomingController {
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentDescriptionService = documentDescriptionService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
@@ -326,7 +329,7 @@ public class IncomingController {
         model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + documentTaskSub.getId());
