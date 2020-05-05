@@ -52,13 +52,13 @@
                                                 <tr th:each="invoice :${invoiceList}">
                                                     <th th:utext="${invoice.invoice}" style="width: 20%;"></th>
                                                     <th style="width: 20%;">
-                                                        <span th:if="${invoice.payeeId!=null}" th:text="${@documentHelperService.getOrganizationName(invoice.payeeId,#locale)}"></span>
+                                                        <span th:if="${invoice.payeeId!=null}" th:text="${@helperService.getOrganizationName(invoice.payeeId,#locale)}"></span>
                                                     </th>
                                                     <th th:utext="${invoice.amount}" style="width: 20%;">
                                                         <span th:if="${invoice.createdDate!=null}"  th:text="${#dates.format(invoice.createdDate,'dd.MM.yyyy')}"></span>
                                                     </th>
                                                     <td class="text-center">
-                                                        <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" th:href="${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFilEdit+'?id='+invoice.id + '&paymentFileId=' + paymentFileId}" ><i class="feather icon-edit" style="margin: 0px"></i></a>
+                                                        <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" th:href="${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileEditSubmit+'?id='+invoice.id + '&paymentFileId=' + paymentFileId}" ><i class="feather icon-edit" style="margin: 0px"></i></a>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -86,28 +86,5 @@
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
-<!--<script th:src="@{/static/datatables/jquery.spring-friendly.min.js}"></script>-->
-
-<script th:inline="javascript">
-    var getPositionLink = [[${get_url}]];
-
-    function positionAdd() {
-        $('#modal').click();
-        addPosition();
-    }
-
-    function positionEdit(id) {
-        $.get(getPositionLink + "?id=" + id,function (data) {
-            $('#modal').click();
-            console.log(data);
-            editPosition(data.id,data.name,data.nameRu);
-        });
-    }
-
-    function getDatatableConnect() {
-        location.reload();
-    }
-
-</script>
 </body>
 </html>

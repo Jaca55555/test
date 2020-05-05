@@ -44,8 +44,11 @@ public class PaymentFileController {
     private PaymentService paymentService;
 
     @Autowired
-    public PaymentFileController(PaymentFileService paymentFileService) {
+    public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService) {
         this.paymentFileService = paymentFileService;
+        this.invoiceService = invoiceService;
+        this.clientService = clientService;
+        this.paymentService = paymentService;
     }
 
     @RequestMapping(BillingUrls.PaymentFileList)
@@ -98,17 +101,21 @@ public class PaymentFileController {
         List<PaymentFile> paymentFileList = paymentFilePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(paymentFileList.size());
         for (PaymentFile paymentFile : paymentFileList){
-            Invoice invoiceNew = null;
-            boolean invoiceIsNull = false;
-            String invoiceStr = paymentFile.getDetails();
-            String[] parts = invoiceStr.split(" ");
-            for (String invoiceCheck : parts) {
-                if(invoiceCheck.length()==14){
-                    invoiceNew = invoiceService.getInvoice(invoiceCheck);
-                    if(invoice!=null) break;
+            boolean invoiceIsNull = Boolean.TRUE;
+            if (paymentFile.getInvoice()!=null) invoiceIsNull = Boolean.FALSE;
+            if (paymentFile.getInvoice()==null){
+                String invoiceStr = paymentFile.getDetails();
+                String[] parts = invoiceStr.split(" ");
+                for (String invoiceCheck : parts) {
+                    if(invoiceCheck.length()==14){
+                        invoiceService.getInvoice(invoiceCheck);
+                        if(invoiceService.getInvoice(invoiceCheck)!=null ){
+                            invoiceIsNull = Boolean.FALSE;
+                            break;
+                        }
+                    }
                 }
             }
-            if (invoiceNew==null) invoiceIsNull = true;
             convenientForJSONArray.add(new Object[]{
                 paymentFile.getId(),
                 paymentFile.getInvoice(),
@@ -137,7 +144,7 @@ public class PaymentFileController {
         return BillingTemplates.PaymentFileView;
     }
 
-    @RequestMapping(BillingUrls.PaymentFilEdit)
+    @RequestMapping(BillingUrls.PaymentFileEdit)
     public String joinInvoice(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -146,6 +153,7 @@ public class PaymentFileController {
         if (paymentFile==null){
             return "redirect:" + BillingUrls.PaymentFileList;
         }
+        System.out.println("payerTin" + paymentFile.getPayerTin());
         Client client = clientService.getByTin(paymentFile.getPayerTin());
         if (client==null){
             return "redirect:" + BillingUrls.PaymentFileList;
@@ -156,7 +164,7 @@ public class PaymentFileController {
         return BillingTemplates.PaymentFileEdit;
     }
 
-    @RequestMapping(BillingUrls.PaymentFilEditSubmit)
+    @RequestMapping(BillingUrls.PaymentFileEditSubmit)
     public String joinInvoiceId(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "paymentFileId") Integer paymentFileId
@@ -166,6 +174,8 @@ public class PaymentFileController {
         if (paymentFile!=null){
             Invoice invoice = invoiceService.getInvoice(id);
             if (invoice!=null){
+                paymentFile.setInvoice(invoice.getInvoice());
+                paymentFileService.save(paymentFile);
                 paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
             }
         }

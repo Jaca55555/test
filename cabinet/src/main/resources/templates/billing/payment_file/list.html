@@ -156,7 +156,7 @@
     function renderActionsColumn(data, type, row, meta) {
         var html ='';
         html+='<a class="btn btn-info btn-sm mr-1" href="'+viewLink+'/'+row[0]+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
-        if (invoiceIsNull){
+        if (row[6]){
             html+='<a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
         }
         return html;
