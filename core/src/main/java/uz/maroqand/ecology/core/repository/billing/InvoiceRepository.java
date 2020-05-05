@@ -21,5 +21,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaS
     Invoice findByInvoiceAndDeletedFalse(String id);
 
     List<Invoice> findAllByStatusAndDeletedFalse(InvoiceStatus invoiceStatus);
+    List<Invoice> findAllByStatusAndClientIdAndDeletedFalse(InvoiceStatus invoiceStatus,Integer clientId);
 
 }

@@ -13,5 +13,7 @@ public class BillingUrls {
     public static final String PaymentFileList = PaymentFile + "/list";
     public static final String PaymentFileListAjax = PaymentFile + "/ajax";
     public static final String PaymentFileView = PaymentFile + "/view";
+    public static final String PaymentFilEdit = PaymentFile + "/edit";
+    public static final String PaymentFilEditSubmit = PaymentFile + "/edit_submit";
 
 }

@@ -29,6 +29,8 @@ public interface InvoiceService {
 
     List<Invoice> getListByStatus(InvoiceStatus invoiceStatus);
 
+    List<Invoice> getListByStatusAndClientId(InvoiceStatus invoiceStatus,Integer clientId);
+
     Invoice cancelInvoice(Invoice invoice);
 
     Page<Invoice> findFiltered(

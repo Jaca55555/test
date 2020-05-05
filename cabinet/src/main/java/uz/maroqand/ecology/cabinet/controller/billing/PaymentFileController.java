@@ -13,8 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.billing.BillingTemplates;
 import uz.maroqand.ecology.cabinet.constant.billing.BillingUrls;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
+import uz.maroqand.ecology.core.constant.billing.PaymentType;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
+import uz.maroqand.ecology.core.service.billing.PaymentService;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -32,6 +39,9 @@ import java.util.List;
 public class PaymentFileController {
 
     private PaymentFileService paymentFileService;
+    private InvoiceService invoiceService;
+    private ClientService clientService;
+    private PaymentService paymentService;
 
     @Autowired
     public PaymentFileController(PaymentFileService paymentFileService) {
@@ -88,13 +98,25 @@ public class PaymentFileController {
         List<PaymentFile> paymentFileList = paymentFilePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(paymentFileList.size());
         for (PaymentFile paymentFile : paymentFileList){
+            Invoice invoiceNew = null;
+            boolean invoiceIsNull = false;
+            String invoiceStr = paymentFile.getDetails();
+            String[] parts = invoiceStr.split(" ");
+            for (String invoiceCheck : parts) {
+                if(invoiceCheck.length()==14){
+                    invoiceNew = invoiceService.getInvoice(invoiceCheck);
+                    if(invoice!=null) break;
+                }
+            }
+            if (invoiceNew==null) invoiceIsNull = true;
             convenientForJSONArray.add(new Object[]{
-                    paymentFile.getId(),
-                    paymentFile.getInvoice(),
-                    paymentFile.getPayerName(),
-                    paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
-                    paymentFile.getAmount(),
-                    paymentFile.getDetails()
+                paymentFile.getId(),
+                paymentFile.getInvoice(),
+                paymentFile.getPayerName(),
+                paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
+                paymentFile.getAmount(),
+                paymentFile.getDetails(),
+                invoiceIsNull
             });
         }
 
@@ -113,6 +135,42 @@ public class PaymentFileController {
 
         model.addAttribute("paymentFile", paymentFile);
         return BillingTemplates.PaymentFileView;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFilEdit)
+    public String joinInvoice(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        PaymentFile paymentFile = paymentFileService.getById(id);
+        if (paymentFile==null){
+            return "redirect:" + BillingUrls.PaymentFileList;
+        }
+        Client client = clientService.getByTin(paymentFile.getPayerTin());
+        if (client==null){
+            return "redirect:" + BillingUrls.PaymentFileList;
+        }
+        List<Invoice> invoiceList = invoiceService.getListByStatusAndClientId(InvoiceStatus.Initial,client.getId());
+        model.addAttribute("invoiceList",invoiceList);
+        model.addAttribute("paymentFileId",paymentFile.getId());
+        return BillingTemplates.PaymentFileEdit;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFilEditSubmit)
+    public String joinInvoiceId(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "paymentFileId") Integer paymentFileId
+    ){
+
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile!=null){
+            Invoice invoice = invoiceService.getInvoice(id);
+            if (invoice!=null){
+                paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+            }
+        }
+
+        return "redirect:" + BillingUrls.PaymentFileList;
     }
 
 }

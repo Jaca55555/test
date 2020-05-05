@@ -183,6 +183,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public List<Invoice> getListByStatusAndClientId(InvoiceStatus invoiceStatus, Integer clientId) {
+        return invoiceRepository.findAllByStatusAndClientIdAndDeletedFalse(InvoiceStatus.Initial,clientId);
+    }
+
+    @Override
     public Invoice cancelInvoice(Invoice invoice) {
         invoice.setStatus(InvoiceStatus.Canceled);
         invoice.setCanceledDate(new Date());
