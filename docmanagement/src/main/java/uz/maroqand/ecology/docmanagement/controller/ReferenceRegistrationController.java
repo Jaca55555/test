@@ -48,10 +48,11 @@ public class ReferenceRegistrationController {
     private final DocumentLogService documentLogService;
     private final DocumentHelperService documentHelperService;
     private final DocumentOrganizationService documentOrganizationService;
-
+    private final DocumentTaskContentService documentTaskContentService;
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Autowired
     public ReferenceRegistrationController(
+            DocumentTaskContentService documentTaskContentService,
             DocumentService documentService,
             DocumentDescriptionService documentDescriptionService,
             CommunicationToolService communicationToolService,
@@ -80,6 +81,7 @@ public class ReferenceRegistrationController {
         this.documentViewService = documentViewService;
         this.documentHelperService = documentHelperService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.ReferenceRegistrationList, method = RequestMethod.GET)
@@ -447,7 +449,7 @@ public class ReferenceRegistrationController {
 
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.ReferenceRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.ReferenceRegistrationView+"?id=" + document.getId());

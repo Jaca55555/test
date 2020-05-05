@@ -47,9 +47,10 @@ public class InnerRegistrationController {
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentTaskContentService documentTaskContentService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
+    public InnerRegistrationController(DocumentTaskContentService documentTaskContentService,UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -62,6 +63,7 @@ public class InnerRegistrationController {
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentHelperService = documentHelperService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
@@ -423,7 +425,7 @@ public class InnerRegistrationController {
         model.addAttribute("userList", userList);
         model.addAttribute("document", document);
         model.addAttribute("isExecuteForm", isExecuteForm);
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.InnerRegistrationView+"?id=" + document.getId());
