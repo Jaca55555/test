@@ -190,8 +190,7 @@ public class BillingController {
             result.put("payerBank", client.getBankName());
             result.put("payerBankAccount", client.getBankAccount());
 
-            List<RegApplication> regApplicationList = regApplicationService.getByInvoiceId(invoice.getId());
-            RegApplication regApplication = regApplicationList.get(0);
+            RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
             List<Category> categoryList = new LinkedList<>();
             List<Requirement> requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
             for(Requirement requirement: requirementList){
@@ -204,9 +203,9 @@ public class BillingController {
             result.put("categoryList", categoryList);
             result.put("regApplicationId", regApplication.getId());
 
-            result.put("nowObjectName", regApplication.getObjectId()!=null? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"");
-            result.put("nowActivityName", regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"");
-            result.put("nowCategoryName", regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"");
+            result.put("nowObjectName", regApplication.getObjectId()!=null? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"0");
+            result.put("nowActivityName", regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"0");
+            result.put("nowCategoryName", regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"0");
 
             result.put("payments",convenientForJSONArray);
             return result;
@@ -255,6 +254,15 @@ public class BillingController {
         regApplicationService.update(regApplication);
 
         toastrService.create(user.getId(), ToastrType.Info, "O'zgartirish muvaffaqiyatli.","O'zgartirish muvaffaqiyatli amalga oshirildi");
+        return "redirect:" + ExpertiseUrls.BillingList;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.BillingDelete)
+    public String invoiceCancel(@RequestParam(name = "id") Integer id){
+        User user = userService.getCurrentUserFromContext();
+        Invoice invoice = invoiceService.getInvoice(id);
+        if (invoice==null || !invoice.getStatus().equals(InvoiceStatus.Initial)) return "redirect:" + ExpertiseUrls.BillingList;
+        invoice = invoiceService.cancelInvoice(invoice);
         return "redirect:" + ExpertiseUrls.BillingList;
     }
 

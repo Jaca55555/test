@@ -172,8 +172,10 @@
                         var userFullName=response.userFullName;
                         var position=response.position;
                         var html='';
+                        console.log("userId==" + userId);
                         if (selectedUsersIds.indexOf(userId)<0){
                             selectedUsersIds.push(userId);
+                            console.log("userId2==" + userId);
                             html='<tr id="tr_'+userId+'">' +
                                 '   <td style="width: 30%">\n' +
                                 '       <div class="flex-space-between p0">\n' +

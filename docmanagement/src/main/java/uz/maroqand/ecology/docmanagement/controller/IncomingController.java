@@ -284,6 +284,7 @@ public class IncomingController {
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
+        model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(task.getId(),locale));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);

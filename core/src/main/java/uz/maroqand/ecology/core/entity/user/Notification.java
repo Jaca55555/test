@@ -39,6 +39,9 @@ public class Notification {
     @Column
     private String message;
 
+    @Column
+    private Integer applicationNumber;
+
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id", insertable = false, updatable = false)
     private User reviewer;*/

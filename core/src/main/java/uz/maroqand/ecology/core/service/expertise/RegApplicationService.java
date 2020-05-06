@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.expertise;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -22,9 +23,15 @@ public interface RegApplicationService {
 
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 
+    RegApplication getByOneInvoiceId(Integer invoiceId);
+
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);
+
+    RegApplication cancelApplicationByInvoiceId(Integer invoiceId);
+
+    List<RegApplication> getListByPerformerId(Integer performerId);
 
     RegApplication getById(Integer id, Integer createdBy);
 

@@ -8,6 +8,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 15.06.2019.
@@ -25,6 +26,12 @@ public interface InvoiceService {
     Invoice getInvoice(String invoice);
 
     Invoice payTest(Integer id);
+
+    List<Invoice> getListByStatus(InvoiceStatus invoiceStatus);
+
+    List<Invoice> getListByStatusAndClientId(InvoiceStatus invoiceStatus,Integer clientId);
+
+    Invoice cancelInvoice(Invoice invoice);
 
     Page<Invoice> findFiltered(
       Date dateBegin,

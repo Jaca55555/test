@@ -17,6 +17,8 @@ public interface ClientService {
 
     Client getById(Integer id);
 
+    Client getByTin(Integer tin);
+
     Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message);
 
     Client saveIndividual(IndividualDto individualDto, User user, String message);

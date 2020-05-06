@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import uz.maroqand.ecology.cabinet.config.WebMVCConfigs;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -31,6 +32,7 @@ import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
         repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
 @EntityScan(basePackages = {"uz.maroqand.ecology.core.entity","uz.maroqand.ecology.docmanagement.entity"})
 @EnableCaching(proxyTargetClass = true)
+@EnableScheduling
 public class CabinetStarter { 
 
     private static final Logger logger = LogManager.getLogger(CabinetStarter.class);

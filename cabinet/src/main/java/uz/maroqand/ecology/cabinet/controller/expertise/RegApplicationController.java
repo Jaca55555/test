@@ -1130,14 +1130,28 @@ public class RegApplicationController {
         HashMap<String, Object> result = new HashMap<>();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        if(objectId == null || activityId == null){
+        if(objectId == null){
             return result;
         }
 
-        Activity activity = activityService.getById(activityId);
-        List<Requirement> requirementList = requirementService.getRequirementMaterials(objectId,activity.getCategory());
+        ObjectExpertise objectExpertise = objectExpertiseService.getById(objectId);
 
-        result.put("category", helperService.getCategory(activity.getCategory().getId(),locale));
+        if(objectExpertise == null){
+            return result;
+        }
+        List<Requirement> requirementList=new ArrayList<>();
+        if (activityId==null){
+            requirementList = requirementService.getRequirementExpertise(objectId);
+            if (requirementList.size()<1) return result;
+            Category category = requirementList.get(0).getCategory();
+            for (Requirement requirement:requirementList) {
+                if (!category.equals(requirement.getCategory())) return result;
+            }
+        }else{
+            Activity activity = activityService.getById(activityId);
+            requirementList = requirementService.getRequirementMaterials(objectId,activity.getCategory());
+            result.put("category", helperService.getCategory(activity.getCategory().getId(),locale));
+        }
         result.put("requirementList", requirementList);
         return result;
     }

@@ -26,6 +26,7 @@ public interface NotificationService {
             Integer reviewerId,
             NotificationType type,
             String title,
+            Integer applicationNumber,
             String message,
             String url,
             Integer userId

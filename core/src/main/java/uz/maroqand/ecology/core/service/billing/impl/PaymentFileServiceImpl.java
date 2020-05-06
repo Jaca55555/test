@@ -37,6 +37,11 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         return paymentFileRepository.getOne(id);
     }
 
+    @Override
+    public PaymentFile save(PaymentFile paymentFile) {
+        return paymentFileRepository.save(paymentFile);
+    }
+
     public PaymentFile create(PaymentFile paymentFile){
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);

@@ -237,7 +237,14 @@ public class ForwardingController {
             commentService.updateComment(comment);
         }
 
-        notificationService.create(performerId, NotificationType.Expertise, helperService.getTranslation("sys_notification.performerNewApp",locale),id + " raqamli ariza ijro uchun sizga yuborildi","/expertise/performer/view/?id=" + id, user.getId());
+        notificationService.create(
+                performerId,
+                NotificationType.Expertise,
+                "sys_notification.performerNewApp",
+                id,
+                "sys_notification_message.for_perform",
+                "/expertise/performer/view/?id=" + id,
+                user.getId());
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz ko'rib chiqish uchun qabul qilindi, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
 

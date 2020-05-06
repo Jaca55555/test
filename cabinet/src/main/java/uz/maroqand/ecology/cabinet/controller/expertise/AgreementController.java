@@ -251,7 +251,8 @@ public class AgreementController {
                     regApplication.getPerformerId(),
                     NotificationType.Expertise,
                     helperService.getTranslation("sys_notification.performerInfo", locale),
-                    "Sizning ijroingizdagi " + regApplication.getId() + " raqamli ariza tasdiqlanmadi",
+                    regApplication.getId(),
+                    "sys_notification_message.performer_not_confirm",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
             );

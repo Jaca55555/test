@@ -27,9 +27,9 @@ public class Conclusion {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reg_application_id", insertable = false, updatable = false)
-    private RegApplication regApplication;*/
+    private RegApplication regApplication;
 
     @Column(name = "reg_application_id")
     private Integer regApplicationId;

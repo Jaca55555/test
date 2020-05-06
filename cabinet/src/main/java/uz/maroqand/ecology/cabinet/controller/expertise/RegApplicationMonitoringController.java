@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -23,10 +24,7 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 23.06.2019.
@@ -50,8 +48,9 @@ public class RegApplicationMonitoringController {
     private final SoatoService soatoService;
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
+    private final RequirementService requirementService;
 
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -66,6 +65,7 @@ public class RegApplicationMonitoringController {
         this.soatoService = soatoService;
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
+        this.requirementService = requirementService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
@@ -108,7 +108,9 @@ public class RegApplicationMonitoringController {
                     helperService.getMaterials(regApplication.getMaterials(),locale),
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
-                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():""
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
+                    regApplication.getApplicantId()!=null?regApplication.getName():"",
+                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():""
 
             });
         }
@@ -166,7 +168,13 @@ public class RegApplicationMonitoringController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
         }
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
+        model.addAttribute("requirementList", requirementService.getAllList());
+        model.addAttribute("categoryList", Category.getCategoryList());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
+
         model.addAttribute("regApplication", regApplication);
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringEdit;
     }
@@ -175,6 +183,11 @@ public class RegApplicationMonitoringController {
     public String updateRegApplication(
             @PathVariable("id") Integer id,
             @RequestParam(name = "name") String name,
+            @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "activityId", required = false) Integer activityId,
+            @RequestParam(name = "materials", required = false) Set<Integer> materials,
+            @RequestParam(name = "tin") String projectDeveloperTin,
+            @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
             @RequestParam(name = "coordinates", required = false) List<Double> coordinates
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -205,6 +218,43 @@ public class RegApplicationMonitoringController {
                 coordinateLatLongRepository.save(coordinateLatLong);
             }
         }
+
+        ProjectDeveloper projectDeveloper1 = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):new ProjectDeveloper();
+        projectDeveloper1.setName(projectDeveloperName);
+        projectDeveloper1.setTin(projectDeveloperTin);
+        projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
+        regApplication.setDeveloperId(projectDeveloper1.getId());
+
+        Activity activity = null;
+        if(activityId!=null){
+            activity = activityService.getById(activityId);
+        }
+        List<Requirement> requirementList;
+        Requirement requirement = null;
+        if(activity!=null){
+            requirementList = requirementService.getRequirementMaterials(objectId, activity.getCategory());
+        }else {
+            requirementList = requirementService.getRequirementExpertise(objectId);
+        }
+        if(requirementList.size()==0){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "?id=" + id + "&failed=1";
+        }else if(requirementList.size()==1){
+            requirement = requirementList.get(0);
+        }
+
+        if(requirement==null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "?id=" + id + "&failed=2";
+        }
+        regApplication.setRequirementId(requirement.getId());
+        regApplication.setReviewId(requirement.getReviewId());
+        regApplication.setDeadline(requirement.getDeadline());
+
+        regApplication.setObjectId(objectId);
+        regApplication.setName(name);
+        regApplication.setMaterials(materials);
+
+        regApplication.setActivityId(activityId);
+        regApplication.setCategory(activity!=null? activity.getCategory():null);
 
         regApplication.setUpdateById(user.getId());
         regApplication.setUpdateAt(new Date());

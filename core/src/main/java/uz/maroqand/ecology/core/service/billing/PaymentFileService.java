@@ -15,6 +15,8 @@ public interface PaymentFileService {
 
     PaymentFile getById(Integer id);
 
+    PaymentFile save(PaymentFile paymentFile);
+
     PaymentFile create(PaymentFile paymentFile);
 
     Page<PaymentFile> findFiltered(

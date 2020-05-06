@@ -16,15 +16,17 @@ public class NotificationDto {
     private Integer id;
     private String url;
     private String title;
+    private String applicationNumber;
     private String message;
     private String createdAt;
     private String createdBy;
 
-    public NotificationDto(Notification notification, HelperService helperService){
+    public NotificationDto(Notification notification, HelperService helperService,String locale){
         this.id = notification.getId();
         this.url = notification.getUrl();
-        this.title = notification.getTitle();
-        this.message = notification.getMessage();
+        this.title = helperService.getTranslation(notification.getTitle(),locale);
+        this.applicationNumber = notification.getApplicationNumber()!=null?notification.getApplicationNumber().toString()+": " :"";
+        this.message = helperService.getTranslation(notification.getMessage(),locale);
         this.createdAt = notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"";
         this.createdBy = helperService.getUserFullNameById(notification.getCreatedById());
     }

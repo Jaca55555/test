@@ -108,9 +108,8 @@
                 <div><span th:text="${document.content}"></span></div>
             </div>
             <div class="col-md-6 col-sm-12">
-                <div id="modalContainer"> </div>
                 <div class="m20-vertical"><span class="bold" th:text="#{doc_inner.files}">Хатга иловалар:</span></div>
-                <div class="flex-start mobile-flex-center">
+                <!--<div class="flex-start mobile-flex-center">
                     <div class="office-card-file" th:each="file: ${document.contentFiles}">
                         <div class="card dashboard-card">
                             <div class="file-icon-container-small color-blue">
@@ -130,6 +129,9 @@
                             </div>
                         </div>
                     </div>
+                </div>-->
+                <div class="flex-start mobile-flex-center" id="fileContainer">
+                    <div id="modalContainer"> </div>
                 </div>
                 <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
                     <button type="button" class="btn btn-rounded btn-danger fs11">
@@ -148,7 +150,13 @@
 <div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog" aria-resolutionModal="modal1" aria-hidden="true" >
     <div class="modal-dialog col-xl-6 col-12" role="document" th:object="${resolutionDocument}">
         <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
-                <div class="card parent-card m0">
+            <div class="card">
+                <div class="text-right p-3">
+                    <a href="#" onclick="printThisDiv('for_print')">
+                        <i class="fas fa-print fs30 color-gray m10-horizontal pointer"></i>
+                    </a>
+                </div>
+                <div class="parent-card m0" id="for_print">
                     <div th:if="${resolutionDocument!=null}">
                         <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
                             <h4 th:text="${resolutionDocument.organizationName!=null?resolutionDocument.organizationName:''}"></h4>
@@ -196,14 +204,13 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    let files = [[${document.contentFiles}]];
-    console.log(files)
+<script th:inline="none">
     function displayFiles(files){
         for(let i = 0; i < files.length; i++){
             let fileName= files[i].name;
@@ -235,9 +242,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <!-- /.modal-content -->
             </div>
-                <!-- /.modal-dialog -->
             </div>
             `);
         }
@@ -289,7 +294,6 @@
         subStringName += getExtension;
         return subStringName;
     }
-    displayFiles(files);
 
 </script>
 </body>

@@ -50,15 +50,67 @@
                                                     <input class="form-control" required="" th:value="${regApplication.applicant!=null? regApplication.applicant.name:''}" readonly="readonly">
                                                 </div>
                                             </div>
+                                            <!--begin-->
                                             <div class="form-group row">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_about.objectExpertise}">Объект экспертизы</label>
+                                                    <span class="required">*</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" id="activityIdDiv">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
+                                                    <span class="required">*</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control" th:field="*{activityId}" required="" onchange="getMaterialList()">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:if="${regApplication.activityId}" th:value="${regApplication.activityId}" th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></option>
+                                                        <!--<option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>-->
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" id="categoryDiv">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_about.material}">Вид материалов</label>
+                                                    <span class="required">*</span>
+                                                </div>
+                                                <div class="col-md-6" id="materialDiv">
+                                                    <div class="custom-control custom-checkbox" th:if="${regApplication.materials}" th:each="material : ${regApplication.materials}">
+                                                        <input type="checkbox" class="custom-control-input" th:id="${'materials'+material}" th:value="${material}" name="materials" checked="checked" required="required" data-parsley-errors-container="#materialError" >
+                                                        <label class="custom-control-label" th:for="${'materials'+material}" th:text="${@helperService.getMaterial(material,#locale)}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 offset-3" id="materialError"></div>
+                                            </div>
+                                            <!--end-->
+
+                                            <!--<div class="form-group row">
                                                 <div class="col-md-3 text-right">
                                                     <label class="col-form-label" th:text="#{sys_about.objectExpertise}"></label>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <input class="form-control only-number" readonly="readonly" th:value="${regApplication.objectId!=null? @helperService.getObjectExpertise(regApplication.objectId,#locale):''}">
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
+                                            </div>-->
+                                            <!--<div class="form-group row">
                                                 <div class="col-md-3 text-right">
                                                     <label class="col-form-label" th:text="#{sys_about.activity}"></label>
                                                 </div>
@@ -81,7 +133,7 @@
                                                 <div class="col-md-6">
                                                     <input class="form-control" readonly="readonly" th:value="${regApplication.materials!=null? @helperService.getMaterials(regApplication.materials,#locale):''}" >
                                                 </div>
-                                            </div>
+                                            </div>-->
 
 
 
@@ -168,7 +220,7 @@
                                                 </div>
                                             </div>
 
-                                            <!--<div class="form-group row" >
+                                            <div class="form-group row" >
                                                 <div class="col-md-3 text-right">
                                                     <label class="col-form-label" th:text="#{sys_about.projectDeveloper_tin}">ИНН разработчика проекта</label>
                                                     <span class="required">*</span>
@@ -187,7 +239,7 @@
                                                     <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
                                                     <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
                                                 </div>
-                                            </div>-->
+                                            </div>
                                             </br>
                                             <h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
                                             <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
@@ -311,6 +363,15 @@
             $('#open-map-btn').prop('disabled', true);
             $('#clear-coordinates-btn').prop('disabled', false);
         }
+        $('#objectId').select2();
+        $('#activityId').select2();
+
+        $("#objectId").change(function(){
+            getActivityList();
+        });
+        $("#activityId").change(function(){
+            getMaterialList();
+        });
     });
     function openInputFile() {
         document.getElementById("file-input").click();
@@ -324,6 +385,126 @@
         }
     });
 
+    function getActivityList() {
+        var idSelected = 0;
+        if ($('#activityId').val() != ""){
+            idSelected = $('#activityId').val();
+        }
+        var form = new FormData();
+        form.append("objectId", $("#objectId").val());
+        form.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: '/expertise/reg/application/activity',
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
+                $("#materialDiv").text("");
+
+                if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
+                    $("#activityIdDiv").hide();
+                    $("#activityId").removeAttr('required');
+                    $("#categoryDiv").hide();
+                    materialDiv(response.requirementList[0].materials);
+                }else {
+                    $("#activityIdDiv").show();
+                    $("#activityId").prop('required',true);
+                    $("#categoryDiv").show();
+
+                    console.log('response.categoryList='+response.categoryList);
+                    $.each(response.categoryList, function (keyCategory, valueCategory) {
+                        console.log('valueCategory='+valueCategory);
+                        var options =  $('<optgroup label="'+valueCategory+'">');
+                        $.each(response.activityList, function (key, value) {
+                            if(valueCategory === value.category){
+                                var selected = false;
+                                var name = '';
+                                switch (getCurrentLanguage()){
+                                    case 'uz':name=value.name;break;
+                                    case 'oz':name=value.nameOz;break;
+                                    case 'ru':name=value.nameRu;break;
+                                    default :name=value.nameRu;break;
+                                }
+                                if (idSelected!="" && idSelected==value.id){
+                                    selected = true;
+                                }
+                                options.append(new Option(name, value.id,!selected,selected));
+                            }
+                        });
+                        $('#activityId').append(options);
+                    });
+                }
+                $('#activityId').change();
+            }
+        });
+    }
+
+    function getMaterialList() {
+        var form = new FormData();
+        form.append("objectId", $("#objectId").val());
+        form.append("activityId", $("#activityId").val());
+        form.append("_csrf", $("#global_csrf").val());
+        var srSelector = $('#requirementId');
+        srSelector.find('option:selected').prop('selected',false);
+        srSelector.find('option').hide();
+        $.ajax({
+            url: '/expertise/reg/application/materials',
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                $('#categoryName').text("");
+                $('#categoryName').text(response.category);
+                $("#materialDiv").text("");
+                if (response.requirementList.length>0){
+                    $.each(response.requirementList, function (index, value) {
+                        materialDiv(value.materials);
+                    });
+                }
+            }
+        });
+    }
+
+    function materialDiv(list) {
+        var materialId = false;
+        $.each(list, function (key, value) {
+            if(value===2){
+                materialId = true;
+            }
+            $("#materialDiv").append(
+                '<div class="custom-control custom-checkbox" >\n' +
+                '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
+                '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
+                '</div>');
+            getMaterial(value);
+        });
+        checkedMaretil();
+        if(materialId){ $("#coordinates-control").show(); }else { $("#coordinates-control").hide(); }
+    }
+
+    function getMaterial(id) {
+        $.post('/expertise/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
+            $.each(response, function (key, value) {
+                if(value.id===id){
+                    var name = '';
+                    switch (getCurrentLanguage()){
+                        case 'uz':name=value.name;break;
+                        case 'oz':name=value.nameOz;break;
+                        case 'ru':name=value.nameRu;break;
+                        default :name=value.nameRu;break;
+                    }
+                    console.log('material='+name);
+                    $('#materials-'+id+'-label').text(name);
+                }
+            });
+        });
+    }
+
     function checkedMaretil() {
         var regApplicationMaterials = [[${regApplication.materials}]];
         if (regApplicationMaterials.length>0){
@@ -332,6 +513,15 @@
             })
         }
     }
+
+    /*function checkedMaretil() {
+        var regApplicationMaterials = [[${regApplication.materials}]];
+        if (regApplicationMaterials.length>0){
+            $.each(regApplicationMaterials,function (item,value) {
+                $('#materials'+value).prop('checked',true);
+            })
+        }
+    }*/
     /*th:checked="${requirement.materials!=null? #lists.contains(requirement.materials, material.id): false}"*/
 
     function openModalFile() {
