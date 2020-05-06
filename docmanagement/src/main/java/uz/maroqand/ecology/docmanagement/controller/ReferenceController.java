@@ -67,12 +67,12 @@ public class ReferenceController {
     }
 
     @RequestMapping(value = DocUrls.ReferenceList, method = RequestMethod.GET)
-    public String getReferenceListPage(Model model) {
+    public String getReferenceListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
         Integer New = documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses);
-
+        model.addAttribute("tab_number_", tabNumber);
         model.addAttribute("reference", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.AppealDocuments.getId(), user.getId()));
 
         model.addAttribute("newDocumentCount", New);
@@ -138,14 +138,6 @@ public class ReferenceController {
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
-                deadlineDateEnd = calendar.getTime();
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.New.getId());
-                status.add(TaskSubStatus.InProgress.getId());
-                status.add(TaskSubStatus.Waiting.getId());
-                status.add(TaskSubStatus.Agreement.getId());
-                break;//Муддати кеччикан
-            case 4:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -156,6 +148,14 @@ public class ReferenceController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати якинлашаётган
+            case 4:
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());

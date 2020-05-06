@@ -53,9 +53,9 @@ public class InnerController {
     }
 
     @RequestMapping(value = DocUrls.InnerList, method = RequestMethod.GET)
-    public String getInnerListPage(Model model) {
+    public String getInnerListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
-
+        model.addAttribute("tab_number_", tabNumber);
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
@@ -104,31 +104,19 @@ public class InnerController {
                 status.add(TaskSubStatus.Agreement.getId());
                 break;
             case 3:
-//                calendar.add(Calendar.DATE, 1);
-//                deadlineDateEnd = calendar.getTime();
-//                deadlineDateEnd.setHours(23);
-//                deadlineDateEnd.setMinutes(59);
-//                deadlineDateEnd.setSeconds(0);
-//                calendar.add(Calendar.DATE, -2);
-//                deadlineDateBegin = calendar.getTime();
-//                deadlineDateBegin.setHours(23);
-//                deadlineDateBegin.setMinutes(59);
-//                deadlineDateBegin.setSeconds(59);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати якинлашаётган
             case 4:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-                deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
@@ -138,13 +126,13 @@ public class InnerController {
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
                 break;//Ижро назоратида
-            /*case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
+            /*case 6: type = TaskSubType.Info.getId();break;//Малъумот учун */
             case 7:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControll = Boolean.TRUE;
                 break;//Якунланган*/
             default:
                 departmentId = user.getDepartmentId();
@@ -181,7 +169,7 @@ public class InnerController {
                 pageable
         );
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        System.out.println(tabFilter);
+
         List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
@@ -326,10 +314,6 @@ public class InnerController {
         if (document==null){
             return "redirect:" + DocUrls.InnerList;
         }
-
-        System.out.println("id=" + id);
-        System.out.println("content=" + content);
-        System.out.println("docRegDateStr=" + docRegDateStr);
 
         DocumentTask documentTask = documentTaskService.getByIdAndDocumentId(taskId,document.getId());
         if (documentTask==null){

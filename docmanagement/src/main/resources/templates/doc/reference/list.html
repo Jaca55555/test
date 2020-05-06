@@ -38,7 +38,8 @@
                 </div>
                 <h5 class="office-h5 default-color" th:text="#{doc_reference.documentsCount}">Кирувчи хатлар статистикаси</h5>
                 <div class="responsive">
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active'); getTabDatatableConnect(9)">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
                             </div>
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_2').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
                             </div>
@@ -58,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_3').click()">
                         <div class="card dashboard-card border-warning-shadow">
                             <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
@@ -67,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_4').click()">
                         <div class="card dashboard-card border-green-shadow">
                             <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
                             <div class="card-body" style="display: inline-block;text-align: center;">
@@ -76,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_7').click()">
                         <div class="card dashboard-card border-primary-shadow">
                             <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
                             </div>
@@ -86,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="office-card">
+                    <div class="office-card" onclick="$('#tab_filter_1').click()">
                         <div class="card dashboard-card border-danger-shadow">
                             <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
                             </div>
@@ -186,28 +187,28 @@
         <div class="parent-card col-xl-12 mh-1000">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="home-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_delayed}">Муддати кеччикан</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span  th:text="#{sys_document.info_tab_dueDate}">Муддати кеччикан</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="home-tab" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_dueDate}">Муддати якинлашаётган</span></a>
+                    <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_7" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="contact-tab" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -264,11 +265,13 @@
         function getCurrentLanguage() {
             return [[__${#locale}__]];
         }
+
+        let tab_number = [[${tab_number_}]];
     </script>
     <script th:inline="none">
         var dataDatatableSelector;
         var thead;
-        var tabFilter = 1;
+        var tabFilter = tab_number == null ? 1 : tab_number;;
 
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
@@ -407,6 +410,18 @@
                 $('#myTab a.active').trigger('click');
             })
         });
+
+        if (tab_number != null) {
+            if (tab_number !== 9) {
+                document.querySelector('#tab_filter_' + tab_number).click();
+            } else {
+                $('#myTab a.active').removeClass('active');
+                $('#home-tab').addClass('active');
+                getTabDatatableConnect(9);
+            }
+        }
+
+
     </script>
 </body>
 </html>

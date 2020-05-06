@@ -291,19 +291,11 @@
 
         let html = '';
 
-        let current;
-
-        if(data === "document_status.new"){
-            current = 2;
-        }else if(data === "document_status.inProgress"){
-            current = 2;
-        }else if(data == "document_status.completed"){
-            current = 3;
-        }
+        let text = translateToSentOrNotSent(data);
 
         html += `<div class="btn-group mb-2 mr-2">
                                             <button type="button"
-                         class="btn-rounded btn btn-primary">${data}</button>
+                         class="btn-rounded btn btn-primary">${text}</button>
                  </div>`;
 
         return html;
@@ -315,7 +307,7 @@
         $('#filter').trigger('change');
     }
 
-    function datatableConnect(tab) {
+    function datatableConnect(tab = 6) {
         cDataTable = dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -402,7 +394,31 @@
         });
     });
 
+    function translateToSentOrNotSent(text_) {
+        let currentLanguage = getCurrentLanguage();
+        let text = '';
 
+        if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
+            if (currentLanguage === 'oz') {
+                text = 'Жунатилмаган';
+            } else if (currentLanguage === 'uz') {
+                text = 'Junatilmagan';
+            } else if (currentLanguage === 'ru') {
+                text = 'Неотправлено';
+            }
+            return text;
+        }else if(text_ === "document_status.completed"){
+            if(currentLanguage === 'oz') {
+                text = 'Жунатилган';
+            }
+            else if(currentLanguage === 'uz'){
+                text = 'Junatilgan';
+            }else if(currentLanguage === 'ru'){
+                text = 'Отправлено';
+            }
+            return text;
+        }else return '';
+    }
 
 </script>
 

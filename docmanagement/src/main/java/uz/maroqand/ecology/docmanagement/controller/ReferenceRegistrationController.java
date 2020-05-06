@@ -116,14 +116,6 @@ public class ReferenceRegistrationController {
         Integer tabFilter = referenceRegFilterDTO.getTabFilter()!=null?referenceRegFilterDTO.getTabFilter():1;
         switch (tabFilter){
             case 3:
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                deadlineDateBegin = calendar.getTime();
-                status = new LinkedHashSet<>();
-                status.add(TaskStatus.New.getId());
-                status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
-                break;//Муддати кеччикан
-            case 4:
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
@@ -131,6 +123,14 @@ public class ReferenceRegistrationController {
                 status.add(TaskStatus.InProgress.getId());
                 status.add(TaskStatus.Checking.getId());
                 break;//Муддати якинлашаётган
+            case 4:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskStatus.New.getId());
+                status.add(TaskStatus.InProgress.getId());
+                status.add(TaskStatus.Checking.getId());
+                break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskStatus.Checking.getId());
@@ -140,7 +140,7 @@ public class ReferenceRegistrationController {
                 status.add(TaskStatus.Complete.getId());
                 break;//Якунланган
             case 8:
-                specialControll=Boolean.TRUE;
+                specialControll = Boolean.TRUE;
                 break;//Якунланган
             default:
                 break;//Жами
