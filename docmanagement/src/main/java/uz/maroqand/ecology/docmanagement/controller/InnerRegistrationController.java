@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.List;
-import java.util.Collections;
 
 
 @Controller
@@ -47,9 +47,11 @@ public class InnerRegistrationController {
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentHelperService documentHelperService;
+    private final CommunicationToolService communicationToolService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService) {
+    public InnerRegistrationController(UserService userService, FileService fileService, DocumentService documentService, DocumentViewService documentViewService, JournalService journalService, DocumentDescriptionService documentDescriptionService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentSubService documentSubService, DocumentLogService documentLogService, DocumentOrganizationService documentOrganizationService, DocumentHelperService documentHelperService, CommunicationToolService communicationToolService, OrganizationService organizationService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -62,6 +64,8 @@ public class InnerRegistrationController {
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentHelperService = documentHelperService;
+        this.communicationToolService = communicationToolService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = DocUrls.InnerRegistrationList, method = RequestMethod.GET)
@@ -267,12 +271,19 @@ public class InnerRegistrationController {
         return DocTemplates.InnerRegistrationView;
     }
 
-    @RequestMapping(DocUrls.InnerRegistrationNew)
+    @RequestMapping(value = DocUrls.InnerRegistrationNew,method = RequestMethod.GET)
     public String getInnerRegistrationNewPage(Model model) {
+        User user = userService.getCurrentUserFromContext();
         Document document = new Document();
         document.setControlForm(ControlForm.FormNot);
         document.setExecuteForm(ExecuteForm.Performance);
+        List<User> userList = userService.getEmployeesForForwarding(user.getOrganizationId());
+
         model.addAttribute("document", document);
+        model.addAttribute("userList", userList);
+        model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -293,6 +304,7 @@ public class InnerRegistrationController {
             @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
             @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
+            @RequestBody MultiValueMap<String, String> formData,
             Document document
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -319,11 +331,62 @@ public class InnerRegistrationController {
         DocumentSub documentSub = new DocumentSub();
         documentSub.setOrganizationId(documentOrganizationId);
         documentSubService.create(document.getId(), documentSub, user);
-        if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
+
+        DocumentTask documentTask = null;
+//        DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        Integer userId = null;
+        Integer performerType = null;
+        Date dueDate = null;
+        String descriptionTextareaTask = null;
+        Date taskDocRegDateStr = null;
+        Map<String,String> map = formData.toSingleValueMap();
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            String value= mapEntry.getValue().replaceAll(" ","");
+            if (tagName.equals("descriptionTextareaTask")){
+                descriptionTextareaTask = value;
+            }
+            if (tagName.equals("taskDocRegDateStr")){
+                taskDocRegDateStr = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+            }
+            if (tagName.equals("taskNumber")){
+                documentTask = documentTaskService.createNewTask(document,TaskStatus.New.getId(),descriptionTextareaTask,taskDocRegDateStr,document.getManagerId(),user.getId());
+                descriptionTextareaTask = "";
+                taskDocRegDateStr = null;
+            }
+            if (tagName.equals("user")){
+                userId=Integer.parseInt(value);
+            }
+            if (tagName.equals("performer")){
+                performerType = Integer.parseInt(value);
+            }
+
+            if (tagName.equals("dueDateStr")){
+                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+                if (userId!=null && performerType!=null && documentTask!=null){
+                    documentTaskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if (performerType==TaskSubType.Performer.getId()){
+                        documentTask.setPerformerId(userId);
+                        documentTaskService.update(documentTask);
+                    }
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
+            }
+        }
+        if(!document.getStatus().equals(DocumentStatus.InProgress)){
+            document.setStatus(DocumentStatus.InProgress);
+            documentService.update(document);
+        }
+        return "redirect:" + DocUrls.InnerRegistrationList;
+        /*if(httpServletRequest.getRequestURI().equals(DocUrls.InnerRegistrationNewTask)){
             return "redirect:" + DocUrls.InnerRegistrationView + "?id=" + document.getId();
         }else {
             return "redirect:" + DocUrls.InnerRegistrationList;
-        }
+        }*/
     }
 
     @RequestMapping(DocUrls.InnerRegistrationEdit)
