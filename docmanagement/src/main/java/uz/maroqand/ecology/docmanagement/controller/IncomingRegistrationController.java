@@ -57,7 +57,7 @@ public class IncomingRegistrationController {
     private final DocumentLogService documentLogService;
     private final DocumentHelperService documentHelperService;
     private final DocumentOrganizationService documentOrganizationService;
-
+    private final DocumentTaskContentService documentTaskContentService;
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     @Autowired
     public IncomingRegistrationController(
@@ -74,7 +74,9 @@ public class IncomingRegistrationController {
             DocumentTaskSubService taskSubService,
             DocumentLogService documentLogService,
             DocumentHelperService documentHelperService,
-            DocumentOrganizationService documentOrganizationService) {
+            DocumentOrganizationService documentOrganizationService,
+            DocumentTaskContentService documentTaskContentService
+    ) {
         this.documentService = documentService;
         this.documentSubService = documentSubService;
         this.taskService = taskService;
@@ -89,6 +91,7 @@ public class IncomingRegistrationController {
         this.documentViewService = documentViewService;
         this.documentHelperService = documentHelperService;
         this.documentOrganizationService = documentOrganizationService;
+        this.documentTaskContentService=documentTaskContentService;
     }
 
     @RequestMapping(value = DocUrls.IncomingRegistrationList, method = RequestMethod.GET)
@@ -565,7 +568,7 @@ public class IncomingRegistrationController {
             model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
 
             System.out.println(document.getExecuteForm().getName());
-            model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+            model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
             model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
             model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
             model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());

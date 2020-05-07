@@ -17,7 +17,7 @@ import java.util.Set;
 public interface DocumentTaskSubService {
 
     DocumentTaskSub getById(Integer id);
-
+    Integer getCountByStatus();
     DocumentTaskSub createNewSubTask(Integer level,Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
 
     DocumentTaskSub update(DocumentTaskSub taskSub);

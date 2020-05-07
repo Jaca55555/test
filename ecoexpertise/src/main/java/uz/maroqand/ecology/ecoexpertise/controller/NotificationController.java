@@ -63,7 +63,7 @@ public class NotificationController {
             if(count>6){
                 continue;
             }
-            newNotificationListShow.add(new NotificationDto(notification, helperService));
+            newNotificationListShow.add(new NotificationDto(notification, helperService, locale));
             count++;
         }
 
@@ -71,7 +71,7 @@ public class NotificationController {
             if(count>6){
                 continue;
             }
-            notificationListShow.add(new NotificationDto(notification, helperService));
+            notificationListShow.add(new NotificationDto(notification, helperService, locale));
             count++;
         }
 

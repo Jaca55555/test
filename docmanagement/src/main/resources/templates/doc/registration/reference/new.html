@@ -8,23 +8,18 @@
         #upload-gif{
             position: relative;
             float: left;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translate(-50%, -50%);
             max-width: 85px;
         }
         #percentage {
-            position: absolute;
-            top: 65%;
-            left: 8%;
-            transform: translate(-50%, -50%);
             display: none;
         }
-
-        .datepicker>.datepicker-days {
-            display: block;
+        .ui-menu-item-wrapper:hover{
+            color:white;
+            background:#62c462;
         }
-
     </style>
 </head>
 <body>
@@ -337,14 +332,14 @@
         $('#addFile').on('click', function (e) {
             e.stopImmediatePropagation();
         }).on('change', function () {
-            if (this.files[0].size > 10000000) {
+          /*  if (this.files[0].size > 10000000) {
                 swal("Файл не должен занимать больше 10 мб.",'', "warning");
                 return false;
             }
             if(this.files[0].size === 0){
                 swal("Файл не должен быть пустым", "", "warning");
                 return false;
-            }
+            }*/
             let csrf = $("form input[name='_csrf']").val();
             let files = $(this)[0].files[0];
             let fd = new FormData();

@@ -86,6 +86,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Id</th>
+                                                    <th>prefix code</th>
                                                     <th th:text="#{mntr_department.name}">name</th>
                                                     <th th:text="#{mntr_department.nameOz}">name</th>
                                                     <th th:text="#{mntr_department.nameEn}">name</th>
@@ -229,12 +230,13 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {data: 1, name: 'name'},
-                {data: 2, name: 'nameOz'},
-                {data: 3, name: 'nameEn'},
-                {data: 4, name: 'nameRu'},
-                {data: 5, name: 'organizationId'},
-                {data: 6, name: 'parentId'},
+                {data: 1, name: 'prefixCode'},
+                {data: 2, name: 'name'},
+                {data: 3, name: 'nameOz'},
+                {data: 4, name: 'nameEn'},
+                {data: 5, name: 'nameRu'},
+                {data: 6, name: 'organizationId'},
+                {data: 7, name: 'parentId'},
                 {render: renderActionsColumn, orderable: false, className: 'text-center'}
             ],
             language: {

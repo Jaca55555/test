@@ -179,7 +179,7 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_incoming.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="executeForm : ${executeForms}">
-                            <input type="radio" name="executeFormId" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
+                            <input type="radio" name="executeFormId" onclick="displayRadioValue()" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
                             <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
                     </div>
@@ -337,9 +337,9 @@
                 enctype: 'multipart/form-data',
                 success: detectExtensionAndDisplay,
                 beforeSend: function () {
-                $('#plus-icon').hide();
-                $('#upload-gif').show();
-                $('#percentage').show();
+                    $('#plus-icon').hide();
+                    $('#upload-gif, #percentage').show();
+                 //   $('#percentage').show();
                 },
                 complete: function () {
                     $('#upload-gif').hide();
@@ -444,14 +444,14 @@
             enctype: 'multipart/form-data',
             success: detectExtensionAndDisplay,
             beforeSend: function () {
-                $('#addFileButton').hide();
+                $('#plus-icon').hide();
                 $('#upload-gif').show();
                 $('#percentage').show();
             },
             complete: function () {
                 $('#upload-gif').hide();
                 $('#percentage').hide();
-                $('#addFileButton').show();
+                $('#plus-icon').show();
             },
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
@@ -533,6 +533,21 @@
         let text=$('#description_content_task_'+id).val();
             $('#description_textarea_task_'+id).val(text);
     }
+    function displayRadioValue() {
+        var ele = document.getElementsByName('executeFormId');
+
+        for(i = 0; i < ele.length; i++) {
+            if(ele[i].checked)
+                return  ele[i].value;
+        }
+
+    }
+    console.log(displayRadioValue());
+
+    $('#description_content_task').on('change',function () {
+        var text=this.options[this.selectedIndex].text;
+        $('#description_textarea_task').val(text);
+    });
 
     function addTaskSubmit() {
         if (isSubmit()){
@@ -597,6 +612,9 @@
                                 '       </div>\n' +
                                 '   </td>';
                                 if ($('#typePerformerIsTaskId_'+id).val()==''){
+
+                            if(displayRadioValue()!=1)  {
+                                if ($('#typePerformer').val()==''){
                                     html+='<td style="width: 30%">\n' +
                                         '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
                                         '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +

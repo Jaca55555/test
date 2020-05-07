@@ -194,11 +194,11 @@
                         </div>
                         <hr class="m20-vertical">
                         <div class="flex-center w100 row-wrap">
-                            <a th:if="${task.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerTask+'?id='+documentTaskSub.id}">
-                                <span th:text="#{doc_inner.newTask}">Ижро учун йўналтириш</span>
+                            <a th:if="${task.status!=4}" class="btn btn-glow-secondary btn-secondary m10-vertical m20-horizontal" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingTask+'?id='+documentTaskSub.id}">
+                                <span th:text="#{doc_incoming.newTask}">Ижро учун йўналтириш</span>
                             </a>
                             <button th:if="${documentTaskSub.status!=6}" type="button" class="btn btn-glow-secondary btn-secondary  m10-vertical m20-horizontal" data-toggle="modal" data-target="#modal2">
-                                <span th:text="#{doc_inner.doc_log_add}">Ижро холатини белгилаш</span>
+                                <span th:text="#{doc_incoming.doc_log_add}">Ижро холатини белгилаш</span>
                             </button>
                         </div>
                     </div>

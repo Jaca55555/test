@@ -62,7 +62,7 @@
                                         <label class="control-label" th:text="#{doc_incoming.doc_task_and_content}"></label>
                                         <select class="singleSelect col-sm-12 select2-hidden-accessible" id="description_content">
                                             <option value=""></option>
-                                            <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.content}"></option>
+                                            <option th:each="description : ${descriptionList}" th:value="${description.id}" th:text="${description.getNameTranslation(#locale)}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">

@@ -180,6 +180,15 @@ public class DocUrls {
     public static final String DocDescriptionView = DocDescription + "/view";
     public static final String DocDescriptionDelete = DocDescription + "/delete";
 
+    private static final String DocTaskContent = Prefix + "/task_content";
+    public static final String DocTaskContentList = DocTaskContent + "/list";
+    public static final String DocTaskContentListAjax = DocTaskContent + "/list_ajax";
+    public static final String DocTaskContentNew = DocTaskContent + "/new";
+    public static final String DocTaskContentEdit = DocTaskContent + "/edit";
+    public static final String DocTaskContentView = DocTaskContent + "/view";
+    public static final String DocTaskContentDelete = DocTaskContent + "/delete";
+
+
     private static final String DocumentView = Prefix + "/document_view";
     public static final String DocumentViewList = DocumentView + "/list";
     public static final String DocumentViewListAjax = DocumentViewList + "/ajax";

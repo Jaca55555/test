@@ -324,6 +324,7 @@
                 xhr: function() {
                     var xhr = new window.XMLHttpRequest();
                     xhr.upload.addEventListener("progress",
+
                         uploadProgressHandler,
                         false
                     );
@@ -378,6 +379,7 @@
     {
         var percent = (event.loaded / event.total) * 100;
         var progress = Math.round(percent);
+
         $('#percentage-num').html(progress);
     }
 
