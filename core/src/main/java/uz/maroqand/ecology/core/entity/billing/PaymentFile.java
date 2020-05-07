@@ -34,7 +34,7 @@ public class PaymentFile {
     private String invoice;
 
     @Column(name = "bank_id")
-    private Integer bankId;
+    private Long bankId;
 
     //Тўловчини СТИРИ
     @Column(name = "payer_tin")

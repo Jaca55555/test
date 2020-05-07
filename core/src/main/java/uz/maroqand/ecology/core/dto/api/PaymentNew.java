@@ -17,6 +17,6 @@ public class PaymentNew {
     private String document_number; //Документ рақами
     private String payment_date;    //Тўлов санаси ва вақти
     private String details;         //Тўлов топшириқномаси
-    private Integer id;
+    private Long id;
 
 }
