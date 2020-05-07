@@ -116,7 +116,12 @@
                         <span class="pcoded-mtext" th:text="#{doc_inner.list}">Ички хужжатлар</span>
                     </a>
                 </li>
-
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationList}">
+                        <span class="pcoded-micon"><i class="feather icon-corner-right-down color-green"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_reference.regList}">Кирувчи хатлар</span>
+                    </a>
+                </li>
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <label>Руйхатга олиш</label>
                 </li>
