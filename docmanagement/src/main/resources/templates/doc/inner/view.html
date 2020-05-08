@@ -488,6 +488,7 @@
 
     var urlAction = [[${comment_url}]];
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
+    var contentFiles = [[${document.contentFiles}]];
 
     //<![CDATA[
     $(document).ready(function () {
@@ -657,7 +658,7 @@
         fd.append("file", files);
         fd.append("_csrf", csrf);
         $.ajax({
-            url: "/doc/outgoing_mail/file/upload",
+            url: "/doc/file_upload",
             type: 'post',
             data: fd,
             processData: false,
@@ -818,6 +819,7 @@
         window.location.href='/doc/open_view?id=' + id;
     }
     //]]>
+    displayFiles(contentFiles);
 
 </script>
 </body>

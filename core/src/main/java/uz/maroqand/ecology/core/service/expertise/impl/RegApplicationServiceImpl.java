@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
@@ -66,6 +67,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByOneInvoiceId(Integer invoiceId) {
+        return regApplicationRepository.findByInvoiceIdAndDeletedFalse(invoiceId);
+    }
+
+    @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
@@ -111,6 +117,21 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public RegApplication getById(Integer id) {
         if(id==null) return null;
         return regApplicationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public RegApplication cancelApplicationByInvoiceId(Integer invoiceId) {
+        RegApplication regApplication = getByOneInvoiceId(invoiceId);
+        if (regApplication==null) return null;
+        regApplication.setStatus(RegApplicationStatus.Canceled);
+        update(regApplication);
+        System.out.println("==cancelApplicationByInvoiceId==");
+        return regApplication;
+    }
+
+    @Override
+    public List<RegApplication> getListByPerformerId(Integer performerId) {
+        return regApplicationRepository.findAllByPerformerIdAndDeletedFalseOrderByIdDesc(performerId);
     }
 
     public RegApplication getById(Integer id, Integer createdBy) {

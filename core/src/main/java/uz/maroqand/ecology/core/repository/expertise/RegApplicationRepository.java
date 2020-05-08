@@ -4,6 +4,7 @@ import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 
 import java.util.List;
@@ -21,7 +22,11 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
 
     List<RegApplication> findByInvoiceId(Integer invoiceId);
 
+    RegApplication findByInvoiceIdAndDeletedFalse(Integer invoiceId);
+
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
+
+    List<RegApplication> findAllByPerformerIdAndDeletedFalseOrderByIdDesc(Integer performerId);
 
     RegApplication findByIdAndCreatedByIdAndDeletedFalse(Integer id, Integer createdBy);
 }

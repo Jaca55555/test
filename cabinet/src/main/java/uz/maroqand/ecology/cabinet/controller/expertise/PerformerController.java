@@ -253,8 +253,9 @@ public class PerformerController {
             notificationService.create(
                     agreementLog.getUpdateById(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.newAppAgreement", locale),
-                    id + " raqamli ariza kelishish uchun yuborildi.",
+                    "sys_notification.newAppAgreement",//kelishish uchun yuborildi
+                    id ,
+                     "sys_notification_message.new",
                     "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
                     user.getId()
             );
@@ -340,8 +341,9 @@ public class PerformerController {
             notificationService.create(
                     agreementLog.getUpdateById(),
                     NotificationType.Expertise,
-                    helperService.getTranslation("sys_notification.newAppAgreement", locale),
-                    id + " raqamli ariza kelishish uchun yuborildi.",
+                    "sys_notification.newAppAgreement",
+                    id,
+                    "sys_notification_message.new",
                     "/expertise/agreement/view?id=" + id + "&logId=" + agreementLog.getId(),
                     user.getId()
             );
@@ -456,8 +458,9 @@ public class PerformerController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.new", locale),
-                "Sizning " + regApplicationId + " raqamli arizangizga habar yozildi",
+                "sys_notification.new",
+                regApplicationId,
+                "sys_notification_message.send",
                 "/reg/application/resume?id=" + regApplicationId,
                 user.getId()
         );

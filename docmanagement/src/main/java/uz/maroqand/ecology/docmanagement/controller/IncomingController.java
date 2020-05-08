@@ -67,8 +67,12 @@ public class IncomingController {
     }
 
     @RequestMapping(value = DocUrls.IncomingList, method = RequestMethod.GET)
-    public String getIncomingListPage(Model model) {
+    public String getIncomingListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
+
         User user = userService.getCurrentUserFromContext();
+
+        model.addAttribute("tab_number_", tabNumber);
+
         Set<Integer> statuses = new LinkedHashSet<>();
 
         statuses.add(TaskSubStatus.New.getId());
@@ -128,14 +132,6 @@ public class IncomingController {
         switch (tabFilter){
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
-                deadlineDateEnd = calendar.getTime();
-                status = new LinkedHashSet<>();
-                status.add(TaskSubStatus.New.getId());
-                status.add(TaskSubStatus.InProgress.getId());
-                status.add(TaskSubStatus.Waiting.getId());
-                status.add(TaskSubStatus.Agreement.getId());
-                break;//Муддати кеччикан
-            case 4:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -146,6 +142,14 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати якинлашаётган
+            case 4:
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
@@ -284,6 +288,7 @@ public class IncomingController {
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
+        model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(task.getId(),locale));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);

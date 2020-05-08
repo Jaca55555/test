@@ -117,6 +117,15 @@
                         <div id="fileContainer" class="flex-start mobile-flex-center">
 
                         </div>
+                        <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
+                            <button type="button" class="btn btn-rounded btn-danger fs11">
+                                <i class="fas fa-lock"></i>
+                                <span th:text="#{sys_document.inside_purpose_warning_text}">
+                        Иловалар фақат ишчи тартибда кўриб чиқиш учун белгиланган. Хужжатларни кўриш учун
+                        девонхонага мурожаат қилинг!
+                        </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <hr class="m20-vertical">
@@ -227,6 +236,11 @@
     let files = [[${files}]];
     let currentStatus = [[${document_status}]];
     let currentId = [[${document_id}]];
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+
     //]]>
 </script>
 <script>
@@ -310,26 +324,29 @@
    function renderChangeColumn(currentStatus){
         let divToRender = document.querySelector('#toRender');
         let html = document.querySelector('#toRender').innerHTML;
-        let idToChangeOne, idToChangeTwo;
-        let current;
-        if(currentStatus === "New" || currentStatus === "InProgress"){
-            current = 2;
-            idToChangeOne = 3;
-        }else if(currentStatus === "Completed"){
-            current = 3;
-            idToChangeOne = 2;
+        let idToChange;
+        let currentId;
+        console.log(currentStatus);
+       let textAndOptionText = translateToSentAndNotSent(currentStatus);
+
+        if(currentStatus === "document_status.new" || currentStatus === "document_status.inProgress"){
+            idToChange = 3;
+            currentId = 2;
+        }else if(currentStatus == "document_status.completed"){
+            idToChange = 2;
+            currentId = 3;
         }
 
         html += `<div class="btn-group mr-2">
                                             <button type="button"
-                         class="btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
+                         class="btn btn-outline-primary left-radius table-modal-button">${textAndOptionText[0]}</button>
                      <button type="button"
                          class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
                          data-toggle="dropdown" aria-haspopup="true"
                          aria-expanded="false"><span class="sr-only">Toggle
                              Dropdown</span></button>
                      <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChangeOne})">${statuses[idToChangeOne]}</button>
+                         <button class="dropdown-item" onclick="changeStatus(this, ${currentId}, ${idToChange})">${textAndOptionText[1]}</button>
                      </div>
                  </div>`;
         document.querySelector('#toRender').innerHTML = html;
@@ -345,14 +362,52 @@
                 }
             })
             .then((data) => {
-                dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
+                console.log(data.first);
+                let textAndOptionText = translateToSentAndNotSent(data.first);
+                dropDownValues.siblings()[0].innerHTML =  textAndOptionText[1];
                 dropDownValues[0].innerHTML = `
-                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
+                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${textAndOptionText[0]}</button>
                 `;
             })
     }
 
     renderChangeColumn(currentStatus);
+
+    function translateToSentAndNotSent(text_) {
+        let currentLanguage = getCurrentLanguage();
+        let text = '';
+        let option_text = '';
+
+        if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
+            if (currentLanguage === 'oz') {
+                text = 'Жунатилмаган';
+                option_text = 'Жунатилган';
+            } else if (currentLanguage === 'uz') {
+                text = 'Junatilmagan';
+                option_text = 'Junatilgan';
+            } else if (currentLanguage === 'ru') {
+                text = 'Неотправлено';
+                option_text = 'Отправлено';
+            }
+            return [text, option_text];
+        }else if(text_ === "document_status.completed"){
+            if(currentLanguage === 'oz') {
+                option_text = 'Жунатилмаган';
+                text = 'Жунатилган';
+            }
+            else if(currentLanguage === 'uz'){
+                option_text = 'Junatilmagan';
+                text = 'Junatilgan';
+            }else if(currentLanguage === 'ru'){
+                option_text = 'Неотправлено';
+                text = 'Отправлено';
+            }
+            return [text, option_text];
+        }else return ['', ''];
+    }
+
+
+
 
 </script>
 </body>

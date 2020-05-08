@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -273,7 +275,7 @@ public class DocController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 break;
-            case 3:
+          /*   case 3:
                 calendar.add(Calendar.DATE, 1);
                 deadlineDateEnd = calendar.getTime();
                 deadlineDateEnd.setHours(23);
@@ -301,17 +303,36 @@ public class DocController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати кеччикан */
+            case 3:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                deadlineDateEnd = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                deadlineDateBegin = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                break;//Муддати якинлашаётган
+            case 4:
+                deadlineDateEnd = calendar.getTime();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
                 break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
                 break;//Ижро назоратида
-            /*case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
+            /*case 6: type = TaskSubType.Info.getId();break;*///Малъумот учун
             case 7:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());
                 break;//Якунланган
-            case 8:
+           /* case 8:
                 specialControll=Boolean.TRUE;
                 break;//Якунланган*/
             default:
@@ -530,12 +551,21 @@ public class DocController {
             @RequestParam(name = "lang") String lang,
             @RequestParam(name = "currentUrl") String currentUrl
     ){
-        lang=lang.substring(0,2);
-        System.out.println("lang==" + lang);
-        System.out.println("currentUrl==" + currentUrl);
+        lang = lang.substring(0,2);
         User user = userService.getCurrentUserFromContext();
         user.setLang(lang);
         userService.updateUser(user);
         return "redirect:" + currentUrl;
+    }
+
+    @RequestMapping(value = DocUrls.FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, File> fileUpload(@RequestParam(name = "file") MultipartFile file){
+
+        File file_ = fileService.uploadFile(file, userService.getCurrentUserFromContext().getId(), file.getOriginalFilename(), file.getContentType());
+        HashMap<String, File> res = new HashMap<>();
+        res.put("data", file_);
+
+        return res;
     }
 }

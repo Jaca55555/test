@@ -395,7 +395,10 @@
 
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingListAjax}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
+    var invoiceDeleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingDelete}]];
     var labelView = [[#{sys_view}]];
+    var labelEdit = [[#{sys_edit}]];
+    var labelDelete = [[#{sys_delete}]];
     var statusInitial = [[#{invoice_status.initial}]];
     var statusSuccess = [[#{invoice_status.success}]];
     var statusCanceled = [[#{invoice_status.canceled}]];
@@ -403,6 +406,11 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+
+    function deleteInvoice(id) {
+        window.location.href = invoiceDeleteLink + '?id=' + id;
+    }
+
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
@@ -413,10 +421,20 @@
     var dateThisMonth = false;
 
     function renderActionsColumn(data, type, row, meta) {
-        // var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var currentDeleteLink = invoiceDeleteLink + '?id=' + row[0];
         var html = '';
-        html += '<div class="btn-group"><button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
-        html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
+        '           <button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button>';
+        if (row[5] == "Initial"){
+            html+='<button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" ><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button>\n' +
+                 '<button class="btn btn-danger btn-sm mr-1" onclick="deleteInvoice('+row[0]+')"  title="'+labelDelete+'"><i class="mdi mdi-close-circle-outline" style="margin-right: 0px;"></i></button>\n';
+        }
+        html+='</div>';
+        /*html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
+
+            html += '<div class="btn-group"><button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
+            html += '<div class="btn-group"><button class="btn btn-danger btn-sm mr-1" ><i class="mdi mdi-close-circle-outline" style="margin-right: 0px;"></i></button></div>';
+        }*/
         return html;
     }
 
@@ -481,8 +499,8 @@
                 {data: 2, name: 'organizationName', orderable:false},
                 {render: renderFormatAmount,  name: 'amount'},
                 {data: 4, name: 'createdDate'},
-                {render: renderStatusColumn, orderable:false},
-                {render: renderActionsColumn, orderable:false}
+                {render: renderStatusColumn, orderable:false,className:'text-center'},
+                {render: renderActionsColumn, orderable:false,className:'text-center'}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

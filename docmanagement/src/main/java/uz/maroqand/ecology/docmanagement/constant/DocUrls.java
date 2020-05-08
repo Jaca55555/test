@@ -21,6 +21,7 @@ public class DocUrls {
     public static final String DashboardDocList = Dashboard + "/list_ajax";
     public static final String Settings = Prefix + "/settings";
     public static final String AddComment = Prefix + "/add_comment";
+    public static final String FileUpload =  Prefix + "/file_upload";
     public static final String FileDownload = Prefix + "/file/download";
     public static final String DocumentTaskChange = Prefix + "/task_change";
     public static final String DocumentOpenView = Prefix + "/open_view";
@@ -60,6 +61,7 @@ public class DocUrls {
 
     public static final String InnerList = Prefix + Inner + "/list"; //Ichki xujjatlar
     public static final String InnerView = Prefix + Inner + "/view"; //Ichki ko'rish
+
     public static final String InnerTask = Prefix + Inner + "/task";
     public static final String InnerTaskSubmit = Prefix + Inner + "/task_submit";
     public static final String InnerTaskUserName = Prefix + Inner + "/user_name";

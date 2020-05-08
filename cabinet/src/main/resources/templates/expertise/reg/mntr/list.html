@@ -141,6 +141,8 @@
                                                         <th th:text="#{reg_application.id}"></th>
                                                         <th th:text="#{reg_application.inputType}"></th>
                                                         <th th:text="#{sys_expertise.objectExpertise}"></th>
+                                                        <th th:text="#{sys_legal_entity_name}"></th>
+                                                        <th th:text="#{sys_tin}"></th>
                                                         <th th:text="#{sys_expertise.material}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
@@ -225,6 +227,8 @@
                     {data: 0, name: 'id'},
                     {data: 1, name: 'inputType'},
                     {data: 2, name: 'objectId'},
+                    {data: 7, name: 'applicant.name'},
+                    {data: 8, name: 'applicant.tin'},
                     {data: 3, orderable: false},
                     {data: 4, name: 'createdAt'},
                     {

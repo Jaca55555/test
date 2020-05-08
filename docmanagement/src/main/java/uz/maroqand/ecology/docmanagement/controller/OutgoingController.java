@@ -97,7 +97,7 @@ public class OutgoingController {
         model.addAttribute("document", document);
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("document_id", document.getId());
-        model.addAttribute("document_status", document.getStatus());
+        model.addAttribute("document_status", document.getStatus().getName());
         DocumentSub documentSub = documentSubService.findOneByDocumentId(document.getId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
@@ -168,6 +168,11 @@ public class OutgoingController {
 
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
+        if(tab == 7){
+            statuses.clear();
+            statuses.add(DocumentStatus.InProgress);
+        }
+
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
@@ -204,8 +209,8 @@ public class OutgoingController {
                     document.getContent() != null ? document.getContent() : "",
                     document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
-                    documentHelperService.getTranslation(document.getStatus().getName(), locale),
-                    (document.getPerformerName() != null ?document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
+                    document.getStatus().getName(),
+                    (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
             });
         }
 

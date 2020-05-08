@@ -239,8 +239,9 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.confirmInfo", locale),
-                "Sizning " + regApplication.getId() + " raqamli arizangiz tasdiqlandi",
+                "sys_notification.confirmInfo",
+                regApplication.getId(),
+                "sys_notification_message.confirm",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
@@ -280,8 +281,9 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.notConfirmInfo", locale),
-                "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "sys_notification.notConfirmInfo",
+                regApplication.getId(),
+                "sys_notification_message.not_confirm",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
@@ -323,8 +325,9 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.confirmInfo", locale),
-                "Sizning "+regApplication.getId()+" raqamli arizangiz tasdiqlandi",
+                "sys_notification.confirmInfo",
+                regApplication.getId(),
+                "sys_notification_message.confirm",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
@@ -367,8 +370,9 @@ public class ConfirmController {
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.notConfirmInfo", locale),
-                "Sizning "+regApplication.getId()+" raqamli arizangizga rad javobi berildi",
+                "sys_notification.notConfirmInfo",
+                regApplication.getId(),
+                "sys_notification_message.not_confirm",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );

@@ -221,7 +221,7 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
-    let selected= [[#{sys_select}]]
+    let selected = [[#{sys_select}]]
 
     $('#document_organization_id').select2({
         ajax: {
@@ -283,15 +283,14 @@
         fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
             .then((response) =>{
                 if(response.ok){
-                    console.log(response);
                     return response.json()
                 }
             })
             .then((data) => {
-                console.log(data);
-                dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
+                let textAndOptionText = translateToSentAndNotSent(data.first);
+                dropDownValues.siblings()[0].innerHTML = textAndOptionText[1];
                 dropDownValues[0].innerHTML = `
-                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
+                    <button class="dropdown-item" onclick="changeStatus(this, ${id}, ${data.firstId})">${textAndOptionText[0]}</button>
                 `;
                 dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
 
@@ -302,26 +301,25 @@
         let editlink = 'doc/outgoing_mail/change_column';
         let html = '';
         let idToChange;
-        let current;
+
+        let textAndOptionText = translateToSentAndNotSent(data);
 
         if(data === "document_status.new" || data === "document_status.inProgress"){
-            current = 2;
             idToChange = 3;
         }else if(data == "document_status.completed"){
-            current = 3;
             idToChange = 2;
         }
 
         html += `<div class="btn-group mb-2 mr-2">
                                             <button type="button"
-                         class="btn btn-outline-primary left-radius table-modal-button">${statuses[current]}</button>
+                         class="btn btn-outline-primary left-radius table-modal-button">${textAndOptionText[0]}</button>
                      <button type="button"
                          class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button"
                          data-toggle="dropdown" aria-haspopup="true"
                          aria-expanded="false"><span class="sr-only">Toggle
                              Dropdown</span></button>
                      <div class="dropdown-menu">
-                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChange})">${statuses[idToChange]}</button>
+                         <button class="dropdown-item" onclick="changeStatus(this, ${row[0]}, ${idToChange})">${textAndOptionText[1]}</button>
                      </div>
                  </div>`;
 
@@ -330,7 +328,7 @@
 
 
 
-    function datatableConnect(tab) {
+    function datatableConnect(tab = 6) {
         cDataTable = dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -417,8 +415,38 @@
         datatableConnect();
     });
 
+    function translateToSentAndNotSent(text_) {
+        let currentLanguage = getCurrentLanguage();
+        let text = '';
+        let option_text = '';
 
-
+        if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
+            if (currentLanguage === 'oz') {
+                text = 'Жунатилмаган';
+                option_text = 'Жунатилган';
+            } else if (currentLanguage === 'uz') {
+                text = 'Junatilmagan';
+                option_text = 'Junatilgan';
+            } else if (currentLanguage === 'ru') {
+                text = 'Неотправлено';
+                option_text = 'Отправлено';
+            }
+            return [text, option_text];
+        }else if(text_ === "document_status.completed"){
+            if(currentLanguage === 'oz') {
+                option_text = 'Жунатилмаган';
+                text = 'Жунатилган';
+            }
+            else if(currentLanguage === 'uz'){
+                option_text = 'Junatilmagan';
+                text = 'Junatilgan';
+            }else if(currentLanguage === 'ru'){
+                option_text = 'Неотправлено';
+                text = 'Отправлено';
+            }
+            return [text, option_text];
+        }else return ['', ''];
+    }
 </script>
 
 

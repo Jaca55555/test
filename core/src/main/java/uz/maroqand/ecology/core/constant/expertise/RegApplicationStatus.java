@@ -20,7 +20,8 @@ public enum RegApplicationStatus {
     Process(4,"sys_regApplication.statusProcess","badge badge-info"), //ispolnitel natijani kiritgandan
     Modification(5,"sys_regApplication.statusModification","badge badge-warning"), //dorabotka, qayta ko'rib chiqish
     Approved(6,"sys_regApplication.statusApproved","badge badge-success"), //ispolnitel tasdiqlash yozsa va rais tasdiqlasa
-    NotConfirmed(7,"sys_regApplication.statusNotConfirmed","badge badge-danger"); //ispolnitel rad javobi yozsa va rais tasdiqlasa
+    NotConfirmed(7,"sys_regApplication.statusNotConfirmed","badge badge-danger"), //ispolnitel rad javobi yozsa va rais tasdiqlasa
+    Canceled(8,"sys_regApplication.statusCanceled","badge badge-danger"); //90 kun ichida to'lov qilinmagan bo'lsa bekor qilindi
 
     private Integer id;
     private String name;

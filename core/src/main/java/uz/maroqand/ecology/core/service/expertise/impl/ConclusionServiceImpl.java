@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,14 +85,16 @@ public class ConclusionServiceImpl implements ConclusionService {
 
 
     @Override
-    public Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Pageable pageable) {
-        return conclusionRepository.findAll(getFilteringSpecification(id,dateBegin,dateEnd),pageable);
+    public Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
+        return conclusionRepository.findAll(getFilteringSpecification(id,dateBegin,dateEnd,tin,name),pageable);
     }
 
     private static Specification<Conclusion> getFilteringSpecification(
             final Integer id,
             final Date dateBegin,
-            final Date dateEnd
+            final Date dateEnd,
+            final Integer tin,
+            final String name
     ) {
         return new Specification<Conclusion>() {
             @Override
@@ -113,6 +116,16 @@ public class ConclusionServiceImpl implements ConclusionService {
                 if(dateBegin == null && dateEnd != null){
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("date"), dateEnd));
                 }
+
+                if (tin!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").<String>get("tin"), tin));
+
+                }
+
+                if (name != null) {
+                    predicates.add(criteriaBuilder.like(root.join("regApplication").get("applicant").<String>get("name"), "%" + name + "%"));
+                }
+
                 // Show only registered and non-deleted
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
                 predicates.add( notDeleted );

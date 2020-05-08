@@ -548,7 +548,7 @@
                     $('#categoryName').text("");
                     $('#categoryName').text(response.category);
                     $("#materialDiv").text("");
-                    if (response.requirementList.length>0){
+                    if ( response.requirementList!=undefined && response.requirementList.length>0){
                         $.each(response.requirementList, function (index, value) {
                             materialDiv(value.materials);
                         });

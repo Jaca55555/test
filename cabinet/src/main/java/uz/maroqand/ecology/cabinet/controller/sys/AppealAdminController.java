@@ -152,8 +152,9 @@ public class AppealAdminController {
         notificationService.create(
                 appeal.getCreatedById(),
                 NotificationType.Expertise,
-                helperService.getTranslation("sys_notification.new", locale),
-                "Sizning " + appeal.getId() + " raqamli murojaatingizga izox qoldirildi.",
+                "sys_notification.new",
+                appeal.getId(),
+                "sys_notification_message.appeal_reason",
                 "/reg/appeal/view?id=" + appeal.getId(),
                 user.getId()
         );

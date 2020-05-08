@@ -56,13 +56,12 @@ public class NotificationController {
 
         List<Notification> notificationList = notificationService.getNotificationList(user.getId());
         List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId());
-
         int count = 0;
         for (Notification notification:newNotificationList) {
             if(count>6){
                 continue;
             }
-            newNotificationListShow.add(new NotificationDto(notification, helperService));
+            newNotificationListShow.add(new NotificationDto(notification, helperService,locale));
             count++;
         }
 
@@ -70,7 +69,7 @@ public class NotificationController {
             if(count>6){
                 continue;
             }
-            notificationListShow.add(new NotificationDto(notification, helperService));
+            notificationListShow.add(new NotificationDto(notification, helperService,locale));
             count++;
         }
 
@@ -107,7 +106,7 @@ public class NotificationController {
         HashMap<String,Object> result = new HashMap<>();
 
         Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null,pageable);
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<Notification> notificationList = notificationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(notificationList.size());
         for (Notification notification : notificationList){
@@ -115,8 +114,8 @@ public class NotificationController {
                     notification.getId(),
                     notification.getType(),
                     notification.getStatus(),
-                    notification.getTitle(),
-                    notification.getMessage(),
+                    !notification.getTitle().isEmpty()?helperService.getTranslation(notification.getTitle(),locale):"",
+                    notification.getApplicationNumber()!=null?(notification.getApplicationNumber() + ": " +helperService.getTranslation(notification.getMessage(),locale)):helperService.getTranslation(notification.getMessage(),locale),
                     notification.getUrl(),
                     notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"",
                     notification.getCreatedById()!=null? helperService.getUserFullNameById(notification.getCreatedById()):""
