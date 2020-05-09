@@ -58,7 +58,7 @@
                                                     <label th:text="#{appeal.type}">English</label>
                                                     <select class="form-control" id="type">
                                                         <option value="" th:text="#{sys_select_appeal_type}" selected="selected"></option>
-                                                        <option th:each="type : ${appealTypeList}" th:value="${type.getId()}" th:text="${type.getName()}"></option>
+                                                        <option th:each="type : ${appealTypeList}" th:value="${type.getId()}" th:text="#{${type.name}}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-3">

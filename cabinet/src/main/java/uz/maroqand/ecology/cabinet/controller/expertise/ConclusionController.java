@@ -73,7 +73,7 @@ public class ConclusionController {
 
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         Page<Conclusion> conclusionPage = conclusionService.findFiltered(id, dateBegin, dateEnd,tin,name, pageable);
         Calendar c = Calendar.getInstance();
@@ -89,7 +89,7 @@ public class ConclusionController {
                     regApplication.getApplicant().getTin(),
                     regApplication.getName(),
                     regApplication.getMaterials(),
-                    regApplication.getCategory() !=null ? regApplication.getCategory().getName() : "",
+                    regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
                     regApplication.getApplicant().getName()

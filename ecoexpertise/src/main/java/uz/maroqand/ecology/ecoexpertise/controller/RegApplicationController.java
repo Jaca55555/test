@@ -850,6 +850,7 @@ public class RegApplicationController {
         regApplication.setPerformerLogIdNext(null);
         regApplication.setAgreementLogs(null);
         regApplication.setAgreementCompleteLogId(null);
+        regApplication.setConclusionId(null);
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplicationService.update(regApplication);

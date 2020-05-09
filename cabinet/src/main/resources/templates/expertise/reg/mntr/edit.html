@@ -47,7 +47,17 @@
                                                     <label class="col-form-label" th:text="#{sys_legal_entity_name}">Фирменное наименование предприятия</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input class="form-control" required="" th:value="${regApplication.applicant!=null? regApplication.applicant.name:''}" readonly="readonly">
+                                                    <input class="form-control" required="" th:value="${regApplication.applicant!=null? regApplication.applicant.name:''}" >
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" >
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_tin}">СТИР</label>
+                                                    <span class="required">*</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control" required="" id="applicationTin" name="applicationTin" data-parsley-type="digits" data-parsley-minlength="9" data-parsley-maxlength="9" maxlength="9" th:value="${regApplication.applicant!=null? regApplication.applicant.tin:''}">
                                                 </div>
                                             </div>
                                             <!--begin-->

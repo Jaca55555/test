@@ -217,6 +217,11 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    @Override
+    public Client saveForEdit(Client client) {
+        return clientRepository.save(client);
+    }
+
 
     public Client updateGnk(Client client){
         client.setUpdateAt(new Date());

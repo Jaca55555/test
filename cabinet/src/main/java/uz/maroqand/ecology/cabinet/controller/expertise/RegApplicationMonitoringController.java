@@ -23,6 +23,7 @@ import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.TinParser;
 
 import java.util.*;
 
@@ -183,6 +184,7 @@ public class RegApplicationMonitoringController {
     public String updateRegApplication(
             @PathVariable("id") Integer id,
             @RequestParam(name = "name") String name,
+            @RequestParam(name = "applicationTin") String applicationTin,
             @RequestParam(name = "objectId") Integer objectId,
             @RequestParam(name = "activityId", required = false) Integer activityId,
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
@@ -250,7 +252,10 @@ public class RegApplicationMonitoringController {
         regApplication.setDeadline(requirement.getDeadline());
 
         regApplication.setObjectId(objectId);
-        regApplication.setName(name);
+        Client client = regApplication.getApplicant();
+        client.setTin(TinParser.trimIndividualsTinToNull(applicationTin));
+        client.setName(name);
+        clientService.saveForEdit(client);
         regApplication.setMaterials(materials);
 
         regApplication.setActivityId(activityId);
@@ -258,7 +263,6 @@ public class RegApplicationMonitoringController {
 
         regApplication.setUpdateById(user.getId());
         regApplication.setUpdateAt(new Date());
-        regApplication.setName(name);
         regApplicationService.update(regApplication);
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
