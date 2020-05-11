@@ -165,4 +165,7 @@ public class Document {
 
     @Column(name = "department_id")
     private Integer departmentId;
+
+    @Column(name = "doc_out_last_number")
+    private Integer docOutLastNumber;
 }

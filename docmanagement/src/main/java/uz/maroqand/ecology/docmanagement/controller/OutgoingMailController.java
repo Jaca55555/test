@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.Position;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
@@ -280,8 +281,16 @@ public class OutgoingMailController {
         //journal, registration number and registration date
         Journal journal = journalService.getById(document.getJournalId());
         document.setJournal(journal);
-        document.setRegistrationNumber(journal.getPrefix() + '-' + (journal.getNumbering() != null ? journal.getNumbering() : 1));
+        document.setRegistrationNumber(documentService.getOutDocNumber(position_id,document.getDepartmentId(),1));
         document.setRegistrationDate(new Date());
+        Department department = departmentService.getById(document.getDepartmentId());
+        Document documentLast = documentService.getLastOutDocument(department.getOrganizationId());
+        Integer lastDocNumber=1;
+        if (documentLast!=null && documentLast.getDocOutLastNumber()!=null){
+            lastDocNumber = documentLast.getDocOutLastNumber()+1;
+        }
+        document.setDocOutLastNumber(lastDocNumber);
+
         //document view
         document.setDocumentView(documentViewService.getById(document.getDocumentViewId()));
         //content and creating documentDescription
@@ -511,6 +520,22 @@ public class OutgoingMailController {
             documentOrganizationId = documentOrganizationService.create(documentOrganization).getId();
         }
         return documentOrganizationId;
+    }
+
+    @RequestMapping(DocUrls.OutgoingRegNumber)
+    @ResponseBody
+    public HashMap<String,Object> getRegNumber(
+            @RequestParam(name = "positionId") Integer positionId,
+            @RequestParam(name = "departmentId") Integer departmentId
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",0);
+            String regNumber = documentService.getOutDocNumber(positionId,departmentId,0);
+            if (regNumber !=null) {
+                result.put("status", 1);
+                result.put("regNumber", regNumber);
+            }
+        return result;
     }
 
 }

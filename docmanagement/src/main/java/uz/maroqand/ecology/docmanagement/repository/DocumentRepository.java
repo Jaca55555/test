@@ -69,4 +69,6 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
     Integer countAllExpiredDocsByType(Integer type, Date date);
 
     Page<Document> findAllByDocumentTypeIdInAndDeletedFalse(List<Integer> types, Pageable pageable);
+
+    Document findTop1ByDocumentTypeIdAndOrganizationIdOrderByIdDesc(Integer documentTypeId,Integer organizationId);
 }

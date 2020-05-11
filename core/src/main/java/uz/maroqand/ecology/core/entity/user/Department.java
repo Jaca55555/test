@@ -83,6 +83,9 @@ public class Department {
     @Column(name = "code")
     private String prefixCode;
 
+    @Column(name = "doc_index")
+    private String docIndex;
+
     @Override
     public String toString() {
         return "{tags:" + id + ", text:\'" + name + "\', nodes:"

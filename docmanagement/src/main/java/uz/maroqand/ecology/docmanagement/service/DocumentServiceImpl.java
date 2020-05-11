@@ -7,21 +7,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Department;
+import uz.maroqand.ecology.core.entity.user.Position;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.*;
 
 /**
@@ -34,17 +36,26 @@ public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
     private final JournalService journalService;
     private final DocumentSubService documentSubService;
+    private final PositionService positionService;
+    private final DepartmentService departmentService;
 
     @Autowired
-    public DocumentServiceImpl(DocumentRepository documentRepository, JournalService journalService, DocumentSubService documentSubService) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, JournalService journalService, DocumentSubService documentSubService, PositionService positionService, DepartmentService departmentService) {
         this.documentRepository = documentRepository;
         this.journalService = journalService;
         this.documentSubService = documentSubService;
+        this.positionService = positionService;
+        this.departmentService = departmentService;
     }
 
     @Override
     public Document getById(Integer id) {
         return documentRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public Document getLastOutDocument(Integer organizationId) {
+        return documentRepository.findTop1ByDocumentTypeIdAndOrganizationIdOrderByIdDesc(DocumentTypeEnum.OutgoingDocuments.getId(),organizationId);
     }
 
     @Override
@@ -141,6 +152,36 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.save(document);
     }
 
+    @Override
+    public String getOutDocNumber(Integer positionId, Integer departmentId,Integer saveOrNot) {
+        if (positionId==null || positionId==null ) return null;
+        Position position = positionService.getById(positionId);
+        Department department = departmentService.getById(departmentId);
+        String outDocNumber="";
+        outDocNumber+=position.getDocIndex()!=null?position.getDocIndex()+"-":"";
+        outDocNumber+=department.getDocIndex()!=null?department.getDocIndex()+"-":"";
+        Integer lastDocNumber=1;
+        System.out.println(position.getLastDocNumber());
+        if (position.getLastDocNumber()!=null){
+            lastDocNumber=1+position.getLastDocNumber();
+        }
+            outDocNumber+=""+lastDocNumber+"-";
+
+        if (saveOrNot==1){
+            position.setLastDocNumber(lastDocNumber);
+            positionService.save(position);
+        }
+        Document document = getLastOutDocument(department.getOrganizationId());
+        System.out.println("documentId=" + document.getId());
+        lastDocNumber=1;
+        if (document!=null && document.getDocOutLastNumber()!=null){
+            lastDocNumber = document.getDocOutLastNumber()+1;
+        }
+        System.out.println("lastDocNumber=" + lastDocNumber);
+        outDocNumber+=""+lastDocNumber;
+        return outDocNumber;
+    }
+
     public Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user, Integer positionIdForPrefix, String departmentPrefixCode){
 
         document.setOrganizationId(user.getOrganizationId());
@@ -152,9 +193,9 @@ public class DocumentServiceImpl implements DocumentService {
         }else{
             document.setSpecialControll(Boolean.FALSE);
         }
-        String chiefPrefix = String.format("%02d", positionIdForPrefix);
-        String journalSuffix = journalService.getRegistrationNumberByJournalId(document.getJournalId());
-        document.setRegistrationNumber(String.format("%s-%s-%s", chiefPrefix, departmentPrefixCode, journalSuffix));
+//        String chiefPrefix = String.format("%02d", positionIdForPrefix);
+//        String journalSuffix = journalService.getRegistrationNumberByJournalId(document.getJournalId());
+//        document.setRegistrationNumber(String.format("%s-%s-%s", chiefPrefix, departmentPrefixCode, journalSuffix));
 
         document.setRegistrationDate(new Date());
 

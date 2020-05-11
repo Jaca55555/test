@@ -150,6 +150,7 @@ public class DepartmentController {
         department1.setCreatedAt(new Date());
         department1.setCreatedById(user.getId());
         department1.setPrefixCode(department.getPrefixCode());
+        department1.setDocIndex(department.getDocIndex());
         department1 = departmentService.save(department1);
         String after="";
         try {
@@ -197,6 +198,7 @@ public class DepartmentController {
         oldDepartment.setNameEn(department.getNameEn());
         oldDepartment.setNameRu(department.getNameRu());
         oldDepartment.setPrefixCode(department.getPrefixCode());
+        oldDepartment.setDocIndex(department.getDocIndex());
         oldDepartment.setUpdatedAt(new Date());
         oldDepartment.setUpdatedById(user.getId());
         oldDepartment = departmentService.save(oldDepartment);

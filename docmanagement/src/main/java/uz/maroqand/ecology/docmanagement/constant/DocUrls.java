@@ -220,6 +220,7 @@ public class DocUrls {
     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
     public static final String OutgoingMailView = OutgoingMail + "/view";
     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
+    public static final String OutgoingRegNumber = OutgoingMail + "/regNumber";
     private static final String OutgoingMailFile = OutgoingMail + "/file";
     public static final String OutgoingMailFileUpload = OutgoingMailFile + "/upload";
     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
