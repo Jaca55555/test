@@ -266,12 +266,7 @@ public class IncomingController {
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);}
 
-        if (Boolean.TRUE.equals(document.getInsidePurpose())) {
-            User user = userService.getCurrentUserFromContext();
-            if (user.getId().equals(task.getPerformerId())) {
-                document.setInsidePurpose(Boolean.FALSE);
-            }
-        }
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         List<TaskSubStatus> statuses = new LinkedList<>();

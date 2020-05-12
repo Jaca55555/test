@@ -318,6 +318,7 @@ public class IncomingRegistrationController {
         model.addAttribute("userList", userList);
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("taskContentList", documentTaskContentService.getTaskContentList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
@@ -343,7 +344,7 @@ public class IncomingRegistrationController {
             @RequestParam(name = "performerPhone", required = false) String performerPhone,
             @RequestParam(name = "managerId") Integer managerId,
             @RequestParam(name = "controlId", required = false) Integer controlId,
-            @RequestParam(name = "insidePurpose", required = false) Boolean insidePurpose,
+            @RequestParam(name = "insidePurpose", required = false ,defaultValue = "") Boolean insidePurpose,
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
@@ -491,6 +492,7 @@ public class IncomingRegistrationController {
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("documentTaskContent",documentTaskContentService.getTaskContentList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
 

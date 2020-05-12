@@ -258,6 +258,7 @@
 
     <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
     <script th:src="@{/static/datatables/datatables.min.js}"></script>
+    <script th:src="@{/static/datatables/buttons.print.min.js}"></script>
 
     <script th:inline="javascript">
         var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}]];
@@ -322,7 +323,14 @@
                 pageLength: 25,
                 lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
-                dom: 'lrtip',
+                dom:'lrtip',
+                dom: 'Bfrtip',
+                buttons: [
+
+                'copy', 'csv', 'excel', 'pdf','print'
+
+                ],
+
                 ajax : function (dataToSend, callback, settings) {
                     let api = this.api();
 

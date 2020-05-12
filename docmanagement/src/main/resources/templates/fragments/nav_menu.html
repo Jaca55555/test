@@ -19,7 +19,7 @@
                     </a>
                 </li>
                 <li class="nav-item pcoded-menu-caption">
-                    <label>Хужжатлар</label>
+                    <label th:text="#{sys_document}">Хужжатлар</label>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}">
@@ -93,7 +93,7 @@
                 </li>
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <label>Девонхона</label>
+                    <label th:text="#{sys_office}">Девонхона</label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="padding: 5px 15px">
@@ -126,7 +126,7 @@
                     </a>
                 </li>
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <label>Руйхатга олиш</label>
+                    <label th:text="#{sys_reg}">Руйхатга олиш</label>
                 </li>
 
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
