@@ -27,6 +27,8 @@ public interface ClientService {
 
     Client saveForeignIndividual(ForeignIndividualDto foreignIndividualDto, User user, String message);
 
+    Client saveForEdit(Client client);
+
     Client updateGnk(Client client);
 
     Page<Client> findFiltered(

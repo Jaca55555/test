@@ -71,6 +71,14 @@
                                                                 <th class="text-right"><span th:text="#{mntr_expertise_department.organization}"></span>:</th>
                                                                 <td class="text-left"><span th:if="*{organizationId!=null}" th:text="${@helperService.getOrganizationName(department.organizationId,#locale)}"></span></td>
                                                             </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_department.prefix_code}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:text="${department.prefixCode}"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 50%" class="text-right"><span th:text="#{mntr_department.doc_index}"></span>:</th>
+                                                                <td style="width: 50%" class="text-left"><span th:text="${department.docIndex}"></span></td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -120,6 +128,16 @@
                                                                                     <td class="text-right"><span th:text="#{mntr_department.organization}"></span>:</td>
                                                                                     <td class="text-center"><span th:if="${elem['before']!=null and elem['before'].organizationId!=null}" th:text="${@helperService.getOrganizationName(elem['before'].organizationId,#locale)}"></span></td>
                                                                                     <td class="text-center"><span th:if="${elem['after'].organizationId!=null}" th:text="${@helperService.getOrganizationName(elem['after'].organizationId,#locale)}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_department.prefix_code}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].prefixCode}"></span></td>
+                                                                                    <td class="text-center"><span th:text="${elem['after'].prefixCode}"></span></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="text-right"><span th:text="#{mntr_department.doc_index}"></span>:</td>
+                                                                                    <td class="text-center"><span th:if="${elem['before']!=null}" th:text="${elem['before'].docIndex}"></span></td>
+                                                                                    <td class="text-center"><span th:text="${elem['after'].docIndex}"></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

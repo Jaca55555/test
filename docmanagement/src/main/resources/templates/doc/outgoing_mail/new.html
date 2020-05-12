@@ -52,39 +52,41 @@
                 </div>
             </div>
             <div class="card-block">
-                <form enctype="multipart/form-data" th:action="@{/doc/outgoing_mail/new}" id="document_form" th:object="${document}" method="post">
+                <form enctype="multipart/form-data" th:action="@{/doc/outgoing_mail/new}" id="document_form" th:object="${document}" method="post" data-parsley-validate="">
                 <div class="row">
                     <!-- journal, document_view, communication tools, organization_name fields start -->
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:for="${#ids.next('journalId')}"
                                th:text="#{doc.outgoing_reg_journal}">Чикувчи хатларни руйхатга олиш журнали</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{journalId}" required>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{journalId}" required data-parsley-errors-container="#journalIdError">
                             <option value="" th:text="#{doc.outgoing_mail.journal_select}"></option>
                             <option th:each="journal: ${journals}" th:value="${journal.id}" th:text="${journal.name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-6 p0" id="journalIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_outgoing.doc_view}">хужат тури</label>
-                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:field="*{documentViewId}" required>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" th:field="*{documentViewId}" required data-parsley-errors-container="#documentViewError">
                             <option value="">Мароканд умумий хатлар</option>
                             <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-6 p0" id="documentViewError"></div> </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_outgoing.communication_tool}">Хатни жунатиш усули(почта оркали, e-mail, факс, етказиб бериш ва х.к.)</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1"
-                                aria-hidden="true" th:name="communication_tool_id" required>
+                                aria-hidden="true" th:name="communication_tool_id" required data-parsley-errors-container="#communication_toolError">
                             <option th:value="${communication_tool_id}" th:text="${communication_tool_name}"></option>
                             <option th:each="communicationTool: ${communicationTools}" th:value="${communicationTool.id}" th:text="${communicationTool.name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-6 p0" id="communication_toolError"></div> </div>
                     </div>
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
-                        <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required">
+                        <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">
                             <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
                         </select>
+                        <div class="row"> <div class="col-md-6 p0" id="document_organizationError"></div> </div>
                     </div>
                    <!-- journal, document_view, communication tools, organization_name fields end -->
 
@@ -98,25 +100,27 @@
 
                     <div class="row">
                         <div class="col-sm-6 form-group " >
-                        <label for="name" class="control-label" th:text="#{doc_outgoing.department}">Хат жунатаётган булим номи</label>
+                        <label class="control-label" th:text="#{doc_outgoing.department}">Хат жунатаётган булим номи</label>
                             <select class="form-control singleSelect" tabindex="-1"
-                                    aria-hidden="true" th:field="*{departmentId}" required>
+                                    aria-hidden="true" th:field="*{departmentId}" required id="departmentId" data-parsley-errors-container="#departmentError">
                                 <option value="" th:text="#{department_id_select}">department select</option>
                                 <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.prefixCode + ' ' + department.name}"></option>
                             </select>
-                    </div>
+                            <div class="row"> <div class="col-md-6 p0" id="departmentError"></div> </div>
+                        </div>
                     <div class="col-md-6"></div>
                         <div class="col-sm-6 form-group" >
-                            <label for="name" class="control-label" th:text="#{doc_outgoing.performer}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
-                            <select class="form-control singleSelect" th:field="*{performerId}"  required>
+                            <label  class="control-label" th:text="#{doc_outgoing.performer}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
+                            <select class="form-control singleSelect" th:field="*{performerId}"  required data-parsley-errors-container="#performerError">
                                 <option value=""></option>
                                 <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.fullName}"></option>
                             </select>
+                            <div class="row"> <div class="col-md-6 p0" id="performerError"></div> </div>
                         </div>
 
                     <div class="col-md-6"></div>
                         <div class="form-group col-md-6 col-sm-6">
-                            <label for="subRegionId" class="control-label"  th:text="#{doc_outgoing.additional_document}" >Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
+                            <label for="additional_document_id" class="control-label"  th:text="#{doc_outgoing.additional_document}" >Ушбу хатга жавоб тарикасида юборилмокда(агар мавжуд боса)</label>
                             <div class="col-sm-12 p0">
                                 <select class="form-control singleSelect select2-hidden-accessible"
                                         tabindex="-1" aria-hidden="true" id="additional_document_id" th:field="*{additionalDocumentId}">
@@ -128,10 +132,11 @@
                         <div class="col-md-6"></div>
                         <div class="col-sm-6 form-group" >
                             <label for="position" class="control-label" th:text="#{doc_outgoing.from_whom}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
-                            <select id="position" class="form-control singleSelect" name="position_id" required>
+                            <select id="position" class="form-control singleSelect" name="position_id" required  data-parsley-errors-container="#positionError">
                                 <option value=""></option>
                                 <option th:each="position: ${positions}" th:value="${position.id}" th:text="${position.id + ' '+ position.name}"></option>
                             </select>
+                            <div class="row"> <div class="col-md-6 p0" id="positionError"></div> </div>
                         </div>
                 </div>
                     <div class=" m20 p20" id="borderBox" style="margin-left:15px">
@@ -145,6 +150,16 @@
                             <span th:text="#{doc_incoming.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
                         </div>
                     </div>
+                    <div class=" col-sm-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly="readonly" required="required" id="doc_number" data-parsley-errors-container="#doc_numberError">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-warning pl-5 pr-5" id="gener_doc_number"><i class="feather icon-refresh-cw"></i><span th:text="#{sys_gener}">Generation</span></button>
+                            </div>
+                        </div>
+                        <div class="row"> <div class="col-md-6 p0" id="doc_numberError"></div> </div>
+                    </div>
+
                 <!-- files input start -->
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border" th:text="#{doc_outgoing.files}">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
@@ -227,6 +242,8 @@
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
 <script th:inline="javascript">
     var sys_select = [[#{sys_select}]];
@@ -264,6 +281,42 @@
             }
         });
     });
+
+    $('#department_id').on('change',function () {
+        $('#doc_number').val('');
+    })
+    $('#position').on('change',function () {
+        $('#doc_number').val('');
+    })
+    $('#gener_doc_number').on('click',function () {
+        console.log("erwerwerwere")
+        $('#departmentId').parsley().validate();
+        $('#position').parsley().validate();
+        if ($('#departmentId').parsley().isValid() && $('#position').parsley().isValid()) {
+
+            let csrf = $('#global_csrf').val();
+            let fd = new FormData();
+            fd.append("positionId",$('#position').val());
+            fd.append("departmentId",$('#departmentId').val());
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingRegNumber}]],
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    console.log("result"+result.status);
+                    if (result.status===1){
+                        console.log("result"+result.regNumber);
+                        $('#doc_number').val(result.regNumber);
+                    }
+                },
+            });
+        }
+    });
+
+
 
     function downloadFileFunction(id) {
         window.open(`/doc/outgoing_mail/file/download?id=${id}`);

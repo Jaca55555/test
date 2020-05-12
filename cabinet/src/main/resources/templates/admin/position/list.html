@@ -45,6 +45,8 @@
                                                     <th th:utext="#{mgmt_position.id}"></th>
                                                     <th th:utext="#{mgmt_position.name}"></th>
                                                     <th th:utext="#{mgmt_position.nameRu}"></th>
+                                                    <th th:utext="#{mgmt_position.organizationId}"></th>
+                                                    <th th:utext="#{mgmt_position.docIndex}"></th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -53,6 +55,8 @@
                                                     <th th:utext="${position.id}" style="width: 20%;"></th>
                                                     <th th:utext="${position.name}" ></th>
                                                     <th th:utext="${position.nameRu}" ></th>
+                                                    <th th:utext="${position.organizationId!=null?@helperService.getOrganizationName(position.organizationId,#locale):''}" ></th>
+                                                    <th th:utext="${position.docIndex}" ></th>
                                                     <td class="text-center">
                                                         <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" href="#" th:onclick="'positionEdit('+${position.id}+')'"><i class="feather icon-edit" style="margin: 0px"></i></a>
                                                     </td>
@@ -75,7 +79,7 @@
 <!-- [ Main Content ] end -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_position" style="display: none" id="modal"></button>
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
-<object th:include="mgmt/position/position_add :: position_add" th:remove="tag" ></object>
+<object th:include="admin/position/position_add :: position_add" th:remove="tag" ></object>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
@@ -93,7 +97,7 @@
         $.get(getPositionLink + "?id=" + id,function (data) {
             $('#modal').click();
             console.log(data);
-            editPosition(data.id,data.name,data.nameRu);
+            editPosition(data.id,data.name,data.nameRu,data.organizationId,data.docIndex);
         });
     }
 

@@ -61,8 +61,10 @@
                                                 <span th:text="#{sys_print}"> print</span>
                                             </button>
                                         </div>
-                                        <div class=" page size-A4 text-center" style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}">
-                                            <object th:include="expertise/reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
+                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}">
+                                            <object th:include="expertise/fragment/conclusion_view :: conclusion" th:remove="tag"></object>
+
+<!--                                            <object th:include="expertise/reg/fragments/conclusion :: conclusion" th:remove="tag"></object>-->
                                         </div>
                                     </div>
                                 </div>

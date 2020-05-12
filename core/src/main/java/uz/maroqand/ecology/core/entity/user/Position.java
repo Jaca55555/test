@@ -61,6 +61,10 @@ public class Position {
     @Column(name = "updated_by_id")
     private Integer updatedById;
 
+    private Integer lastDocNumber;
+
+    private String docIndex;
+
     public String getNameTranslation(String locale) {
         switch (locale) {
             case "ru":

@@ -460,8 +460,9 @@ public class IncomingController {
                 documentTaskService.update(documentTask);
         }
 
-
-        if(httpServletRequest.getRequestURI().equals(DocUrls.IncomingView)){
+        System.out.println("httpServletRequest.getRequestURI()==" + httpServletRequest.getRequestURI());
+        //todo to'g'rilash kerak
+        if(documentTask.getDocument().getDocumentTypeId()==DocumentTypeEnum.IncomingDocuments.getId()){
             return "redirect:" + DocUrls.IncomingView + "?id=" + taskSub.getId();
         }else {
             return "redirect:" + DocUrls.InnerView + "?id=" + taskSub.getId();

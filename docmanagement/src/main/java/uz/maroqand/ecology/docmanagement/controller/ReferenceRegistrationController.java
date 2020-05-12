@@ -254,7 +254,10 @@ public class ReferenceRegistrationController {
 
         model.addAttribute("document", new Document());
         model.addAttribute("documentSub", new DocumentSub());
+        User user = userService.getCurrentUserFromContext();
+        List<User> userList = userService.getEmployeesForForwarding(user.getOrganizationId());
 
+        model.addAttribute("userList", userList);
 //        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
@@ -288,7 +291,9 @@ public class ReferenceRegistrationController {
             @RequestParam(name = "insidePurpose", required = false) Boolean insidePurpose,
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
-            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds
+            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
+            @RequestBody MultiValueMap<String, String> formData
+
     ) {
         User user = userService.getCurrentUserFromContext();
         Set<File> files = new HashSet<>();
@@ -343,11 +348,62 @@ public class ReferenceRegistrationController {
         documentSub.setAddress(address);
         documentSubService.create(document.getId(), documentSub, user);
 
-        if(httpServletRequest.getRequestURI().equals(DocUrls.ReferenceRegistrationNewTask)){
+        DocumentTask documentTask = null;
+//        DocumentTask documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),content,DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat),document.getManagerId(),user.getId());
+        Integer userId = null;
+        Integer performerType = null;
+        Date dueDate = null;
+        String descriptionTextareaTask = null;
+        Date taskDocRegDateStr = null;
+        Map<String,String> map = formData.toSingleValueMap();
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            String value= mapEntry.getValue().replaceAll(" ","");
+            if (tagName.equals("descriptionTextareaTask")){
+                descriptionTextareaTask = value;
+            }
+            if (tagName.equals("taskDocRegDateStr")){
+                taskDocRegDateStr = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+            }
+            if (tagName.equals("taskNumber")){
+                documentTask = taskService.createNewTask(document,TaskStatus.New.getId(),descriptionTextareaTask,taskDocRegDateStr,document.getManagerId(),user.getId());
+                descriptionTextareaTask = "";
+                taskDocRegDateStr = null;
+            }
+            if (tagName.equals("user")){
+                userId=Integer.parseInt(value);
+            }
+            if (tagName.equals("performer")){
+                performerType = Integer.parseInt(value);
+            }
+
+            if (tagName.equals("dueDateStr")){
+                dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
+                if (userId!=null && performerType!=null && documentTask!=null){
+                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if (performerType==TaskSubType.Performer.getId()){
+                        documentTask.setPerformerId(userId);
+                        taskService.update(documentTask);
+                    }
+                    userId = null;
+                    performerType = null;
+                    dueDate = null;
+                }
+            }
+        }
+        if(!document.getStatus().equals(DocumentStatus.InProgress)){
+            document.setStatus(DocumentStatus.InProgress);
+            documentService.update(document);
+        }
+        return "redirect:" + DocUrls.ReferenceRegistrationList;
+
+       /* if(httpServletRequest.getRequestURI().equals(DocUrls.ReferenceRegistrationNewTask)){
             return "redirect:" + DocUrls.ReferenceRegistrationView + "?id=" + document.getId();
         }else {
             return "redirect:" + DocUrls.ReferenceRegistrationList;
-        }
+        }*/
     }
 
     @RequestMapping(DocUrls.ReferenceRegistrationEdit)

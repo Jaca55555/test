@@ -15,6 +15,7 @@ import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.user.Position;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
@@ -36,19 +37,22 @@ public class PositionController {
     private final TableHistoryService tableHistoryService;
     private final ObjectMapper objectMapper;
     private final UserAdditionalService userAdditionalService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public PositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService) {
+    public PositionController(PositionService positionService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, OrganizationService organizationService) {
         this.positionService = positionService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
         this.objectMapper = objectMapper;
         this.userAdditionalService = userAdditionalService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(AdminUrls.PositionList)
     public String getUserListPage(Model model) {
         model.addAttribute("positionList", positionService.getAll());
+        model.addAttribute("organizationList", organizationService.getList());
         model.addAttribute("create_url", AdminUrls.PositionCreate);
         model.addAttribute("edit_url", AdminUrls.PositionUpdate);
         model.addAttribute("get_url", AdminUrls.PositionGet);
@@ -58,12 +62,16 @@ public class PositionController {
     @RequestMapping(AdminUrls.PositionCreate)
     public String positionCreate(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "nameRu") String nameRu
+            @RequestParam(name = "nameRu") String nameRu,
+            @RequestParam(name = "organizationId") Integer organizationId,
+            @RequestParam(name = "docIndex") String docIndex
     ){
         User user = userService.getCurrentUserFromContext();
         Position position = new Position();
         position.setName(name);
         position.setNameRu(nameRu);
+        position.setOrganizationId(organizationId);
+        position.setDocIndex(docIndex);
         position.setDeleted(Boolean.FALSE);
         position = positionService.save(position);
         String after = "";
@@ -100,7 +108,9 @@ public class PositionController {
     public String positionUpdate(
         @RequestParam(name = "id") Integer id,
         @RequestParam(name = "name") String name,
-        @RequestParam(name = "nameRu") String nameRu
+        @RequestParam(name = "nameRu") String nameRu,
+        @RequestParam(name = "organizationId") Integer organizationId,
+        @RequestParam(name = "docIndex") String docIndex
     ){
         User user = userService.getCurrentUserFromContext();
         Position position = positionService.getById(id);
@@ -117,6 +127,8 @@ public class PositionController {
 
         position.setName(name);
         position.setNameRu(nameRu);
+        position.setOrganizationId(organizationId);
+        position.setDocIndex(docIndex);
         position = positionService.save(position);
         try {
             after = objectMapper.writeValueAsString(position);
