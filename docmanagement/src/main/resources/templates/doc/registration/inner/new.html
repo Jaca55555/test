@@ -53,7 +53,9 @@
             <!--/*@thymesVar id="doc" type="uz.maroqand.ecology.docmanagement.entity.Document"*/-->
             <form action="" th:object="${document}" th:method="post" class="card-block" data-parsley-validate="" id="doc_task">
                 <div th:if="${document.id != null}">
-                    <input type="hidden" th:field="*{id}" th:value="*{id}"/>
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" name="docSubId" th:value="${documentSub.id}"/>
+                    <input type="hidden" th:field="${documentSub.documentId}" th:value="${documentSub.documentId}"/>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-lg-6 form-group">
@@ -247,20 +249,21 @@
                     </div>
                 </div>
                 <input type="hidden" id="global_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            </form>
 
+            </form>
         </div>
     </div>
 </div>
 
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
-<script src="/static/doc/js/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript" src="/static/doc/assets/plugins/jquery-ui/js/jquery-ui.js"></script>
-<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
-
+<script type="text/javascript" src="/static/doc/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+<script src="/static/doc/js/jquery.inputmask.bundle.min.js"></script>
 <script  th:inline="javascript">
 
     var sys_select = [[#{sys_select}]];
@@ -348,10 +351,10 @@
             $('#addFile').val('');
         });
 
-        $('form').on('submit', function () {
+       /* $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
             $(this).submit();
-        });
+        });*/
 
         $('#documentOrganizationId').select2({
             ajax: {
@@ -382,17 +385,6 @@
 
         $('#percentage-num').html(progress);
     }
-
-    /*function fileNameSubString(fileName) {
-        var lastIndex = fileName.lastIndexOf('.');
-        var subStringName = fileName.substring(0,lastIndex);
-        var getExtension = fileName.substring(lastIndex,fileName.length);
-        if (subStringName.length>10){
-            subStringName = subStringName.substring(0,9)+'..';
-        }
-        subStringName += getExtension;
-        return subStringName;
-    }*/
 
     function detectExtensionAndDisplay(data){
         console.log(data);
@@ -465,7 +457,7 @@
         fd.append("file", files[0]);
         fd.append("_csrf", csrf);
         $.ajax({
-            url: "/doc/outgoing_mail/file/upload",
+            url: "/doc/file_upload",
             type: 'post',
             data: fd,
             processData: false,
@@ -528,6 +520,7 @@
         let submitFor=true;
         let allTaskCount=0;
         for (i=1;i<=taskNumber; i++) {
+            console.log("taskSubmitid"+i);
             if ($('#data-table_'+i).html()!==undefined){
                 if ($('#data-table_'+i+' tr').length==0){
                     $('#addUsers_'+i).css('border','1px solid red');

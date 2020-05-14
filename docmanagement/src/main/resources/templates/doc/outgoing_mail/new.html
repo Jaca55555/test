@@ -349,7 +349,7 @@
             fd.append("file", files);
             fd.append("_csrf", csrf);
             $.ajax({
-                url: "/doc/outgoing_mail/file/upload",
+                url: "/doc/file_upload",
                 type: 'post',
                 data: fd,
                 processData: false,
@@ -472,7 +472,7 @@
         fd.append("file", files[0]);
         fd.append("_csrf", csrf);
         $.ajax({
-            url: "/doc/outgoing_mail/file/upload",
+            url: "/doc/file_upload",
             type: 'post',
             data: fd,
             processData: false,
