@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 
+import java.util.Set;
+
 /**
  * Created by Namazov Jamshid
  * email: <jamwid07@mail.ru>
@@ -34,7 +36,7 @@ public class DocFilterDTO {
     private Integer coExecutorStatus;
     private String replies;
     private DocumentTypeEnum documentTypeEnum;
-    private DocumentStatus documentStatus;
+    private Set<DocumentStatus> documentStatuses;
 
     public String getContent() {
         return StringUtils.trimToNull(content);

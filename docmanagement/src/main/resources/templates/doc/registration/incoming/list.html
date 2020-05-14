@@ -254,29 +254,18 @@
                                 <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                     <thead>
                                     <tr role="row">
-                                        <th>ID</th>
-                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0" th:text="#{doc.doc_type_type}"> </th>
+                                        <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-10" colspan="1" rowspan="1" tabindex="0">
+                                            <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами </span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
+                                        <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
+                                            <span th:text="#{sys.registrationDate}">Регистрация санаси</span>
                                         </th>
-                                        <th aria-controls="responsive-table-model" style="width:300px;max-width: 300px;min-width: 200px;" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
-                                        </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
-                                        </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
-                                        </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
-                                        </th>
-                                        <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
-                                        </th>
-                                        <th></th>
+                                        <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.content}"> </th>
+                                        <th aria-controls="responsive-table-model" class="sorting w-15" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.createdAt}"> </th>
+                                        <th aria-controls="responsive-table-model" class="sorting w-15" colspan="1" rowspan="1" tabindex="0" th:text="#{doc_incoming.managerId}"> </th>
+                                        <th aria-controls="responsive-table-model" class="sorting w-15" colspan="1" rowspan="1" tabindex="0" th:text="#{sys_document_status}"> </th>
+                                        <th> </th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -326,12 +315,25 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        // html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
-        html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        // html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 
     function renderStatusColumn(data, type, row, meta) {
+        var html = '';
+        var status=row[7];
+        switch (status) {
+            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-sm">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-sm">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-sm">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-success btn-sm">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light btn-sm">'+row[6]+'</button>';return html;
+        }
+        return html;
+    }
+
+    /*function renderStatusColumn(data, type, row, meta) {
         var html = '';
         var status=row[8];
         switch (status) {
@@ -344,7 +346,7 @@
             default: html='<button type="button" class="btn-rounded btn btn-block btn-light  btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
-    }
+    }*/
 
     function clearFilter() {
         $('.singleSelect').val(null).select2();
@@ -408,43 +410,30 @@
                 });
             },
             columns: [
-                {data: 0, name: 'id', visible: false},
-                {data: 1, name: 'document.registrationNumber',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'">' + row[1]+'</a>';
-                        return html;
+                {data: 8, name: 'documentTypeId',className: "w-10 text-center", visible: false},
+                {data: 1, name: 'registrationNumber',
+                    render: function ( data, type, row, meta ) {
+                        return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[1]+'</a>'
                     },
-                    className: "text-left"
+                    className: "w-10 text-center"
                 },
-                {data: 2, name: 'document.registrationDate',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
-                        return html;
-                    },
-                    className: "text-left"
+                {data: 2, name: 'registrationDate',
+                    render: function ( data, type, row, meta ) {return '<a href="'+viewLink + '?id=' + row[0]+'">'+row[2]+'</a>'},
+                    className: "w-10 text-center"
                 },
-                {data: 3, name: 'document.content',className: "text-left"},
-                {data: 4, name: 'createdAt',className: "text-left"},
-                {data: 5, name: 'dueDate',
-                    render: function (data, type, row, meta) {
-                        var html = row[5] + ' <br/>';
-                        return html;
-                    },
-                    className: "w-10 text-center"},
-                {render: renderStatusColumn, name: 'status',className: "text-center"},
-                {data: 7, name: 'content',className: "text-justify"},
-                {render: renderActionsColumn, orderable: false,className: "text-center"}
+                {data: 3, name: 'content',
+                    render: function ( data, type, row, meta ) {return '<span href="'+viewLink + '?id=' + row[0]+'">'+row[3]+'</span>'},
+                    className: "w-20 text-center"
+                },
+                {data: 4, name: 'createdAt',className: "w-15 text-center"},
+                {data: 5, name: 'managerId',className: "w-15 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-15 text-center"},
+                {render: renderActionsColumn, orderable: false, className: "text-center"}
             ],
             rowCallback: function (row, data) {
                 $(row).on('click', function () {
                     location.href = $(row).children()[0].firstElementChild.href
                 })
-                // $(row).children()[0].classList += ` ${data[9][0]}`
-                // $(row).children()[1].classList += ` ${data[9][0]}`
-                // $(row).children()[3].classList += ` ${data[9][0]}`
-                // $(row).children()[4].classList += ` ${data[9][0]}`
             },
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

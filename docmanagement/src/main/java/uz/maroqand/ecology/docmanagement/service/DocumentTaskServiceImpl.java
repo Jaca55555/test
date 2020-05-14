@@ -384,9 +384,10 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         String controls = "";
         for (DocumentTaskSub documentTaskSub:documentTaskSubList){
             if (documentTaskSub.getReceiverId()!=null){
-                performers+=documentTaskSub.getReceiver().getShortName()+",";
                 if (documentTaskSub.getType().equals(TaskSubType.Control.getId())){
                     controls+=documentTaskSub.getReceiver().getShortName()+",";
+                }else{
+                    performers+=documentTaskSub.getReceiver().getShortName()+",";
                 }
             }
 

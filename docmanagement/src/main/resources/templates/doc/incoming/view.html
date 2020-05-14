@@ -755,7 +755,7 @@
         fd.append("file", files);
         fd.append("_csrf", csrf);
         $.ajax({
-            url: "doc/file_upload",
+            url: "/doc/file_upload",
             type: 'post',
             data: fd,
             processData: false,
