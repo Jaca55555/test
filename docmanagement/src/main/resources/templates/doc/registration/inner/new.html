@@ -108,26 +108,22 @@
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border" th:text="#{sys_document.files}">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20" id="file-container">
-                    <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
-                    </select>
-                    <div class="file-block" th:each="file: ${document.contentFiles}">
-                        <div class="text-right"><span class='fas fa-trash-alt'></span></div>
-                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
-                        </div>
-                        <div class="text-center">
-                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}">
-                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="file-block flex-center file-button">
-                        <div class="text-center file-icon-container align-self-center color-gray">
-                            <input type="file" class="d-none" id="addFile" name="addFile">
-                            <span class="fas fa-plus" id="plus-icon"></span>
-                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
+
+                    <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                        <div  class="text-center file-icon-container align-self-center color-gray">
+                            <span class="fas fa-plus" id="addFileButton"></span>
+                            <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
+                            <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
+
+                </div>
+                <div id="file_ids" class="d-none">
+                    <input type="text" name="file_ids" value="">
+                </div>
+                <div id="addFileDiv">
+                    <input type="file" class="d-none" id="addFile2" name="files">
                 </div>
                 <div class="border-danger m20 p20">
                     <div class="checkbox checkbox-fill d-inline checkbox-danger">
@@ -264,7 +260,9 @@
 <script  th:inline="javascript">
 
     var sys_select = [[#{sys_select}]];
-
+    function clickPlus() {
+        $('#addFile2').click();
+    }
     $(document).ready(function () {
 
 
@@ -430,11 +428,24 @@
                 extension = '';
                 color = 'color-gray';
         }
+        function downloadFileFunction(id) {
+            window.open(`/doc/inner/file/download?id=${id}`);
+        }
+        function deleteFunc(id){
+            fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+            $('#addFile2').remove();
+            document.querySelector(`#file_block_${id}`).remove();
+            document.querySelector(`#input_file_id_${id}`).remove();
+            $('#addFileDiv').append(`
+             <input type="file" class="d-none" id="addFile2" name="files">
+        `);
+            hearInputClickFunction();
+        }
         $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
         $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
-                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fas fa-file${extension}"></span>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fa fa-file${extension}"></span>
                         </div>
                         <div class="text-center">
                             <span>` + fileNameSubString(fileName) + `</span>

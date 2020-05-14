@@ -12,11 +12,11 @@ import java.util.Map;
  */
 public enum TaskSubStatus {
     Initial(0,"task_sub_status.initial","info"),//
-    New(1,"task_sub_status.new","warning"),//Кўрилмаган
+    New(1,"task_sub_status.new","primary"),//Кўрилмаган
 
-    InProgress(2,"task_sub_status.inProgress","primary"),//Жараёнда, (listda o'zfartirsa bo'ladi)
-    Waiting(3,"task_sub_status.waiting","primary"),//Маълумот сўралган, (listda o'zfartirsa bo'ladi)
-    Agreement(4,"task_sub_status.agreement","primary"),//Келишув жараёнида, (listda o'zfartirsa bo'ladi)
+    InProgress(2,"task_sub_status.inProgress","warning"),//Жараёнда, (listda o'zfartirsa bo'ladi)
+    Waiting(3,"task_sub_status.waiting","warning"),//Маълумот сўралган, (listda o'zfartirsa bo'ladi)
+    Agreement(4,"task_sub_status.agreement","warning"),//Келишув жараёнида, (listda o'zfartirsa bo'ladi)
 
     Checking(5,"task_sub_status.checking","secondary"),//Назоратдан чиқариш
     Complete(6,"task_sub_status.complete","success"),//Якунланган
