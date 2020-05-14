@@ -554,7 +554,7 @@
     });
 
     function description_content_task(id){
-        let text=$('#description_content_task_'+id).val();
+        let text=$('#description_content_task_'+id+" option:selected").text();
         $('#description_textarea_task_'+id).val(text);
     }
 
@@ -837,8 +837,8 @@
         let html='';
         let description_content = '';
         let userListOption = '';
-        $.each([[${descriptionList}]],function (item, value) {
-            description_content+=`<option  value="`+value.content+`" >`+value.content+`</option>`;
+        $.each([[${taskContentList}]],function (item, value) {
+            description_content+=`<option  value="`+value.id+`" >`+value.content+`</option>`;
         });
 
         $.each([[${userList}]],function (item, value) {
