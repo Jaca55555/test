@@ -42,7 +42,7 @@
         </div>
         <div class="flex-center">
             <a data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
+
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
             <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
         </div>
@@ -85,12 +85,18 @@
                 </div>
             </div>
 
+
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId==null}"></div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="*{additionalDocumentId!=null}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{sys_document.additionalDocumentId}">Ушбу хатга жавоб тариқасида:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><a href="#" th:text="*{@documentHelperService.getDocumentNumberAndDate(additionalDocumentId)}">TPP-4123/4565-MRQ</a></div>
             </div>
-
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.executeForm}">Hujjatni ijro etish shakli</span></div>
+                <div class="col-md-6 p0" style="float:right">
+                    <span th:text="${executeForm}"></span>
+                </div>
+            </div>
         </div>
         <hr class="m20-vertical">
         <div class="row">

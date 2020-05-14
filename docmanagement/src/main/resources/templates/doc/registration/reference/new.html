@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
     <link rel="stylesheet" href="/static/doc/assets/plugins/jquery-ui/css/jquery-ui.min.css">
-    <title th:text="#{doc_incoming.reg}">Murojaatlar Ro'yxati</title>
+    <title th:text="#{doc_appeal.reg}">Murojaatlar Ro'yxati</title>
     <style>
         #upload-gif{
             position: relative;
@@ -42,8 +42,8 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between">
-                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_incoming.reg}">Кирувчи хатни рўйхатга олиш</h5>
-                <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_incoming.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
+                <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_appeal.reg}">Кирувчи хатни рўйхатга олиш</h5>
+                <h5 class="mb-0" th:if="${document.id!=null}" th:text="#{doc_appeal.edit}">Кирувчи хатни тахрирлаш - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
                 <!--<div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
@@ -99,7 +99,7 @@
                         <div class="row"> <div class="col-md-4" id="documentOrganizationIdError"></div> </div>
                     </div>
                     <div class="col-sm-6 col-lg-6 form-group" th:object="${documentSub}">
-                        <label class="control-label" th:text="#{doc_incoming.address}" th:for="${#ids.next('address')}">Кирувчи хатларни руйхатга олиш раками</label>
+                        <label class="control-label" th:text="#{doc_appeal.address}" th:for="${#ids.next('address')}">Кирувчи хатларни руйхатга олиш раками</label>
                         <div class="col-sm-12 p0">
                             <input type="text" class="form-control" th:field="*{address}" required="required">
                         </div>
@@ -157,12 +157,12 @@
                 <div class="border-warning m20 p20">
                     <div class="checkbox checkbox-fill d-inline checkbox-danger">
                         <input type="checkbox" name="insidePurpose" id="checkbox-fill-1" th:checked="${document!=null && document.insidePurpose!=null && document.insidePurpose}">
-                        <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc_incoming.reg_inside_purpose}">Checked</span></label>
+                        <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc_appeal.reg_inside_purpose}">Checked</span></label>
                     </div>
                     <div class="m20-vertical">
                         <span th:text="#{sys_attention}">Диккат:</span>
                         <br>
-                        <span th:text="#{doc_incoming.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                        <span th:text="#{doc_appeal.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
                     </div>
                 </div>
 
@@ -208,7 +208,7 @@
                         <div class="col-xl-12 col-sm-12 pl-0 pl-15-mobile">
                             <div class=" parent-card">
                                 <div class="card-header flex-space-between align-center" style="height:65px;">
-                                    <h5><span th:text="#{doc_incoming.task_number}"></span>&nbsp;№ 1</h5>
+                                    <h5><span th:text="#{doc_appeal.task_number}"></span>&nbsp;№ 1</h5>
                                     <div class="flex-space-between p0 align-center column-2">
                                         <button type="button" class="btn-icon" onclick="deleteTask(1)">
                                             <i class="feather icon-trash-2 fs20 color-gray"></i>
@@ -219,7 +219,7 @@
                                     <div class="row">
                                         <div class="executor col-6 m10-vertical mt-0">
                                             <div class="form-group">
-                                                <label class="control-label" th:text="#{doc_incoming.doc_task_and_content}"></label>
+                                                <label class="control-label" th:text="#{doc_appeal.doc_task_and_content}"></label>
                                                 <select class="singleSelect col-sm-12 select2-hidden-accessible" id="description_content_task_1" onchange="description_content_task(1)">
                                                     <option value=""></option>
                                                     <option th:each="description : ${taskContentList}" th:value="${description.id}" th:text="${description.getNameTranslation(#locale)}"></option>
@@ -229,7 +229,7 @@
                                                 <textarea class="form-control" rows="4" name="descriptionTextareaTask_1" id="description_textarea_task_1" required="required" minlength="5"></textarea>
                                             </div>
                                             <div class="form-group" >
-                                                <label class="control-label" th:text="#{doc_incoming.task_deadline}">
+                                                <label class="control-label" th:text="#{doc_appeal.task_deadline}">
                                                     <span th:text="#{sys.doc_executeDate}">Ижро муддати</span>
                                                 </label>
                                                 <div class="col-sm-12 p0">
@@ -241,7 +241,7 @@
                                         <input type="hidden" name="taskNumber_1"/>
                                         <div class="executor col-6 m10-vertical">
                                             <div class="form-group">
-                                                <label class="control-label" th:text="#{doc_incoming.task_sub_receivers}"></label>
+                                                <label class="control-label" th:text="#{doc_appeal.task_sub_receivers}"></label>
                                                 <div class="table-responsive">
                                                     <table id="data-table_1" class="table table-hover dataTable" style="width: 100%">
                                                         <tbody>
@@ -271,7 +271,7 @@
                     <div class="flex-center w100 row-wrap">
                         <button type="button" onclick="addTaskForm()"  class="btn btn-primary m10-vertical m20-horizontal pr-5 pl-5" >
                             <i class="fas fa-plus-square"></i>
-                            <span th:text="#{doc_incoming.newTask}"></span>
+                            <span th:text="#{doc_appeal.newTask}"></span>
                         </button>
                         <button type="button" onclick="addTaskSubmit()" class="btn btn-success m10-vertical m20-horizontal pr-5 pl-5" th:text="#{sys_save}">Рўйхатга олиш</button>
                     </div>
@@ -520,7 +520,7 @@
         return submitFor;
     }
 
-    var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationUserName}]];
+    var url = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationUserName}]];
     function changeUserPerformer(id){
         console.log("changeUserPerformer id=" + id);
         $('#dateBegin_task_'+id).parsley().validate();
@@ -758,7 +758,7 @@
                         <div class="col-xl-12 col-sm-12 pl-0 pl-15-mobile">
                             <div class=" parent-card">
                                 <div class="card-header flex-space-between align-center" style="height:65px;">
-                                    <h5><span>`+[[#{doc_incoming.task_number}]]+`</span>&nbsp;№ `+taskNumber+`</h5>
+                                    <h5><span>`+[[#{doc_appeal.task_number}]]+`</span>&nbsp;№ `+taskNumber+`</h5>
                                     <div class="flex-space-between p0 align-center column-2">
                                         <button type="button" class="btn-icon" onclick="deleteTask(`+taskNumber+`)">
                                             <i class="feather icon-trash-2 fs20 color-gray"></i>
@@ -769,7 +769,7 @@
                                     <div class="row">
                                         <div class="executor col-6 m10-vertical mt-0">
                                             <div class="form-group">
-                                                <label class="control-label" >`+[[#{doc_incoming.doc_task_and_content}]]+`</label>
+                                                <label class="control-label" >`+[[#{doc_appeal.doc_task_and_content}]]+`</label>
                                                 <select class="singleSelect col-sm-12 select2-hidden-accessible" id="description_content_task_`+taskNumber+`" onchange="description_content_task(taskNumber)">
                                                     <option value=""></option>
                                                     `+description_content+`
@@ -780,7 +780,7 @@
                                             </div>
                                             <div class="form-group" >
                                                 <label class="control-label" >
-                                                    <span>`+[[#{doc_incoming.task_deadline}]]+`</span>
+                                                    <span>`+[[#{doc_appeal.task_deadline}]]+`</span>
                                                 </label>
                                                 <div class="col-sm-12 p0">
                                                     <input autocomplete="off" class="form-control datepicker date" id="dateBegin_task_`+taskNumber+`"  data-dtp="dtp_lq7TC" name="taskDocRegDateStr_`+taskNumber+`" required="required" />
@@ -791,7 +791,7 @@
                                         <input type="hidden" name="taskNumber_`+taskNumber+`"/>
                                         <div class="executor col-6 m10-vertical">
                                             <div class="form-group">
-                                                <label class="control-label" >`+[[#{doc_incoming.task_sub_receivers}]]+`</label>
+                                                <label class="control-label" >`+[[#{doc_appeal.task_sub_receivers}]]+`</label>
                                                 <div class="table-responsive">
                                                     <table id="data-table_`+taskNumber+`" class="table table-hover dataTable" style="width: 100%">
                                                         <tbody>

@@ -198,6 +198,7 @@ public class ChangePerformerController {
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("executeForm",document.getExecuteForm().getName());
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));

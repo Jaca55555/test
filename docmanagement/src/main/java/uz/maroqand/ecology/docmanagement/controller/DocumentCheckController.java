@@ -160,6 +160,7 @@ public class DocumentCheckController {
         taskStatuses.add(TaskStatus.Rejected);
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("executeForm",document.getExecuteForm().getName());
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("task", task);
