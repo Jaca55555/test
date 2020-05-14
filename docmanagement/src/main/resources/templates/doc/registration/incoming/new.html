@@ -608,7 +608,7 @@
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>';
-                            if ($('#typePerformerIsTaskId_'+id).val()==''){
+                            if(displayRadioValue()!=1)  {    if ($('#typePerformerIsTaskId_'+id).val()==''){
                                 html+='<td style="width: 30%">\n' +
                                     '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
                                     '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
@@ -643,6 +643,35 @@
                                     '           <input type="hidden" name="performer_'+userId+'" id="performerIsTaskId_'+id+'userId_'+userId+'" value="3"/>\n' +
                                     '       </div>\n' +
                                     '   </td>';
+                            }}
+                            else{
+                                if ($('#typePerformerIsTaskId_'+id).val()==''){
+                                    html+='<td style="width: 30%">\n' +
+                                        '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
+                                        '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                                        '               <i class="fas fa-cog" style="margin-right: 1em"></i>\n' + task_sub_type_info +
+                                        '           </button>\n' +
+                                        '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                                        '               <span class="sr-only"></span>\n' +
+                                        '           </button>\n' +
+                                        '           <input type="hidden" name="performer_'+userId+'" id="performerIsTaskId_'+id+'userId_'+userId+'" value="0"/>\n' +
+                                        '       </div>\n' +
+                                        '   </td>';
+                                    $('#typePerformerIsTaskId_'+id).val(userId);
+                                } else{
+                                    html+='<td style="width: 30%">\n' +
+                                        '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
+                                        '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
+                                        '               <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>\n' + task_sub_type_info +
+                                        '           </button>\n' +
+                                        '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+
+                                        '           </button>\n' +
+
+                                        '           <input type="hidden" name="performer_'+userId+'" id="performerIsTaskId_'+id+'userId_'+userId+'" value="3"/>\n' +
+                                        '       </div>\n' +
+                                        '   </td>';
+                                }
                             }
                             html+='   <td style="width: 35%">\n' +
                                 '       <div class="col-md-12 mb-3">\n' +
