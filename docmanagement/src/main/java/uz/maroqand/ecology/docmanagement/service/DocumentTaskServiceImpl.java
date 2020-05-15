@@ -382,11 +382,14 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         List<DocumentTaskSub> documentTaskSubList = taskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         String performers = "";
         String controls = "";
+        HashMap<Integer,String> performerMap = new HashMap<>();
         for (DocumentTaskSub documentTaskSub:documentTaskSubList){
-            if (documentTaskSub.getReceiverId()!=null){
-                performers+=documentTaskSub.getReceiver().getShortName()+",";
+            if (documentTaskSub.getReceiverId()!=null && !performerMap.containsKey(documentTaskSub.getReceiverId())){
+                performerMap.put(documentTaskSub.getReceiverId(),"");
                 if (documentTaskSub.getType().equals(TaskSubType.Control.getId())){
                     controls+=documentTaskSub.getReceiver().getShortName()+",";
+                }else{
+                    performers+=documentTaskSub.getReceiver().getShortName()+",";
                 }
             }
 

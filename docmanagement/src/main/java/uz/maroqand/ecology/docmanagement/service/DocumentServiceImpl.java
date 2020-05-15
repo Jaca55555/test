@@ -334,8 +334,8 @@ public class DocumentServiceImpl implements DocumentService {
                         predicates.add(criteriaBuilder.equal(root, filterDTO.getReplies()));
                     }
 
-                    if (filterDTO.getDocumentStatus() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("status"), filterDTO.getDocumentStatus()));
+                    if (filterDTO.getDocumentStatuses() != null) {
+                        predicates.add(criteriaBuilder.in(root.get("status")).value(filterDTO.getDocumentStatuses()));
                     }
                 }
 

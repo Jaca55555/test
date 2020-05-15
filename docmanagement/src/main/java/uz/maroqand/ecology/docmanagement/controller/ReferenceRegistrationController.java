@@ -196,7 +196,9 @@ public class ReferenceRegistrationController {
 
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        Set<DocumentStatus> documentStatuses = new HashSet<>();
+        documentStatuses.add(DocumentStatus.New);
+        docFilterDTO.setDocumentStatuses(documentStatuses);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
         List<Document> documentList = documentPage.getContent();

@@ -135,26 +135,27 @@ public class IncomingRegistrationController {
         HashMap<String, Object> result = new HashMap<>();
         Date deadlineDateBegin = null;
         Date deadlineDateEnd = null;
-        Set<Integer> status = null;
+        Set<DocumentStatus> status = null;
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
+
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
 
         Integer tabFilter = incomingRegFilter.getTabFilter() != null ? incomingRegFilter.getTabFilter() : 9;
         switch (tabFilter){
             case 1:
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.New.getId());
+                status.add(DocumentStatus.New);
                 break;
             case 2:
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.InProgress.getId());
+                status.add(DocumentStatus.New);
                 break;
             case 3:
                 deadlineDateEnd = calendar.getTime();
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.New.getId());
-                status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
+                status.add(DocumentStatus.New);
+                status.add(DocumentStatus.InProgress);
                 break;//Муддати кеччикан
             case 4:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -162,26 +163,25 @@ public class IncomingRegistrationController {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 deadlineDateBegin = calendar.getTime();
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.New.getId());
-                status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
+                status.add(DocumentStatus.New);
+                status.add(DocumentStatus.InProgress);
                 break;//Муддати якинлашаётган
             case 5:
-                status = new LinkedHashSet<>();
-                status.add(TaskStatus.Checking.getId());
+                /*status = new LinkedHashSet<>();
+                status.add(TaskStatus.Checking.getId());*/
                 break;//Ижро назоратида
             case 7:
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.Complete.getId());
+                status.add(DocumentStatus.Completed);
                 break;//Якунланган
             case 8:
                 specialControl = Boolean.TRUE;
                 break;//Якунланган
             case 9:
                 status = new LinkedHashSet<>();
-                status.add(TaskStatus.New.getId());
-                status.add(TaskStatus.InProgress.getId());
-                status.add(TaskStatus.Checking.getId());
+                status.add(DocumentStatus.New);
+                status.add(DocumentStatus.InProgress);
+                status.add(DocumentStatus.Completed);
                 break;
             default:
                 pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
@@ -191,7 +191,35 @@ public class IncomingRegistrationController {
                 break;//Жами
         }
         //todo documentTypeId=1
-        Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, user.getDepartmentId(), null, specialControl, pageable);
+
+        docFilterDTO.setExecuteDateBegin(deadlineDateBegin!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateBegin):null);
+        docFilterDTO.setExecuteDateEnd(deadlineDateEnd!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateEnd):null);
+        docFilterDTO.setDocumentType(DocumentTypeEnum.IncomingDocuments.getId());
+        docFilterDTO.setDocumentStatuses(status);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            String documentTypeName="";
+
+            JSONArray.add(new Object[]{
+                    document.getId(),
+                    document.getRegistrationNumber()!=null?document.getRegistrationNumber():"",
+                    document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    document.getContent()!=null?document.getContent():"",
+                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    document.getManagerId()!=null?userService.findById(document.getManagerId()).getFullName():"",
+                    documentHelperService.getTranslation(document.getStatus().getName(),locale),
+                    document.getStatus().getId(),
+                    document.getDocumentTypeId()!=null?document.getDocumentType().getNameTranslation(locale):""
+            });
+        }
+
+       /* Page<DocumentTask> documentTaskPage = taskService.findFiltered(user.getOrganizationId(), 1, incomingRegFilter, deadlineDateBegin, deadlineDateEnd, status, user.getDepartmentId(), null, specialControl, pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentTaskList.size());
         String locale = LocaleContextHolder.getLocale().getLanguage();
@@ -222,10 +250,10 @@ public class IncomingRegistrationController {
                     taskService.getDueColor(documentTask.getDueDate(),true,documentTask.getStatus(),locale)
 
             });
-        }
+        }*/
 
-        result.put("recordsTotal", documentTaskPage.getTotalElements()); //Total elements
-        result.put("recordsFiltered", documentTaskPage.getTotalElements()); //Filtered elements
+        result.put("recordsTotal", documentPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentPage.getTotalElements()); //Filtered elements
         result.put("data", JSONArray);
         return result;
     }
@@ -241,7 +269,9 @@ public class IncomingRegistrationController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
-        docFilterDTO.setDocumentStatus(DocumentStatus.New);
+        Set<DocumentStatus>  documentStatuses = new HashSet<>();
+        documentStatuses.add(DocumentStatus.New);
+        docFilterDTO.setDocumentStatuses(documentStatuses);
         docFilterDTO.setChief(user.getId());
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
 
