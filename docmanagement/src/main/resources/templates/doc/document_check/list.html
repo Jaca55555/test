@@ -366,7 +366,7 @@
                 {data: 1, name: 'document.registrationNumber',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -374,14 +374,32 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
                         return html;
                     },
                     className: "text-left"
                 },
-                {data: 3, name: 'document.content',className: "text-left"},
-                {data: 4, name: 'createdAt',className: "text-center"},
-                {data: 5, name: 'dueDate',className: "text-center"},
+                {data: 3, name: 'document.content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[3]+'</a>';
+                        return html;
+                    },
+                    className: "text-left"},
+                {data: 4, name: 'createdAt',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[4]+'</a>';
+                        return html;
+                    },
+                    className: "text-center"},
+                {data: 5, name: 'dueDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[5]+'</a>';
+                        return html;
+                    },
+                    className: "text-center"},
                 {render: renderStatusColumn, name: 'status',className: "text-center"},
                 {data: 7, name: 'content',
                     render: function (data, type, row, meta) {

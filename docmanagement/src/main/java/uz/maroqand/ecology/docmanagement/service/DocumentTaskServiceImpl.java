@@ -226,13 +226,19 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         date.setMinutes(59);
         Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
         if (statusId==1 || statusId==0){ colorText+="text-primary" ;}
-        if (statusId==2){ colorText+="text-primary " ;}
-        if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 5)) {
-            colorText+="text-success ";
-        }
-        if ((taskOrTaskSub && statusId == 4) || (!taskOrTaskSub && statusId == 6)) {
-            colorText+="text-secondary ";
-        }
+        if (statusId==2){ colorText+="text-warning " ;}
+        if (statusId==3){ colorText+="text-warning " ;}
+        if (statusId==4){ colorText+="text-warning " ;}
+        if (statusId==5){ colorText+="text-secondary " ;}
+        if (statusId==6){ colorText+="text-success " ;}
+        if (statusId==7){ colorText+="text-danger " ;}
+        if (statusId==8){ colorText+="text-light " ;}
+//        if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 4)) {
+//            colorText+="text-warning ";
+//        }
+//        if ((taskOrTaskSub && statusId == 5) || (!taskOrTaskSub && statusId == 6)) {
+//            colorText+="text-secondary ";
+//        }
         if ((taskOrTaskSub && (statusId != 3 && statusId !=4)) || (!taskOrTaskSub && (statusId != 5 && statusId != 6))) {
             List<String> getName = getColorAndText(intervalHours,locale);
             colorText += getName.get(0);

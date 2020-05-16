@@ -629,13 +629,13 @@
             var html = '';
             var status=row[8];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+statuses[status]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+statuses[status]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+statuses[status]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+statuses[status]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+statuses[status]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+row[6]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[6]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[6]+'</button>';return html;
             }
             return html;
         }
