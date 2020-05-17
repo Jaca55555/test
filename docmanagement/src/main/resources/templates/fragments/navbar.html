@@ -18,7 +18,9 @@
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto mobile2-none">
-                <li><span th:text="${#dates.createNow()}"></span></li>
+                <li>
+                    <span style="margin-left: 10px" th:utext="${@dateShowService.getCurrentTimeUsingDate(#locale)}"></span>
+                    <span id="span"></span></li>
                 <li><span th:utext="${@userServiceImpl.getCurrentUserFromContext().getFullName()}"></span> - <span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -95,6 +97,19 @@
         </div>
     </header>
     <!-- [ Header ] end -->
+    <script>
+        var span = document.getElementById('span');
 
+        function time() {
+            var d = new Date();
+            var s = d.getSeconds();
+            var m = d.getMinutes();
+            var h = d.getHours();
+            span.textContent = h + ":" + m + ":" + s;
+        }
+        setInterval(time, 1000);
+
+
+    </script>
 </body>
 </html>
