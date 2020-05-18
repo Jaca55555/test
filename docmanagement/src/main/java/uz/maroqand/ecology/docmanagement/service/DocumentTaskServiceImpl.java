@@ -239,11 +239,11 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
 //        if ((taskOrTaskSub && statusId == 5) || (!taskOrTaskSub && statusId == 6)) {
 //            colorText+="text-secondary ";
 //        }
-        if ((taskOrTaskSub && (statusId != 3 && statusId !=4)) || (!taskOrTaskSub && (statusId != 5 && statusId != 6))) {
-            List<String> getName = getColorAndText(intervalHours,locale);
-            colorText += getName.get(0);
-            dueText = getName.get(1);
-        }
+//        if ((taskOrTaskSub && (statusId != 3 && statusId !=4)) || (!taskOrTaskSub && (statusId != 5 && statusId != 6))) {
+//            List<String> getName = getColorAndText(intervalHours,locale);
+//            colorText += getName.get(0);
+//            dueText = getName.get(1);
+//        }
 
         result.add(colorText);
         result.add(dueText);

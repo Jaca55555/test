@@ -413,7 +413,13 @@
                         },
                         className: "text-left"},
                     {render: renderStatusColumn,  name: 'status',className: "text-center"},
-                    {data: 7, name: 'content',className: "text-left",}
+                    {data: 7, name: 'content',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<b>'+row[7]+'</b><br>'+row[10];
+                            return html;
+                        },
+                        className: "text-justify"},
                 ],
                 rowCallback: function (row, data) {
                     $(row).on('click', function () {

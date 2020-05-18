@@ -126,6 +126,7 @@ public class IncomingController {
         Integer type = null;
         Set<Integer> status = null;
         Integer departmentId = null;
+
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
@@ -216,6 +217,7 @@ public class IncomingController {
             if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
                 docContent+=" №"+ document.getDocRegNumber().trim()+",";
             }
+
             docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
             docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
             JSONArray.add(new Object[]{
@@ -228,8 +230,8 @@ public class IncomingController {
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
-                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
-
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
+                    userService.findById(documentTaskSub.getReceiverId()).getFullName()
             });
         }
 

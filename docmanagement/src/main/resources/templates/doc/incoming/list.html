@@ -396,7 +396,13 @@
                         },
                         className: "w-10 text-center"},
                     {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                    {data: 7, name: 'content',className: "text-justify"},
+                    {data: 7, name: 'content',
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            html += '<b>'+row[7]+'</b><br>'+row[10];
+                            return html;
+                        },
+                        className: "text-justify"},
                 ],
                 rowCallback: function (row, data) {
                     $(row).on('click', function () {

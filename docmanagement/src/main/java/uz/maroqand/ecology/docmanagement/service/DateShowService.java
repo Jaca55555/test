@@ -80,7 +80,7 @@ public class DateShowService {
         int dom = cal.get(Calendar.DAY_OF_MONTH);
         switch (locale) {
             case "ru":
-                return dom+" "+getRumonth(num)+" "+year+" йил.";
+                return dom+" "+getRumonth(num)+" "+year+" года.";
             case "oz":
                 return dom+" "+getRumonth(num)+" "+year+" йил.";
             default:
