@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc_changePerformer.view}+${document.registrationNumber}" >Kiruvchi Xatlar Ro'yxati</title>
     <link rel="stylesheet" href="/static/bootstrap-treeview.css">
 <style>
     .panel{

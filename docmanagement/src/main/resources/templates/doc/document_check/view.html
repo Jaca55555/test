@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{sys_site_main_title}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc_check.view}+${document.registrationNumber}" >Kiruvchi Xatlar Ro'yxati</title>
+
     <link rel="stylesheet" href="/static/bootstrap-treeview.css">
     <style>
         .panel{
@@ -372,9 +373,7 @@
                                 <span>Ташкилот рахбари</span>
                             </div>
                         </div>
-                        <div>
-                            <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
-                        </div>
+
                     </div>
                     <div class="flex-space-between p0 m20-vertical align-center">
                         <span th:text="#{doc.document_task_current_status}">Хужжатнинг жорий статуси</span>
