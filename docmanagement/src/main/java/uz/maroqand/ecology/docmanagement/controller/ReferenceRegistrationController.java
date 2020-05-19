@@ -264,6 +264,7 @@ public class ReferenceRegistrationController {
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());

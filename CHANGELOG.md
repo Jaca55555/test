@@ -1,5 +1,8 @@
 # Changelog
 
+### [1.1] - 13.03.2020
+#### Reserve branch 
+
 ### [1.1] - 09.03.2020
 - DocumentType.type ni id ga o'zgartirdim, ko'p joylarda id ishlatilayotgani uchun, ordinal yozilayotgandi
 - bazada `document_type` type ni o'zgartirish kerak, xozir ordinal turibdi

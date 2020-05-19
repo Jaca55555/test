@@ -281,6 +281,7 @@ public class ReferenceController {
 
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
+        model.addAttribute("executeForm",document.getExecuteForm().getName());
         model.addAttribute("documentSub",documentSub);
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());

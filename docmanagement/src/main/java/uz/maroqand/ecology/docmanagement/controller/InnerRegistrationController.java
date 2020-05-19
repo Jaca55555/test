@@ -289,6 +289,7 @@ public class InnerRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList());
         model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("executeForms", ControlForm.getControlFormList());

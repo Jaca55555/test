@@ -38,7 +38,7 @@
         </div>
         <div class="flex-center">
             <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-download fs20 color-gray m10-horizontal pointer"></i></a>
+
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
             <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
         </div>
@@ -93,6 +93,12 @@
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:if="${isView}!=null">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.performerPhone}">Жўнатувчи билан алоқа учун:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="*{performerPhone}">+998 (99) 999-99-99</span></div>
+            </div>
+            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
+                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_appeal.executeForm}">Hujjatni ijro etish shakli</span></div>
+                <div class="col-md-6 p0" style="float:right">
+                    <span th:text="${executeForm}"></span>
+                </div>
             </div>
         </div>
         <hr class="m20-vertical">
