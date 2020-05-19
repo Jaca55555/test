@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+
+    <title th:text="#{doc.journal_list_heading}">Kiruvchi Xatlar Ro'yxati</title>
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ MainContent ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 parent-card">
+        <div class="card">
+            <div class="card-header flex-space-between-nowrap" id="headingOne">
+                <h5 th:text="#{sys_notification.list}"></h5>
+            </div>
+            <div class="card-body">
+                <form class="row">
+                    <div class="form-group col-sm-4" >
+                        <label for="dateBegin" class="control-label" th:text="#{sys_notification.createdAt}"></label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input class="form-control datepicker" id="dateBegin" th:placeholder="#{sys_begin}"/>
+                            </div>
+                            <div class="col-sm-6">
+                                <input class="form-control datepicker" id="dateEnd" th:placeholder="#{sys_end}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-2 text-right">
+                        <label class="control-label">&nbsp;</label></br>
+                        <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
+                            <i class="feather icon-search mr-1"></i>
+                            <span th:text="#{sys_search}">Search</span>
+                        </a>
+                    </div>
+                </form>
+
+                <div class="table-responsive break-word" id="result" >
+                    <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th th:text="#{sys_notification.createdBy}"></th>
+                            <th th:text="#{sys_notification.createdAt}"></th>
+                            <th th:text="#{sys_notification.title}"></th>
+                            <th th:text="#{sys_notification.message}"></th>
+                            <th ></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ MainContent ] end -->
+
+<object th:include="fragments/footer :: footer" th:remove="tag"></object>
+
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+
+<script th:inline="javascript">
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).NotificationListAjax}]];
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+    var dataDatatableSelector;
+    var thead;
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 20,
+            lengthMenu: [ [20, 50, 75, 100], [20, 50, 75, 100] ],
+            order: [],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
+                dataToSend._csrf = $("#global_csrf").val();
+                dataToSend.sort = api.order().length > 0 ? dataToSend.columns[ api.order()[0][0] ].name + ',' + api.order()[0][1] : "createdAt,DESC";
+
+                $.post(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+
+            },
+            columns: [
+                {data: 7, name: 'createdById'},
+                {data: 6, name: 'createdAt'},
+                {data: 3, name: 'title'},
+                {
+                    render: function (data, type, row, meta) {
+                        return '<a href="'+row[5]+'" >'+row[4]+'</a>';
+                    },name: 'message'
+                },
+                {
+                    render: function (data, type, row, meta) {
+                        return '<a href="'+row[5]+'" class="btn btn-info btn-sm "><i class="mdi mdi-view-grid" style="margin-right: 0px;"></i></a>';
+                    },orderable:false, className:'text-center'
+                }
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#data-table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
+    });
+
+
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -16,6 +16,12 @@ public class DocUrls {
     private static final String DocumentCheck="/document_check"; //Document oxirgisi
     private static final String ChangePerformer = "/change_performer"; //kiruvchi xujjatlar
 
+    private static final String Notification = Prefix + "/notification";
+    public static final String NotificationShow = Notification + "/show";
+    public static final String NotificationList = Notification + "/list";
+    public static final String NotificationListAjax = Notification + "/list_ajax";
+    public static final String NotificationShowAfter = Notification + "/show/after";
+
     public static final String Dashboard = Prefix + "/dashboard";
     public static final String DocLangSelect = Prefix + "/lang_select";
     public static final String DashboardDocList = Dashboard + "/list_ajax";

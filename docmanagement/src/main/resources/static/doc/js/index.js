@@ -75,6 +75,8 @@ $(document).ready(function() {
         todayHighlight: true,
         autoclose: true
                 });
+
+    getNotificationList();
     // $('.date').bootstrapMaterialDatePicker({
     //     weekStart: 0,
     //     time: false
@@ -153,4 +155,58 @@ function printThisDiv(id) {
 
     }
 
+}
+
+function getToastrList() {
+    $.post('/sys/toastr', {_csrf: $('#global_csrf').val()}, function (data) {
+        $.each(data.toastrList, function( index, value ){
+            switch(value.toastrType) {
+                case 'Success': toastr.success(value.message, value.title);break;
+                case 'Info': toastr.info(value.message, value.title);break;
+                case 'Warning': toastr.warning(value.message, value.title);break;
+                case 'Error': toastr.error(value.message, value.title);break;
+            }
+        });
+    });
+}
+
+function getNotificationList() {
+    $.post('/doc/notification/show', {_csrf: $('#global_csrf').val()}, function (data) {
+        var notification = '';
+        if(data.newNotificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.newNotificationTitle+'</p></li>';
+            $("#noti-body").append(notification);
+            $("#new-notification-count").text(data.newNotificationList.length);
+            $("#new-notification-count").show();
+        }else {
+            $("#new-notification-count").hide();
+        }
+        $.each(data.newNotificationList, function( index, value ){
+            appendNotification(value);
+        });
+
+        if(data.notificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.notificationTitle+'</p></li>';
+            $("#noti-body").append(notification);
+        }
+        $.each(data.notificationList, function( index, value ){
+            appendNotification(value);
+        });
+    });
+}
+
+$(".dropdown-toggle").on('click', function() {
+    $.post('/doc/notification/show/after', {_csrf: $('#global_csrf').val()}, function (data) {
+        $("#new-notification-count").hide();
+    });
+});
+
+function appendNotification(value) {
+    var notification =
+        '<li class="notification"> <div class="media"> <div class="media-body">\n' +
+        '  <p><strong>'+value.createdBy+'</strong><span class="n-time text-muted">' +
+        '    <i class="icon feather icon-clock m-r-10"></i>'+value.createdAt+'</span></p>\n' +
+        '  <a style="color: black" href="'+value.url+'">'+value.registrationNumber+ " " +value.message+'</a>\n' +
+        '</div> </div> </li>';
+    $("#noti-body").append(notification);
 }

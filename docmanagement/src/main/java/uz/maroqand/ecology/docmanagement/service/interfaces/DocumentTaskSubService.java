@@ -3,6 +3,8 @@ package uz.maroqand.ecology.docmanagement.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
+import uz.maroqand.ecology.docmanagement.entity.Document;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.Date;
@@ -18,7 +20,7 @@ public interface DocumentTaskSubService {
 
     DocumentTaskSub getById(Integer id);
     Integer getCountByStatus();
-    DocumentTaskSub createNewSubTask(Integer level,Integer docId,Integer taskId, String content,Date dueDate,Integer type,Integer senderId,Integer receiverId, Integer departmentId);
+    DocumentTaskSub createNewSubTask(Integer level, Document document, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId);
 
     DocumentTaskSub update(DocumentTaskSub taskSub);
 
@@ -28,7 +30,8 @@ public interface DocumentTaskSubService {
 
     List<DocumentTaskSub> getListByTaskIdAndLevel(Integer docId,Integer level);
 
-    void allTaskSubCompleteGetTaskId(Integer taskId);
+    void allTaskSubCompleteGetTaskId(DocumentTask task, Integer userId);
+    void allTaskSubRejectedGetTaskId(DocumentTask task,Integer userId);
 
     List<DocumentTaskSub> getListByDocIdAndTaskId(Integer docId,Integer taskId);
 
@@ -92,4 +95,6 @@ public interface DocumentTaskSubService {
 
     Integer countByReceiverIdAll(Integer receiverId);
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);
+
+    String getUrl(Document document,Integer  taskSubId);
 }

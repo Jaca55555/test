@@ -368,7 +368,7 @@ public class InnerRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null && documentTask!=null){
-                    documentTaskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document,documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         documentTaskService.update(documentTask);
@@ -531,7 +531,7 @@ public class InnerRegistrationController {
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
                 if (!isExecuteForm){
-                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document,documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;
@@ -542,7 +542,7 @@ public class InnerRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document,documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType.equals(TaskSubType.Performer.getId())){
                         documentTask.setPerformerId(userId);
                         documentTaskService.update(documentTask);

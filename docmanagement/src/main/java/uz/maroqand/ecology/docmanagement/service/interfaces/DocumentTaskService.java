@@ -8,6 +8,7 @@ import uz.maroqand.ecology.docmanagement.dto.ResolutionDTO;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.Set;
  * date: 11.02.2020
  */
 public interface DocumentTaskService {
+
+    void createNotificationForAddComment(Document document, DocumentTaskSub documentTaskSub);
 
     DocumentTask getById(Integer id);
 

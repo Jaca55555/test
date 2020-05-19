@@ -6,13 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
-import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
+import uz.maroqand.ecology.core.service.user.NotificationService;
+import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
-import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
@@ -34,13 +36,15 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     private final DocumentSubService documentSubService;
     private final HelperService helperService;
     private final DocumentService documentService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService, DocumentService documentService) {
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService, DocumentService documentService, NotificationService notificationService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.documentSubService = documentSubService;
         this.helperService = helperService;
         this.documentService = documentService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -91,11 +95,45 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public void allTaskSubCompleteGetTaskId(Integer taskId) {
-        List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByTaskIdAndDeletedFalse(taskId);
+    public void allTaskSubCompleteGetTaskId(DocumentTask task, Integer userId) {
+        List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByTaskIdAndDeletedFalse(task.getId());
+        Document document = documentService.getById(task.getDocumentId());
         for (DocumentTaskSub documentTaskSub:documentTaskSubList) {
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             update(documentTaskSub);
+            String url = getUrl(document,documentTaskSub.getId());
+
+            notificationService.create(
+                    documentTaskSub.getReceiverId(),
+                    NotificationType.Document,
+                    "doc_notification.check_complete",
+                    document.getRegistrationNumber(),
+                    "doc_notification_message.check_complete",
+                    url,
+                    userId
+            );
+        }
+
+    }
+
+    @Override
+    public void allTaskSubRejectedGetTaskId(DocumentTask task,Integer userId) {
+        List<DocumentTaskSub> documentTaskSubList = documentTaskSubRepository.findByTaskIdAndDeletedFalse(task.getId());
+        Document document = documentService.getById(task.getDocumentId());
+        for (DocumentTaskSub documentTaskSub:documentTaskSubList) {
+            documentTaskSub.setStatus(TaskSubStatus.Rejected.getId());
+            update(documentTaskSub);
+            String url = getUrl(document,documentTaskSub.getId());
+
+            notificationService.create(
+                    documentTaskSub.getReceiverId(),
+                    NotificationType.Document,
+                    "doc_notification.check_rejected",
+                    document.getRegistrationNumber(),
+                    "doc_notification_message.check_rejected",
+                    url,
+                    userId
+            );
         }
     }
 
@@ -105,9 +143,9 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public DocumentTaskSub createNewSubTask(Integer level,Integer docId, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
+    public DocumentTaskSub createNewSubTask(Integer level, Document document, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId) {
         DocumentTaskSub documentTaskSub = new DocumentTaskSub();
-        documentTaskSub.setDocumentId(docId);
+        documentTaskSub.setDocumentId(document.getId());
         documentTaskSub.setTaskId(taskId);
         documentTaskSub.setContent(content.trim());
         documentTaskSub.setDueDate(dueDate);
@@ -120,7 +158,20 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         documentTaskSub.setCreatedAt(new Date());
         documentTaskSub.setCreatedById(senderId);
         documentTaskSub.setLevel(level!=null?(level+1):1);
-        return documentTaskSubRepository.save(documentTaskSub);
+        documentTaskSub = documentTaskSubRepository.save(documentTaskSub);
+        String url = getUrl(document,documentTaskSub.getId());
+
+        notificationService.create(
+                documentTaskSub.getReceiverId(),
+                NotificationType.Document,
+                "doc_notification.new",
+                document.getRegistrationNumber(),
+                "doc_notification_message.new",
+                url,
+                senderId
+        );
+
+        return documentTaskSub;
     }
 
     @Override
@@ -480,5 +531,30 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now) {
         return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqualFor(receiverId,now);
+    }
+
+    @Override
+    public String getUrl(Document document,Integer  taskSubId){
+        String url="";
+
+        switch (document.getDocumentTypeId()){
+            case 1:
+                url= DocUrls.IncomingView+"?id="+taskSubId;
+                break;//Kirish
+            case 2:
+                url= DocUrls.OutgoingView+"?id="+taskSubId;
+                break;//Chiqish
+            case 3:
+                url= DocUrls.InnerView+"?id="+taskSubId;
+                break;//ichki
+
+            case 4:
+                url= DocUrls.ReferenceView+"?id="+taskSubId;
+                break;//murojaat
+            default:
+                url= DocUrls.Dashboard;
+                break;
+        }
+        return url;
     }
 }

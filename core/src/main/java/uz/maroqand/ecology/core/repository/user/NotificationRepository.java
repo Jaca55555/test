@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.constant.user.NotificationStatus;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Notification;
 
 import java.util.List;
@@ -17,6 +18,6 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer>, JpaSpecificationExecutor<Notification> {
 
-    List<Notification> findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(Integer reviewerId, NotificationStatus status, Pageable pageable);
+    List<Notification> findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(Integer reviewerId, NotificationStatus status, NotificationType notificationType, Pageable pageable);
 
 }

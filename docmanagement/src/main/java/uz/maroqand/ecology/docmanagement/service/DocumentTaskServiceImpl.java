@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
@@ -22,7 +24,6 @@ import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
-import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskService;
@@ -45,14 +46,34 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     private final HelperService helperService;
     private final DocumentTaskSubService taskSubService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService, HelperService helperService, DocumentTaskSubService taskSubService, UserService userService) {
+    public DocumentTaskServiceImpl(DocumentTaskRepository taskRepository, DocumentService documentService, HelperService helperService, DocumentTaskSubService taskSubService, UserService userService, NotificationService notificationService) {
         this.taskRepository = taskRepository;
         this.documentService = documentService;
         this.helperService = helperService;
         this.taskSubService = taskSubService;
         this.userService = userService;
+        this.notificationService = notificationService;
+    }
+
+    @Override
+    public void createNotificationForAddComment(Document document, DocumentTaskSub documentTaskSub) {
+        List<DocumentTaskSub> documentTaskSubList = taskSubService.getListByDocIdAndTaskId(document.getId(),documentTaskSub.getTaskId());
+        for (DocumentTaskSub taskSub: documentTaskSubList) {
+            if (!taskSub.getReceiverId().equals(documentTaskSub.getReceiverId())){
+                notificationService.create(
+                        taskSub.getReceiverId(),
+                        NotificationType.Document,
+                        "doc_notification.add_comment",
+                        document.getRegistrationNumber(),
+                        "doc_notification_message.add_comment",
+                        taskSubService.getUrl(document,taskSub.getId()),
+                        documentTaskSub.getReceiverId()
+                );
+            }
+        }
     }
 
     @Override

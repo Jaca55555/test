@@ -91,18 +91,40 @@ public class NotificationServiceImpl implements NotificationService {
         newNotificationMap.get(notification.getReviewerId()).add(notification);*/
     }
 
-    public List<Notification> getNotificationList(Integer reviewerId){
+    @Override
+    public void create(Integer reviewerId, NotificationType type, String title, String registrationNumber, String message, String url, Integer userId) {
+        Notification notification = new Notification();
+        notification.setType(type);
+        notification.setStatus(NotificationStatus.New);
+
+        notification.setReviewerId(reviewerId);
+        notification.setTitle(title);
+        notification.setRegistrationNumber(registrationNumber);
+        notification.setMessage(message);
+        notification.setUrl(url);
+
+        notification.setCreatedAt(new Date());
+        notification.setCreatedById(userId);
+        notificationRepository.saveAndFlush(notification);
+
+        /*if (!newNotificationMap.containsKey(notification.getReviewerId())) {
+            newNotificationMap.put(notification.getReviewerId(), new LinkedList<>());
+        }
+        newNotificationMap.get(notification.getReviewerId()).add(notification);*/
+    }
+
+    public List<Notification> getNotificationList(Integer reviewerId,NotificationType notificationType){
         Pageable limit = PageRequest.of(0,10);
-        return notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.Reviewed, limit);
+        return notificationRepository.findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.Reviewed, notificationType,limit);
         /*if (notificationMap.containsKey(reviewerId)) {
             return notificationMap.get(reviewerId);
         }
         return new LinkedList<>();*/
     }
 
-    public List<Notification> getNewNotificationList(Integer reviewerId){
+    public List<Notification> getNewNotificationList(Integer reviewerId,NotificationType notificationType){
         Pageable limit = PageRequest.of(0,10);
-        return notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New, limit);
+        return notificationRepository.findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New, notificationType, limit);
         //get and clear
         /*List<Notification> notificationList = new LinkedList<>();
         if (newNotificationMap.containsKey(reviewerId)) {
@@ -118,9 +140,9 @@ public class NotificationServiceImpl implements NotificationService {
 //        return notificationList;
     }
 
-    public void viewNewNotificationList(Integer reviewerId){
+    public void viewNewNotificationList(Integer reviewerId,NotificationType notificationType){
         Pageable limit = PageRequest.of(0,10);
-        List<Notification> notificationList = notificationRepository.findByReviewerIdAndStatusAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New, limit);
+        List<Notification> notificationList = notificationRepository.findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.New,notificationType, limit);
         for (Notification notification:notificationList){
             notification.setStatus(NotificationStatus.Reviewed);
             notification.setUpdateAt(new Date());
@@ -147,16 +169,18 @@ public class NotificationServiceImpl implements NotificationService {
             String dateEndStr,
             Integer reviewerId,
             Integer createdById,
+            NotificationType notificationType,
             Pageable pageable
     ){
-        return notificationRepository.findAll(getFilteringSpecification(dateBeginStr, dateEndStr, reviewerId, createdById), pageable);
+        return notificationRepository.findAll(getFilteringSpecification(dateBeginStr, dateEndStr, reviewerId, createdById,notificationType), pageable);
     }
 
     private static Specification<Notification> getFilteringSpecification(
             final String dateBeginStr,
             final String dateEndStr,
             final Integer reviewerId,
-            final Integer createdById
+            final Integer createdById,
+            final NotificationType notificationType
     ) {
         return new Specification<Notification>() {
             @Override
@@ -180,6 +204,10 @@ public class NotificationServiceImpl implements NotificationService {
                 }
                 if(createdById != null){
                     predicates.add(criteriaBuilder.equal(root.get("createdById"), createdById));
+                }
+
+                if(notificationType!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("type"), notificationType.ordinal()));
                 }
 
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);

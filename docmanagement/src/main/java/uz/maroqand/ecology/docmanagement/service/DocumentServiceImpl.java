@@ -182,7 +182,7 @@ public class DocumentServiceImpl implements DocumentService {
         return outDocNumber;
     }
 
-    public Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user, Integer positionIdForPrefix, String departmentPrefixCode){
+    public Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user){
 
         document.setOrganizationId(user.getOrganizationId());
         document.setDocumentTypeId(documentTypeId);

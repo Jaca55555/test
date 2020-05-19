@@ -339,7 +339,7 @@ public class InnerController {
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
                 if (!isExecuteForm){
-                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document,documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;
@@ -349,7 +349,7 @@ public class InnerController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(documentTaskSub.getLevel(),document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(documentTaskSub.getLevel(),document,documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;
