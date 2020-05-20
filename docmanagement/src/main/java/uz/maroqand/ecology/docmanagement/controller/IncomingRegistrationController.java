@@ -508,7 +508,7 @@ public class IncomingRegistrationController {
         String  additionalDocumentText = null;
         if (document.getAdditionalDocumentId()!=null){
             additionalDocument = documentService.getById(document.getAdditionalDocumentId());
-            additionalDocumentText = additionalDocument.getRegistrationNumber() +" - "+ Common.uzbekistanDateAndTimeFormat.format(additionalDocument.getRegistrationDate());
+            additionalDocumentText = additionalDocument.getRegistrationNumber();
         }
         if (documentSub.getOrganizationId()!=null){
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());

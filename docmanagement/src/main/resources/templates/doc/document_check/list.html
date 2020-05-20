@@ -298,8 +298,8 @@
             case 0: html='<button type="button" class="btn-rounded btn btn-info">'+row[6]+'</button>';return html;
             case 1: html='<button type="button" class="btn-rounded btn btn-warning">'+row[6]+'</button>';return html;
             case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-secondary">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-success">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-secondary" th:text="#{doc_check.ended}"></button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-success" th:text="#{doc_check.notEnded}"></button>';return html;
             case 5: html='<button type="button" class="btn-rounded btn btn-danger">'+row[6]+'</button>';return html;
             default: html='<button type="button" class="btn-rounded btn btn-light">'+row[6]+'</button>';return html;
         }
