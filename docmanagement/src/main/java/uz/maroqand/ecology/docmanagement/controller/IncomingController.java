@@ -131,6 +131,7 @@ public class IncomingController {
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
         switch (tabFilter){
+            case 1:  break;
             case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);

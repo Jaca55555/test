@@ -94,6 +94,7 @@ public class InnerController {
         Boolean specialControll=null;
 
         switch (tabFilter){
+            case 1: break;
             case 9: status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
