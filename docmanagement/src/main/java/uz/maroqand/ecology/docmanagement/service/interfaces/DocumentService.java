@@ -35,7 +35,7 @@ public interface DocumentService {
     //saveOrNot=1 save positionLastnumber
     String getOutDocNumber(Integer positionId, Integer departmentId,Integer saveOrNot);
 
-    Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user, Integer positionIdForPrefix, String departmentPrefixCode);
+    Document createDoc2(Integer documentTypeId, DocumentStatus status, Document document, User user);
     Document createReference(Integer documentTypeId, Document document, User user);
     void update(Document document);
 

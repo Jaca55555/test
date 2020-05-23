@@ -80,8 +80,8 @@ public class Department {
     @Column(name = "updated_by_id")
     private Integer updatedById;
 
-    @Column(name = "code")
-    private String prefixCode;
+   /* @Column(name = "code")
+    private String prefixCode;*/
 
     @Column(name = "doc_index")
     private String docIndex;

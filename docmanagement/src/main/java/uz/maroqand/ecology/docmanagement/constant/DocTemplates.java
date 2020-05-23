@@ -133,4 +133,7 @@ public class DocTemplates {
     public static final String InnerRegistrationList = Prefix + Registration + Inner + "/list";
     public static final String InnerRegistrationTask = Prefix + Registration + Inner + "/task";
     public static final String InnerRegistrationView = Prefix + Registration + Inner + "/view";
+
+    private static final String Notification = Prefix + "/notification";
+    public static final String NotificationList = Notification + "/list";
 }

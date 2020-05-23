@@ -92,7 +92,7 @@ public class DepartmentController {
         for(Department department : departments) {
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
-                    department.getPrefixCode(),
+                    department.getDocIndex(),
                     department.getName(),
                     department.getNameOz(),
                     department.getNameEn(),
@@ -149,7 +149,6 @@ public class DepartmentController {
         department1.setDeleted(Boolean.FALSE);
         department1.setCreatedAt(new Date());
         department1.setCreatedById(user.getId());
-        department1.setPrefixCode(department.getPrefixCode());
         department1.setDocIndex(department.getDocIndex());
         department1 = departmentService.save(department1);
         String after="";
@@ -197,7 +196,6 @@ public class DepartmentController {
         oldDepartment.setNameOz(department.getNameOz());
         oldDepartment.setNameEn(department.getNameEn());
         oldDepartment.setNameRu(department.getNameRu());
-        oldDepartment.setPrefixCode(department.getPrefixCode());
         oldDepartment.setDocIndex(department.getDocIndex());
         oldDepartment.setUpdatedAt(new Date());
         oldDepartment.setUpdatedById(user.getId());

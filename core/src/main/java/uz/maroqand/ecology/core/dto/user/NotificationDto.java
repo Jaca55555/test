@@ -17,6 +17,7 @@ public class NotificationDto {
     private String url;
     private String title;
     private String applicationNumber;
+    private String registrationNumber;
     private String message;
     private String createdAt;
     private String createdBy;
@@ -26,6 +27,7 @@ public class NotificationDto {
         this.url = notification.getUrl();
         this.title = helperService.getTranslation(notification.getTitle(),locale);
         this.applicationNumber = notification.getApplicationNumber()!=null?notification.getApplicationNumber().toString()+": " :"";
+        this.registrationNumber = notification.getRegistrationNumber()!=null?notification.getRegistrationNumber()+": " :"";
         this.message = helperService.getTranslation(notification.getMessage(),locale);
         this.createdAt = notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"";
         this.createdBy = helperService.getUserFullNameById(notification.getCreatedById());

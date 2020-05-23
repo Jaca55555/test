@@ -9,14 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
-import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
@@ -265,9 +266,10 @@ public class IncomingController {
             return "redirect:" + DocUrls.IncomingList;
         }
 
-         if(document.getExecuteForm().getId().equals(1)){
+         if(document.getExecuteForm().getId().equals(ExecuteForm.Information.getId())){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
-            documentTaskSubService.update(documentTaskSub);}
+            documentTaskSubService.update(documentTaskSub);
+         }
 
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -298,7 +300,6 @@ public class IncomingController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(task.getId(),locale));
         return DocTemplates.IncomingView;
     }
 
@@ -393,7 +394,7 @@ public class IncomingController {
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
                 if (!isExecuteForm){
-                    documentTaskSubService.createNewSubTask(0,documentTask.getDocumentId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(0,document,documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;
@@ -403,7 +404,7 @@ public class IncomingController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    documentTaskSubService.createNewSubTask(documentTaskSub.getLevel(),document.getId(),documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
+                    documentTaskSubService.createNewSubTask(documentTaskSub.getLevel(),document,documentTask.getId(),content,dueDate,performerType,documentTaskSub.getReceiverId(),userId,userService.getUserDepartmentId(userId));
                     userId = null;
                     performerType = null;
                     dueDate = null;

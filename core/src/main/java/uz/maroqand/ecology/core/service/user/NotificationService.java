@@ -16,11 +16,11 @@ public interface NotificationService {
 
 //    void initialization();
 
-    List<Notification> getNotificationList(Integer reviewerId);
+    List<Notification> getNotificationList(Integer reviewerId,NotificationType notificationType);
 
-    List<Notification> getNewNotificationList(Integer reviewerId);
+    List<Notification> getNewNotificationList(Integer reviewerId,NotificationType notificationType);
 
-    void viewNewNotificationList(Integer reviewerId);
+    void viewNewNotificationList(Integer reviewerId,NotificationType notificationType);
 
     void create(
             Integer reviewerId,
@@ -32,11 +32,22 @@ public interface NotificationService {
             Integer userId
     );
 
+    void create(
+            Integer reviewerId,
+            NotificationType type,
+            String title,
+            String registrationNumber,
+            String message,
+            String url,
+            Integer userId
+    );
+
     Page<Notification> findFiltered(
             String dateBeginStr,
             String dateEndStr,
             Integer reviewerId,
             Integer createdById,
+            NotificationType notificationType,
             Pageable pageable
     );
 

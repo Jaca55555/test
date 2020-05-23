@@ -414,7 +414,7 @@ public class IncomingRegistrationController {
 
         document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
-        document = documentService.createDoc(1, document, user);
+        document = documentService.createDoc(DocumentTypeEnum.IncomingDocuments.getId(), document, user);
 
         Integer documentOrganizationId1;
         try {
@@ -466,7 +466,7 @@ public class IncomingRegistrationController {
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null && documentTask!=null){
-                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    taskSubService.createNewSubTask(0,document,documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);
@@ -643,7 +643,7 @@ public class IncomingRegistrationController {
 //            if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null){
-                    taskSubService.createNewSubTask(0,document.getId(),documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    taskSubService.createNewSubTask(0,document,documentTask.getId(),content,dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);

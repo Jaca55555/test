@@ -197,12 +197,14 @@ public class DocumentCheckController {
         documentTaskService.update(documentTask);
 
         if (documentTask.getStatus().equals(TaskStatus.Complete.getId())){
-            documentTaskSubService.allTaskSubCompleteGetTaskId(documentTask.getId());
+            documentTaskSubService.allTaskSubCompleteGetTaskId(documentTask,user.getId());
             List<DocumentTask> documentTaskList = documentTaskService.getByDocumetId(document.getId());
             if (documentTaskList.size()==1){
                 document.setStatus(DocumentStatus.Completed);
                 documentService.update(document);
             }
+        }else{
+            documentTaskSubService.allTaskSubRejectedGetTaskId(documentTask,user.getId());
         }
 
         documentLogService.createLog(documentLog,DocumentLogType.Log.getId(),file_ids,oldStatus.getName(),oldStatus.getColor(),newStatus.getName(),newStatus.getColor(),user.getId());

@@ -15,17 +15,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.Permissions;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.Role;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
-import uz.maroqand.ecology.docmanagement.dto.IncomingRegFilter;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 import uz.maroqand.ecology.docmanagement.entity.*;
@@ -50,6 +51,7 @@ public class DocController {
     private final HelperService helperService;
     private final DocumentSubService documentSubService;
     private final DocumentTaskSubService documentTaskSubService;
+    private final NotificationService notificationService;
 
     @Autowired
     public DocController(
@@ -62,8 +64,8 @@ public class DocController {
             DocumentOrganizationService documentOrganizationService,
             HelperService helperService,
             DocumentSubService documentSubService,
-            DocumentTaskSubService documentTaskSubService
-    ) {
+            DocumentTaskSubService documentTaskSubService,
+            NotificationService notificationService) {
         this.userService = userService;
         this.fileService = fileService;
         this.documentService = documentService;
@@ -74,6 +76,7 @@ public class DocController {
         this.helperService = helperService;
         this.documentSubService = documentSubService;
         this.documentTaskSubService = documentTaskSubService;
+        this.notificationService = notificationService;
     }
 
     @RequestMapping(DocUrls.Dashboard)
@@ -461,6 +464,14 @@ public class DocController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         DocumentLog documentLog1 = documentLogService.createLog(documentLog,DocumentLogType.Comment.getId(),file_ids,"","","","",user.getId());
+        Document document = documentService.getById(documentLog1.getDocumentId());
+        if (document!=null && documentLog.getTaskSubId()!=null){
+            DocumentTaskSub documentTaskSub = documentTaskSubService.getById(documentLog.getTaskSubId());
+            if (documentTaskSub!=null){
+                documentTaskService.createNotificationForAddComment(document,documentTaskSub);
+
+            }
+        }
         result.put("status", "success");
         result.put("createName", user.getFullName());
         result.put("createPosition", user.getPositionId()!=null?helperService.getUserPositionName(user.getPositionId(),locale):"");
