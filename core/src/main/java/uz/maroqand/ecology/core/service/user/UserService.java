@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,6 +16,14 @@ import java.util.List;
 public interface UserService {
 
     List<User> getListByDepartmentAllParent(Integer departmentId);
+
+    User getByTelegramId(Integer telegramUserId);
+
+    Boolean isRegistrationUser(Integer telegramUserId);
+
+    User login(String login, String password);
+
+    List<User> getAllByTelegramUsers();
 
     List<User> getEmployeeList();
     List<User> getAll();

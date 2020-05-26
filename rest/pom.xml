@@ -57,6 +57,12 @@
             <version>1.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>uz.maroqand.ecology.docmanagement</groupId>
+            <artifactId>docmanagement</artifactId>
+            <version>1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
