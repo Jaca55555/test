@@ -41,7 +41,7 @@
     <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" th:if="${regApplication.facture}">
         <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8080/expertise/reg/application/conclusion_file/download?id='+regApplication.id+'&fileId='+conclusionFile.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
     </div>
-    <div class="col-md-12 task-attachment" th:if="${regApplication.facture}">
+    <div class="col-md-12 task-attachment" >
         <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
         <ul class="media-list p-0">
             <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">

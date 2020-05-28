@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.user.NotificationDto;
 import uz.maroqand.ecology.core.entity.user.Notification;
@@ -55,8 +56,8 @@ public class NotificationController {
         List<NotificationDto> notificationListShow = new LinkedList<>();
         List<NotificationDto> newNotificationListShow = new LinkedList<>();
 
-        List<Notification> notificationList = notificationService.getNotificationList(user.getId());
-        List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId());
+        List<Notification> notificationList = notificationService.getNotificationList(user.getId(), NotificationType.Expertise);
+        List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId(), NotificationType.Expertise);
 
         int count = 0;
         for (Notification notification:newNotificationList) {
@@ -86,7 +87,7 @@ public class NotificationController {
     @ResponseBody
     public HashMap<String, Object> getShowAfter() {
         User user = userService.getCurrentUserFromContext();
-        notificationService.viewNewNotificationList(user.getId());
+        notificationService.viewNewNotificationList(user.getId(), NotificationType.Expertise);
         HashMap<String, Object> result = new HashMap<>();
         return result;
     }
@@ -107,7 +108,7 @@ public class NotificationController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
 
-        Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null,pageable);
+        Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null, NotificationType.Expertise,pageable);
 
         List<Notification> notificationList = notificationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(notificationList.size());

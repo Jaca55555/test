@@ -121,9 +121,10 @@ public class PaymentFileController {
                 paymentFile.getInvoice(),
                 paymentFile.getPayerName(),
                 paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
-                paymentFile.getAmount(),
+                String.format("% ,.1f", paymentFile.getAmount()),
                 paymentFile.getDetails(),
-                invoiceIsNull
+                invoiceIsNull,
+                paymentFile.getPayerTin(),
             });
         }
 

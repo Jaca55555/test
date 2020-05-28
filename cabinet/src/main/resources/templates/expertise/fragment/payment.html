@@ -5,13 +5,13 @@
     <title>Title</title>
 </head>
 <body th:fragment="payment">
-    <div class="row" th:object="${invoice}">
+    <div class="row" th:object="${invoice}" th:if="${invoice!=null}">
         <div class="col-md-6 offset-md-3" style="margin-bottom: 40px">
             <table class="table table-borderless">
                 <tbody>
                 <tr>
                     <td th:text="#{sys_invoice_number}"></td>
-                    <td class="text-right" th:text="*{invoice}"></td>
+                    <td class="text-right" th:text="${invoice.invoice}"></td>
                 </tr>
                 <tr>
                     <td th:text="#{sys_payer_name}"></td>
