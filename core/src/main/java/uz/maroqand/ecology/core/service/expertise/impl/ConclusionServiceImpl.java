@@ -40,6 +40,11 @@ public class ConclusionServiceImpl implements ConclusionService {
     }
 
     @Override
+    public Conclusion save(Conclusion conclusion) {
+        return conclusionRepository.save(conclusion);
+    }
+
+    @Override
     public Conclusion getByRegApplicationIdLast(Integer id) {
         return conclusionRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(id);
     }
@@ -68,14 +73,14 @@ public class ConclusionServiceImpl implements ConclusionService {
     @Override
     public Conclusion complete(Integer conclusionId){
         Conclusion conclusion = getById(conclusionId);
-        if(conclusion.getNumber()!=null){
+        /*if(conclusion.getNumber()!=null){
             return null;
-        }
+        }*/
 
         DocumentRepo documentRepo = documentRepoService.create(DocumentRepoType.Conclusion, conclusion.getId());
         conclusion.setDocumentRepoId(documentRepo.getId());
         conclusion.setStatus(ConclusionStatus.Active);
-        conclusion.setNumber(conclusion.getId().toString()); //todo xulosa raqami ketma ket ketadimi prefix suffix bo’lmaydimi?
+//        conclusion.setNumber(conclusion.getId().toString()); //todo xulosa raqami ketma ket ketadimi prefix suffix bo’lmaydimi?
         conclusion.setDate(new Date());
 //        conclusion.setDeadlineDate();
 //        conclusion.setFiles();

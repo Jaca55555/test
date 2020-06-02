@@ -10,6 +10,8 @@ public interface ConclusionService {
 
     Conclusion getById(Integer id);
 
+    Conclusion save(Conclusion conclusion);
+
     Conclusion getByRegApplicationIdLast(Integer id);
 
     Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable);
