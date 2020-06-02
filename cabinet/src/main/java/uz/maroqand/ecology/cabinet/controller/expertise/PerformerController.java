@@ -214,6 +214,7 @@ public class PerformerController {
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "number")String number,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -239,6 +240,12 @@ public class PerformerController {
         regApplication.setAgreementStatus(LogStatus.Initial);
         regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion!=null){
+            conclusion.setNumber(number);
+            conclusionService.save(conclusion);
+        }
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
@@ -285,6 +292,7 @@ public class PerformerController {
     public String getPerformerActionEditMethod(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
+            @RequestParam(name = "number")String number,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -358,6 +366,12 @@ public class PerformerController {
             regApplication.setAgreementCompleteLogId(null);
         }
         regApplicationService.update(regApplication);
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion!=null){
+            conclusion.setNumber(number);
+            conclusionService.save(conclusion);
+        }
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }

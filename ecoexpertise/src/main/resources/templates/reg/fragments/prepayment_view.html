@@ -48,7 +48,25 @@
                     </div>
                     <div class="row m-15">
                         <div class="col-md-6 text-left">
-                            <h3 th:text="#{sys_nds.additional}">Оплата в МРЗП</h3>
+                            <h3 th:text="#{sys_invoice.qty_sum}">Оплата в МРЗП</h3>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <h4>
+                                <span th:if="${regApplication.addNds==null or !regApplication.addNds}" >
+                                    <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}"></span>
+                                    <span th:text="#{sys_currency.sum}"></span>
+                                </span>
+                                <span th:if="${regApplication.addNds!=null and regApplication.addNds}" >
+                                     <span th:text="*{#numbers.formatDecimal(amount/1.15, 1, 'WHITESPACE', 2, 'POINT')}"></span>
+                                     <span th:text="#{sys_currency.sum}"></span>
+                                </span>
+                                <!--20-->
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row m-15">
+                        <div class="col-md-6 text-left">
+                            <h3 th:text="#{sys_nds.additional}"></h3>
                         </div>
                         <div class="col-md-6 text-right">
                             <h4>
@@ -58,9 +76,26 @@
                             </h4>
                         </div>
                     </div>
+                    <div class="row m-15">
+                        <div class="col-md-6 text-left">
+                            <h3 th:text="#{sys_nds.additional_sum}"></h3>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <h4>
+                                <span th:if="${regApplication.addNds==null or !regApplication.addNds}">
+                                    0 <span th:text="#{sys_currency.sum}"></span>
+                                </span>
+                                <span th:if="${regApplication.addNds!=null and regApplication.addNds}" >
+                                    <span th:text="*{#numbers.formatDecimal(((amount*15)/115), 1, 'WHITESPACE', 2, 'POINT')}"></span>
+                                    <span th:text="#{sys_currency.sum}"></span>
+                                </span>
+                                <!--20-->
+                            </h4>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-5 ">
-                    <div class="row  text-center">
+                    <div class="row  text-center mt-5">
                         <div class="col-md-12 m-20">
                             <h1 class="display-4" th:text="#{sys_invoice.amount}"> Сумма к оплате </h1>
                         </div>
