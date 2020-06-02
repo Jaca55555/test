@@ -269,7 +269,7 @@ public class AgreementCompleteController {
             );
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId() + "#action";
+        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplicationLog.getId() + "#action";
     }
 
 }

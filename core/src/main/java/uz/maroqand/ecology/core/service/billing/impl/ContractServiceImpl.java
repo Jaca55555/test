@@ -29,14 +29,18 @@ public class ContractServiceImpl implements ContractService {
         this.minWageService = minWageService;
     }
 
-    public Contract create(Invoice invoice, Requirement requirement, ContractType contractType){
+    public Contract create(Invoice invoice, Requirement requirement, ContractType contractType, Boolean isNds){
         Contract contract = new Contract();
         contract.setType(contractType);
         contract.setInvoiceId(invoice.getId());
         contract.setRequirementId(requirement.getId());
 
         MinWage minWage = minWageService.getMinWage();
-        contract.setAmount(requirement.getQty() * minWage.getAmount());
+        Double amount = requirement.getQty() * minWage.getAmount();
+        if (isNds!=null && isNds){
+            amount=amount*1.15;
+        }
+        contract.setAmount(amount);
         contract.setCost(requirement.getQty());
 
         return contractRepository.save(contract);

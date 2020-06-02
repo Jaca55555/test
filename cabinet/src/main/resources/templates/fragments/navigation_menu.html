@@ -27,14 +27,55 @@
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
 
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_REG')"><a href="/expertise/reg/application/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.regApplicationList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')"><a href="/expertise/confirm/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.confirmList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')"><a href="/expertise/forwarding/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-file-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.forwardingList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')"><a href="/expertise/performer/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-pen"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.performerList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')"><a href="/expertise/agreement/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/agreement_complete/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.agreementCompleteList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')"><a href="/expertise/change_deadline/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.changeDeadlineDateList}"> </span></a></li>
-
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_REG')">
+                    <a href="/expertise/reg/application/list" class="nav-link" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.regApplicationList}"> </span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM')">
+                    <a href="/expertise/confirm/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.confirmList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(0)}">2</span>
+                        <!--<span th:text="${@getNotifacationService.countIncomingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>-->
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_FORWARDING')">
+                    <a href="/expertise/forwarding/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="mdi mdi-file-multiple"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.forwardingList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(1)}">2</span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')">
+                    <a href="/expertise/performer/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="mdi mdi-pen"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.performerList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(2)}">2</span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')">
+                    <a href="/expertise/agreement/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="feather icon-layers"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.agreementList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(3)}">2</span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')">
+                    <a href="/expertise/agreement_complete/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.agreementCompleteList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(4)}">2</span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')">
+                    <a href="/expertise/change_deadline/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.changeDeadlineDateList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@changeDeadlineDateServiceImpl.getCountByStatusInitial()}">2</span>
+                    </a>
+                </li>
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('ENTERPRISE_REGISTER,EMPLOYEE_CONTROL')">
                     <label th:text="#{sys_expertise_registry}"></label>
@@ -43,7 +84,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_MONITORING')"><a href="/expertise/reg/mntr/application/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.regMntrApplicationList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_MONITORING')"><a href="/expertise/conclusion/list" class="nav-link"><span class="pcoded-micon"><i class="far fa-file-alt"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.conclusionList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('COORDINATE_REGISTER')"><a href="/expertise/coordinate/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-map-pin"></i></span><span class="pcoded-mtext" th:text="#{coordination.list}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('FACTURE_MONITORING')"><a href="/expertise/facture/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-receipt"></i></span><span class="pcoded-mtext" th:text="#{sys_facture.list}"> </span></a></li>
+<!--                <li class="nav-item" sec:authorize="hasAnyAuthority('FACTURE_MONITORING')"><a href="/expertise/facture/list" class="nav-link"><span class="pcoded-micon"><i class="fas fa-receipt"></i></span><span class="pcoded-mtext" th:text="#{sys_facture.list}"> </span></a></li>-->
 
 
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('BILLING','PAYMENT_FILE')">

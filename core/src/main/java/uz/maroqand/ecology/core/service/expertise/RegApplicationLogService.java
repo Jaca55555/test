@@ -40,6 +40,10 @@ public interface RegApplicationLogService {
 
     List<RegApplicationLog> getAllByIndex(Integer regApplicationId, LogType type, Integer index);
 
+    List<RegApplicationLog> getAllByLogType(LogType logType);
+
+    Integer getLogCount(Integer id);
+
     Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,

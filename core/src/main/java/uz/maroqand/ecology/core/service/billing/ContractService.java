@@ -12,7 +12,7 @@ import uz.maroqand.ecology.core.entity.expertise.Requirement;
  */
 public interface ContractService {
 
-    Contract create(Invoice invoice, Requirement requirement, ContractType contractType);
+    Contract create(Invoice invoice, Requirement requirement, ContractType contractType, Boolean isNds);
 
     Contract createByAmount(Invoice invoice, Requirement requirement, Double amount, ContractType contractType);
 
