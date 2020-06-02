@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final DepartmentService departmentService;
+    private static PasswordEncoder encoder;
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, DepartmentService departmentService) {
@@ -48,6 +52,36 @@ public class UserServiceImpl implements UserService {
             departmentIds.add(department.getId());
         }
         return userRepository.findByDepartmentIdInAndEnabledTrue(departmentIds);
+    }
+
+    @Override
+    public User getByTelegramId(Integer telegramUserId) {
+        return userRepository.findByTelegramUserIdAndEnabledTrue(telegramUserId);
+    }
+
+    @Override
+    public Boolean isRegistrationUser(Integer telegramUserId) {
+        User user = getByTelegramId(telegramUserId);
+        if (user != null){
+            System.out.println(true);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public User login(String login, String password) {
+        User user = findByUsername(login);
+        if (user==null || !passwordEncoder().matches(password, user.getPassword())
+                ||!user.getEnabled().equals(Boolean.TRUE)) {
+            return null;
+        }
+        return user;
+    }
+
+    @Override
+    public List<User> getAllByTelegramUsers() {
+        return userRepository.findAllByTelegramUserIdNotNullAndEnabledTrue();
     }
 
     @Override
@@ -279,4 +313,12 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    private PasswordEncoder passwordEncoder(){
+        if (encoder == null){
+            encoder = new BCryptPasswordEncoder();
+        }
+        return encoder;
+    }
+
 }

@@ -179,7 +179,7 @@ public class AgreementCompleteController {
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
-
+        System.out.println(" complete regApplicationID==" + regApplication.getId());
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
@@ -269,7 +269,7 @@ public class AgreementCompleteController {
             );
         }
 
-        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplication.getId() + "#action";
+        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplicationLog.getId() + "#action";
     }
 
 }

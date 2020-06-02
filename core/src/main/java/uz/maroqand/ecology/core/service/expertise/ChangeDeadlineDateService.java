@@ -20,4 +20,6 @@ public interface ChangeDeadlineDateService {
     ChangeDeadlineDate save(ChangeDeadlineDate changeDeadlineDate);
 
     ChangeDeadlineDate getByRegApplicationId(Integer id);
+
+    Integer getCountByStatusInitial();
 }

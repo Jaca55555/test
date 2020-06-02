@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.telegram.SendQueryType;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
@@ -37,14 +39,16 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     private final HelperService helperService;
     private final DocumentService documentService;
     private final NotificationService notificationService;
+    private final UserService userService;
 
     @Autowired
-    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService, DocumentService documentService, NotificationService notificationService) {
+    public DocumentTaskSubServiceImpl(DocumentTaskSubRepository documentTaskSubRepository, DocumentSubService documentSubService, HelperService helperService, DocumentService documentService, NotificationService notificationService, UserService userService) {
         this.documentTaskSubRepository = documentTaskSubRepository;
         this.documentSubService = documentSubService;
         this.helperService = helperService;
         this.documentService = documentService;
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @Override
@@ -170,6 +174,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 url,
                 senderId
         );
+
+//        bot.sendMsg(256161586,"yangi keldi");
 
         return documentTaskSub;
     }
@@ -556,5 +562,124 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
                 break;
         }
         return url;
+    }
+
+    @Override
+    public List<DocumentTaskSub> getAllByReceiverIdAndStatuses(Integer receiverId, Set<Integer> statusSet) {
+        return documentTaskSubRepository.findByReceiverIdAndStatusInAndDeletedFalseOrderByIdAsc(receiverId,statusSet);
+    }
+
+    @Override
+    public String getMessageText(Integer telegramUserId, SendQueryType sendQueryType) {
+        System.out.println("getMessageText  " + sendQueryType + "  telId=" + telegramUserId);
+        User user = userService.getByTelegramId(telegramUserId);
+        if (user==null){
+            return " user null  " + telegramUserId;
+        }
+        switch (sendQueryType){
+            case All:
+                return allDocument(user.getId());
+            case NewDocument:
+                return newDocument(user.getId());
+            case InProccess:
+                return inProcessDocument(user.getId());
+            case DueDate:
+                return dueDateDocument(user.getId());
+            case ExecutiveDate:
+                return executiveDocument(user.getId());
+            default: return " ";
+        }
+    }
+
+    private String allDocument(Integer userId){
+        String text = "";
+        text+=newDocument(userId)+"\n";
+        text+=inProcessDocument(userId)+"\n";
+        text+=dueDateDocument(userId)+"\n";
+        text+=executiveDocument(userId);
+        return text;
+    }
+
+    private String newDocument(Integer userId){
+        Set<Integer> subStatusSet = new HashSet<>();
+        subStatusSet.add(TaskSubStatus.New.getId());
+        List<DocumentTaskSub> taskSubList = getAllByReceiverIdAndStatuses(userId,subStatusSet);
+        Integer listSize=taskSubList.size();
+        StringBuilder text = new StringBuilder("Yangi xujjat soni:= " + listSize + "\n");
+        for (DocumentTaskSub taskSub: taskSubList) {
+            if (taskSub.getDocumentId()!=null){
+                Document document = documentService.getById(taskSub.getDocumentId());
+                text.append(document!=null?"xujjat raqami: "+document.getRegistrationNumber():"  ---").append("\n");
+            }
+        }
+     return text.toString();
+    }
+
+    private String inProcessDocument(Integer userId){
+        Set<Integer> subStatusSet = new HashSet<>();
+        subStatusSet.add(TaskSubStatus.InProgress.getId());
+        List<DocumentTaskSub> taskSubList = getAllByReceiverIdAndStatuses(userId,subStatusSet);
+        Integer listSize=taskSubList.size();
+        StringBuilder text = new StringBuilder("Jarayondagi xujjat soni:= " + listSize + "\n");
+        for (DocumentTaskSub taskSub: taskSubList) {
+            if (taskSub.getDocumentId()!=null){
+                Document document = documentService.getById(taskSub.getDocumentId());
+                text.append(document!=null?"xujjat raqami: "+document.getRegistrationNumber():"  ---").append("\n");
+            }
+        }
+        return text.toString();
+    }
+
+    private String dueDateDocument(Integer userId){
+        Set<Integer> subStatusSet = new HashSet<>();
+        subStatusSet.add(TaskSubStatus.New.getId());
+        subStatusSet.add(TaskSubStatus.InProgress.getId());
+        subStatusSet.add(TaskSubStatus.Waiting.getId());
+        subStatusSet.add(TaskSubStatus.Agreement.getId());
+        List<DocumentTaskSub> taskSubList = getAllByReceiverIdAndStatuses(userId,subStatusSet);
+        Integer listSize=0;
+        StringBuilder text = new StringBuilder();
+        for (DocumentTaskSub taskSub: taskSubList) {
+            if (taskSub.getDocumentId()!=null && taskSub.getDueDate()!=null){
+                Date taskDueDate = taskSub.getDueDate();
+                taskDueDate.setHours(23);
+                taskDueDate.setMinutes(59);
+                Calendar cd = Calendar.getInstance();
+                cd.add(Calendar.DATE,3);
+                Date nowdate = new Date();
+                if (taskDueDate.after(nowdate) && taskDueDate.before(cd.getTime())){
+                    listSize++;
+                    Document document = documentService.getById(taskSub.getDocumentId());
+                    text.append(document != null ? "xujjat raqami: " + document.getRegistrationNumber() : "  ---").append("\n");
+                }
+            }
+        }
+        text.insert(0, "Muddati yaqinlashgan xujjat soni:= " + listSize + "\n");
+        return text.toString();
+    }
+
+    private String executiveDocument(Integer userId){
+        Set<Integer> subStatusSet = new HashSet<>();
+        subStatusSet.add(TaskSubStatus.New.getId());
+        subStatusSet.add(TaskSubStatus.InProgress.getId());
+        subStatusSet.add(TaskSubStatus.Waiting.getId());
+        subStatusSet.add(TaskSubStatus.Agreement.getId());
+        List<DocumentTaskSub> taskSubList = getAllByReceiverIdAndStatuses(userId,subStatusSet);
+        Integer listSize=0;
+        StringBuilder text = new StringBuilder();
+        for (DocumentTaskSub taskSub: taskSubList) {
+            if (taskSub.getDocumentId()!=null && taskSub.getDueDate()!=null){
+                Date taskDueDate = taskSub.getDueDate();
+                Calendar cd = Calendar.getInstance();
+                cd.add(Calendar.DATE,-1);
+                if (taskDueDate.before(cd.getTime())){
+                    listSize++;
+                    Document document = documentService.getById(taskSub.getDocumentId());
+                    text.append(document != null ? "xujjat raqami: " + document.getRegistrationNumber() : "  ---").append("\n");
+                }
+            }
+        }
+        text.insert(0, "Muddati tugagan xujjat soni:= " + listSize + "\n");
+        return text.toString();
     }
 }

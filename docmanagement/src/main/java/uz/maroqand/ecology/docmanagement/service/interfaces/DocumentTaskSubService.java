@@ -2,6 +2,8 @@ package uz.maroqand.ecology.docmanagement.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.telegram.SendQueryType;
+import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.dto.StaticInnerInTaskSubDto;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -97,4 +99,8 @@ public interface DocumentTaskSubService {
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);
 
     String getUrl(Document document,Integer  taskSubId);
+
+    List<DocumentTaskSub> getAllByReceiverIdAndStatuses(Integer receiverId, Set<Integer> statusSet);
+
+    String getMessageText(Integer telegramUserId, SendQueryType sendQueryType);
 }

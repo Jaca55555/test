@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.repository.expertise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import uz.maroqand.ecology.core.constant.expertise.ChangeDeadlineDateStatus;
 import uz.maroqand.ecology.core.entity.expertise.ChangeDeadlineDate;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface ChangeDeadlineDateRepository extends JpaRepository<ChangeDeadli
     List<ChangeDeadlineDate> findByRegApplicationId(Integer id);
 
     ChangeDeadlineDate findTop1ByRegApplicationIdOrderByIdDesc(Integer regApplicationId);
+
+    Integer countByStatus(ChangeDeadlineDateStatus status);
 
 }

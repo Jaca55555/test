@@ -189,7 +189,7 @@ public class PerformerController {
             model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
-
+        System.out.println(" performer regApplicationID==" + regApplication.getId());
         Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");

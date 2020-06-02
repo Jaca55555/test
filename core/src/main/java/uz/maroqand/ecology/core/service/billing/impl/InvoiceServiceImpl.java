@@ -85,6 +85,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amountAfter = requirement.getQty() * minWage.getAmount();
+        if (regApplication.getAddNds()!=null && regApplication.getAddNds()){
+            amountAfter=amountAfter*1.15;// 15% nds
+        }
         System.out.println("invoice.getAmount()="+invoice.getAmount());
         System.out.println("amountAfter="+amountAfter);
         if(!invoice.getAmount().equals(amountAfter)){
@@ -124,7 +127,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         calendar.set(Calendar.DAY_OF_MONTH, 60);
         String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
-        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication);
+        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds());
         invoice.setAmount(contract.getAmount());
         invoice.setQty(contract.getCost());
 

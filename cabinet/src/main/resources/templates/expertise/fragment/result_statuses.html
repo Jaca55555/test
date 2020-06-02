@@ -8,9 +8,11 @@
 
     <div class="form-group col-md-10 offset-1">
         <h5 class="" th:text="#{sys_performer.conclusionResult}">Результат заключения</h5>
-        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.approved}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" />
-        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.denied}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" />
-        <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.modification}" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Modification}" />
+        <div th:if="${performerLog!=null}">
+            <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.approved}" th:if="${performerLog.status !=null && performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" />
+            <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.denied}" th:if="${performerLog.status !=null && performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" />
+            <input class="form-control" readonly="readonly" th:value="#{sys_performerStatus.modification}" th:if="${performerLog.status !=null && performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Modification}" />
+        </div>
     </div>
     <div class="form-group col-md-10 offset-1">
         <label th:text="#{sys_performer.conclusionType}">Xulosa turi:</label>
@@ -27,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-10 offset-1" th:if="${#lists.size(performerLog.documentFiles)>0}">
+    <div class="col-md-10 offset-1" th:if="${performerLog!=null && #lists.size(performerLog.documentFiles)>0}">
         <div class="task-attachment" >
             <h5 class="mt-lg-5"  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
             <ul class="media-list p-0">

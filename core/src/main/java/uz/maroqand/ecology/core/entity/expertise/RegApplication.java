@@ -231,6 +231,10 @@ public class RegApplication {
     @Column(name = "facture",columnDefinition = "boolean DEFAULT false")
     private Boolean facture = false;
 
+    //for nds uchun
+    @Column(name = "add_nds",columnDefinition = "boolean DEFAULT false")
+    private Boolean addNds ;
+
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
 

@@ -111,7 +111,7 @@
                                                     <label for="status" class="control-label" th:text="#{sys_status}"></label>
                                                     <select id="status" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="#{${status.getConfirmName()}}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status.id}" th:text="#{${status.getConfirmName()}}"></option>
                                                     </select>
                                                 </div>
 

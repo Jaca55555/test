@@ -26,6 +26,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> findByTin(Integer tin);
 
     List<User> findAllByDepartmentIdNotNull();
+    List<User> findAllByTelegramUserIdNotNullAndEnabledTrue();
 
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
 
@@ -38,5 +39,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> findByOrganizationId(Integer organizationId);
 
     List<User> findByDepartmentIdInAndEnabledTrue(Set<Integer> departmentIds);
+
+    User findByTelegramUserIdAndEnabledTrue(Integer telegramUserId);
 
 }

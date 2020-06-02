@@ -132,6 +132,49 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public List<RegApplicationLog> getAllByLogType(LogType logType) {
+        return regApplicationLogRepository.findByTypeOrderByIdDesc(logType);
+    }
+
+    @Override
+    public Integer getLogCount(Integer id) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        if (id == null) return 0;
+        LogType logType;
+        switch (id) {
+            case 0:
+                logType = LogType.Confirm;
+                break;
+            case 1:
+                logType = LogType.Forwarding;
+                break;
+            case 2:
+                logType = LogType.Performer;
+                break;
+            case 3:
+                logType = LogType.Agreement;
+                break;
+            case 4:
+                logType = LogType.AgreementComplete;
+                break;
+            default:
+                return 0;
+        }
+        List<RegApplicationLog> regApplicationLogList = getAllByLogType(logType);
+        System.out.println("size==" + regApplicationLogList.size() + "   type=" + logType + "  id==" + id);
+        Integer result = 0;
+        for (RegApplicationLog regApplicationLog : regApplicationLogList) {
+            if (!regApplicationLog.getRegApplication().getDeleted() && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
+                    && (regApplicationLog.getStatus().equals(LogStatus.Initial) || regApplicationLog.getStatus().equals(LogStatus.Resend)
+                    || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))) {
+                    result++;
+                    hashMap.put(regApplicationLog.getRegApplicationId(), regApplicationLog.getRegApplicationId());
+            }
+        }
+        return result;
+    }
+
+    @Override
     public Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,

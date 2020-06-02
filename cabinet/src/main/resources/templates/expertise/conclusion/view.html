@@ -55,16 +55,14 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <div class="col-md-12 " th:if="${conclusion!=null}">
+                                        <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">
                                             <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
                                                 <i class="feather icon-printer"></i>
                                                 <span th:text="#{sys_print}"> print</span>
                                             </button>
                                         </div>
-                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}">
+                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}" id="conclusion">
                                             <object th:include="expertise/fragment/conclusion_view :: conclusion" th:remove="tag"></object>
-
-<!--                                            <object th:include="expertise/reg/fragments/conclusion :: conclusion" th:remove="tag"></object>-->
                                         </div>
                                     </div>
                                 </div>

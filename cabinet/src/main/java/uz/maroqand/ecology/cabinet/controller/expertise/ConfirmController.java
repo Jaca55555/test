@@ -212,7 +212,8 @@ public class ConfirmController {
     public String confirmApplication(
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "budget")Boolean budget
+            @RequestParam(name = "budget")Boolean budget,
+            @RequestParam(name = "addNds")Boolean nds
     ){
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -233,6 +234,7 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Approved, comment, user.getId());
 
         regApplication.setBudget(budget);
+        regApplication.setAddNds(nds);
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
@@ -254,7 +256,8 @@ public class ConfirmController {
     public String notConfirmApplication(
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "budget")Boolean budget
+            @RequestParam(name = "budget")Boolean budget,
+            @RequestParam(name = "addNds")Boolean nds
     ){
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -275,6 +278,7 @@ public class ConfirmController {
         regApplicationLogService.update(regApplicationLog, LogStatus.Denied, comment, user.getId());
 
         regApplication.setBudget(budget);
+        regApplication.setAddNds(nds);
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 
@@ -294,7 +298,8 @@ public class ConfirmController {
     public String confirmEditLog(
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "budget")Boolean budget
+            @RequestParam(name = "budget")Boolean budget,
+            @RequestParam(name = "addNds")Boolean nds
     ){
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -319,6 +324,7 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setAddNds(nds);
         regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
         regApplicationService.update(regApplication);
 
@@ -339,7 +345,8 @@ public class ConfirmController {
     public String confirmDeniedEdit(
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "budget")Boolean budget
+            @RequestParam(name = "budget")Boolean budget,
+            @RequestParam(name = "addNds")Boolean nds
     ){
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -364,6 +371,7 @@ public class ConfirmController {
 
         regApplication.setConfirmLogId(regApplicationLog.getId());
         regApplication.setBudget(budget);
+        regApplication.setAddNds(nds);
         regApplication.setStatus(RegApplicationStatus.CheckNotConfirmed);
         regApplicationService.update(regApplication);
 

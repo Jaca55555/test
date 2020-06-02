@@ -17,6 +17,9 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        .required-border{
+            border: 1px dashed darkred;
+        }
 
         .add-file {
             background-color: #F4F7FA;
@@ -33,7 +36,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+.is-invalid{
 
+}
         .file {
             position: relative;
             background-color: #F4F7FA;
@@ -226,10 +231,13 @@
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.coordinates}"></label>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6" id="add_coordinate">
                                                                 <button type="button" class="btn btn-info" th:text="#{sys_about.open_map}" data-toggle="modal" data-target="#map-modal" id="open-map-btn"></button>
                                                                 <button type="button" class="btn btn-primary" th:text="#{sys_about.write_coordinates}" id="write-coordinates-btn" onclick="writeCoordinates()"></button>
                                                                 <button type="button" class="btn btn-secondary" th:text="#{sys_about.clear_coordinates}" id="clear-coordinates-btn" disabled="" style="float: right; margin-right: 0;" onclick="clearCoordinates()"></button>
+                                                            </div>
+                                                            <div class="col-md-6 offset-md-3" id="error_coordinate" style="display: none">
+                                                                <span class="text-c-red" th:text="#{sys_cordinate.select}">koordinateni belgilang</span>
                                                             </div>
                                                         </div>
                                                         <div id="coordinates-map-list" style="margin-bottom: 50px; display: none;" >
@@ -438,6 +446,7 @@
         var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
+        var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
@@ -447,6 +456,7 @@
                 $('#write-coordinates-btn').prop('disabled', true);
                 $('#open-map-btn').prop('disabled', true);
                 $('#clear-coordinates-btn').prop('disabled', false);
+                isCoordinate = true;
             }
             $('#objectId').select2();
             $('#activityId').select2();
@@ -579,7 +589,12 @@
                 getMaterial(value);
             });
             checkedMaretil();
-            if(materialId){ $("#coordinates-control").show(); }else { $("#coordinates-control").hide(); }
+            if(materialId){
+                isCoordinate = true;
+                $("#coordinates-control").show();
+            }else {
+                $("#coordinates-control").hide();
+            }
         }
 
         function getMaterial(id) {
@@ -790,6 +805,7 @@
         }
 
         function saveCoordinates() {
+            removeCoordinatedivBorder();
             var features = vector.getSource().getFeatures();
 
             if (features.length > 0) {
@@ -819,24 +835,34 @@
 
         var coordinateIndex = 1;
         function writeCoordinates() {
+            removeCoordinatedivBorder();
             $('#write-coordinates-btn').prop('disabled', true);
             $('#open-map-btn').prop('disabled', true);
             $('#clear-coordinates-btn').prop('disabled', false);
 
-            addInputForCoordinates(coordinateIndex++);
+            addInputForCoordinates();
+            addInputForCoordinates();
+            addInputForCoordinates();
+            addInputForCoordinates();
 
             $('#coordinates-list').show();
+
         }
         
-        function addInputForCoordinates(index) {
+        function addInputForCoordinates() {
+            let index = coordinateIndex++;
             $('#coordinates-list').append('<div class="form-group row">\n' +
                 '                                                                <div class="col-md-3 text-right">\n' +
                 '                                                                    <label class="col-form-label">#'+index+'</label>\n' +
                 '                                                                </div>\n' +
                 '                                                                <div class="col-md-6 row" style="margin-left: 0;">\n' +
-                '                                                                        <input type="text" class="form-control col-md-4 coord-input">\n' +
-                '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input">\n' +
-                '                                                                </div>\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 coord-input" required="required" data-parsley-errors-container="#materialError'+index+'" data-parsley-type="number">\n' +
+                '                                                                        <input type="text" class="form-control col-md-4 offset-md-4 coord-input" required="required" data-parsley-errors-container="#materialError_'+index+'" data-parsley-type="number">\n' +
+                '                                                                </div>' +
+                 '                                                              <div class="col-md-6 offset-md-3 row">' +
+                 '                                                                  <div class="col-md-4" id="materialError'+index+'"></div>' +
+                 '                                                                  <div class="col-md-4 offset-4" id="materialError_'+index+'"></div>' +
+                 '                                                              </div>'+
                 '                                                            </div>');
 
             $('#plus-btn').remove();
@@ -845,9 +871,10 @@
                 '                                                                    <label class="col-form-label"></label>\n' +
                 '                                                                </div>\n' +
                 '                                                                <div class="col-md-6">\n' +
-                '                                                                        <button class="btn btn-info btn-icon" style="float: right; margin-right: 0;" onclick="addInputForCoordinates(' + (coordinateIndex++) + ')"><i class="feather icon-plus"></i></button>\n' +
+                '                                                                        <button class="btn btn-info btn-icon" style="float: right; margin-right: 0;" onclick="addInputForCoordinates(' + (index+1) + ')"><i class="feather icon-plus"></i></button>\n' +
                 '                                                                </div>\n' +
                 '                                                            </div>');
+
         }
 
         function clearCoordinates() {
@@ -876,18 +903,37 @@
 
             });
         }
-        
+
         function submitForm() {
+            console.log("submitForm");
             var coordinatesListForSubmit = [];
             $('.coord-input').each(function () {
                 coordinatesListForSubmit.push(parseFloat($(this).val()));
-
             });
-
             if ($('input[name="coordinates"]').length)
                 $('input[name="coordinates"]').remove();
             $('#about-form').append('<input type="hidden" name="coordinates" value="'+coordinatesListForSubmit+'">');
-            $('#about-form').submit();
+
+            if (isCoordinate){
+                let mapListSize = $('#coordinates-map-list').children().length;
+                let coordinateListSize = $('#coordinates-list').children().length;
+                console.log("mapListSize=" + mapListSize);
+                console.log("coordinateListSize=" + coordinateListSize);
+                if (mapListSize>=4 || coordinateListSize>=5){
+                    $('#error_coordinate').hide();
+                    $('#about-form').submit();
+                }else{
+                    $('#add_coordinate').addClass('required-border');
+                    $('#error_coordinate').show();
+                }
+            }else{
+                $('#about-form').submit();
+            }
+        }
+
+        function removeCoordinatedivBorder(){
+            $('#add_coordinate').removeClass('required-border');
+            $('#error_coordinate').hide();
         }
 
         $('#projectDeveloperTin').change(function () {

@@ -115,6 +115,12 @@ public class User {
     @Transient
     private Integer userAdditionalId;
 
+    @Column(name = "telegram_user_id")
+    private Integer telegramUserId;
+
+    @Column(name = "telegram_user_private")
+    private Boolean isPrivate;
+
     //lang selected
     private String lang;
 
@@ -130,6 +136,10 @@ public class User {
         if (firstname!=null) shortName+=firstname.substring(0,1).toUpperCase() + ".";
         if (lastname!=null) shortName+=lastname+" ";
         return shortName;
+    }
+
+    public Boolean getPrivate(){
+        return isPrivate;
     }
 
 }

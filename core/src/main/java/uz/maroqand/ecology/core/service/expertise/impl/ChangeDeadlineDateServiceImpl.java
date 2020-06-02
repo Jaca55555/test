@@ -50,6 +50,11 @@ public class ChangeDeadlineDateServiceImpl implements ChangeDeadlineDateService 
         return changeDeadlineDateRepository.findTop1ByRegApplicationIdOrderByIdDesc(id);
     }
 
+    @Override
+    public Integer getCountByStatusInitial() {
+        return changeDeadlineDateRepository.countByStatus(ChangeDeadlineDateStatus.Initial);
+    }
+
     private static Specification<ChangeDeadlineDate> getFilteringSpecifications(
             final Integer regApplicationId,
             final ChangeDeadlineDateStatus changeDeadlineDateStatus
