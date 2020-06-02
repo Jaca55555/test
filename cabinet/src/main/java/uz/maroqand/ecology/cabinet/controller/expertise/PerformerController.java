@@ -242,8 +242,10 @@ public class PerformerController {
         regApplicationService.update(regApplication);
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        conclusion.setNumber(number);
-        conclusionService.save(conclusion);
+        if (conclusion!=null){
+            conclusion.setNumber(number);
+            conclusionService.save(conclusion);
+        }
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
@@ -364,6 +366,12 @@ public class PerformerController {
             regApplication.setAgreementCompleteLogId(null);
         }
         regApplicationService.update(regApplication);
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion!=null){
+            conclusion.setNumber(number);
+            conclusionService.save(conclusion);
+        }
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
