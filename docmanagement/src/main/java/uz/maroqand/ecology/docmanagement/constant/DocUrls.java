@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.docmanagement.constant;
 
+import com.google.inject.internal.cglib.core.$DebuggingClassWriter;
+
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
  * (uz)
@@ -89,6 +91,7 @@ public class DocUrls {
     public static final String IncomingRegistrationTaskSubmit = IncomingRegistration + "/task_submit";
     public static final String IncomingRegistrationUserName = IncomingRegistration + "/user_name";
     public static final String IncomeMailFileUpload = IncomingRegistration + "/file";
+    public static final String IncomingFileDelete=IncomeMailFileUpload+ "/delete";
     public static final String IncomingSpecialControll = IncomingRegistration + "/special";
 
     //Murojaatlarni ro'yhatga olish
