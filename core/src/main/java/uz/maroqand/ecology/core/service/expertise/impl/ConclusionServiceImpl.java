@@ -18,9 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ConclusionServiceImpl implements ConclusionService {
@@ -91,7 +89,10 @@ public class ConclusionServiceImpl implements ConclusionService {
 
     @Override
     public Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
-        return conclusionRepository.findAll(getFilteringSpecification(id,dateBegin,dateEnd,tin,name),pageable);
+        Set<ConclusionStatus> conclusionStatusIds  = new HashSet<>();
+        conclusionStatusIds.add(ConclusionStatus.Active);
+        conclusionStatusIds.add(ConclusionStatus.Expired);
+        return conclusionRepository.findAll(getFilteringSpecification(id,dateBegin,dateEnd,tin,conclusionStatusIds,name),pageable);
     }
 
     private static Specification<Conclusion> getFilteringSpecification(
@@ -99,6 +100,7 @@ public class ConclusionServiceImpl implements ConclusionService {
             final Date dateBegin,
             final Date dateEnd,
             final Integer tin,
+            final Set<ConclusionStatus> conclusionStatuses,
             final String name
     ) {
         return new Specification<Conclusion>() {
@@ -108,6 +110,10 @@ public class ConclusionServiceImpl implements ConclusionService {
 
                 if(id != null){
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));
+                }
+
+                if(conclusionStatuses != null){
+                    predicates.add(criteriaBuilder.in(root.get("status")).value(conclusionStatuses));
                 }
 
                 if(dateBegin != null && dateEnd != null){

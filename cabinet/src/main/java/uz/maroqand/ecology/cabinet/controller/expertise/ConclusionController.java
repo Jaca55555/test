@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
@@ -23,6 +24,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -40,15 +42,17 @@ public class ConclusionController {
     private final ConclusionService conclusionService;
     private final RegApplicationLogService regApplicationLogService;
     private final HelperService helperService;
+    private final DocumentRepoService documentRepoService;
 
     @Autowired
-    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService) {
+    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.conclusionService = conclusionService;
         this.regApplicationLogService = regApplicationLogService;
         this.helperService = helperService;
+        this.documentRepoService = documentRepoService;
     }
 
 
@@ -110,14 +114,16 @@ public class ConclusionController {
         Conclusion conclusion = conclusionService.getById(id);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
-        if(conclusion == null){
+        if(conclusion == null || conclusion.getStatus().equals(ConclusionStatus.Initial)){
             return "redirect:" + ExpertiseUrls.ConclusionList;
         }
         RegApplication regApplication = null;
         if(conclusion.getRegApplicationId() != null){
             regApplication = regApplicationService.getById(conclusion.getRegApplicationId());
         }
-
+        if(conclusion.getDocumentRepoId() != null){
+            model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+        }
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("regApplication", regApplication);
 
