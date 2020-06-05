@@ -35,9 +35,10 @@
             <div class="col-md-6">
                 <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" data-parsley-errors-container="#legalEntityOpf-error">
                     <option value="" th:text="#{sys_select}"></option>
+                    <option value="100" th:text="${@opfServiceImpl.getById(100).getNameTranslation(#locale)}" disabled="disabled"></option>
                     <option value="1521" th:text="${@opfServiceImpl.getById(1521).getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==1521}"></option>
                     <option value="1522" th:text="${@opfServiceImpl.getById(1522).getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==1522}"></option>
-                    <option th:each="opf : ${opfLegalEntityList}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${(opf.id!=1522 || opf.id!=1521) and opf.parentId==null }"></option>
+                    <option  th:each="opf : ${opfLegalEntityList}" th:if="${opf.id!=100}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${(opf.id!=1522 || opf.id!=1521) and opf.parentId==null }"></option>
                 </select>
                 <div id="legalEntityOpf-error"></div>
             </div>

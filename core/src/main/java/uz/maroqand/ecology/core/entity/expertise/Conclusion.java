@@ -63,6 +63,9 @@ public class Conclusion {
     @Column(name = "conclusion_file_id")
     private Integer conclusionFileId; // for reestrga yuklangan arizalar uchun xulosa yuklash
 
+    @Column(name = "file_id")
+    private Integer fileId;
+
     /*
      * Technical Fields
      */

@@ -15,7 +15,7 @@ public enum RegApplicationStatus {
     Initial(0,"sys_regApplication.statusInitial","badge badge-secondary"), //ispolnitel  natijani kiritishni boshlagan
     CheckSent(1,"sys_regApplication.statusCheck","badge badge-info"), //ispolnitel natijani kiritgandan
     CheckConfirmed(2,"sys_regApplication.statusConfirmed","badge badge-success"), //ispolnitel natijani kiritgandan
-    CheckNotConfirmed(3,"sys_regApplication.statusNotConfirmed","badge badge-danger"), //ispolnitel natijani kiritgandan
+    CheckNotConfirmed(3,"sys_regApplication.checkNotConfirmed","badge badge-danger"), //ispolnitel natijani kiritgandan
 
     Process(4,"sys_regApplication.statusProcess","badge badge-info"), //ispolnitel natijani kiritgandan
     Modification(5,"sys_regApplication.statusModification","badge badge-warning"), //dorabotka, qayta ko'rib chiqish

@@ -169,7 +169,10 @@
                     vo.expired = dates.compare(now, vo.validTo) > 0;
                     var itm = document.createElement("option");
                     itm.value = itmkey;
-                    itm.text = vo.CN;
+                    itm.text = vo.subjectName + '\n' + vo.CN;
+                    itm.text = itm.text + '\n  serial:'+vo.serialNumber;
+                    itm.text = itm.text + '\n  tin:'+vo.TIN;
+                    itm.text = itm.text + '\n  date:'+vo.validFrom + '-' + vo.validTo;
                     if (!vo.expired) {
 
                     } else {

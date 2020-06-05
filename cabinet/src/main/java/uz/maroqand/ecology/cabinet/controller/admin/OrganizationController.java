@@ -160,6 +160,7 @@ public class OrganizationController {
         oldOrganization.setDirector(organization.getDirector());
         oldOrganization.setLastNumber(organization.getLastNumber());
         oldOrganization.setManager(organization.getManager());
+        oldOrganization.setTin(organization.getTin());
         oldOrganization.setMfo(organization.getMfo());
         oldOrganization.setName(organization.getName());
         oldOrganization.setNameRu(organization.getNameRu());

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="conclusion">
+
+<div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
+    <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
+
+    <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
+    <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_info}"></span> </p>
+    <img th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImage + '?id=' + conclusion.documentRepoId}" class="qr-code" />
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_id}"></span> <span th:text="${documentRepo.id}"></span> </p>
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_code}"></span> <span th:text="${documentRepo.code}"></span> </p>
+</div>
+
+</body>
+</html>

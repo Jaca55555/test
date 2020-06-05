@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -31,12 +34,14 @@ public class EmployeeController {
     private final RegApplicationService regApplicationService;
     private final UserService userService;
     private final HelperService helperService;
+    private final OpfService opfService;
 
     @Autowired
-    public EmployeeController(RegApplicationService regApplicationService, UserService userService, HelperService helperService) {
+    public EmployeeController(RegApplicationService regApplicationService, UserService userService, HelperService helperService, OpfService opfService) {
         this.regApplicationService = regApplicationService;
         this.userService = userService;
         this.helperService = helperService;
+        this.opfService = opfService;
     }
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControls,method = RequestMethod.GET)
@@ -69,6 +74,17 @@ public class EmployeeController {
         HashMap<String,Object> result = new HashMap<>();
 
         for (RegApplication regApplication: regApplicationList) {
+            Client client = null;
+            String opfName = "";
+            if (regApplication.getApplicantId()!=null){
+                client = regApplication.getApplicant();
+                if (client.getOpfId()!=null){
+                    Opf opf = opfService.getById(client.getOpfId());
+                    System.out.println("opf----");
+                    System.out.println(opf.getId());
+                    opfName=opf!=null?opf.getNameTranslation(locale):"";
+                }
+            }
             for (User user: userList) {
                 if (user.getId().equals(regApplication.getPerformerId())){
                     convenientForJSONArray.add(new Object[]{
@@ -76,7 +92,12 @@ public class EmployeeController {
                             regApplication.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                             regApplication.getMaterials()!=null?helperService.getMaterials(regApplication.getMaterials(),locale):"",
                             regApplication.getDeadlineDate()!=null? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                            user.getFullName()
+                            user.getFullName(),
+                            regApplication.getObjectId()!=null?helperService.getObjectExpertise(regApplication.getObjectId(),locale):"",
+                            client!=null?client.getTin():"",
+                            client!=null?client.getName():"",
+                            opfName
+
                     });
                 }
             }

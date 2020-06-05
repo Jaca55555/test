@@ -31,11 +31,11 @@
                </div>
                <div class="col-md-9">
                    <div class="custom-control custom-radio">
-                       <input type="radio" id="ndsFalse" name="addNds" value="0" class="custom-control-input" th:checked="${regApplication.addNds==null or regApplication.addNds==false}" required="" >
+                       <input type="radio" id="ndsFalse" name="addNds" value="0" class="custom-control-input" th:checked="${regApplication.addNds!=null and regApplication.addNds==false}" required="" >
                        <label class="custom-control-label" for="ndsFalse" th:text="#{sys_nds.false}"> </label>
                    </div>
                    <div class="custom-control custom-radio">
-                       <input type="radio" id="ndsTrue" name="addNds" value="1" class="custom-control-input" th:checked="${regApplication.addNds!=null and regApplication.addNds==true}" required="" >
+                       <input type="radio" id="ndsTrue" name="addNds" value="1" class="custom-control-input" th:checked="${regApplication.addNds==null or regApplication.addNds==true}" required="" >
                        <label class="custom-control-label" for="ndsTrue" th:text="#{sys_nds.true}"> </label>
                    </div>
                </div>

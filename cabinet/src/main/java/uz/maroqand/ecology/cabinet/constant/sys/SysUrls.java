@@ -26,4 +26,9 @@ public class SysUrls {
     public static final String ErrorInternalServerError = "/500";
     public static final String ErrorForbidden = "/403";
 
+    private static final String Repository = "/repository";
+    public static final String GetDocument = Repository + "/get-document";
+    public static final String GetQRImage = Repository + "/get_qr_image";
+    public static final String GetCaptcha = Repository + "/captcha";
+
 }
