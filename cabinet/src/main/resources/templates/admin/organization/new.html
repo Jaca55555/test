@@ -228,18 +228,19 @@
                                                             </label>
                                                             <select  class="form-control"  id="regionId" th:field="*{regionId}">
                                                                 <option value="" th:text="#{sys_select}"></option>
-                                                                <option th:each="r:${regions}" th:text="${r.name}" th:value="${r.id}"></option>
+                                                                <option th:each="r:${regions}" th:text="${r.id + ' - ' + r.getNameTranslation(#locale)}" th:value="${r.id}"></option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label for="subregion" class="control-label" >
+                                                            <label for="subRegionId" class="control-label" >
                                                                 <span th:text="#{organization.SubRegion}"></span>
                                                                 <span class="required">*</span>
                                                             </label>
-                                                            <select id="subregion" class="form-control"   name="subRegionId">
+                                                            <select id="subRegionId" class="form-control"   name="subRegionId">
                                                                 <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="r:${subRegions}" th:text="${r.id + ' - ' + r.getNameTranslation(#locale)}" th:class="${'sr-'+r.parentId}" th:value="${r.id}"></option>
 
                                                             </select>
                                                         </div>
@@ -293,61 +294,12 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 <script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script type="text/javascript" src="/static/js/form.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 <script th:inline="javascript">
-    var url = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).OrganizationtGetByRegion}]];
-    var locale = getCurrentLanguage();
-    var subRegionId=[[${subRegionId}]];
-
     $(document).ready(function () {
-        var regionId = $('#regionId').val();
-        console.log(regionId);
-        if (regionId!="" && regionId!=null){
-            getSubregion();
-        }
-        $('#regionId').select2();
-    });
-
-
-    function getSubregion() {
-        var regionId = $('#regionId').val();
-        var srSelector = $('#subRegionId');
-        srSelector.find('option').hide();
-        srSelector.find('option:selected').prop('selected',false);
-        srSelector.find('option:first').show();
-        if (regionId!="" && regionId!=null){
-            var html = '';
-            $.ajax({
-                url: url,
-                data: {
-                    id: regionId,
-                    _csrf: $('#global_csrf').val()
-                },
-                type: 'post',
-                dataType: 'json',
-                cache: true,
-                success: function (response) {
-                    console.log(response);
-                    $.each(response, function (index, value) {
-                        html += '<option value="' + value.id + '"' ;
-                        if ((subRegionId!='' || subRegionId!=null) && (subRegionId==value.id)){
-                            html+='selected="selected"';
-                        }
-                        if (locale === 'ru'){
-                            html+='>' + value.nameRu + '</option>'
-                        } else{
-
-                        }html+='>' + value.name + '</option>'
-
-                    });
-                    $('#subRegionId').find(':first-child').after(html);
-
-                },
-                error: function () {
-                }
-            });
-        }
-    }
+        bindSubRegionSelectToRegionSelect('#subRegionId','#regionId')
+    })
 </script>
 </body>
 </html>

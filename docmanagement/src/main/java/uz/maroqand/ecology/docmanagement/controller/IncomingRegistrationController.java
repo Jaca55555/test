@@ -703,7 +703,15 @@ public class IncomingRegistrationController {
         response.put("data", file);
         return response;
     }
-
+    @RequestMapping(value = DocUrls.IncomingFileDelete, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public File deleteAttachment(@RequestParam(name = "id")Integer id){
+        File file = fileService.findById(id);
+        file.setDeleted(true);
+        file.setDateDeleted(new Date());
+        file.setDeletedById(userService.getCurrentUserFromContext().getId());
+        return fileService.save(file);
+    }
     @GetMapping(value = DocUrls.FileDownload)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@RequestParam(name = "id")Integer id) {
