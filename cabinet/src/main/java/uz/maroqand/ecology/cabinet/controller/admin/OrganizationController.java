@@ -102,7 +102,7 @@ public class OrganizationController {
         Organization organization=new Organization();
         model.addAttribute("organization",organization);
         model.addAttribute("soato",soatoService.getRegions());
-        model.addAttribute("subRegionId",null);
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("action_url", AdminUrls.OrganizationCreate);
         model.addAttribute("back_url", AdminUrls.OrganizationList);
