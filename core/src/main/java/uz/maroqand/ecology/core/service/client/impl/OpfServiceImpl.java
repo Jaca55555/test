@@ -48,7 +48,7 @@ public class OpfServiceImpl implements OpfService {
 
     @Cacheable("getOpfById")
     public Opf getById(Integer id){
-        return opfRepository.getOne(id);
+        return opfRepository.findById(id).get();
     }
 
     public Integer getByNameRu(String nameRu){

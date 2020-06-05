@@ -148,6 +148,10 @@
 <script th:inline="javascript">
     var reg_application_number = [[#{reg_application_number}]];
     var reg_application_deadlineDate = [[#{reg_application.deadlineDate}]];
+    let coordinate_object_name = [[#{coordinate.object_name}]];
+    let sys_legal_entity_name = [[#{sys_legal_entity_name}]];
+    let sys_tin = [[#{sys_tin}]];
+    let sys_opf = [[#{sys_opf}]];
     $(document).ready(function () {
         getAllApp();
     });
@@ -187,6 +191,46 @@
                     '                       <strong>'+reg_application_deadlineDate+'</strong>\n' +
                     '                       <strong class="label label-danger">\n' +
                     '                        <span>'+item[3]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+coordinate_object_name+'</strong>\n' +
+                    '                       <strong >: \n' +
+                    '                        <span>'+item[5]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+sys_legal_entity_name+'</strong>\n' +
+                    '                       <strong >: \n' +
+                    '                        <span>'+item[7]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+sys_tin+'</strong>\n' +
+                    '                       <strong >: \n' +
+                    '                        <span>'+item[6]+'</span>\n' +
+                    '                       </strong>\n' +
+                    '                       </p>\n' +
+                    '                 </div>\n' +
+                    '           </div>\n' +
+                    '           <div class="row">\n' +
+                    '                 <div class="col-sm-12">\n' +
+                    '                       <p class="task-due">\n' +
+                    '                       <strong>'+sys_opf+'</strong>\n' +
+                    '                       <strong >: \n' +
+                    '                        <span>'+item[8]+'</span>\n' +
                     '                       </strong>\n' +
                     '                       </p>\n' +
                     '                 </div>\n' +
