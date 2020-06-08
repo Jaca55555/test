@@ -124,7 +124,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 th:text="#{mntr_user_new}"></h5>
+                                        <h5 th:text="#{doc_organization.new}"></h5>
                                     </div>
                                     <div class="card-body">
                                         <form method="post" th:object="${organization}" data-parsley-validate="" th:action="${action_url}" id="userForm">
@@ -187,7 +187,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="lastNumber" class="control-label" >
-                                                                <span th:text="#{organization.Manager}"></span>
+                                                                <span th:text="#{organization.lastNumber}"></span>
                                                                 <span class="required">*</span>
                                                             </label>
                                                             <input id="lastNumber" required="required" class="form-control" type="text" th:field="*{lastNumber}" />
@@ -297,6 +297,10 @@
 <script type="text/javascript" src="/static/js/form.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 <script th:inline="javascript">
+    var locale = getCurrentLanguage();
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
     $(document).ready(function () {
         bindSubRegionSelectToRegionSelect('#subRegionId','#regionId')
     })
