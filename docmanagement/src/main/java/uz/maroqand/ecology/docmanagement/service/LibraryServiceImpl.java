@@ -111,7 +111,9 @@ public class LibraryServiceImpl implements LibraryService {
         library.setDeleted(Boolean.FALSE);
         library.setCreatedAt(new Date());
         LibraryCategory category=getByCategoryId(library.getCategoryId());
-        libraryCategory.setCount(category.getCount()+1);
+        if(libraryCategory.getCount()!=null){
+        libraryCategory.setCount(category.getCount()+1);}
+        else {libraryCategory.setCount(1);}
         return libraryRepository.save(library);
     }
     @Override

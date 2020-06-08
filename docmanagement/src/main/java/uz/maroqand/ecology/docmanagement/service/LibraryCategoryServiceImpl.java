@@ -66,7 +66,7 @@ public class LibraryCategoryServiceImpl implements LibraryCategoryService {
     }
     @Override
     public List<LibraryCategory> findAll(){
-        return libraryCategoryRepository.findAll();
+        return libraryCategoryRepository.findAllByDeletedFalse();
     }
     @Override
     public DataTablesOutput<LibraryCategory> getAll(DataTablesInput input) {
