@@ -10994,3 +10994,34 @@ div .dt-buttons{
 .w-65 {
   width: 65% !important;
 }
+
+.file-block:hover {
+  -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-transition: all 0.55s ease-in-out;
+  transition: all 0.55s ease-in-out;
+  cursor: pointer;
+}
+
+.file-block {
+  width:150px;
+  height:150px;
+  border:2px solid #ced4da;
+  margin-top:5px;
+  margin-right:20px;
+}
+.text-center {
+  text-align: center;
+}
+.file-icon-container {
+  font-size:60px;
+}
+.file-icon-container-small {
+  margin-left: 5px;
+  font-size:40px;
+  display:flex;
+  align-items: center;
+}
+.file-icon-container-small>div {
+  align-self:center;
+}
