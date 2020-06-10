@@ -9,6 +9,9 @@
         .table td, .table th{
             white-space: unset;
         }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -88,7 +91,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                                                 <div class="text-right" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
-                                                    <button class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
+                                                    <button th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}" class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
                                                     <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>
                                                 </div>
                                                 <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
@@ -138,6 +141,9 @@
 <script src="/static/plugins/ckeditor/js/document/FileSaver.js"></script>
 <script src="/static/plugins/ckeditor/js/document/jquery.wordexport.js"></script>
 
+<script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+
+
 <!-- Ckeditor js -->
 <script>
     DecoupledEditor
@@ -181,6 +187,11 @@
         if(conclusionId === 0){
             saveConculision();
         }
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
     });
 
     function saveConculision() {
