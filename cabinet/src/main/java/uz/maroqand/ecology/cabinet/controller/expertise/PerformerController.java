@@ -36,6 +36,7 @@ import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
 
@@ -215,6 +216,7 @@ public class PerformerController {
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "number")String number,
+            @RequestParam(name = "date")String dateStr,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -244,6 +246,7 @@ public class PerformerController {
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         if (conclusion!=null){
             conclusion.setNumber(number);
+            conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
         }
 

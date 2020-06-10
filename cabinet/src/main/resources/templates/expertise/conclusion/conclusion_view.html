@@ -7,15 +7,21 @@
 <body th:fragment="conclusion">
 
 <div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
-    <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
+    <div th:if="${conclusion.conclusionFileId==null}">
 
-    <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
-    <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+        <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
+        <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
+        <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+        <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_info}"></span> </p>
+        <img th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImage + '?id=' + conclusion.documentRepoId}" class="qr-code" />
+        <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_id}"></span> <span th:text="${documentRepo.id}"></span> </p>
+        <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_code}"></span> <span th:text="${documentRepo.code}"></span> </p>
+    </div>
 
-    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_info}"></span> </p>
-    <img th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImage + '?id=' + conclusion.documentRepoId}" class="qr-code" />
-    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_id}"></span> <span th:text="${documentRepo.id}"></span> </p>
-    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_code}"></span> <span th:text="${documentRepo.code}"></span> </p>
+    <div th:if="${conclusion.conclusionFileId!=null}" class="text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
+        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8085/expertise/conclusion/file_download_for_view?id='+conclusion.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+    </div>
+
 </div>
 
 </body>

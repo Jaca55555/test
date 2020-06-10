@@ -3,28 +3,36 @@ package uz.maroqand.ecology.cabinet.controller.expertise;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
+import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Conclusion;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ConclusionService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
+import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -43,9 +51,13 @@ public class ConclusionController {
     private final RegApplicationLogService regApplicationLogService;
     private final HelperService helperService;
     private final DocumentRepoService documentRepoService;
+    private final SoatoService soatoService;
+    private final ObjectExpertiseService objectExpertiseService;
+    private final ActivityService activityService;
+    private final FileService fileService;
 
     @Autowired
-    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService) {
+    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, FileService fileService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -53,6 +65,10 @@ public class ConclusionController {
         this.regApplicationLogService = regApplicationLogService;
         this.helperService = helperService;
         this.documentRepoService = documentRepoService;
+        this.soatoService = soatoService;
+        this.objectExpertiseService = objectExpertiseService;
+        this.activityService = activityService;
+        this.fileService = fileService;
     }
 
 
@@ -90,13 +106,13 @@ public class ConclusionController {
                     conclusion.getId(),
                     conclusion.getNumber(),
                     conclusion.getDate()!= null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDate()) : "",
-                    regApplication.getApplicant().getTin(),
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():"",
                     regApplication.getName(),
                     regApplication.getMaterials(),
                     regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
-                    regApplication.getApplicant().getName()
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getName():""
             });
         }
 
@@ -129,43 +145,137 @@ public class ConclusionController {
 
         return ExpertiseTemplates.ConclusionView;
     }
-    @RequestMapping(ExpertiseUrls.ConclusionNewList)
+    @RequestMapping(value = ExpertiseUrls.ConclusionNewList,method = RequestMethod.GET)
     public String getConclusionNewList(Model model){
-        User user = userService.getCurrentUserFromContext();
-        List<RegApplication> regApplicationList = regApplicationService.getListByPerformerId(user.getId());
-        List<Object[]> regApplicationNewList = new ArrayList<>(regApplicationList.size());
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        for (RegApplication regApplication:regApplicationList){
-            RegApplicationLog regApplicationLog;
-            if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
-                regApplicationLog=regApplicationLogService.getById(regApplication.getPerformerLogIdNext());
-            } else {
-                regApplicationLog=regApplicationLogService.getById(regApplication.getPerformerLogId());
-            }
-//            th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}"
-            if (regApplicationLog!=null && (regApplicationLog.getStatus().equals(LogStatus.Initial)
-                    || regApplicationLog.getStatus().equals(LogStatus.Resend))
-                    || (regApplication.getAgreementStatus()!=null && regApplication.getAgreementStatus().equals(LogStatus.Denied))){
-                    Client client = clientService.getById(regApplication.getApplicantId());
-                            regApplicationNewList.add(new Object[]{
-                            regApplication.getId(),
-                            client.getTin(),
-                            client.getName(),
-                            regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
-                            regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
-                            regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                            regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                            regApplication.getAgreementStatus() != null ? helperService.getTranslation(regApplication.getAgreementStatus().getAgreementName(),locale):"",
-                            regApplication.getAgreementStatus() != null ? regApplication.getAgreementStatus().getId():"",
-                            regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
-                            regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
-                    });
-            }
-        }
+        List<LogStatus> logStatusList = new ArrayList<>();
+        logStatusList.add(LogStatus.Initial);
+        logStatusList.add(LogStatus.Approved);
+        logStatusList.add(LogStatus.Denied);
 
-        model.addAttribute("regApplicationNewList",regApplicationNewList);
+        Conclusion conclusion = new Conclusion();
+
+        model.addAttribute("regions",soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
+        model.addAttribute("activityList",activityService.getList());
+        model.addAttribute("conclusion", conclusion);
 
         return ExpertiseTemplates.ConclusionNewList;
     }
 
+    @RequestMapping(value = ExpertiseUrls.ConclusionNewList,method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getConclusionNewListAjax(
+            FilterDto filterDto,
+            Pageable pageable
+    ){
+        User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        HashMap<String, Object> result = new HashMap<>();
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                user.getOrganizationId(),
+                null,
+                null,
+                null,
+                null,
+                pageable
+        );
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            Client client = regApplication.getApplicant();
+            Boolean isfileUpload = false;// agar status completed bo'lmasa
+            if (regApplication.getStatus()==null || regApplication.getStatus().equals(RegApplicationStatus.Initial)){
+                isfileUpload = true;
+            }
+            convenientForJSONArray.add(new Object[]{
+                    regApplication.getId(),
+                    client != null ? client.getTin() : "",
+                    client != null ? client.getName() : "",
+                    client != null ? helperService.getApplicantType(client.getType().getId(),locale):"",
+                    client != null ? client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"" : "",
+                    client != null ? client.getOked() : "",
+                    client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
+                    client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
+                    regApplication.getCreatedAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplication.getCreatedAt()):"",
+                    isfileUpload
+            });
+        }
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("data",convenientForJSONArray);
+        return result;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.ConclusionFileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, File> fileUpload(@RequestParam(name = "file") MultipartFile file){
+        File file_ = fileService.uploadFile(file, userService.getCurrentUserFromContext().getId(), file.getOriginalFilename(), file.getContentType());
+        HashMap<String, File> res = new HashMap<>();
+        res.put("data", file_);
+
+        return res;
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionFileDownload)
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(
+            @RequestParam(name = "id") Integer fileId
+    ) {
+
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionFileDownloadForView)
+    @ResponseBody
+    public ResponseEntity<Resource> conclusionFileDownloadForView(
+            @RequestParam(name = "id") Integer conclusionId
+    ) {
+
+        Conclusion conclusion = conclusionService.getById(conclusionId);
+        if (conclusion==null || conclusion.getConclusionFileId()==null){
+            return null;
+        }
+
+        File file = fileService.findById(conclusion.getConclusionFileId());
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionFileAdd)
+    public String conclusionFileAdd(
+            @RequestParam(name = "id") Integer regApplicationId,
+            @RequestParam(name = "file_id") Integer fileId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regApplicationId);
+        if (regApplication==null){
+            return "redirect:" + ExpertiseUrls.ConclusionList;
+        }
+
+        Conclusion conclusion = new Conclusion();
+        conclusion.setRegApplicationId(regApplicationId);
+        conclusion.setStatus(ConclusionStatus.Active);
+        conclusion.setConclusionFileId(fileId);
+        conclusion.setUploadedUser(user.getId());
+        conclusion.setDeleted(Boolean.FALSE);
+        conclusion = conclusionService.save(conclusion);
+
+        regApplication.setConclusionId(conclusion.getId());
+        regApplicationService.update(regApplication);
+        return "redirect:" + ExpertiseUrls.ConclusionList;
+
+    }
 }
