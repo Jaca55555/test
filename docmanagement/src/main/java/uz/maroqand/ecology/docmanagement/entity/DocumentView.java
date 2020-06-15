@@ -41,7 +41,8 @@ public class DocumentView {
 
     @Column(name = "created_by_id")
     private Integer createdById;
-
+    @Column(name = "doc_type_id")
+    private String type;
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 

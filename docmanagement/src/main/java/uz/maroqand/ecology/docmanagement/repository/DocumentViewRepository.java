@@ -18,5 +18,7 @@ public interface DocumentViewRepository extends DataTablesRepository<DocumentVie
     DocumentView findByIdAndDeletedFalse(Integer id);
 
     List<DocumentView> findByStatusTrue();
+    List<DocumentView> findByStatusTrueAndType(String type);
+
 
 }

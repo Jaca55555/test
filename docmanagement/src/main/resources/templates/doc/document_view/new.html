@@ -22,22 +22,44 @@
 
 <!--main content start-->
 <div class="pcoded-main-container">
-    <div class="col-xl-12 col-md-12">
+    <div class="col-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
-
-                <form method="post" th:object="${docView}" th:action="@{/doc/document_view/new}">
+                <form th:action="${action_url}"th:method="post" class="card-block" th:object="${docView}"  >
                     <input type="hidden" th:field="*{id}">
-                    <div class="form-group  col-sm-12">
-                        <label class="control-label"  th:text="#{document_view.name}"></label><br/>
-                        <input  class="form-control" type="text" th:field="*{name}">
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('name')}" th:text="#{document_view.name}"></label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" th:field="*{name}">
+                                <i class="gray-arrow fas  fa-map color-gray"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('type')}" th:text="#{doc.doc_type}"></label>
+                            <div class="col-sm-12 p0">
+                                <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                                        tabindex="-1" aria-hidden="true" th:field="*{type}">
+                                    <option value=""></option>
+                                    <option th:each="type: ${doc_type}" th:value="${type}" th:text="#{${type.name}}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" th:for="${#ids.next('status')}" th:text="#{document_view.status}"></label>
+                            <input type="checkbox" class="form-control checkbox" th:field="*{status}">
+                        </div>
                     </div>
-                    <div class="form-group  col-sm-12">
-                        <label class="control-label"  th:text="#{document_view.status}"></label><br/>
-                        <input type="checkbox" value="unchecked"  th:field="*{status}"><br/>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button th:text="#{doc.doc_type_save_btn}" class="btn btn-success"></button>
+                        </div>
                     </div>
-                    <input type="submit" value="подтвердить" class="btn btn-primary">
                 </form>
+
+
 
             </div>
         </div>

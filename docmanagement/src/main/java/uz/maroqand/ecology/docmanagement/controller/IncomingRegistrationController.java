@@ -118,7 +118,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("all", taskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 1));
 
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
@@ -344,7 +344,7 @@ public class IncomingRegistrationController {
         List<User> userList = userService.getEmployeesForForwarding(user.getOrganizationId());
 
         model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
         model.addAttribute("userList", userList);
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
@@ -519,7 +519,7 @@ public class IncomingRegistrationController {
         model.addAttribute("documentOrdanization", documentOrdanization);
 
         model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("documentTaskContent",documentTaskContentService.getTaskContentList());

@@ -18,7 +18,10 @@ import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
+import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
+import uz.maroqand.ecology.docmanagement.entity.DocumentType;
 import uz.maroqand.ecology.docmanagement.entity.DocumentView;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTypeService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
 
 @Controller
@@ -26,11 +29,13 @@ public class DocumentViewController {
 
     private final DocumentViewService documentViewService;
     private final UserService userService;
+    private final DocumentTypeService documentTypeService;
     int prevId;
     @Autowired
-    public DocumentViewController(DocumentViewService documentViewService, UserService userService){
+    public DocumentViewController(DocumentViewService documentViewService, UserService userService,DocumentTypeService documentTypeService){
         this.documentViewService = documentViewService;
         this.userService = userService;
+        this.documentTypeService=documentTypeService;
     }
 
     @RequestMapping(DocUrls.DocumentViewList)
@@ -58,7 +63,12 @@ public class DocumentViewController {
         List<Object[]> JSONArray = new ArrayList<>(docViewPage.getContent().size());
 
         for(DocumentView documentView: docViewPage){
-            JSONArray.add(new Object[]{documentView.getId(), documentView.getName(), documentView.getStatus(), Common.uzbekistanDateFormat.format(documentView.getCreatedAt())});
+            JSONArray.add(new Object[]{
+                    documentView.getId(),
+                    documentView.getName(),
+                    documentView.getStatus(),
+                    documentView.getType()!=null ? documentView.getType():" ",
+                    Common.uzbekistanDateFormat.format(documentView.getCreatedAt())});
         }
         result.put("data", JSONArray);
 
@@ -69,14 +79,16 @@ public class DocumentViewController {
     public String documentViewNew(Model model){
 
         DocumentView docView = new DocumentView();
+        model.addAttribute("action_url", DocUrls.DocumentViewNew);
         model.addAttribute("docView", docView);
-
+        model.addAttribute("doc_type", DocumentTypeEnum.getList());
         return DocTemplates.DocumentViewNew;
     }
 
     @RequestMapping(value = DocUrls.DocumentViewNew, method = RequestMethod.POST)
-    public String documentViewNewCreate(@RequestParam(name = "name")String name, @RequestParam(name = "status", defaultValue = "false")Boolean status){
+    public String documentViewNewCreate(@RequestParam(name = "name")String name, @RequestParam(name = "status", defaultValue = "false")Boolean status,@RequestParam(name = "type")String type){
         DocumentView docView = new DocumentView();
+        docView.setType(type);
         docView.setName(name);
         docView.setStatus(status);
         docView.setCreatedById(userService.getCurrentUserFromContext().getId());
@@ -92,10 +104,10 @@ public class DocumentViewController {
         prevId = id;
         if(docView == null)
             return "redirect:" + DocUrls.DocumentViewList;
-
+        model.addAttribute("action_url", DocUrls.DocumentViewEdit);
         model.addAttribute("docView", docView);
-
-        return DocTemplates.DocumentViewEdit;
+        model.addAttribute("doc_type", DocumentTypeEnum.getList());
+        return DocTemplates.DocumentViewNew;
     }
 
 
@@ -112,6 +124,7 @@ public class DocumentViewController {
 
         updatedView.setName(docView.getName());
         updatedView.setStatus(docView.getStatus());
+        updatedView.setType(docView.getType());
         documentViewService.update(updatedView);
         return "redirect:" + DocUrls.DocumentViewList;
     }

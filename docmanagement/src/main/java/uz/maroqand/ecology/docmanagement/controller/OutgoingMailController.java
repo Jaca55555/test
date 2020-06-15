@@ -89,7 +89,7 @@ public class OutgoingMailController {
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
 
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
 
         long totalOutgoing = documentService.countAll(outgoingMailType, organizationId);
@@ -248,7 +248,7 @@ public class OutgoingMailController {
 
         model.addAttribute("document", new Document());
         model.addAttribute("journals", journalService.getStatusActive(2));//todo 2
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
@@ -350,7 +350,7 @@ public class OutgoingMailController {
 
         model.addAttribute("document", document);
         model.addAttribute("journals", journalService.getStatusActive(2));//TODO 2
-        model.addAttribute("documentViews", documentViewService.getStatusActive());
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
         model.addAttribute("additional_document_id", additionalDocument.getId());

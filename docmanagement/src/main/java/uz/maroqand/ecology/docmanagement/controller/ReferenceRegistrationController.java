@@ -93,7 +93,7 @@ public class ReferenceRegistrationController {
         model.addAttribute("expired", taskService.countExecutedForReference());
         model.addAttribute("executed", taskService.countExecuted());
         model.addAttribute("total", taskService.countTotal());
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
@@ -261,7 +261,7 @@ public class ReferenceRegistrationController {
 
         model.addAttribute("userList", userList);
 //        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList());
@@ -438,7 +438,7 @@ public class ReferenceRegistrationController {
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
 //        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));

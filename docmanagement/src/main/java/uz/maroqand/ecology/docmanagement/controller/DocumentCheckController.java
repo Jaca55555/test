@@ -130,7 +130,8 @@ public class DocumentCheckController {
                     documentTask.getDueDate()!=null? Common.uzbekistanDateFormat.format(documentTask.getDueDate()):"",
                     documentTask.getStatus()!=null ? helperService.getTranslation(TaskStatus.getTaskStatus(documentTask.getStatus()).getName(),locale):"",
                     documentTask.getContent(),
-                    documentTask.getStatus()
+                    documentTask.getStatus(),
+                    documentTaskService.getDueColor(documentTask.getDueDate(),false,documentTask.getStatus(),locale),
             });
         }
 
