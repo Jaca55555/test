@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByUsername(String username);
 
     User findByTinAndLeTinIsNull(Integer tin);
-
+    List<User> findByDepartmentId(Integer id);
     User findByTinAndLeTin(Integer tin, Integer leTin);
 
     User findByIdAndOrganizationId(Integer id, Integer organizationId);

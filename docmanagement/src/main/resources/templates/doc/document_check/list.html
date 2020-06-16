@@ -35,7 +35,7 @@
                 </h5>
             </div>
             <h5 class="office-h5 default-color" th:text="#{doc_check.documentsCount}">Кирувчи хатлар статистикаси</h5>
-            <div class="responsive">
+            <div class="responsive" style="width: 100%">
                 <div class="office-card" onclick="$('#all-tab').click()">
                     <div class="card dashboard-card border-green-shadow">
                         <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
@@ -371,7 +371,7 @@
                 {data: 1, name: 'document.registrationNumber',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[1]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -379,7 +379,7 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[2]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -387,21 +387,21 @@
                 {data: 3, name: 'document.content',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[3]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
                         return html;
                     },
                     className: "text-left"},
                 {data: 4, name: 'createdAt',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[4]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
                         return html;
                     },
                     className: "text-center"},
                 {data: 5, name: 'dueDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[5]+'</a>';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
                         return html;
                     },
                     className: "text-center"},

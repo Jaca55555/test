@@ -235,39 +235,34 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     @Override
     public List<String> getDueColor(Date date, boolean taskOrTaskSub, Integer statusId,String locale) {
         List<String> result = new ArrayList<>();
-        if (date == null || statusId == null){
-            result.add("");
-            result.add("");
+        System.out.println(statusId);
+        String colorText="";
+        if (statusId==3){ colorText+=" color:yellow; " ;}else
+        if (statusId==4){ colorText+=" color:yellow; " ;}else
+        if (statusId==5){ colorText+=" color:grey; " ;}else
+        if (statusId==6){ colorText+=" color:green; " ;}else
+        if (statusId==7){ colorText+=" color:red; " ;}else
+        if (statusId==8){ colorText+=" color:rgb(169,169,169); " ;}
+
+        if (statusId == null||date==null){
+            result.add(colorText);
             return result;
         }
         Date nowDate = new Date();
-        String colorText="";
-        String dueText="";
+
         date.setHours(23);
         date.setMinutes(59);
         Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
-        if (statusId==1 || statusId==0){ colorText+="text-primary" ;}
-        if (statusId==2){ colorText+="text-warning " ;}
-        if (statusId==3){ colorText+="text-warning " ;}
-        if (statusId==4){ colorText+="text-warning " ;}
-        if (statusId==5){ colorText+="text-secondary " ;}
-        if (statusId==6){ colorText+="text-success " ;}
-        if (statusId==7){ colorText+="text-danger " ;}
-        if (statusId==8){ colorText+="text-light " ;}
-//        if ((taskOrTaskSub && statusId == 3) || (!taskOrTaskSub && statusId == 4)) {
-//            colorText+="text-warning ";
-//        }
-//        if ((taskOrTaskSub && statusId == 5) || (!taskOrTaskSub && statusId == 6)) {
-//            colorText+="text-secondary ";
-//        }
-//        if ((taskOrTaskSub && (statusId != 3 && statusId !=4)) || (!taskOrTaskSub && (statusId != 5 && statusId != 6))) {
-//            List<String> getName = getColorAndText(intervalHours,locale);
-//            colorText += getName.get(0);
-//            dueText = getName.get(1);
-//        }
+        System.out.println(intervalHours);
+
+        if (statusId==1 || statusId==0){ colorText+=" color:blue;font-weight: bold; ";}else
+        if (statusId==2){if(intervalHours>72) {colorText+=" color:blue;" ;}else
+        if(intervalHours<72&&intervalHours>24) {colorText+=" color:orange; ";}
+        else if(intervalHours<24) {colorText+="color:red; " ;}
+        }
 
         result.add(colorText);
-        result.add(dueText);
+
         return result;
     }
 
