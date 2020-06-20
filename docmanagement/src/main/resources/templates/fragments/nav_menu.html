@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org">
 <body th:fragment="menu">
 <!-- [ navigation menu ] start -->
-<nav class="pcoded-navbar">
+<nav class="pcoded-navbar" style="width: 275px">
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo" >
             <a class="logo_a" href="#">
@@ -30,45 +30,45 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-download color-yellow"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}" style="word-wrap: break-word;">Кирувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}" >Кирувчи хатлар</span>
+                        <span th:text="${@getNotifacationService.countIncomingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingList}" style="padding: 5px 15px" >
                         <span class="pcoded-micon"><i class="feather icon-upload color-green"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}" style="word-wrap: break-word;">Чикувчи хатлар</span>
-                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}" >Чикувчи хатлар</span>
+                        <span th:text="${@getNotifacationService.countOutgoingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
 
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-briefcase color-purple"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_inner.list}" style="word-wrap: break-word;">Внутренние документы</span>
-                        <span th:text="${@getNotifacationService.countInnerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.list}" >Внутренние документы</span>
+                        <span th:text="${@getNotifacationService.countInnerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-file-text color-purple"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_reference.list}" style="word-wrap: break-word;">Мурожаaтлар</span>
-                        <span th:text="${@getNotifacationService.countAppealByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_reference.list}" >Мурожаaтлар</span>
+                        <span th:text="${@getNotifacationService.countAppealByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
 
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_check.list}" style="word-wrap: break-word;"></span>
-                        <span th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                        <span class="pcoded-mtext" th:text="#{doc_check.list}" ></span>
+                        <span th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')">
                                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
                                        <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
-                                       <span class="pcoded-mtext" th:text="#{doc_change.perfomer}" style="word-wrap: break-word;">Ijrochini o'zgartirish</span>
-                                       <span th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>
+                                       <span class="pcoded-mtext" th:text="#{doc_change.perfomer}" >Ijrochini o'zgartirish</span>
+                                       <span th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
 
                                    </a>
                                </li>
@@ -88,7 +88,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_LIBRARY')" >
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryWindow}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-book color-green"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_library}" style="word-wrap: break-word;"></span>
+                        <span class="pcoded-mtext" th:text="#{doc_library}" ></span>
                     </a>
                 </li>
 
@@ -104,25 +104,25 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-corner-right-down color-green"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}" style="word-wrap: break-word;">Кирувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.list}" >Кирувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-corner-right-up color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}" style="word-wrap: break-word;">Чикувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.list}" >Чикувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-briefcase color-purple"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_inner.list}" style="word-wrap: break-word;">Ички хужжатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.list}" >Ички хужжатлар</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationList}">
                         <span class="pcoded-micon"><i class="feather icon-corner-right-down color-green"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_reference.regList}" style="word-wrap: break-word;">Кирувчи хатлар</span>
+                        <span class="pcoded-mtext" th:text="#{doc_reference.regList}" >Кирувчи хатлар</span>
                     </a>
                 </li>
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
@@ -132,25 +132,25 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-inbox color-yellow"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_incoming.reg}" style="word-wrap: break-word;">Кирувчи хатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_incoming.reg}" >Кирувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-mail color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_outgoing.reg}" style="word-wrap: break-word;">Чикувчи хатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.reg}" >Чикувчи хатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-flag color-purple"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_inner.reg}" style="word-wrap: break-word;">Ички хужжатларни руйхатга олиш</span>
+                        <span class="pcoded-mtext" th:text="#{doc_inner.reg}" >Ички хужжатларни руйхатга олиш</span>
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
                      <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 5px 15px">
                          <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
-                         <span class="pcoded-mtext" th:text="#{doc_appeal.reg}" style="word-wrap: break-word;">Мурожаатларни руйхатга олиш</span>
+                         <span class="pcoded-mtext" th:text="#{doc_appeal.reg}" >Мурожаатларни руйхатга олиш</span>
                      </a>
                  </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
