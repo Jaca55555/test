@@ -257,7 +257,7 @@ public class OutgoingMailController {
         List<Position> positions = positionService.getAll();
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
-        model.addAttribute("users", userService.getEmployeesForDocManage("chief"));
+        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
 
         return DocTemplates.OutgoingMailNew;
     }
