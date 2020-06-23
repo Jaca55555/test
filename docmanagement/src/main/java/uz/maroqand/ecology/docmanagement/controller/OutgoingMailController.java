@@ -258,7 +258,7 @@ public class OutgoingMailController {
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
         model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
-
+        model.addAttribute("performerId",null);
         return DocTemplates.OutgoingMailNew;
     }
 

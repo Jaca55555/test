@@ -717,11 +717,43 @@
                     if (log.contentFiles!=null && log.contentFiles.length>0){
                         html+='';
                         $.each(log.contentFiles,function (element,val) {
-                            html+='<div class="w100"></div>' +
+                      if(val.extension=="pdf") {     html+='<div class="w100"></div>' +
                                 '  <div class="column-2 mt-3">\n' +
                                 '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
                                 '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
-                                '  </div>';
+                                '  </div>';}
+                            if(val.extension=="jpg"||val.extension=="jpeg"||val.extension=="png") {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-image fs30 color-yellow"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+                            if(val.extension=="docx"||val.extension=="doc") {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-word fs30 color-blue"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+                            if(val.extension=="xls"||val.extension=="xlsx") {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-excel fs30 color-green"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+                            if(val.extension=="pptx"||val.extension=="ppt") {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-powerpoint fs30 color-red"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+                            if(val.extension=="zip"||val.extension=="7z"||val.extension=="rar") {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+                            else  {     html+='<div class="w100"></div>' +
+                                '  <div class="column-2 mt-3">\n' +
+                                '       <span class="fas  fs30 color-grey"></span>\n' +
+                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                '  </div>';}
+
+
 
                         })
                     }
@@ -839,6 +871,7 @@
                 color = 'color-blue';
                 break;
             case 'pptx':
+            case 'ppt':
                 extension = '-powerpoint';
                 color = 'color-red';
                 break;
