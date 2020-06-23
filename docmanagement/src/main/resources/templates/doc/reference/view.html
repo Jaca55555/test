@@ -513,6 +513,20 @@
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
     $(document).ready(function () {
             docFileName([[${document.contentFiles}]]);
+        $('#modal1').on('hidden.bs.modal', function() {
+            $(this).find('form').trigger('reset');
+            $(".file-block").remove();
+            $("#file-container").slice(0).html(`
+            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                </div>
+                            </div>
+            `
+            );
+        });
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
                 placeholder: "Танланг",

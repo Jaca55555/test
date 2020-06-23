@@ -595,7 +595,17 @@
         });
         $('#modal1').on('hidden.bs.modal', function() {
             $(this).find('form').trigger('reset');
-            $(this).find('#file_ids').trigger('reset');
+            $(".file-block").remove();
+            $("#file-container").slice(0).html(`
+            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                </div>
+                            </div>
+            `
+                );
         });
 
         $('#modal2').on('hidden.bs.modal', function() {
@@ -896,6 +906,8 @@
                         </div>
                     </div>`
         );
+
+
     }
 
     function uploadProgressHandler(event)
