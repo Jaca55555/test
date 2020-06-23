@@ -378,7 +378,7 @@ public class ReferenceController {
 
             String[] paramName =  mapEntry.getKey().split("_");
             String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
+            String value= mapEntry.getValue().replaceAll(" "," ");
 
             if (tagName.equals("user")){
                 userId=Integer.parseInt(value);

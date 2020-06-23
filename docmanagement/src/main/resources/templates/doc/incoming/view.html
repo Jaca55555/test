@@ -593,6 +593,10 @@
                 allowClear: true
             });
         });
+        $('#modal1').on('hidden.bs.modal', function() {
+            $(this).find('form').trigger('reset');
+            $(this).find('#file_ids').trigger('reset');
+        });
 
         $('#modal2').on('hidden.bs.modal', function() {
             $('.addDocSelect').select2('destroy');
@@ -747,11 +751,7 @@
                                 '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
                                 '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
                                 '  </div>';}
-                            else  {     html+='<div class="w100"></div>' +
-                                '  <div class="column-2 mt-3">\n' +
-                                '       <span class="fas  fs30 color-grey"></span>\n' +
-                                '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
-                                '  </div>';}
+
 
 
 
