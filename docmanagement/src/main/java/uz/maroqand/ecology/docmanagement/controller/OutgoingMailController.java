@@ -312,6 +312,7 @@ public class OutgoingMailController {
         //setting document sub
         DocumentSub docSub = new DocumentSub();
         Set<DocumentOrganization> documentOrganizationSet = new HashSet<>();
+
         for (String docIdOrName: documentOrganizationIds) {
             DocumentOrganization documentOrganization = documentOrganizationService.getById(parseIdOrCreateNew(docIdOrName, user.getId()));
             if (documentOrganization!=null){

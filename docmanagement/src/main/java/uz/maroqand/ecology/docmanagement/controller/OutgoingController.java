@@ -25,6 +25,7 @@ import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
+import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
@@ -44,14 +45,16 @@ public class OutgoingController {
     private final DocumentViewService documentViewService;
     private final DocumentSubService documentSubService;
     private final DocumentHelperService documentHelperService;
+    private final DocumentOrganizationService documentOrganizationService;
 
-    public OutgoingController(DocumentService documentService, UserService userService, DepartmentService departmentService, DocumentViewService documentViewService, DocumentSubService documentSubService, DocumentHelperService documentHelperService){
+    public OutgoingController(DocumentOrganizationService documentOrganizationService,DocumentService documentService, UserService userService, DepartmentService departmentService, DocumentViewService documentViewService, DocumentSubService documentSubService, DocumentHelperService documentHelperService){
         this.documentService = documentService;
         this.userService = userService;
         this.departmentService = departmentService;
         this.documentViewService = documentViewService;
         this.documentSubService = documentSubService;
         this.documentHelperService = documentHelperService;
+        this.documentOrganizationService=documentOrganizationService;
     }
 
 
@@ -118,7 +121,11 @@ public class OutgoingController {
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
         if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
             for (DocumentOrganization documentOrganization: documentOrganizationSet) {
-                document_organization_name +=documentOrganization.getName() + ", ";
+                if(documentOrganization.getLevel()!=0)
+                {document_organization_name +=documentOrganization.getName() + ", ";}
+                else{
+                    document_organization_name+=documentOrganizationService.getById(documentOrganization.getParent()).getName();
+                }
             }
         }else if (documentSub.getOrganizationId()!=null){
             document_organization_name=documentSub.getOrganization().getName();
