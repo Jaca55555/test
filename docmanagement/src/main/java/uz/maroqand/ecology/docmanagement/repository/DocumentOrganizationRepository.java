@@ -16,7 +16,7 @@ import java.util.List;
 public interface DocumentOrganizationRepository extends DataTablesRepository<DocumentOrganization, Integer>, JpaRepository<DocumentOrganization, Integer> {
 
     DocumentOrganization findByIdAndDeletedFalse(Integer id);
-
+    List<DocumentOrganization> getAllByLevel(Integer id);
     DocumentOrganization findByNameContaining(String name);
 
     List<DocumentOrganization> findByStatusTrue();

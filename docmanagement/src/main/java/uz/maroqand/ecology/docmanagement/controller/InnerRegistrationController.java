@@ -347,7 +347,7 @@ public class InnerRegistrationController {
 
             String[] paramName =  mapEntry.getKey().split("_");
             String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
+            String value= mapEntry.getValue().replaceAll(" "," ");
             if (tagName.equals("descriptionTextareaTask")){
                 descriptionTextareaTask = value;
             }

@@ -29,6 +29,15 @@
                         <label class="control-label"  th:text="#{doc_organization.name}"></label><br/>
                         <input  class="form-control" type="text" th:field="*{name}">
                     </div>
+                    <div class="col-sm-12 p0" >
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible"
+                                tabindex="-1" aria-hidden="true" th:field="*{parent}" >
+                            <option value=""> </option>
+                            <option th:each="t:${organizationGroup}" th:if="${t.parent==null and t.deleted==false}" th:value="${t.id}" th:text="#{${t.name}}">
+                            </option>
+                        </select>
+                        <i class="gray-arrow fas fa-sort-down color-gray"></i>
+                    </div>
                     <div class="form-group  col-sm-12">
                         <label class="control-label"  th:text="#{doc_organization.status}"></label><br/>
                         <input type="checkbox" value="unchecked"  th:field="*{status}"><br/>

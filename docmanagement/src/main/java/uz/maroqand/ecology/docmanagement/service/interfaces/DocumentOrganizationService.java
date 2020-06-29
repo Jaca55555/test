@@ -32,7 +32,7 @@ public interface DocumentOrganizationService {
     DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input);
 
     List<DocumentOrganization> getList();
-
+    List<DocumentOrganization> getLevel(Integer Id);
     Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable);
 
     Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable);

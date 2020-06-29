@@ -13,6 +13,24 @@
          .datepicker>.datepicker-days {
              display: block;
          }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +232,7 @@
 </div>
 <!--  main content end -->
 <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/input.js}"></script>
 
 <script th:inline="javascript">
 
@@ -316,6 +335,7 @@
             lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
+            pagingType: 'input',
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());

@@ -257,8 +257,8 @@ public class OutgoingMailController {
         List<Position> positions = positionService.getAll();
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
-        model.addAttribute("users", userService.getEmployeesForDocManage("chief"));
-
+        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
+        model.addAttribute("performerId",null);
         return DocTemplates.OutgoingMailNew;
     }
 
@@ -312,6 +312,7 @@ public class OutgoingMailController {
         //setting document sub
         DocumentSub docSub = new DocumentSub();
         Set<DocumentOrganization> documentOrganizationSet = new HashSet<>();
+
         for (String docIdOrName: documentOrganizationIds) {
             DocumentOrganization documentOrganization = documentOrganizationService.getById(parseIdOrCreateNew(docIdOrName, user.getId()));
             if (documentOrganization!=null){

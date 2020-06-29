@@ -10,6 +10,24 @@
         a{
             color: #007bff;
         }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
     </style>
 </head>
 <body>
@@ -229,9 +247,6 @@
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                                 </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
-                                                    <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
-                                                </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                                 </th>
@@ -259,6 +274,8 @@
     <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
     <script th:src="@{/static/datatables/datatables.min.js}"></script>
     <script th:src="@{/static/datatables/buttons.print.min.js}"></script>
+    <script th:src="@{/static/datatables/input.js}"></script>
+
 
     <script th:inline="javascript">
         var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}]];
@@ -291,15 +308,15 @@
             var html = '';
             var status = row[8];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[5]+'</button>';return html;
             }
             return html;
         }
@@ -320,7 +337,7 @@
                 processing: true,
                 serverSide: true,
                 scrollX: true,
-                pageLength: 25,
+
                 lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom:'lrtip',
@@ -330,7 +347,7 @@
                 'copy', 'csv', 'excel', 'pdf','print'
 
                 ],
-
+                pagingType: 'input',
                 ajax : function (dataToSend, callback, settings) {
                     let api = this.api();
 
@@ -381,25 +398,19 @@
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
                             return html;},
                         className: "w-20 text-justify"},
-                    {data: 4, name: 'createdAt',
+
+                    {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"},
-                    {data: 5, name: 'dueDate',
-                        render: function (data, type, row, meta) {
-                            var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
-                            return html;
-                        },
-                        className: "w-10 text-center"},
                     {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                    {data: 7, name: 'content',
+                    {data: 6, name: 'content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<b>'+row[7]+'</b><br>'+row[10];
+                            html += '<b>'+row[6]+'</b><br>'+row[10];
                             return html;
                         },
                         className: "text-justify"},

@@ -38,6 +38,13 @@ public class DocumentOrganization {
     @Column(name = "created_by_id")
     private Integer createdById;
 
+    @Column(name = "parent")
+    private Integer parent;
+
+    @Column(name = "level")
+    private Integer level;
+
+
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 

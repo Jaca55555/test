@@ -98,6 +98,11 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
+    public List<DocumentOrganization> getLevel(Integer id) {
+        return documentOrganizationRepository.getAllByLevel(id);
+    }
+
+    @Override
     public Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable){
         return documentOrganizationRepository.findAll(getFilteringSpecification(id, name, status), pageable);
     }

@@ -62,6 +62,7 @@
                     <tr>
                         <th>Id</th>
                         <th th:text="#{doc_organization.name}">name</th>
+                        <th th:text="#{doc_organization.groupName}">GroupName</th>
                         <th th:text="#{doc_organization.status}">status</th>
                         <th></th>
                     </tr>
@@ -167,6 +168,7 @@
             columns: [
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
+                {data: 2, name: 'parent'},
                 {render: renderChangeColumn, orderable: false, className: 'text-center'},
                 {render: renderActionsColumn, orderable: false}
             ],
