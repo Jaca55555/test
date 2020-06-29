@@ -57,6 +57,11 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     }
 
     @Override
+    public List<DocumentView> getStatusActiveAndByType(String type) {
+        return documentViewRepository.findByStatusTrueAndType(type);
+    }
+
+    @Override
     @CacheEvict(value = "documentViewStatusActive", allEntries = true)
     public List<DocumentView> documentViewGetStatusActive() {
         return documentViewRepository.findByStatusTrue();

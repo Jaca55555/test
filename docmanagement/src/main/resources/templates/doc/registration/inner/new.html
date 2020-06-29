@@ -268,7 +268,7 @@
     }
     $(document).ready(function () {
 
-
+        hearInputClickFunction();
         $('.singleSelect').select2({
             placeholder: sys_select,
             allowClear: true
@@ -343,11 +343,7 @@
             $('#description_textarea').val(dec + text);
         });
 
-        $(document).on('click', '.fa-trash-alt', function () {
-            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
-            $(this).parent().parent().remove();
-            $('#addFile').val('');
-        });
+
 
        /* $('form').on('submit', function () {
             $('#addFile').attr('disabled', 'disabled');
@@ -423,17 +419,11 @@
         function downloadFileFunction(id) {
             window.open(`/doc/inner/file/download?id=${id}`);
         }
-        function deleteFunc(id){
-            fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
-            $('#addFile2').remove();
-            document.querySelector(`#file_block_${id}`).remove();
-            document.querySelector(`#input_file_id_${id}`).remove();
-            $('#addFileDiv').append(`
-             <input type="file" class="d-none" id="addFile2" name="files">
-        `);
-            hearInputClickFunction();
-        }
+
         $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
+        $('#file_ids').append(
+            `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
+        );
         $('#file-container').append(
             `<div class="file-block" id="file_block_${data.data.id}">
                         <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
@@ -448,10 +438,65 @@
 
     let dropArea = document.querySelector('.file-button');
 
+    function deleteFunc(id){
+        fetch(`/doc/outgoing_mail/file/delete?id=${id}`);
+        $('#addFile2').remove();
+        document.querySelector(`#file_block_${id}`).remove();
+        document.querySelector(`#input_file_id_${id}`).remove();
+        $('#addFileDiv').append(`
+             <input type="file" class="d-none" id="addFile2" name="files">
+        `);
+        hearInputClickFunction();
+    }
+
     ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false)
     })
 
+    function hearInputClickFunction(){
+        $('#addFile2').on('change', function () {
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
+            let csrf = $("form input[name='_csrf']").val();
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/doc/file_upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: detectExtensionAndDisplay,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+                    return xhr;
+                }
+            })
+        });
+    }
     function preventDefaults (e) {
         e.preventDefault()
         e.stopPropagation()

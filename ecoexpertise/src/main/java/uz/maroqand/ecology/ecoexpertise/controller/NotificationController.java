@@ -57,7 +57,7 @@ public class NotificationController {
         List<NotificationDto> newNotificationListShow = new LinkedList<>();
 
         List<Notification> notificationList = notificationService.getNotificationList(user.getId(), NotificationType.Expertise);
-        List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId(), NotificationType.Expertise);
+        List<Notification> newNotificationList = notificationService.getNewNotificationList(user.getId(),NotificationType.Expertise);
 
         int count = 0;
         for (Notification notification:newNotificationList) {
@@ -87,7 +87,7 @@ public class NotificationController {
     @ResponseBody
     public HashMap<String, Object> getShowAfter() {
         User user = userService.getCurrentUserFromContext();
-        notificationService.viewNewNotificationList(user.getId(), NotificationType.Expertise);
+        notificationService.viewNewNotificationList(user.getId(),NotificationType.Expertise);
         HashMap<String, Object> result = new HashMap<>();
         return result;
     }
@@ -108,7 +108,7 @@ public class NotificationController {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
 
-        Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null, NotificationType.Expertise,pageable);
+        Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null,NotificationType.Expertise,pageable);
 
         List<Notification> notificationList = notificationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(notificationList.size());

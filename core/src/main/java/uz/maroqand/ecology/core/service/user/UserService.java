@@ -16,7 +16,7 @@ import java.util.List;
 public interface UserService {
 
     List<User> getListByDepartmentAllParent(Integer departmentId);
-
+    List<User> getByDepartmentId(Integer departmentId);
     User getByTelegramId(Integer telegramUserId);
 
     Boolean isRegistrationUser(Integer telegramUserId);

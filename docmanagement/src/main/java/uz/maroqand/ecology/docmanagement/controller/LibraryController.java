@@ -54,8 +54,6 @@ public class LibraryController {
     @RequestMapping(value = DocUrls.LibraryWindow)
     public String getCategoryList(Model model) {
         model.addAttribute("categories",libraryCategoryService.findAll());
-        model.addAttribute("subcategories",libraryCategoryService.findAll());
-//        model.addAttribute("count",libraryService.countByCategoryId());
         return DocTemplates.LibraryWindow;
     }
 //      Lists
@@ -80,10 +78,11 @@ public class LibraryController {
                     library.getId(),
                     library.getName(),
                     library.getNumber(),
-                    library.getLdate().toString().substring(0,11)
+//                    library.getLdate().toString().substring(0,11)
             });
         }
-
+        result.put("recordsTotal", LibraryPage.getTotalElements());
+        result.put("recordsFiltered", LibraryPage.getTotalElements());
         result.put("data", JSONArray);
         return result;
     }
@@ -112,9 +111,9 @@ public class LibraryController {
                     library.getName(),
                     library.getFtext(),
                     library.getNumber(),
-                    library.getLdate().toString().substring(0,11),
+//                    library.getLdate().toString().substring(0,11),
                     library.getCreatedAt().toString().substring(0,11),
-                    library.getCategoryId()!=null ? libraryCategoryService.getById(library.getCategoryId()).getName():""
+                    library.getCategoryId()!=null ? libraryCategoryService.getById(library.getCategoryId()).getName(): ""
             });
         }
         result.put("recordsTotal", LibraryPage.getTotalElements());
@@ -150,8 +149,8 @@ public class LibraryController {
         }
         library.setContentFiles(files);
         library.setCreated_by_id(user.getId());
-        library.setLdate(ldate);
-
+        System.out.println(ldateStr);
+        library.setLdate(DateParser.TryParse(ldateStr,Common.uzbekistanDateFormat));
         libraryService.create(library,libraryCategory);
         return "redirect:" + DocUrls.LibraryWindow;
     }
@@ -205,7 +204,7 @@ public class LibraryController {
         library.setContentFiles(files);
         libraryService.update(library);
         libraryService.updateByIdFromCache(library.getId());
-        return "redirect:" + DocUrls.LibraryList;
+        return "redirect:" + DocUrls.LibraryWindow;
     }
     //Upload Files
     @RequestMapping(value = DocUrls.LibraryFileUpload, method = RequestMethod.POST, produces = "application/json")
@@ -252,7 +251,8 @@ public class LibraryController {
         library.setDeleted(Boolean.TRUE);
         libraryService.update(library);
         libraryService.updateByIdFromCache(library.getId());
-        return "redirect:" + DocUrls.LibraryList;
+        return "redirect:" + DocUrls.LibraryWindow;
+
     }
 
 

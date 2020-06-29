@@ -19,7 +19,7 @@ public interface DocumentViewService {
     DocumentView updateByIdFromCache(Integer id);
 
     List<DocumentView> getStatusActive();
-
+    List<DocumentView> getStatusActiveAndByType(String type);
     List<DocumentView> documentViewGetStatusActive();
 
     Page<DocumentView> findFiltered(String name, Integer status, String locale, Pageable pageable);

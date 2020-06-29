@@ -362,7 +362,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="' +row[9][0]+ '" >' + row[1]+'</a>';
                             return html;
                         },
                         className: "w-15 text-left"
@@ -370,7 +370,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "w-10 text-left"
@@ -378,20 +378,20 @@
                     {data: 3, name: 'document.content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[2]+'" class="'+row[9][0]+'" >' + row[3]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
                             return html;},
                         className: "w-20 text-justify"},
                     {data: 4, name: 'createdAt',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[4]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"},
                     {data: 5, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" class="'+row[9][0]+'" >' + row[5]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"},

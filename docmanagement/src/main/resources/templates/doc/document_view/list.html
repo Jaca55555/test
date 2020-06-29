@@ -67,6 +67,7 @@
                         <th>Id</th>
                         <th th:text="#{document_view.name}">name</th>
                         <th th:text="#{document_view.status}">status</th>
+                        <th th:text="#{document_view.docType}">status</th>
                         <th th:text="#{document_view.created_at}">created_at</th>
                         <th></th>
                     </tr>
@@ -177,7 +178,8 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
                 {render: renderChangeColumn, orderable: false, className: 'text-center'},
-                {data: 3, name: 'createdAt', className: 'text-center'},
+                {data: 3, name: 'documentType', className: 'text-center'},
+                {data: 4, name: 'createdAt', className: 'text-center'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

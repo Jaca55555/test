@@ -53,6 +53,10 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.findByDepartmentIdInAndEnabledTrue(departmentIds);
     }
+    @Override
+    public List<User> getByDepartmentId(Integer departmentId) {
+        return userRepository.findByDepartmentId(departmentId);
+    }
 
     @Override
     public User getByTelegramId(Integer telegramUserId) {

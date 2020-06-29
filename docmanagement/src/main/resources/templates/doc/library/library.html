@@ -148,7 +148,7 @@
                                     <th th:text="#{doc.library_name}"></th>
                                     <th th:text="#{doc.library_ftext}"></th>
                                     <th th:text="#{doc.library_number}"></th>
-                                    <th th:text="#{doc.library_date}"></th>
+
                                     <th th:text="#{doc.library_Createddate}"></th>
                                     <th th:text="#{doc.library_categoryId}"></th>
                                     <th th:text="#{actions}"></th>
@@ -239,9 +239,9 @@
                 },
                 {data: 2, name: 'ftext'},
                 {data: 3, name: 'number'},
-                {data: 4, name: 'ldate'},
-                {data: 5, name: 'createdAt'},
-                {data: 6, name: 'categoryId'},
+
+                {data: 4, name: 'createdAt'},
+                {data: 5, name: 'categoryId' , default:null},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

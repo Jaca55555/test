@@ -18,6 +18,7 @@ public class AdminUrls {
     public static final String OrganizationView = Organization + "/view";
     public static final String OrganizationtGetByRegion = Organization + "/get_region";
     //Users
+
     private static final String Users = Prefix + "/users";
     public static final String UsersList = Users + "/list";
     public static final String UsersListAjax = Users + "/ajax_list";
@@ -33,7 +34,7 @@ public class AdminUrls {
     public static final String UsersUpdate = Users + "/update";
     public static final String UsersEditEnebled = Users + "/enebled";
     public static final String UsersView = Users + "/view";
-
+    public static final String PerformerGetByDepartment=Users+"/performer_get_by_department";
     //Department
     private static final String Department = Prefix + "/department";
     public static final String DepartmentList = Department + "/list";

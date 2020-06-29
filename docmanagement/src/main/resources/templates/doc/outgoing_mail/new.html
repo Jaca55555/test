@@ -111,9 +111,9 @@
                     <div class="col-md-6"></div>
                         <div class="col-sm-6 form-group" >
                             <label  class="control-label" th:text="#{doc_outgoing.performer}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
-                            <select class="form-control singleSelect" th:field="*{performerId}"  required data-parsley-errors-container="#performerError">
-                                <option value=""></option>
-                                <option th:each="performer: ${performers}" th:value="${performer.id}" th:text="${performer.fullName}"></option>
+                            <select id="performerId" class="form-control" required="" name="performerId" data-parsley-errors-container="#performerError" >
+                                <option value="" th:text="#{sys_select}"></option>
+                                <!--<option th:if="${department!=null}" th:value="${department.id}" th:text="${department.getNameTranslation(#locale)}"></option>-->
                             </select>
                             <div class="row"> <div class="col-md-6 p0" id="performerError"></div> </div>
                         </div>
@@ -134,7 +134,7 @@
                             <label for="position" class="control-label" th:text="#{doc_outgoing.from_whom}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
                             <select id="position" class="form-control singleSelect" name="position_id" required  data-parsley-errors-container="#positionError">
                                 <option value=""></option>
-                                <option th:each="position: ${positions}" th:value="${position.id}" th:text="${position.docIndex + ' '+ position.name}"></option>
+                                <option th:each="user: ${users}" th:value="${user.positionId}" th:text="${user.id + ' '+ user.getFullName()}"></option>
                             </select>
                             <div class="row"> <div class="col-md-6 p0" id="positionError"></div> </div>
                         </div>
@@ -247,13 +247,15 @@
 
 <script th:inline="javascript">
     var sys_select = [[#{sys_select}]];
-
+    var url = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).PerformerGetByDepartment}]];
+    var performerId=[[${performerId}]];
     function clickPlus() {
         $('#addFile2').click();
     }
 
     $(document).ready(function(){
         hearInputClickFunction();
+
 
         $('.singleSelect').select2({
             placeholder: sys_select,
@@ -281,6 +283,42 @@
             }
         });
     });
+
+    function getPerformer() {
+        var organizationId = $('#departmentId').val();
+        var srSelector = $('#performerId');
+        srSelector.find('option').hide();
+        srSelector.find('option:selected').prop('selected',false);
+        srSelector.find('option:first').show();
+        if (departmentId!="" && departmentId!=null){
+            var html = '';
+            $.ajax({
+                url: url,
+                data: {
+                    id: departmentId,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log(response);
+                    $.each(response, function (index, value) {
+                        html += '<option value="' + value.id + '"' ;
+                        if ((performerId!='' || performerId!=null) && (performerId==value.id)){
+                            html+='selected="selected"';
+                        }
+                        html+='>' + value.name + '</option>'
+
+                    });
+                    $('#performerId').find(':first-child').after(html);
+
+                },
+                error: function () {
+                }
+            });
+        }
+    }
 
     $('#department_id').on('change',function () {
         $('#doc_number').val('');

@@ -15,10 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.admin.AdminTemplates;
 import uz.maroqand.ecology.cabinet.constant.admin.AdminUrls;
@@ -26,6 +23,7 @@ import uz.maroqand.ecology.core.constant.sys.TableHistoryEntity;
 import uz.maroqand.ecology.core.constant.sys.TableHistoryType;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.TableHistory;
+import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.EvidinceStatus;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.user.UserEvidence;
@@ -84,7 +82,18 @@ public class UserController {
         model.addAttribute("add_url", AdminUrls.UsersNew);
         return AdminTemplates.UserList;
     }
+    @PostMapping(value = AdminUrls.PerformerGetByDepartment)
+    @ResponseBody
+    public List<User> getList(
+            @RequestParam("id")Integer departmentId
+    ){
 
+        Department department = departmentService.getById(departmentId);
+        if (department==null) return null;
+
+        List<User> userList = userService.getByDepartmentId(department.getId());
+        return userList;
+    }
     @RequestMapping(value = AdminUrls.UsersListAjax, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> getUserAjaxList(

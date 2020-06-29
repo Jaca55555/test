@@ -287,7 +287,7 @@ public class InnerRegistrationController {
         model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList());
         model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
@@ -408,7 +408,7 @@ public class InnerRegistrationController {
         model.addAttribute("docOrganization",documentOrganization);
         model.addAttribute("docAdditional",documentAdditional);
         model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
-        model.addAttribute("documentViewList", documentViewService.getStatusActive());
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
         model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));

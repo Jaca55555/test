@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{doc_appeal.view}+${document.registrationNumber}" >Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc_appeal.view}+'/'+${document.registrationNumber}" >Kiruvchi Xatlar Ro'yxati</title>
     <link rel="stylesheet" href="/static/bootstrap-treeview.css">
 <style>
     .panel{
@@ -305,7 +305,7 @@
                             </div>
                         </div>
                         <div class="m10-vertical"><span th:text="#{sys_document.comment}">Изоҳи</span></div>
-                        <textarea class="form-control" id="content" name="content" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+                        <textarea class="form-control" id="content" name="content" onfocus="this.value=''" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
                         <div class="m10-vertical">
                             <span th:text="#{sys_document.additional_files}"></span>
                         </div>

@@ -11,6 +11,6 @@ import java.util.List;
 public interface LibraryCategoryRepository extends DataTablesRepository<LibraryCategory, Integer>, JpaRepository<LibraryCategory, Integer> {
 
 
-   // Page<LibraryCategory> findByStatusTrueAndType(String name , Pageable pageable);
+  List<LibraryCategory> findAllByDeletedFalse();
 
 }

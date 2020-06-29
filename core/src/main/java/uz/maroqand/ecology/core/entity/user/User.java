@@ -131,12 +131,19 @@ public class User {
         if (middlename!=null) fullName+=middlename+" ";
         return fullName;
     }
+    public String getFName(){
+        String fullName = " ";
+        if (firstname!=null) fullName+=firstname+" ";
+        if (lastname!=null) fullName+=lastname + " ";
+        return fullName;
+    }
     public String getShortName(){
         String shortName = " ";
         if (firstname!=null) shortName+=firstname.substring(0,1).toUpperCase() + ".";
         if (lastname!=null) shortName+=lastname+" ";
         return shortName;
     }
+
 
     public Boolean getPrivate(){
         return isPrivate;

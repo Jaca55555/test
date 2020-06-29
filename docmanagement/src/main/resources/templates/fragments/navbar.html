@@ -21,7 +21,7 @@
                 <li>
                     <span style="margin-left: 10px" th:utext="${@dateShowService.getCurrentTimeUsingDate(#locale)}"></span>
                     <span id="span"></span></li>
-                <li><span th:utext="${@userServiceImpl.getCurrentUserFromContext().getFullName()}"></span> - <span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
+                <li><span th:utext="${@userServiceImpl.getCurrentUserFromContext().getFName()}"></span> - <span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li>

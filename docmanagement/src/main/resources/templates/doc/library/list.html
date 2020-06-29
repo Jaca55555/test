@@ -3,7 +3,7 @@
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
 
-    <title th:text="#{doc.doc_type_list_heading}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:text="#{doc.doc_library_list}">Kiruvchi Xatlar Ro'yxati</title>
 </head>
 <body>
 <div class="background"></div>
@@ -25,7 +25,7 @@
     <div class="col-xl-12 col-md-12 parent-card">
         <div class="card">
             <div class="card-header flex-space-between-nowrap" id="headingOne">
-                <h5 class="mb-0" th:text="#{doc.doc_type_list_heading}"></h5>
+                <h5 class="mb-0" th:text="#{doc.doc_library_list}"></h5>
                 <span style="font-weight: bold" th:text="${cat.name}"></span>
                 <div>
                     <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryNew}" class="btn btn-rounded btn-success btn-sm ml-2 m0" th:text="#{doc.library}"></a>
@@ -55,7 +55,7 @@
                                 <th th:text="#{doc.id}">ID</th>
                                 <th th:text="#{doc.library_name}"></th>
                                 <th th:text="#{doc.library_number}"></th>
-                                <th th:text="#{doc.library_date}"></th>
+
                                 <th th:text="#{actions}"></th>
                             </tr>
                             </thead>
@@ -122,7 +122,7 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'name'},
                 {data: 2, name: 'number'},
-                {data: 3, name: 'ldate'},
+
                 {render: renderActionsColumn, orderable: false}
             ],
             ajax: function (dataToSend, callback, settings) {
