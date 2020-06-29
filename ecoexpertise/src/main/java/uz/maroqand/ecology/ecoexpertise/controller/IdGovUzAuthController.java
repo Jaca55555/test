@@ -45,7 +45,7 @@ public class IdGovUzAuthController {
     private static final String ClientId = "davekoekspertiza_uz";
     private static final String Scope = "davekoekspertiza_uz";
     private static final String ClientSecret = "XbzKDhhq8+3tDnuU/e02bA==";
-    private static final String RedirectUrl = "http://devfo.davekoekspertiza.uz:8080" + SysUrls.IdGovUzAccessToken;
+    private static final String RedirectUrl = "http://eco-service.uz:8080" + SysUrls.IdGovUzAccessToken;
 
     private final Logger logger = LogManager.getLogger(IdGovUzAuthController.class);
     private final SimpleDateFormat idGovUzDateFormat = new SimpleDateFormat("yyyyMMdd");
