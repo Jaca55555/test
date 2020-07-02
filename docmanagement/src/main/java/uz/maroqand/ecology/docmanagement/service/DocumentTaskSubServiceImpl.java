@@ -88,6 +88,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         return tree;
     }
 
+
+
     @Override
     public List<DocumentTaskSub> getListByDocId(Integer docId) {
         return documentTaskSubRepository.findByDocumentIdAndDeletedFalseOrderByIdAsc(docId);
@@ -436,6 +438,14 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date){
         return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqual(receiverId, date);
+    }
+
+    @Override
+    public Integer countAllByStatusAndDepartmentId(Integer status, Integer departmentId) {
+
+        Integer number=null;
+
+        return documentTaskSubRepository.countAllByStatusAndDepartmentId(status,departmentId);
     }
 
     @Override

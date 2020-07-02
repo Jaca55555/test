@@ -72,6 +72,12 @@
 
                                    </a>
                                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportList}" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_report.list}" ></span>
+                    </a>
+                </li>
 
                 <!--<li class="nav-item">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OrdersList}">
