@@ -128,6 +128,7 @@ public class AgreementCompleteController {
                 pageable
         );*/
 
+        System.out.println(filterDto);
         Page<RegApplicationLog> regApplicationLogPage = regApplicationLogService.findFiltered(
                 filterDto,
                 null,
