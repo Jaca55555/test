@@ -25,6 +25,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     List<DocumentTaskSub> findByReceiverIdAndStatusInAndDeletedFalseOrderByIdAsc(Integer receiverId, Set<Integer> statusSet);
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN User u ON d.receiverId = u.id WHERE d.status =?1 AND d.deleted = FALSE AND u.departmentId=?2")
+    Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
 
     List<DocumentTaskSub> findByTaskIdAndLevelAndDeletedFalse(Integer documentId,Integer level);
 
@@ -41,8 +43,10 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
 
     DocumentTaskSub findByReceiverIdAndDocumentIdAndDeletedFalse(Integer userId, Integer docId);
+    DocumentTaskSub findByDepartmentIdAndDeletedFalse(Integer departmentId);
 
     List<DocumentTaskSub> findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(Integer docId, Integer taskId);
+    List<DocumentTaskSub> findByDepartmentId(Integer departmentId);
 
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1 AND d.status=?2")
     Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses);
