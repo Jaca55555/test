@@ -307,7 +307,7 @@
             case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
             case 3: html='<button type="button" class="btn-rounded btn btn-secondary">'+checked+'</button>';return html;
             case 4: html='<button type="button" class="btn-rounded btn btn-success">'+completed+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
             case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
             case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+rejected+'</button>';return html;
 
@@ -336,8 +336,8 @@
             processing: true,
             serverSide: true,
             scrollX: true,
-            pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            pageLength: 10,
+            lengthMenu: [ [10.25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
             dom: 'lrtip',
             pagingType: 'input',
