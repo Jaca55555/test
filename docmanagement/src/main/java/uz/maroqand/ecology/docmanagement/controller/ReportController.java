@@ -22,6 +22,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.*;
+import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,12 +43,14 @@ public class ReportController {
     private final DocumentSubService documentSubService;
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
+    private final DocumentTaskSubRepository documentTaskSubRepository;
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentTaskContentService documentTaskContentService;
 
     public ReportController(
+            DocumentTaskSubRepository documentTaskSubRepository,
             DepartmentService departmentService,
             DocumentTaskContentService documentTaskContentService,
             UserService userService,
@@ -66,6 +69,7 @@ public class ReportController {
         this.departmentService=departmentService;
         this.documentSubService = documentSubService;
         this.documentTaskService = documentTaskService;
+        this.documentTaskSubRepository=documentTaskSubRepository;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
         this.documentOrganizationService = documentOrganizationService;
@@ -106,19 +110,20 @@ public class ReportController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(departments.size());
 
         for(Department department : departments) {
+
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
                     department.getName(),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(1,departmentId),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,departmentId),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,departmentId),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(6,departmentId),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(4,departmentId),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(1,departmentId)+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,departmentId)+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,departmentId)+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(6,departmentId)+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(4,departmentId),
+                    documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId()),
+                    documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId()),
+                    documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId()),
+                    documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId()),
+                    documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
+                    documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId())+
+                    documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId())+
+                            documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId())+
+                            documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId())+
+                    documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
             });
         }
 

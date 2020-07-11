@@ -24,6 +24,7 @@ public interface DocumentTaskSubService {
     Integer getCountByStatus();
     DocumentTaskSub createNewSubTask(Integer level, Document document, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId);
     Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
+    Integer countAllByStatusAndDate(Date date,Integer departmentId);
     DocumentTaskSub update(DocumentTaskSub taskSub);
 
     String buildTree(Integer level,List<DocumentTaskSub> documentTaskSubList, Map<Integer,DocumentTaskSub> taskSubMap,String locale);

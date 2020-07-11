@@ -442,10 +442,24 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     @Override
     public Integer countAllByStatusAndDepartmentId(Integer status, Integer departmentId) {
-
-        Integer number=null;
-
         return documentTaskSubRepository.countAllByStatusAndDepartmentId(status,departmentId);
+    }
+
+    @Override
+    public Integer countAllByStatusAndDate(Date date, Integer departmentId) {
+        int number=0;
+        Date nowDate = new Date();
+        date.setHours(23);
+        date.setMinutes(59);
+        Long intervalHours = (date.getTime()-nowDate.getTime())/3600000;
+        System.out.println(intervalHours);
+        if(intervalHours<72&&intervalHours>0){
+            number=documentTaskSubRepository.countAllByStatusAndDepartmentId(null,departmentId);
+        }else if(intervalHours<0){
+            number=documentTaskSubRepository.countAllByStatusAndDepartmentId(null,departmentId);
+        }
+
+        return number;
     }
 
     @Override
