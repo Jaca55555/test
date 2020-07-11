@@ -204,9 +204,7 @@
         </div>
         <div class="parent-card col-xl-12 mh-1000">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
-                </li>
+
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
@@ -227,6 +225,9 @@
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+                </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -306,7 +307,7 @@
 
         function renderStatusColumn(data, type, row, meta) {
             var html = '';
-            var status = row[8];
+            var status = row[7];
             switch (status) {
                 case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[5]+'</button>';return html;
                 case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
@@ -379,7 +380,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="' +row[9][0]+ '" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="' +row[8][0]+ '" >' + row[1]+'</a>';
                             return html;
                         },
                         className: "w-15 text-left"
@@ -387,7 +388,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "w-10 text-left"
@@ -395,14 +396,14 @@
                     {data: 3, name: 'document.content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[3]+'</a>';
                             return html;},
                         className: "w-20 text-justify"},
 
                     {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[4]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"},
@@ -410,7 +411,7 @@
                     {data: 6, name: 'content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<b>'+row[6]+'</b><br>'+row[10];
+                            html += '<b>'+row[6]+'</b><br>'+row[9];
                             return html;
                         },
                         className: "text-justify"},
