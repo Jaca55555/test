@@ -65,14 +65,21 @@
                     <label for="departmentName" class="control-label" th:text="#{departmentName}">Хат рақами</label>
                     <input type="text" class="form-control" id="departmentName" />
                 </div>
-            </div>
-            <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="row" style="padding-top: 0px;">
-
-                    <div class="form-group col-md-2 col-sm-12 form-button-container">
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="dateBegin" class="control-label"><span th:text="#{mntr_department.name}">Рўйхатга олинган сана</span></label>
+                    <div class="row">
+                        <div class="col-6" style="padding-left: 0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                        </div>
+                        <div class="col-6" style="padding-right:0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                        </div>
                         <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
                             <span th:text="#{sys_document.search}">Қидириш</span>
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -181,6 +188,8 @@
                 dataToSend.page = api !== undefined ? api.page() : 0;
                 dataToSend.size = api !== undefined ? api.page.len() : 25;
                 dataToSend.departmentName = $('#departmentName').val();
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
 
 
 

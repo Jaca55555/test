@@ -87,8 +87,8 @@ public class ReportController {
     @ResponseBody
     public HashMap<String, Object> getDepartmentListAjaxt(
             @RequestParam(name = "id", required = false) Integer departmentId,
-            @RequestParam(name = "organizationId", required = false) Integer organizationId,
-            @RequestParam(name = "parentId", required = false) Integer parentId,
+            @RequestParam(name = "dateEnd", required = false)  String dateEndStr,
+            @RequestParam(name = "dateBegin", required = false)  String dateBeginStr,
             @RequestParam(name = "departmentName", required = false) String name,
             @RequestParam(name = "departmentName", required = false) String nameOz,
             @RequestParam(name = "departmentName", required = false) String nameEn,
@@ -99,8 +99,9 @@ public class ReportController {
         nameOz = StringUtils.trimToNull(nameOz);
         nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
-
-        Page<Department>  departmentPage = departmentService.findFiltered(departmentId, organizationId, parentId, name, nameOz,nameEn,nameRu, pageable);
+        System.out.println("allo"+dateBeginStr);
+        System.out.println(dateEndStr);
+        Page<Department>  departmentPage = departmentService.findFilter(departmentId, DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat), DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat), name, nameOz,nameEn,nameRu, pageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", departmentPage.getTotalElements()); //Total elements
@@ -110,19 +111,24 @@ public class ReportController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(departments.size());
 
         for(Department department : departments) {
-
+            Calendar calendar = Calendar.getInstance();
+            Calendar calendar1 = Calendar.getInstance();
+            calendar.add(Calendar.HOUR_OF_DAY, -72);
+            Date date = calendar.getTime();
+            calendar1.add(Calendar.HOUR_OF_DAY,0);
+            Date date1=calendar1.getTime();
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
                     department.getName(),
                     documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId()),
-                    documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId()),
-                    documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId()),
+                    documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId()),
+                    documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId())+
                     documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId())+
-                            documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId())+
-                            documentTaskSubService.countAllByStatusAndDate(documentTaskSubRepository.findByDepartmentIdAndDeletedFalse(department.getId()).getDueDate(), department.getId())+
+                    documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId())+
+                    documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId())+
                     documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
             });
         }
