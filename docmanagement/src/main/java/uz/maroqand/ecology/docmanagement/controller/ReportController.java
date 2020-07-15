@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -34,7 +35,7 @@ import java.util.*;
  */
 @Controller
 public class ReportController {
-
+    private final OrganizationService organizationService;
     private final UserService userService;
     private final PositionService positionService;
     private final HelperService helperService;
@@ -52,6 +53,7 @@ public class ReportController {
     public ReportController(
             DocumentTaskSubRepository documentTaskSubRepository,
             DepartmentService departmentService,
+            OrganizationService organizationService,
             DocumentTaskContentService documentTaskContentService,
             UserService userService,
             PositionService positionService,
@@ -72,6 +74,7 @@ public class ReportController {
         this.documentTaskSubRepository=documentTaskSubRepository;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
+        this.organizationService=organizationService;
         this.documentOrganizationService = documentOrganizationService;
         this.documentDescriptionService = documentDescriptionService;
         this.documentTaskContentService=documentTaskContentService;
@@ -135,6 +138,73 @@ public class ReportController {
 
         result.put("data", convenientForJSONArray);
         return result; }
+    @RequestMapping(value = DocUrls.ReportView, method = RequestMethod.GET)
+    public String getReportListPage(Model model) {
+        model.addAttribute("departments",departmentService.getAll());
+        model.addAttribute("doc_type",DocumentTypeEnum.getList());
+        model.addAttribute("statuses",TaskSubStatus.getTaskSubStatusList());
+
+        return DocTemplates.ReportView;
+    }
+
+    @RequestMapping(value = DocUrls.ReportView, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> getReportListAjaxt(
+            @RequestParam(name = "id", required = false) Integer departmentId,
+            @RequestParam(name = "statusId", required = false) Set<Integer> status,
+            @RequestParam(name = "typeId", required = false) Integer typeId,
+            @RequestParam(name = "dateEnd", required = false)  String dateEndStr,
+            @RequestParam(name = "dateBegin", required = false)  String dateBeginStr,
+            Pageable pageable
+    ) {
+        HashMap<String, Object> result = new HashMap<>();
+        Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
+                null,
+                null, //todo documentTypeId = 3
+                null,
+                null,
+                null,
+                DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat),
+                DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                typeId,
+
+               null,
+                departmentId,
+                null,
+                null,
+                pageable
+        );
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        List<DocumentTaskSub> documentTaskSubList = documentTaskSubs.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
+        for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
+            Document document = documentService.getById(documentTaskSub.getDocumentId());
+            JSONArray.add(new Object[]{
+                    documentTaskSub.getId(),
+                    document.getRegistrationNumber(),
+                    document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    documentTaskSub.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getRegistrationDate()):"",
+                    document.getOrganizationId()!=null ? organizationService.getById(document.getOrganizationId()).getName():"",
+                    document.getContent(),
+                    documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
+                    document.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
+            });
+        }
+
+        result.put("recordsTotal", documentTaskSubs.getTotalElements()); //Total elements
+        result.put("recordsFiltered", documentTaskSubs.getTotalElements()); //Filtered elements
+        result.put("data", JSONArray);
+
+        return result;}
 
 
 
