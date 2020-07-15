@@ -65,7 +65,7 @@
                     <label for="typeId" class="control-label" th:text="#{doc.doc_type}">Жўнатувчи ташкилот номи</label>
                     <select class="form-control" id="typeId">
                         <option value=""></option>
-                        <option th:each="type: ${doc_type}" th:value="${type}" th:text="#{${type.name}}">
+                        <option th:each="type: ${doc_type}" th:value="${type.id}" th:text="#{${type.name}}">
                         </option>
                     </select>
                 </div>
@@ -120,28 +120,31 @@
                                     <tr role="row">
                                         <th></th>
                                         <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
-                                            <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
+                                            <span th:text="#{doc.RegNumber}">Регистрация рақами</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
-                                            <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
+                                            <span th:text="#{doc.registrationDate}">Регистрация санаси</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
-                                            <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
+                                            <span th:text="#{doc.regDate}">Кирувчи хат маълумотлари</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
+                                            <span th:text="#{doc.organization}">Хужжат санаси</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
+                                            <span th:text="#{doc_content}">Ижро муддати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.task_comment}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.dueDate}">Резолюция ва иштирокчилар</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                            <span th:text="#{sys_document.taskDate}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
                                     </thead>
@@ -274,7 +277,7 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a >' + row[2]+'</a>';
+                        html += '<a >' + row[2]+"<br>"+row[9]+'</a>';
                         return html;
                     },
                     className: "text-left"
@@ -301,7 +304,7 @@
                 {data: 6, name: 'created',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a >' + row[6]+'</a>';
+                        html += '<a >' + row[10]+'</a>';
                         return html;
                     },
                     className: "text-left"},
@@ -319,7 +322,13 @@
                         return html;
                     },
                     className: "text-left"},
-
+                {data: 9, name: 'created',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a >' + row[11]+'</a>';
+                        return html;
+                    },
+                    className: "text-left"},
             ],
             rowCallback: function (row, data) {
                 $(row).on('click', function () {
