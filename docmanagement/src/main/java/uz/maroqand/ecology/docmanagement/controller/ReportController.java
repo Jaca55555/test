@@ -151,16 +151,23 @@ public class ReportController {
     @ResponseBody
     public HashMap<String, Object> getReportListAjaxt(
             @RequestParam(name = "id", required = false) Integer departmentId,
-            @RequestParam(name = "statusId", required = false) Set<Integer> status,
+            @RequestParam(name = "statusId", required = false) Integer status,
             @RequestParam(name = "typeId", required = false) Integer typeId,
             @RequestParam(name = "dateEnd", required = false)  String dateEndStr,
             @RequestParam(name = "dateBegin", required = false)  String dateBeginStr,
             Pageable pageable
     ) {
+        int id=0;
+        Set<Integer> statuses = null;
+        if(status!=null){
+        statuses = new LinkedHashSet<>();
+        statuses.add(status);}
+        if(departmentId==null){id=0;}else{id=departmentId;};
+
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 null,
-                null, //todo documentTypeId = 3
+                typeId!=null ? Collections.singletonList(typeId):null, //todo documentTypeId = 3
                 null,
                 null,
                 null,
@@ -173,10 +180,10 @@ public class ReportController {
                 null,
                 null,
                 null,
-                typeId,
+                null,
 
-               null,
-                departmentId,
+               statuses,
+                id ,
                 null,
                 null,
                 pageable
@@ -190,13 +197,16 @@ public class ReportController {
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
-                    document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    documentTaskSub.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getRegistrationDate()):"",
+                    document.getDocRegDate()!=null ? Common.uzbekistanDateFormat.format(document.getDocRegDate()):"",
+                    documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     document.getOrganizationId()!=null ? organizationService.getById(document.getOrganizationId()).getName():"",
                     document.getContent(),
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     document.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
+                    document.getDocRegNumber(),
+                    documentTaskSub.getReceiver().getFullName(),
+                    document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
             });
         }
 
