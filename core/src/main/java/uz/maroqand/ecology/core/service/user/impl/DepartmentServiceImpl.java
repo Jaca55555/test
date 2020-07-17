@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.repository.user.DepartmentRepository;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,6 +63,18 @@ public class DepartmentServiceImpl implements DepartmentService {
             String nameRu,
             Pageable pageable) {
         return departmentRepository.findAll(getFilteringSpecification(departmentId,organizationId,parentId,name,nameOz,nameEn,nameRu), pageable);
+    }
+    @Override
+    public Page<Department> findFilter(
+            Integer departmentId,
+            Date dateBegin,
+            Date dateEnd,
+            String name,
+            String nameOz,
+            String nameEn,
+            String nameRu,
+            Pageable pageable) {
+        return departmentRepository.findAll(getFilterSpecification(departmentId,dateBegin,dateEnd,name,nameOz,nameEn,nameRu), pageable);
     }
 
     @Override
@@ -108,6 +123,56 @@ public class DepartmentServiceImpl implements DepartmentService {
                 if (parentId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("parentId"), parentId));
                 }
+                if (name != null) {
+                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
+                }
+                if (nameOz != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameOz"), "%" + nameOz + "%"));
+                }
+                if (nameEn != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameEn"), "%" + nameEn + "%"));
+                }
+                if (nameRu != null) {
+                    predicates.add(criteriaBuilder.like(root.get("nameRu"), "%" + nameRu + "%"));
+                }
+                // Show only registered and non-deleted
+                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
+                predicates.add(notDeleted);
+
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
+    private static Specification<Department> getFilterSpecification(
+            final Integer departmentId,
+            final Date dateBegin,
+            final Date dateEnd,
+            final String name,
+            final String nameOz,
+            final String nameEn,
+            final String nameRu
+    ) {
+        return new Specification<Department>() {
+            @Override
+            public Predicate toPredicate(Root<Department> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                System.out.println("departmentId="+departmentId);
+                System.out.println("name="+name);
+                System.out.println("nameRu="+nameRu);
+
+                if (departmentId != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), departmentId));
+                }
+                if(dateEnd != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateEnd);
+                    calendar.add(Calendar.DATE, 1);
+                    predicates.add(criteriaBuilder.lessThan(root.get("createdAt"), calendar.getTime()));
+                }if(dateBegin != null)
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), dateBegin));
+
                 if (name != null) {
                     predicates.add(criteriaBuilder.like(root.get("name"), "%" + name + "%"));
                 }

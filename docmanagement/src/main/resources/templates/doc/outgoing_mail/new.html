@@ -336,6 +336,7 @@
 
             let csrf = $('#global_csrf').val();
             let fd = new FormData();
+            console.log($('#position').val());
             fd.append("positionId",$('#position').val());
             fd.append("departmentId",$('#departmentId').val());
             fd.append("_csrf", csrf);

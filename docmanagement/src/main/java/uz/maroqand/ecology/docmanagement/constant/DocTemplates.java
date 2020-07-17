@@ -139,6 +139,7 @@ public class DocTemplates {
 
     private static final String Report=Prefix+"/report";
     public static final String ReportList = Report + "/list";
+    public static final String ReportView = Report + "/view";
 
 
 }

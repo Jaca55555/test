@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.entity.user.Department;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +22,16 @@ public interface DepartmentService {
             Integer departmentId,
             Integer organizationId,
             Integer parentId,
+            String name,
+            String nameOz,
+            String nameEn,
+            String nameRu,
+            Pageable pageable
+    );
+    Page<Department> findFilter(
+            Integer departmentId,
+            Date dateBegin,
+            Date dateEnd,
             String name,
             String nameOz,
             String nameEn,

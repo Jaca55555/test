@@ -56,9 +56,6 @@
                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info btn-sm"><i class="feather icon-search"></i>
                     <span th:text="#{sys_search}">Поиск</span>
                 </a>
-                <a href="/doc/document_view/new" class="btn btn-success btn-sm"><i class="feather icon-plus"></i>
-                    <span>new doc_view</span>
-                </a>
             </div>
             <div class="card parent-card table-responsive" style="padding:20px 15px 0px 15px">
                 <table id="document_view" class="display table nowrap table-hover" style="width:100%">
@@ -152,8 +149,8 @@
             processing: true,
             serverSide: true,
             scrollX: true,
-            pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            pageLength: 10,
+            lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {

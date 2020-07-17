@@ -25,12 +25,18 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     List<DocumentTaskSub> findByReceiverIdAndStatusInAndDeletedFalseOrderByIdAsc(Integer receiverId, Set<Integer> statusSet);
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
-    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN User u ON d.receiverId = u.id WHERE d.status =?1 AND d.deleted = FALSE AND u.departmentId=?2")
+//    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN User u ON d.receiverId = u.id WHERE d.status =?1 AND d.deleted = FALSE AND u.departmentId=?2")
     Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate>?1 AND d.departmentId=?2")
+    Integer countAllByDueDateAndDepartmentId(Date date,Integer departmentId);
+
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
+    Integer countAllByDueDate1AndDepartmentId(Date date,Integer departmentId);
 
     List<DocumentTaskSub> findByTaskIdAndLevelAndDeletedFalse(Integer documentId,Integer level);
 
     DocumentTaskSub findByIdAndDeletedFalse(Integer id);
+    DocumentTaskSub findByDepartmentIdAndDeletedFalse(Long departmentId);
 
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);//Муддати якинлашаётган
 

@@ -57,6 +57,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public List<DocumentTaskSub> getByDepartmentId(Integer departmentId) {
+        return documentTaskSubRepository.findByDepartmentId(departmentId);
+    }
+
+    @Override
     public Integer getCountByStatus() {
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.ForChangePerformer.getId());
@@ -442,11 +447,18 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     @Override
     public Integer countAllByStatusAndDepartmentId(Integer status, Integer departmentId) {
-
-        Integer number=null;
-
         return documentTaskSubRepository.countAllByStatusAndDepartmentId(status,departmentId);
     }
+
+    @Override
+    public Integer countAllByDueDateAndDepartmentId(Date date, Integer departmentId) {
+        return documentTaskSubRepository.countAllByDueDateAndDepartmentId(date,departmentId);
+    }
+    @Override
+    public Integer countAllByDueDate1AndDepartmentId(Date date, Integer departmentId) {
+        return documentTaskSubRepository.countAllByDueDate1AndDepartmentId(date,departmentId);
+    }
+
 
     @Override
     public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){

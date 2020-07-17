@@ -121,7 +121,7 @@ public class OutgoingController {
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
         if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
             for (DocumentOrganization documentOrganization: documentOrganizationSet) {
-                if(documentOrganization.getLevel()!=0)
+                if(documentOrganization.getLevel()!=0&&documentOrganization.getLevel()!=null)
                 {document_organization_name +=documentOrganization.getName() + ", ";}
                 else{
                     document_organization_name+=documentOrganizationService.getById(documentOrganization.getParent()).getName();
@@ -130,6 +130,7 @@ public class OutgoingController {
         }else if (documentSub.getOrganizationId()!=null){
             document_organization_name=documentSub.getOrganization().getName();
         }
+
         model.addAttribute("document_organization_name", document_organization_name);
 
         model.addAttribute("department_name", departmentService.getById(document.getDepartmentId()).getName());
