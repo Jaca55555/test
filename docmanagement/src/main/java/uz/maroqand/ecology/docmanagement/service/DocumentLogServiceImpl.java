@@ -47,6 +47,11 @@ public class DocumentLogServiceImpl implements DocumentLogService {
     }
 
     @Override
+    public DocumentLog findFirstByDocumentIdOrderByIdDesc(Integer docId) {
+        return logRepository.findFirstByDocumentIdOrderByIdDesc(docId);
+    }
+
+    @Override
     public List<DocumentLog> getAllByDocAndTaskId(Integer docId, Integer taskId) {
         return logRepository.findAllByDocumentIdAndTaskIdOrderByIdDesc(docId, taskId);
     }
