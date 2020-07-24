@@ -13,21 +13,25 @@
         #responsive-table-model_previous  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
 
         #responsive-table-model_next  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         #responsive-table-model_first  {
             padding: 5px;
             border: 1px solid grey;
-
+            margin: 10px;
         }
         #responsive-table-model_last  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -291,6 +295,11 @@
         var thead;
         var tabFilter = tab_number == null ? 2 : tab_number;
 
+        var firstClassName = 'fa fa-fast-backward';
+        var previousClassName = 'fa fa-step-backward mx-2';
+        var nextClassName = 'fa fa-step-forward mx-2';
+        var lastClassName = 'fa fa-fast-forward';
+
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
             dataDatatableSelector.html(thead);
@@ -338,7 +347,7 @@
                 processing: true,
                 serverSide: true,
                 scrollX: true,
-                pageLength: 100,
+                pageLength: 10,
                 lengthMenu: [ [10, 25, 50, 100], [10, 25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom:'lrtip',
