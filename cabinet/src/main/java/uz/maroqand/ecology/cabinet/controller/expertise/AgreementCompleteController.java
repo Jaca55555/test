@@ -146,7 +146,10 @@ public class AgreementCompleteController {
             if (regApplication!=null && regApplication.getApplicantId()!=null){
                 client = clientService.getById(regApplication.getApplicantId());
             }
-            RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
+            RegApplicationLog performerLog = null;
+            if (regApplication!=null && agreementCompleteLog.getIndex()!=null){
+                performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
+            }
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client!=null?client.getTin():"",
@@ -155,8 +158,8 @@ public class AgreementCompleteController {
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
                     regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
-                    performerLog.getStatus() != null ? performerLog.getStatus().getId():"",
+                    (performerLog!=null && performerLog.getStatus() != null ) ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
+                    (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
                     agreementCompleteLog.getId()
