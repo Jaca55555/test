@@ -68,7 +68,7 @@ public interface UserService {
     LogType getUserLogType(User user);
 
     List<User> getEmployeesForDocManage(String type);
-
+    List<User> getEmployeesForDocManageAndIsExecutive(String type);
     List<User> getEmployeesForNewDoc(String type);
 
     Integer getUserDepartmentId(Integer userId);

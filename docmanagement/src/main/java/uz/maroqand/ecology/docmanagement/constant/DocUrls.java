@@ -235,4 +235,8 @@ public class DocUrls {
     public static final String OutgoingMailFileDownload = OutgoingMailFile + "/download";
     public static final String OutgoingMailFileDelete = OutgoingMailFile + "/delete";
     public static final String OutgoingMailChangeStatus = OutgoingMail + "/change_status";
+
+    private static final String Report=Prefix+"/report";
+    public static final String ReportList=Report+"/list";
+    public static final String ReportView=Report+"/view";
 }

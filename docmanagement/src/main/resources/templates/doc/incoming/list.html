@@ -10,6 +10,24 @@
         a{
             color: #007bff;
         }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
     </style>
 </head>
 <body>
@@ -186,9 +204,7 @@
         </div>
         <div class="parent-card col-xl-12 mh-1000">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
-                </li>
+
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
@@ -210,6 +226,9 @@
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
                 </li>
+                <li class="nav-item card-nav-item">
+                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -228,9 +247,6 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                                     <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
-                                                </th>
-                                                <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
-                                                    <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                                     <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
@@ -259,6 +275,8 @@
     <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
     <script th:src="@{/static/datatables/datatables.min.js}"></script>
     <script th:src="@{/static/datatables/buttons.print.min.js}"></script>
+    <script th:src="@{/static/datatables/input.js}"></script>
+
 
     <script th:inline="javascript">
         var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}]];
@@ -289,17 +307,17 @@
 
         function renderStatusColumn(data, type, row, meta) {
             var html = '';
-            var status = row[8];
+            var status = row[7];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[5]+'</button>';return html;
             }
             return html;
         }
@@ -320,8 +338,8 @@
                 processing: true,
                 serverSide: true,
                 scrollX: true,
-                pageLength: 25,
-                lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
+                pageLength: 10,
+                lengthMenu: [ [10, 25, 50, 100], [10, 25, 50, 100] ],
                 order: [[5, 'desc']],
                 dom:'lrtip',
                 dom: 'Bfrtip',
@@ -330,7 +348,7 @@
                 'copy', 'csv', 'excel', 'pdf','print'
 
                 ],
-
+                pagingType: 'input',
                 ajax : function (dataToSend, callback, settings) {
                     let api = this.api();
 
@@ -362,7 +380,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="' +row[9][0]+ '" >' + row[1]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="' +row[8][0]+ '" >' + row[1]+'</a>';
                             return html;
                         },
                         className: "w-15 text-left"
@@ -370,7 +388,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "w-10 text-left"
@@ -378,28 +396,22 @@
                     {data: 3, name: 'document.content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[3]+'</a>';
                             return html;},
                         className: "w-20 text-justify"},
-                    {data: 4, name: 'createdAt',
+
+                    {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
-                            return html;
-                        },
-                        className: "w-10 text-center"},
-                    {data: 5, name: 'dueDate',
-                        render: function (data, type, row, meta) {
-                            var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
+                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[8][0]+'" >' + row[4]+'</a>';
                             return html;
                         },
                         className: "w-10 text-center"},
                     {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                    {data: 7, name: 'content',
+                    {data: 6, name: 'content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<b>'+row[7]+'</b><br>'+row[10];
+                            html += '<b>'+row[6]+'</b><br>'+row[9];
                             return html;
                         },
                         className: "text-justify"},

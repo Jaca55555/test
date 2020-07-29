@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{doc_report.list}" >Кирувчи хатлар</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        a{
+            color: #007bff;
+        }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+    </style>
+</head>
+<body>
+<div class="background"> </div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+
+    <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+        <!-- filters card begins here -->
+        <div class="card" style="border-radius: 5px">
+            <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
+                <h5 class="mb-0">
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                </h5>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="row p10" style="padding-bottom: 0px;">
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="departmentName" class="control-label" th:text="#{departmentName}">Хат рақами</label>
+                    <input type="text" class="form-control" id="departmentName" />
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="dateBegin" class="control-label"><span th:text="#{mntr_department.name}">Рўйхатга олинган сана</span></label>
+                    <div class="row">
+                        <div class="col-6" style="padding-left: 0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                        </div>
+                        <div class="col-6" style="padding-right:0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                        </div>
+                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
+                            <span th:text="#{sys_document.search}">Қидириш</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="parent-card col-xl-12 mh-1000">
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="table-responsive">
+                    <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="responsive-table-model" class="table table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th th:text="#{mntr_department.name}">name</th>
+                                        <th th:text="#{count_department.new}">name</th>
+                                        <th th:text="#{count_department.progress}">name</th>
+                                        <th th:text="#{count_department.dueDate}">name</th>
+                                        <th th:text="#{count_department.afterDate}">name</th>
+                                        <th th:text="#{count_department.doLater}">name</th>
+                                        <th th:text="#{count_department.total}">name</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script th:src="@{/static/datatables/buttons.print.min.js}"></script>
+<script th:src="@{/static/datatables/input.js}"></script>
+
+
+<script th:inline="javascript">
+    var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+    let tab_number = [[${tab_number_}]];
+</script>
+<script th:inline="none">
+    var dataDatatableSelector;
+    var thead;
+    var tabFilter = tab_number == null ? 1 : tab_number;
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    function getTabDatatableConnect(tab) {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        tabFilter = tab;
+        datatableConnect();
+    }
+
+
+
+
+    /* function renderActionsColumn(data, type, row, meta) {
+         var html = '';
+         html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+         return html;
+     }*/
+
+    function clearFilter() {
+        $('#accordionExample .singleSelect').val(null).select2();
+        $('#accordionExample input').val('');
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 10,
+            lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
+            order: [[5, 'desc']],
+            dom:'lrtip',
+            dom: 'Bfrtip',
+            buttons: [
+
+                'copy', 'csv', 'excel', 'pdf','print'
+
+            ],
+            pagingType: 'input',
+            ajax : function (dataToSend, callback, settings) {
+                let api = this.api();
+
+                dataToSend.page = api !== undefined ? api.page() : 0;
+                dataToSend.size = api !== undefined ? api.page.len() : 25;
+                dataToSend.departmentName = $('#departmentName').val();
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
+
+
+
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post("", dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'docIndex'},
+                {data: 2, name: 'name'},
+                {data: 3, name: 'nameOz'},
+                {data: 4, name: 'nameEn'},
+                {data: 5, name: 'nameRu'},
+                {data: 6, name: 'organizationId'},
+                {data: 7, name: 'parentId'},
+
+            ],
+            rowCallback: function (row, data) {
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
+            },
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#responsive-table-model');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+        $('#filter').on('change', function () {
+            $('#myTab a.active').trigger('click');
+        })
+    });
+
+    $('#newDocs').on('click',function () {
+        $('#myTab a.active').removeClass('active');
+        $('#home-tab').addClass('active');
+        getTabDatatableConnect(9);
+    });
+
+
+    if (tab_number != null) {
+        if (tab_number !== 9) {
+            document.querySelector('#tab_filter_' + tab_number).click();
+        } else {
+            $('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active');
+            getTabDatatableConnect(9);
+        }
+    }
+
+
+</script>
+</body>
+</html>

@@ -395,6 +395,7 @@ public class IncomingRegistrationController {
         document.setDocRegNumber(docRegNumber);
         document.setDocRegDate(DateParser.TryParse(docRegDateStr, Common.uzbekistanDateFormat));
         document.setContentId(contentId);
+        document.setContentId(contentId);
         document.setContent(content);
         document.setAdditionalDocumentId(additionalDocumentId);
         document.setPerformerName(performerName);
@@ -444,7 +445,7 @@ public class IncomingRegistrationController {
 
             String[] paramName =  mapEntry.getKey().split("_");
             String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
+            String value= mapEntry.getValue();
             if (tagName.equals("descriptionTextareaTask")){
                 descriptionTextareaTask = value;
             }
@@ -630,7 +631,7 @@ public class IncomingRegistrationController {
 
             String[] paramName =  mapEntry.getKey().split("_");
             String  tagName = paramName[0];
-            String value= mapEntry.getValue().replaceAll(" ","");
+            String value= mapEntry.getValue().replaceAll(" "," ");
 
             if (tagName.equals("user")){
                 userId=Integer.parseInt(value);

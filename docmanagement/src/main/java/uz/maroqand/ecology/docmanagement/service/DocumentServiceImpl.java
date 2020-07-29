@@ -158,7 +158,7 @@ public class DocumentServiceImpl implements DocumentService {
         Position position = positionService.getById(positionId);
         Department department = departmentService.getById(departmentId);
         String outDocNumber="";
-        outDocNumber+=position.getDocIndex()!=null?position.getDocIndex()+"-":"";
+        outDocNumber+=position.getDocIndex()!=null?position.getId()+"-":"";
         outDocNumber+=department.getDocIndex()!=null?department.getDocIndex()+"-":"";
         Integer lastDocNumber=1;
         System.out.println(position.getLastDocNumber());

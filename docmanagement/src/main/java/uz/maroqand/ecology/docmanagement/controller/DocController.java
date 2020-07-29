@@ -411,11 +411,9 @@ public class DocController {
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Document document  : documentPage.getContent()) {
-//            if(document.getDocumentTypeId()==1) {
-                select2DtoList.add(new Select2Dto(document.getId(), document.getRegistrationNumber()));
-//            }
 
-        }
+                select2DtoList.add(new Select2Dto(document.getId(), document.getRegistrationNumber()+" - "+ Common.uzbekistanDateFormat.format(document.getRegistrationDate())));
+       }
 //        +" - "+ Common.uzbekistanDateAndTimeFormat.format(document.getRegistrationDate())
         Select2PaginationDto paginationDto = new Select2PaginationDto();
         paginationDto.setMore(true);

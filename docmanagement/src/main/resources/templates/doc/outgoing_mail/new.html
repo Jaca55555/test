@@ -283,9 +283,11 @@
             }
         });
     });
-
+    $('#departmentId').change(function () {
+        getPerformer();
+    });
     function getPerformer() {
-        var organizationId = $('#departmentId').val();
+        var departmentId = $('#departmentId').val();
         var srSelector = $('#performerId');
         srSelector.find('option').hide();
         srSelector.find('option:selected').prop('selected',false);
@@ -308,7 +310,7 @@
                         if ((performerId!='' || performerId!=null) && (performerId==value.id)){
                             html+='selected="selected"';
                         }
-                        html+='>' + value.name + '</option>'
+                        html+='>' + value.fullName+ '</option>'
 
                     });
                     $('#performerId').find(':first-child').after(html);
@@ -334,6 +336,7 @@
 
             let csrf = $('#global_csrf').val();
             let fd = new FormData();
+            console.log($('#position').val());
             fd.append("positionId",$('#position').val());
             fd.append("departmentId",$('#departmentId').val());
             fd.append("_csrf", csrf);

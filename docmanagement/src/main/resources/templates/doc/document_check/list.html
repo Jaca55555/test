@@ -202,9 +202,7 @@
     </div>
     <div class="parent-card col-xl-12 mh-1000">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect()" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
-            </li>
+
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
             </li>
@@ -213,6 +211,9 @@
             </li>
             <li class="nav-item card-nav-item">
                 <a class="nav-link text-uppercase show" id="executing-tab2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_rejected}">Ижро учун</span></a>
+            </li>
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase show active" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect()" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -264,12 +265,14 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script th:src="@{/static/datatables/input.js}"></script>
 
 <script th:inline="javascript">
     let viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckView}]];
     var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
     var checked=[[#{doc_check.notEnded}]];
     var completed=[[#{doc_check.ended}]];
+    var rejected=[[#{doc_check.rejected}]];
 
     function getCurrentLanguage() {
         return [[__${#locale}__]];
@@ -305,7 +308,10 @@
             case 2: html='<button type="button" class="btn-rounded btn btn-primary">'+row[6]+'</button>';return html;
             case 3: html='<button type="button" class="btn-rounded btn btn-secondary">'+checked+'</button>';return html;
             case 4: html='<button type="button" class="btn-rounded btn btn-success">'+completed+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-danger">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+rejected+'</button>';return html;
+
             default: html='<button type="button" class="btn-rounded btn btn-light">'+row[6]+'</button>';return html;
         }
         return html;
@@ -331,10 +337,11 @@
             processing: true,
             serverSide: true,
             scrollX: true,
-            pageLength: 25,
-            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            pageLength: 10,
+            lengthMenu: [ [10.25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
             dom: 'lrtip',
+            pagingType: 'input',
             ajax : function (dataToSend, callback, settings) {
                 let api = this.api();
 

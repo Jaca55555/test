@@ -260,7 +260,14 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         if(intervalHours<72&&intervalHours>24) {colorText+=" color:orange; ";}
         else if(intervalHours<24) {colorText+="color:red; " ;}
         }
-
+        if (statusId==3){if(intervalHours>72) {colorText+=" color:blue;" ;}else
+        if(intervalHours<72&&intervalHours>24) {colorText+=" color:orange; ";}
+        else if(intervalHours<24) {colorText+="color:red; " ;}
+        }
+        if (statusId==4){if(intervalHours>72) {colorText+=" color:blue;" ;}else
+        if(intervalHours<72&&intervalHours>24) {colorText+=" color:orange; ";}
+        else if(intervalHours<24) {colorText+="color:red; " ;}
+        }
         result.add(colorText);
 
         return result;

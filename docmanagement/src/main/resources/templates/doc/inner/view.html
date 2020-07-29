@@ -485,10 +485,24 @@
     var urlAction = [[${comment_url}]];
     let attachedDocView = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView}]] + '?id=';
     var contentFiles = [[${document.contentFiles}]];
-
+    var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
     //<![CDATA[
     $(document).ready(function () {
         docFileName([[${document.contentFiles}]]);
+        $('#modal1').on('hidden.bs.modal', function() {
+            $(this).find('form').trigger('reset');
+            $(".file-block").remove();
+            $("#file-container").slice(0).html(`
+            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                </div>
+                            </div>
+            `
+            );
+        });
         $('#modal2').on('show.bs.modal', function() {
             $('.addDocSelect').select2({
                 placeholder: "Танланг",
@@ -533,12 +547,38 @@
                             "       </div>\n";
 
                         if (log.contentFiles != null) {
-                            for (let file of log.contentFiles) {
-                                html += "<div class='w100'></div>\n" +
-                                    "<div class='column-2 mt-3'>\n" +
-                                    "    <span class='fas fa-file-pdf fs30 color-red'></span>\n" +
-                                    "    <a href='[(${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload})]?id=" + file.id + "'>" + file.name + "</a>\n" +
-                                    "</div>\n"
+                            for (var val of log.contentFiles) {
+                                if(val.extension=="pdf") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+                                if(val.extension=="jpg"||val.extension=="jpeg"||val.extension=="png") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-image fs30 color-yellow"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+                                if(val.extension=="docx"||val.extension=="doc") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-word fs30 color-blue"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+                                if(val.extension=="xls"||val.extension=="xlsx") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-excel fs30 color-green"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+                                if(val.extension=="pptx"||val.extension=="ppt") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-powerpoint fs30 color-red"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+                                if(val.extension=="zip"||val.extension=="7z"||val.extension=="rar") {     html+='<div class="w100"></div>' +
+                                    '  <div class="column-2 mt-3">\n' +
+                                    '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
+                                    '       <a href="'+download+'?id=' + val.id +'">'+fileNameSubString(val.name)+'</a>\n' +
+                                    '  </div>';}
+
                             }
                         }
 

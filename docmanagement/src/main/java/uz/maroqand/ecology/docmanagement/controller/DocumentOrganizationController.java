@@ -57,7 +57,10 @@ public class DocumentOrganizationController {
         List<Object[]> JSONArray = new ArrayList<>(docOrganizationPage.getContent().size());
 
         for(DocumentOrganization docOrganization: docOrganizationPage){
-            JSONArray.add(new Object[]{docOrganization.getId(), docOrganization.getName(), docOrganization.getStatus()});
+            JSONArray.add(new Object[]{docOrganization.getId(),
+                    docOrganization.getName(),
+                    docOrganization.getParent()!=null ? documentOrganizationService.getById(docOrganization.getParent()).getName():"",
+                    docOrganization.getStatus()});
         }
 
         result.put("data", JSONArray);
@@ -70,16 +73,25 @@ public class DocumentOrganizationController {
 
         DocumentOrganization documentOrganization = new DocumentOrganization();
         model.addAttribute("docOrganization", documentOrganization);
-
+        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(1));
         return DocTemplates.DocumentOrganizationNew;
     }
 
     @RequestMapping(value = DocUrls.DocumentOrganizationNew, method = RequestMethod.POST)
-    public String documentOrganizationNewCreate(@RequestParam(name = "name")String name, @RequestParam(name = "status", defaultValue = "false")Boolean status){
+    public String documentOrganizationNewCreate(@RequestParam(name = "name")String name, @RequestParam(name = "status", defaultValue = "false")Boolean status, @RequestParam(name = "parent", required = false)Integer parent){
         DocumentOrganization docOrganization = new DocumentOrganization();
 
         docOrganization.setName(name);
         docOrganization.setStatus(status);
+        if(parent!=null){
+            docOrganization.setParent(parent);
+            docOrganization.setLevel(0);
+        }else{
+            docOrganization.setParent(null);
+            docOrganization.setLevel(1);
+        }
+        docOrganization.setParent(parent);
+
         docOrganization.setCreatedById(userService.getCurrentUserFromContext().getId());
         documentOrganizationService.create(docOrganization);
 
@@ -94,8 +106,8 @@ public class DocumentOrganizationController {
             return "redirect:" + DocUrls.DocumentOrganizationList;
 
         model.addAttribute("docOrganization", docOrganization);
-
-        return DocTemplates.DocumentOrganizationEdit;
+        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(1));
+        return DocTemplates.DocumentOrganizationNew;
     }
 
     @RequestMapping(value = DocUrls.DocumentOrganizationEdit, method = RequestMethod.POST)
@@ -113,6 +125,7 @@ public class DocumentOrganizationController {
 
         updatedDocOrganization.setName(docOrganization.getName());
         updatedDocOrganization.setStatus(docOrganization.getStatus());
+        updatedDocOrganization.setParent(docOrganization.getParent());
         documentOrganizationService.update(updatedDocOrganization);
 
         return "redirect:" + DocUrls.DocumentOrganizationList;

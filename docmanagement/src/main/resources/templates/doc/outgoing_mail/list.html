@@ -13,6 +13,24 @@
          .datepicker>.datepicker-days {
              display: block;
          }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+        }
     </style>
 </head>
 <body>
@@ -212,7 +230,7 @@
 </div>
 <!--  main content end -->
 <object th:include="fragments/footer :: footer" th:remove="tag" ></object>
-
+<script th:src="@{/static/datatables/input.js}"></script>
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListAjax}]];
     let viewLink = [[${view_link}]];
@@ -333,10 +351,11 @@
             processing: true,
             serverSide: true,
             scrollX: true,
-            pageLength: 25,
-            lengthMenu: [ [25, 50, 100], [25, 50, 100] ],
+            pageLength: 10,
+            lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
+            pagingType: 'input',
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
