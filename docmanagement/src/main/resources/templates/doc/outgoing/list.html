@@ -16,22 +16,26 @@
         #responsive-table-model_previous  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
 
         #responsive-table-model_next  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         #responsive-table-model_first  {
             padding: 5px;
             border: 1px solid grey;
-
+            margin: 10px;
         }
         #responsive-table-model_last  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
     </style>
+
 </head>
 <body>
 <div class="background"></div>
@@ -177,11 +181,11 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(7)"
+                    <a class="nav-link text-uppercase show active" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(7)"
                        role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
                 </li>
                 <li class="nav-item card-nav-item text-center">
-                    <a class="nav-link text-uppercase show active" id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect(6)" role="tab"
+                    <a class="nav-link text-uppercase show " id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect(6)" role="tab"
                        aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
                 </li>
             </ul>

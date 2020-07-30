@@ -202,11 +202,14 @@ public class ReportController {
                     document.getOrganizationId()!=null ? organizationService.getById(document.getOrganizationId()).getName():"",
                     document.getContent(),
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
-                    document.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getContent():"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     document.getDocRegNumber(),
                     documentTaskSub.getReceiver().getFullName(),
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
+                    documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?Common.uzbekistanDateFormat.format(documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedAt()):"",
+                    documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedBy().getFullName():"",
+
             });
         }
 

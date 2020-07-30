@@ -19,7 +19,7 @@ public interface DocumentLogService {
     List<DocumentLog> getAllByDocId(Integer docId);
 
     List<DocumentLog> getAllByDocAndTaskSubId(Integer docId, Integer taskId);
-
+    DocumentLog findFirstByDocumentIdOrderByIdDesc(Integer docId);
     List<DocumentLog> getAllByDocAndTaskId(Integer docId, Integer taskId);
 
     DocumentLog create(DocumentLog documentLog);

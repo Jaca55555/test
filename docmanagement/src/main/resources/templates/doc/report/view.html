@@ -310,7 +310,9 @@
 
                 {data: 7, name: 'dueDate',
                     render: function (data, type, row, meta) {
-                        var html = row[7] + ' <br/>';
+                        var html = row[7] + ' <br/>'+
+                        row[12] + ' <br/>'+
+                        row[13] + ' <br/>';
                         return html;
                     },
                     className: "text-left"},
