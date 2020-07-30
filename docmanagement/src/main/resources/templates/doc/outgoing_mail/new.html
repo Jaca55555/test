@@ -134,7 +134,7 @@
                             <label for="position" class="control-label" th:text="#{doc_outgoing.from_whom}">Чикувчи хатга маъсул ходимнинг исми ва фамилияси</label>
                             <select id="position" class="form-control singleSelect" name="position_id" required  data-parsley-errors-container="#positionError">
                                 <option value=""></option>
-                                <option th:each="user: ${users}" th:value="${user.positionId}" th:text="${user.id + ' '+ user.getFullName()}"></option>
+                                <option th:each="user: ${users}" th:value="${user.Id}" th:text="${user.id + ' '+ user.getFullName()}"></option>
                             </select>
                             <div class="row"> <div class="col-md-6 p0" id="positionError"></div> </div>
                         </div>

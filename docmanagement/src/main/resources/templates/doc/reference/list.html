@@ -13,20 +13,23 @@
         #responsive-table-model_previous  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
 
         #responsive-table-model_next  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         #responsive-table-model_first  {
             padding: 5px;
             border: 1px solid grey;
-
+            margin: 10px;
         }
         #responsive-table-model_last  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
     </style>
 </head>
@@ -206,7 +209,7 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
+                    <a class="nav-link text-uppercase active show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span  th:text="#{sys_document.info_tab_dueDate}">Муддати кеччикан</span></a>
@@ -227,7 +230,7 @@
                     <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -291,7 +294,7 @@
     <script th:inline="none">
         var dataDatatableSelector;
         var thead;
-        var tabFilter = tab_number == null ? 1 : tab_number;;
+        var tabFilter = tab_number == null ? 2 : tab_number;;
 
         function getDatatableConnect() {
             dataDatatableSelector.DataTable().destroy();
