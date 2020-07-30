@@ -141,7 +141,10 @@ public class AgreementCompleteController {
         List<RegApplicationLog> regApplicationLogList = regApplicationLogPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
         for (RegApplicationLog agreementCompleteLog : regApplicationLogList){
-            RegApplication regApplication = regApplicationService.getById(agreementCompleteLog.getRegApplicationId());
+            RegApplication regApplication = null;
+            if (agreementCompleteLog.getRegApplicationId()!=null){
+                regApplication = regApplicationService.getById(agreementCompleteLog.getRegApplicationId());
+            }
             Client client =null;
             if (regApplication!=null && regApplication.getApplicantId()!=null){
                 client = clientService.getById(regApplication.getApplicantId());
@@ -151,13 +154,13 @@ public class AgreementCompleteController {
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
             }
             convenientForJSONArray.add(new Object[]{
-                    regApplication.getId(),
+                    regApplication!=null?regApplication.getId():"",
                     client!=null?client.getTin():"",
                     client!=null?client.getName():"",
-                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
-                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
-                    regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    regApplication!=null && regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
+                    regApplication!=null && regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+                    regApplication!=null && regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                    regApplication!=null && regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                     (performerLog!=null && performerLog.getStatus() != null ) ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
                     (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
