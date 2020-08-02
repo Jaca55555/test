@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{doc_report.list}" >Кирувчи хатлар</title>
+    <title th:text="#{doc_report.view}" >Кирувчи хатлар</title>
     <style>
         .datepicker>.datepicker-days {
             display: block;
@@ -28,6 +28,7 @@
             padding: 5px;
             border: 1px solid grey;
         }
+        
     </style>
 </head>
 <body>
@@ -80,7 +81,7 @@
                             <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
+                        <button type="button"  class="btn btn-primary m10-vertical m20-horizontal mt-4  float-right" onclick="getDatatableConnect()">
                             <span th:text="#{sys_document.search}">Қидириш</span>
                         </button>
 
@@ -135,7 +136,7 @@
                                             <span th:text="#{doc_content}">Ижро муддати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
+                                            <span th:text="#{sys_document.performer}">Жорий ҳолати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                             <span th:text="#{sys_document.task_comment}">Резолюция ва иштирокчилар</span>
@@ -144,12 +145,11 @@
                                             <span th:text="#{sys_document.dueDate}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskDate}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.checkingDate}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
 
@@ -192,20 +192,6 @@
         dataDatatableSelector.html(thead);
         tabFilter = tab;
         datatableConnect();
-    }
-    function renderStatusColumn(data, type, row, meta) {
-        var html = '';
-        var status=row[8];
-        switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[6]+'</button>';return html;
-        }
-        return html;
     }
 
 
@@ -276,7 +262,7 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a >' + row[2]+"<br>"+row[9]+'</a>';
+                        html += '<a >' + row[9]+"<br>"+row[2]+'</a>';
                         return html;
                     },
                     className: "text-left"
