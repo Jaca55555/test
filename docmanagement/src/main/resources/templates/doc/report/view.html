@@ -28,7 +28,10 @@
             padding: 5px;
             border: 1px solid grey;
         }
-        
+        .dt-buttons{
+            margin-top: 50px;
+            margin-left: -20%;
+        }
     </style>
 </head>
 <body>
@@ -81,17 +84,13 @@
                             <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
-                        <button type="button"  class="btn btn-primary m10-vertical m20-horizontal mt-4  float-right" onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
-
                     </div>
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
                     <label for="departmentId" class="control-label" th:text="#{doc.departments}">Жўнатувчи ташкилот номи</label>
                     <select class="form-control" id="departmentId">
                         <option value=""></option>
-                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="#{${department.name}}">
+                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="${@helperService.getDepartmentName(department.id,#locale)}">
                         </option>
                     </select>
                 </div>
@@ -103,7 +102,9 @@
                         </option>
                     </select>
                 </div>
-
+                <button type="button"  class="btn btn-primary m10-vertical m20-horizontal mt-4" style="margin-left: 90%" onclick="getDatatableConnect()">
+                    <span th:text="#{sys_document.search}">Қидириш</span>
+                </button>
             </div>
 
         </div>
@@ -217,13 +218,13 @@
             pageLength: 10,
             lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
-            dom:'lrtip',
-            dom: 'Bfrtip',
+            dom: 'lBrtip',
             buttons: [
 
                 'copy', 'csv', 'excel', 'pdf','print'
 
             ],
+
             pagingType: 'input',
             ajax : function (dataToSend, callback, settings) {
                 let api = this.api();

@@ -116,7 +116,7 @@ public class ReportController {
             Date date1=calendar1.getTime();
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
-                    department.getName(),
+                    department.getNameTranslation(locale),
                     documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId()),
                     documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId()),
