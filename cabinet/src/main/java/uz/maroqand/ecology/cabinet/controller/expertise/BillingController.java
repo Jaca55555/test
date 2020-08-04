@@ -119,13 +119,18 @@ public class BillingController {
         List<Invoice> invoiceList = invoicePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(invoiceList.size());
         for (Invoice invoice : invoiceList){
+            Client client = null;
+            if (invoice.getClientId()!=null){
+                client = clientService.getById(invoice.getClientId());
+            }
             convenientForJSONArray.add(new Object[]{
                     invoice.getId(),
                     invoice.getInvoice(),
                     invoice.getPayeeId() != null ? helperService.getOrganizationName(invoice.getPayeeId(), locale) : "",
                     invoice.getAmount(),
                     Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
-                    invoice.getStatus()
+                    invoice.getStatus(),
+                    client!=null?client.getName():""
             });
         }
 
