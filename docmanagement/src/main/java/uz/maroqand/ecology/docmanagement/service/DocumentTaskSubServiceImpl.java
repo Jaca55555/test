@@ -75,6 +75,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public Integer countAllByDepartmentId(Integer departmentId) {
+        return documentTaskSubRepository.countAllByDepartmentIdAndDeletedFalse(departmentId);
+    }
+
+    @Override
     public String buildTree(Integer level,List<DocumentTaskSub> documentTaskSubList, Map<Integer,DocumentTaskSub> taskSubMap,String locale){
         String tree="";
         for (DocumentTaskSub taskSub: documentTaskSubList) {

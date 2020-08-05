@@ -106,17 +106,17 @@ public class IncomingRegistrationController {
         Date begin = calendar.getTime();
 
 
-        model.addAttribute("new_", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.New.getId()));
-
-        model.addAttribute("inProgress", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.InProgress.getId()));
-
-        model.addAttribute("nearDueDate", taskService.countAllTasksByDocumentTypeIdAndDueDateBetween(organizationId, departmentId, 1, begin, end));
-
-        model.addAttribute("expired", taskService.countAllTasksByDocumentTypeIdAndDueDateBefore(organizationId, departmentId, 1, end));
-
-        model.addAttribute("completed", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.Complete.getId()));
-
-        model.addAttribute("all", taskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 1));
+//        model.addAttribute("new_", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.New.getId()));
+//
+//        model.addAttribute("inProgress", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.InProgress.getId()));
+//
+//        model.addAttribute("nearDueDate", taskService.countAllTasksByDocumentTypeIdAndDueDateBetween(organizationId, departmentId, 1, begin, end));
+//
+//        model.addAttribute("expired", taskService.countAllTasksByDocumentTypeIdAndDueDateBefore(organizationId, departmentId, 1, end));
+//
+//        model.addAttribute("completed", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.Complete.getId()));
+//
+//        model.addAttribute("all", taskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 1));
 
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
         model.addAttribute("organizationList", organizationService.getStatusActive());

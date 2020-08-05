@@ -110,7 +110,8 @@ public class ReportController {
         for(Department department : departments) {
             Calendar calendar = Calendar.getInstance();
             Calendar calendar1 = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, -72);
+            calendar.add(Calendar.HOUR_OF_DAY, 72);
+            System.out.println(calendar.getTime());
             Date date = calendar.getTime();
             calendar1.add(Calendar.HOUR_OF_DAY,0);
             Date date1=calendar1.getTime();
@@ -122,11 +123,7 @@ public class ReportController {
                     documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId()),
                     documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId())+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId())+
-                    documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId())+
-                    documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId())+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
+                    documentTaskSubService.countAllByDepartmentId(department.getId()),
             });
         }
 

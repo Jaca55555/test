@@ -221,7 +221,6 @@ public class ChangePerformerController {
             DocumentTaskSub documentTaskSub,
             @RequestParam(name = "userid")Integer userid
     ) {
-//        System.out.println(id);
         documentTaskSub.setReceiverId(userid);
         documentTaskSub.setStatus(1);
         documentTaskSubService.update(documentTaskSub);
