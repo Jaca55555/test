@@ -62,11 +62,15 @@
             </div>
             <div class="row p10" style="padding-bottom: 0px;">
                 <div class="form-group col-md-3 col-sm-12">
-                    <label for="departmentName" class="control-label" th:text="#{departmentName}">Хат рақами</label>
-                    <input type="text" class="form-control" id="departmentName" />
+                    <label for="departmentName" class="control-label" th:text="#{doc.departments}">Жўнатувчи ташкилот номи</label>
+                    <select class="form-control" id="departmentName">
+                        <option value=""></option>
+                        <option th:each="department: ${departments}" th:value="${department.name}" th:text="${@helperService.getDepartmentName(department.id,#locale)}">
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group col-md-4 col-sm-12">
-                    <label for="dateBegin" class="control-label"><span th:text="#{mntr_department.name}">Рўйхатга олинган сана</span></label>
+                    <label for="dateBegin" class="control-label"><span th:text="#{mntr_department.regDate}">Рўйхатга олинган сана</span></label>
                     <div class="row">
                         <div class="col-6" style="padding-left: 0;">
                             <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />

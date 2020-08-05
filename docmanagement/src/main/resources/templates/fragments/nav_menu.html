@@ -58,21 +58,6 @@
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_check.list}" ></span>
-                        <span th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
-                    </a>
-                </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')">
-                                   <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
-                                       <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
-                                       <span class="pcoded-mtext" th:text="#{doc_change.perfomer}" style="margin-right: 5px" >Ijrochini o'zgartirish</span>
-                                       <span th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
-
-                                   </a>
-                               </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_report.list}" ></span>
@@ -85,18 +70,6 @@
                 </a>
             </li>
 
-                <!--<li class="nav-item">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OrdersList}">
-                        <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
-                        <span class="pcoded-mtext">Буйруклар</span>
-                    </a>
-                </li>-->
-                <!--<li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span class="pcoded-micon color-gray"><i class="fas fa-sitemap"></i></span>
-                        <span class="pcoded-mtext">Журналлар буйича</span>
-                    </a>
-                </li>-->
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_LIBRARY')" >
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).LibraryWindow}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-book color-green"></i></span>
@@ -104,6 +77,24 @@
                     </a>
                 </li>
 
+                <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_ChECKED')">
+                    <label th:text="#{sys.executeControl}">Хужжатлар</label>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHECKED')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_check.list}" ></span>
+                        <span th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
+                        <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_change.perfomer}" style="margin-right: 5px" >Ijrochini o'zgartirish</span>
+                        <span th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
+
+                    </a>
+                </li>
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <label th:text="#{sys_office}">Девонхона</label>
                 </li>

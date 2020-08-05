@@ -75,8 +75,8 @@ public class ReportController {
     }
 
     @RequestMapping(value = DocUrls.ReportList, method = RequestMethod.GET)
-    public String getIncomingListPage() {
-
+    public String getIncomingListPage(Model model) {
+        model.addAttribute("departments",departmentService.getAll());
         return DocTemplates.ReportList;
     }
 
