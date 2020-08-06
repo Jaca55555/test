@@ -57,11 +57,14 @@
         <table style="width: 100%">
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${performerLog!=null}">
                 <td style="width: 15%; padding-bottom: 5px;padding-top: 10px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AI</span>
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >
+                        <span th:if="${performerLog.updateById!=null}" th:text="${@helperService.getUserLastAndFirstShortById(performerLog.updateById)}">AI</span>
+                    </span>
                 </td>
                 <td style="width: 60%;">
                     <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(performerLog.updateById)}">Холмуратов Жахонгир</h6>
-                    <small th:text="#{sys_logType.performer}">Исполнитель</small>
+                    <small th:text="${@helperService.getUserPositionName(performerLog.updateById,#locale)}">Исполнитель</small>
+<!--                    <small th:text="#{sys_logType.performer}">Исполнитель</small>-->
                 </td>
                 <td>
                     <span th:if="${performerLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${performerLog.status.getPerformerName()}}">Согласовано</span>
@@ -74,11 +77,14 @@
             </tr>
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementLogList!=null}" th:each="agreementLog :${agreementLogList}">
                 <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >AS</span>
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >
+                        <span th:if="${agreementLog.updateById!=null}" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}">AI</span>
+                    </span>
                 </td>
                 <td style="width: 60%;">
                     <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}">Акбар Сапаев</h6>
-                    <small th:text="#{sys_logType.agreement}">Директор</small>
+                    <small th:text="${@helperService.getUserPositionName(agreementLog.updateById,#locale)}">Директор</small>
+<!--                    <small th:text="#{sys_logType.agreement}">Директор</small>-->
                 </td>
                 <td>
                     <span th:if="${agreementLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementLog.status.getAgreementName()}}"></span>
@@ -91,11 +97,14 @@
             </tr>
             <tr style="border-bottom: 1px solid #f4f4f4" th:if="${agreementCompleteLog!=null}">
                 <td style="width: 15%; padding-bottom: 5px; padding-top: 20px" >
-                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >UB</span>
+                    <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 15%; background-color: #bdc0c3" >
+                        <span th:if="${agreementCompleteLog.updateById!=null}" th:text="${@helperService.getUserLastAndFirstShortById(agreementCompleteLog.updateById)}">AI</span>
+                    </span>
                 </td>
                 <td style="width: 60%;">
                     <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementCompleteLog.updateById)}">Уткирбек Болтаев</h6>
-                    <small th:text="#{sys_logType.agreementComplete}">Председатель</small>
+                    <small th:text="${@helperService.getUserPositionName(agreementCompleteLog.updateById,#locale)}">Председатель</small>
+<!--                    <small th:text="#{sys_logType.agreementComplete}">Председатель</small>-->
                 </td>
                 <td>
                     <span th:if="${agreementCompleteLog.status.getId()==0}" class="badge badge-pill badge-secondary" th:text="#{${agreementCompleteLog.status.getAgreementName()}}">Не завершено</span>

@@ -197,20 +197,25 @@ public class BillingController {
 
             RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
             List<Category> categoryList = new LinkedList<>();
-            List<Requirement> requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
-            for(Requirement requirement: requirementList){
-                categoryList.add(requirement.getCategory());
+            List<Requirement> requirementList = null;
+            if (regApplication!=null && regApplication.getObjectId()!=null){
+                requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
             }
+       if (requirementList!=null){
+           for(Requirement requirement: requirementList){
+               categoryList.add(requirement.getCategory());
+           }
+       }
             List<Activity> activityList = activityService.getByInCategory(categoryList);
             Collections.sort(categoryList);
             result.put("activityList", activityList);
             result.put("activityListSize", activityList.size());
             result.put("categoryList", categoryList);
-            result.put("regApplicationId", regApplication.getId());
+            result.put("regApplicationId", regApplication!=null?regApplication.getId():null);
 
-            result.put("nowObjectName", regApplication.getObjectId()!=null? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"0");
-            result.put("nowActivityName", regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"0");
-            result.put("nowCategoryName", regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"0");
+            result.put("nowObjectName", regApplication!=null && regApplication.getObjectId()!=null ? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"0");
+            result.put("nowActivityName",regApplication!=null &&  regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"0");
+            result.put("nowCategoryName", regApplication!=null && regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"0");
 
             result.put("payments",convenientForJSONArray);
             return result;
@@ -252,7 +257,7 @@ public class BillingController {
         }
         regApplication.setRequirementId(requirement.getId());
         regApplication.setActivityId(activityId);
-        regApplication.setCategory(activity.getCategory());
+        regApplication.setCategory(activity!=null?activity.getCategory():null);
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         invoice = invoiceService.modification(regApplication, invoice, requirement);

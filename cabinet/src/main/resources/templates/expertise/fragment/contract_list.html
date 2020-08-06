@@ -16,7 +16,7 @@
                 <th th:text="#{sys_payment_amount}">#</th>
                 <th th:text="#{sys_payment_date}">First Name</th>
                 <th th:text="#{sys_invoice_number}">Last Name</th>
-                <th th:text="#{sys_contract_text}">Username</th>
+<!--                <th th:text="#{sys_contract_text}">Username</th>-->
                 <th th:text="#{sys_contract_file}"></th>
             </tr>
             </thead>
@@ -28,16 +28,21 @@
                 <td class="text-center" th:text="${contract[3]} ? ${contract[3]} : ' '"></td>
                 <td class="text-center" th:text="${contract[4]} ? ${contract[4]} : ' '"></td>
                 <td class="text-center" th:text="${contract[5]} ? ${#dates.format(contract[5],'dd.MM.yyyy')} : ' '"></td>
-                <td class="text-center" th:text="${contract[6]} ? ${contract[4]} : ' '"></td>
-                <td>
+                <td class="text-center" th:text="${contract[6]} ? ${contract[6]} : ' '"></td>
+               <!-- <td>
                     <a class="btn btn-primary btn-sm text-white" th:text="#{sys_open_text}"></a>
-                </td>
+                </td>-->
                 <td>
-                    <div class="media d-flex">
+                    <div class="media d-flex" th:each="file : ${contract[7]}">
                         <div class="file-attach">
-                            <i class="mdi mdi-file-pdf card-icon text-danger" style="font-size: 40px"></i>
+                            <a class="view-pdf" dat th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <i class="mdi mdi-file-pdf card-icon text-danger f-26" ></i>
+                                <span class="card-title f-16" th:text="${file.name}"> Письмо КМК-234 от 23.01.2019г.pdf </span>
+                            </a>
                         </div>
-                        <p class="m-t-20 d-block text-secondary">test.pdf</p>
+                        <!--<a th:href="${files}">
+                            <p class="m-t-20 d-block text-secondary" th:text="${files.name}">test.pdf</p>
+                        </a>-->
                     </div>
                 </td>
             </tr>

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ConclusionService {
 
@@ -21,5 +22,7 @@ public interface ConclusionService {
     Conclusion update(Conclusion conclusion, String text, Integer createdById);
 
     Conclusion complete(Integer conclusionId);
+
+    List<Conclusion> getByRegApplicationId(Integer regApplicationId);
 
 }

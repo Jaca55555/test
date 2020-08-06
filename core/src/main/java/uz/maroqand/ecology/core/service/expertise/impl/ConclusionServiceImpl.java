@@ -86,6 +86,11 @@ public class ConclusionServiceImpl implements ConclusionService {
         return conclusionRepository.save(conclusion);
     }
 
+    @Override
+    public List<Conclusion> getByRegApplicationId(Integer regApplicationId) {
+        return conclusionRepository.findByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
+    }
+
 
     @Override
     public Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
