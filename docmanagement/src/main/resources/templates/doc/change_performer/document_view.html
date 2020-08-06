@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
+
 <body th:fragment="document_view">
 
 <div class="card parent-card">
@@ -138,7 +140,7 @@
             </select>
                 <div class="row">
                     <div class="col align-self-center">
-                        <button th:text="#{doc.save_btn}" class="btn btn-success"></button>
+                        <button th:text="#{doc.save_btn}" style="margin-top: 10px" class="btn btn-success"></button>
                     </div>
                 </div>
             </form>
@@ -146,7 +148,7 @@
                 <input type="hidden"  th:field="*{id}" th:value="*{id}" />
                 <div class="row">
                     <div class="col align-self-center">
-                        <button th:text="#{sys_notConfirm}" class="btn btn-danger"></button>
+                        <button th:text="#{sys_notConfirm}" style="margin-left: 38%;margin-top: -93px" class="btn btn-danger"></button>
                     </div>
                 </div>
             </form>
