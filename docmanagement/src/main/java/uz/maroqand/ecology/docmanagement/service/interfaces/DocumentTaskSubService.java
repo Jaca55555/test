@@ -29,6 +29,7 @@ public interface DocumentTaskSubService {
     Integer countAllByDueDate1AndDepartmentId(Date date,Integer departmentId);
     DocumentTaskSub update(DocumentTaskSub taskSub);
     Integer countAllByDepartmentId(Integer departmentId);
+
     String buildTree(Integer level,List<DocumentTaskSub> documentTaskSubList, Map<Integer,DocumentTaskSub> taskSubMap,String locale);
 
     List<DocumentTaskSub> getListByDocId(Integer docId);

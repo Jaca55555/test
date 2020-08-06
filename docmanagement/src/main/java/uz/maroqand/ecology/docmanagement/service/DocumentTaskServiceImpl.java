@@ -243,6 +243,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
         if (statusId==6){ colorText+=" color:green; " ;}else
         if (statusId==7){ colorText+=" color:red; " ;}else
         if (statusId==8){ colorText+=" color:rgb(169,169,169); " ;}
+        if (statusId==9){ colorText+=" color:green; " ;}
 
         if (statusId == null||date==null){
             result.add(colorText);
