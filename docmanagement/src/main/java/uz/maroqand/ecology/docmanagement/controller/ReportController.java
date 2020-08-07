@@ -3,20 +3,14 @@ package uz.maroqand.ecology.docmanagement.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Department;
-import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
-import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -25,8 +19,6 @@ import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.repository.DocumentTaskSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -49,7 +41,7 @@ public class ReportController {
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentTaskContentService documentTaskContentService;
-
+    private final JournalService journalService;
     public ReportController(
             DocumentTaskSubRepository documentTaskSubRepository,
             DepartmentService departmentService,
@@ -63,8 +55,10 @@ public class ReportController {
             DocumentTaskService documentTaskService,
             DocumentTaskSubService documentTaskSubService,
             DocumentLogService documentLogService,
+            JournalService journalService,
             DocumentOrganizationService documentOrganizationService, DocumentDescriptionService documentDescriptionService) {
         this.userService = userService;
+        this.journalService=journalService;
         this.positionService = positionService;
         this.helperService = helperService;
         this.documentService = documentService;
@@ -81,8 +75,8 @@ public class ReportController {
     }
 
     @RequestMapping(value = DocUrls.ReportList, method = RequestMethod.GET)
-    public String getIncomingListPage() {
-
+    public String getIncomingListPage(Model model) {
+        model.addAttribute("departments",departmentService.getAll());
         return DocTemplates.ReportList;
     }
 
@@ -116,23 +110,20 @@ public class ReportController {
         for(Department department : departments) {
             Calendar calendar = Calendar.getInstance();
             Calendar calendar1 = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, -72);
+            calendar.add(Calendar.HOUR_OF_DAY, 72);
+            System.out.println(calendar.getTime());
             Date date = calendar.getTime();
             calendar1.add(Calendar.HOUR_OF_DAY,0);
             Date date1=calendar1.getTime();
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
-                    department.getName(),
+                    department.getNameTranslation(locale),
                     documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId()),
                     documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId()),
                     documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId()),
                     documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
-                    documentTaskSubService.countAllByStatusAndDepartmentId(1,department.getId())+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(2,department.getId())+
-                    documentTaskSubService.countAllByDueDateAndDepartmentId(date,department.getId())+
-                    documentTaskSubService.countAllByDueDate1AndDepartmentId(date1,department.getId())+
-                    documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
+                    documentTaskSubService.countAllByDepartmentId(department.getId()),
             });
         }
 
@@ -143,7 +134,7 @@ public class ReportController {
         model.addAttribute("departments",departmentService.getAll());
         model.addAttribute("doc_type",DocumentTypeEnum.getList());
         model.addAttribute("statuses",TaskSubStatus.getTaskSubStatusList());
-
+        model.addAttribute("journals",journalService.getAll());
         return DocTemplates.ReportView;
     }
 
@@ -158,10 +149,34 @@ public class ReportController {
             Pageable pageable
     ) {
         int id=0;
+        System.out.println("qiymati="+status);
+        Calendar calendar = Calendar.getInstance();
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
         Set<Integer> statuses = null;
         if(status!=null){
-        statuses = new LinkedHashSet<>();
-        statuses.add(status);}
+        if(status==10){
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            deadlineDateEnd = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            deadlineDateBegin = calendar.getTime();
+            statuses = new LinkedHashSet<>();
+            statuses.add(TaskSubStatus.New.getId());
+            statuses.add(TaskSubStatus.InProgress.getId());
+            statuses.add(TaskSubStatus.Waiting.getId());
+            statuses.add(TaskSubStatus.Agreement.getId());
+        }
+        else if (status == 11) {
+            deadlineDateEnd = calendar.getTime();
+            statuses = new LinkedHashSet<>();
+            statuses.add(TaskSubStatus.New.getId());
+            statuses.add(TaskSubStatus.InProgress.getId());
+            statuses.add(TaskSubStatus.Waiting.getId());
+            statuses.add(TaskSubStatus.Agreement.getId());
+        }else{statuses = new LinkedHashSet<>();
+            statuses.add(status);}
+
+            }
         if(departmentId==null){id=0;}else{id=departmentId;};
 
         HashMap<String, Object> result = new HashMap<>();
@@ -178,8 +193,8 @@ public class ReportController {
                 null,
                 null,
                 null,
-                null,
-                null,
+                deadlineDateBegin,
+                deadlineDateEnd,
                 null,
 
                statuses,
@@ -194,22 +209,23 @@ public class ReportController {
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
             Document document = documentService.getById(documentTaskSub.getDocumentId());
+            DocumentSub documentSub=documentSubService.getById(document.getId());
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getDocRegDate()!=null ? Common.uzbekistanDateFormat.format(document.getDocRegDate()):"",
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
-                    document.getOrganizationId()!=null ? organizationService.getById(document.getOrganizationId()).getName():"",
+                    documentSub.getOrganizationId()!=null ? documentOrganizationService.getById(documentSub.getOrganizationId()).getName():"",
                     document.getContent(),
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getContent():"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     document.getDocRegNumber(),
-                    documentTaskSub.getReceiver().getFullName(),
+                    documentTaskSub.getReceiver().getShortName(),
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?Common.uzbekistanDateFormat.format(documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedAt()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedBy().getFullName():"",
-
+                    document.getJournal().getName()
             });
         }
 

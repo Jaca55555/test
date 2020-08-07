@@ -47,6 +47,7 @@ public class DocUrls {
     public static final String ChangePerformerList = Prefix + ChangePerformer + "/list"; //kiruvchi xatlar
     public static final String ChangePerformerView = Prefix + ChangePerformer + "/view"; //kiruvchi xatni ko'rish
     public static final String ChangePerformerTask = Prefix + ChangePerformer + "/task";
+    public static final String ChangePerformerDeny = Prefix + ChangePerformer + "/deny";
     public static final String ChangePerformerTaskSubmit = Prefix + ChangePerformer + "/task_submit";
     public static final String ChangePerformerTaskUserName = Prefix + ChangePerformer + "/user_name";
 

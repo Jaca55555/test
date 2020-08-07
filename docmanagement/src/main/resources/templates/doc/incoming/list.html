@@ -31,7 +31,13 @@
             border: 1px solid grey;
             margin: 10px;
         }
-
+        .dt-buttons{
+            margin-top: 50px;
+            margin-left: -20%;
+        }
+        .paginate_input{
+            width: 30px;
+        }
     </style>
 </head>
 <body>
@@ -350,11 +356,10 @@
                 pageLength: 10,
                 lengthMenu: [ [10, 25, 50, 100], [10, 25, 50, 100] ],
                 order: [[5, 'desc']],
-                dom:'lrtip',
-                dom: 'Bfrtip',
+                dom: 'lBrtip',
                 buttons: [
 
-                'copy', 'csv', 'excel', 'pdf','print'
+                    'copy', 'csv', 'excel', 'pdf','print'
 
                 ],
                 pagingType: 'input',

@@ -140,9 +140,11 @@ public class User {
     public String getShortName(){
         String shortName = " ";
         if (firstname!=null) shortName+=firstname.substring(0,1).toUpperCase() + ".";
+        if (middlename!=null) shortName+=middlename.substring(0,1).toUpperCase() + ".";
         if (lastname!=null) shortName+=lastname+" ";
         return shortName;
     }
+
 
 
     public Boolean getPrivate(){

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
+
 <body th:fragment="document_view">
 
 <div class="card parent-card">
@@ -109,9 +111,9 @@
                 <div><span th:text="${document.content}"></span></div>
             </div>
             <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="#{doc_changePerformer.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center" id="fileContainer">
-                <div id="modalContainer"> </div>
+
                 </div>
                 <div class="col-sm-12 m20-vertical" th:if="${document.insidePurpose == true}">
                     <button type="button" class="btn btn-rounded btn-danger fs11">
@@ -128,7 +130,8 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6 form-group">
-            <form th:action="${action_url}" th:method="post" class="card-block">
+            <form th:action="${action_url}" th:method="post" class="card-block" th:object="${documentTaskSub}">
+                <input type="hidden"  th:field="*{id}" th:value="*{id}" />
 
                 <label class="control-label" th:text="#{change_performer}">Кирувчи хатларни руйхатга олиш журнали</label>
             <select class="singleSelect col-sm-12 select2-hidden-accessible"  required="required" name="userid" >
@@ -137,11 +140,19 @@
             </select>
                 <div class="row">
                     <div class="col align-self-center">
-                        <button th:text="#{doc.reset_btn}" class="btn btn-dark"></button>
-                        <button th:text="#{doc.save_btn}" class="btn btn-success"></button>
+                        <button th:text="#{doc.save_btn}" style="margin-top: 10px" class="btn btn-success"></button>
                     </div>
                 </div>
             </form>
+            <form th:action="${action_uri}" th:method="post" class="card-block" th:object="${documentTaskSub}">
+                <input type="hidden"  th:field="*{id}" th:value="*{id}" />
+                <div class="row">
+                    <div class="col align-self-center">
+                        <button th:text="#{sys_notConfirm}" style="margin-left: 38%;margin-top: -93px" class="btn btn-danger"></button>
+                    </div>
+                </div>
+            </form>
+
         </div>
         </div>
 
@@ -158,8 +169,8 @@
         for(let i = 0; i < files.length; i++){
             let fileName= files[i].name;
             let extensionAndColor = detectExtensionAndColor(files[i].extension)
-            $('#fileContainer').append(`<button class="btn" data-toggle="modal" data-target="#myModal`+i+`">
-                <div  class="office-card-file" >
+            $('#fileContainer').append(`
+                <div  class="office-card-file" onclick="downloadFileFunction(${files[i].id})">
                                 <div class="card dashboard-card">
                                     <div class="file-icon-container-small ${extensionAndColor.color}"><span
                                             class="fas fa-file${extensionAndColor.extension}"></span></div>
@@ -168,27 +179,7 @@
                                         <h6 class="card-title" >` + fileNameSubString(fileName) + `</h6>
                                     </div>
                                 </div>
-                            </div></button>
-            `);
-            $('#modalContainer').append(`
-            <div class="modal fade" id="myModal`+i+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">`+files[i].name+`</h4>
-                    </div>
-                    <div class="modal-body">
-                        <iframe src="`+files[i].path+`" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+                            </div>
             `);
         }
     }
