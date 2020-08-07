@@ -222,6 +222,13 @@ public class HelperService {
         return opf!=null? opf.getNameTranslation(locale):"";
     }
 
+    @Cacheable(value = "getOpfShortName", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
+    public String getOpfShortName(Integer id, String locale) {
+        if(id==null) return "";
+        Opf opf = opfService.getById(id);
+        return opf!=null? opf.getNameShortTranslation(locale):"";
+    }
+
     @Cacheable(value = "getAppealType", key = "{#id,#locale}",condition="#id != null",unless="#result == ''")
     public String getAppealType(Integer id, String locale) {
         if(id==null) return "";

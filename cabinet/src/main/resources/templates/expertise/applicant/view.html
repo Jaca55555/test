@@ -85,8 +85,6 @@
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script type="text/javascript" th:inline="javascript">
-console.log([[${contractList}]]);
-// console.log([[${applicantAuditList}]]);
 
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');

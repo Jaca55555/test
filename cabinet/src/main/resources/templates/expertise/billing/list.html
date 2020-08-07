@@ -124,6 +124,7 @@
                                                 <tr>
                                                     <th th:text="#{invoice_number}"></th>
                                                     <th th:text="#{sys_organization_name}"></th>
+                                                    <th th:text="#{sys_client}"></th>
                                                     <th th:text="#{invoice_amount}"></th>
                                                     <th th:text="#{invoice_create_date}"></th>
                                                     <th th:text="#{invoice_status}"></th>
@@ -497,6 +498,7 @@
             columns: [
                 {data: 1, name: 'invoice'},
                 {data: 2, name: 'organizationName', orderable:false},
+                {data: 6, name: 'client.name'},
                 {render: renderFormatAmount,  name: 'amount'},
                 {data: 4, name: 'createdDate'},
                 {render: renderStatusColumn, orderable:false,className:'text-center'},

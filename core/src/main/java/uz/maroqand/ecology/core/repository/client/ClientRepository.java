@@ -15,6 +15,8 @@ public interface ClientRepository extends JpaRepository<Client, Integer>, JpaSpe
 
     Client findTop1ByTinAndDeletedFalseOrderByIdDesc(Integer tin);
 
+    Client findByIdAndDeletedFalse(Integer Id);
+
     Client findTop1ByPinflAndDeletedFalseOrderByIdDesc(String pinfl);
 
     Client findTop1ByPassportNumberAndDeletedFalseOrderByIdDesc(String passportNumber);
