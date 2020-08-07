@@ -100,6 +100,8 @@
                         <option value=""></option>
                         <option th:each="status: ${statuses}" th:value="${status.id}" th:text="#{${status.name}}">
                         </option>
+                        <option value="10" th:text="#{sys_document.info_tab_dueDate}"></option>
+                        <option value="11" th:text="#{SYS.DOC_INFO_TAB_DELAYED}"></option>
                     </select>
                 </div>
                 <button type="button"  class="btn btn-primary m10-vertical m20-horizontal mt-4" style="margin-left: 90%" onclick="getDatatableConnect()">

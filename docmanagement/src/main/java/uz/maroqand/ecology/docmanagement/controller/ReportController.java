@@ -149,10 +149,34 @@ public class ReportController {
             Pageable pageable
     ) {
         int id=0;
+        System.out.println("qiymati="+status);
+        Calendar calendar = Calendar.getInstance();
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
         Set<Integer> statuses = null;
         if(status!=null){
-        statuses = new LinkedHashSet<>();
-        statuses.add(status);}
+        if(status==10){
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            deadlineDateEnd = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            deadlineDateBegin = calendar.getTime();
+            statuses = new LinkedHashSet<>();
+            statuses.add(TaskSubStatus.New.getId());
+            statuses.add(TaskSubStatus.InProgress.getId());
+            statuses.add(TaskSubStatus.Waiting.getId());
+            statuses.add(TaskSubStatus.Agreement.getId());
+        }
+        else if (status == 11) {
+            deadlineDateEnd = calendar.getTime();
+            statuses = new LinkedHashSet<>();
+            statuses.add(TaskSubStatus.New.getId());
+            statuses.add(TaskSubStatus.InProgress.getId());
+            statuses.add(TaskSubStatus.Waiting.getId());
+            statuses.add(TaskSubStatus.Agreement.getId());
+        }else{statuses = new LinkedHashSet<>();
+            statuses.add(status);}
+
+            }
         if(departmentId==null){id=0;}else{id=departmentId;};
 
         HashMap<String, Object> result = new HashMap<>();
@@ -169,8 +193,8 @@ public class ReportController {
                 null,
                 null,
                 null,
-                null,
-                null,
+                deadlineDateBegin,
+                deadlineDateEnd,
                 null,
 
                statuses,
