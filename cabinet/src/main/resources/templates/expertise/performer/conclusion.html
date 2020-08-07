@@ -87,7 +87,7 @@
         font-size: 1.2em;
         line-height: 1.63em;
         padding-top: .5em;
-        margin-bottom: 1.13em;
+        margin-bottom: 8px;
     }
     .document-editor .ck-content blockquote {
         font-family: Georgia, serif;
@@ -129,7 +129,11 @@
                         </tr>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_client}">Заказчик:</span></th>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${applicant.name}"><span th:text="${applicant.name}">ИП ООО «SURHANCEMENTINVEST»</span></span></td>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="${applicant.name}"></span>
+                                <span th:if="${opfId!=null}" th:text="${@helperService.getOpfShortName(opfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
+                                <span th:if="${opfId==null}" > nullll  </span>
+                            </td>
                             <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
                         </tr>
                         <tr>
@@ -264,26 +268,11 @@
                 <br>
                 <br>
                 <br>
-                <p style="text-align: center">
-                    <strong>&nbsp;</strong>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <strong>&nbsp;</strong></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br><br>
-                </p>
-
                Исп.: <span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></br>
                     тел.   207-07-70 (вн. 2011#)
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
 </body>
 </html>

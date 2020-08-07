@@ -44,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getById(Integer id) {
-        return clientRepository.getOne(id);
+        return clientRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override
@@ -309,6 +309,8 @@ public class ClientServiceImpl implements ClientService {
 
     public void clientView(Integer applicantId, Model model){
         Client applicant = getById(applicantId);
+        System.out.println("clientID" + applicantId);
+        System.out.println(applicant.getOpfId() != null ?applicant.getOpfId():"000000000000");
         switch (applicant.getType()){
             case Individual:
                 model.addAttribute("individual", new IndividualDto(applicant)); break;
@@ -320,6 +322,7 @@ public class ClientServiceImpl implements ClientService {
                 model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
         model.addAttribute("applicant", applicant);
+        model.addAttribute("opfId", applicant.getOpfId());
     }
 
 }
