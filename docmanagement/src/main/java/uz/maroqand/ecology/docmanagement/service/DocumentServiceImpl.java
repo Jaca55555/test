@@ -158,7 +158,7 @@ public class DocumentServiceImpl implements DocumentService {
         Position position = positionService.getById(positionId);
         Department department = departmentService.getById(departmentId);
         String outDocNumber="";
-        outDocNumber+=position.getDocIndex()!=null?position.getId()+"-":"";
+        outDocNumber+=position.getDocIndex()!=null?position.getDocIndex()+"-":"";
         outDocNumber+=department.getDocIndex()!=null?department.getDocIndex()+"-":"";
         Integer lastDocNumber=1;
         System.out.println(position.getLastDocNumber());
@@ -172,7 +172,7 @@ public class DocumentServiceImpl implements DocumentService {
             positionService.save(position);
         }
         Document document = getLastOutDocument(department.getOrganizationId());
-        System.out.println("documentId=" + document.getId());
+//        System.out.println("documentId=" + document.getId());
         lastDocNumber=1;
         if (document!=null && document.getDocOutLastNumber()!=null){
             lastDocNumber = document.getDocOutLastNumber()+1;
