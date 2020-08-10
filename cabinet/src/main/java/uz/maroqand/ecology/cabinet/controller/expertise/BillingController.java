@@ -124,13 +124,13 @@ public class BillingController {
                 client = clientService.getById(invoice.getClientId());
             }
             convenientForJSONArray.add(new Object[]{
-                    invoice.getId(),
-                    invoice.getInvoice(),
-                    invoice.getPayeeId() != null ? helperService.getOrganizationName(invoice.getPayeeId(), locale) : "",
-                    invoice.getAmount(),
-                    Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
-                    invoice.getStatus(),
-                    client!=null?client.getName():""
+                invoice.getId(),
+                invoice.getInvoice(),
+                invoice.getPayeeId() != null ? helperService.getOrganizationName(invoice.getPayeeId(), locale) : "",
+                invoice.getAmount(),
+                Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
+                invoice.getStatus(),
+                client!=null?client.getName():""
             });
         }
 
@@ -165,60 +165,60 @@ public class BillingController {
                 });
                 paymentTotal += payment.getAmount();
         }
-            invoiceLeft -= paymentTotal;
-            result.put("paymentTotal",paymentTotal);
-            result.put("invoiceLeft",invoiceLeft);
+        invoiceLeft -= paymentTotal;
+        result.put("paymentTotal",paymentTotal);
+        result.put("invoiceLeft",invoiceLeft);
 
-            result.put("invoiceNumber", invoice.getInvoice());
-            result.put("invoiceStatus", invoice.getStatus());
-            result.put("invoiceDate", invoice.getCreatedDate() != null ? Common.uzbekistanDateFormat.format(invoice.getCreatedDate()) : "");
-            result.put("invoiceExpiryAt", invoice.getExpireDate() != null ? Common.uzbekistanDateAndTimeFormat.format(invoice.getExpireDate()) : "");
-            result.put("invoiceDetail", invoice.getDetail());
-            result.put("invoiceQty", invoice.getQty());
-            result.put("invoiceAmount", invoice.getAmount());
+        result.put("invoiceNumber", invoice.getInvoice());
+        result.put("invoiceStatus", invoice.getStatus());
+        result.put("invoiceDate", invoice.getCreatedDate() != null ? Common.uzbekistanDateFormat.format(invoice.getCreatedDate()) : "");
+        result.put("invoiceExpiryAt", invoice.getExpireDate() != null ? Common.uzbekistanDateAndTimeFormat.format(invoice.getExpireDate()) : "");
+        result.put("invoiceDetail", invoice.getDetail());
+        result.put("invoiceQty", invoice.getQty());
+        result.put("invoiceAmount", invoice.getAmount());
 
-            result.put("payeeName", invoice.getPayeeName());
-            result.put("payeeTin", invoice.getPayeeTin());
-            result.put("payeeAccount", invoice.getPayeeAccount());
-            result.put("payeeAddress", invoice.getPayeeAddress());
+        result.put("payeeName", invoice.getPayeeName());
+        result.put("payeeTin", invoice.getPayeeTin());
+        result.put("payeeAccount", invoice.getPayeeAccount());
+        result.put("payeeAddress", invoice.getPayeeAddress());
 
-            result.put("payerName", invoice.getPayerName());
-            if(client.getType() != null){
-                result.put("payerType", helperService.getApplicantType(client.getType().getId(),locale));
-            }else {
-                result.put("payerType","");
-            }
-            result.put("payerTin", client.getTin());
-            result.put("payerPassport", client.getPassportSerial() + client.getPassportNumber());
-            result.put("payerPhone", client.getPhone());
-            result.put("payerEmail", client.getEmail());
-            result.put("payerBank", client.getBankName());
-            result.put("payerBankAccount", client.getBankAccount());
+        result.put("payerName", invoice.getPayerName());
+        if(client.getType() != null){
+            result.put("payerType", helperService.getApplicantType(client.getType().getId(),locale));
+        }else {
+            result.put("payerType","");
+        }
+        result.put("payerTin", client.getTin());
+        result.put("payerPassport", client.getPassportSerial() + client.getPassportNumber());
+        result.put("payerPhone", client.getPhone());
+        result.put("payerEmail", client.getEmail());
+        result.put("payerBank", client.getBankName());
+        result.put("payerBankAccount", client.getBankAccount());
 
-            RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-            List<Category> categoryList = new LinkedList<>();
-            List<Requirement> requirementList = null;
-            if (regApplication!=null && regApplication.getObjectId()!=null){
-                requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
-            }
+        RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+        List<Category> categoryList = new LinkedList<>();
+        List<Requirement> requirementList = null;
+        if (regApplication!=null && regApplication.getObjectId()!=null){
+            requirementList = requirementService.getRequirementExpertise(regApplication.getObjectId());
+        }
        if (requirementList!=null){
            for(Requirement requirement: requirementList){
                categoryList.add(requirement.getCategory());
            }
        }
-            List<Activity> activityList = activityService.getByInCategory(categoryList);
-            Collections.sort(categoryList);
-            result.put("activityList", activityList);
-            result.put("activityListSize", activityList.size());
-            result.put("categoryList", categoryList);
-            result.put("regApplicationId", regApplication!=null?regApplication.getId():null);
+        List<Activity> activityList = activityService.getByInCategory(categoryList);
+        Collections.sort(categoryList);
+        result.put("activityList", activityList);
+        result.put("activityListSize", activityList.size());
+        result.put("categoryList", categoryList);
+        result.put("regApplicationId", regApplication!=null?regApplication.getId():null);
 
-            result.put("nowObjectName", regApplication!=null && regApplication.getObjectId()!=null ? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"0");
-            result.put("nowActivityName",regApplication!=null &&  regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"0");
-            result.put("nowCategoryName", regApplication!=null && regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"0");
+        result.put("nowObjectName", regApplication!=null && regApplication.getObjectId()!=null ? helperService.getObjectExpertise(regApplication.getObjectId(), locale):"0");
+        result.put("nowActivityName",regApplication!=null &&  regApplication.getActivityId()!=null? helperService.getActivity(regApplication.getActivityId(), locale):"0");
+        result.put("nowCategoryName", regApplication!=null && regApplication.getCategory()!=null? helperService.getTranslation(regApplication.getCategory().getName(), locale):"0");
 
-            result.put("payments",convenientForJSONArray);
-            return result;
+        result.put("payments",convenientForJSONArray);
+        return result;
     }
 
     @RequestMapping(ExpertiseUrls.BillingEdit)
@@ -260,7 +260,7 @@ public class BillingController {
         regApplication.setCategory(activity!=null?activity.getCategory():null);
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-        invoice = invoiceService.modification(regApplication, invoice, requirement);
+        invoiceService.modification(regApplication, invoice, requirement);
         regApplicationService.update(regApplication);
 
         toastrService.create(user.getId(), ToastrType.Info, "O'zgartirish muvaffaqiyatli.","O'zgartirish muvaffaqiyatli amalga oshirildi");
@@ -272,7 +272,7 @@ public class BillingController {
         User user = userService.getCurrentUserFromContext();
         Invoice invoice = invoiceService.getInvoice(id);
         if (invoice==null || !invoice.getStatus().equals(InvoiceStatus.Initial)) return "redirect:" + ExpertiseUrls.BillingList;
-        invoice = invoiceService.cancelInvoice(invoice);
+        invoiceService.cancelInvoice(invoice);
         return "redirect:" + ExpertiseUrls.BillingList;
     }
 

@@ -83,7 +83,7 @@ public class BankAPIController {
                 paymentFile.setBankId(paymentNew.getId());
                 try {
                     paymentFile.setAmount(Double.parseDouble(paymentNew.getAmount())/100);
-                } catch (Exception e){}
+                } catch (Exception ignored){}
 
                 paymentFile.setAmountOriginal(paymentNew.getAmount());
                 paymentFile.setDocumentNumber(paymentNew.getDocument_number());
