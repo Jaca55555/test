@@ -124,7 +124,7 @@ public class ChangePerformerController {
                 type,
                 status,
                 departmentId,
-                receiverId,
+                null,
                 specialControll,
                 pageable
         );

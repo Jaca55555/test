@@ -13,24 +13,30 @@
         #responsive-table-model_previous  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
 
         #responsive-table-model_next  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         #responsive-table-model_first  {
             padding: 5px;
             border: 1px solid grey;
-
+            margin: 10px;
         }
         #responsive-table-model_last  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         .dt-buttons{
             margin-top: 50px;
             margin-left: -20%;
+        }
+        .paginate_input{
+            width: 30px;
         }
     </style>
 </head>
@@ -127,7 +133,7 @@
                                             <span th:text="#{doc.RegNumber}">Регистрация рақами</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
-                                            <span th:text="#{doc.registrationDate}">Регистрация санаси</span>
+                                            <span th:text="#{doc.registrationDate_Number}">Регистрация санаси</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc.regDate}">Кирувчи хат маълумотлари</span>
