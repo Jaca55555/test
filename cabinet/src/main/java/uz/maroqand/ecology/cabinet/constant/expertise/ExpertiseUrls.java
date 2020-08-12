@@ -81,6 +81,7 @@ public class ExpertiseUrls {
     public static final String ApplicantList = Applicant + "/list";
     public static final String ApplicantListAjax = Applicant + "/list_ajax";
     public static final String ApplicantView = Applicant + "/view";
+    public static final String ApplicantConclusionView = Applicant + "/conclusion_view";
     public static final String ApplicantUpdateTax = Applicant + "/update_tax";
 
     //Employee control
