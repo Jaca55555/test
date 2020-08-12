@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.ApplicantType;
+import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
 import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
@@ -35,6 +36,7 @@ import uz.maroqand.ecology.core.service.client.OpfService;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.gnk.GnkService;
+import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.util.Common;
@@ -64,10 +66,11 @@ public class ApplicantController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final GnkService gnkService;
     private final ConclusionService conclusionService;
+    private final DocumentRepoService documentRepoService;
 
     private static final Logger logger = LogManager.getLogger(ApplicantController.class);
 
-    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, GnkService gnkService, ConclusionService conclusionService) {
+    public ApplicantController(ClientService clientService, SoatoService soatoService, OpfService opfService, HelperService helperService, ClientAuditService clientAuditService, RegApplicationService regApplicationService, InvoiceService invoiceService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, GnkService gnkService, ConclusionService conclusionService, DocumentRepoService documentRepoService) {
         this.clientService = clientService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -79,6 +82,7 @@ public class ApplicantController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.gnkService = gnkService;
         this.conclusionService = conclusionService;
+        this.documentRepoService = documentRepoService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ApplicantList)
@@ -172,7 +176,7 @@ public class ApplicantController {
                      regApplication.getObjectId() != null ? helperService.getObjectExpertise(regApplication.getObjectId(),locale) : "",
                     regApplication.getCategory() != null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     regApplication.getPerformerId()!=null ? helperService.getUserFullNameById(regApplication.getPerformerId()) : "",
-                    ExpertiseUrls.ConclusionView + "?id=" + conclusion.getId()
+                    ExpertiseUrls.ApplicantConclusionView + "?id=" + conclusion.getId()
                 });
             }
 
@@ -206,6 +210,29 @@ public class ApplicantController {
         return ExpertiseTemplates.ApplicantView;
     }
 
+    @RequestMapping(ExpertiseUrls.ApplicantConclusionView)
+    public String conclusionView(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        Conclusion conclusion = conclusionService.getById(id);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+
+        if(conclusion == null || conclusion.getStatus().equals(ConclusionStatus.Initial)){
+            return "redirect:" + ExpertiseUrls.ApplicantList;
+        }
+        RegApplication regApplication = null;
+        if(conclusion.getRegApplicationId() != null){
+            regApplication = regApplicationService.getById(conclusion.getRegApplicationId());
+        }
+        if(conclusion.getDocumentRepoId() != null){
+            model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+        }
+        model.addAttribute("conclusion", conclusion);
+        model.addAttribute("regApplication", regApplication);
+
+        return ExpertiseTemplates.ConclusionView;
+    }
 
     @RequestMapping(value = ExpertiseUrls.ApplicantUpdateTax)
     public String updateTax() {
