@@ -328,6 +328,7 @@ public class ReferenceController {
         List<User> userList = userService.getListByDepartmentAllParent(user.getDepartmentId());
 
         model.addAttribute("document", document);
+        model.addAttribute("executeForm",document.getExecuteForm().getName());
         model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);

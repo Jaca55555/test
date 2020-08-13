@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{doc_report.list}" >Кирувчи хатлар</title>
+    <title th:text="#{doc_report.view}" >Кирувчи хатлар</title>
     <style>
         .datepicker>.datepicker-days {
             display: block;
@@ -13,20 +13,30 @@
         #responsive-table-model_previous  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
 
         #responsive-table-model_next  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
         }
         #responsive-table-model_first  {
             padding: 5px;
             border: 1px solid grey;
-
+            margin: 10px;
         }
         #responsive-table-model_last  {
             padding: 5px;
             border: 1px solid grey;
+            margin: 10px;
+        }
+        .dt-buttons{
+            margin-top: 50px;
+            margin-left: -20%;
+        }
+        .paginate_input{
+            width: 30px;
         }
     </style>
 </head>
@@ -80,17 +90,13 @@
                             <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
                             <i class="gray-arrow mdi mdi-calendar color-gray"></i>
                         </div>
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
-
                     </div>
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
                     <label for="departmentId" class="control-label" th:text="#{doc.departments}">Жўнатувчи ташкилот номи</label>
                     <select class="form-control" id="departmentId">
                         <option value=""></option>
-                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="#{${department.name}}">
+                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="${@helperService.getDepartmentName(department.id,#locale)}">
                         </option>
                     </select>
                 </div>
@@ -100,9 +106,13 @@
                         <option value=""></option>
                         <option th:each="status: ${statuses}" th:value="${status.id}" th:text="#{${status.name}}">
                         </option>
+                        <option value="10" th:text="#{sys_document.info_tab_dueDate}"></option>
+                        <option value="11" th:text="#{SYS.DOC_INFO_TAB_DELAYED}"></option>
                     </select>
                 </div>
-
+                <button type="button"  class="btn btn-primary m10-vertical m20-horizontal mt-4" style="margin-left: 90%" onclick="getDatatableConnect()">
+                    <span th:text="#{sys_document.search}">Қидириш</span>
+                </button>
             </div>
 
         </div>
@@ -123,7 +133,7 @@
                                             <span th:text="#{doc.RegNumber}">Регистрация рақами</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
-                                            <span th:text="#{doc.registrationDate}">Регистрация санаси</span>
+                                            <span th:text="#{doc.registrationDate_Number}">Регистрация санаси</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc.regDate}">Кирувчи хат маълумотлари</span>
@@ -135,7 +145,7 @@
                                             <span th:text="#{doc_content}">Ижро муддати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
+                                            <span th:text="#{sys_document.performer}">Жорий ҳолати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
                                             <span th:text="#{sys_document.task_comment}">Резолюция ва иштирокчилар</span>
@@ -144,12 +154,11 @@
                                             <span th:text="#{sys_document.dueDate}">Резолюция ва иштирокчилар</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskDate}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.checkingDate}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
 
@@ -193,20 +202,6 @@
         tabFilter = tab;
         datatableConnect();
     }
-    function renderStatusColumn(data, type, row, meta) {
-        var html = '';
-        var status=row[8];
-        switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[6]+'</button>';return html;
-        }
-        return html;
-    }
 
 
 
@@ -231,13 +226,13 @@
             pageLength: 10,
             lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
-            dom:'lrtip',
-            dom: 'Bfrtip',
+            dom: 'lBrtip',
             buttons: [
 
                 'copy', 'csv', 'excel', 'pdf','print'
 
             ],
+
             pagingType: 'input',
             ajax : function (dataToSend, callback, settings) {
                 let api = this.api();
@@ -276,7 +271,7 @@
                 {data: 2, name: 'document.registrationDate',
                     render: function (data, type, row, meta) {
                         var html = '';
-                        html += '<a >' + row[2]+"<br>"+row[9]+'</a>';
+                        html += '<a >' + row[9]+"<br>"+row[2]+'</a>';
                         return html;
                     },
                     className: "text-left"

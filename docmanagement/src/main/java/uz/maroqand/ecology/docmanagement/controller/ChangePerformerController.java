@@ -24,8 +24,7 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerTask;
-import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerView;
+import static uz.maroqand.ecology.docmanagement.constant.DocUrls.*;
 
 /**
  * Created by Utkirbek Boltaev on 13.12.2019.
@@ -97,12 +96,15 @@ public class ChangePerformerController {
         Date deadlineDateBegin = null;
         Date deadlineDateEnd = null;
         Integer type = null;
-        Set<Integer> status = null;
+        Set<Integer> status =null;
         Integer departmentId = null;
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-
+        status = new LinkedHashSet<>();
+        status.add(TaskSubStatus.ForChangePerformer.getId());
+        status.add(TaskSubStatus.PerformerChanged.getId());
+        System.out.println(status);
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFilter(
                 user.getOrganizationId(),
@@ -115,14 +117,14 @@ public class ChangePerformerController {
                 content,
                 performerId,
                 taskSubType,
-                8,
+                taskSubStatus,
 
                 deadlineDateBegin,
                 deadlineDateEnd,
                 type,
                 status,
                 departmentId,
-                receiverId,
+                null,
                 specialControll,
                 pageable
         );
@@ -142,6 +144,7 @@ public class ChangePerformerController {
             }
             docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
             docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
+
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
@@ -212,22 +215,32 @@ public class ChangePerformerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("performers",userService.getEmployeesForForwarding(document.getOrganizationId()));
+        model.addAttribute("performers",userService.getAll());
         model.addAttribute("action_url",ChangePerformerTask);
+        model.addAttribute("action_uri",ChangePerformerDeny);
         return DocTemplates.ChangePerformerView;
     }
     @PostMapping(ChangePerformerTask)
     public String changePerformer(
             DocumentTaskSub documentTaskSub,
+            @RequestParam(name = "id")Integer id,
             @RequestParam(name = "userid")Integer userid
     ) {
-//        System.out.println(id);
-        documentTaskSub.setReceiverId(userid);
-        documentTaskSub.setStatus(1);
-        documentTaskSubService.update(documentTaskSub);
-
-
+        DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
+        System.out.println(userid);
+        documentTaskSub1.setReceiverId(userid);
+        documentTaskSub1.setStatus(9);
+        documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
     }
-
+    @PostMapping(ChangePerformerDeny)
+    public String denyPerformer(
+            DocumentTaskSub documentTaskSub,
+            @RequestParam(name = "id")Integer id
+    ) {
+        DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
+        documentTaskSub1.setStatus(7);
+        documentTaskSubService.update(documentTaskSub1);
+        return "redirect:" + DocUrls.ChangePerformerList;
+    }
 }

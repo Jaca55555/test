@@ -47,6 +47,11 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
+    public List<Journal> getAll() {
+        return journalRepository.findAll();
+    }
+
+    @Override
     @CachePut(value = "journalGetById", key = "#id")
     public Journal updateByIdFromCache(Integer id) {
         if (id==null)return null;

@@ -17,7 +17,7 @@ import java.util.List;
 public interface JournalService {
 
     Journal getById(Integer id) throws IllegalArgumentException;
-
+    List <Journal> getAll();
     Journal updateByIdFromCache(Integer id);
 
     List<Journal> getStatusActive(Integer documentTypeId);

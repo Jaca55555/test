@@ -282,6 +282,7 @@ public class InnerController {
         if (document.getExecuteForm()!=null && document.getExecuteForm().equals(ExecuteForm.Performance)){
             isExecuteForm = true;
         }
+        model.addAttribute("executeForm",document.getExecuteForm().getName());
         model.addAttribute("document", document);
         model.addAttribute("isExecuteForm", isExecuteForm);
         model.addAttribute("documentTask", documentTask);

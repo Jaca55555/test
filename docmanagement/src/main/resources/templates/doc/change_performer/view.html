@@ -45,7 +45,86 @@
     <div class="col-xl-12 col-md-12">
 
         <object th:include="doc/change_performer/document_view :: document_view" th:remove="tag" ></object>
+        <div>
+            <div class="col-sm-12">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between-nowrap mb-0">
+                        <h5 class="mb-0" style="align-self:center">
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}" ></span>&nbsp;&nbsp;
+                        </h5>
+                        <div class="btn-group" role="group">
+                            <button class="btn-icon" data-toggle="modal" data-target="#modal1">
+                                <i class="fs20 fas fa-edit color-gray"></i>
+                            </button>
 
+                        </div>
+                    </div>
+                    <div class="card-body comment-content" id="comments">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray column-1"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
+                                    <br>
+                                    <span th:text="${log.createdBy.position.name}">Руководитель организации</span>
+                                </div>
+                            </div>
+                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">
+                                10.05.2019 - 09:35
+                            </div>
+                            <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
+                                <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
+                                    <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.beforeStatus}}"></span>
+                                    </span>
+                                    <!--<button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.beforeStatus}}"></span>
+                                    </button>-->
+                                </div>
+                                <div class="col-sm-2" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                    <span class="statusSpan badge badge-light">
+                                        <i class="feather icon-chevrons-right mr-0"></i>
+                                    </span>
+                                    <!--<button type="button" class="btn-block btn btn-light btn-sm btn-rounded">
+                                        <i class="feather icon-arrow-right mr-0"></i>
+                                    </button>-->
+                                </div>
+                                <div class="col-sm-5 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                     <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
+                                        <span th:text="#{${log.afterStatus}}"></span>
+                                    </span>
+                                    <!--<button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.afterStatusColor}">
+                                        <span  th:text="#{${log.afterStatus}}"></span>
+                                    </button>-->
+                                </div>
+                            </div>
+                            <div class="w100"></div>
+                            <div class="row col-sm-12  mt-2">
+                                <span th:text="${log.content}">Гафуров Г. Г. ижроси тасдиқланди ва назоратдан чиқарилди.</span>
+                            </div>
+
+                            <div th:if="${log.contentFiles}!=null" th:each="file : ${log.contentFiles}" th:remove="tag"> &nbsp;&nbsp;
+                                <div class="w100"></div>
+                                <div class="row col-sm-12  mt-2">
+                                    <span class='fas fa-file-pdf fs30 color-red mr-1'></span>
+                                    <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" th:text="${file.name}"></a>
+                                </div>
+                            </div>
+                            <div th:if="${log.attachedDocId}!=null" th:remove="tag">
+                                <div class="w100"></div>
+                                <div class="row col-sm-12  mt-2 d-flex">
+                                    <span class="d-flex align-self-center" th:text="#{sys_document.attached_doc}"></span>&nbsp;&nbsp;
+                                    <span class='mdi mdi-file-upload-outline fs30 color-green mr-1'></span>
+                                    <a class="d-flex align-self-center" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentOpenView} + '?id=' + ${log.attachedDocId}" th:text="${log.attachedDoc.registrationNumber}"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -53,49 +132,68 @@
 
 <!-- Status modal -->
 
-<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
     <div class="modal-dialog col-xl-6 col-12" role="document">
         <div class="modal-content">
             <div class="card parent-card m0">
                 <div class="card-header flex-space-between-nowrap mb-0">
-                    <h5 class="mb-0" style="align-self:center">
-                        <span href="#" class="card-header-a">
-                        <span th:text="#{doc_incoming.view}">Кирувчи хат №</span>
-                            <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
-                        </span>
-                    </h5>
-                    <div class="btn-group" role="group" >
-
-                        <button type="button" class="close pointer mr-2"onclick="treeCloseAll()">
-                            <i class="feather icon-chevrons-up"></i>
-                            <!--<span th:text="#{+}">all</span>-->
-                        </button>
-                        <button type="button" class="close pointer mr-2" onclick="treeOpenAll()">
-                            <i class="feather icon-chevrons-down"></i>
-                            <!--<span th:text="#{-}">all</span>-->
-                        </button>
-                        <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" >
-                            <!--<span aria-hidden="true">&times;</span>-->
-                            <i class="feather icon-x"></i>
-                        </button>
-                    </div>
+                    <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a"><span th:text="#{sys_document.comments_and_execute}">Ижро амаллари ва изохлар</span></span></h5>
+                    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="col-sm-12 mt-2">
-
-                </div><span></span>
                 <div class="card-body">
-                    <div class="flex-space-between p0 m20-vertical mt-0">
-                        <div class="panel">
-                            <div id="treeview-selectable" class="treeview"></div>
+                    <form th:action="${comment_url}" id="commentForm" th:object="${documentLog}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="documentId" th:value="${document.id}">
+                        <input type="hidden" name="taskSubId" th:value="${documentTaskSub.id}">
+                        <input type="hidden" name="taskId" th:value="${task.id}">
+                        <div class="flex-space-between p0 m20-vertical">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-green bold" th:text="${user.fullName}">Абдуллаев А. А.</span>
+                                    <br>
+                                    <span th:if="${user.id!=null}" th:text="${@helperService.getUserPositionName(user.id,#locale)}">Ташкилот рахбари</span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i>
+                            </div>
                         </div>
-                    </div>
-
+                        <div class="m10-vertical"><span th:text="#{sys_document.comment}" >Изоҳи</span></div>
+                        <textarea class="form-control" id="content" name="content" onfocus="this.value=''" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+                        <div class="m10-vertical">
+                            <span th:text="#{sys_document.additional_files}"></span>
+                        </div>
+                        <div id="file_ids" class="d-none"></div>
+                        <input type="file" class="d-none" id="addFile2" name="files" multiple>
+                        <div class="row p20" id="file-container">
+                            <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                <div  class="text-center file-icon-container align-self-center color-gray">
+                                    <span class="fas fa-plus" id="addFileButton"></span>
+                                    <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                    <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="m20-vertical">
+                        <div class="row">
+                            <div class="flex-center w100 row-wrap">
+                                <button type="button" class="btn btn-secondary m10-vertical m20-horizontal"  th:text="#{sys_cancel}" data-dismiss="modal" id="closeCommentModal"></button>
+                                <button type="button" id="formSend" class="btn btn-primary m10-vertical m20-horizontal" th:text="#{sys_add}"></button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<button type="button" class="btn btn-secondary"  th:text="#{sys_close}">Close</button>
+
 <!-- [ Modals ] end -->
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
