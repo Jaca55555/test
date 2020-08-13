@@ -11025,3 +11025,7 @@ div .dt-buttons{
 .file-icon-container-small>div {
   align-self:center;
 }
+
+.border-none{
+  border:1px dashed white !important;
+}

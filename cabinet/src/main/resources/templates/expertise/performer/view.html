@@ -184,14 +184,39 @@
         $('textarea.max-textarea').maxlength({
             alwaysShow: true
         });
-        if(conclusionId === 0){
-            saveConculision();
-        }
+        borderNone();
+
         $('.datepicker').datepicker({
             format: "dd.mm.yyyy",
             todayHighlight: true,
             autoclose: true
         });
+    });
+
+    function borderNone() {
+        $('.table').find('table').each(function (i,a) {
+            if (i<2){
+                console.log("ii====" + i);
+                // console.log("table",tableMy);
+                // tableMy.find("th").css("border","1px dashed white !important;");
+                // tableMy.find("td").css("border","1px dashed white !important;");
+                // tableMy.css("border","1px dashed white !important;");
+                // console.log("table==3");
+                $(this).addClass('border-none');
+                $(this).find('th').each(function (i,a) {
+                    console.log("aaaaaaaa====" + a.innerHTML + "    iii=" + i)
+                    $(this).addClass('border-none');
+                });
+                $(this).find('td').each(function (i,a) {
+                    console.log("aaaaaaaa====" + a.innerHTML + "    iii=" + i)
+                    $(this).addClass('border-none');
+                });
+            }
+        })
+    }
+
+    $('#form').on('submit',function () {
+        saveConculision();
     });
 
     function saveConculision() {

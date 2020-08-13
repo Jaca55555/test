@@ -88,15 +88,21 @@
         line-height: 1.63em;
         /*padding-top: 1px;*/
         margin-bottom: 4px;
+        text-indent: 3ch;
+        text-align: justify;
     }
     .document-editor .ck-content blockquote {
         font-family: Georgia, serif;
         margin-left: calc(2 * var(--ck-spacing-large));
         margin-right: calc(2 * var(--ck-spacing-large));
-    }.document-editor .ck-content p .MsoNormal {
+    }
+    .document-editor .ck-content p .MsoNormal {
          padding-top: 1px;
          margin-bottom: 4px;
      }
+    .ck-content .table table td, .ck-content .table table th{
+        border-color: black;
+    }
 </style>
 
 <div class="card-block">
@@ -113,13 +119,13 @@
                 <h4 style="text-align:center;"> 100047, Тошкент ш., Яшнобод т., Той-тепа кўчаси, 2a-уй. тел.: 207-11-03, факс: 236-02-32 <br>веб-саҳифа:http://www.uznature.uz, электрон почта: info@uznature.uz </h4><br>&nbsp;<br>
                 <h2 style="text-align:center;">З А К Л Ю Ч Е Н И Е</h2>
                 <h3 style="text-align:center;">Государственной  экологической  экспертизы</h3>
-
-                    <table>
+                <figure class="table myclass ck-widget ck-widget_selectable" contenteditable="true">
+                    <div class="ck ck-widget__selection-handler"></div>
+                    <table class="table myTable">
                         <tbody>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">По объекту:</th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
                         </tr>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_client}">Заказчик:</span></th>
@@ -127,35 +133,33 @@
                                 <span th:text="${applicant.name}"></span>
                                 <span th:if="${opfId!=null}" th:text="${@helperService.getOpfShortName(opfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
                             </td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
                         </tr>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_tin}">ИНН:</span></th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${applicant.tin}">206942614</span></td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
                         </tr>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_category}">Категория:</span>:</th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span >I, п.32, ПКМ РУз №949 от 22.11.2018 г.</span></td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
                         </tr>
                         <tr>
-                            <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_developer}">Разработчик:</span></th>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getDeveloperName(regApplication.developerId)}">ООО «EKO SERVIS NORMATIV»</span></td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
+                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_developer}">Разработчик:</span></th>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getDeveloperName(regApplication.developerId)}">ООО «EKO SERVIS NORMATIV»</span></td>
                         </tr>
                         <tr>
-                            <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_expert}">Эксперт:</span></th>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></td>
-                            <!--<td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>-->
+                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_expert}">Эксперт:</span></th>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></td>
                         </tr>
                         <tr>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
                         </tr>
                         </tbody>
                     </table>
+                </figure>
+                <figure class="table myclass ck-widget ck-widget_selectable" contenteditable="false">
+                    <div class="ck ck-widget__selection-handler"></div>
                     <table>
                         <tbody>
                         <tr>
@@ -174,6 +178,7 @@
                         </tr>
                         </tbody>
                     </table>
+                </figure>
                 <br/>
                 <br/>
                Исп.: <span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></br>

@@ -38,7 +38,7 @@
     </div>
 
     <!--Files-->
-    <div class="col-md-10 offset-1 text-justify" th:if="${regApplication.conclusionOnline and regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved)}">
+    <div class="col-md-12 text-justify" th:if="${regApplication.conclusionOnline and regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved)}">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
                 <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
