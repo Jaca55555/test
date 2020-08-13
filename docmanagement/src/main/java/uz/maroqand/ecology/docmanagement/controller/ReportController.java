@@ -225,7 +225,6 @@ public class ReportController {
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?Common.uzbekistanDateFormat.format(documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedAt()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedBy().getFullName():"",
-                    document.getJournal().getName()
             });
         }
 
