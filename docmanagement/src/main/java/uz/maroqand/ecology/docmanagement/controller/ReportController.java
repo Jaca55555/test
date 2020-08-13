@@ -221,11 +221,11 @@ public class ReportController {
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getContent():"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     document.getDocRegNumber(),
-                    documentTaskSub.getReceiver().getShortName(),
+                    documentTaskSub.getReceiverId()!=null?documentTaskSub.getReceiver().getShortName():"",
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?Common.uzbekistanDateFormat.format(documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedAt()):"",
                     documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId())!=null?documentLogService.findFirstByDocumentIdOrderByIdDesc(document.getId()).getCreatedBy().getFullName():"",
-                    document.getJournal().getName()
+                    document.getJournalId()!=null?document.getJournal().getName():""
             });
         }
 

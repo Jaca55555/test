@@ -51,20 +51,19 @@ public class AccountController {
             return "redirect:/profile";
         }
 
-        User oldUser = userService.findById(user.getId());
-        String oldUserString = gson.toJson(oldUser);
-        oldUser.setPassword(new BCryptPasswordEncoder().encode(userPassword));
-        userService.updateUser(oldUser);
+        String oldUserString = gson.toJson(user);
+        user.setPassword(new BCryptPasswordEncoder().encode(userPassword));
+        userService.updateUser(user);
 
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.User,
-                oldUser.getId(),
+                user.getId(),
                 oldUserString,
-                gson.toJson(oldUser),
+                gson.toJson(user),
                 "Users password updated successfully!!!",
-                oldUser.getId(),
-                oldUser.getUserAdditionalId());
+                user.getId(),
+                user.getUserAdditionalId());
         return "redirect:/profile";
     }
 }

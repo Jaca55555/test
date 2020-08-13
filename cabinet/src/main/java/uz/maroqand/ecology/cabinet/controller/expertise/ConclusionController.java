@@ -101,18 +101,21 @@ public class ConclusionController {
         List<Conclusion> conclusionList = conclusionPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(conclusionList.size());
         for (Conclusion conclusion : conclusionList){
-            RegApplication regApplication = regApplicationService.getById(conclusion.getRegApplicationId());
+            RegApplication regApplication = null;
+            if (conclusion.getRegApplicationId()!=null){
+                regApplication = regApplicationService.getById(conclusion.getRegApplicationId());
+            }
             convenientForJSONArray.add(new Object[]{
                     conclusion.getId(),
                     conclusion.getNumber(),
                     conclusion.getDate()!= null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDate()) : "",
-                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():"",
-                    regApplication.getName(),
-                    regApplication.getMaterials(),
-                    regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
+                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():"",
+                    regApplication!=null ? regApplication.getName():"",
+                    regApplication!=null && regApplication.getMaterials()!=null? regApplication.getMaterials():"",
+                    regApplication!=null && regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
-                    regApplication.getApplicant()!=null?regApplication.getApplicant().getName():""
+                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():""
             });
         }
 
