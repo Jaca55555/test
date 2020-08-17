@@ -29,13 +29,13 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> findAllByTelegramUserIdNotNullAndEnabledTrue();
 
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
-    List<User> findAllByDepartmentIdNotNullAndIsExecuteChiefTrue();
+    List<User> findAllByDepartmentIdNotNullAndIsExecuteChiefTrueAndOrganizationId(Integer organizationId);
 
     List<User> findAllByDepartmentIdNotNullOrderByIsExecuteControllerDesc();
 
-    List<User> findAllByIsExecuteChiefTrue();
+    List<User> findAllByIsExecuteChiefTrueAndOrganizationId(Integer organizationId);
 
-    List<User> findAllByIsExecuteControllerTrue();
+    List<User> findAllByIsExecuteControllerTrueAndOrganizationId(Integer organizationId);
 
     List<User> findByOrganizationId(Integer organizationId);
 

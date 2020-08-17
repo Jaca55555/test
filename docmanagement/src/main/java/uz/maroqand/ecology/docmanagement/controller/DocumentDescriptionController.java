@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -48,8 +49,13 @@ public class DocumentDescriptionController
             Pageable pageable
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        User user = userService.getCurrentUserFromContext();
+        System.out.println("==============================");
+        System.out.println(user.getOrganizationId());
+        System.out.println("==============================");
         HashMap<String, Object> response = new HashMap<>();
-        Page<DocumentDescription> page = descriptionService.getDescriptionFilterPage(content, pageable);
+        Page<DocumentDescription> page = descriptionService.getDescriptionFilterPage(content,user.getOrganizationId(), pageable);
+        System.out.println(page);
         List<Object[]> JSONArray = new ArrayList<>(page.getContent().size());
         for (DocumentDescription description : page.getContent()) {
             JSONArray.add(new Object[]{

@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.docmanagement.entity;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,6 +30,9 @@ public class DocumentDescription {
     private String contentRu;
     @Column(name = "content_oz")
     private String contentOz;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", updatable = false, insertable = false)
+    private User user;
     @Column(name = "created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 

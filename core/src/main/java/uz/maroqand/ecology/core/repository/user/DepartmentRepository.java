@@ -20,7 +20,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
     List<Department> findByOrganizationIdAndDeletedFalse(Integer id);
 
     List<Department> findAllByDeletedFalseOrderByIdAsc();
-
+    List<Department> findAllByDeletedFalseAndOrganizationId(Integer organizationId);
     List<Department> findByParentIdAndDeletedFalse(Integer parentId);
 
     List<Department> findByParentIdIsNull();

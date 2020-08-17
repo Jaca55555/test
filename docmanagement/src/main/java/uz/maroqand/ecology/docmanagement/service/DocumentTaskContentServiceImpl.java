@@ -33,8 +33,8 @@ public class DocumentTaskContentServiceImpl implements DocumentTaskContentServic
     }
 
     @Override
-    public List<DocumentTaskContent> getTaskContentList() {
-        return documentTaskContentRepository.findAll();
+    public List<DocumentTaskContent> getTaskContentList(Integer organizationId) {
+        return documentTaskContentRepository.findAllByOrganizationId(organizationId);
     }
 
     @Override

@@ -89,7 +89,7 @@ public class OutgoingMailController {
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
         Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
 
-        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType(organizationId,"OutgoingDocuments"));
         model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
 
         long totalOutgoing = documentService.countAll(outgoingMailType, organizationId);
@@ -145,11 +145,12 @@ public class OutgoingMailController {
         }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-
+        User user = userService.getCurrentUserFromContext();
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
+                user.getOrganizationId(),
                 documentStatusIdToExclude,
                 documentOrganizationId,
                 registrationNumber,
@@ -245,10 +246,10 @@ public class OutgoingMailController {
 
     @RequestMapping(DocUrls.OutgoingMailNew)
     public String newOutgoingMail(Model model){
-
+        User user =userService.getCurrentUserFromContext();
         model.addAttribute("document", new Document());
-        model.addAttribute("journals", journalService.getStatusActive(2));//todo 2
-        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
+        model.addAttribute("journals", journalService.getStatusActive(user.getOrganizationId(),2));//todo 2
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"OutgoingDocuments"));
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         model.addAttribute("organizations", documentOrganizationService.getList());
         Integer organizationId = userService.getCurrentUserFromContext().getOrganizationId();
@@ -257,7 +258,7 @@ public class OutgoingMailController {
         List<Position> positions = positionService.getAll();
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
-        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
+        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief",user.getOrganizationId()));
         model.addAttribute("performerId",null);
         return DocTemplates.OutgoingMailNew;
     }
@@ -345,14 +346,14 @@ public class OutgoingMailController {
             documentOrganizationSet = new HashSet<>();
             documentOrganizationSet.add(documentSub.getOrganization());
         }
-
+        User user =userService.getCurrentUserFromContext();
         model.addAttribute("communication_tool_id", documentSub.getCommunicationToolId());
         model.addAttribute("communication_tool_name", documentSub.getCommunicationTool().getName());
         model.addAttribute("document_organization_ids", documentOrganizationSet);
 
         model.addAttribute("document", document);
-        model.addAttribute("journals", journalService.getStatusActive(2));//TODO 2
-        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType("OutgoingDocuments"));
+        model.addAttribute("journals", journalService.getStatusActive(user.getOrganizationId(),2));//TODO 2
+        model.addAttribute("documentViews", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"OutgoingDocuments"));
         model.addAttribute("communicationTools", communicationToolService.getStatusActive());
         Document additionalDocument = documentService.getById(document.getAdditionalDocumentId());
         model.addAttribute("additional_document_id", additionalDocument.getId());

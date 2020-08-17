@@ -86,14 +86,14 @@ public class ReferenceRegistrationController {
 
     @RequestMapping(value = DocUrls.ReferenceRegistrationList, method = RequestMethod.GET)
     public String getReferenceRegistrationListPage(Model model) {
-
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("newCount", taskService.countNewForReference());
         model.addAttribute("inProcess", taskService.countInProcessForReference());
         model.addAttribute("nearDate", taskService.countNearDate());
         model.addAttribute("expired", taskService.countExecutedForReference());
         model.addAttribute("executed", taskService.countExecuted());
         model.addAttribute("total", taskService.countTotal());
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"AppealDocuments"));
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
@@ -193,13 +193,13 @@ public class ReferenceRegistrationController {
     @ResponseBody
     public HashMap<String,Object> getReferenceRegistrationNewListAjax(Pageable pageable){
         System.out.println(pageable.getSort());
-
+        User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         DocFilterDTO docFilterDTO = new DocFilterDTO();
         Set<DocumentStatus> documentStatuses = new HashSet<>();
         documentStatuses.add(DocumentStatus.New);
         docFilterDTO.setDocumentStatuses(documentStatuses);
-        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, user.getOrganizationId(),pageable);
 
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
@@ -261,12 +261,12 @@ public class ReferenceRegistrationController {
 
         model.addAttribute("userList", userList);
 //        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"AppealDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList(user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -432,17 +432,17 @@ public class ReferenceRegistrationController {
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
 
         }
-
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("document", document);
         model.addAttribute("additionalDocument", additionalDocument);
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
 //        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("AppealDocuments"));
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"AppealDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
 
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -505,10 +505,10 @@ public class ReferenceRegistrationController {
         }
 
         List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.ReferenceRegistrationTaskSubmit);
         model.addAttribute("back_url", DocUrls.ReferenceRegistrationView+"?id=" + document.getId());

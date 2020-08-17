@@ -10,7 +10,7 @@ public interface DocumentTaskContentService {
 
     DocumentTaskContent getById(Integer id);
 
-    List<DocumentTaskContent> getTaskContentList();
+    List<DocumentTaskContent> getTaskContentList(Integer organizationId);
 
     Page<DocumentTaskContent> getTaskContentFilterPage(String content, Pageable pageable);
 

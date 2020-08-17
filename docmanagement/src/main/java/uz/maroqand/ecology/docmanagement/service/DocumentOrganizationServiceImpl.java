@@ -10,10 +10,12 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.repository.DocumentOrganizationRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,7 +91,7 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
 
     @Override
     public DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input) {
-        return documentOrganizationRepository.findAll(input,getFilteringSpecification(null));
+        return documentOrganizationRepository.findAll(input,getFilteringSpecification(null,null));
     }
 
     @Override
@@ -103,36 +105,43 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
-    public Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable){
-        return documentOrganizationRepository.findAll(getFilteringSpecification(id, name, status), pageable);
+    public Page<DocumentOrganization> findFiltered(Integer id,Integer organizationId, String name, Integer status, Pageable pageable){
+        return documentOrganizationRepository.findAll(getFilteringSpecification(id,organizationId, name, status), pageable);
     }
 
     @Override
-    public Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable) {
-        return documentOrganizationRepository.findAll(getFilteringSpecification(name),pageable);
+    public Page<DocumentOrganization> getOrganizationList(String name,Integer organizationId, Pageable pageable) {
+        return documentOrganizationRepository.findAll(getFilteringSpecification(name,organizationId),pageable);
     }
 
-    private static Specification<DocumentOrganization> getFilteringSpecification(final String name) {
+    private static Specification<DocumentOrganization> getFilteringSpecification(final String name,Integer organizationId) {
         return (Specification<DocumentOrganization>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
+            Join<DocumentOrganization, User> joinUser = root.join("user");
             if(name!=null){
                 predicates.add( criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + name.toUpperCase() + "%") );
             }
+            if(organizationId!=null){
+                predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
+            }
+
             predicates.add( criteriaBuilder.equal(root.get("deleted"), false) );
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
-    private static Specification<DocumentOrganization> getFilteringSpecification(Integer id, String name, Integer status){
+    private static Specification<DocumentOrganization> getFilteringSpecification(Integer id,Integer organizationId, String name, Integer status){
         return (Specification<DocumentOrganization>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
-
+            Join<DocumentOrganization, User> joinUser = root.join("user");
             if(id != null)
                 predicates.add(criteriaBuilder.equal(root.get("id"), id));
             if(name != null)
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
             if(status != null)
                 predicates.add(criteriaBuilder.equal(root.get("status"), status == 1));
-
+            if(organizationId!=null){
+                predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
+            }
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

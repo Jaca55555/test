@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
@@ -52,9 +53,9 @@ public class DocumentViewController {
     ){
         name = StringUtils.trimToNull(name);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-     //
+        User user = userService.getCurrentUserFromContext();
         System.out.println("name: " + name + ", status: " + status + ", locale: " + locale);
-        Page<DocumentView> docViewPage = documentViewService.findFiltered(name, status == 0 ? null : status, locale, pageable);
+        Page<DocumentView> docViewPage = documentViewService.findFiltered(name,user.getOrganizationId(), status == 0 ? null : status, locale, pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", docViewPage.getTotalElements()); //Total elements

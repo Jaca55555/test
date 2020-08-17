@@ -186,6 +186,7 @@ public class OutgoingController {
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
+                user.getOrganizationId(),
                 documentStatusIdToExclude,
                 documentOrganizationId,
                 registrationNumber,

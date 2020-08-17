@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.Department;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
@@ -76,7 +77,8 @@ public class ReportController {
 
     @RequestMapping(value = DocUrls.ReportList, method = RequestMethod.GET)
     public String getIncomingListPage(Model model) {
-        model.addAttribute("departments",departmentService.getAll());
+        User user = userService.getCurrentUserFromContext();
+        model.addAttribute("departments",departmentService.findByOrganizationId(user.getOrganizationId()));
         return DocTemplates.ReportList;
     }
 
@@ -86,6 +88,7 @@ public class ReportController {
             @RequestParam(name = "id", required = false) Integer departmentId,
             @RequestParam(name = "dateEnd", required = false)  String dateEndStr,
             @RequestParam(name = "dateBegin", required = false)  String dateBeginStr,
+            @RequestParam(name = "parentId", required = false) Integer parentId,
             @RequestParam(name = "departmentName", required = false) String name,
             @RequestParam(name = "departmentName", required = false) String nameOz,
             @RequestParam(name = "departmentName", required = false) String nameEn,
@@ -93,12 +96,13 @@ public class ReportController {
             Pageable pageable
     ) {
         name = StringUtils.trimToNull(name);
+        User currentUser = userService.getCurrentUserFromContext();
         nameOz = StringUtils.trimToNull(nameOz);
         nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
         System.out.println("allo"+dateBeginStr);
         System.out.println(dateEndStr);
-        Page<Department>  departmentPage = departmentService.findFilter(departmentId, DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat), DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat), name, nameOz,nameEn,nameRu, pageable);
+        Page<Department>  departmentPage = departmentService.findFiltered(departmentId, currentUser.getOrganizationId(), parentId, name, nameOz,nameEn,nameRu, pageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", departmentPage.getTotalElements()); //Total elements
@@ -131,7 +135,8 @@ public class ReportController {
         return result; }
     @RequestMapping(value = DocUrls.ReportView, method = RequestMethod.GET)
     public String getReportListPage(Model model) {
-        model.addAttribute("departments",departmentService.getAll());
+        User user = userService.getCurrentUserFromContext();
+        model.addAttribute("departments",departmentService.findByOrganizationId(user.getOrganizationId()));
         model.addAttribute("doc_type",DocumentTypeEnum.getList());
         model.addAttribute("statuses",TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("journals",journalService.getAll());
@@ -148,6 +153,7 @@ public class ReportController {
             @RequestParam(name = "dateBegin", required = false)  String dateBeginStr,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         int id=0;
         System.out.println("qiymati="+status);
         Calendar calendar = Calendar.getInstance();
@@ -181,7 +187,7 @@ public class ReportController {
 
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
-                null,
+                user.getOrganizationId(),
                 typeId!=null ? Collections.singletonList(typeId):null, //todo documentTypeId = 3
                 null,
                 null,

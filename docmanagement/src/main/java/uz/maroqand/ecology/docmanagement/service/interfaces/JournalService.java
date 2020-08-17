@@ -20,13 +20,13 @@ public interface JournalService {
     List <Journal> getAll();
     Journal updateByIdFromCache(Integer id);
 
-    List<Journal> getStatusActive(Integer documentTypeId);
+    List<Journal> getStatusActive(Integer organizationId,Integer documentTypeId);
 
     List<Journal> updateStatusActive(Integer documentTypeId);
 
-    Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable);
+    Page<Journal> getFiltered(JournalFilterDTO filterDTO,Integer organizationId, Pageable pageable);
 
-    DataTablesOutput<Journal> getAll(DataTablesInput input);
+    DataTablesOutput<Journal> getAll(DataTablesInput input,Integer organizationId);
 
     Journal create(Journal journal);
 
