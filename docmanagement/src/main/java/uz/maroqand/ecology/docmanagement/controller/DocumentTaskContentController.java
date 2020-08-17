@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
@@ -41,9 +42,10 @@ public class DocumentTaskContentController
             @RequestParam(name = "content")String content,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> response = new HashMap<>();
-        Page<DocumentTaskContent> page = taskContentService.getTaskContentFilterPage(content, pageable);
+        Page<DocumentTaskContent> page = taskContentService.getTaskContentFilterPage(content,user.getOrganizationId(), pageable);
         List<Object[]> JSONArray = new ArrayList<>(page.getContent().size());
         for (DocumentTaskContent taskContent : page.getContent()) {
             JSONArray.add(new Object[]{

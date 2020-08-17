@@ -12,7 +12,7 @@ public interface DocumentTaskContentService {
 
     List<DocumentTaskContent> getTaskContentList(Integer organizationId);
 
-    Page<DocumentTaskContent> getTaskContentFilterPage(String content, Pageable pageable);
+    Page<DocumentTaskContent> getTaskContentFilterPage(String content,Integer organizationId, Pageable pageable);
 
     DocumentTaskContent save(DocumentTaskContent desc);
 
