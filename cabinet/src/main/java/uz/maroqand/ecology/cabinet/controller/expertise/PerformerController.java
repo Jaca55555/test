@@ -399,6 +399,8 @@ public class PerformerController {
             conclusion = conclusionService.getById(regApplication.getConclusionId());
         }
         htmlText = htmlText.replaceAll("figure","div");
+        htmlText = htmlText.replaceAll("svg","div");
+//        htmlText = htmlText.replaceAll("figcaption","div");
 
         if(conclusion == null){
             conclusion = conclusionService.create(regApplicationId, htmlText.trim(), user.getId());
