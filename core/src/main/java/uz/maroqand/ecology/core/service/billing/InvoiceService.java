@@ -25,6 +25,8 @@ public interface InvoiceService {
 
     Invoice getInvoice(String invoice);
 
+    Invoice checkInvoiceStatus(Invoice invoice);
+
     Invoice payTest(Integer id);
 
     List<Invoice> getListByStatus(InvoiceStatus invoiceStatus);

@@ -123,7 +123,12 @@
     <script type="text/javascript" th:src="@{/static/plugins/input-mask/jquery.mask.min.js}"></script>
     <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/static/js/payment.js}"></script>
     <script th:inline="javascript">
+        var confirmSms = [[#{sys_prepayment.paymentSMSConfirmationCode}]];
+        var confirmation = [[#{sys_prepayment.confirmation}]];
+        var pay = [[#{sys_prepayment.pay}]];
+
             $(".tel").mask('99 999 99 99');
             $(".card-bank").mask('9999 9999 9999 9999');
             $(".card-exp").mask('99/99');

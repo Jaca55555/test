@@ -147,7 +147,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /* check */
-    private Invoice checkInvoiceStatus(Invoice invoice) {
+    @Override
+    public Invoice checkInvoiceStatus(Invoice invoice) {
         Double paymentAmount = 0.0;
         List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
         for (Payment payment:paymentList){

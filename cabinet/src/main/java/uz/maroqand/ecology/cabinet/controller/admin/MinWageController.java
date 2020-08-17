@@ -155,18 +155,19 @@ public class MinWageController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        minWage.setBeginDate(beginDateMinWage);
-        minWage.setRegisteredAt(new Date());
-        minWageService.updateMinWage(minWage);
+        oldMinWage.setBeginDate(beginDateMinWage);
+        oldMinWage.setRegisteredAt(new Date());
+        oldMinWage.setAmount(minWage.getAmount());
+        minWageService.updateMinWage(oldMinWage);
         try {
-            after = objectMapper.writeValueAsString(minWage);
+            after = objectMapper.writeValueAsString(oldMinWage);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.MinWage,
-                minWage.getId(),
+                oldMinWage.getId(),
                 before,
                 after,
                 "MinWage successfully updated!!!",

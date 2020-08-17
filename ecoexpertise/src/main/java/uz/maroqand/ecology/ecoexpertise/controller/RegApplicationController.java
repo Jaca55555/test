@@ -681,13 +681,13 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
-            /*if (invoice.getStatus()== InvoiceStatus.Success){
+            if (invoice.getStatus()== InvoiceStatus.Success){
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
-            }*/
+            }
         }
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", RegUrls.RegApplicationPaymentFree+ "?id=" + id);
+        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return RegTemplates.RegApplicationPrepayment;
     }
@@ -702,6 +702,11 @@ public class RegApplicationController {
             @RequestParam(name = "cardMonth") String cardMonth,
             @RequestParam(name = "cardYear") String cardYear
     ) {
+        System.out.println("id=" + id);
+        System.out.println("telephone=" + telephone);
+        System.out.println("cardNumber=" + cardNumber);
+        System.out.println("cardMonth=" + cardMonth);
+        System.out.println("cardYear=" + cardYear);
         String failUrl = RegUrls.RegApplicationPaymentSendSms;
         String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
         User user = userService.getCurrentUserFromContext();
@@ -786,6 +791,7 @@ public class RegApplicationController {
         if(invoice == null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
+        invoiceService.checkInvoiceStatus(invoice);
         if (invoice.getStatus() != InvoiceStatus.Success){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
