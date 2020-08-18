@@ -643,10 +643,13 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
+            if (invoice.getStatus()== InvoiceStatus.Success){
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
+            }
         }
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("upay_url", ExpertiseUrls.ExpertiseRegApplicationPaymentFree+ "?id=" + id);
+        model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
     }
