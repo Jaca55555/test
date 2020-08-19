@@ -161,7 +161,9 @@ public class BillingController {
                 convenientForJSONArray.add(new Object[]{
                         payment.getType(),
                         payment.getPaymentDate() != null ? Common.uzbekistanDateAndTimeFormat.format(payment.getPaymentDate()) : "",
-                        payment.getAmount()
+                        payment.getAmount(),
+                        payment.getId(),
+                        payment.getInvoiceId()
                 });
                 paymentTotal += payment.getAmount();
         }
