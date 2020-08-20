@@ -231,15 +231,19 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Page<Document> findFiltered(
             DocFilterDTO filterDTO,
+            Integer organizationId,
             Pageable pageable
     ) {
-        return documentRepository.findAll(getSpesification(filterDTO), pageable);
+        return documentRepository.findAll(getSpesification(filterDTO,organizationId), pageable);
     }
     //fucking grammar, i fixed it 10 times!
-    private static Specification<Document> getSpesification(final DocFilterDTO filterDTO) {
+    private static Specification<Document> getSpesification(final DocFilterDTO filterDTO,final Integer organizationId) {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
-
+            if (organizationId != null) {
+                //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
+                predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
+            }
             if (filterDTO != null) {
                 if (filterDTO.getDocumentId() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), filterDTO.getDocumentId()));
@@ -345,8 +349,8 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<Document> getRegistrationNumber(String name, Pageable pageable) {
-        return documentRepository.findAll(getSpecification(name), pageable);
+    public Page<Document> getRegistrationNumber(String name,Integer organizationId, Pageable pageable) {
+        return documentRepository.findAll(getSpecification(name,organizationId), pageable);
     }
     @Override
     public Long countAll(Integer documentTypeId, Integer organizationId){
@@ -428,11 +432,15 @@ public class DocumentServiceImpl implements DocumentService {
         return document1;
     }
 
-    private static Specification<Document> getSpecification(String registrationNumber) {
+    private static Specification<Document> getSpecification(String registrationNumber,Integer organizationId) {
         return (Specification<Document>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             if(registrationNumber != null){
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("registrationNumber")), "%" + registrationNumber.toLowerCase() + "%"));
+            }
+            if (organizationId != null) {
+                //ushbu tashkilotga tegishli hujjatlar chiqishi uchun, user boshqa organizationga o'tsa eskisi ko'rinmaydi
+                predicates.add(criteriaBuilder.equal(root.get("organizationId"), organizationId));
             }
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

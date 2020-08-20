@@ -10,14 +10,13 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.entity.DocumentView;
+import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.repository.DocumentViewRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentViewService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,8 +56,8 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     }
 
     @Override
-    public List<DocumentView> getStatusActiveAndByType(String type) {
-        return documentViewRepository.findByStatusTrueAndType(type);
+    public List<DocumentView> getStatusActiveAndByType(Integer organizationId,String type) {
+        return documentViewRepository.findByStatusTrueAndType(organizationId,type);
     }
 
     @Override
@@ -94,9 +93,14 @@ public class DocumentViewServiceImpl implements DocumentViewService {
         };
     }
 
-    private static Specification<DocumentView> getFilteringSpecification(String name, Integer status, String locale){
+    private static Specification<DocumentView> getFilteringSpecification(String name,Integer organizationId, Integer status, String locale){
         return (Specification<DocumentView>) (root, criteriaQuery, criteriaBuilder) -> {
+            Join<DocumentView, User> joinUser = root.join("user");
+
             List<Predicate> predicates = new LinkedList<>();
+            if(organizationId!=null){
+                predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
+            }
             if(name != null){
                 if(locale.equals("oz"))
                     predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),"%" + name.toLowerCase() + "%"));
@@ -115,8 +119,8 @@ public class DocumentViewServiceImpl implements DocumentViewService {
     }
 
     @Override
-    public Page<DocumentView> findFiltered(String name, Integer status, String locale, Pageable pageable){
-        return documentViewRepository.findAll(getFilteringSpecification(name, status, locale), pageable);
+    public Page<DocumentView> findFiltered(String name,Integer organizationId, Integer status, String locale, Pageable pageable){
+        return documentViewRepository.findAll(getFilteringSpecification(name,organizationId, status, locale), pageable);
     }
 
 }

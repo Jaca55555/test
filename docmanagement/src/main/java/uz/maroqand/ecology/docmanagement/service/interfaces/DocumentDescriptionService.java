@@ -16,8 +16,8 @@ public interface DocumentDescriptionService {
     DocumentDescription getById(Integer id);
 
     List<DocumentDescription> getDescriptionList();
-
-    Page<DocumentDescription> getDescriptionFilterPage(String content, Pageable pageable);
+    List<DocumentDescription> findAllByOrganizationId(Integer organizationId);
+    Page<DocumentDescription> getDescriptionFilterPage(String content,Integer organizationId, Pageable pageable);
 
     DocumentDescription save(DocumentDescription desc);
 

@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -53,6 +54,10 @@ public class Journal {
     //(uz) deleted=TRUE bo'lsa o'chirilgan bo'ladi, deleted=FALSE bo'lsa aksincha
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", updatable = false, insertable = false)
+    private User user;
 
     @Column(name = "created_by_id")
     private Integer createdById;

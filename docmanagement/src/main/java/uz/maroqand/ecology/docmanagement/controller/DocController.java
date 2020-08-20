@@ -405,9 +405,10 @@ public class DocController {
             @RequestParam(name = "search", required = false) String search,
             @RequestParam(name = "page") Integer page
     ){
+        User user = userService.getCurrentUserFromContext();
         search = StringUtils.trimToNull(search);
         PageRequest pageRequest = new PageRequest(page-1, 15, Sort.Direction.DESC, "id");
-        Page<Document> documentPage = documentService.getRegistrationNumber(search, pageRequest);
+        Page<Document> documentPage = documentService.getRegistrationNumber(search,user.getOrganizationId(), pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Document document  : documentPage.getContent()) {
@@ -432,9 +433,10 @@ public class DocController {
             @RequestParam(name = "search", required = false) String search,
             @RequestParam(name = "page") Integer page
     ){
+        User user = userService.getCurrentUserFromContext();
         search = StringUtils.trimToNull(search);
         PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
-        Page<DocumentOrganization> documentOrganizationPage = documentOrganizationService.getOrganizationList(search, pageRequest);
+        Page<DocumentOrganization> documentOrganizationPage = documentOrganizationService.getOrganizationList(search,user.getOrganizationId(), pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (DocumentOrganization documentOrganization : documentOrganizationPage.getContent()) {

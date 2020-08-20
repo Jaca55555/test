@@ -42,6 +42,7 @@ public interface DepartmentService {
     Department save(Department department);
 
     List<Department> findByParentId(Integer parentId);
+    List<Department> findByOrganizationId(Integer organizationId);
 
     List<Department> getAll();
 

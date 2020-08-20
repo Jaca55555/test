@@ -33,9 +33,9 @@ public interface DocumentOrganizationService {
 
     List<DocumentOrganization> getList();
     List<DocumentOrganization> getLevel(Integer Id);
-    Page<DocumentOrganization> findFiltered(Integer id, String name, Integer status, Pageable pageable);
+    Page<DocumentOrganization> findFiltered(Integer id,Integer organizationId, String name, Integer status, Pageable pageable);
 
-    Page<DocumentOrganization> getOrganizationList(String name, Pageable pageable);
+    Page<DocumentOrganization> getOrganizationList(String name,Integer organizationId, Pageable pageable);
 
     DocumentOrganization create(DocumentOrganization documentOrganization);
 

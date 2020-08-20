@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
@@ -47,8 +48,8 @@ public class DocumentOrganizationController {
         Pageable pageable
     ){
         name = StringUtils.trimToNull(name);
-
-        Page<DocumentOrganization> docOrganizationPage = documentOrganizationService.findFiltered(id, name, status == 0 ? null : status, pageable);
+        User user = userService.getCurrentUserFromContext();
+        Page<DocumentOrganization> docOrganizationPage = documentOrganizationService.findFiltered(id,user.getOrganizationId(), name, status == 0 ? null : status, pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", docOrganizationPage.getTotalElements()); //Total elements
