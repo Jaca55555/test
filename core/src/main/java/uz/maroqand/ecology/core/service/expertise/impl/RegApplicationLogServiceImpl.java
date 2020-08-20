@@ -14,6 +14,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationLogRepository;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -33,10 +34,12 @@ import java.util.*;
 public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
     private final RegApplicationLogRepository regApplicationLogRepository;
+    private final UserService userService;
 
     @Autowired
-    public RegApplicationLogServiceImpl(RegApplicationLogRepository regApplicationLogRepository) {
+    public RegApplicationLogServiceImpl(RegApplicationLogRepository regApplicationLogRepository, UserService userService) {
         this.regApplicationLogRepository = regApplicationLogRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -139,6 +142,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     @Override
     public Integer getLogCount(Integer id) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
+        User user = userService.getCurrentUserFromContext();
         if (id == null) return 0;
         LogType logType;
         switch (id) {
@@ -164,7 +168,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         System.out.println("size==" + regApplicationLogList.size() + "   type=" + logType + "  id==" + id);
         Integer result = 0;
         for (RegApplicationLog regApplicationLog : regApplicationLogList) {
-            if (!regApplicationLog.getRegApplication().getDeleted() && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
+            if (regApplicationLog.getUpdateById()!=null  && regApplicationLog.getUpdateById()==user.getId() && !regApplicationLog.getRegApplication().getDeleted() && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
                     && (regApplicationLog.getStatus().equals(LogStatus.Initial) || regApplicationLog.getStatus().equals(LogStatus.Resend)
                     || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))) {
                     result++;

@@ -20,8 +20,8 @@ public class WSClient {
     private STWS port;
 
     public WSClient() {
-        service = new STWS_Service();
-        port = service.getSTWSPort();
+//        service = new STWS_Service();
+//        port = service.getSTWSPort();
     }
 
     public static synchronized WSClient getInstance(){
