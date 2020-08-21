@@ -263,6 +263,34 @@ public class OutgoingMailController {
         return DocTemplates.OutgoingMailNew;
     }
 
+    @RequestMapping(DocUrls.OutgoingMailListIn)
+    public String getOutgoingListInPage(Model model) {
+        User user = userService.getCurrentUserFromContext();
+
+        Integer departmentId = user.getDepartmentId();
+        Integer organizationId = user.getOrganizationId();
+        Integer outgoingMailType = DocumentTypeEnum.OutgoingDocuments.getId();
+        Integer userId = user.getId();
+        long totalOutgoing = documentService.countAll(outgoingMailType, organizationId, departmentId, userId);
+        long haveAdditionalDocument =  documentService.countAllWhichHaveAdditionalDocuments(outgoingMailType, organizationId, departmentId, userId);
+
+        model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId, userId));
+        model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId, userId));
+
+        model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
+        //additional document is null, 'answer not accepted translation tag'
+        model.addAttribute("answerNotAccepted", totalOutgoing - haveAdditionalDocument);
+        model.addAttribute("totalOutgoing", totalOutgoing);
+
+        model.addAttribute("departments", departmentService.getByOrganizationId(organizationId));
+        model.addAttribute("documentViews", documentViewService.getStatusActive());
+
+
+        model.addAttribute("view_link", DocUrls.OutgoingView);
+
+        return DocTemplates.OutgoingMailListIn;
+    }
+
     @Transactional
     @PostMapping(DocUrls.OutgoingMailNew)
     public String newOutgoingMail(Document document,

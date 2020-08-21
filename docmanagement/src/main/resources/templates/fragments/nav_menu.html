@@ -151,11 +151,17 @@
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
-                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 5px 15px">
-                         <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
-                         <span class="pcoded-mtext" th:text="#{doc_appeal.reg}" >Мурожаатларни руйхатга олиш</span>
-                     </a>
-                 </li>
+                <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 5px 15px">
+                    <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
+                    <span class="pcoded-mtext" th:text="#{doc_appeal.reg}" >Мурожаатларни руйхатга олиш</span>
+                </a>
+            </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListIn}" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="mdi mdi-clipboard-text-outline color-yellow"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_outgoing.listIn}" >Мурожаатларни руйхатга олиш</span>
+                    </a>
+                </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNewList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-alert-circle color-yellow"></i></span>

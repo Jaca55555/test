@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{doc_outgoing.list}">Kiruvchi Xatlar Ro'yxati</title>
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-menu-item-wrapper:hover{
+            color:white;
+            background:#62c462;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        #responsive-table-model_previous  {
+            padding: 5px;
+            border: 1px solid grey;
+            margin: 10px;
+        }
+
+        #responsive-table-model_next  {
+            padding: 5px;
+            border: 1px solid grey;
+            margin: 10px;
+        }
+        #responsive-table-model_first  {
+            padding: 5px;
+            border: 1px solid grey;
+            margin: 10px;
+        }
+        #responsive-table-model_last  {
+            padding: 5px;
+            border: 1px solid grey;
+            margin: 10px;
+        }
+        .paginate_input{
+            width: 30px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="background"></div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- main content start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12">
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap">
+                <h5 class="mb-0" style="align-self:center">
+                    <a href="/static/doc/" class="collapsed card-header-a"
+                       data-toggle="collapse" data-target="#collapseTopContainer"
+                       aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_outgoing.list}">Девонхона хужжатлар иш столи</a>
+                </h5>
+            </div>
+            <h5 class="office-h5 default-color"><span th:text="#{doc_outgoing.documentsCount}">Кирувчи хатлар статистикаси</span></h5>
+            <div class="responsive">
+                <div class="office-card">
+                    <div class="card dashboard-card border-primary-shadow">
+                        <div class="file-icon-container-small color-yellow"><span class="fas fa-clock"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(1)" >
+                            <h4 class="card-title" th:text="${inProgress}">10</h4>
+                            <h6 class="card-title" th:text="#{doc_outgoing.in_progress_count}">Жўнатилмаган</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-danger-shadow">
+                        <div class="file-icon-container-small color-green"><span class="hawcons-icon-136-document-edit"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(2)" >
+                            <h4 class="card-title" th:text="${todayDocuments}">20</h4>
+                            <h6 class="card-title" th:text="#{doc_outgoing.today_document_count}">Бугун рўйхатга олинган</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-green-shadow">
+                        <div class="file-icon-container-small color-blue"><span class="hawcons-icon-57-document-download"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(3)" >
+                            <h4 class="card-title" th:text="${haveAdditionalDocument}">40</h4>
+                            <h6 class="card-title"  th:text="#{doc_outgoing.answer_accepted_document_count}">Хатга жавоб олинган</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-green-shadow">
+                        <div class="file-icon-container-small color-orange
+"><span class="hawcons-icon-69-document-text"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(4)" >
+                            <h4 class="card-title" th:text="${answerNotAccepted}">40</h4>
+                            <h6 class="card-title" th:text="#{doc_outgoing.answer_not_accepted_document_count}">Жавобсиз хужжатлар</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="office-card">
+                    <div class="card dashboard-card border-green-shadow">
+                        <div class="file-icon-container-small color-primary"><span class="hawcons-icon-93-inbox-upload"></span></div>
+                        <div class="card-body" style="display: inline-block;text-align: center;" onclick="getDatatableConnect(5)" >
+                            <h4 class="card-title" th:text="${totalOutgoing}">40</h4>
+                            <h6 class="card-title"  th:text="#{doc_outgoing.all_doc_count}">Жами чиқувчи хатлар</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card parent-card">
+            <div class="card-header flex-space-between-nowrap">
+                <h5 class="mb-0" style="align-self:center">
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+
+                </h5>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a href="/static/doc/" class="collapsed card-header-a"
+                       data-toggle="collapse" data-target="#collapseOne"
+                       aria-expanded="false" aria-controls="collapseOne">
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 accordion parent-card" id="accordion">
+                <!-- filters card begins here -->
+                <form style="border-radius: 5px" id="filter">
+                    <div class="row card-body" style="padding-bottom: 0;">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="tin" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
+                            <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
+                                <option value="" th:text="#{sys_select}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="applicationId" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
+                            <input type="text" class="form-control" id="registration_number">
+                        </div>
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
+                            <div class="row">
+                                <div class="col-6" style="padding-left: 0;">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
+                                    <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                                </div>
+                                <div class="col-6" style="padding-right:0;">
+                                    <input autocomplete="off" class="form-control datepicker date" id="date_end" th:placeholder="#{date_end}">
+                                    <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-12">
+                            <label for="document_view_id" class="control-label" th:text="#{doc_outgoing.documentView}">Хужжат тури</label>
+                            <select class="col-sm-12 singleSelect" id="document_view_id">
+                                <option value th:text="#{sys_select}"></option>
+                                <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label class="control-label"><span th:text="#{doc_outgoing.content}">Хужжатнинг қисқача мазмуни</span></label>
+                                <div class="col-sm-12 p0">
+                                    <input type="text" class="form-control" id="content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="parent-card col-xl-12 mh-1000 pr-0 pl-0">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item card-nav-item text-center">
+                    <a class="nav-link text-uppercase show active" id="profile-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(7)"
+                       role="tab" aria-controls="profile" aria-selected="false" th:text="#{sys_document.info_tab_not_completed}">Чикиб кетмаган</a>
+                </li>
+                <li class="nav-item card-nav-item text-center">
+                    <a class="nav-link text-uppercase show " id="home-tab" data-toggle="tab" href="#home" onclick="getDatatableConnect(6)" role="tab"
+                       aria-controls="home" aria-selected="true" th:text="#{sys_document.info_tab_total}">Жами</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="table-responsive">
+                        <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="dynamicTable" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
+                                        <thead>
+                                        <tr role="row">
+                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1"  tabindex="0">
+                                            <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc w-15" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{doc_outgoing.registrationNumber}" >Регистрация рақами</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{doc_outgoing.registrationDate}" >Регистрация санаси</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-20" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{doc_outgoing.content}"> Кирувчи хат маълумотлари</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
+                                            </th>
+                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
+                                                <span th:text="#{sys_document.outgoing_resolution}">Резолюция ва иштирокчилар</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--  main content end -->
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/input.js}"></script>
+
+<script th:inline="javascript">
+
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingListAjax}]];
+    let viewLink = [[${view_link}]];
+    let changeStatusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailChangeStatus}]];
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+    let selected = [[#{sys_select}]];
+    $('#document_organization_id').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
+
+    $('.singleSelect2').select2({
+        placeholder: selected,
+        allowClear: true
+    });
+
+
+    let statuses = {};
+    statuses[1] = [[#{task_status.new}]];
+    statuses[2] = [[#{task_status.inProgress}]];
+    statuses[3] = [[#{task_status.complete}]];
+
+
+</script>
+
+<script th:inline="none">
+
+    let labelView = "view";
+    let dataDatatableSelector;
+    let thead;
+
+    function renderActionsColumn(data, type, row, meta) {
+        let currentViewLink = viewLink + '?id=' + row[0];
+        let html = '';
+
+        html += `<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink}" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>`;
+
+        return html;
+    }
+
+
+    function changeStatus(btn, id, targetStatus){
+        dropDownValues = $(btn).parent();
+        //  console.log();
+
+        fetch(changeStatusLink + `?id=${id}&target_status_id=${targetStatus}`)
+            .then((response) =>{
+                if(response.ok){
+                    return response.json()
+                }
+            })
+            .then((data) => {
+
+                dropDownValues.siblings()[0].innerHTML = statuses[data.changedOnStatusId];
+                dropDownValues[0].innerHTML = `
+                    <button class="dropdown-item btn-block" onclick="changeStatus(this, ${id}, ${data.firstId})">${data.first}</button>
+                     <button class="dropdown-item btn-block" onclick="changeStatus(this, ${id}, ${data.secondId})">${data.second}</button>
+                `;
+                dropDownValues.parent().parent().siblings()[4].innerHTML = data.updatedAt;
+
+            })
+    }
+
+    function renderChangeColumn(data, type, row, meta) {
+
+        let html = '';
+
+        let text = translateToSentOrNotSent(data);
+
+        html += `<div class="btn-group mb-2 mr-2">
+                                            <button type="button"
+                         class="btn-rounded btn btn-primary">${text}</button>
+                 </div>`;
+
+        return html;
+    }
+
+    function clearFilter() {
+        $('#accordion .singleSelect').val(null).select2();
+        $('#accordion input').val('');
+        $('#filter').trigger('change');
+    }
+
+    function datatableConnect(tab = 6) {
+        cDataTable = dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 10,
+            lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            pagingType: 'input',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                dataToSend.document_organization_id = $('#document_organization_id').val();
+                dataToSend.registration_number = $('#registration_number').val();
+                dataToSend.date_begin = $('#date_begin').val();
+                dataToSend.date_end = $('#date_end').val();
+                dataToSend.document_view_id = $('#document_view_id').val();
+                dataToSend.content = $('#content').val();
+                dataToSend.document_status_id_to_exclude = status;
+                dataToSend.tab = tab;
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id', visible: false},
+                {data: 1, name: 'registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[1]+'</a>';
+                        return html;
+                    },
+                    className: "w-15 text-left"
+                },
+                {data: 2, name: 'registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
+                        return html;
+                    },
+                    className: "w-10 text-left"
+                },
+                {data: 3, name: 'content',
+                    className: "w-20 text-left"
+                },
+                {data: 4, name: 'createdAt',className: "text-center"},
+                {data: 5, name: 'updateAt',className: "text-center"},
+                {render: renderChangeColumn, orderable: false, className: "text-center"},
+                {data: 7, name: 'performerName'},
+            ],
+            rowCallback: function (row, data) {
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
+            },
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect(tab) {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect(tab);
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#dynamicTable');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+        $('#filter').on('change', function () {
+            getDatatableConnect();
+        });
+    });
+
+    function translateToSentOrNotSent(text_) {
+        let currentLanguage = getCurrentLanguage();
+        let text = '';
+
+        if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
+            if (currentLanguage === 'oz') {
+                text = 'Жунатилмаган';
+            } else if (currentLanguage === 'uz') {
+                text = 'Junatilmagan';
+            } else if (currentLanguage === 'ru') {
+                text = 'Неотправлено';
+            }
+            return text;
+        }else if(text_ === "document_status.completed"){
+            if(currentLanguage === 'oz') {
+                text = 'Жунатилган';
+            }
+            else if(currentLanguage === 'uz'){
+                text = 'Junatilgan';
+            }else if(currentLanguage === 'ru'){
+                text = 'Отправлено';
+            }
+            return text;
+        }else return '';
+    }
+
+</script>
+
+
+</body>
+</html>
