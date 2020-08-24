@@ -104,7 +104,7 @@ public class IncomingRegistrationController {
         Date end = calendar.getTime();
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date begin = calendar.getTime();
-
+        User user = userService.getCurrentUserFromContext();
 
         model.addAttribute("new_", taskService.countAllTasksByDocumentTypeIdAndTaskStatus(organizationId, departmentId, 1, TaskStatus.New.getId()));
 
@@ -118,7 +118,7 @@ public class IncomingRegistrationController {
 
         model.addAttribute("all", taskService.countAllTasksByDocumentTypeId(organizationId, departmentId, 1));
 
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"IncomingDocuments"));
         model.addAttribute("organizationList", organizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
@@ -196,7 +196,7 @@ public class IncomingRegistrationController {
         docFilterDTO.setExecuteDateEnd(deadlineDateEnd!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateEnd):null);
         docFilterDTO.setDocumentType(DocumentTypeEnum.IncomingDocuments.getId());
         docFilterDTO.setDocumentStatuses(status);
-        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO,user.getOrganizationId(), pageable);
 
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
@@ -273,7 +273,7 @@ public class IncomingRegistrationController {
         documentStatuses.add(DocumentStatus.New);
         docFilterDTO.setDocumentStatuses(documentStatuses);
         docFilterDTO.setChief(user.getId());
-        Page<Document> documentPage = documentService.findFiltered(docFilterDTO, pageable);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO,user.getOrganizationId(), pageable);
 
         List<Document> documentList = documentPage.getContent();
         List<Object[]> JSONArray = new ArrayList<>(documentList.size());
@@ -343,14 +343,14 @@ public class IncomingRegistrationController {
         model.addAttribute("documentSub", new DocumentSub());
         List<User> userList = userService.getEmployeesForForwarding(user.getOrganizationId());
 
-        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
+        model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),1));//todo 1
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"IncomingDocuments"));
         model.addAttribute("userList", userList);
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("taskContentList", documentTaskContentService.getTaskContentList());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("taskContentList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -514,18 +514,24 @@ public class IncomingRegistrationController {
         if (documentSub.getOrganizationId()!=null){
             documentOrdanization = organizationService.getById(documentSub.getOrganizationId());
         }
+
+        User user = userService.getCurrentUserFromContext();
+        System.out.println("====================================");
+        System.out.println(journalService.getStatusActive(user.getOrganizationId(),1));
+        System.out.println("====================================");
+
         model.addAttribute("document", document);
         model.addAttribute("additionalDocument", additionalDocument);
         model.addAttribute("additionalDocumentText", additionalDocumentText);
         model.addAttribute("documentOrdanization", documentOrdanization);
 
-        model.addAttribute("journalList", journalService.getStatusActive(1));//todo 1
-        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType("IncomingDocuments"));
+        model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),1));//todo 1
+        model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"IncomingDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
-        model.addAttribute("documentTaskContent",documentTaskContentService.getTaskContentList());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("documentTaskContent",documentTaskContentService.getTaskContentList(user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
 
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -593,7 +599,7 @@ public class IncomingRegistrationController {
                 isExecuteForm = true;
             }
     //        List<User> userList = userService.getEmployeesForForwarding(document.getOrganizationId());
-
+            User user = userService.getCurrentUserFromContext();
             model.addAttribute("document", document);
             model.addAttribute("userList", userList);
             model.addAttribute("tasksubtype",document.getExecuteForm());
@@ -601,7 +607,7 @@ public class IncomingRegistrationController {
             model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
 
             System.out.println(document.getExecuteForm().getName());
-            model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
+            model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
             model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
             model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
             model.addAttribute("back_url", DocUrls.IncomingRegistrationView+"?id=" + document.getId());

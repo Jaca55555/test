@@ -32,12 +32,13 @@ public interface DocumentSubService {
 
     DocumentSub getById(Integer id);
 
-    Page<DocumentSub> findFiltered(Integer documentTypeId, Integer documentStatusId, Integer documentOrganizationId, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
+    Page<DocumentSub> findFiltered(Integer documentTypeId,Integer organizationId, Integer documentStatusId, Integer documentOrganizationId, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
 
     DocumentSub findOneByDocumentId(Integer documentId);
 
     Specification<DocumentSub> filteringSpecificationForOutgoingForm(
             Integer documentTypeId,
+            Integer organizationId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
             String registrationNumber,

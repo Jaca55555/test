@@ -60,10 +60,10 @@ public class InnerController {
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
         model.addAttribute("performerList", userService.getEmployeeList());
         model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(),user.getId()));
-        model.addAttribute("journalList", journalService.getStatusActive(3));//todo 3
+        model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),1));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActive());
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("descriptionList", documentDescriptionService.getDescriptionList());
+        model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         return DocTemplates.InnerList;
     }
 
@@ -288,7 +288,7 @@ public class InnerController {
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.InnerTaskSubmit);
         model.addAttribute("back_url", DocUrls.InnerView+"?id=" + documentTaskSub.getId());

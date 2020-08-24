@@ -332,7 +332,7 @@ public class ReferenceController {
         model.addAttribute("task", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("userList", userList);
-        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList());
+        model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("action_url", DocUrls.ReferenceTaskSubmit);
         model.addAttribute("back_url", DocUrls.ReferenceView+"?id=" + documentTaskSub.getId());

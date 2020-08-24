@@ -58,8 +58,9 @@ public class JournalController {
             JournalFilterDTO filterDTO,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
         HashMap<String, Object> result = new HashMap<>();
-        Page<Journal> journalPage = journalService.getFiltered(filterDTO, pageable);
+        Page<Journal> journalPage = journalService.getFiltered(filterDTO,user.getOrganizationId(), pageable);
         List<Object[]> JSONArray = new ArrayList<>(journalPage.getContent().size());
         for (Journal journal : journalPage.getContent()) {
             JSONArray.add(new Object[]{

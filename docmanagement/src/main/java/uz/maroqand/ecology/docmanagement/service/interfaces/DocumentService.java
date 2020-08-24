@@ -39,9 +39,9 @@ public interface DocumentService {
     Document createReference(Integer documentTypeId, Document document, User user);
     void update(Document document);
 
-    Page<Document> findFiltered(DocFilterDTO filterDTO, Pageable pageable);
+    Page<Document> findFiltered(DocFilterDTO filterDTO, Integer organizationId, Pageable pageable);
 
-    Page<Document> getRegistrationNumber(String name, Pageable pageable);
+    Page<Document> getRegistrationNumber(String name,Integer organizationId, Pageable pageable);
 
     Long countAll(Integer documentTypeId, Integer organizationId);
 

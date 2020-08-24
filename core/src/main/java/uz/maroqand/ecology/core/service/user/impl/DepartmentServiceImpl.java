@@ -94,6 +94,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentList1;
     }
 
+    @Override
+    public List<Department> findByOrganizationId(Integer organizationId) {
+        return departmentRepository.findAllByDeletedFalseAndOrganizationId(organizationId);
+    }
+
     private static Specification<Department> getFilteringSpecification(
             final Integer departmentId,
             final Integer organizationId,

@@ -10,16 +10,15 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.dto.JournalFilterDTO;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.Journal;
 import uz.maroqand.ecology.docmanagement.repository.JournalRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.JournalService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +59,8 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     @Cacheable("journalGetStatusActive")
-    public List<Journal> getStatusActive(Integer documentTypeId) {
-        return journalRepository.findByStatusTrueAndDocumentTypeId(documentTypeId);
+    public List<Journal> getStatusActive(Integer organizationId,Integer documentTypeId) {
+        return journalRepository.findByStatusTrueAndDocumentType(organizationId,documentTypeId);
     }
 
     @Override
@@ -71,18 +70,23 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
-    public Page<Journal> getFiltered(JournalFilterDTO filterDTO, Pageable pageable) {
-        return journalRepository.findAll(getFilteringSpecification(filterDTO), pageable);
+    public Page<Journal> getFiltered(JournalFilterDTO filterDTO, Integer organizationId,Pageable pageable) {
+        return journalRepository.findAll(getFilteringSpecification(filterDTO,organizationId), pageable);
     }
 
     @Override
-    public DataTablesOutput<Journal> getAll(DataTablesInput input) {
-        return journalRepository.findAll(input,getFilteringSpecification(new JournalFilterDTO()));
+    public DataTablesOutput<Journal> getAll(DataTablesInput input,Integer organizationId) {
+        return journalRepository.findAll(input,getFilteringSpecification(new JournalFilterDTO(),organizationId));
     }
 
-    private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO) {
+    private static Specification<Journal> getFilteringSpecification(JournalFilterDTO filterDTO,Integer organizationId) {
         return (Specification<Journal>) (root, criteriaQuery, criteriaBuilder) -> {
+            Join<Journal, User> joinUser = root.join("user");
+
             List<Predicate> predicates = new LinkedList<>();
+            if(organizationId!=null){
+                predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
+            }
             if (filterDTO.getDocTypeId() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("documentTypeId"), filterDTO.getDocTypeId()));
             }

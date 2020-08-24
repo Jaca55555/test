@@ -11,6 +11,7 @@ import org.springframework.data.domain.Example;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentSubRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -108,6 +109,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     @Override
     public Page<DocumentSub> findFiltered(
             Integer documentTypeId,
+            Integer organizationId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
             String registrationNumber,
@@ -124,6 +126,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
     ){
         return documentSubRepository.findAll(filteringSpecificationForOutgoingForm(
                 documentTypeId,
+                organizationId,
                 documentStatusIdToExclude,
                 documentOrganizationId,
                 registrationNumber,
@@ -141,6 +144,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
 
     public Specification<DocumentSub> filteringSpecificationForOutgoingForm(
             Integer documentTypeId,
+            Integer organizationId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
             String registrationNumber,
@@ -160,7 +164,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Join<DocumentSub, Document> joinDocument = root.join("document");
             Join<DocumentSub, Set<DocumentOrganization>> joinOrganizations = root.join("documentOrganizations");
 
-            if(documentOrganizationId != null)
+        if(organizationId != null)
+            predicates.add(criteriaBuilder.equal(joinDocument.get("organizationId"), organizationId));
+
+        if(documentOrganizationId != null)
                 predicates.add(criteriaBuilder.equal(joinOrganizations.get("id"), documentOrganizationId));
 
             if(documentTypeId != null)
