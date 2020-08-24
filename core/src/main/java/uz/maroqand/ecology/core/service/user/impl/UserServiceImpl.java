@@ -299,20 +299,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getEmployeesForDocManageAndIsExecutive(String type,Integer organizationId) {
+    public List<User> getEmployeesForDocManageAndIsExecutive(String type) {
         List<User> users = new ArrayList<>();
         if (type.equals("chief"))
-            users = userRepository.findAllByDepartmentIdNotNullAndIsExecuteChiefTrueAndOrganizationId(organizationId);
+            users = userRepository.findAllByDepartmentIdNotNullAndIsExecuteChiefTrue();
         return users;
     }
 
     @Override
-    public List<User> getEmployeesForNewDoc(String type,Integer organizationId) {
+    public List<User> getEmployeesForNewDoc(String type) {
         List<User> users = new ArrayList<>();
         if (type.equals("chief"))
-            users = userRepository.findAllByIsExecuteChiefTrueAndOrganizationId(organizationId);
+            users = userRepository.findAllByIsExecuteChiefTrue();
         if (type.equals("controller"))
-            users = userRepository.findAllByIsExecuteControllerTrueAndOrganizationId(organizationId);
+            users = userRepository.findAllByIsExecuteControllerTrue();
         return users;
     }
 

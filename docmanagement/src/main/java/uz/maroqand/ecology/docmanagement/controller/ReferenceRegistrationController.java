@@ -265,8 +265,8 @@ public class ReferenceRegistrationController {
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList(user.getOrganizationId()));
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -441,8 +441,8 @@ public class ReferenceRegistrationController {
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"AppealDocuments"));
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
 
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
