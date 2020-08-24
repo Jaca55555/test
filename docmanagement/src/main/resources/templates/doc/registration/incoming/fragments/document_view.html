@@ -54,7 +54,8 @@
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
-                <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
+                <div class="col-md-6 p0" style="float: right;" th:if="${documentSub.organizationId!=null}">
+                    <span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
             </div>
 
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">

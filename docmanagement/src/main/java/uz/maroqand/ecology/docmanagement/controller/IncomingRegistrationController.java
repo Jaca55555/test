@@ -604,9 +604,10 @@ public class IncomingRegistrationController {
             model.addAttribute("userList", userList);
             model.addAttribute("tasksubtype",document.getExecuteForm());
             model.addAttribute("isExecuteForm", isExecuteForm);
-            model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+if(document.getExecuteForm()!=null){model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+}
 
-            System.out.println(document.getExecuteForm().getName());
+//            System.out.println(document.getExecuteForm().getName());
             model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
             model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
             model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);
