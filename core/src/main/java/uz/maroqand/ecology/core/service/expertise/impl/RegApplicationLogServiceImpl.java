@@ -168,11 +168,24 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         System.out.println("size==" + regApplicationLogList.size() + "   type=" + logType + "  id==" + id);
         Integer result = 0;
         for (RegApplicationLog regApplicationLog : regApplicationLogList) {
-            if (regApplicationLog.getUpdateById()!=null  && regApplicationLog.getUpdateById()==user.getId() && !regApplicationLog.getRegApplication().getDeleted() && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
-                    && (regApplicationLog.getStatus().equals(LogStatus.Initial) || regApplicationLog.getStatus().equals(LogStatus.Resend)
-                    || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))) {
+            if (regApplicationLog.getType().equals(LogType.AgreementComplete)){
+                System.out.println("regId" +regApplicationLog.getRegApplicationId() + " logId=" + regApplicationLog.getId() + " status=" + regApplicationLog.getStatus().name() );
+            }
+            if ( !regApplicationLog.getRegApplication().getDeleted()
+                    && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
+                    && (regApplicationLog.getStatus().equals(LogStatus.Initial)|| regApplicationLog.getStatus().equals(LogStatus.Resend)
+                    || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))
+            ) {
+                if (logType.equals(LogType.Agreement) || logType.equals(LogType.Performer)) {
+                    if (regApplicationLog.getUpdateById() != null && regApplicationLog.getUpdateById().equals(user.getId())) {
+                        result++;
+                        hashMap.put(regApplicationLog.getRegApplicationId(), regApplicationLog.getRegApplicationId());
+                    }
+                }else{
                     result++;
                     hashMap.put(regApplicationLog.getRegApplicationId(), regApplicationLog.getRegApplicationId());
+                }
+
             }
         }
         return result;

@@ -602,14 +602,27 @@
                 $.each(response, function (key, value) {
                     if(value.id===id){
                         var name = '';
+                        var nameShort = '';
                         switch (getCurrentLanguage()){
-                            case 'uz':name=value.name;break;
-                            case 'oz':name=value.nameOz;break;
-                            case 'ru':name=value.nameRu;break;
-                            default :name=value.nameRu;break;
+                            case 'uz':
+                                name=value.name;
+                                nameShort=value.nameShort;
+                                break;
+                            case 'oz':
+                                name=value.nameOz;
+                                nameShort=value.nameShortOz;
+                                break;
+                            case 'ru':
+                                name=value.nameRu;
+                                nameShort=value.nameShortRu;
+                                break;
+                            default :
+                                name=value.nameRu;
+                                nameShort=value.nameShortRu;
+                                break;
                         }
                         console.log('material='+name);
-                        $('#materials-'+id+'-label').text(name);
+                        $('#materials-'+id+'-label').text(nameShort + " - " + name);
                     }
                 });
             });
