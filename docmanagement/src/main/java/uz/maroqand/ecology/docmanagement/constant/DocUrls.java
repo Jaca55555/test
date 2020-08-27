@@ -227,7 +227,11 @@ public class DocUrls {
     private static final String OutgoingMail = Prefix + "/outgoing_mail";
     public static final String OutgoingMailNew = OutgoingMail + "/new";
     public static final String OutgoingMailList = OutgoingMail + "/list";
+    public static final String OutgoingMailListIn = OutgoingMail + "/list_in";
+    public static final String OutgoingMailTask = OutgoingMail + "/task";
+    public static final String OutgoingMailListView = OutgoingMail + "/list_view";
     public static final String OutgoingMailListAjax = OutgoingMailList + "/ajax";
+    public static final String OutgoingMailListInAjax = OutgoingMailListIn + "/ajax";
     public static final String OutgoingMailView = OutgoingMail + "/view";
     public static final String OutgoingMailEdit = OutgoingMail + "/edit";
     public static final String OutgoingRegNumber = OutgoingMail + "/regNumber";

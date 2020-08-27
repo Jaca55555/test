@@ -436,7 +436,7 @@ public class DocController {
         User user = userService.getCurrentUserFromContext();
         search = StringUtils.trimToNull(search);
         PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
-        Page<DocumentOrganization> documentOrganizationPage = documentOrganizationService.getOrganizationList(search,user.getOrganizationId(), pageRequest);
+        Page<DocumentOrganization> documentOrganizationPage = documentOrganizationService.getOrganizationList(search,null, pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (DocumentOrganization documentOrganization : documentOrganizationPage.getContent()) {

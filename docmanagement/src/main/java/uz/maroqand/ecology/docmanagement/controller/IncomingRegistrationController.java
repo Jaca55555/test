@@ -349,8 +349,8 @@ public class IncomingRegistrationController {
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         model.addAttribute("taskContentList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -530,8 +530,8 @@ public class IncomingRegistrationController {
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         model.addAttribute("documentTaskContent",documentTaskContentService.getTaskContentList(user.getOrganizationId()));
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
 
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
@@ -604,9 +604,10 @@ public class IncomingRegistrationController {
             model.addAttribute("userList", userList);
             model.addAttribute("tasksubtype",document.getExecuteForm());
             model.addAttribute("isExecuteForm", isExecuteForm);
-            model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+if(document.getExecuteForm()!=null){model.addAttribute("tasksubtype1",document.getExecuteForm().getName());
+}
 
-            System.out.println(document.getExecuteForm().getName());
+//            System.out.println(document.getExecuteForm().getName());
             model.addAttribute("descriptionList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
             model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
             model.addAttribute("action_url", DocUrls.IncomingRegistrationTaskSubmit);

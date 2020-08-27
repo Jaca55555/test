@@ -284,14 +284,14 @@ public class InnerRegistrationController {
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),1));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         model.addAttribute("taskContentList",documentTaskContentService.getTaskContentList(user.getOrganizationId()));
-        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
         model.addAttribute("action_url", DocUrls.InnerRegistrationNew);
@@ -410,8 +410,8 @@ public class InnerRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
-        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief",user.getOrganizationId()));
-        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller",user.getOrganizationId()));
+        model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
+        model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
 
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
