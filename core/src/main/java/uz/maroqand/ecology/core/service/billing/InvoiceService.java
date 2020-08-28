@@ -23,6 +23,8 @@ public interface InvoiceService {
 
     Invoice getInvoice(Integer id);
 
+    Double getInvoiceResidualAmount(Invoice invoice); //qoldiq summa to'lanmagan
+
     Invoice getInvoice(String invoice);
 
     Invoice checkInvoiceStatus(Invoice invoice);

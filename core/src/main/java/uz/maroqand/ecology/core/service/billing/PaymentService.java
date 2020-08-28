@@ -38,4 +38,6 @@ public interface PaymentService {
             String failUrl
     );
 
+    Payment save(Payment payment);
+
 }

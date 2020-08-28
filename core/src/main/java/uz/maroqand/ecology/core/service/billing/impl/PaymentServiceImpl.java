@@ -151,6 +151,11 @@ public class PaymentServiceImpl implements PaymentService {
         return resultJson;
     }
 
+    @Override
+    public Payment save(Payment payment) {
+        return paymentRepository.save(payment);
+    }
+
     private Payment upayPrePayment(Invoice invoice,String cardNumber, String phone, String cardMonth, String cardYear) {
         Payment payment = new Payment();
         cardNumber = FixedSymbolOperation.getOnlyDigits(cardNumber);

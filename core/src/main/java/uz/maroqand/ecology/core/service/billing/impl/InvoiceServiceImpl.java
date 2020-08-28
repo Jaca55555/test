@@ -204,6 +204,19 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.findByIdAndDeletedFalse(id);
     }
 
+    @Override
+    public Double getInvoiceResidualAmount(Invoice invoice) {
+
+        Double amount = invoice.getAmount();
+        List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
+        for (Payment payment:paymentList) {
+            if (payment.getStatus().equals(PaymentStatus.Success) || payment.getStatus().equals(PaymentStatus.AlreadyPaid)){
+                amount-=payment.getAmount();
+            }
+        }
+        return amount;
+    }
+
     public Invoice getInvoice(String invoice) {
         return invoiceRepository.findByInvoiceAndDeletedFalse(invoice);
     }

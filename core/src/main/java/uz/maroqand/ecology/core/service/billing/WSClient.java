@@ -12,16 +12,16 @@ import uz.maroqand.ecology.core.integration.upay.*;
 @Service
 public class WSClient {
 
-    private static final String UPAY_API_KEY = "0BB4AEC1710521C12EE76289D9440817";
-    private static final Integer SERVICE_ID = 282;
+    private static final String UPAY_API_KEY = "B337E84DE8752B27EDA3A12363109E80";
+    private static final Integer SERVICE_ID = 502;
     private static final String LANG = "ru";
     private static WSClient wsClient = null;
     private STWS_Service service;
     private STWS port;
 
     public WSClient() {
-//        service = new STWS_Service();
-//        port = service.getSTWSPort();
+        service = new STWS_Service();
+        port = service.getSTWSPort();
     }
 
     public static synchronized WSClient getInstance(){
