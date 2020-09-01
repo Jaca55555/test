@@ -145,7 +145,7 @@ public class OutgoingController {
     @ResponseBody
     public HashMap<String, Object> getOutgoingDocumentListAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "document_organization_id", required = false)List<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -154,11 +154,14 @@ public class OutgoingController {
             @RequestParam(name = "tab", required = false)Integer tab,
             Pageable pageable
     ){
+
         registrationNumber = StringUtils.trimToNull(registrationNumber);
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-
+        System.out.println("=========================================");
+        System.out.println(documentOrganizationIds);
+        System.out.println("=========================================");
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
@@ -167,7 +170,7 @@ public class OutgoingController {
         User user = userService.getCurrentUserFromContext();
         Integer departmentId = user.getDepartmentId();
         Integer performerId = user.getId();
-
+        Integer documentOrganizationId=null;
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
         MutableBoolean findTodayS = new MutableBoolean();
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
@@ -180,7 +183,6 @@ public class OutgoingController {
             statuses.clear();
             statuses.add(DocumentStatus.InProgress);
         }
-
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
@@ -189,6 +191,7 @@ public class OutgoingController {
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
                 documentOrganizationId,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
@@ -211,12 +214,14 @@ public class OutgoingController {
                 if(document.getCreatedById() != userId && document.getPerformerId() != userId)
                     continue;
             }
+            System.out.println(documentSub.getDocumentOrganizations());
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent() != null ? document.getContent() : "",
-                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+//                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
+                    documentSub.getDocumentOrganizations(),
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     document.getStatus().getName(),
                     (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")

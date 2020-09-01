@@ -135,18 +135,17 @@
                 <!-- filters card begins here -->
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
-<!--                        <div class="form-group col-md-4 col-sm-12">-->
-<!--                        <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>-->
-<!--                        <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">-->
-<!--                            <option value="" th:text="#{sys_select}"></option>-->
-<!--                        </select>-->
-<!--                    </div>-->
                         <div class="form-group col-md-4 col-sm-12">
-                            <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
-                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">
-                                <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
-                            </select>
-                        </div>
+                        <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
+                        <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required">
+                            <option value="" th:text="#{sys_select}"></option>
+                        </select>
+                    </div>
+<!--                        <div class="form-group col-md-4 col-sm-12">-->
+<!--                            <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>-->
+<!--                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">-->
+<!--                            </select>-->
+<!--                        </div>-->
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="registration_number" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
@@ -218,7 +217,7 @@
                                                 <span th:text="#{doc_outgoing.content}"> Кирувчи хат маълумотлари</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
-                                                <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
+                                                <span th:text="#{sys_document.Organization}">Хужжат санаси</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting w-10" colspan="1" rowspan="1" tabindex="0">
                                                 <span th:text="#{sys_document.taskDeadline}"> Ижро муддати</span>
@@ -358,6 +357,8 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
 
                 dataToSend.document_organization_id = $('#document_organization_id').val();
+                console.log(typeof $('#document_organization_id').val());
+                console.log($('#document_organization_id').val());
                 dataToSend.registration_number = $('#registration_number').val();
                 dataToSend.date_begin = $('#date_begin').val();
                 dataToSend.date_end = $('#date_end').val();
@@ -393,7 +394,7 @@
                 {data: 3, name: 'content',
                     className: "w-20 text-left"
                 },
-                {data: 4, name: 'createdAt',className: "text-center"},
+                {data: 4, name: 'createdAt', "render": "[, ].name",  className: "text-center"},
                 {data: 5, name: 'updateAt',className: "text-center"},
                 {render: renderChangeColumn, orderable: false, className: "text-center"},
                 {data: 7, name: 'performerName'},
@@ -434,19 +435,19 @@
 
         if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
             if (currentLanguage === 'oz') {
-                text = 'Жунатилмаган';
+                text = 'Жўнатилмаган';
             } else if (currentLanguage === 'uz') {
-                text = 'Junatilmagan';
+                text = `Jo'natilmagan`;
             } else if (currentLanguage === 'ru') {
                 text = 'Неотправлено';
             }
             return text;
         }else if(text_ === "document_status.completed"){
             if(currentLanguage === 'oz') {
-                text = 'Жунатилган';
+                text = 'Жўнатилган';
             }
             else if(currentLanguage === 'uz'){
-                text = 'Junatilgan';
+                text = `Jo'natilgan`;
             }else if(currentLanguage === 'ru'){
                 text = 'Отправлено';
             }
