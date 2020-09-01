@@ -253,6 +253,8 @@ public class AgreementController {
             regApplication.setAgreementStatus(LogStatus.Denied);
             regApplication.setLogIndex(regApplication.getLogIndex()+1);
             RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
+            performerLogNext.setUpdateById(regApplicationLog.getCreatedById());
+            regApplicationLogService.updateDocument(performerLogNext);
             regApplication.setPerformerLogIdNext(performerLogNext.getId());
             regApplicationService.update(regApplication);
 

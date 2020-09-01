@@ -39,6 +39,10 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     List<User> findByOrganizationId(Integer organizationId);
 
+    List<User> findByOrganizationIdAndIsPerformerTrueAndEnabledTrue(Integer organizationId);
+
+    List<User> findByOrganizationIdAndIsAgreementTrueAndEnabledTrue(Integer organizationId);
+
     List<User> findByDepartmentIdInAndEnabledTrue(Set<Integer> departmentIds);
 
     User findByTelegramUserIdAndEnabledTrue(Integer telegramUserId);

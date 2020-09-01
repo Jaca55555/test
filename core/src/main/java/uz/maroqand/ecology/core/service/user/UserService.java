@@ -56,6 +56,7 @@ public interface UserService {
             Integer organizationId,
             Integer departmentId,
             Integer positionId,
+            Integer controls,//for 1=performer or 2=agreement
             Pageable pageable
     );
 
@@ -64,6 +65,10 @@ public interface UserService {
     public User getCurrentUserFromContext();
 
     List<User> getEmployeesForForwarding(Integer organizationId);
+
+    List<User> getEmployeesPerformerForForwarding(Integer organizationId);
+
+    List<User> getEmployeesAgreementForForwarding(Integer organizationId);
 
     LogType getUserLogType(User user);
 

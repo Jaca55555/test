@@ -143,9 +143,10 @@ public class UserServiceImpl implements UserService {
             Integer organizationId,
             Integer departmentId,
             Integer positionId,
+            Integer controls,//for 1=performer or 2=agreement
             Pageable pageable
     ) {
-        return userRepository.findAll(getFilteringForEmployeeSpecification(userId,username,lastName,firstName,middleName,organizationId,departmentId,positionId),pageable);
+        return userRepository.findAll(getFilteringForEmployeeSpecification(userId,username,lastName,firstName,middleName,organizationId,departmentId,positionId,controls),pageable);
     }
 
     private static Specification<User> getFilteringSpecification(
@@ -211,7 +212,9 @@ public class UserServiceImpl implements UserService {
             final String middleName,
             final Integer organizationId,
             final Integer departmentId,
-            final Integer positionId
+            final Integer positionId,
+            final Integer controls   //for 1=performer or 2=agreement
+
     ) {
         return new Specification<User>() {
             @Override
@@ -255,6 +258,15 @@ public class UserServiceImpl implements UserService {
                 if (positionId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("positionId"), positionId));
                 }
+
+                if (controls!=null){
+                    if (controls==1){
+                        predicates.add(criteriaBuilder.equal(root.get("isPerformer"), true));
+                    }else{
+                        predicates.add(criteriaBuilder.equal(root.get("isAgreement"), true));
+                    }
+                }
+
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }
@@ -271,6 +283,16 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getEmployeesForForwarding(Integer organizationId){
         return userRepository.findByOrganizationId(organizationId);
+    }
+
+    @Override
+    public List<User> getEmployeesPerformerForForwarding(Integer organizationId) {
+        return userRepository.findByOrganizationIdAndIsPerformerTrueAndEnabledTrue(organizationId);
+    }
+
+    @Override
+    public List<User> getEmployeesAgreementForForwarding(Integer organizationId) {
+        return userRepository.findByOrganizationIdAndIsAgreementTrueAndEnabledTrue(organizationId);
     }
 
     public LogType getUserLogType(User user){

@@ -71,9 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().ignoringAntMatchers("/login");
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST,"/upay/check").permitAll()
+       /* http.authorizeRequests().antMatchers(HttpMethod.POST,"/upay/check").permitAll()
                 .antMatchers(HttpMethod.POST,"/upay/payment").permitAll()
-                .and().csrf().disable();
+                .and().csrf().disable();*/
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

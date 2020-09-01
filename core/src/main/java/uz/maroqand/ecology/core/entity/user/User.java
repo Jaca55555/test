@@ -112,6 +112,14 @@ public class User {
     @Column(name = "is_execute_chief", columnDefinition = "boolean DEFAULT false")
     private Boolean isExecuteChief;
 
+    //Performer  masul ijrochi
+    @Column(name = "is_performer", columnDefinition = "boolean DEFAULT false")
+    private Boolean isPerformer;
+
+    //Agreement  kelishish uchun masul
+    @Column(name = "is_agreement", columnDefinition = "boolean DEFAULT false")
+    private Boolean isAgreement;
+
     @Transient
     private Integer userAdditionalId;
 

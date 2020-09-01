@@ -402,6 +402,7 @@ public class RegApplicationController {
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationAbout;
@@ -415,6 +416,7 @@ public class RegApplicationController {
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
+            @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
             @RequestParam(name = "coordinates", required = false) List<Double> coordinates
     ){
@@ -452,6 +454,7 @@ public class RegApplicationController {
         ProjectDeveloper projectDeveloper1 = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
         projectDeveloper1.setTin(projectDeveloperTin);
+        projectDeveloper1.setOpfId(projectDeveloperOpfId);
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
         regApplication.setDeveloperId(projectDeveloper1.getId());
 

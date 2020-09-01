@@ -46,8 +46,9 @@ public class EmployeeController {
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControls,method = RequestMethod.GET)
     public String getEmployeeControls(Model model){
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.getEmployeeList());
+        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
         return ExpertiseTemplates.EmployeeControls;
     }
 
@@ -66,7 +67,7 @@ public class EmployeeController {
 
         List<RegApplication> regApplicationList = regApplicationService.getAllByPerfomerIdNotNullDeletedFalse();
         PageRequest pageRequest = new PageRequest(0, regApplicationList.size(), Sort.Direction.ASC, "id");
-        Page<User> userPage = userService.findFilteredForEmployee(id,lastname,firstname,middlename,null,null,null,null,pageRequest );
+        Page<User> userPage = userService.findFilteredForEmployee(id,lastname,firstname,middlename,null,null,null,null,1,pageRequest );
         List<User> userList = userPage.getContent();
         System.out.println(userList.size());
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -113,8 +114,9 @@ public class EmployeeController {
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControlList,method = RequestMethod.GET)
     public String getEmployeeControlList(Model model){
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.getEmployeeList());
+        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
         return ExpertiseTemplates.EmployeeControlList;
     }
 
@@ -183,6 +185,7 @@ public class EmployeeController {
                 null,//TODO organizationId
                 null,
                 null,
+                1,
                 pageable
         );
         List<User> userList = userPage.getContent();

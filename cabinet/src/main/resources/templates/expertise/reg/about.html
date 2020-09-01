@@ -325,6 +325,19 @@
                                                                 <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_opf}">Организационно правовая форма предприятия</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control" required="" id="opfId" th:field="${projectDeveloper.opfId}" data-parsley-errors-container="#legalEntityOpf-error">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option  th:each="opf : ${opfList}"  th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${projectDeveloper.opfId==opf.id}" ></option>
+                                                                </select>
+                                                                <div id="legalEntityOpf-error"></div>
+                                                            </div>
+                                                        </div>
                                                         </br>
                                                         <h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
                                                         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
@@ -579,14 +592,27 @@
                 $.each(response, function (key, value) {
                     if(value.id===id){
                         var name = '';
+                        var nameShort = '';
                         switch (getCurrentLanguage()){
-                            case 'uz':name=value.name;break;
-                            case 'oz':name=value.nameOz;break;
-                            case 'ru':name=value.nameRu;break;
-                            default :name=value.nameRu;break;
+                            case 'uz':
+                                name=value.name;
+                                nameShort=value.nameShort;
+                                break;
+                            case 'oz':
+                                name=value.nameOz;
+                                nameShort=value.nameShortOz;
+                                break;
+                            case 'ru':
+                                name=value.nameRu;
+                                nameShort=value.nameShortRu;
+                                break;
+                            default :
+                                name=value.nameRu;
+                                nameShort=value.nameShortRu;
+                                break;
                         }
                         console.log('material='+name);
-                        $('#materials-'+id+'-label').text(name);
+                        $('#materials-'+id+'-label').text(nameShort + " - " + name);
                     }
                 });
             });

@@ -102,6 +102,7 @@
      }
     .ck-content .table table td, .ck-content .table table th{
         border-color: black;
+        vertical-align: top;
     }
 </style>
 
@@ -130,7 +131,7 @@
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_client}">Заказчик:</span></th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
-                                <span th:text="${applicant.name}"></span>
+                                "<span th:text="${applicant.name}"></span>" &nbsp;
                                 <span th:if="${opfId!=null}" th:text="${@helperService.getOpfShortName(opfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
                             </td>
                         </tr>
@@ -144,7 +145,10 @@
                         </tr>
                         <tr>
                             <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_developer}">Разработчик:</span></th>
-                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getDeveloperName(regApplication.developerId)}">ООО «EKO SERVIS NORMATIV»</span></td>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                "<span th:text="${@helperService.getDeveloperName(regApplication.developerId)}">ООО «EKO SERVIS NORMATIV»</span>"
+                                <span th:if="${developerOpfId!=null}" th:text="${@helperService.getOpfShortName(developerOpfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
+                            </td>
                         </tr>
                         <tr>
                             <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_expert}">Эксперт:</span></th>
@@ -163,26 +167,50 @@
                     <table>
                         <tbody>
                         <tr>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_organization}">Генеральному директору</span>
+                            </td>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true" >
+                                "<span th:text="${applicant.name}"></span>" &nbsp;
+                                <span th:if="${applicant.opfId!=null}" th:text="${@helperService.getOpfShortName(applicant.opfId,#locale)}"></span>
+
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true">
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
-                            <td class="ck-editor__editable ck-editor__nested-editable sizeTd" contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td class="ck-editor__editable ck-editor__nested-editable " contenteditable="true" style="text-align: center">
-                                <span th:text="#{sys_directorFullName}">Генеральному директору</span><br>
-                                <span th:text="${applicant.name}"><span th:text="${applicant.name}">ИП ООО «SURHANCEMENTINVEST»</span></span>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_director}">Генеральному директору</span>
+                            </td>
+                            <td class="ck-editor__editable ck-editor__nested-editable " contenteditable="true">
                                 <span th:text="${applicant.directorFullName}">ХАМРОЕВУ О.</span>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </figure>
+                <p><br/>
                 <br/>
                 <br/>
-               Исп.: <span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></br>
-                    тел.   207-07-70 (вн. 2011#)
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                </p>
+               <p >&nbsp; <br/>
+                   Исп.: <span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></br>
+                   тел.   207-07-70 (вн. 2011#)
+               </p>
             </div>
         </div>
     </div>

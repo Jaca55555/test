@@ -178,6 +178,8 @@ public class ForwardingController {
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
 
         model.addAttribute("userList", userService.getEmployeesForForwarding(user.getOrganizationId()));
+        model.addAttribute("agreementList", userService.getEmployeesAgreementForForwarding(user.getOrganizationId()));
+        model.addAttribute("performerList", userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
         model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
 

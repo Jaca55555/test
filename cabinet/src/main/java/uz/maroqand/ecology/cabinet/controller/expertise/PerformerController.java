@@ -183,6 +183,13 @@ public class PerformerController {
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
 
+        Integer developerOpfId=null;
+        if (regApplication.getDeveloperId()!=null){
+            ProjectDeveloper projectDeveloper = projectDeveloperService.getById(regApplication.getDeveloperId());
+            developerOpfId = projectDeveloper!=null? projectDeveloper.getOpfId() : null;
+        }
+        model.addAttribute("developerOpfId", developerOpfId);
+
         if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
             model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogIdNext()));
             model.addAttribute("action_url", ExpertiseUrls.PerformerActionEdit);

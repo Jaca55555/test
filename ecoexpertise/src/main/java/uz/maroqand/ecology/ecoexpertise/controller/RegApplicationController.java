@@ -415,6 +415,7 @@ public class RegApplicationController {
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
@@ -433,6 +434,7 @@ public class RegApplicationController {
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
+            @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
             @RequestParam(name = "coordinates", required = false) List<Double> coordinates
     ){
         User user = userService.getCurrentUserFromContext();
@@ -469,6 +471,7 @@ public class RegApplicationController {
         ProjectDeveloper projectDeveloper1 = regApplication.getDeveloperId()!=null?projectDeveloperService.getById(regApplication.getDeveloperId()):new ProjectDeveloper();
         projectDeveloper1.setName(projectDeveloperName);
         projectDeveloper1.setTin(projectDeveloperTin);
+        projectDeveloper1.setOpfId(projectDeveloperOpfId);
         projectDeveloper1 = projectDeveloperService.save(projectDeveloper1);
         regApplication.setDeveloperId(projectDeveloper1.getId());
 

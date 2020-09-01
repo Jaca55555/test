@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+
+    <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
+    <style>
+        table.dataTable.nowrap th, table.dataTable.nowrap td {
+            white-space: pre-line;
+        }
+        .table td, .table th{
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{mntr_user_list}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="regIndividual" method="post" class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label"  th:text="#{mntr_user.id}"></label><br/>
+                                                <input type="text" class="form-control" id="userId" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.firstname}">:</label><br/>
+                                                <input type="text" id="firstname" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.lastname}">:</label><br/>
+                                                <input type="text" id="lastname" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.middlename}">:</label><br/>
+                                                <input type="text" id="middlename" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.username}">:</label><br/>
+                                                <input type="text" id="username" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                <select id="organizationId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.department}">:</label><br/>
+                                                <select id="departmentId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="department : ${departmentList}" th:value="${department.id}" th:text="${department.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.position}">:</label><br/>
+                                                <select id="positionId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="position : ${positionList}" th:value="${position.id}" th:text="${position.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.control}">:</label><br/>
+                                                <select id="controls" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option value="1" th:text="#{is.performer}"></option>
+                                                    <option value="2" th:text="#{is.agreement}"></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-9 text-right">
+                                                <label class="control-label" >&nbsp;</label><br/>
+
+                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info btn-sm"><i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}">Поиск</span>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table id="user-table" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th th:text="#{mntr_user.fullName}"></th>
+                                                    <th th:text="#{mntr_user.userName}"></th>
+                                                    <th th:text="#{mntr_user.organization}"></th>
+                                                    <th th:text="#{mntr_user.department}"></th>
+                                                    <th th:text="#{mntr_user.position}"></th>
+                                                    <th th:text="#{mntr_user.isPerformer}"></th>
+                                                    <th th:text="#{mntr_user.isAgreement}"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+<script th:inline="javascript">
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UserControlListAjax}]];
+    var ajaxRequestStatusLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UserControlStatus}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+    let performer="performer";
+    let agreement="agreement";
+    let isPerformer = [[#{is.performer}]];
+    let isAgreement = [[#{is.agreement}]];
+
+    function onChangeCheck(id,type){
+        let form = new FormData();
+        form.append("id",id);
+        form.append("type",type);
+        form.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: ajaxRequestStatusLink,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if (response.status ==='success') {
+                    console.log(response);
+                }
+            }
+        })
+
+    }
+</script>
+<script th:inline="none">
+    /*<![CDATA[*/
+    var dataDatatableSelector;
+    var thead;
+
+    function renderStatusPerformerColumn(data, type, row, meta) {
+        let html='';
+
+        html='<div class="custom-control custom-switch" data-action="performer">\n' +
+            '   <input type="checkbox" name="performer" onchange="onChangeCheck('+row[0]+','+performer+')" class="custom-control-input" ' +
+            '       id="performer_' + row[0] +'"';
+        if(row[6]){
+            html+='checked="chechked"';
+        }
+        html+='/>\n' +
+            '       <label class="custom-control-label" for="performer_' + row[0] +'" >'+isPerformer+'</label>\n' +
+            '</div>';
+        return html;
+    }
+
+    function renderStatusAgreementColumn(data, type, row, meta) {
+        let html='';
+        html='<div class="custom-control custom-switch" >\n' +
+            '   <input type="checkbox" name="agreement" onchange="onChangeCheck('+row[0]+','+agreement+')" class="custom-control-input"' +
+            '       id="agreement_' + row[0] +'"';
+         if(row[7]){
+             html+='checked="chechked"';
+         }
+         html+='/>\n' +
+            '       <label class="custom-control-label" for="agreement_' + row[0] +'" >'+isAgreement+'</label>\n' +
+            '</div>';
+
+        return html;
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                dataToSend.userId = $('#userId').val();
+                dataToSend.firstname = $('#firstname').val();
+                dataToSend.lastname = $('#lastname').val();
+                dataToSend.middlename = $('#middlename').val();
+                dataToSend.username = $('#username').val();
+                dataToSend.organizationId = $('#organizationId').val();
+                dataToSend.departmentId = $('#departmentId').val();
+                dataToSend.positionId = $('#positionId').val();
+                dataToSend.controls = $('#controls').val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'lastname'},
+                {data: 2, name: 'username'},
+                {data: 3, name: 'organizationId'},
+                {data: 4, name: 'departmentId'},
+                {data: 5, name: 'positionId'},
+                {render: renderStatusPerformerColumn, name:'isPerformer'},
+                {render: renderStatusAgreementColumn, name: 'isAgreement'},
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#user-table');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+
+
+    });
+
+    $('#user-table').css("width", "100%");
+    /*]]>*/
+</script>
+</body>
+</html>

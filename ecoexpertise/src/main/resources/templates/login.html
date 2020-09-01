@@ -4,14 +4,19 @@
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
 </head>
 <body>
+<style>
+    .tab-content{
+        padding: 20px 5px;
+    }
+</style>
 <div class="auth-wrapper">
     <div class="auth-content subscribe">
         <div class="card">
             <div class="row no-gutters">
-                <div class="col-md-4 col-lg-6 d-none d-md-flex d-lg-flex theme-bg align-items-center justify-content-center">
+                <div class="col-md-4 col-lg-4 d-none d-md-flex d-lg-flex theme-bg align-items-center justify-content-center">
                     <img th:src="@{/static/images/lock.png}" alt="lock images" class="img-fluid" />
                 </div>
-                <div class="col-md-8 col-lg-6">
+                <div class="col-md-8 col-lg-8">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active text-uppercase" id="oneid-tab" data-toggle="tab" href="#oneid" role="tab" aria-controls="oneid" aria-selected="false"><span th:text="#{id.gov.uz}"></span></a>
@@ -42,7 +47,7 @@
                                     <h5 class="mb-5" th:text="#{sign_in.eds.title}" style="margin-bottom: 1rem!important;"></h5>
 
                                     <div id="login" class="animate form">
-                                        <section class="login_content">
+                                         <section class="login_content">
                                             <form action="/sys/eds_login" name="testform" method="post">
                                                 <!--<h2 th:text="#{sys_systemName}"></h2>-->
                                                 <!--<h4>Войти</h4>-->
@@ -197,7 +202,7 @@
                                                 vo.expired = dates.compare(now, vo.validTo) > 0;
                                                 var itm = document.createElement("option");
                                                 itm.value = itmkey;
-                                                itm.text = vo.CN;
+                                                itm.text = vo.CN + '\n  tin:'+vo.TIN;
                                                 if (!vo.expired) {
 
                                                 } else {

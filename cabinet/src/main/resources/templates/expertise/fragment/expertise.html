@@ -68,6 +68,15 @@
             </div>
         </div>
 
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_opf}">Наименование разработчика проекта</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${projectDeveloper!=null && projectDeveloper.opfId!=null ? @helperService.getOpfName(projectDeveloper.opfId,#locale):''}" >
+            </div>
+        </div>
+
         <div th:if="${coordinate}">
             <div class="form-group row">
                 <div class="col-md-3 text-right">
