@@ -83,7 +83,10 @@
                     <label class="col-form-label" th:text="#{sys.coordinates}"></label>
                 </div>
                 <div class="col-md-6">
-
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#coordinate" id="openMapModal">
+                        <i class="fs20 fas fa-map color-gray"></i>
+                        <span th:text="#{sys_map.open}"></span>
+                    </button>
                 </div>
             </div>
 
@@ -132,6 +135,24 @@
             <div class="col-md-12 text-center" id="tab-control-buttons">
                 <a class="btn btn-danger text-white btnPrevious" th:text="#{sys_back}"></a>
                 <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+            </div>
+        </div>
+
+        <div class="modal fade" id="coordinate" tabindex="-1" role="dialog" aria-labelledby="coordinate" aria-hidden="true">
+            <div class="modal-dialog modal-lg col-xl-6 col-12" role="document">
+                <div class="modal-content">
+                    <div class="card parent-card m0">
+                        <div class="card-header flex-space-between-nowrap mb-0">
+                            <h5 class="mb-0" style="align-self:center"><span href="#" class="card-header-a"><span th:text="#{sys_document.map}">Ижро амаллари ва изохлар</span></span></h5>
+                            <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="map" class="map" style="width: 100%; height: 600px;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
