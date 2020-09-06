@@ -404,7 +404,7 @@
                     className: "text-left"
                 },
                 {data: 3, name: 'content',className: "text-left"},
-                {data: 4, name: 'createdAt',className: "text-center"},
+                {data: 4, name: 'createdAt', "render": "[, ].name",className: "text-center"},
                 {data: 5, name: 'updateAt',className: "text-center"},
                 {render: renderChangeColumn, orderable: false,className: "text-center"},
                 {data: 7, name: 'performerName',className: "text-left"},
@@ -447,11 +447,11 @@
 
         if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
             if (currentLanguage === 'oz') {
-                text = 'Жунатилмаган';
-                option_text = 'Жунатилган';
+                text = 'Жўнатилмаган';
+                option_text = 'Жўнатилган';
             } else if (currentLanguage === 'uz') {
-                text = 'Junatilmagan';
-                option_text = 'Junatilgan';
+                text = `Jo'natilmagan`;
+                option_text = `Jo'natilgan`;
             } else if (currentLanguage === 'ru') {
                 text = 'Неотправлено';
                 option_text = 'Отправлено';
@@ -459,12 +459,12 @@
             return [text, option_text];
         }else if(text_ === "document_status.completed"){
             if(currentLanguage === 'oz') {
-                option_text = 'Жунатилмаган';
-                text = 'Жунатилган';
+                option_text = 'Жўнатилмаган';
+                text = 'Жўнатилган';
             }
             else if(currentLanguage === 'uz'){
-                option_text = 'Junatilmagan';
-                text = 'Junatilgan';
+                option_text = `Jo'natilmagan`;
+                text = `Jo'natilgan`;
             }else if(currentLanguage === 'ru'){
                 option_text = 'Неотправлено';
                 text = 'Отправлено';
