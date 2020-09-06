@@ -62,18 +62,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.EDSLogin).permitAll()
                 .antMatchers("/static*/**").permitAll()
                 .antMatchers("/login*/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/upay*/**").permitAll()
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");
 
-
-
-        http.csrf().ignoringAntMatchers("/login");
-
-       /* http.authorizeRequests().antMatchers(HttpMethod.POST,"/upay/check").permitAll()
-                .antMatchers(HttpMethod.POST,"/upay/payment").permitAll()
-                .and().csrf().disable();*/
+        
+        http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()
