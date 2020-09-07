@@ -103,6 +103,7 @@ public class InnerController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                status.add(TaskSubStatus.New.getId());
                 break;
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);

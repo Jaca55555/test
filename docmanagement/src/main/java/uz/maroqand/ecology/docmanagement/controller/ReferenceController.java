@@ -136,7 +136,13 @@ public class ReferenceController {
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
         switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
+            case 2: type = TaskSubType.Performer.getId();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+                status.add(TaskSubStatus.New.getId());
+            break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();
