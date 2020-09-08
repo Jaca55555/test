@@ -173,7 +173,7 @@
 
     for (var i in coords) {
         var c = coords[i].split(',');
-        polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:102113'));
+        polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
 
         /*$('#mapModal').append('<div class="col-md-12 row form-group">\n' +
             '                                                <div class="col-md-2">\n' +
