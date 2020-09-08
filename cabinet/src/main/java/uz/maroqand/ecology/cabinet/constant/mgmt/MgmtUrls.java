@@ -61,6 +61,12 @@ public class MgmtUrls {
     public static final String UsersEditEnebled = Users + "/enebled";
     public static final String UsersView = Users + "/view";
 
+    //user performer and agreement
+    private static final String UserControl = Prefix + "/user_control";
+    public static final String UserControlList = UserControl + "/list";
+    public static final String UserControlListAjax = UserControl + "/ajax_list";
+    public static final String UserControlStatus = UserControl + "/status";
+
     //Position
     private static final String Position = Prefix + "/position";
     public static final String PositionList = Position + "/list";

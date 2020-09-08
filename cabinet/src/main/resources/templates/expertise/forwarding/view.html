@@ -365,7 +365,7 @@
             vector.getSource().clear();
     });
 
-    $('#openMapModal').click(function () {
+    $('#openMapModal').on('click',function () {
         setTimeout( function() { map.updateSize();}, 200);
     })
 

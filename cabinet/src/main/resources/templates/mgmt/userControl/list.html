@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-
     <link rel="stylesheet" th:href="@{/static/datatables/css/datatables.min.css}">
     <style>
         table.dataTable.nowrap th, table.dataTable.nowrap td {
@@ -23,7 +21,7 @@
 </div>
 <!-- [ Pre-loader ] End -->
 
-<object th:include="admin/admin_navigation_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
 
 <object th:include="fragments/header :: head" th:remove="tag" ></object>
 
@@ -146,8 +144,8 @@
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 <script th:inline="javascript">
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UserControlListAjax}]];
-    var ajaxRequestStatusLink = [[${T(uz.maroqand.ecology.cabinet.constant.admin.AdminUrls).UserControlStatus}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UserControlListAjax}]];
+    var ajaxRequestStatusLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).UserControlStatus}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }

@@ -131,8 +131,7 @@
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_client}">Заказчик:</span></th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
-                                "<span th:text="${applicant.name}"></span>" &nbsp;
-                                <span th:if="${opfId!=null}" th:text="${@helperService.getOpfShortName(opfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
+                                    <span  th:text="${opfName}"></span>
                             </td>
                         </tr>
                         <tr>
@@ -144,24 +143,25 @@
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span >I, п.32, ПКМ РУз №949 от 22.11.2018 г.</span></td>
                         </tr>
                         <tr>
-                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_developer}">Разработчик:</span></th>
+                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_developer}" style="font-weight: bold">Разработчик:</span>
+                            </th>
                             <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
-                                "<span th:text="${@helperService.getDeveloperName(regApplication.developerId)}">ООО «EKO SERVIS NORMATIV»</span>"
-                                <span th:if="${developerOpfId!=null}" th:text="${@helperService.getOpfShortName(developerOpfId,#locale)}">ИП ООО «SURHANCEMENTINVEST»</span>
+                                <span th:text="${developerOpfName}" >ИП ООО «SURHANCEMENTINVEST»</span>&nbsp;
                             </td>
                         </tr>
                         <tr>
-                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_expert}">Эксперт:</span></th>
-                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span></td>
-                        </tr>
-                        <tr>
-                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
-                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
-                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"></td>
+                            <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_expert}" style="font-weight: bold">Эксперт:</span>
+                            </th>
+                            <td style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="${@helperService.getUserFullNameById(regApplication.performerId)}">Тушева Л.Г.</span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </figure>
+                <p>&nbsp;</p>
                 <figure class="table myclass ck-widget ck-widget_selectable" contenteditable="false">
                     <div class="ck ck-widget__selection-handler"></div>
                     <table>
@@ -173,13 +173,11 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
-                                <span th:text="#{sys_organization}">Генеральному директору</span>
-                            </td>
+                            <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_organization}" >Генеральному директору</span>:
+                            </th>
                             <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true" >
-                                "<span th:text="${applicant.name}"></span>" &nbsp;
-                                <span th:if="${applicant.opfId!=null}" th:text="${@helperService.getOpfShortName(applicant.opfId,#locale)}"></span>
-
+                                <span  th:text="${opfName}"></span>
                             </td>
                         </tr>
                         <tr>
@@ -189,9 +187,9 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </td>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
-                                <span th:text="#{sys_director}">Генеральному директору</span>
-                            </td>
+                            <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">
+                                <span th:text="#{sys_director}">Генеральному директору</span>:
+                            </th>
                             <td class="ck-editor__editable ck-editor__nested-editable " contenteditable="true">
                                 <span th:text="${applicant.directorFullName}">ХАМРОЕВУ О.</span>
                             </td>
@@ -200,8 +198,6 @@
                     </table>
                 </figure>
                 <p><br/>
-                <br/>
-                <br/>
                 <br/>
                 <br/>
                 <br/>

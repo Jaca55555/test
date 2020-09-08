@@ -27,7 +27,7 @@
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/organization/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-office-building"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.organizationList}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/users/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-account-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.usersList}"> </span></a></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/user_control/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-account-alert"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.userControlList}"> </span></a></li>
+<!--                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/user_control/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-account-alert"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.userControlList}"> </span></a></li>-->
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/mgmt/translations" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-translate"></i></span><span class="pcoded-mtext" th:text="#{mgmt_translations}"> </span></a></li>
 
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/admin/roles/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-stack-overflow"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.roleList}"> </span></a></li>

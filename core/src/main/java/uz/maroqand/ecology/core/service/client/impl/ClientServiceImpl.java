@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.client.impl;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +18,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.client.ClientRepository;
 import uz.maroqand.ecology.core.service.client.ClientAuditService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -33,12 +35,14 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final ClientAuditService clientAuditService;
+    private final HelperService helperService;
     private final Gson gson;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService, Gson gson) {
+    public ClientServiceImpl(ClientRepository clientRepository, ClientAuditService clientAuditService, HelperService helperService, Gson gson) {
         this.clientRepository = clientRepository;
         this.clientAuditService = clientAuditService;
+        this.helperService = helperService;
         this.gson = gson;
     }
 
@@ -322,7 +326,17 @@ public class ClientServiceImpl implements ClientService {
                 model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
         model.addAttribute("applicant", applicant);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        String opfName="";
+        if (locale.equals("ru")){
+            opfName=applicant.getOpfId()!=null?helperService.getOpfShortName(applicant.getOpfId(),locale):"";
+            opfName += "  \"" + applicant.getName() + "\"";
+        }else{
+            opfName ="\"" + applicant.getName() + "\" ";
+            opfName += applicant.getOpfId()!=null?helperService.getOpfShortName(applicant.getOpfId(),locale):"";
+        }
         model.addAttribute("opfId", applicant.getOpfId());
+        model.addAttribute("opfName", opfName);
     }
 
 }

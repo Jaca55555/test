@@ -65,11 +65,4 @@ public class AdminUrls {
     public static final String RolesCreate = Roles + "/create";
     public static final String RolesUpdate = Roles + "/update";
     public static final String RolesView = Roles + "/view";
-
-    //user performer and agreement
-    private static final String UserControl = Prefix + "/user_control";
-    public static final String UserControlList = UserControl + "/list";
-    public static final String UserControlListAjax = UserControl + "/ajax_list";
-    public static final String UserControlStatus = UserControl + "/status";
-
 }

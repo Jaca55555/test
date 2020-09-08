@@ -40,9 +40,4 @@ public class AdminTemplates {
     public static final String OrganizationNew = Organization + "/new";
     public static final String OrganizationView = Organization + "/view";
 
-    //user performer and agreement
-    private static final String UserControl = Prefix + "/userControl";
-    public static final String UserControlList = UserControl + "/list";
-
-
 }
