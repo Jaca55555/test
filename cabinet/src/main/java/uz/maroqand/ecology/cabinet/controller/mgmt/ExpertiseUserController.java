@@ -530,6 +530,86 @@ public class ExpertiseUserController {
         return "redirect:" + MgmtUrls.UsersList;
     }
 
+    @RequestMapping(MgmtUrls.UserControlList)
+    public String getUserControlListPage(Model model) {
+
+        model.addAttribute("departmentList",departmentService.getAll());
+        model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("positionList",positionService.getAll());
+        model.addAttribute("roleList",userRoleService.getRoleList());
+        return MgmtTemplates.UserControlList;
+    }
+
+
+    @RequestMapping(value = MgmtUrls.UserControlListAjax, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> getUserControlListAjaxList(
+            @RequestParam(name = "userId", defaultValue = "", required = false) Integer userId,
+            @RequestParam(name = "firstname", defaultValue = "", required = false) String firstname,
+            @RequestParam(name = "lastname", defaultValue = "", required = false) String lastname,
+            @RequestParam(name = "middlename", defaultValue = "", required = false) String middlename,
+            @RequestParam(name = "username", defaultValue = "", required = false) String username,
+            @RequestParam(name = "organizationId", defaultValue = "", required = false) Integer organizationId,
+            @RequestParam(name = "departmentId", defaultValue = "", required = false) Integer departmentId,
+            @RequestParam(name = "positionId", defaultValue = "", required = false) Integer positionId,
+            @RequestParam(name = "controls", defaultValue = "", required = false) Integer controls,
+            Pageable pageable
+    ) {
+
+        firstname = StringUtils.trimToNull(firstname);
+        lastname = StringUtils.trimToNull(lastname);
+        middlename = StringUtils.trimToNull(middlename);
+        username = StringUtils.trimToNull(username);
+
+        Page<User> usersPage = userService.findFilteredForEmployee(userId,firstname,lastname,middlename,username,organizationId,departmentId,positionId,controls,pageable);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("recordsTotal", usersPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", usersPage.getTotalElements()); //Filtered elements
+
+        List<User> users = usersPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(users.size());
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        for (User user : usersPage) {
+            convenientForJSONArray.add(new Object[]{
+                    user.getId(),
+                    user.getFullName(),
+                    user.getUsername(),
+                    user.getOrganizationId()!=null? organizationService.getById(user.getOrganizationId()).getNameTranslation(locale):"",
+                    user.getDepartmentId()!=null? departmentService.getById(user.getDepartmentId()).getName():"",
+                    user.getPositionId()!=null? positionService.getById(user.getPositionId()).getName():"",
+                    user.getIsPerformer(),
+                    user.getIsAgreement()
+            });
+        }
+
+        result.put("data", convenientForJSONArray);
+        return result;
+    }
+
+    @RequestMapping(value = MgmtUrls.UserControlStatus,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> userControlStatus(
+            @RequestParam(name = "id")Integer id,
+            @RequestParam(name = "type")String type
+    ) {
+        HashMap<String, Object> response = new HashMap<>();
+        User user = userService.findById(id);
+        if (user == null) {
+            response.put("status", "error");
+            return response;
+        }
+        if (type.equals("performer"))
+            user.setIsPerformer(!user.getIsPerformer());
+        if (type.equals("agreement"))
+            user.setIsAgreement(!user.getIsAgreement());
+        userService.updateUser(user);
+
+        response.put("status", "success");
+        return response;
+    }
+
+
+
     /*@RequestMapping(value = MgmtUrls.UserDelete)
     @ResponseBody
     public String userDelete(

@@ -22,6 +22,7 @@ import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -182,13 +183,23 @@ public class PerformerController {
         }
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        String opfName="";
 
-        Integer developerOpfId=null;
+        String  developerOpfName="null";
         if (regApplication.getDeveloperId()!=null){
             ProjectDeveloper projectDeveloper = projectDeveloperService.getById(regApplication.getDeveloperId());
-            developerOpfId = projectDeveloper!=null? projectDeveloper.getOpfId() : null;
+            if (projectDeveloper!=null){
+                if (locale.equals("ru")){
+                    developerOpfName=projectDeveloper.getOpfId()!=null?helperService.getOpfShortName(projectDeveloper.getOpfId(),locale):"";
+                    developerOpfName += " \"" + projectDeveloper.getName() + "\"";
+                }else{
+                    developerOpfName ="\"" + projectDeveloper.getName()+"\" ";
+                    developerOpfName += projectDeveloper.getOpfId()!=null?helperService.getOpfShortName(projectDeveloper.getOpfId(),locale):"";
+                }
+            }
         }
-        model.addAttribute("developerOpfId", developerOpfId);
+        model.addAttribute("developerOpfName", developerOpfName);
 
         if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
             model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogIdNext()));
@@ -197,6 +208,9 @@ public class PerformerController {
             model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
+
+
+
         System.out.println(" performer regApplicationID==" + regApplication.getId());
         Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
