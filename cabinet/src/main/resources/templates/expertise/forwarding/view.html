@@ -267,7 +267,7 @@
 
 
 <script src="/static/ol/ol.js" type="text/javascript"></script>
-<script th:inline="javascript">
+<script th:inline="javascript" th:if="${coordinate!=null}">
     var coordinateLatLongList = [[${coordinateLatLongList}]];
     var coordinateLat = [[${coordinate.latitude}]];
     var coordinateLong = [[${coordinate.longitude}]];
@@ -277,7 +277,7 @@
 
 
 </script>
-<script>
+<script th:if="${coordinate!=null}">
     var Map = ol.Map;
     var View = ol.View;
     var Draw = ol.interaction.Draw;
