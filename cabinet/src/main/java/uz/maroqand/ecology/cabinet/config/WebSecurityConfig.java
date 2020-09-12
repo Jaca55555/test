@@ -81,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/doc/registration/incoming/**").hasAuthority(Permissions.DOC_MANAGEMENT_REGISTER.name())
                 .antMatchers("/doc/outgoing_mail/**").hasAuthority(Permissions.DOC_MANAGEMENT_REGISTER.name())
-                .antMatchers("/doc/registration/inner/**").hasAuthority(Permissions.DOC_MANAGEMENT_INTERNAL.name())
+                .antMatchers("/doc/registration/inner/**").hasAuthority(Permissions.DOC_MANAGEMENT_REGISTER.name())
 
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()

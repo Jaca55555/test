@@ -215,7 +215,7 @@ public class ChangePerformerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("performers",userService.getAll());
+        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));
         model.addAttribute("action_url",ChangePerformerTask);
         model.addAttribute("action_uri",ChangePerformerDeny);
         return DocTemplates.ChangePerformerView;

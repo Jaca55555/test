@@ -28,7 +28,8 @@
             <span th:if="${#bools.isTrue(document.specialControll)}" type="button" class="btn-rounded btn-danger btn-sm ml-2 m0" id="specialControl">
                 <i class="feather icon-check-circle mr-0 pr-2"></i><span th:text="#{doc.special_controll}"></span>
             </span>
-            <button th:if="${task.status!=T(uz.maroqand.ecology.docmanagement.constant.TaskStatus).Complete.getId() &&  @documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'name',#locale)!=''}" type="button" th:class="'btn  btn-rounded btn-sm ml-2 m0 btn-'+${@documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'color',#locale)}"  >
+            <button data-toggle="tooltip" data-placement="bottom" th:title="${dueDate}"
+                    th:if="${task.status!=T(uz.maroqand.ecology.docmanagement.constant.TaskStatus).Complete.getId() &&  @documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'name',#locale)!=''}" type="button" th:class="'btn  btn-rounded btn-sm ml-2 m0 btn-'+${@documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'color',#locale)}"  >
                 <i class="feather icon-clock mr-0"></i>
                 <span th:text="${@documentTaskServiceImpl.getDueTranslateNameOrColor(documentTaskSub.id,false,'name',#locale)}">Муддати яқинлашган</span>
             </button>

@@ -40,7 +40,7 @@
                     </a>
                     </button>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')"  style="padding: 0 2px">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')"  style="padding: 0 2px">
                     <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top"  th:title="#{doc_inner.reg}">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" style="padding: 0px 0px">
                         <span class="pcoded-micon"><i class="feather icon-briefcase color-white"></i></span>
@@ -48,7 +48,7 @@
                     </button>
 
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')" style="padding: 0 2px">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')" style="padding: 0 2px">
                     <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"  th:title="#{doc_appeal.reg}">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 0px 0px">
                         <span class="pcoded-micon"><i class="feather icon-file-text color-white"></i></span>
