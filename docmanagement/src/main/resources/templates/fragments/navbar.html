@@ -22,26 +22,40 @@
                     <span style="margin-left: 10px" th:utext="${@dateShowService.getCurrentTimeUsingDate(#locale)}"></span>
                     <span id="span"></span></li>
                 <li><span th:utext="${@userServiceImpl.getCurrentUserFromContext().getFName()}"></span> - <span th:text="#{doc.welcome_title}">Тизимга хуш келибсиз!</span></li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-download color-yellow"></i></span>
-                    </a>
+<!--                tooltips-->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')"  style="padding: 0 2px">
+                    <button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="top"  th:title="#{doc_incoming.reg}">
+                        <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" style="padding: 0px 0px">
+                            <span class="pcoded-micon"><i class="feather icon-download color-white"></i></span>
+                        </a>
+                    </button>
+<!--                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationNew}" style="padding: 5px 15px">-->
+<!--                        <span class="pcoded-micon"><i class="feather icon-download color-white"></i></span>-->
+<!--                    </a>-->
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-upload color-green"></i></span>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')"  style="padding: 0 2px">
+                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top"  th:title="#{doc_outgoing.reg}">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailNew}" style="padding: 0px 0px">
+                        <span class="pcoded-micon"><i class="feather icon-upload color-white"></i></span>
                     </a>
+                    </button>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_INTERNAL')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-briefcase color-purple"></i></span>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')"  style="padding: 0 2px">
+                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top"  th:title="#{doc_inner.reg}">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerRegistrationNew}" style="padding: 0px 0px">
+                        <span class="pcoded-micon"><i class="feather icon-briefcase color-white"></i></span>
                     </a>
+                    </button>
+
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_APPEAL')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-file-text color-purple"></i></span>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')" style="padding: 0 2px">
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"  th:title="#{doc_appeal.reg}">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceRegistrationNew}" style="padding: 0px 0px">
+                        <span class="pcoded-micon"><i class="feather icon-file-text color-white"></i></span>
                     </a>
+                        </button>
                 </li>
+<!--          tooltips-->
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li>

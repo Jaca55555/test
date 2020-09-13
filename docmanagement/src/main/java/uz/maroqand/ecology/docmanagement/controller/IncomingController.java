@@ -127,13 +127,18 @@ public class IncomingController {
         Integer type = null;
         Set<Integer> status = null;
         Integer departmentId = null;
-
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
         switch (tabFilter){
             case 1:  break;
-            case 2: type = TaskSubType.Performer.getId();break;//Ижро учун
+            case 2: type = TaskSubType.Performer.getId();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.InProgress.getId());
+                status.add(TaskSubStatus.Waiting.getId());
+                status.add(TaskSubStatus.Agreement.getId());
+            break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 deadlineDateEnd = calendar.getTime();

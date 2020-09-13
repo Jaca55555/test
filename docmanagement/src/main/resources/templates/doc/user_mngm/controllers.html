@@ -3,7 +3,8 @@
 <head>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta th:include="fragments/head :: top" th:remove="tag">
-    <title th:text="#{doc_organization.list}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:if="${isChief}" th:text="#{doc.chief_list}">Kiruvchi Xatlar Ro'yxati</title>
+    <title th:if="${isController}" th:text="#{doc.controller_list}">Kiruvchi Xatlar Ro'yxati</title>
 </head>
 <body>
 <div class="background"></div>
@@ -25,7 +26,9 @@
     <div class="col-xl-12 col-md-12">
         <div class="card parent-card">
             <div class="card-header flex-space-between-nowrap">
-                <h5 class="mb-0" style="align-self:center" th:text="#{doc.controller_list}"></h5>
+                <h5 class="mb-0" style="align-self:center"  th:if="${isController}" th:text="#{doc.controller_list}"></h5>
+                <h5 class="mb-0" style="align-self:center"  th:if="${isChief}" th:text="#{doc.chief_list}"></h5>
+
             </div>
             <div class="card-body">
                 <div class="table-responsive">

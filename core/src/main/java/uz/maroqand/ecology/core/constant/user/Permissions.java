@@ -40,13 +40,13 @@ public enum Permissions {
     DOC_MANAGEMENT_REGISTER(42, 3, "sys_permissions.docManagementRegister"), //Кирувчи ва чиқувчи хатларни рўйхатга олиш
     DOC_MANAGEMENT_INTERNAL(43, 3, "sys_permissions.docManagementInternal"), //Ички хужжатларни рўйхатга олиш
     DOC_MANAGEMENT_APPEAL(44, 3, "sys_permissions.docManagementAppeal"), //Мурожаатларни рўйхатга олиш
-    DOC_MANAGEMENT_LIBRARY(45, 3, "sys_permissions.docManagementLibrary"), //Кутубхона маълумотларини рўйхатга олиш
-    DOC_MANAGEMENT_PERFORMER(46, 3, "sys_permissions.docManagementPerformer"), //Хужжатларни ижрога йўналтириш
-    DOC_MANAGEMENT_SETTINGS(47, 3, "sys_permissions.docManagementSettings"), //Электрон Хужжатлар Юритиш Тизимининг созламаларини ўзгартириш
-    DOC_MANAGEMENT_CHECKED(48,3,"sys_permissions.docManagementCheck"), //Ijro nazoratida dostup alohida//
-    DOC_MANAGEMENT_CHANGE_PERFORMER(49,3,"sys_permissions.docManagementChangePerformer"),
-    DOC_MANAGEMENT_REPORT_LIST(50,3,"sys_permissions.docManagementrReportList"),
-    DOC_MANAGEMENT_REPORT_VIEW(51,3,"sys_permissions.docManagementrReportView");
+    DOC_MANAGEMENT_LIBRARY(43, 3, "sys_permissions.docManagementLibrary"), //Кутубхона маълумотларини рўйхатга олиш
+    DOC_MANAGEMENT_PERFORMER(44, 3, "sys_permissions.docManagementPerformer"), //Хужжатларни ижрога йўналтириш
+    DOC_MANAGEMENT_SETTINGS(45, 3, "sys_permissions.docManagementSettings"), //Электрон Хужжатлар Юритиш Тизимининг созламаларини ўзгартириш
+    DOC_MANAGEMENT_CHECKED(46,3,"sys_permissions.docManagementCheck"), //Ijro nazoratida dostup alohida//
+    DOC_MANAGEMENT_CHANGE_PERFORMER(47,3,"sys_permissions.docManagementChangePerformer"),
+    DOC_MANAGEMENT_REPORT_LIST(48,3,"sys_permissions.docManagementrReportList"),
+    DOC_MANAGEMENT_REPORT_VIEW(49,3,"sys_permissions.docManagementrReportView");
 
     private Integer id;
     private Integer type;
