@@ -136,16 +136,12 @@
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                        <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
-                        <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required">
-                            <option value="" th:text="#{sys_select}"></option>
-                        </select>
+                            <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
+                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">
+                                <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
+                            </select>
                     </div>
-<!--                        <div class="form-group col-md-4 col-sm-12">-->
-<!--                            <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>-->
-<!--                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">-->
-<!--                            </select>-->
-<!--                        </div>-->
+
                         <div class="form-group col-md-3 col-sm-12">
                             <label for="registration_number" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
@@ -352,13 +348,9 @@
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
-
-                dataToSend.page = api != undefined ? api.page() : 0;
-                dataToSend.size = api != undefined ? api.page.len() : 25;
-
-                dataToSend.document_organization_id = $('#document_organization_id').val();
+                dataToSend.document_organization_id = $('#document_organization_id').select2("val");
                 console.log(typeof $('#document_organization_id').val());
-                console.log($('#document_organization_id').val());
+                console.log( $('#document_organization_id').select2("val"));
                 dataToSend.registration_number = $('#registration_number').val();
                 dataToSend.date_begin = $('#date_begin').val();
                 dataToSend.date_end = $('#date_end').val();
@@ -368,6 +360,8 @@
                 dataToSend.tab = tab;
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
 
                 $.get(ajaxRequestLink, dataToSend, function(data){
                     callback(data);

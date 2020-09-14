@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 29.03.2019.
@@ -16,6 +17,7 @@ import java.util.List;
 public interface DocumentOrganizationRepository extends DataTablesRepository<DocumentOrganization, Integer>, JpaRepository<DocumentOrganization, Integer> {
 
     DocumentOrganization findByIdAndDeletedFalse(Integer id);
+    Set<DocumentOrganization> findByParentAndDeletedFalse(Integer parentId);
     List<DocumentOrganization> getAllByLevel(Integer id);
     DocumentOrganization findByNameContaining(String name);
 

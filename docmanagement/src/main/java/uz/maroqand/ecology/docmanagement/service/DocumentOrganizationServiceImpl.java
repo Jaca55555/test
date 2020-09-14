@@ -17,10 +17,7 @@ import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganization
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 29.03.2019.
@@ -41,6 +38,11 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     @Cacheable(value = "organizationGetById", key = "#id",unless="#result == ''")
     public DocumentOrganization getById(Integer id) {
         return documentOrganizationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public Set<DocumentOrganization> getByParent(Integer parentId) {
+        return documentOrganizationRepository.findByParentAndDeletedFalse(parentId);
     }
 
     @Override
