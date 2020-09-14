@@ -599,9 +599,9 @@ public class ExpertiseUserController {
             return response;
         }
         if (type.equals("performer"))
-            user.setIsPerformer(!user.getIsPerformer());
+            user.setIsPerformer(user.getIsPerformer()!=null?!user.getIsPerformer():Boolean.TRUE);
         if (type.equals("agreement"))
-            user.setIsAgreement(!user.getIsAgreement());
+            user.setIsAgreement(user.getIsAgreement()!=null?!user.getIsAgreement():Boolean.TRUE);
         userService.updateUser(user);
 
         response.put("status", "success");
