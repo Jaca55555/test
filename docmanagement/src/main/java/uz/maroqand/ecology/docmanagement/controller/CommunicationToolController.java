@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
@@ -48,8 +49,8 @@ public class CommunicationToolController {
     )
     {
         name = StringUtils.trimToNull(name);
-
-        Page<CommunicationTool> toolsPage = communicationToolService.findFiltered(id, name, pageable);
+        User user= userService.getCurrentUserFromContext();
+        Page<CommunicationTool> toolsPage = communicationToolService.findFiltered(id, name,user.getOrganizationId(), pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", toolsPage.getTotalElements()); //Total elements

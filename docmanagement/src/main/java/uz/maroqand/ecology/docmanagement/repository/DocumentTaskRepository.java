@@ -26,8 +26,8 @@ public interface DocumentTaskRepository extends DataTablesRepository<DocumentTas
     DocumentTask findByDocumentIdAndChiefId(Integer docId, Integer userId);
 
     DocumentTask findByIdAndDocumentIdAndDeletedFalse(Integer id, Integer docId);
-
     Integer countByStatusInAndDeletedFalse(Set<Integer> status);
+    Integer countByStatusInAndDeletedFalseAndCreatedById(Set<Integer> status,Integer userId);
     Integer countByDueDateBetweenAndStatusNotAndDeletedFalse(Date begin, Date end, Integer statusId);
 
     Integer countByDueDateBeforeAndStatusNotAndDeletedFalse(Date now, Integer statusId);

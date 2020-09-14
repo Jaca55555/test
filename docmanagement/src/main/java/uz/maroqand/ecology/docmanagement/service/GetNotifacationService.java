@@ -79,7 +79,7 @@ public class GetNotifacationService {
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskStatus.Checking.getId());
-        return documentTaskService.getCountTaskStatus(statuses);
+        return documentTaskService.getCountTaskStatus(statuses,user.getId());
     }
     public Integer countPerformerByStatus(){
         return documentTaskSubService.getCountByStatus();

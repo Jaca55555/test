@@ -73,19 +73,19 @@ public class DocumentCheckController {
         statuses.add(TaskStatus.Checking.getId());
         statuses.add(TaskStatus.Complete.getId());
         statuses.add(TaskStatus.Rejected.getId());
-        model.addAttribute("allCount", documentTaskService.getCountTaskStatus(statuses));
+        model.addAttribute("allCount", documentTaskService.getCountTaskStatus(statuses,user.getId()));
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskStatus.Checking.getId());
-        model.addAttribute("inProgressCount", documentTaskService.getCountTaskStatus(statuses));
+        model.addAttribute("inProgressCount", documentTaskService.getCountTaskStatus(statuses,user.getId()));
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskStatus.Complete.getId());
-        model.addAttribute("inCompleteCount", documentTaskService.getCountTaskStatus(statuses));
+        model.addAttribute("inCompleteCount", documentTaskService.getCountTaskStatus(statuses,user.getId()));
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskStatus.Rejected.getId());
-        model.addAttribute("inRejectedCount", documentTaskService.getCountTaskStatus(statuses));
+        model.addAttribute("inRejectedCount", documentTaskService.getCountTaskStatus(statuses,user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());
@@ -114,6 +114,11 @@ public class DocumentCheckController {
         }else if(tabFilter==3){
             taskStatuses.add(TaskStatus.Rejected.getId());
         }
+        System.out.println("+++++++++++");
+        System.out.println(taskStatuses);
+        System.out.println(incomingRegFilter);
+        System.out.println("+++++++++++");
+
         //barcha hujjatlar ko'rinishi uchun documentTypeId=null
         Page<DocumentTask> documentTaskPage = documentTaskService.findFiltered(user.getOrganizationId(), null, incomingRegFilter, null, null, taskStatuses, null, null, null,pageable);
         List<DocumentTask> documentTaskList = documentTaskPage.getContent();

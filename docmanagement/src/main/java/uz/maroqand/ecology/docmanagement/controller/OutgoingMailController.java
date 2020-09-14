@@ -21,15 +21,12 @@ import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -444,6 +441,7 @@ public class OutgoingMailController {
         Document document1=documentService.getById(id);
         System.out.println(type);
         document1.setDocumentTypeId(type);
+        document1.setExecuteForm(ExecuteForm.Performance);
         documentService.update(document1);
         return "redirect:" + DocUrls.OutgoingMailListIn;
     }
