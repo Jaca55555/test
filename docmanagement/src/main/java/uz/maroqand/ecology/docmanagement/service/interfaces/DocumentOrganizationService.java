@@ -7,6 +7,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 29.03.2019.
@@ -16,7 +17,7 @@ import java.util.List;
 public interface DocumentOrganizationService {
 
     DocumentOrganization getById(Integer id);
-
+    Set<DocumentOrganization> getByParent(Integer parentId);
     DocumentOrganization getByName(String name);
 
     List<String> getDocumentOrganizationNames();

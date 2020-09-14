@@ -175,6 +175,10 @@ public class DocumentSubServiceImpl implements DocumentSubService {
         if (statuses != null) {
             predicates.add(criteriaBuilder.in(joinDocument.get("status")).value(statuses));
         }
+        if (documentOrganizationIds != null) {
+            predicates.add(criteriaBuilder.in(root.get("documentOrganizationIds")).value(documentOrganizationIds));
+        }
+
             if(documentTypeId != null)
                 predicates.add(criteriaBuilder.equal(joinDocument.get("documentTypeId"), documentTypeId));
             if(documentStatusIdToExclude != null)

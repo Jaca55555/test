@@ -341,7 +341,7 @@ public class OutgoingMailController {
                 documentViewId,
                 content,
                 departmentId,
-                null,
+                user.getId(),
                 statuses,
                 hasAdditional,
                 findTodayS_,
@@ -495,8 +495,11 @@ public class OutgoingMailController {
 
         for (String docIdOrName: documentOrganizationIds) {
             DocumentOrganization documentOrganization = documentOrganizationService.getById(parseIdOrCreateNew(docIdOrName, user.getId()));
-            if (documentOrganization!=null){
+            if (documentOrganization!=null&&documentOrganization.getParent()!=null){
                 documentOrganizationSet.add(documentOrganization);
+            }else{
+                documentOrganizationSet.add(documentOrganization);
+                documentOrganizationSet.addAll(documentOrganizationService.getByParent(documentOrganization.getId()));
             }
         }
         docSub.setDocumentOrganizations(documentOrganizationSet);

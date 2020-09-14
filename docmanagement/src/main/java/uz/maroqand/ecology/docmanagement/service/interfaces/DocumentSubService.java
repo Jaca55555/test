@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
 
 import java.util.Date;
@@ -32,7 +33,7 @@ public interface DocumentSubService {
 
     DocumentSub getById(Integer id);
 
-    Page<DocumentSub> findFiltered(Integer documentTypeId,Integer organizationId, Integer documentStatusId, Integer documentOrganizationId, List<Integer> documentOrganizationIds,String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
+    Page<DocumentSub> findFiltered(Integer documentTypeId, Integer organizationId, Integer documentStatusId, Integer documentOrganizationId, List<Integer> documentOrganizationIds, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
 
     DocumentSub findOneByDocumentId(Integer documentId);
 
