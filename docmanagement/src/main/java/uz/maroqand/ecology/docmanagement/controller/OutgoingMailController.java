@@ -315,7 +315,7 @@ public class OutgoingMailController {
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-
+        User user = userService.getCurrentUserFromContext();
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
         MutableBoolean findTodayS = new MutableBoolean();
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
@@ -323,19 +323,15 @@ public class OutgoingMailController {
         List<DocumentStatus> statuses = new ArrayList<>(2);
 
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
-
-        if(tab == 7){
-            statuses.clear();
-            statuses.add(DocumentStatus.InProgress);
-        }
+        statuses.clear();
+        statuses.add(DocumentStatus.Completed);
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        User user = userService.getCurrentUserFromContext();
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
-                user.getOrganizationId(),
+                null,
                 documentStatusIdToExclude,
                 documentOrganizationId,
                 null,

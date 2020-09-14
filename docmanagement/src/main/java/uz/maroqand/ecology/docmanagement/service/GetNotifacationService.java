@@ -86,7 +86,8 @@ public class GetNotifacationService {
     }
 
     public Integer countIncomingNotByStatus(){
-        return documentRepository.countByStatus(DocumentStatus.New);
+        User user =userService.getCurrentUserFromContext();
+        return documentRepository.countByStatusAndCreatedById(DocumentStatus.New,user.getId());
     }
 
 }
