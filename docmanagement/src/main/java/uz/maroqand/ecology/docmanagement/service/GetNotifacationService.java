@@ -79,14 +79,15 @@ public class GetNotifacationService {
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskStatus.Checking.getId());
-        return documentTaskService.getCountTaskStatus(statuses);
+        return documentTaskService.getCountTaskStatus(statuses,user.getId());
     }
     public Integer countPerformerByStatus(){
         return documentTaskSubService.getCountByStatus();
     }
 
     public Integer countIncomingNotByStatus(){
-        return documentRepository.countByStatus(DocumentStatus.New);
+        User user =userService.getCurrentUserFromContext();
+        return documentRepository.countByStatusAndCreatedById(DocumentStatus.New,user.getId());
     }
 
 }

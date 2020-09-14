@@ -10,10 +10,13 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.entity.CommunicationTool;
+import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
 import uz.maroqand.ecology.docmanagement.repository.CommunicationToolRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.CommunicationToolService;
 
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
 import java.util.LinkedList;
@@ -73,12 +76,13 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
     public Page<CommunicationTool> findFiltered(
             Integer id,
             String name,
+            Integer organizationId,
             Pageable pageAble
     ){
-        return communicationToolRepository.findAll(getFilteringSpecification2(id, name), pageAble);
+        return communicationToolRepository.findAll(getFilteringSpecification2(id, name,organizationId), pageAble);
     }
 
-    private static Specification<CommunicationTool> getFilteringSpecification2(Integer id, String name) {
+    private static Specification<CommunicationTool> getFilteringSpecification2(Integer id, String name,Integer organizationId) {
         return (Specification<CommunicationTool>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new LinkedList<>();
             if (id != null) {
@@ -88,6 +92,10 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
                 predicates.add(criteriaBuilder.like(
                         criteriaBuilder.lower(root.get("name")),
                         "%" + name.toLowerCase() + "%"));
+            }
+            Join<DocumentDescription, User> joinUser = root.join("user");
+            if(organizationId!=null){
+                predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
             }
             predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

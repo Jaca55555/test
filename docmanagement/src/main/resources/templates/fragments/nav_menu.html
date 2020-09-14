@@ -167,7 +167,7 @@
                         <span class="pcoded-micon"><i class="feather icon-alert-circle color-yellow"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_incoming.taskNotIncluded}">Ижрога тушмаган</span>
 <!--                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="bg-success border border-primary rounded-pill w-15 text-center" style="height: 20px">12</span>-->
-                        <span th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="w-15 text-center rounded-notification">12</span>
+                        <span th:if="${@getNotifacationService.countIncomingNotByStatus()}!=0" th:text="${@getNotifacationService.countIncomingNotByStatus()}" class="w-15 text-center rounded-notification">12</span>
                     </a>
                 </li>
                 <!--<li class="nav-item">

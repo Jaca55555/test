@@ -160,8 +160,8 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
     }
 
     @Override
-    public Integer getCountTaskStatus(Set<Integer> statusSet) {
-        return taskRepository.countByStatusInAndDeletedFalse(statusSet);
+    public Integer getCountTaskStatus(Set<Integer> statusSet,Integer userId) {
+        return taskRepository.countByStatusInAndDeletedFalseAndCreatedById(statusSet,userId);
     }
 
     @Override
@@ -460,6 +460,7 @@ public class DocumentTaskServiceImpl implements DocumentTaskService{
                 //kiruvchi, ichki hujjatlar
                 predicates.add(criteriaBuilder.equal(root.get("document").get("documentTypeId"), documentTypeId));
             }
+
             if (incomingRegFilter.getDocumentOrganizationId() != null) {
                 predicates.add(criteriaBuilder.equal(
                         root.join("document").join("documentSubs").get("organizationId"),

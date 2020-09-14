@@ -22,7 +22,7 @@ public interface CommunicationToolService {
 
     List<CommunicationTool> updateStatusActive();
 
-    Page<CommunicationTool> findFiltered(Integer id, String service, Pageable pageAble);
+    Page<CommunicationTool> findFiltered(Integer id, String service,Integer organizationId, Pageable pageAble);
 
     CommunicationTool create(CommunicationTool communicationTool);
 

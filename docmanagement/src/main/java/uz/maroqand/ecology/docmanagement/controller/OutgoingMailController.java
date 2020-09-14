@@ -21,15 +21,12 @@ import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -318,7 +315,7 @@ public class OutgoingMailController {
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-
+        User user = userService.getCurrentUserFromContext();
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
         MutableBoolean findTodayS = new MutableBoolean();
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
@@ -326,19 +323,15 @@ public class OutgoingMailController {
         List<DocumentStatus> statuses = new ArrayList<>(2);
 
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
-
-        if(tab == 7){
-            statuses.clear();
-            statuses.add(DocumentStatus.InProgress);
-        }
+        statuses.clear();
+        statuses.add(DocumentStatus.Completed);
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        User user = userService.getCurrentUserFromContext();
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
-                user.getOrganizationId(),
+                null,
                 documentStatusIdToExclude,
                 documentOrganizationId,
                 null,
@@ -444,6 +437,7 @@ public class OutgoingMailController {
         Document document1=documentService.getById(id);
         System.out.println(type);
         document1.setDocumentTypeId(type);
+        document1.setExecuteForm(ExecuteForm.Performance);
         documentService.update(document1);
         return "redirect:" + DocUrls.OutgoingMailListIn;
     }

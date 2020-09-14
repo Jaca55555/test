@@ -228,7 +228,6 @@ public class InnerController {
         List<Integer> docTypes = new ArrayList<>();
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
-
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),documentTask.getId());
         model.addAttribute("document", document);
@@ -236,10 +235,12 @@ public class InnerController {
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(documentTask.getId(),locale));
         model.addAttribute("tree", documentService.createTree(document));
+
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("dueDate",Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()));
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
