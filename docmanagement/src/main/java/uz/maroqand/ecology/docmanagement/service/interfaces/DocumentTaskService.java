@@ -43,7 +43,7 @@ public interface DocumentTaskService {
     Integer countExecutedForReference();
     Integer countTotal();
 
-    Integer getCountTaskStatus(Set<Integer> taskStatusSet);
+    Integer getCountTaskStatus(Set<Integer> taskStatusSet,Integer userId);
 
     DocumentTask create(DocumentTask task);
 

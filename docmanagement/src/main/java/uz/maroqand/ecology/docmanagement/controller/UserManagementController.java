@@ -30,19 +30,19 @@ public class UserManagementController
 
     @GetMapping(value = DocUrls.Chiefs)
     public String getChiefList(Model model) {
-
+        User user= userService.getCurrentUserFromContext();
         model.addAttribute("isChief", true);
         model.addAttribute("isController", false);
-        model.addAttribute("users", userService.getEmployeesForDocManage("chief"));
+        model.addAttribute("users", userService.getEmployeesForDocManageOrganization("chief",user.getOrganizationId()));
         return DocTemplates.Controllers;
     }
 
     @GetMapping(value = DocUrls.Controllers)
     public String getControllerList(Model model) {
-
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("isChief", false);
         model.addAttribute("isController", true);
-        model.addAttribute("users", userService.getEmployeesForDocManage("controller"));
+        model.addAttribute("users", userService.getEmployeesForDocManageOrganization("controller",user.getOrganizationId()));
         return DocTemplates.Controllers;
     }
 

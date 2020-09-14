@@ -269,11 +269,11 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
-
+        if(document.getExecuteForm()!=null){
          if(document.getExecuteForm().getId().equals(ExecuteForm.Information.getId())){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);
-         }
+         }}
 
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -285,17 +285,19 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Checking);
         statuses.add(TaskSubStatus.ForChangePerformer);
         List<Integer> docTypes = new ArrayList<>();
+
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());
         List<DocumentTaskSub> documentTaskSubs = documentTaskSubService.getListByDocIdAndTaskId(document.getId(),task.getId());
         model.addAttribute("document", document);
-        model.addAttribute("executeForm",document.getExecuteForm().getName());
+        model.addAttribute("executeForm", document.getExecuteForm().getName());
         model.addAttribute("task", task);
         model.addAttribute("documentLog", new DocumentLog());
         model.addAttribute("tree", documentService.createTree(document));
         model.addAttribute("resolutionDocument", documentTaskService.resolutionCreateByTaskId(task.getId(),locale));
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
+        model.addAttribute("dueDate",Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()));
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);

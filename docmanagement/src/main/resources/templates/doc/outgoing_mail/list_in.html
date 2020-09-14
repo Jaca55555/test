@@ -136,17 +136,17 @@
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="tin" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
+                            <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
                             <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
                                 <option value="" th:text="#{sys_select}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="applicationId" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
+                            <label for="registration_number" class="control-label" th:text="#{doc_outgoing.registrationNumber}">Руйхатга олиш раками</label>
                             <input type="text" class="form-control" id="registration_number">
                         </div>
                         <div class="form-group col-md-3 col-sm-12">
-                            <label for="dateBegin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
+                            <label for="date_begin" class="control-label" th:text="#{doc_outgoing.registrationDate}">Руйхатга олинган сана</label>
                             <div class="row">
                                 <div class="col-6" style="padding-left: 0;">
                                     <input autocomplete="off" class="form-control datepicker date" id="date_begin" th:placeholder="#{date_begin}">
@@ -244,7 +244,7 @@
 
 <script th:inline="javascript">
 
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingListAjax}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailListInAjax}]];
     let viewLink = [[${view_link}]];
     let changeStatusLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingMailChangeStatus}]];
 
@@ -377,11 +377,7 @@
                     className: "w-15 text-left"
                 },
                 {data: 2, name: 'registrationDate',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" >' + row[2]+'</a>';
-                        return html;
-                    },
+
                     className: "w-10 text-left"
                 },
                 {data: 3, name: 'content',
@@ -428,21 +424,21 @@
 
         if (text_ === "document_status.new" || text_ === "document_status.inProgress") {
             if (currentLanguage === 'oz') {
-                text = 'Жунатилмаган';
+                text = 'Жўнатилмаган';
             } else if (currentLanguage === 'uz') {
-                text = 'Junatilmagan';
+                text = `Jo'natilmagan`;
             } else if (currentLanguage === 'ru') {
                 text = 'Неотправлено';
             }
             return text;
         }else if(text_ === "document_status.completed"){
             if(currentLanguage === 'oz') {
-                text = 'Жунатилган';
+                text = 'Жўнатилган';
             }
             else if(currentLanguage === 'uz'){
-                text = 'Junatilgan';
+                text = `Jo'natilgan`;
             }else if(currentLanguage === 'ru'){
-                text = 'Отправлено';
+                text ='Отправлено';
             }
             return text;
         }else return '';
