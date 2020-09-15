@@ -348,7 +348,7 @@
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
-                dataToSend.document_organization_id = $('#document_organization_id').select2("val");
+                dataToSend.document_organization_id = $('#document_organization_id').val();
                 console.log(typeof $('#document_organization_id').val());
                 console.log( $('#document_organization_id').select2("val"));
                 dataToSend.registration_number = $('#registration_number').val();

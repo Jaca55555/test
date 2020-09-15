@@ -145,7 +145,7 @@ public class OutgoingController {
     @ResponseBody
     public HashMap<String, Object> getOutgoingDocumentListAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)List<String> documentOrganizationIds,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -185,26 +185,14 @@ public class OutgoingController {
         }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        Set<DocumentOrganization> documentOrganizationSet = new HashSet<>();
 
-        /*for (String docIdOrName: documentOrganizationIds) {
-            DocumentOrganization documentOrganization = documentOrganizationService.getById(parseIdOrCreateNew(docIdOrName, user.getId()));
-            if (documentOrganization!=null&&documentOrganization.getParent()!=null){
-                documentOrganizationSet.add(documentOrganization);
-            }else{
-                documentOrganizationSet.add(documentOrganization);
-                documentOrganizationSet.addAll(documentOrganizationService.getByParent(documentOrganization.getId()));
-            }
-        }*/
-        System.out.println("=============================");
-        System.out.println(documentOrganizationSet);
-        System.out.println("=============================");
+
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
                 documentOrganizationId,
-                null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
