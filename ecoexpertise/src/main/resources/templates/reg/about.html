@@ -309,7 +309,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" th:field="*{name}"required=""  />
+                                                                <input class="form-control" type="text" th:field="*{name}" required="" maxlength="254"  />
                                                             </div>
                                                         </div>
 
@@ -329,7 +329,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
+                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" maxlength="254" />
                                                                 <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
                                                             </div>
                                                         </div>
