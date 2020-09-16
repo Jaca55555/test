@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class AccountController {
 
     private final UserService userService;
     private final TableHistoryService tableHistoryService;
-    private final Gson gson;
+    private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Autowired
     public AccountController(
@@ -29,7 +30,6 @@ public class AccountController {
     ) {
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
-        this.gson = gson;
     }
 
     @RequestMapping("/profile")

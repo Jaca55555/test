@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 </head>
 <body>
 <style>
@@ -47,30 +49,82 @@
                                     <h5 class="mb-5" th:text="#{sign_in.eds.title}" style="margin-bottom: 1rem!important;"></h5>
 
                                     <div id="login" class="animate form">
+                                        <label id="message"></label>
+                                        Выберите ключ <br/>
+                                        <!--<div id="legal_content">
+                                                    <h4 th:text="#{e_imzo_legal}" class="text-center"></h4>
+                                                    <div class="card text-left btn pl-3 pt-3 rounded-bottom rounded-top" style="background-color: #e8e9ea">
+                                                        <p class="m-0">
+                                                            <span style="font-weight: bold">OOO test korxona</span><br/>
+                                                            <span style="font-weight: bold" th:text="#{sys_full_name}">NAME:</span>:<span> Sadulleyev Akmal Ikrom o'g'li</span><br/>
+                                                            <span style="font-weight: bold" th:text="#{sys_tin}">TIN:</span>:<span> 123456789</span>
+                                                        </p>
+                                                        <div class="text-right">
+                                                            <button  class="btn btn-primary btn-sm">
+                                                                <span th:text="#{sys_sign}"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card text-left btn pl-3 pt-3 rounded-bottom rounded-top" style="background-color: #e8e9ea">
+                                                        <p class="m-0">
+                                                            <span style="font-weight: bold">OOO test korxona</span><br/>
+                                                            <span style="font-weight: bold" th:text="#{sys_full_name}">NAME:</span>:<span> Sadulleyev Akmal Ikrom o'g'li</span><br/>
+                                                            <span style="font-weight: bold" th:text="#{sys_tin}">TIN:</span>:<span> 123456789</span>
+                                                        </p>
+                                                        <div class="text-right">
+                                                            <button  class="btn btn-primary btn-sm">
+                                                                <span th:text="#{sys_sign}"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                        <div id="e-imzo-individual-div">
+                                            <h4 th:text="#{e_imzo_individual}"></h4>
+                                            <div class="card btn btn-light mb-2 pt-2 pb-2 text-left" >
+                                                <p class="m-0">
+                                                    <span style="font-weight: bold" th:text="#{sys_full_name}">NAME:</span>: &nbsp;<span> Sadulleyev Akmal Ikrom o'g'li</span><br/>
+                                                    <span style="font-weight: bold" th:text="#{sys_pinfl}">PNFL:</span>:  &nbsp; <span>32201850191994 </span><br/>
+                                                </p>
+                                                <div class="text-right">
+                                                    <button type="button" class="btn btn-primary btn-sm mr-0">
+                                                        <span th:text="#{sys_sign}"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card btn btn-light mb-2 pt-2 pb-2 text-left" >
+                                                <p class="m-0">
+                                                    <span style="font-weight: bold" th:text="#{sys_full_name}">NAME:</span>: &nbsp;<span> Sadulleyev Akmal Ikrom o'g'li</span><br/>
+                                                    <span style="font-weight: bold" th:text="#{sys_pinfl}">PNFL:</span>: &nbsp; <span>32201850191994 </span><br/>
+                                                </p>
+                                                <div class="text-right">
+                                                    <button type="button" class="btn btn-primary btn-sm mr-0">
+                                                        <span th:text="#{sys_sign}"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>-->
+
+                                        <div id="e-imzo-legal-div">
+                                        </div>
+
+                                        <div id="e-imzo-individual-div">
+
+                                        </div>
                                          <section class="login_content">
                                             <form action="/sys/eds_login" name="testform" method="post">
                                                 <!--<h2 th:text="#{sys_systemName}"></h2>-->
                                                 <!--<h4>Войти</h4>-->
-
-
-                                                <label id="message"></label>
-                                                Выберите ключ <br/>
-
-
-                                                <div id="e-imzo-legal-div">
-                                                </div>
-
-                                                <div id="e-imzo-individual-div">
-                                                </div>
 
                                                 <select class="form-control" name="key"  style="display: none"></select><br/>
                                                 <!--<div>
                                                     <input type="password" class="form-control" placeholder="Password" required="" name="password"/>
                                                 </div>-->
 
-<!--                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                                                 <input type="hidden" name="data" value="test" />
                                                 <input type="hidden" name="pkcs7" value="" />
+                                                <input type="hidden" id= "csrf-token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<!--                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                                                 <!--<br/>-->
                                                 <div class="clearfix"></div>
                                                 <div class="separator" style="display: none">
@@ -100,15 +154,14 @@
                                             const sysPinfl = [[#{sys_pinfl}]];
                                             const eImzoLegal = [[#{e_imzo_legal}]];
                                             const eImzoIndividual = [[#{e_imzo_individual}]];
-                                            let keyYesOrNot = 0;
 
                                             function createKeyDiv(itmKey,vo) {
                                                 let createDiv= "";
-                                                keyYesOrNot++;
-                                                if (vo.UID){
-                                                    if (document.getElementById('e-imzo-legal-div').childElementCount==0){
+                                                console.log("UID==" + vo.UID + "--");
+                                                if (vo.UID && vo.UID!==""){
+                                                    /*if (document.getElementById('e-imzo-legal-div').childElementCount==0){
                                                         createDiv='<h4>' + eImzoLegal + '</h4>'
-                                                    }
+                                                    }*/
                                                      createDiv += '<div class="card mb-2 p-2 text-left"  >\n' +
                                                         '               <p class="m-0">\n' +
                                                         '                   <span style="font-weight: bold">' + vo.O + '</span><br/>\n' +
@@ -116,16 +169,16 @@
                                                         '                   <span style="font-weight: bold" >' + sysTin + ':</span>:&nbsp;<span> ' + vo.TIN + ' </span><br/>\n' +
                                                         '               </p>\n' +
                                                         '               <div class="text-right">\n' +
-                                                        '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey('+itmKey+')">\n' +
+                                                        '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey(\''+itmKey+'\')">\n' +
                                                         '                       <span >'+sysSign+'</span>\n' +
                                                         '                   </button>\n' +
                                                         '               </div>\n' +
                                                         '            </div>';
                                                      $('#e-imzo-legal-div').append(createDiv);
                                                 }else{
-                                                    if (document.getElementById('e-imzo-individual-div').childElementCount==0){
+                                                   /* if (document.getElementById('e-imzo-individual-div').childElementCount==0){
                                                         createDiv='<h4>' + eImzoIndividual + '</h4>'
-                                                    }
+                                                    }*/
                                                     createDiv += '<div class="card mb-2 p-2 text-left"  >\n' +
                                                         '               <p class="m-0">\n' +
                                                         '                   <span style="font-weight: bold" >' + sysFullName +': </span>:&nbsp;<span>' + vo.CN + '</span><br/>\n' +
@@ -133,7 +186,7 @@
                                                         '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' +
                                                         '               </p>\n' +
                                                         '               <div class="text-right">\n' +
-                                                        '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey('+itmKey+')">\n' +
+                                                        '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey(\''+itmKey+'\')">\n' +
                                                         '                       <span >'+sysSign+'</span>\n' +
                                                         '                   </button>\n' +
                                                         '               </div>\n' +
@@ -331,12 +384,5 @@
     </div>
 </div>
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
-<script >
-    $(document).ready(function () {
-        alert("hello");
-            console.log(document.getElementById('e-imzo-individual-div').childElementCount);
-            console.log(document.getElementById('e-imzo-legal-div').childElementCount);
-    })
-</script>
 </body>
 </html>
