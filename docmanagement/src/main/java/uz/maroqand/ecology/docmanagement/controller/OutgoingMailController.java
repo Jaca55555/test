@@ -321,7 +321,7 @@ public class OutgoingMailController {
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
-
+        Set<Integer> documentOrganizations= documentOrganizationService.getByOrganizationId(user.getOrganizationId());
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
         statuses.clear();
         statuses.add(DocumentStatus.Completed);
@@ -334,7 +334,7 @@ public class OutgoingMailController {
                 null,
                 documentStatusIdToExclude,
                 documentOrganizationId,
-                null,
+                documentOrganizations,
                 registrationNumber,
                 begin,
                 end,

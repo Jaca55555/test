@@ -18,6 +18,7 @@ public interface DocumentOrganizationService {
 
     DocumentOrganization getById(Integer id);
     Set<DocumentOrganization> getByParent(Integer parentId);
+    Set<Integer> getByOrganizationId(Integer organizationId);
     DocumentOrganization getByName(String name);
 
     List<String> getDocumentOrganizationNames();
