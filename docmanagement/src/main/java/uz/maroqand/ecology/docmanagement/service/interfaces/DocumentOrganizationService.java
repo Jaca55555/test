@@ -34,7 +34,7 @@ public interface DocumentOrganizationService {
     DataTablesOutput<DocumentOrganization> getAll(DataTablesInput input);
 
     List<DocumentOrganization> getList();
-    List<DocumentOrganization> getLevel(Integer Id);
+    List<DocumentOrganization> getLevel(Integer organizationId,Integer Id);
     Page<DocumentOrganization> findFiltered(Integer id,Integer organizationId, String name, Integer status, Pageable pageable);
 
     Page<DocumentOrganization> getOrganizationList(String name,Integer organizationId, Pageable pageable);

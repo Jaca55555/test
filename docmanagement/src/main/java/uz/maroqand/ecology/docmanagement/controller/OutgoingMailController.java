@@ -260,7 +260,7 @@ public class OutgoingMailController {
         List<Position> positions = positionService.getAll();
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
-        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
+        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief",user.getOrganizationId()));
         model.addAttribute("performerId",null);
         return DocTemplates.OutgoingMailNew;
     }
@@ -296,7 +296,7 @@ public class OutgoingMailController {
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListInAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -333,8 +333,8 @@ public class OutgoingMailController {
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 null,
                 documentStatusIdToExclude,
-                documentOrganizationId,
-                documentOrganizations,
+                null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,

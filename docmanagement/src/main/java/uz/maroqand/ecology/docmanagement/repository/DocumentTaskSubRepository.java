@@ -3,6 +3,7 @@ package uz.maroqand.ecology.docmanagement.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
@@ -41,10 +42,10 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countByReceiverIdAndDueDateLessThanEqual(Integer receiverId, Date date);//Муддати якинлашаётган
 
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);//Муддати кеччикан
-
-    Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
-    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =?1 AND d.deleted = FALSE AND d.receiverId=?2 AND d.status=?3")
-    Integer countByReceiverIdAndStatus(Integer d_id,Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
+//    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =?1 AND d.deleted = FALSE AND d.receiverId=?2 AND d.status=?3")
+//    Integer countByReceiverIdAndStatusIn(Integer typeId,Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган;//Янги хатлар, Жараёндаги, Ижро этилган
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId = :d_id AND d.deleted = FALSE AND d.receiverId= :receiverId AND d.status IN :statuses")
+    Integer countByReceiverIdAndStatus(@Param("d_id") Integer d_id, @Param("receiverId") Integer receiverId, @Param("statuses") Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
     Integer countByStatus( Set<Integer> statuses);
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
 

@@ -349,8 +349,8 @@ public class IncomingRegistrationController {
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
         model.addAttribute("taskContentList", documentTaskContentService.getTaskContentList(user.getOrganizationId()));
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("managerUserList", userService.getEmployeesForDocManageOrganization("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForDocManageOrganization("controller",user.getOrganizationId()));
         model.addAttribute("organizationList", organizationService.getDocumentOrganizationNames());
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());

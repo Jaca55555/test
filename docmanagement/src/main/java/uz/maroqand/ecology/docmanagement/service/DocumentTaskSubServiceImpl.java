@@ -466,8 +466,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
 
     @Override
-    public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){
-        return documentTaskSubRepository.countByReceiverIdAndStatusIn(receiverId, statuses);
+    public Integer countByReceiverIdAndStatusIn(Integer typeId,Integer receiverId, Set<Integer> statuses){
+        return documentTaskSubRepository.countByReceiverIdAndStatus(typeId,receiverId, statuses);
     }
 
     @Override

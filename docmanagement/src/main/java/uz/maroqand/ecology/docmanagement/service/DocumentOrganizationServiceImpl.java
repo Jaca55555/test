@@ -107,8 +107,8 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
-    public List<DocumentOrganization> getLevel(Integer id) {
-        return documentOrganizationRepository.getAllByLevel(id);
+    public List<DocumentOrganization> getLevel(Integer organizationId,Integer id) {
+        return documentOrganizationRepository.getAllByLevel(organizationId,id);
     }
 
     @Override

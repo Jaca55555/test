@@ -19,7 +19,8 @@ public interface DocumentOrganizationRepository extends DataTablesRepository<Doc
 
     DocumentOrganization findByIdAndDeletedFalse(Integer id);
     Set<DocumentOrganization> findByParentAndDeletedFalse(Integer parentId);
-    List<DocumentOrganization> getAllByLevel(Integer id);
+    @Query("SELECT d FROM DocumentOrganization d LEFT JOIN User dt ON d.createdById = dt.id WHERE d.status=true AND d.deleted = FALSE AND  dt.organizationId=?1 AND d.level=?2")
+    List<DocumentOrganization> getAllByLevel(Integer organizationId,Integer id);
     DocumentOrganization findByNameContaining(String name);
     @Query("SELECT d.id FROM DocumentOrganization d LEFT JOIN User dt ON d.createdById = dt.id WHERE d.status=true AND d.deleted = FALSE AND  dt.organizationId=?1")
     Set<Integer> findByStatusTrueAndOrganizationId(Integer organizationId);

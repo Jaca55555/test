@@ -284,8 +284,8 @@ public class InnerRegistrationController {
         model.addAttribute("document", document);
         model.addAttribute("userList", userList);
         model.addAttribute("communicationToolList", communicationToolService.getStatusActive());
-        model.addAttribute("managerUserList", userService.getEmployeesForNewDoc("chief"));
-        model.addAttribute("controlUserList", userService.getEmployeesForNewDoc("controller"));
+        model.addAttribute("managerUserList", userService.getEmployeesForDocManageOrganization("chief",user.getOrganizationId()));
+        model.addAttribute("controlUserList", userService.getEmployeesForDocManageOrganization("controller",user.getOrganizationId()));
         model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),1));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));

@@ -159,9 +159,6 @@ public class OutgoingController {
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-        System.out.println("=========================================");
-        System.out.println(documentOrganizationIds);
-        System.out.println("=========================================");
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
