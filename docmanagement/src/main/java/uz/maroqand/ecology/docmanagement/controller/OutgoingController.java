@@ -183,7 +183,8 @@ public class OutgoingController {
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
-
+        Set<Integer> documentOrganizationSet=documentOrganizationService.getByOrganizationId(user.getOrganizationId());
+        if(documentOrganizationIds==null){documentOrganizationIds=documentOrganizationSet;}
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),

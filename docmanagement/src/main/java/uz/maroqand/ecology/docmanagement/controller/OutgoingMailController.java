@@ -127,24 +127,23 @@ public class OutgoingMailController {
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-
+        User user = userService.getCurrentUserFromContext();
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
         MutableBoolean findTodayS = new MutableBoolean();
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
-
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        User user = userService.getCurrentUserFromContext();
-        Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
+        Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
+        Set<Integer> documentOrganizationSet=documentOrganizationService.getByOrganizationId(user.getOrganizationId());
+        if(documentOrganizationIds==null){documentOrganizationIds=documentOrganizationSet;}
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
