@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.lang.NumberFormatException;
+import java.util.function.Function;
 
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerTask;
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.OutgoingMailTask;
@@ -111,7 +112,7 @@ public class OutgoingMailController {
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -139,10 +140,6 @@ public class OutgoingMailController {
 
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
-//        if(tab == 7){
-//            statuses.clear();
-//            statuses.add(DocumentStatus.InProgress);
-//        }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
         User user = userService.getCurrentUserFromContext();
@@ -152,8 +149,8 @@ public class OutgoingMailController {
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
-                documentOrganizationId,
                 null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
@@ -165,10 +162,12 @@ public class OutgoingMailController {
                 hasAdditional,
                 findTodayS_,
                 specificPageable);
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Integer userId = userService.getCurrentUserFromContext().getId();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
+
             Document document = documentSub.getDocument();
             if(document == null) continue;
             if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
@@ -356,6 +355,7 @@ public class OutgoingMailController {
                 if(document.getCreatedById() != userId && document.getPerformerId() != userId)
                     continue;
             }
+
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
