@@ -304,7 +304,7 @@ public class InnerRegistrationController {
     public String createDoc(
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
-            @RequestParam(name = "fileIds",required = false) List<Integer> fileIds,
+            @RequestParam(name = "file_ids")List<Integer> file_ids,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
             @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
             @RequestBody MultiValueMap<String, String> formData,
@@ -312,10 +312,8 @@ public class InnerRegistrationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         Set<File> files = new HashSet<>();
-        if (fileIds!=null){
-            for (Integer fileId : fileIds) {
-                files.add(fileService.findById(fileId));
-            }
+        for(Integer id: file_ids) {
+            if (id != null) files.add(fileService.findById(id));
         }
         document.setContentFiles(files);
         document.setCreatedAt(new Date());

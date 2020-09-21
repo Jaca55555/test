@@ -294,16 +294,14 @@ public class ReferenceRegistrationController {
             @RequestParam(name = "insidePurpose", required = false) Boolean insidePurpose,
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
-            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
+            @RequestParam(name = "file_ids")List<Integer> file_ids,
             @RequestBody MultiValueMap<String, String> formData
 
     ) {
         User user = userService.getCurrentUserFromContext();
         Set<File> files = new HashSet<>();
-        if(fileIds!=null){
-            for (Integer fileId : fileIds) {
-                files.add(fileService.findById(fileId));
-            }
+        for(Integer id: file_ids) {
+            if (id != null) files.add(fileService.findById(id));
         }
 
         Document document = new Document();

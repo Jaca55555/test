@@ -377,19 +377,21 @@ public class IncomingRegistrationController {
             @RequestParam(name = "insidePurpose", required = false ,defaultValue = "") Boolean insidePurpose,
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
-            @RequestParam(name = "fileIds", required = false) List<Integer> fileIds,
+            @RequestParam(name = "file_ids")List<Integer> file_ids,
             @RequestBody MultiValueMap<String, String> formData
 
     ) {
-        User user = userService.getCurrentUserFromContext();
-        Set<File> files = new HashSet<>();
-        if(fileIds!=null){
-            for (Integer fileId : fileIds) {
-                files.add(fileService.findById(fileId));
-            }
+        System.out.println("++++++++++++++++");
+
+        System.out.println("++++++++++++++++");
+        Set<File> files = new HashSet<File>();
+        for(Integer id: file_ids) {
+            if (id != null) files.add(fileService.findById(id));
         }
 
+        User user = userService.getCurrentUserFromContext();
         Document document = new Document();
+        document.setContentFiles(files);
         document.setJournalId(journalId);
         document.setDocumentViewId(documentViewId);
         document.setDocRegNumber(docRegNumber);
@@ -410,7 +412,10 @@ public class IncomingRegistrationController {
         if(controlFormId!=null){
             document.setControlForm(ControlForm.getControlForm(controlFormId));
         }
-        document.setContentFiles(files);
+        System.out.println("____________");
+        System.out.println(files);
+        System.out.println("____________");
+//        document.setContentFiles(files);
         document.setCreatedById(user.getId());
 
         document.setSpecialControll(Boolean.FALSE);
