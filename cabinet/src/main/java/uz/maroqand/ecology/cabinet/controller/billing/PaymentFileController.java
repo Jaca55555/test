@@ -178,6 +178,7 @@ public class PaymentFileController {
                 paymentFile.setInvoice(invoice.getInvoice());
                 paymentFileService.save(paymentFile);
                 paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+                invoiceService.checkInvoiceStatus(invoice);
             }
         }
 

@@ -35,17 +35,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final WSClient wsClient;
-    private final InvoiceService invoiceService;
 
     private Logger logger = LogManager.getLogger(PaymentServiceImpl.class);
     private final String UPAY_RESPONSE_OK = "OK";
     private Gson gson = new Gson();
 
     @Autowired
-    public PaymentServiceImpl(PaymentRepository paymentRepository, WSClient wsClient, InvoiceService invoiceService) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, WSClient wsClient) {
         this.paymentRepository = paymentRepository;
         this.wsClient = wsClient;
-        this.invoiceService = invoiceService;
     }
 
     public Payment pay(Integer invoiceId, Double amount, Date paymentDate, String detail, PaymentType paymentType){
@@ -59,9 +57,6 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStatus(PaymentStatus.Success);
         payment.setDeleted(false);
         payment.setRegisteredAt(new Date());
-        if (payment.getInvoice()!=null){
-            invoiceService.checkInvoiceStatus(payment.getInvoice());
-        }
 
         return paymentRepository.save(payment);
     }

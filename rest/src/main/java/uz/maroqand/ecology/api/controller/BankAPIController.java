@@ -115,6 +115,8 @@ public class BankAPIController {
                 paymentFile.setInvoice(invoice.getInvoice());
                 paymentFileService.save(paymentFile);
                 paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                invoiceService.checkInvoiceStatus(invoice);
+
             }
 
         }

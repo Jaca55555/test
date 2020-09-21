@@ -85,10 +85,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amountAfter = requirement.getQty() * minWage.getAmount();
-        if (regApplication.getAddNds()!=null && regApplication.getAddNds()){
-            amountAfter=amountAfter*1.15;// 15% nds
-        }
-        System.out.println("invoice.getAmount()="+invoice.getAmount());
         System.out.println("amountAfter="+amountAfter);
         if(!invoice.getAmount().equals(amountAfter)){
             Double amount = amountAfter - invoice.getAmount();
@@ -177,6 +173,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.save(invoice);
 
         paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
+        checkInvoiceStatus(invoice);
 
         return invoice;
     }
