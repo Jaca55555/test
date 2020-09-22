@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
@@ -21,6 +20,7 @@ import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -36,12 +36,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     private final RegApplicationRepository regApplicationRepository;
     private final SmsSendService smsSendService;
     private final SmsSendOauth2Service smsSendOauth2Service;
+    private final UserService userService;
 
     @Autowired
-    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service) {
+    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService) {
         this.regApplicationRepository = regApplicationRepository;
         this.smsSendService = smsSendService;
         this.smsSendOauth2Service = smsSendOauth2Service;
+        this.userService = userService;
     }
 
     public RegApplication create(User user,RegApplicationInputType inputType){

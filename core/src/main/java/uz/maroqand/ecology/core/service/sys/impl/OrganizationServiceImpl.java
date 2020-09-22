@@ -33,6 +33,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public Organization getByRegionId(Integer id) {
+        return organizationRepository.findTop1ByRegionId(id);
+    }
+
+    @Override
     public List<Organization> getList() {
         return organizationRepository.findAll();
     }

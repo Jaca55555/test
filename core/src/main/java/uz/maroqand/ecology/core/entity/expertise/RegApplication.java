@@ -2,10 +2,12 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Soato;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -64,6 +66,15 @@ public class RegApplication {
     @Column(name = "category")
     @Enumerated(EnumType.ORDINAL)
     private Category category;
+
+    //Регион
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", updatable = false, insertable = false)
+    private Soato region;
+
+    @Column(name = "region_id")
+    private Integer regionId;
 
     //Вид материалов
     /*@OneToOne(fetch = FetchType.LAZY)

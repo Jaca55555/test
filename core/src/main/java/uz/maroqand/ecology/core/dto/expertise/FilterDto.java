@@ -14,8 +14,9 @@ public class FilterDto {
     private String name;
     private String contractNumber;
     private Integer applicationId;
-    private Long regionId;
-    private Long subRegionId;
+    private Integer regionId;
+    private Integer ecoRegionId;//xudud qaysiligi
+    private Integer subRegionId;
     private String regDateBegin;
     private String regDateEnd;
 

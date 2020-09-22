@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.user.UserRepository;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.DepartmentService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
@@ -34,12 +36,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final DepartmentService departmentService;
     private static PasswordEncoder encoder;
+    private final OrganizationService organizationService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, DepartmentService departmentService) {
+    public UserServiceImpl(UserRepository userRepository, DepartmentService departmentService, OrganizationService organizationService) {
         this.userRepository = userRepository;
         this.departmentService = departmentService;
+        this.organizationService = organizationService;
     }
 
     @Override
@@ -355,6 +359,15 @@ public class UserServiceImpl implements UserService {
             return user.getDepartmentId();
         }
         return null;
+    }
+
+    @Override
+    public Integer getUserRegionId(User  user) {
+        if (user.getOrganizationId()==null){
+            return null;
+        }
+        Organization organization = organizationService.getById(user.getOrganizationId());
+        return organization!=null?organization.getRegionId():null;
     }
 
     private PasswordEncoder passwordEncoder(){
