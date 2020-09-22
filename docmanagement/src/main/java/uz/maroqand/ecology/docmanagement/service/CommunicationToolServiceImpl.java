@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.docmanagement.entity.CommunicationTool;
-import uz.maroqand.ecology.docmanagement.entity.DocumentDescription;
 import uz.maroqand.ecology.docmanagement.repository.CommunicationToolRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.CommunicationToolService;
 
@@ -93,7 +92,7 @@ public class CommunicationToolServiceImpl implements CommunicationToolService {
                         criteriaBuilder.lower(root.get("name")),
                         "%" + name.toLowerCase() + "%"));
             }
-            Join<DocumentDescription, User> joinUser = root.join("user");
+            Join<CommunicationTool, User> joinUser = root.join("user");
             if(organizationId!=null){
                 predicates.add(criteriaBuilder.equal(joinUser.get("organizationId"), organizationId));
             }

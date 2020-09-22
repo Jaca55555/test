@@ -234,7 +234,8 @@ public class ReferenceController {
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
-                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
+                    document.getContentFiles()
 
             });
         }

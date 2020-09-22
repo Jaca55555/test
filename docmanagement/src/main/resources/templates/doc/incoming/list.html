@@ -430,32 +430,32 @@
                             html += '<b>'+row[6]+'</b><br>'+row[9]+'<br>';
                             $.each(row[10],function (i,file) {
                                 if(file.extension=="pdf") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="jpg"||file.extension=="jpeg"||file.extension=="png") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-image fs30 color-yellow"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="docx"||file.extension=="doc") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-word fs30 color-blue"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="xls"||file.extension=="xlsx") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-excel fs30 color-green"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="pptx"||file.extension=="ppt") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-powerpoint fs30 color-red"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="zip"||file.extension=="7z"||file.extension=="rar") {     html+=
-                                    '  <div class="column-2 mt-3">\n' +
+                                    '  <span class=" mt-3">\n' +
                                     '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
                                     '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}

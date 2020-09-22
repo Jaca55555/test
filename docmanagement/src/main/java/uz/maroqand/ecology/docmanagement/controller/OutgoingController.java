@@ -219,11 +219,11 @@ public class OutgoingController {
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent() != null ? document.getContent() : "",
-
                     documentSub.getDocumentOrganizations(),
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     document.getStatus().getName(),
-                    (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
+                    (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : ""),
+                    document.getContentFiles()
             });
         }
 
