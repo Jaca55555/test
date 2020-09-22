@@ -307,6 +307,7 @@ public class IncomingController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
+        model.addAttribute("files",document.getContentFiles());
         return DocTemplates.IncomingView;
     }
 
