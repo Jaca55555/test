@@ -483,7 +483,7 @@
         var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
-        let regCategory="";
+        let regCategory=[[${regApplication.category.id}]];
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
             var srSelector = $('#materialId');
@@ -500,19 +500,15 @@
             // $('#activityId').select2();
 
             $("#objectId").change(function(){
-                regCategory = $('#categorySelect').val();
                 getActivityList();
-
-
             });
             $("#activityId").change(function(){
                 getMaterialList();
             });
-            if (regCategory!=undefined || regCategory!=""){
-                $('#categorySelect').val(regCategory);
-                $('#categorySelect').change();
+            if (regCategory==3 || regCategory==4){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
             }
-
         });
         function openInputFile() {
             document.getElementById("file-input").click();

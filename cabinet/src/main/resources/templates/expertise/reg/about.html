@@ -190,8 +190,9 @@
                                                                 <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control" th:field="*{category}" required="" id="categorySelect" >
+                                                                <select class="form-control" th:field="*{category.id}" required="" id="categorySelect" >
                                                                     <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:if="${regApplication.category.id!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -479,7 +480,7 @@
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
-            getActivityList();
+            // getActivityList();
             if(coordinate != null){
                 $('#coordinates-list').show();
                 $('#coordinates-control').show();
@@ -488,7 +489,6 @@
                 $('#clear-coordinates-btn').prop('disabled', false);
             }
             $('#objectId').select2();
-            // $('#activityId').select2();
 
             $("#objectId").change(function(){
                 getActivityList();
@@ -496,7 +496,10 @@
             $("#activityId").change(function(){
                 getMaterialList();
             });
-
+            if (regCategory==3 || regCategory==4){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }
         });
         function openInputFile() {
             document.getElementById("file-input").click();

@@ -484,6 +484,7 @@ public class RegApplicationController {
         Organization organization = null;
         if (regionId!=null){
             organization = organizationService.getByRegionId(regionId);
+            regApplication.setRegionId(regionId);
         }
         regApplication.setReviewId(organization!=null?organization.getId():requirement.getReviewId());
         regApplication.setRequirementId(requirement.getId());
