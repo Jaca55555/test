@@ -14,6 +14,44 @@
         .block {
             display: block !important;
         }
+        /*table.dataTable thead .sorting:after,*/
+        /*table.dataTable thead .sorting:before,*/
+        /*table.dataTable thead .sorting_asc:after,*/
+        /*table.dataTable thead .sorting_asc:before,*/
+        /*table.dataTable thead .sorting_asc_disabled:after,*/
+        /*table.dataTable thead .sorting_asc_disabled:before,*/
+        /*table.dataTable thead .sorting_desc:after,*/
+        /*table.dataTable thead .sorting_desc:before,*/
+        /*table.dataTable thead .sorting_desc_disabled:after,*/
+        /*table.dataTable thead .sorting_desc_disabled:before {*/
+        /*    bottom: .5em;*/
+        /*}*/
+        #dtVerticalScrollExample_filter,#dtVerticalScrollExample_info,#dtVerticalScrollExample_length,#dtVerticalScrollExample_paginate,
+        #dtVerticalScrollExample1_filter,#dtVerticalScrollExample1_info,#dtVerticalScrollExample1_length,#dtVerticalScrollExample1_paginate,
+        #dtVerticalScrollExample2_filter,#dtVerticalScrollExample2_info,#dtVerticalScrollExample2_length,#dtVerticalScrollExample2_paginate{
+            display: none;
+        }
+        #dtVerticalScrollExample_wrapper .col-sm-12, #dtVerticalScrollExample2_wrapper .col-sm-12, #dtVerticalScrollExample1_wrapper .col-sm-12
+        {
+            padding: 0 !important;
+        }
+        #dtVerticalScrollExample_wrapper .table-striped,#dtVerticalScrollExample1_wrapper .table-striped,#dtVerticalScrollExample2_wrapper .table-striped {
+            margin-top: 0 !important;
+        }
+        .table-striped {
+            background: white;
+        }
+        table.dataTable thead th {
+            border-bottom: 2px solid #eaeaea;
+        }
+        #tVerticalScrollExample3 > thead > tr:first-child > th {
+            padding:11px 18px;
+            border-bottom-width: 2px;
+        }
+        #tVerticalScrollExample3 > thead > tr:not(:first-child) > th {
+            padding:10px 18px;
+            border-bottom-width: 2px;
+        }
     </style>
 </head>
 <body>
@@ -34,283 +72,139 @@
     <!-- [ Main Content ] start -->
     <div class="pcoded-main-container">
 
-        <div class="col-xl-12 col-md-12">
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10 color-white" th:text="#{sys_document.dashboard}">Layout</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item color-white"><i class="feather icon-home"></i></li>
-                                <li class="breadcrumb-item "><a href="#" class="color-white" th:text="#{sys_document.dashboard}">Layout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-xl-12 col-md-12" style="display: flex;" >
+            <div class="col-xl-3 col-md-3 p-0">
+                <table id="tVerticalScrollExample3" class="table table-striped table-bordered table-sm" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            <span class=" hawcons-icon-9-mail-checked color-purple" style="font-size: 50px;float: left"></span>
+                            <h3>Nazoratda</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="th-sm">Name
+                        </th>
+                        <th class="th-sm">Position
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr>
+                        <td th:text="#{doc_check.list}">Donna Snider</td>
+                        <td>
+                            <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
+                            <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
+                            </a>  </td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{doc_change.perfomer}">Donna Snider</td>
+                        <td>
+                            <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
+                            <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
+                            </a>    </td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+
             </div>
-            <div class="card parent-card">
-                <div class="card-header flex-space-between mb-0">
-                    <h5 class="mb-0" style="align-self:center">
-                        <span th:text="#{sys_office.list}">Девонхона хужжатлар иш столи</span>
-                    </h5>
-                    <a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne">
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                    </a>
-                </div>
-                <h5 class="office-h5 default-color" th:text="#{doc_incoming.documentsCount}">Кирувчи хатлар статистикаси</h5>
-                <div class="responsive">
-                    <div class="office-card" onclick="goTo(1, 9)">
-                        <div class="card dashboard-card border-primary-shadow">
-                             <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
-                            <!--  onclick="dropAndSet();getTabDatatableConnect(1, 9)" -->
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incoming.newCount}">10</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_new}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="goTo(1, 2)">
-                        <div class="card dashboard-card border-danger-shadow">
-                            <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
-                            <!-- getTabDatatableConnect(1, 2) -->
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${incoming.inProgressCount}">20</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_in_process}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="goTo(1, 3)">
-                        <div class="card dashboard-card border-warning-shadow">
-                            <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
-                            <!-- getTabDatatableConnect(1, 3) -->
-                            <div class="card-body" style="display: inline-block;text-align: center;" >
-                                <h4 class="card-title" th:text="${incoming.lessDeadlineCount}">30</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_near_date}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="goTo(1, 4)">
-                        <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                            <!-- getTabDatatableConnect(1, 4) -->
-                            <div class="card-body" style="display: inline-block;text-align: center;" >
-                                <h4 class="card-title" th:text="${incoming.greaterDeadlineCount}">40</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_expired}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="goTo(1, 7)">
-                        <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
-                            <!-- getTabDatatableConnect(1, 5) -->
-                            <div class="card-body" style="display: inline-block;text-align: center;" >
-                                <h4 class="card-title" th:text="${incoming.checkingCount}">40</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_completed}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="goTo(1, 1)">
-                        <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
-                            <!-- getTabDatatableConnect(1, 6) -->
-                            <div class="card-body" style="display: inline-block;text-align: center;" >
-                                <h4 class="card-title" th:text="${incoming.allCount}">40</h4>
-                                <h6 class="card-title" th:text="#{doc_incoming.count_total}">Жами чикувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="collapseTopContainer" class="col-xl-12 card-body collapse show" style="padding: 0;">
-                    <h5 class="office-h5 default-color" th:text="#{doc_inner.statistic}">Ички хужжатлар статистикаси</h5>
-                    <div class="responsive">
-                        <div class="office-card" onclick="goTo(3,9)">
-                            <div class="card dashboard-card border-primary-shadow">
-                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
-                                <!-- getTabDatatableConnect(3, 9)-->
-                                <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${inner.newCount}">10</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_new}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(3,2)">
-                            <div class="card dashboard-card border-danger-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
-                                <!-- getTabDatatableConnect(3, 2) -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${inner.inProgressCount}">20</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_in_process}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(3,3)">
-                            <div class="card dashboard-card border-warning-shadow">
-                                <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
-                                <!-- dropAndSet('tab4'); getTabDatatableConnect(3, 3)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${inner.lessDeadlineCount}">30</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_near_date}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(3,4)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                                <!-- getTabDatatableConnect(3, 4) -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${inner.greaterDeadlineCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_expired}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(3,7)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
-                                <!-- getTabDatatableConnect(3, 5) -->
-                                <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${inner.checkingCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_completed}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(3,1)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
-                                <!--  getTabDatatableConnect(3, 6) -->
-                                <div class="card-body" style="display: inline-block;text-align: center;">
-                                    <h4 class="card-title" th:text="${inner.allCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_inner.count_total}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="office-h5 default-color" th:text="#{doc_appeal.statistic}">Муррожатлар статистикаси</h5>
-                    <div class="responsive">
-                        <div class="office-card" onclick="goTo(4,9)">
-                            <div class="card dashboard-card border-primary-shadow">
-                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
-                                <!-- onclick="dropAndSet();getTabDatatableConnect(4, 9)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${appeal.newCount}">10</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_new}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(4,2)">
-                            <div class="card dashboard-card border-danger-shadow">
-                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>
-                                <!-- onclick="dropAndSet('tab2'); getTabDatatableConnect(4, 2)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${appeal.inProgressCount}">20</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_in_process}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(4,3)">
-                            <div class="card dashboard-card border-warning-shadow">
-                                <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>
-                                <!-- onclick="dropAndSet('tab4'); getTabDatatableConnect(4, 3)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${appeal.lessDeadlineCount}">30</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_near_date}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(4,4)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                                <!-- onclick="dropAndSet('tab3'); getTabDatatableConnect(4, 4)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${appeal.greaterDeadlineCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_expired}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(4,7)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
-                                <!-- onclick="dropAndSet(); getTabDatatableConnect(4, 5)" -->
-                                <div class="card-body" style="display: inline-block;text-align: center;" >
-                                    <h4 class="card-title" th:text="${appeal.checkingCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_completed}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="office-card" onclick="goTo(4,1)">
-                            <div class="card dashboard-card border-green-shadow">
-                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>
-                                <div class="card-body" style="display: inline-block;text-align: center;" onclick="dropAndSet('tab1'); getTabDatatableConnect(4, 6)">
-                                    <h4 class="card-title" th:text="${appeal.allCount}">40</h4>
-                                    <h6 class="card-title" th:text="#{doc_appeal.count_total}">Жами чикувчи хатлар</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-<!--                    <h5 class="office-h5 default-color" th:text="#{doc_outgoing.documentsCount}">Чикувчи хатлар статистикаси</h5>-->
-<!--                    <div class="responsive">-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-primary-shadow">-->
-<!--                                <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingCountNew}">10</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_new}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-danger-shadow">-->
-<!--                                <div class="file-icon-container-small color-yellow"><span class="hawcons-icon-4-mail-envelope-open"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingInProgress}">20</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_in_process}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-warning-shadow">-->
-<!--                                <div class="file-icon-container-small color-orange"><span class=" hawcons-icon-8-mail-error"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingCount.nearDate}">30</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_near_date}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-green-shadow">-->
-<!--                                <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingCount.expired}">40</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_expired}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-green-shadow">-->
-<!--                                <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingCompleted}">40</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_completed}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="office-card">-->
-<!--                            <div class="card dashboard-card border-green-shadow">-->
-<!--                                <div class="file-icon-container-small color-primary"><span class="hawcons-icon-92-inbox-download"></span></div>-->
-<!--                                <div class="card-body" style="display: inline-block;text-align: center;">-->
-<!--                                    <h4 class="card-title" th:text="${outgoingAll}">40</h4>-->
-<!--                                    <h6 class="card-title" th:text="#{doc_outgoing.count_total}">Жами чикувчи хатлар</h6>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                </div>
+
+
+
+            <div class="col-xl-3 col-md-3 p-0">
+                <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            <span class="hawcons-icon-4-mail-envelope-open color-yellow" style="font-size: 50px;float: left"></span>
+                            <h3>Jarayonda</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="th-sm">Name
+                        </th>
+                        <th class="th-sm">Position
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody th:each="progress:${inProgress}">
+                    <tr>
+                        <td th:text="${progress.document.registrationNumber}">Donna Snider</td>
+                        <td th:text="${progress.dueDate}">Customer Support</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
             </div>
+            <div class="col-xl-3 col-md-3 p-0">
+                <table id="dtVerticalScrollExample2" class="table table-striped table-bordered table-sm" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            <span class=" hawcons-icon-8-mail-error color-orange" style="font-size: 50px;float: left"></span>
+                            <h3>Muddati yaqinlashgan</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="th-sm">Name
+                        </th>
+                        <th class="th-sm">Position
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody th:each="near:${nearDate}">
+                    <tr>
+                        <td th:text="${near.document.registrationNumber}">Donna Snider</td>
+                        <td th:text="${near.dueDate}">Customer Support</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-xl-3 col-md-3 p-0">
+                <table id="dtVerticalScrollExample1" class="table table-striped table-bordered table-sm" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            <span class="hawcons-icon-10-mail-cancel color-red" style="font-size: 50px;float: left"></span>
+                            <h3>Muddati kechikkan</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="th-sm">Name
+                        </th>
+                        <th class="th-sm">Position
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody th:each="after:${afterDate}">
+                    <tr>
+                        <td th:text="${after.document.registrationNumber}">Donna Snider</td>
+                        <td th:text="${after.dueDate}">Customer Support</td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
         <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
             <!-- filters card begins here -->
-            <form class="card" style="border-radius: 5px" id="filter">
+            <form class="card" style="border-radius: 5px ; margin-top: 40px" id="filter">
                 <div class="card-header flex-space-between-nowrap" id="headingOne">
                     <h5 class="mb-0">
                         <span th:text="#{doc.doc_filter_header}">Саралаш фильтри</span>
@@ -531,6 +425,30 @@
             });
         });
 
+        $(document).ready(function () {
+            $('#dtVerticalScrollExample').DataTable({
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "ordering": false
+            });
+            $('.dataTables_length').addClass('bs-select');
+        });
+        $(document).ready(function () {
+            $('#dtVerticalScrollExample1').DataTable({
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "ordering": false
+            });
+            $('.dataTables_length').addClass('bs-select');
+        });
+        $(document).ready(function () {
+            $('#dtVerticalScrollExample2').DataTable({
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "ordering": false
+            });
+            $('.dataTables_length').addClass('bs-select');
+        });
         let statuses = {};
         statuses[0] = [[#{task_status.initial}]];
         statuses[1] = [[#{task_status.new}]];
@@ -546,6 +464,7 @@
         let dataDatatableSelector;
         let thead;
         var tabFilter;
+
 
         function renderChangeColumn(data, type, row, meta) {
             let databack = row[8];
