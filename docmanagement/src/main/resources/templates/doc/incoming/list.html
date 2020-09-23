@@ -188,6 +188,9 @@
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                                    <span></span>
+                                                </th>
+                                                <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
@@ -274,7 +277,16 @@
             }
             return html;
         }
-
+        function renderInformationColumn(data, type, row, meta) {
+            var html = '';
+            var status = row[11];
+            switch (status) {
+                case 0: html='<span style="font-size: 30px ; background: blue">&nbsp;</span>';return html;
+                case 1: html='<span style="font-size: 30px; background: grey"> &nbsp;</span>';return html;
+                default: html='<span style="font-size: 30px; background: red">&nbsp; </span>';return html;
+            }
+            return html;
+        }
        /* function renderActionsColumn(data, type, row, meta) {
             var html = '';
             html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
@@ -328,7 +340,7 @@
                     });
                 },
                 columns: [
-
+                    {render: renderInformationColumn, name: 'status',className: ""},
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';

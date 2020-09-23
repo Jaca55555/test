@@ -188,7 +188,8 @@ public class InnerController {
                     documentTaskSub.getStatus(),
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
                     userService.findById(documentTaskSub.getReceiverId()).getFullName(),
-                    document.getContentFiles()
+                    document.getContentFiles(),
+                    document.getExecuteForm().getId()
 
             });
         }

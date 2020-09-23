@@ -213,6 +213,10 @@
                                     <table id="responsive-table-model" aria-describedby="responsive-table-model_info" class="table table-hover dataTable" role="grid" style="width: 100%;">
                                         <thead>
                                         <tr role="row">
+                                            <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                                <span></span>
+                                            </th>
+
                                             <th aria-controls="responsive-table-model" aria-sort="ascending" class="sorting_asc" colspan="1" rowspan="1" tabindex="0">
                                                 <span th:text="#{doc_incoming.registrationNumber}"> Регистрация рақами</span>
                                             </th>
@@ -301,7 +305,16 @@
             }
             return html;
         }
-
+        function renderInformationColumn(data, type, row, meta) {
+            var html = '';
+            var status = row[12];
+            switch (status) {
+                case 0: html='<span style="font-size: 30px ; background: blue">&nbsp;</span>';return html;
+                case 1: html='<span style="font-size: 30px; background: grey"> &nbsp;</span>';return html;
+                default: html='<span style="font-size: 30px; background: red">&nbsp; </span>';return html;
+            }
+            return html;
+        }
         function clearFilter() {
             $('#accordionExample .singleSelect').val(null).select2();
             $('#accordionExample input').val('');
@@ -344,6 +357,7 @@
                     });
                 },
                 columns: [
+                    {render: renderInformationColumn, name: 'status',className: ""},
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
