@@ -216,16 +216,24 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
+                    <a class="nav-link text-uppercase active show"  id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span  th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span>
+                        <span th:if="${progress}!=0" th:text="${progress}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_dueDate}" >Муддати кеччикан</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_dueDate}" >Муддати кеччикан</span>
+                        <span th:if="${lessDeadlineDocumentCount}!=0" th:text="${lessDeadlineDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span></a>
+                    <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span>
+                        <span th:if="${greaterDeadlineDocumentCount}!=0" th:text="${greaterDeadlineDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span>
+                        <span th:if="${checkingDocumentCount}!=0" th:text="${checkingDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
@@ -237,7 +245,9 @@
                     <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">

@@ -84,7 +84,7 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Waiting.getId());
         statuses.add(TaskSubStatus.Agreement.getId());
         model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-
+        model.addAttribute("progress",1);
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
         model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
