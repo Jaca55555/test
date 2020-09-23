@@ -190,9 +190,9 @@
                                                                 <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <select class="form-control" th:field="*{category.id}" required="" id="categorySelect" >
+                                                                <select class="form-control" required="" id="categorySelect" >
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:if="${regApplication.category.id!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
+                                                                    <option th:if="${regApplication.category!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
                                                                 </select>
                                                             </div>
                                                         </div>
