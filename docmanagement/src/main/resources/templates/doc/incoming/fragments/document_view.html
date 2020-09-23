@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:file="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -57,6 +58,9 @@
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
+            <div class="col-md-12 col-sm-12">
+                <div class="m20-vertical"><span class="bold" th:text="${document.content}">Топшириқ шакли:</span></div>
+            </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_incoming.journal}">Рўйхатга олиш журнали:</span></div>
                 <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>
@@ -108,11 +112,8 @@
         </div>
         <hr class="m20-vertical">
         <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.description}">Топшириқ шакли:</span></div>
-                <div><span th:text="${document.content}"></span></div>
-            </div>
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-md-12 col-sm-12">
                 <div class="m20-vertical"><span class="bold" th:text="#{doc_incoming.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center" id="fileContainer">
     <!--                <div id="modalContainer"> </div>-->
@@ -130,7 +131,11 @@
             </div>
         </div>
     </div>
+
 </div>
+<!--<div class="col-xl-6 col-md-6">-->
+
+<!--</div>-->
 <!-- [ Modals ] start -->
 <div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog" aria-resolutionModal="modal1" aria-hidden="true" >
     <div class="modal-dialog col-xl-6 col-12" role="document" th:object="${resolutionDocument}">

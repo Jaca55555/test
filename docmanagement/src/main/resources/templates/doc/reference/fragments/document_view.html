@@ -46,10 +46,9 @@
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
-<!--            <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">-->
-<!--                <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.journal}">Рўйхатга олиш журнали:</span></div>-->
-<!--                <div class="col-md-6 p0" style="float:right"><span th:text="${@documentHelperService.getJournalName(document.journalId)}">Тижорат таклифлари</span></div>-->
-<!--            </div>-->
+            <div class="col-md-12 col-sm-12">
+                <div class="m20-vertical"><span class="bold" th:text="${document.content}">Топшириқ шакли:</span></div>
+            </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:object="${documentSub}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
                 <div class="col-md-6 p0" style="float: right;"><span th:text="${@documentHelperService.getDocumentOrganizationName(documentSub.organizationId)}">"Мароқанд" МЧЖ</span></div>
@@ -96,11 +95,8 @@
         </div>
         <hr class="m20-vertical">
         <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.description}">Топшириқ шакли:</span></div>
-                <div><span th:text="${document.content}"></span></div>
-            </div>
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-md-12 col-sm-12">
                 <div class="m20-vertical"><span class="bold" th:text="#{doc_reference.files}">Хатга иловалар:</span></div>
                 <div class="flex-start mobile-flex-center" id="fileContainer">
 

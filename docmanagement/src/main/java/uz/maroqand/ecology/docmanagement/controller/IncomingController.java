@@ -84,7 +84,7 @@ public class IncomingController {
         statuses.add(TaskSubStatus.Waiting.getId());
         statuses.add(TaskSubStatus.Agreement.getId());
         model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-        model.addAttribute("progress",1);
+        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
         model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
@@ -96,6 +96,10 @@ public class IncomingController {
         statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.Complete.getId());
         model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        statuses.clear();
+        statuses.add(TaskStatus.Rejected.getId());
+        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
         model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 

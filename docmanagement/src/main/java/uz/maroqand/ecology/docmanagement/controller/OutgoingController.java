@@ -71,7 +71,7 @@ public class OutgoingController {
 
         model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId, userId));
         model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId, userId));
-
+        model.addAttribute("notSended",documentService.countAllByStatus(outgoingMailType, DocumentStatus.New, organizationId, departmentId, userId));
         model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
         //additional document is null, 'answer not accepted translation tag'
         model.addAttribute("answerNotAccepted", totalOutgoing - haveAdditionalDocument);
