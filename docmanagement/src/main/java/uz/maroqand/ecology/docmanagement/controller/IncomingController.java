@@ -243,7 +243,7 @@ public class IncomingController {
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),true,documentTaskSub.getStatus(),locale),
                     userService.findById(documentTaskSub.getReceiverId()).getFullName(),
                     document.getContentFiles(),
-                    document.getExecuteForm().getId()
+                    document.getExecuteForm()!=null?document.getExecuteForm().getId():""
             });
         }
 
