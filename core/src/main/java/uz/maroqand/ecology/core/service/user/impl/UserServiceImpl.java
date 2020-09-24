@@ -323,7 +323,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getEmployeesForDocManageOrganization(String type,Integer organizationId) {
         List<User> users = new ArrayList<>();
         if (type.equals("chief"))
-            users = userRepository.findAllByOrganizationIdAndDepartmentIdNotNullOrderByIsExecuteChief(organizationId);
+            users = userRepository.findAllByOrganizationIdAndDepartmentIdNotNullAndIsExecuteChiefTrueOrderByIsExecuteChief(organizationId);
         if (type.equals("controller"))
             users = userRepository.findAllByOrganizationIdAndDepartmentIdNotNullOrderByIsExecuteControllerDesc(organizationId);
         return users;

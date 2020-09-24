@@ -102,6 +102,7 @@ public class ReferenceController {
 
         model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatus(user.getId(), statuses));
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverIdAll(user.getId()));
+        model.addAttribute("reference", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.AppealDocuments.getId(), user.getId()));
 
         model.addAttribute("taskSubTypeList", TaskSubType.getTaskSubTypeList());
         model.addAttribute("taskSubStatusList", TaskSubStatus.getTaskSubStatusList());

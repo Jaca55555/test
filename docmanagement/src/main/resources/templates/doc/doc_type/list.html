@@ -40,7 +40,7 @@
                             <select class="singleSelect col-sm-12 select2-hidden-accessible custom-select"
                                     id="docType" tabindex="-1" aria-hidden="true">
                                 <option></option>
-                                <option th:each="i: ${doc_type}" th:value="${i}" th:text="${i.name}"></option>
+                                <option th:each="i: ${doc_type}" th:value="${i.id}" th:text="${i.name}"></option>
                             </select>
 <!--                            <i class="gray-arrow fas fa-sort-down color-gray"></i>-->
                         </div>
