@@ -541,7 +541,7 @@ public class IncomingRegistrationController {
         model.addAttribute("executeForms",ExecuteForm.getExecuteFormList());
         model.addAttribute("controlForms", ControlForm.getControlFormList());
         model.addAttribute("cancel_url",DocUrls.IncomingRegistrationList );
-
+//
         return DocTemplates.IncomingRegistrationNew;
     }
 

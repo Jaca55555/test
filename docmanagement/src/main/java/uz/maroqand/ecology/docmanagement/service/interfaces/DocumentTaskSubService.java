@@ -101,7 +101,7 @@ public interface DocumentTaskSubService {
     List<DocumentTaskSub> getByDocumentType(Integer documentTypeId,Integer receiverId);
     Integer countByReceiverIdAll(Integer receiverId);
     Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now);
-    List<DocumentTaskSub> getByDuedate(Date date,Integer receiverId);
+    List<DocumentTaskSub> getByDuedate(Date date,Date date1,Integer receiverId);
     String getUrl(Document document,Integer  taskSubId);
 
     List<DocumentTaskSub> getAllByReceiverIdAndStatuses(Integer receiverId, Set<Integer> statusSet);
