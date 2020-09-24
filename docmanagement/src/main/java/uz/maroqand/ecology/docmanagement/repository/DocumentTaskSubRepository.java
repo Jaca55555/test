@@ -30,8 +30,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
     Integer countAllByDueDateAndDepartmentId(Date date,Integer departmentId);
-    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.receiverId=?2")
-    List<DocumentTaskSub> getAllByDueDateAndReceiverId(Date date,Integer receiverId);
+    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.dueDate>?2 AND d.receiverId=?3 ORDER BY d.dueDate desc")
+    List<DocumentTaskSub> getAllByDueDateAndReceiverId(Date date,Date date1,Integer receiverId);
 
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
     Integer countAllByDueDate1AndDepartmentId(Date date,Integer departmentId);
@@ -56,7 +56,7 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     List<DocumentTaskSub> findByDocumentIdAndTaskIdAndDeletedFalseOrderByIdAsc(Integer docId, Integer taskId);
     List<DocumentTaskSub> findByDepartmentId(Integer departmentId);
-    List<DocumentTaskSub> findByStatusAndReceiverId(Integer documentTypeStatusId,Integer receiverId);
+    List<DocumentTaskSub> findByStatusAndReceiverIdOrderByCreatedAtDesc(Integer documentTypeStatusId,Integer receiverId);
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1 AND d.status=?2")
     Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses);
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =4 AND d.deleted = FALSE AND d.receiverId=?1")

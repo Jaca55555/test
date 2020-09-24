@@ -163,6 +163,7 @@
         <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
             <div class="card">
                 <div class="text-right p-3">
+                    <span th:text="#{resolution}" style="float: left;font-size: 30px;font-weight: bolder"></span>
                     <a href="#" onclick="printThisDiv('for_print')">
                         <i class="fas fa-print fs30 color-gray m10-horizontal pointer"></i>
                     </a>
@@ -170,12 +171,13 @@
                         <i class="fa fa-times fs20 color-red"></i>
                     </button>
                 </div>
+                <hr>
                 <div class="parent-card m0" id="for_print">
                     <div th:if="${resolutionDocument!=null}" style="margin: 32px 20px 40px 20px" >
                         <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
                             <h4 th:text="${resolutionDocument.organizationName!=null?resolutionDocument.organizationName:''}"></h4>
                         </div>
-                        <div class="card-body" style="border: solid black">
+                        <div class="card-body">
                             <div class="text-center mt-2" th:if="${resolutionDocument.controlUser!=null && resolutionDocument.controlUser!=''}">
                                 <h5 th:text="#{doc_incoming.controls}"></h5>
                                 <h5 style="font-weight: bold" th:text="${resolutionDocument.controlUser}"></h5>
