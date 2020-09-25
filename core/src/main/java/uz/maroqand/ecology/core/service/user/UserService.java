@@ -78,4 +78,6 @@ public interface UserService {
     List<User> getEmployeesForNewDoc(String type);
 
     Integer getUserDepartmentId(Integer userId);
+
+    Integer getUserRegionId(User user);
 }

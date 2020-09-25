@@ -113,6 +113,10 @@
                                                     <th th:text="#{invoice_payer.tin}"></th>
                                                     <th th:text="#{sys_payment_date}"></th>
                                                     <th th:text="#{sys_invoice.amount}"></th>
+                                                    <th th:text="#{sys_receiver_acc}"></th>
+                                                    <th th:text="#{sys_receiver_name}"></th>
+                                                    <th th:text="#{sys_receiver_inn}"></th>
+                                                    <th th:text="#{sys_receiver_mfo}"></th>
                                                     <th th:text="#{sys_payment_detail}"></th>
                                                     <th ></th>
                                                 </tr>
@@ -208,6 +212,10 @@
                 {data: 7, name: 'payerTin'},
                 {data: 3, name: 'paymentDate'},
                 {data: 4, name: 'amount'},
+                {data: 8, name: 'receiverAccount'},
+                {data: 9, name: 'receiverName'},
+                {data: 10, name: 'receiverInn'},
+                {data: 11, name: 'receiverMfo'},
                 {data: 5, name: 'details'},
                 {render: renderActionsColumn, orderable:false}
             ],

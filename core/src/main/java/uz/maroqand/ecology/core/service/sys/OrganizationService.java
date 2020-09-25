@@ -10,6 +10,7 @@ import java.util.List;
 public interface OrganizationService {
 
     Organization getById(Integer id);
+    Organization getByRegionId(Integer id);
 
     List<Organization> getList();
 

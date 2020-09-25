@@ -6,21 +6,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
+import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.FactureService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.RequirementService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -36,12 +43,24 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     private final RegApplicationRepository regApplicationRepository;
     private final SmsSendService smsSendService;
     private final SmsSendOauth2Service smsSendOauth2Service;
+    private final UserService userService;
+    private final RegApplicationLogService regApplicationLogService;
+    private final ClientService clientService;
+    private final OrganizationService organizationService;
+    private final RequirementService requirementService;
+    private final FactureService factureService;
 
     @Autowired
-    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service) {
+    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService, RegApplicationLogService regApplicationLogService, ClientService clientService, OrganizationService organizationService, RequirementService requirementService, FactureService factureService) {
         this.regApplicationRepository = regApplicationRepository;
         this.smsSendService = smsSendService;
         this.smsSendOauth2Service = smsSendOauth2Service;
+        this.userService = userService;
+        this.regApplicationLogService = regApplicationLogService;
+        this.clientService = clientService;
+        this.organizationService = organizationService;
+        this.requirementService = requirementService;
+        this.factureService = factureService;
     }
 
     public RegApplication create(User user,RegApplicationInputType inputType){
@@ -117,6 +136,29 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public RegApplication getById(Integer id) {
         if(id==null) return null;
         return regApplicationRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public RegApplication sendRegApplicationAfterPayment(RegApplication regApplication,User user, Invoice invoice, String locale) {
+        if (regApplication!=null && regApplication.getForwardingLogId() == null){
+                regApplication.setLogIndex(1);
+                RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
+                regApplication.setForwardingLogId(regApplicationLog.getId());
+                regApplication.setStatus(RegApplicationStatus.Process);
+                regApplication.setRegistrationDate(new Date());
+                regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
+
+                if (regApplication.getInputType()!=null && regApplication.getInputType().equals(RegApplicationInputType.ecoService)){
+                    Client client = clientService.getById(regApplication.getApplicantId());
+                    Organization organization = organizationService.getById(regApplication.getReviewId());
+                    Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+                    Facture facture = factureService.create(regApplication, client, organization, requirement, invoice, locale);
+                    regApplication.setFactureId(facture.getId());
+                }
+
+                update(regApplication);
+        }
+        return regApplication;
     }
 
     @Override

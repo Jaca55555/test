@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.service.billing.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,6 +17,7 @@ import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.billing.InvoiceRepository;
 import uz.maroqand.ecology.core.service.billing.ContractService;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -24,6 +26,7 @@ import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
+import uz.maroqand.ecology.core.service.user.UserService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -46,6 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final HelperService helperService;
     private final MinWageService minWageService;
     private final RegApplicationService regApplicationService;
+    private final UserService userService;
 
     @Autowired
     public InvoiceServiceImpl(
@@ -55,7 +59,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             OrganizationService organizationService,
             HelperService helperService,
             MinWageService minWageService,
-            RegApplicationService regApplicationService) {
+            RegApplicationService regApplicationService, UserService userService) {
         this.invoiceRepository = invoiceRepository;
         this.paymentService = paymentService;
         this.contractService = contractService;
@@ -63,6 +67,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.helperService = helperService;
         this.minWageService = minWageService;
         this.regApplicationService = regApplicationService;
+        this.userService = userService;
     }
 
     @Override
@@ -85,10 +90,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amountAfter = requirement.getQty() * minWage.getAmount();
-        if (regApplication.getAddNds()!=null && regApplication.getAddNds()){
-            amountAfter=amountAfter*1.15;// 15% nds
-        }
-        System.out.println("invoice.getAmount()="+invoice.getAmount());
         System.out.println("amountAfter="+amountAfter);
         if(!invoice.getAmount().equals(amountAfter)){
             Double amount = amountAfter - invoice.getAmount();
@@ -158,10 +159,17 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         if(invoice.getAmount() <= paymentAmount){
             invoice.setStatus(InvoiceStatus.Success);
+            RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+            if (regApplication!=null && regApplication.getCreatedById()!=null){
+                User user = userService.findById(regApplication.getCreatedById());
+                if (user!=null){
+                    regApplicationService.sendRegApplicationAfterPayment(regApplication,user,invoice, LocaleContextHolder.getLocale().toLanguageTag());
+                }
+            }
         }else {
             invoice.setStatus(InvoiceStatus.Initial);
         }
-
+        invoiceRepository.save(invoice);
         return invoice;
     }
 
@@ -177,6 +185,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.save(invoice);
 
         paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
+        checkInvoiceStatus(invoice);
 
         return invoice;
     }

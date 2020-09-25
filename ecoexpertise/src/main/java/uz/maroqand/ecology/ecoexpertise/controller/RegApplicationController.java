@@ -165,7 +165,7 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getId(),RegApplicationInputType.ecoService,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,null,user.getId(),RegApplicationInputType.ecoService,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -416,6 +416,7 @@ public class RegApplicationController {
         model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("categoryList", Category.getCategoryList());
         model.addAttribute("opfList", opfService.getOpfList());
+        model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
@@ -429,6 +430,7 @@ public class RegApplicationController {
     public String regApplicationAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "activityId", required = false) Integer activityId,
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
             @RequestParam(name = "name") String name,
@@ -495,8 +497,13 @@ public class RegApplicationController {
         if(requirement==null){
             return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=2";
         }
+        Organization organization = null;
+        if (regionId!=null){
+            organization = organizationService.getByRegionId(regionId);
+            regApplication.setRegionId(regionId);
+        }
+        regApplication.setReviewId(organization!=null?organization.getId():requirement.getReviewId());
         regApplication.setRequirementId(requirement.getId());
-        regApplication.setReviewId(requirement.getReviewId());
         regApplication.setDeadline(requirement.getDeadline());
 
         regApplication.setObjectId(objectId);
@@ -797,23 +804,6 @@ public class RegApplicationController {
         invoiceService.checkInvoiceStatus(invoice);
         if (invoice.getStatus() != InvoiceStatus.Success){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
-        }
-
-        if(regApplication.getForwardingLogId() == null){
-            regApplication.setLogIndex(1);
-            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-            regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.Process);
-            regApplication.setRegistrationDate(new Date());
-            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-
-            Client client = clientService.getById(regApplication.getApplicantId());
-            Organization organization = organizationService.getById(regApplication.getReviewId());
-            Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-            Facture facture = factureService.create(regApplication, client, organization, requirement, invoice, locale);
-            regApplication.setFactureId(facture.getId());
-
-            regApplicationService.update(regApplication);
         }
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());

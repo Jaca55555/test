@@ -123,7 +123,6 @@ public class ConfirmController {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
-
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 user.getOrganizationId(),

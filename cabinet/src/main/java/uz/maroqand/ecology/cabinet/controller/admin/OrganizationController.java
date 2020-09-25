@@ -136,7 +136,9 @@ public class OrganizationController {
         if (organization == null) {
             return "redirect:" + AdminUrls.OrganizationList;
         }
-
+        model.addAttribute("soato",soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("organization", organization);
         model.addAttribute("action_url", AdminUrls.OrganizationUpdate);
         model.addAttribute("back_url", AdminUrls.OrganizationList);

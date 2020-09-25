@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.integration.common.EcoGovService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
@@ -27,11 +29,13 @@ public class MainController {
     private final String apiKey = "800D00EAA115F8BB0D5083ECBDEC6ABDF9124235BDD6C2CD558CD686B583743524FB947AF54B11A6A98D3A303CF14CF6D86BD71C975E95B45E34D07F327674CA";
     private final EcoGovService ecoGovService;
     private final RegApplicationService regApplicationService;
+    private final UserService userService;
 
     @Autowired
-    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService) {
+    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService, UserService userService) {
         this.ecoGovService = ecoGovService;
         this.regApplicationService = regApplicationService;
+        this.userService = userService;
     }
 
     @RequestMapping("/")
@@ -59,9 +63,17 @@ public class MainController {
     }
 
     @RequestMapping("/dashboard")
-    public String getDashboardPage() {
-        System.out.println("--dashboard");
-        return "dashboard";
+    public String getDashboardPage(@RequestParam (name = "lang",required = false) String lang) {
+        User user = userService.getCurrentUserFromContext();
+        if (lang!=null && !lang.isEmpty()) return "dashboard";
+        System.out.println(user.getLang());
+        if (user.getLang()==null || user.getLang().isEmpty()){
+            user.setLang("oz");
+            userService.updateUser(user);
+            return "redirect:dashboard?lang=oz";
+
+        }
+        return "redirect:dashboard?lang="+user.getLang();
     }
 
     @RequestMapping("/news")

@@ -37,9 +37,6 @@ public class ContractServiceImpl implements ContractService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amount = requirement.getQty() * minWage.getAmount();
-        if (isNds!=null && isNds){
-            amount=amount*1.15;
-        }
         contract.setAmount(amount);
         contract.setCost(requirement.getQty());
 

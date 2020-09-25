@@ -14,6 +14,12 @@
         .block {
             display: block !important;
         }
+        tr,td,table{
+            background: white;
+        }
+        .dataTables_scroll{
+            background: white;
+        }
         /*table.dataTable thead .sorting:after,*/
         /*table.dataTable thead .sorting:before,*/
         /*table.dataTable thead .sorting_asc:after,*/
@@ -80,7 +86,7 @@
     <div class="pcoded-main-container">
 
         <div class="col-xl-12 col-md-12" style="display: flex;" >
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="tVerticalScrollExample3" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -91,11 +97,10 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{sys.executeControl}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_dashboard.newApplication}">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody >
@@ -106,7 +111,6 @@
                             </a>
                         </td>
                         <td>
-
                             <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white ">12</span>
                          </td>
                     </tr>
@@ -117,14 +121,13 @@
                             </a></td>
                         <td>
                             <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white">12</span></td>
-
                     </tr>
                     </tbody>
 
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -135,24 +138,27 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="progress:${inProgress}">
                     <tr>
-                        <td th:text="${progress.document.registrationNumber}">Donna Snider</td>
+                        <td th:switch="${progress.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                        </td>
                         <td th:text="${#dates.format(progress.dueDate,'dd.MM.yyyy')}">Customer Support</td>
-
                     </tr>
                     </tbody>
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample2" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -163,24 +169,28 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="near:${nearDate}">
                     <tr>
-                        <td th:text="${near.document.registrationNumber}">Donna Snider</td>
-                        <td th:text="${#dates.format(near.dueDate,'dd.MM.yyyy')}">Customer Support</td>
+                        <td th:switch="${near.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                        </td>
 
+                        <td th:text="${#dates.format(near.dueDate,'dd.MM.yyyy')}">Customer Support</td>
                     </tr>
                     </tbody>
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample1" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -191,19 +201,21 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="after:${afterDate}">
                     <tr>
-                        <td th:text="${after.document.registrationNumber}">Donna Snider</td>
+                        <td th:switch="${after.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                        </td>
                         <td th:text="${#dates.format(after.dueDate,'dd.MM.yyyy')}">Customer Support</td>
-
-
                     </tr>
                     </tbody>
 

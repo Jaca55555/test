@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,17 +20,16 @@ public class AccountController {
 
     private final UserService userService;
     private final TableHistoryService tableHistoryService;
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public AccountController(
             UserService userService,
             TableHistoryService tableHistoryService,
-            Gson gson
-    ) {
+            ObjectMapper objectMapper) {
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
-        this.gson = gson;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping("/profile")
@@ -51,16 +51,31 @@ public class AccountController {
             return "redirect:/profile";
         }
 
-        String oldUserString = gson.toJson(user);
+        String oldUserString = "";
+        try {
+            oldUserString = objectMapper.writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         user.setPassword(new BCryptPasswordEncoder().encode(userPassword));
         userService.updateUser(user);
+        String after ="";
+        try {
+            after = objectMapper.writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+       /* String oldUserString = gson.toJson(user);
+        user.setPassword(new BCryptPasswordEncoder().encode(userPassword));
+        userService.updateUser(user);*/
 
         tableHistoryService.create(
                 TableHistoryType.edit,
                 TableHistoryEntity.User,
                 user.getId(),
                 oldUserString,
-                gson.toJson(user),
+                after,
                 "Users password updated successfully!!!",
                 user.getId(),
                 user.getUserAdditionalId());

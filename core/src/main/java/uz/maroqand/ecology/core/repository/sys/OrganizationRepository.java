@@ -16,5 +16,7 @@ import java.util.List;
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
     Organization getByName(String name);
 
+    Organization findTop1ByRegionId(Integer regionId);
+
     Page<Organization> findAll(Specification<Organization> filteringSpecification, Pageable pageable);
 }

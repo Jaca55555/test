@@ -21,7 +21,7 @@
                         <span th:text="#{doc_inner.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
         </h5>
-        <div class="p10-horizontal mobile-column">
+        <div class="p10-horizontal mobile-column ml-3">
             <button th:if="${document.insidePurpose!=null && document.insidePurpose}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
                 <i class="fas fa-lock mr-0"></i>
                 <span>ХДФУ</span>
@@ -54,7 +54,7 @@
             <a th:if="${resolutionDocument!=null}" href="#" data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
 
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
-            <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+<!--            <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>-->
         </div>
     </div>
     <div class="card-block" >
@@ -168,7 +168,7 @@
                 <div class="text-right p-3">
                     <span th:text="#{resolution}" style="float: left;font-size: 30px;font-weight: bolder"></span>
                     <a href="#" onclick="printThisDiv('for_print')">
-                        <i class="fas fa-print fs30 color-gray m10-horizontal pointer"></i>
+                        <i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i>
                     </a>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times fs20 color-red"></i>

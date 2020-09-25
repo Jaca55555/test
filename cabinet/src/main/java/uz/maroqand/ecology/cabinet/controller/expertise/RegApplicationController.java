@@ -26,6 +26,7 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.user.UserAdditional;
@@ -403,6 +404,7 @@ public class RegApplicationController {
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("opfList", opfService.getOpfList());
+        model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationAbout;
@@ -412,6 +414,7 @@ public class RegApplicationController {
     public String expertiseRegApplicationAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "objectId") Integer objectId,
+            @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "activityId", required = false) Integer activityId,
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
             @RequestParam(name = "name") String name,
@@ -478,8 +481,13 @@ public class RegApplicationController {
         if(requirement==null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id + "&failed=2";
         }
+        Organization organization = null;
+        if (regionId!=null){
+            organization = organizationService.getByRegionId(regionId);
+            regApplication.setRegionId(regionId);
+        }
+        regApplication.setReviewId(organization!=null?organization.getId():requirement.getReviewId());
         regApplication.setRequirementId(requirement.getId());
-        regApplication.setReviewId(requirement.getReviewId());
         regApplication.setDeadline(requirement.getDeadline());
 
         regApplication.setObjectId(objectId);
@@ -646,6 +654,7 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
+            invoiceService.checkInvoiceStatus(invoice);
             if (invoice.getStatus()== InvoiceStatus.Success){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
             }
@@ -770,13 +779,7 @@ public class RegApplicationController {
         }
 
         if(regApplication.getForwardingLogId()==null){
-            regApplication.setLogIndex(1);
-            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-            regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.Process);
-            regApplication.setRegistrationDate(new Date());
-            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-            regApplicationService.update(regApplication);
+            regApplicationService.sendRegApplicationAfterPayment(regApplication,user,invoice,LocaleContextHolder.getLocale().toLanguageTag());
         }
         List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
         RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());

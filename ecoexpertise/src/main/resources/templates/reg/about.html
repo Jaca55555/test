@@ -171,6 +171,7 @@
                                         </div>
                                         <div class="card-body">
 
+
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
                                             <div class="row" >
@@ -189,6 +190,30 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row" id="categorySelectDiv">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control" required="" id="categorySelect" >
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:if="${regApplication.category!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" id="regionDiv" style="display: none">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_region}" >Категория</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control"  id="regionId" th:field="*{regionId}" >
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:selected="${regApplication.regionId==region.id}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="form-group row" id="activityIdDiv">
                                                             <div class="col-md-3 text-right">
@@ -199,19 +224,18 @@
                                                                 <select class="form-control" th:field="*{activityId}" required="" onchange="getMaterialList()">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:if="${regApplication.activityId}" th:value="${regApplication.activityId}" th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></option>
-                                                                    <!--<option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}" th:selected="${regApplication.activityId==activity.id}"></option>-->
                                                                 </select>
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row" id="categoryDiv">
+                                                        <!--<div class="form-group row" id="categoryDiv">
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
 
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
@@ -309,7 +333,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" th:field="*{name}"required=""  />
+                                                                <input class="form-control" type="text" th:field="*{name}" required="" maxlength="254"  />
                                                             </div>
                                                         </div>
 
@@ -329,7 +353,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
+                                                                <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" maxlength="254" />
                                                                 <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
                                                             </div>
                                                         </div>
@@ -411,7 +435,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -459,6 +483,7 @@
         var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
+        let regCategory=[[${regApplication.category.id}]];
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
             var srSelector = $('#materialId');
@@ -472,7 +497,7 @@
                 isCoordinate = true;
             }
             $('#objectId').select2();
-            $('#activityId').select2();
+            // $('#activityId').select2();
 
             $("#objectId").change(function(){
                 getActivityList();
@@ -480,7 +505,10 @@
             $("#activityId").change(function(){
                 getMaterialList();
             });
-
+            if (regCary==3 || regCategory==4){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }
         });
         function openInputFile() {
             document.getElementById("file-input").click();
@@ -511,22 +539,29 @@
                 cache: false,
                 success: function (response) {
                     $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
+                    $('#categorySelect').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $("#materialDiv").text("");
 
                     if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
                         $("#activityIdDiv").hide();
                         $("#activityId").removeAttr('required');
-                        $("#categoryDiv").hide();
+                        $("#categorySelect").removeAttr('required');
+                        // $("#categoryDiv").hide();
+                        $("#categorySelectDiv").hide();
                         materialDiv(response.requirementList[0].materials);
                     }else {
                         $("#activityIdDiv").show();
                         $("#activityId").prop('required',true);
-                        $("#categoryDiv").show();
+                        // $("#categoryDiv").show();
+                        $("#categorySelectDiv").show();
+                        $("#categorySelect").prop('required',true);
 
                         console.log('response.categoryList='+response.categoryList);
                         $.each(response.categoryList, function (keyCategory, valueCategory) {
                             console.log('valueCategory='+valueCategory);
-                            var options =  $('<optgroup label="'+getCategoryName(valueCategory)+'">');
+                            var optionCategory = new Option(getCategoryName(valueCategory),getCategoryId(valueCategory),false,false);
+                            $('#categorySelect').append(optionCategory);
+                            // var options =  $('<optgroup label="'+getCategoryName(valueCategory)+'">');
                             $.each(response.activityList, function (key, value) {
                                 if(valueCategory === value.category){
                                     var selected = false;
@@ -540,10 +575,12 @@
                                     if (idSelected!="" && idSelected==value.id){
                                         selected = true;
                                     }
-                                    options.append(new Option(name, value.id,!selected,selected));
+                                    var optionActivity = new Option(name, value.id,!selected,selected);
+                                    optionActivity.setAttribute("class","category_"+getCategoryId(value.category));
+                                    optionActivity.setAttribute("style","display:none");
+                                    $('#activityId').append(optionActivity);
                                 }
                             });
-                            $('#activityId').append(options);
                         });
                     }
                 }
@@ -559,6 +596,38 @@
                 case 'Category4': return [[#{sys_category4}]];
             }
         }
+
+        function getCategoryId(valueCategory) {
+            switch (valueCategory){
+                case 'CategoryAll': return 0;
+                case 'Category1': return 1;
+                case 'Category2': return 2;
+                case 'Category3': return 3;
+                case 'Category4': return 4;
+            }
+        }
+
+
+        $('#categorySelect').on('change',function () {
+            let categoryId = $('#categorySelect').val();
+            let activitySelect = $('#activityId');
+            activitySelect.find('option').hide();
+            activitySelect.find('option:first').show();
+            activitySelect.find('option:first').prop("selected", true);
+            activitySelect.change();
+            activitySelect.find('.category_'+categoryId).show();
+                console.log(categoryId);
+                console.log(categoryId==3);
+                console.log(categoryId==4);
+            if (categoryId==3 || categoryId==4){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }else{
+                $('#regionDiv').hide();
+                $('#regionId').prop('required',false);
+            }
+
+        });
 
         function getMaterialList() {
             var form = new FormData();
@@ -579,7 +648,8 @@
                     $('#categoryName').text("");
                     $('#categoryName').text(response.category);
                     $("#materialDiv").text("");
-                    if (response.requirementList.length>0){
+                    console.log(response.requirementList);
+                    if (response.requirementList!=undefined && response.requirementList.length>0){
                         $.each(response.requirementList, function (index, value) {
                             materialDiv(value.materials);
                         });

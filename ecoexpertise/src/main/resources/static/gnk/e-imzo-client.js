@@ -405,6 +405,7 @@ var EIMZOClient = {
                         CN: EIMZOClient._getX500Val(x500name_ex, "CN"),
                         TIN: (EIMZOClient._getX500Val(x500name_ex, "INN") ? EIMZOClient._getX500Val(x500name_ex, "INN") : EIMZOClient._getX500Val(x500name_ex, "UID")),
                         UID: EIMZOClient._getX500Val(x500name_ex, "UID"),
+                        PINFL: EIMZOClient._getX500Val(x500name_ex, "PINFL"),
                         O: EIMZOClient._getX500Val(x500name_ex, "O"),
                         T: EIMZOClient._getX500Val(x500name_ex, "T"),
                         type: 'pfx'
@@ -509,6 +510,7 @@ var EIMZOClient = {
                         CN: EIMZOClient._getX500Val(x500name_ex, "CN"),
                         TIN: (EIMZOClient._getX500Val(x500name_ex, "INN") ? EIMZOClient._getX500Val(x500name_ex, "INN") : EIMZOClient._getX500Val(x500name_ex, "UID")),
                         UID: EIMZOClient._getX500Val(x500name_ex, "UID"),
+                        PINFL: EIMZOClient._getX500Val(x500name_ex, "PINFL"),
                         O: EIMZOClient._getX500Val(x500name_ex, "O"),
                         T: EIMZOClient._getX500Val(x500name_ex, "T"),
                         type: 'pfx'
@@ -551,6 +553,7 @@ var EIMZOClient = {
                         CN: EIMZOClient._getX500Val(x500name_ex, "CN"),
                         TIN: (EIMZOClient._getX500Val(x500name_ex, "INN") ? EIMZOClient._getX500Val(x500name_ex, "INN") : EIMZOClient._getX500Val(x500name_ex, "UID")),
                         UID: EIMZOClient._getX500Val(x500name_ex, "UID"),
+                        PINFL: EIMZOClient._getX500Val(x500name_ex, "PINFL"),
                         O: EIMZOClient._getX500Val(x500name_ex, "O"),
                         T: EIMZOClient._getX500Val(x500name_ex, "T"),
                         type: 'ftjc'
