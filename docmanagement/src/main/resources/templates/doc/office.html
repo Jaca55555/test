@@ -95,7 +95,6 @@
                         </th>
                         <th class="th-sm">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody >
@@ -106,7 +105,6 @@
                             </a>
                         </td>
                         <td>
-
                             <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white ">12</span>
                          </td>
                     </tr>
@@ -117,7 +115,6 @@
                             </a></td>
                         <td>
                             <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white">12</span></td>
-
                     </tr>
                     </tbody>
 
@@ -139,14 +136,12 @@
                         </th>
                         <th class="th-sm">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="progress:${inProgress}">
                     <tr>
                         <td th:text="${progress.document.registrationNumber}">Donna Snider</td>
                         <td th:text="${#dates.format(progress.dueDate,'dd.MM.yyyy')}">Customer Support</td>
-
                     </tr>
                     </tbody>
                 </table>
@@ -167,14 +162,12 @@
                         </th>
                         <th class="th-sm">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="near:${nearDate}">
                     <tr>
                         <td th:text="${near.document.registrationNumber}">Donna Snider</td>
                         <td th:text="${#dates.format(near.dueDate,'dd.MM.yyyy')}">Customer Support</td>
-
                     </tr>
                     </tbody>
                 </table>
@@ -202,8 +195,6 @@
                     <tr>
                         <td th:text="${after.document.registrationNumber}">Donna Snider</td>
                         <td th:text="${#dates.format(after.dueDate,'dd.MM.yyyy')}">Customer Support</td>
-
-
                     </tr>
                     </tbody>
 

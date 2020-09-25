@@ -237,7 +237,8 @@ public class ReferenceController {
                     documentTaskSub.getStatus(),
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
                     document.getContentFiles(),
-                    document.getExecuteForm().getId()
+                    document.getExecuteForm().getId(),
+                    document.getSpecialControll().booleanValue()
 
             });
         }
