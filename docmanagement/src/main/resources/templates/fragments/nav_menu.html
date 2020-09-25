@@ -218,11 +218,27 @@
                         <span class="pcoded-mtext">Хисоботлар</span>
                     </a>
                 </li>-->
+                <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_LIST')" >
+                    <label th:text="#{sys.Report}">Хужжатлар</label>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_LIST')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportList}" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_report.list}" ></span>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_VIEW')">
+                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportView}" style="padding: 5px 15px">
+                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
+                        <span class="pcoded-mtext" th:text="#{doc_report.view}" ></span>
+                    </a>
+                </li>
                 <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_SETTINGS')">
                     <a class="nav-link" href="#">
                         <span class="pcoded-micon"><i class="feather icon-settings color-primary"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_settings}">Созламалар</span>
                     </a>
+
                     <ul class="pcoded-submenu" style="display: none;">
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocTypeList}" th:text="#{doc_doc_type.list}" style="padding: 5px 15px"></a></li>
                         <li class=""><a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).JournalList}" th:text="#{doc_journal.list}" style="padding: 5px 15px"></a></li>
@@ -249,21 +265,7 @@
                         <span class="pcoded-mtext" th:text="#{sys_document.logout}">Тизимдан чиқиш</span>
                     </a>
                 </li>
-                <li class="nav-item pcoded-menu-caption" >
-                    <label th:text="#{sys.Report}">Хужжатлар</label>
-                </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_LIST')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportList}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_report.list}" ></span>
-                    </a>
-                </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_VIEW')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportView}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-check-circle color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{doc_report.view}" ></span>
-                    </a>
-                </li>
+
 
             </ul>
         </div>

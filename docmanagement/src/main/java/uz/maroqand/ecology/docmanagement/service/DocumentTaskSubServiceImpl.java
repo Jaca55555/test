@@ -553,7 +553,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     @Override
     public List<DocumentTaskSub> getByDocumentType(Integer documentTypeId, Integer receiverId) {
-        return documentTaskSubRepository.findByStatusAndReceiverId(documentTypeId,receiverId);
+        return documentTaskSubRepository.findByStatusAndReceiverIdOrderByCreatedAtDesc(documentTypeId,receiverId);
     }
 
     @Override
@@ -572,8 +572,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
-    public List<DocumentTaskSub> getByDuedate(Date date,Integer receiverId) {
-        List<DocumentTaskSub> documentTaskSubs=documentTaskSubRepository.getAllByDueDateAndReceiverId(date,receiverId);
+    public List<DocumentTaskSub> getByDuedate(Date date,Date date1,Integer receiverId) {
+        List<DocumentTaskSub> documentTaskSubs=documentTaskSubRepository.getAllByDueDateAndReceiverId(date,date1,receiverId);
         return documentTaskSubs;
     }
 

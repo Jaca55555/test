@@ -6,14 +6,14 @@
 </head>
 <body th:fragment="document_view">
 
-<div class="card parent-card">
+<div class="card parent-card" id="for_doc_print" >
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
         <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed">
                         <span th:text="#{doc_appeal.view}">Murojaatlar</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
         </h5>
-        <div class="p10-horizontal mobile-column">
+        <div class="p10-horizontal mobile-column ml-3">
             <button th:if="${#bools.isTrue(document.insidePurpose)}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
                 <i class="fas fa-lock mr-0"></i>
                 <span>ХДФУ</span>
@@ -38,16 +38,15 @@
             </span>
         </div>
         <div class="flex-center">
-            <a><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
-
+            <a data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
             <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
-            <a><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+<!--            <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>-->
         </div>
     </div>
     <div class="card-block">
         <div class="row" th:object="${document}">
             <div class="col-md-12 col-sm-12">
-                <div class="m20-vertical"><span class="bold" th:text="${document.content}">Топшириқ шакли:</span></div>
+                <div class="m20-vertical"><span class="bold" th:text="${document.content}" style="font-size: 20px">Топшириқ шакли:</span></div>
             </div>
             <div class="col-md-6 col-sm-12 flex-space-between m10-vertical" th:object="${documentSub}">
                 <div class="col-md-6 p0"><span class="bold" th:text="#{doc_reference.senderOrganizationName}">Жўнатувчи ташкилот:</span></div>
@@ -111,6 +110,231 @@
                     </button>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog" aria-resolutionModal="modal1" aria-hidden="true" >
+    <div class="modal-dialog col-xl-6 col-12" role="document" th:object="${resolutionDocument}">
+        <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
+            <div class="card">
+                <div class="text-right p-3">
+                    <span th:text="#{resolution}" style="float: left;font-size: 30px;font-weight: bolder"></span>
+                    <a href="#" onclick="printThisDiv('for_print')">
+                        <i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i>
+                    </a>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times fs20 color-red"></i>
+                    </button>
+                </div>
+                <hr>
+                <div class="parent-card m0" id="for_print">
+                    <div th:if="${resolutionDocument!=null}" style="margin: 32px 20px 40px 20px" >
+                        <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
+                            <h4 th:text="${resolutionDocument.organizationName!=null?resolutionDocument.organizationName:''}"></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mt-2" th:if="${resolutionDocument.controlUser!=null && resolutionDocument.controlUser!=''}">
+                                <h5 th:text="#{doc_incoming.controls}"></h5>
+                                <h5 style="font-weight: bold" th:text="${resolutionDocument.controlUser}"></h5>
+                            </div><br/>
+                            <h5 >
+                                <span  th:text="#{doc_incoming.doc_task_and_content}" style="border-bottom: 1px solid black;"></span>:<br/>
+                                <span th:text="${resolutionDocument.content}"></span>
+                            </h5>
+                            <br/><br/>
+                            <div class="text-center mt-2" >
+                                <h5 th:text="#{doc_incoming.performers}"></h5>
+                                <h5 style="font-weight: bold"  >
+                                    <span  th:text="${resolutionDocument.performers}"></span>
+                                </h5>
+                            </div>
+                            <br/>
+                            <div class="text-right mt-2"  >
+                                <h5 th:text="${resolutionDocument.managerPosition}"></h5>
+                                <h5 style="font-weight: bold" th:text="${resolutionDocument.managerName}" ></h5>
+                            </div>
+
+                            <br/>
+                            <div class="row mt-2"  >
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width: 10%; text-align: right"><span th:text="#{sys_facture.date}">Data</span>:</td>
+                                        <td style="width: 20%" class="pl-2"><span th:text="${resolutionDocument.registrationDate}"></span></td>
+                                        <td style="width: 70%"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 10%; text-align: right"><span>№</span>:
+                                        <td style="width: 20%" class="pl-2"><span th:text="${resolutionDocument.registrationNumber}"></span></td>
+                                        <td style="width: 70%"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 10%; text-align: right"><span th:text="#{sys.doc_executeDate}">CROK</span>:</td>
+                                        <td style="width: 20%" class="pl-2"><span th:text="${resolutionDocument.dueDate}"></span></td>
+                                        <td style="width: 70%"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="controlModal" tabindex="-1" role="dialog" aria-controlModal="modal1" aria-hidden="true" >
+    <div class="modal-dialog col-xl-6 col-12 modal-lg" style="max-width: 900px;" role="document" th:object="${resolutionDocument}">
+        <div class="modal-content" style="font-family: 'Times New Roman', Arial, Helvetica, sans-serif">
+            <div class="card">
+                <div class="text-right p-3">
+                    <a href="#" onclick="$('#control_print').printThis();">
+                        <i class="fas fa-print fs30 color-gray m10-horizontal pointer"></i>
+                    </a>
+                </div>
+                <div class="parent-card m0" id="control_print">
+                    <div th:if="${resolutionDocument!=null && document.controlForm!= null && document.controlForm!=T(uz.maroqand.ecology.docmanagement.constant.ControlForm).FormNot}">
+                        <div class="card-header flex-space-between-nowrap mb-0 text-center" style="display: block ; border-bottom:2px solid rgba(64, 66, 84, 0.5)">
+                            <h4 class="font-weight-bold" th:text="#{eco_ekspertiza_kumitasi}">Экология ва атроф муҳитни муҳофаза қилиш давлат қўмитаси</h4>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" style="width: 100%">
+                                <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center" th:if="${document.controlForm==T(uz.maroqand.ecology.docmanagement.constant.ControlForm).Form1}">
+                                        <h4 th:text="#{sys_control_form.a1_title}">1a - НАЗОРАТ КАРТОЧКАСИ</h4>
+                                        <h5><span th:text="#{sys_control_form.a1_body}">Ҳужжат тури (Қонун, Пpезидент фармони, қарори, фармойиши, топшириғи)</span></h5>
+                                    </td>
+                                    <td colspan="5" class="text-center" th:if="${document.controlForm==T(uz.maroqand.ecology.docmanagement.constant.ControlForm).Form2}">
+                                        <h4 th:text="#{sys_control_form.a2_title}">1a - НАЗОРАТ КАРТОЧКАСИ</h4>
+                                        <h5><span th:text="#{sys_control_form.a2_body}">Ҳужжат тури (Қонун, Пpезидент фармони, қарори, фармойиши, топшириғи)</span></h5>
+                                    </td>
+                                    <td colspan="5" class="text-center" th:if="${document.controlForm==T(uz.maroqand.ecology.docmanagement.constant.ControlForm).Form3}">
+                                        <h4 th:text="#{sys_control_form.a3_title}">1a - НАЗОРАТ КАРТОЧКАСИ</h4>
+                                        <h5><span th:text="#{sys_control_form.a3_body}">Ҳужжат тури (Қонун, Пpезидент фармони, қарори, фармойиши, топшириғи)</span></h5>
+                                    </td>
+                                    <td colspan="5" class="text-center" th:if="${document.controlForm==T(uz.maroqand.ecology.docmanagement.constant.ControlForm).Form4}">
+                                        <h4 th:text="#{sys_control_form.a4_title}">1a - НАЗОРАТ КАРТОЧКАСИ</h4>
+                                        <h5><span th:text="#{sys_control_form.a4_body}">Ҳужжат тури (Қонун, Пpезидент фармони, қарори, фармойиши, топшириғи)</span></h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="width: 60%">
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{sys_office.senderOrganizationName}">Корреспондент: </span>
+                                            <span th:text="${resolutionDocument.organizationName!=null?resolutionDocument.organizationName:''}">Президент Администрацияси</span>
+                                        </h4>
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{doc.doc_type}">Ҳужжат тури:</span>
+                                             <span th:if="${document.documentViewId!=null}" th:text="${@documentHelperService.getDocumentViewName(document.documentViewId)}">Топшириқ</span>
+                                        </h4>
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{doc_incoming.registrationNumber}">Ҳужжат №: </span>
+                                            <span th:text="${resolutionDocument.registrationNumber}">05/1-681</span>
+                                        </h4>
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{sys.doc_date}">Санаси:</span>
+                                             <span th:if="${document.docRegDate!=null}" th:text="${#dates.format(document.docRegDate,'dd.MM.yyyy')}">07.02.2020 й.</span>
+                                        </h4>
+                                    </td>
+                                    <td colspan="2" style="width: 40%">
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{doc_incoming.docRegNumber}">Рег. №: </span>
+                                            <span th:text="${document.docRegNumber}">39 ПА</span>
+                                        </h4>
+                                        <h4>
+                                            <span class="font-weight-bold" th:text="#{doc.registrationDate}">Келган куни: </span>
+                                            <span th:text="${resolutionDocument.registrationDate}">28.02.2020 й.</span>
+                                        </h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <h4 class="font-weight-bold" th:text="#{doc_incoming.description}">Ҳужжатнинг қисқача мазмуни:</h4>
+                                        <h4><span  th:text="${document.content}">Жорий йилнинг 16 март ойида ёшлар билан очиқ мулоқот ташкил этиш ҳақида.</span></h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 80%">
+                                        <h4 class="font-weight-bold" th:text="#{doc_incoming.doc_task_and_content}">Раҳбар кўрсатмаси:</h4>
+                                        <h4><span th:text="${resolutionDocument.content}">Ўрнатилган тартибда ташкил этилсин.</span></h4>
+                                    </td>
+                                    <td style="width: 20%" rowspan="2">
+                                        <h4 class="font-weight-bold" th:text="#{sys.doc_executeDate}">Муддат:</h4>
+                                        <h4 th:text="${resolutionDocument.dueDate}">16.03.2020 й.</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="width: 60%">
+                                        <h4 class="font-weight-bold" th:text="${resolutionDocument.managerPosition}">Раис</h4>
+                                    </td>
+                                    <td style="width: 20%">
+                                        <h4 class="font-weight-bold" th:text="${resolutionDocument.managerName}">Б. Кучкаров</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <table class="table" style="width: 100%">
+                                            <tr>
+                                                <td style="width: 20%">
+                                                    <h4 class="font-weight-bold" th:text="#{doc_incoming.controls}">Маъсул:</h4>
+                                                </td>
+                                                <td style="width: 30%">
+                                                    <h4 th:text="${#strings.replace(resolutionDocument.controlUser,',',' ')}">И.Каримов</h4>
+                                                </td>
+                                                <td style="width: 20%">
+                                                    <h4 class="font-weight-bold" th:text="#{doc_incoming.performers}">Ижрочи:</h4>
+                                                </td>
+                                                <td style="width: 30%">
+                                                    <h4 th:text="${#strings.replace(resolutionDocument.performers,',',' ')}">О.Ким</h4>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <table  style="width: 100%">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 60%; border-color: black">
+                                                    <h4 th:text="#{sys_receive}">Ҳужжатни олган ходим Ф.И.Ш.:</h4>
+                                                </th>
+                                                <th style="width: 20%; border-color: black">
+                                                    <h4 th:text="#{sys_signature}">Имзо:</h4>
+                                                </th>
+                                                <th style="width: 20%; border-color: black">
+                                                    <h4 th:text="sys_notification.createdAt">Сана:</h4>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td style="width: 60%; border-color: black"><span>&nbsp;</span></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 60%; border-color: black"><span>&nbsp;</span></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 60%; border-color: black"><span>&nbsp;</span></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                                <td style="width: 20%; border-color: black"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

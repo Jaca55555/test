@@ -145,22 +145,22 @@
 
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase active show"  id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span  th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span>
-                        <span th:if="${progress}!=0" th:text="${incoming.inProgressCount}+${incoming.newCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                        <span th:if="${incoming.inProgressCount}+${incoming.newCount}!=0" th:text="${incoming.inProgressCount}+${incoming.newCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_dueDate}" >Муддати кеччикан</span>
-                        <span th:if="${incoming.lessDeadlineCount}!=0" th:text="${incoming.lessDeadlineCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                        <span th:if="${incoming.lessDeadlineCount}!=0" th:text="${incoming.lessDeadlineCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#FF9800 ;color:white">12</span>
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span>
-                        <span th:if="${incoming.greaterDeadlineCount}!=0" th:text="${incoming.greaterDeadlineCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                        <span th:if="${incoming.greaterDeadlineCount}!=0" th:text="${incoming.greaterDeadlineCount}" class=" w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#dc3545 ;color:white">12</span>
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span>
-                        <span th:if="${checkingDocumentCount}!=0" th:text="${checkingDocumentCount}+#{/}+${rejectedDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                        <span th:if="${checkingDocumentCount}!=0" th:text="${checkingDocumentCount}+#{/}+${rejectedDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
@@ -174,7 +174,7 @@
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span>
-                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
                     </a>
                 </li>
             </ul>
@@ -280,10 +280,20 @@
         function renderInformationColumn(data, type, row, meta) {
             var html = '';
             var status = row[11];
+            var specialControll=row[12];
+            console.log(specialControll);
+            if(specialControll===false)
             switch (status) {
-                case 0: html='<span style="font-size: 30px ; background: blue">&nbsp;</span>';return html;
-                case 1: html='<span style="font-size: 30px; background: grey"> &nbsp;</span>';return html;
-                default: html='<span style="font-size: 30px; background: red">&nbsp; </span>';return html;
+                case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.performance}"  style="border-left: 5px solid blue;height: 84px;"></div>';return html;
+                case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.information}"  style=" border-left: 5px solid grey;height: 84px;"1</div>';return html;
+                default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
+            }
+            else{
+                switch (status) {
+                    case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style="border-left: 5px solid red;height: 84px;"></div>';return html;
+                    case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style=" border-left: 5px solid red;height: 84px;"1</div>';return html;
+                    default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
+                }
             }
             return html;
         }
@@ -381,39 +391,39 @@
                             $.each(row[10],function (i,file) {
                                 if(file.extension=="pdf") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-pdf color-red"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="jpg"||file.extension=="jpeg"||file.extension=="png") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-image fs30 color-yellow"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-image color-yellow"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="docx"||file.extension=="doc") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-word fs30 color-blue"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-word  color-blue"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="xls"||file.extension=="xlsx") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-excel fs30 color-green"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-excel  color-green"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="pptx"||file.extension=="ppt") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-powerpoint fs30 color-red"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-powerpoint  color-red"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 if(file.extension=="zip"||file.extension=="7z"||file.extension=="rar") {     html+=
                                     '  <span class=" mt-3">\n' +
-                                    '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
-                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '       <span class="fas fa-file-archive  color-purple"></span>\n' +
+                                    '       <a style="font-size: 13px" href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
                                     '  </div>';}
                                 ;
                             });
                             return html;
                         },
-                        className: "text-justify"},
+                        className: "text-justify "  },
                 ],
 
             rowCallback: function (row, data) {
