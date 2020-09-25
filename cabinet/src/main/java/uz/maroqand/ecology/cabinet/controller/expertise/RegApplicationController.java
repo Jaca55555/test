@@ -654,6 +654,7 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
+            invoiceService.checkInvoiceStatus(invoice);
             if (invoice.getStatus()== InvoiceStatus.Success){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
             }
@@ -778,13 +779,7 @@ public class RegApplicationController {
         }
 
         if(regApplication.getForwardingLogId()==null){
-            regApplication.setLogIndex(1);
-            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-            regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.Process);
-            regApplication.setRegistrationDate(new Date());
-            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-            regApplicationService.update(regApplication);
+            regApplicationService.sendRegApplicationAfterPayment(regApplication,user,invoice,LocaleContextHolder.getLocale().toLanguageTag());
         }
         List<Comment> commentList = commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT);
         RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());

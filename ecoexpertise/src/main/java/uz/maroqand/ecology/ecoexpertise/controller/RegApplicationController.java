@@ -806,23 +806,6 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
-        if(regApplication.getForwardingLogId() == null){
-            regApplication.setLogIndex(1);
-            RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
-            regApplication.setForwardingLogId(regApplicationLog.getId());
-            regApplication.setStatus(RegApplicationStatus.Process);
-            regApplication.setRegistrationDate(new Date());
-            regApplication.setDeadlineDate(regApplicationLogService.getDeadlineDate(regApplication.getDeadline(), new Date()));
-
-            Client client = clientService.getById(regApplication.getApplicantId());
-            Organization organization = organizationService.getById(regApplication.getReviewId());
-            Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-            Facture facture = factureService.create(regApplication, client, organization, requirement, invoice, locale);
-            regApplication.setFactureId(facture.getId());
-
-            regApplicationService.update(regApplication);
-        }
-
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         model.addAttribute("conclusion", conclusion);
         if(conclusion != null){

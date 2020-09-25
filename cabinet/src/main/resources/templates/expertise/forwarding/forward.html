@@ -13,9 +13,7 @@
             </div>
             <div class="col-md-6">
                 <select class="form-control" id="performerId" name="performerId">
-                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
-                        <option th:each="user : ${performerList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
-                    </optgroup>
+                    <option th:each="user : ${performerList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
                 </select>
             </div>
         </div>
@@ -34,9 +32,7 @@
             </div>
             <div class="col-md-5">
                 <select class="form-control" id="agreements" name="agreements">
-                    <optgroup th:each="department : ${departmentList}" th:label="${department.getNameTranslation(#locale)}">
-                        <option th:each="user : ${agreementList}" th:if="${department.id == user.departmentId}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
-                    </optgroup>
+                    <option th:each="user : ${agreementList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
                 </select>
             </div>
             <div class="col-md-1 text-left">
