@@ -46,6 +46,11 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
+    public Set<Integer> getByOrganizationId(Integer organizationId) {
+        return documentOrganizationRepository.findByStatusTrueAndOrganizationId(organizationId);
+    }
+
+    @Override
     @Cacheable(value = "organizationGetByName", key = "#name",unless="#result == ''")
     public DocumentOrganization getByName(String name) {
         return documentOrganizationRepository.getByName(name);
@@ -102,8 +107,8 @@ public class DocumentOrganizationServiceImpl implements DocumentOrganizationServ
     }
 
     @Override
-    public List<DocumentOrganization> getLevel(Integer id) {
-        return documentOrganizationRepository.getAllByLevel(id);
+    public List<DocumentOrganization> getLevel(Integer organizationId,Integer id) {
+        return documentOrganizationRepository.getAllByLevel(organizationId,id);
     }
 
     @Override

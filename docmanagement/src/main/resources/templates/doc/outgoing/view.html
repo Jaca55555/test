@@ -18,6 +18,12 @@
             color:white;
             background:#62c462;
         }
+        .fa-upload{
+            color:yellow;
+        }
+        .fa-download{
+            color:green;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +68,10 @@
             </div>
             <div class="card-block">
                 <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="m20-vertical"><span class="bold" th:text="${content}">Хатнинг қисқача мазмуни:</span></div>
+
+                    </div>
                     <div class="col-md-6 col-sm-12 flex-space-between m10-vertical">
                         <div class="col-md-6 p0"><span class="bold">Рўйхатга олиш журнали:</span></div>
                         <div class="col-md-6 p0" style="float:right"><span th:text="${journal_name}">Тижорат таклифлари</span></div>
@@ -107,11 +117,8 @@
                 </div>
                 <hr class="m20-vertical">
                 <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="m20-vertical"><span class="bold">Хатнинг қисқача мазмуни:</span></div>
-                        <div><span th:text="${content}"></span></div>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
+
+                    <div class="col-md-12 col-sm-12">
                         <div class="m20-vertical"><span class="bold">Хатга иловалар:</span></div>
                         <div id="fileContainer" class="flex-start mobile-flex-center">
 

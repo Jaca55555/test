@@ -135,9 +135,9 @@
                 <form style="border-radius: 5px" id="filter">
                     <div class="row card-body" style="padding-bottom: 0;">
                         <div class="form-group col-md-4 col-sm-12">
-                            <label for="document_organization_id" class="control-label" th:text="#{doc_outgoing.senderOrganizationName}">Корреспондент</label>
-                            <select class="form-control" id="document_organization_id" name="document_organization_id" required="required">
-                                <option value="" th:text="#{sys_select}"></option>
+                            <label class="control-label" th:text="#{doc_outgoing.document_organization}">Хат юборилаётган ташкилот</label>
+                            <select class="form-control" multiple="multiple" id="document_organization_id" name="document_organization_id" required="required" data-parsley-errors-container="#document_organizationError">
+                                <option th:value="${document_organization_id}" th:text="${document_organization_name}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 col-sm-12">

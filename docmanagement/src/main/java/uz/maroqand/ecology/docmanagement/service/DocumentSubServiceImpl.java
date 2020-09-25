@@ -112,7 +112,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Integer organizationId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
-            List<Integer> documentOrganizationIds,
+            Set<Integer> documentOrganizationIds,
             String registrationNumber,
             Date dateBegin,
             Date dateEnd,
@@ -149,7 +149,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             Integer organizationId,
             Integer documentStatusIdToExclude,
             Integer documentOrganizationId,
-            List<Integer> documentOrganizationIds,
+            Set<Integer> documentOrganizationIds,
             String registrationNumber,
             Date dateBegin,
             Date dateEnd,
@@ -176,7 +176,7 @@ public class DocumentSubServiceImpl implements DocumentSubService {
             predicates.add(criteriaBuilder.in(joinDocument.get("status")).value(statuses));
         }
         if (documentOrganizationIds != null) {
-            predicates.add(criteriaBuilder.in(root.get("documentOrganizationIds")).value(documentOrganizationIds));
+            predicates.add(criteriaBuilder.in(joinOrganizations.get("id")).value(documentOrganizationIds));
         }
 
             if(documentTypeId != null)

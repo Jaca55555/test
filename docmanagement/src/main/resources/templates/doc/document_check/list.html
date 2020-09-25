@@ -27,54 +27,7 @@
 
 <!-- [ Main Content ] start -->
 <div class="pcoded-main-container">
-    <div class="col-xl-12 col-md-12">
-        <div class="card parent-card">
-            <div class="card-header flex-space-between-nowrap">
-                <h5 class="mb-0" style="align-self:center">
-                    <a href="/static/doc" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_check.list}">Девонхона хужжатлар иш столи</a>
-                </h5>
-            </div>
-            <h5 class="office-h5 default-color" th:text="#{doc_check.documentsCount}">Кирувчи хатлар статистикаси</h5>
-            <div class="responsive" style="width: 100%">
-                <div class="office-card" onclick="$('#all-tab').click()">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-purple"><span class="hawcons-icon-1-mail-envelope"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${allCount}">40</h4>
-                            <h6 class="card-title" th:text="#{doc_check.all_doc_count}">Жами хатлар</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card"  onclick="$('#executing-tab').click()">
-                    <div class="card dashboard-card border-warning-shadow">
-                        <div class="file-icon-container-small color-yellow"><span class=" hawcons-icon-8-mail-error"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${inProgressCount}">30</h4>
-                            <h6 class="card-title" th:text="#{doc_check.checking_count}">Жами хатлар</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card"  onclick="$('#executing-tab1').click()">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-green"><span class="hawcons-icon-9-mail-checked"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${inCompleteCount}">40</h4>
-                            <h6 class="card-title" th:text="#{doc_check.completed_count}">Жами хатлар</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="office-card"  onclick="$('#executing-tab2').click()">
-                    <div class="card dashboard-card border-green-shadow">
-                        <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                        <div class="card-body" style="display: inline-block;text-align: center;">
-                            <h4 class="card-title" th:text="${inRejectedCount}">40</h4>
-                            <h6 class="card-title" th:text="#{doc_check.rejected_count}">Жами хатлар</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
         <!-- filters card begins here -->
         <form class="card" style="border-radius: 5px" id="filter">
@@ -204,16 +157,24 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
 
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase active show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
+                <a class="nav-link text-uppercase active show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span>
+                    <span th:if="${inProgressCount}!=0" th:text="${inProgressCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                </a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_completed}"></span></a>
+                <a class="nav-link text-uppercase show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_completed}"></span>
+                    <span th:if="${inCompleteCount}!=0" th:text="${inCompleteCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                </a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="executing-tab2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_rejected}">Ижро учун</span></a>
+                <a class="nav-link text-uppercase show" id="executing-tab2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_rejected}">Ижро учун</span>
+                    <span th:if="${inRejectedCount}!=0" th:text="${inRejectedCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                </a>
             </li>
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase show" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect()" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
+                <a class="nav-link text-uppercase show" id="all-tab" data-toggle="tab" href="#home" onclick="getTabDatatableConnect()" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span>
+                    <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                </a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">

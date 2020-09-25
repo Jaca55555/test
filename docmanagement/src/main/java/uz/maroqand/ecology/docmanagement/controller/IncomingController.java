@@ -78,13 +78,13 @@ public class IncomingController {
 
         statuses.add(TaskSubStatus.New.getId());
         model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), user.getId()));
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-
+        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
         statuses.add(TaskSubStatus.Waiting.getId());
         statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
-
+        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
         model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
@@ -94,8 +94,12 @@ public class IncomingController {
         model.addAttribute("greaterDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateGreaterThanEqual(user.getId(), calendar.getTime()));
 
         statuses = new LinkedHashSet<>();
-        statuses.add(TaskSubStatus.Checking.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(user.getId(), statuses));
+        statuses.add(TaskSubStatus.Complete.getId());
+        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        statuses.clear();
+        statuses.add(TaskStatus.Rejected.getId());
+        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
         model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 
@@ -237,7 +241,9 @@ public class IncomingController {
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),true,documentTaskSub.getStatus(),locale),
-                    userService.findById(documentTaskSub.getReceiverId()).getFullName()
+                    userService.findById(documentTaskSub.getReceiverId()).getFullName(),
+                    document.getContentFiles(),
+                    document.getExecuteForm()!=null?document.getExecuteForm().getId():""
             });
         }
 
@@ -306,6 +312,7 @@ public class IncomingController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
+        model.addAttribute("files",document.getContentFiles());
         return DocTemplates.IncomingView;
     }
 

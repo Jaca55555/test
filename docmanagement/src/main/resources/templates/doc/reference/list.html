@@ -51,79 +51,7 @@
 
     <!-- [ Main Content ] start -->
     <div class="pcoded-main-container">
-        <div class="col-xl-12 col-md-12">
-            <div class="card parent-card">
-                <div class="card-header flex-space-between" style="flex-flow: row nowrap;">
-                    <h5 class="mb-0" style="align-self:center"><a href="" class="card-header-a collapsed" data-toggle="collapse" data-target="#collapseTopContainer" aria-expanded="false" aria-controls="collapseOne" th:text="#{doc_reference.list}">Кирувчи хатлар</a></h5>
-                    <!--<div>
-                        <input type="text" class="form-control" />
-                        <i class="gray-arrow fas fa-search  color-green pointer" style="top:27px;right:30px;"></i>
-                    </div>-->
-                </div>
-                <h5 class="office-h5 default-color" th:text="#{doc_reference.documentsCount}">Кирувчи хатлар статистикаси</h5>
-                <div class="responsive">
-                    <div class="office-card" onclick="$('#myTab a.active').removeClass('active');
-            $('#home-tab').addClass('active'); getTabDatatableConnect(9)">
-                        <div class="card dashboard-card border-primary-shadow">
-                            <div class="file-icon-container-small color-purple"><span class="feather icon-mail"></span>
-                            </div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.newCount}">10</h4>
-                                <h6 class="card-title" th:text="#{doc_reference.new_documents_count}">Янги хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="$('#tab_filter_2').click()">
-                        <div class="card dashboard-card border-danger-shadow">
-                            <div class="file-icon-container-small color-yellow"><span class="fas fas fa-clock"></span>
-                            </div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.inProgressCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_reference.in_progress_count}">Жараёндаги</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="$('#tab_filter_3').click()">
-                        <div class="card dashboard-card border-warning-shadow">
-                            <div class="file-icon-container-small color-orange"><span class="fa fa-exclamation-triangle"></span></div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.lessDeadlineCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_reference.near_date_count}">Муддати яқинлашган</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="$('#tab_filter_4').click()">
-                        <div class="card dashboard-card border-green-shadow">
-                            <div class="file-icon-container-small color-red"><span class="hawcons-icon-10-mail-cancel"></span></div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.greaterDeadlineCount}"></h4>
-                                <h6 class="card-title" th:text="#{doc_reference.expired_count}">Муддатдан кечиккан</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="$('#tab_filter_7').click()">
-                        <div class="card dashboard-card border-primary-shadow">
-                            <div class="file-icon-container-small color-green"><span class="fas fa-check-square"></span>
-                            </div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.checkingCount}">></h4>
-                                <h6 class="card-title" th:text="#{doc_reference.completed_count}">Ижро этилган</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="office-card" onclick="$('#tab_filter_1').click()">
-                        <div class="card dashboard-card border-danger-shadow">
-                            <div class="file-icon-container-small color-primary"><span class="fa fa-list-alt"></span>
-                            </div>
-                            <div class="card-body" style="display: inline-block;text-align: center;">
-                                <h4 class="card-title" th:text="${reference.allCount}">></h4>
-                                <h6 class="card-title" th:text="#{doc_reference.all_doc_count}">Жами кирувчи хатлар</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
             <!-- filters card begins here -->
             <div class="card" style="border-radius: 5px">
@@ -212,25 +140,39 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase active show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span></a>
+                    <a class="nav-link text-uppercase active show" id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_to_execute}">Ижро учун</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span  th:text="#{sys_document.info_tab_dueDate}">Муддати кеччикан</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_3" data-toggle="tab" href="#contact" onclick="getTabDatatableConnect(3)" role="tab" aria-controls="contact" aria-selected="false"><span  th:text="#{sys_document.info_tab_dueDate}">Муддати кеччикан</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span></a>
+                    <a class="nav-link text-uppercase" id="tab_filter_4" data-toggle="tab" href="#home1" role="tab" onclick="getTabDatatableConnect(4)" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_delayed}">Муддати якинлашаётган</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span>
+                        <span th:if="${checkingDocumentCount}!=0" th:text="${checkingDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_7" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_7" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_8" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(8)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_specialControll}">Якунланган</span>
+                        <span th:if="${allDocumentCount}!=0" th:text="${allDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px">12</span>
+                    </a>
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span></a>
@@ -245,6 +187,10 @@
                                     <table id="responsive-table-model" class="table table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                             <tr role="row">
+                                                <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                                    <span></span>
+                                                </th>
+
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_reference.registrationNumber}">Регистрация рақами</span>
                                                 </th>
@@ -287,6 +233,7 @@
 
     <script th:inline="javascript">
         var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}]];
+        var download = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload}]];
         var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
         function getCurrentLanguage() {
             return [[__${#locale}__]];
@@ -328,7 +275,16 @@
             }
             return html;
         }
-
+        function renderInformationColumn(data, type, row, meta) {
+            var html = '';
+            var status = row[11];
+            switch (status) {
+                case 0: html='<span style="font-size: 30px ; background: blue">&nbsp;</span>';return html;
+                case 1: html='<span style="font-size: 30px; background: grey"> &nbsp;</span>';return html;
+                default: html='<span style="font-size: 30px; background: red">&nbsp; </span>';return html;
+            }
+            return html;
+        }
        /* function renderActionsColumn(data, type, row, meta) {
             var html = '';
             html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
@@ -377,6 +333,7 @@
                     });
                 },
                 columns: [
+                    {render: renderInformationColumn, name: 'status',className: ""},
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
@@ -415,7 +372,54 @@
                         },
                         className: "w-10 text-center"},
                     {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                    {data: 7, name: 'content',className: "text-justify"},
+                    {data: 7, name: 'content',className: "text-justify",
+
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            console.log(row[8]);
+
+                            html += '<b>'+row[7]+'</b>';
+                            $.each(row[10],function (i,file) {
+                                if(file.extension=="pdf") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-pdf fs30 color-red"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                if(file.extension=="jpg"||file.extension=="jpeg"||file.extension=="png") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-image fs30 color-yellow"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                if(file.extension=="docx"||file.extension=="doc") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-word fs30 color-blue"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                if(file.extension=="xls"||file.extension=="xlsx") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-excel fs30 color-green"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                if(file.extension=="pptx"||file.extension=="ppt") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-powerpoint fs30 color-red"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                if(file.extension=="zip"||file.extension=="7z"||file.extension=="rar") {     html+=
+                                    '  <span class=" mt-3">\n' +
+                                    '       <span class="fas fa-file-archive fs30 color-purple"></span>\n' +
+                                    '       <a href="'+download+'?id=' + file.id +'">'+fileNameSubString(file.name)+'</a>' +
+                                    '  </div>';}
+                                ;
+                            });
+                            return html;
+                        },
+
+
+
+
+
+                    },
                 ],
                 rowCallback: function (row, data) {
                     $(row).on('click', function () {

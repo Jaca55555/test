@@ -466,8 +466,8 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
 
     @Override
-    public Integer countByReceiverIdAndStatusIn(Integer receiverId, Set<Integer> statuses){
-        return documentTaskSubRepository.countByReceiverIdAndStatusIn(receiverId, statuses);
+    public Integer countByReceiverIdAndStatusIn(Integer typeId,Integer receiverId, Set<Integer> statuses){
+        return documentTaskSubRepository.countByReceiverIdAndStatus(typeId,receiverId, statuses);
     }
 
     @Override
@@ -552,6 +552,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public List<DocumentTaskSub> getByDocumentType(Integer documentTypeId, Integer receiverId) {
+        return documentTaskSubRepository.findByStatusAndReceiverId(documentTypeId,receiverId);
+    }
+
+    @Override
     public Integer countByReceiverIdAndStatus(Integer receiverId, Set<Integer> statuses) {
         return documentTaskSubRepository.countByReceiverIdAndStatus(receiverId,statuses);
     }
@@ -564,6 +569,12 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     @Override
     public Integer countByReceiverIdAndDueDateLessThanEqualFor(Integer receiverId,Date now) {
         return documentTaskSubRepository.countByReceiverIdAndDueDateLessThanEqualFor(receiverId,now);
+    }
+
+    @Override
+    public List<DocumentTaskSub> getByDuedate(Date date,Integer receiverId) {
+        List<DocumentTaskSub> documentTaskSubs=documentTaskSubRepository.getAllByDueDateAndReceiverId(date,receiverId);
+        return documentTaskSubs;
     }
 
     @Override

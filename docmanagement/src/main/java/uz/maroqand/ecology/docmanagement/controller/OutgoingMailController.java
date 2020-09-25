@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.lang.NumberFormatException;
+import java.util.function.Function;
 
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.ChangePerformerTask;
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.OutgoingMailTask;
@@ -111,7 +112,7 @@ public class OutgoingMailController {
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -126,34 +127,29 @@ public class OutgoingMailController {
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-
+        User user = userService.getCurrentUserFromContext();
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
         MutableBoolean findTodayS = new MutableBoolean();
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
-
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
-//        if(tab == 7){
-//            statuses.clear();
-//            statuses.add(DocumentStatus.InProgress);
-//        }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        User user = userService.getCurrentUserFromContext();
-        Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
 
+        Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
+        Set<Integer> documentOrganizationSet=documentOrganizationService.getByOrganizationId(user.getOrganizationId());
+        if(documentOrganizationIds==null){documentOrganizationIds=documentOrganizationSet;}
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
-                documentOrganizationId,
                 null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
@@ -165,10 +161,12 @@ public class OutgoingMailController {
                 hasAdditional,
                 findTodayS_,
                 specificPageable);
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Integer userId = userService.getCurrentUserFromContext().getId();
         List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         for (DocumentSub documentSub : documentSubPage) {
+
             Document document = documentSub.getDocument();
             if(document == null) continue;
             if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
@@ -260,7 +258,7 @@ public class OutgoingMailController {
         List<Position> positions = positionService.getAll();
         Collections.reverse(positions);
         model.addAttribute("positions", positions);
-        model.addAttribute("users", userService.getEmployeesForDocManageAndIsExecutive("chief"));
+        model.addAttribute("users", userService.getEmployeesForDocManageOrganization("chief",user.getOrganizationId()));
         model.addAttribute("performerId",null);
         return DocTemplates.OutgoingMailNew;
     }
@@ -296,7 +294,7 @@ public class OutgoingMailController {
     @ResponseBody
     public HashMap<String, Object>  getOutgoingDocumentListInAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)Integer documentOrganizationId,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -321,7 +319,7 @@ public class OutgoingMailController {
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
-
+        Set<Integer> documentOrganizations= documentOrganizationService.getByOrganizationId(user.getOrganizationId());
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
         statuses.clear();
         statuses.add(DocumentStatus.Completed);
@@ -333,8 +331,8 @@ public class OutgoingMailController {
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 null,
                 documentStatusIdToExclude,
-                documentOrganizationId,
                 null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
@@ -356,6 +354,7 @@ public class OutgoingMailController {
                 if(document.getCreatedById() != userId && document.getPerformerId() != userId)
                     continue;
             }
+
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),

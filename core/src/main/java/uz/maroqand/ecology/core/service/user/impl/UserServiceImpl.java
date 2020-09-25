@@ -334,10 +334,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getEmployeesForDocManageAndIsExecutive(String type) {
+    public List<User> getEmployeesForDocManageAndIsExecutive(String type,Integer organizationId) {
         List<User> users = new ArrayList<>();
         if (type.equals("chief"))
-            users = userRepository.findAllByDepartmentIdNotNullOrderByIsExecuteChiefDesc();
+            users = userRepository.findAllByOrganizationIdAndDepartmentIdNotNullAndIsExecuteChiefTrueOrderByIsExecuteChiefDesc(organizationId);
         return users;
     }
 

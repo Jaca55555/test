@@ -71,7 +71,7 @@ public class OutgoingController {
 
         model.addAttribute("inProgress", documentService.countAllByStatus(outgoingMailType, DocumentStatus.InProgress, organizationId, departmentId, userId));
         model.addAttribute("todayDocuments", documentService.countAllTodaySDocuments(outgoingMailType, organizationId,departmentId, userId));
-
+        model.addAttribute("notSended",documentService.countAllByStatus(outgoingMailType, DocumentStatus.New, organizationId, departmentId, userId));
         model.addAttribute("haveAdditionalDocument", haveAdditionalDocument);
         //additional document is null, 'answer not accepted translation tag'
         model.addAttribute("answerNotAccepted", totalOutgoing - haveAdditionalDocument);
@@ -145,7 +145,7 @@ public class OutgoingController {
     @ResponseBody
     public HashMap<String, Object> getOutgoingDocumentListAjax(
             @RequestParam(name = "document_status_id_to_exclude", required = false)Integer documentStatusIdToExclude,
-            @RequestParam(name = "document_organization_id", required = false)List<String> documentOrganizationIds,
+            @RequestParam(name = "document_organization_id[]", required = false)Set<Integer> documentOrganizationIds,
             @RequestParam(name = "registration_number", required = false)String registrationNumber,
             @RequestParam(name = "date_begin", required = false)String dateBegin,
             @RequestParam(name = "date_end", required = false)String dateEnd,
@@ -159,9 +159,6 @@ public class OutgoingController {
         dateBegin = StringUtils.trimToNull(dateBegin);
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
-        System.out.println("=========================================");
-        System.out.println(documentOrganizationIds);
-        System.out.println("=========================================");
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
@@ -185,26 +182,15 @@ public class OutgoingController {
         }
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
-        Set<DocumentOrganization> documentOrganizationSet = new HashSet<>();
 
-        /*for (String docIdOrName: documentOrganizationIds) {
-            DocumentOrganization documentOrganization = documentOrganizationService.getById(parseIdOrCreateNew(docIdOrName, user.getId()));
-            if (documentOrganization!=null&&documentOrganization.getParent()!=null){
-                documentOrganizationSet.add(documentOrganization);
-            }else{
-                documentOrganizationSet.add(documentOrganization);
-                documentOrganizationSet.addAll(documentOrganizationService.getByParent(documentOrganization.getId()));
-            }
-        }*/
-        System.out.println("=============================");
-        System.out.println(documentOrganizationSet);
-        System.out.println("=============================");
+        Set<Integer> documentOrganizationSet=documentOrganizationService.getByOrganizationId(user.getOrganizationId());
+        if(documentOrganizationIds==null){documentOrganizationIds=documentOrganizationSet;}
         Page<DocumentSub> documentSubPage = documentSubService.findFiltered(
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
                 documentOrganizationId,
-                null,
+                documentOrganizationIds,
                 registrationNumber,
                 begin,
                 end,
@@ -233,11 +219,11 @@ public class OutgoingController {
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
                     document.getContent() != null ? document.getContent() : "",
-//                    document.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(document.getCreatedAt()):"",
                     documentSub.getDocumentOrganizations(),
                     document.getUpdateAt()!=null? Common.uzbekistanDateFormat.format(document.getUpdateAt()):"",
                     document.getStatus().getName(),
-                    (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : "")
+                    (document.getPerformerName() != null ? document.getPerformerName(): "") + "<br>" + (departmentService.getById(document.getDepartmentId()) != null ? departmentService.getById(document.getDepartmentId()).getName() : ""),
+                    document.getContentFiles()
             });
         }
 

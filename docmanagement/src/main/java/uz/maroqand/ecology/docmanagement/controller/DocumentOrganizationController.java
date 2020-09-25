@@ -73,8 +73,9 @@ public class DocumentOrganizationController {
     public String documentOrganizationNew(Model model){
 
         DocumentOrganization documentOrganization = new DocumentOrganization();
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("docOrganization", documentOrganization);
-        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(1));
+        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(user.getOrganizationId(),1));
         return DocTemplates.DocumentOrganizationNew;
     }
 
@@ -105,10 +106,10 @@ public class DocumentOrganizationController {
         prevId = id;
         if(docOrganization == null)
             return "redirect:" + DocUrls.DocumentOrganizationList;
-
+        User user = userService.getCurrentUserFromContext();
         model.addAttribute("docOrganization", docOrganization);
-        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(1));
-        return DocTemplates.DocumentOrganizationNew;
+        model.addAttribute("organizationGroup",documentOrganizationService.getLevel(user.getOrganizationId(),1));
+        return DocTemplates.DocumentOrganizationEdit;
     }
 
     @RequestMapping(value = DocUrls.DocumentOrganizationEdit, method = RequestMethod.POST)

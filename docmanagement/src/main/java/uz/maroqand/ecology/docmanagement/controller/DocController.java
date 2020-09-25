@@ -100,9 +100,17 @@ public class DocController {
         model.addAttribute("organizationList", documentOrganizationService.getStatusActive());
         model.addAttribute("executeForms", ControlForm.getControlFormList());
         model.addAttribute("controlForms", ExecuteForm.getExecuteFormList());
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 72);
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.add(Calendar.HOUR_OF_DAY, 0);
+        System.out.println(calendar.getTime());
+        Date date = calendar.getTime();
+        Date date1 = calendar.getTime();
         model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), userId));
-
+        model.addAttribute("inProgress",documentTaskSubService.getByDocumentType(TaskSubStatus.InProgress.getId(),userId));
+        model.addAttribute("nearDate",documentTaskSubService.getByDuedate(date,userId));
+        model.addAttribute("afterDate",documentTaskSubService.getByDuedate(date1,userId));
         model.addAttribute("inner", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(), userId));
 
         model.addAttribute("outgoingCountNew", documentService.countAllTodaySDocuments(2, organizationId, departmentId, userId));
