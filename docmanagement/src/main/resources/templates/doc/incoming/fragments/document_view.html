@@ -22,7 +22,7 @@
                         <span th:text="#{doc_incoming.view}">Кирувчи хат №</span>  <span th:text="${document.registrationNumber}"></span> / <span th:text="${#dates.format(document.registrationDate,'dd.MM.yyyy')}"></span>
                     </span>
             </h5>
-            <div class="p10-horizontal mobile-column">
+            <div class="p10-horizontal mobile-column ml-3">
                 <button th:if="${#bools.isTrue(document.insidePurpose)}" type="button" class="btn btn-rounded btn-danger btn-sm ml-2 m0">
                     <i class="fas fa-lock mr-0"></i>
                     <span>ХДФУ</span>
@@ -53,7 +53,7 @@
             <div class="flex-center">
                 <a data-toggle="modal" data-target="#resolutionModal"><i class="fas fa-external-link-alt fs20 color-gray m10-horizontal pointer"></i></a>
                 <a href="#" data-toggle="modal" data-target="#modal3"><i class="fas fa-sitemap fs20 color-gray m10-horizontal pointer"></i></a>
-                <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>
+<!--                <a href="#" onclick="printThisDiv('for_doc_print')"><i class="fas fa-print fs20 color-gray m10-horizontal pointer"></i></a>-->
             </div>
         </div>
         <div class="card-block">

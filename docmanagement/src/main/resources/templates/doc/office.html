@@ -91,9 +91,9 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{sys.executeControl}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_dashboard.newApplication}">Position
                         </th>
                     </tr>
                     </thead>
@@ -132,15 +132,20 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
                     </tr>
                     </thead>
                     <tbody th:each="progress:${inProgress}">
                     <tr>
-                        <td th:text="${progress.document.registrationNumber}">Donna Snider</td>
+                        <td th:switch="${progress.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                        </td>
                         <td th:text="${#dates.format(progress.dueDate,'dd.MM.yyyy')}">Customer Support</td>
                     </tr>
                     </tbody>
@@ -158,15 +163,21 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
                     </tr>
                     </thead>
                     <tbody th:each="near:${nearDate}">
                     <tr>
-                        <td th:text="${near.document.registrationNumber}">Donna Snider</td>
+                        <td th:switch="${near.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${near.id}" th:text="${near.document.registrationNumber}"></a>
+                        </td>
+
                         <td th:text="${#dates.format(near.dueDate,'dd.MM.yyyy')}">Customer Support</td>
                     </tr>
                     </tbody>
@@ -184,16 +195,20 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="th-sm">Name
+                        <th class="th-sm" th:text="#{doc.RegNumber}">Name
                         </th>
-                        <th class="th-sm">Position
+                        <th class="th-sm" th:text="#{sys_document.taskDate}">Position
                         </th>
-
                     </tr>
                     </thead>
                     <tbody th:each="after:${afterDate}">
                     <tr>
-                        <td th:text="${after.document.registrationNumber}">Donna Snider</td>
+                        <td th:switch="${after.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${after.id}" th:text="${after.document.registrationNumber}"></a>
+                        </td>
                         <td th:text="${#dates.format(after.dueDate,'dd.MM.yyyy')}">Customer Support</td>
                     </tr>
                     </tbody>
