@@ -52,6 +52,22 @@ public class PaymentFile {
     @Column(name = "bank_mfo")
     private String bankMfo;
 
+    //qabul qiluvchi СТИРИ
+    @Column(name = "receiver_inn")
+    private Integer receiverInn;
+
+    //Qabul qiluvchi номи
+    @Column(name = "receiver_name")
+    private String receiverName;
+
+    //qabul qiluvchi ҳисоб рақами
+    @Column(name = "receiver_account")
+    private String receiverAccount;
+
+    //Тўловчининг банк МФОси
+    @Column(name = "receiver_mfo")
+    private String receiverMfo;
+
     //Тўлов суммаси
     private Double amount;
 

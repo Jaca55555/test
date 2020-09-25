@@ -14,6 +14,10 @@ public class PaymentNew {
     private PaymentBank bank;       //Тўловчининг банки
 
     private String amount;          //Тўлов суммаси
+    private String receiver_mfo;          //MFO poluchatelya
+    private Integer receiver_inn;          //INN poluchatelya
+    private String receiver_name;          //Naimenovaniye poluchatelya
+    private String receiver_acc;          //Schet poluchatelya
     private String document_number; //Документ рақами
     private String payment_date;    //Тўлов санаси ва вақти
     private String details;         //Тўлов топшириқномаси

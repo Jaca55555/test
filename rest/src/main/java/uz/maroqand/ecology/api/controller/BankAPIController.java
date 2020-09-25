@@ -80,6 +80,11 @@ public class BankAPIController {
                 paymentFile.setBankAccount(paymentNew.getBank().getAccount());
                 paymentFile.setBankMfo(paymentNew.getBank().getMfo());
 
+                paymentFile.setReceiverInn(paymentNew.getReceiver_inn());
+                paymentFile.setReceiverName(paymentNew.getReceiver_name());
+                paymentFile.setReceiverAccount(paymentNew.getReceiver_acc());
+                paymentFile.setReceiverMfo(paymentNew.getReceiver_mfo());
+
                 paymentFile.setBankId(paymentNew.getId());
                 try {
                     paymentFile.setAmount(Double.parseDouble(paymentNew.getAmount())/100);

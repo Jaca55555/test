@@ -125,6 +125,10 @@ public class PaymentFileController {
                 paymentFile.getDetails(),
                 invoiceIsNull,
                 paymentFile.getPayerTin(),
+                paymentFile.getReceiverAccount(),
+                paymentFile.getReceiverName(),
+                paymentFile.getReceiverInn(),
+                paymentFile.getReceiverMfo()
             });
         }
 
