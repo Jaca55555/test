@@ -65,6 +65,9 @@
         .pcoded-main-container > .col-xl-12 > .col-xl-3 {
             margin:0 1px
         }
+        .dataTables_scrollBody{
+            border-bottom: 0px;
+        }
     </style>
 </head>
 <body>
@@ -104,23 +107,23 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr>
+                    <tr style="height: 100px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
                             <span  th:text="#{doc_check.list}"></span>
                             </a>
                         </td>
                         <td>
-                            <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white ">12</span>
+                            <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white; margin-top: 16%">12</span>
                          </td>
                     </tr>
-                    <tr>
+                    <tr style="height: 99px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
                                 <span  th:text="#{doc_change.perfomer}"></span>
                             </a></td>
                         <td>
-                            <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white">12</span></td>
+                            <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white;margin-top: 16%">12</span></td>
                     </tr>
                     </tbody>
 

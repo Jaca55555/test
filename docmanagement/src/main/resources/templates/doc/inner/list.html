@@ -311,16 +311,16 @@
             var specialControll=row[13];
             console.log(specialControll);
             if(specialControll===false)
+            switch (status) {
+                case 0: html='<div data-toggle="tooltip"  title="Ijro uchun" style="border-left: 3px solid blue;height: 84px;"></div>';return html;
+                case 1: html='<div data-toggle="tooltip"  title="Ma`lumot uchun"  style=" border-left: 3px solid grey;height: 84px;"</div>';return html;
+                default: html='<div data-toggle="tooltip"  title="Maxsus nazoratda" style="border-left: 3px solid red; height: 84px;"></div>';return html;
+            }
+        else{
                 switch (status) {
-                    case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.performance}"  style="border-left: 5px solid blue;height: 84px;"></div>';return html;
-                    case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.information}"  style=" border-left: 5px solid grey;height: 84px;"1</div>';return html;
-                    default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
-                }
-            else{
-                switch (status) {
-                    case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style="border-left: 5px solid red;height: 84px;"></div>';return html;
-                    case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style=" border-left: 5px solid red;height: 84px;"1</div>';return html;
-                    default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
+                    case 0: html='<div data-toggle="tooltip" data-placement="left" title="Maxsus nazoratda"  style="border-left: 5px solid red;height: 84px;"></div>';return html;
+                    case 1: html='<div data-toggle="tooltip" data-placement="left" title="Maxsus nazoratda"  style=" border-left: 5px solid red;height: 84px;"1</div>';return html;
+                    default: html='<div data-toggle="tooltip" data-placement="left" title="Maxsus nazoratda" style="border-left: 5px solid red; height: 84px;"></div>';return html;
                 }
             }
             return html;
