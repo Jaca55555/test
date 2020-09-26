@@ -61,12 +61,20 @@
         .dataTables_scrollBody::-webkit-scrollbar,.dataTables_scrollBody::-webkit-scrollbar-thumb ,.dataTables_scrollBody::-webkit-scrollbar-track  {
             width: 0px;
             display:none;
+
         }
         .pcoded-main-container > .col-xl-12 > .col-xl-3 {
             margin:0 1px
         }
         .dataTables_scrollBody{
             border-bottom: 0px;
+        }
+        #tVerticalScrollExample3{
+            margin-bottom: 0px;
+        }
+        .dataTables_scrollBody{border-bottom: 0px !important;}
+        .dataTables_empty{
+            padding: 88px 0px !important;
         }
     </style>
 </head>
@@ -107,7 +115,7 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr style="height: 100px">
+                    <tr style="height: 116px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
                             <span  th:text="#{doc_check.list}"></span>
@@ -117,7 +125,7 @@
                             <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white; margin-top: 16%">12</span>
                          </td>
                     </tr>
-                    <tr style="height: 99px">
+                    <tr style="height: 116px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
                                 <span  th:text="#{doc_change.perfomer}"></span>
@@ -451,9 +459,10 @@
 
         $(document).ready(function () {
             $('#dtVerticalScrollExample').DataTable({
-                "scrollY": "200px",
+                "scrollY": "230px",
                 "scrollCollapse": true,
-                "ordering": false
+                "ordering": false,
+                "border-bottom":0
             });
             $('.dataTables_length').addClass('bs-select');
         });
