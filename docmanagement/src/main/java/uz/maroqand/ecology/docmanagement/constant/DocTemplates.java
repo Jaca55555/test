@@ -16,6 +16,7 @@ public class DocTemplates {
     private static final String DocumentCheck="/document_check";
     private static final String Reference= "/reference";
     private static final String ChangePerformer = "/change_performer";
+    private static final String ChangeDueDate = "/change_duedate";
 
     public static final String Dashboard = Prefix + "/office";
 
@@ -29,6 +30,10 @@ public class DocTemplates {
     public static final String ChangePerformerList = Prefix + ChangePerformer + "/list";
     public static final String ChangePerformerView = Prefix + ChangePerformer + "/view";
     public static final String ChangePerformerTask = Prefix + ChangePerformer + "/task";
+    //Ijro muddatni o'zgartish
+    public static final String ChangeDueDateList = Prefix + ChangeDueDate + "/list";
+    public static final String ChangeDueDateView = Prefix + ChangeDueDate + "/view";
+    public static final String ChangeDueDateTask = Prefix + ChangeDueDate + "/task";
     //Murojaatlar
     public static final String ReferenceList = Prefix + Reference + "/list";
     public static final String ReferenceView = Prefix + Reference + "/view";

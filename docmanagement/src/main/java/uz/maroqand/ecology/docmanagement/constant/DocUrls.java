@@ -17,6 +17,7 @@ public class DocUrls {
     private static final String Orders = "/orders"; //Buyruqlar
     private static final String DocumentCheck="/document_check"; //Document oxirgisi
     private static final String ChangePerformer = "/change_performer"; //kiruvchi xujjatlar
+    private static final String ChangeDueDate = "/change_duedate"; //kiruvchi xujjatlar
 
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationShow = Notification + "/show";
@@ -50,6 +51,13 @@ public class DocUrls {
     public static final String ChangePerformerDeny = Prefix + ChangePerformer + "/deny";
     public static final String ChangePerformerTaskSubmit = Prefix + ChangePerformer + "/task_submit";
     public static final String ChangePerformerTaskUserName = Prefix + ChangePerformer + "/user_name";
+//    Muddatni o'zgartirish bo'yicha so'rov yuborish
+    public static final String ChangeDueDateList = Prefix + ChangeDueDate + "/list"; //kiruvchi xatlar
+    public static final String ChangeDueDateView = Prefix + ChangeDueDate + "/view"; //kiruvchi xatni ko'rish
+    public static final String ChangeDueDateTask = Prefix + ChangeDueDate + "/task";
+    public static final String ChangeDueDateDeny = Prefix + ChangeDueDate + "/deny";
+    public static final String ChangeDueDateTaskSubmit = Prefix + ChangeDueDate + "/task_submit";
+    public static final String ChangeDueDateTaskUserName = Prefix + ChangeDueDate + "/user_name";
 
     public static final String ReferenceList = Prefix + Reference + "/list";
     public static final String ReferenceView = Prefix + Reference + "/view";
