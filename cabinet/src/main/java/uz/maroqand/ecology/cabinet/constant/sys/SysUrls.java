@@ -31,4 +31,7 @@ public class SysUrls {
     public static final String GetQRImage = Repository + "/get_qr_image";
     public static final String GetCaptcha = Repository + "/captcha";
 
+    public static final String SelectLang = Prefix + "/select_lang";
+
+
 }

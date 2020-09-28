@@ -119,6 +119,7 @@ public class BillingController {
         List<Invoice> invoiceList = invoicePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(invoiceList.size());
         for (Invoice invoice : invoiceList){
+            invoiceService.checkInvoiceStatus(invoice);
             Client client = null;
             if (invoice.getClientId()!=null){
                 client = clientService.getById(invoice.getClientId());
