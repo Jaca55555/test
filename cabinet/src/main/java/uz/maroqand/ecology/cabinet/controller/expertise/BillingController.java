@@ -85,6 +85,7 @@ public class BillingController {
             @RequestParam(name = "service", required = false) String service,
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
+            @RequestParam(name = "tin", required = false) Integer tin,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
     ){
@@ -113,6 +114,7 @@ public class BillingController {
                 regionId,
                 subRegionId,
                 user.getOrganizationId(),
+                tin,
                 pageable
         );
 
@@ -124,6 +126,12 @@ public class BillingController {
             if (invoice.getClientId()!=null){
                 client = clientService.getById(invoice.getClientId());
             }
+            String clientName = "";
+            String clientTin = "";
+            if (client!=null){
+                clientName = client.getName();
+                clientTin = client.getTin()!=null?client.getTin().toString():"";
+            }
             convenientForJSONArray.add(new Object[]{
                 invoice.getId(),
                 invoice.getInvoice(),
@@ -131,7 +139,7 @@ public class BillingController {
                 invoice.getAmount(),
                 Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
                 invoice.getStatus(),
-                client!=null?client.getName():""
+                clientName + "  <br/>" + clientTin
             });
         }
 
