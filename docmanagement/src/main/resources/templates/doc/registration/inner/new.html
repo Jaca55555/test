@@ -145,7 +145,7 @@
                         <label class="control-label" th:text="#{doc_inner.chief}">Хужжатни қабул қилиш учун маъсул рахбар</label>
                         <select class="singleSelect col-sm-12 select2-hidden-accessible" th:field="*{managerId}" required="required" data-parsley-errors-container="#managerIdError">
                             <option value=""></option>
-                            <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
+                            <option th:each="i: ${managerUserList}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
                         </select>
                         <div id="managerIdError"></div>
                     </div>

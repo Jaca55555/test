@@ -22,7 +22,9 @@ public enum TaskSubStatus {
     Complete(6,"task_sub_status.complete","success"),//Якунланган
     Rejected(7,"task_sub_status.rejected","danger"),//Rad etildi
     ForChangePerformer(8,"task_sub_status.performer","light"),
-    PerformerChanged(9,"task_sub_status.performerChanged","green");
+    PerformerChanged(9,"task_sub_status.performerChanged","green"),
+    ForChangeDueDate(10,"task_sub_status.DueDate","light"),
+    DueDateChanged(11,"task_sub_status.dueDateChanged","green");
 
 
     private Integer id;

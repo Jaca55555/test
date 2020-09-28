@@ -190,7 +190,7 @@ public class InnerController {
                     userService.findById(documentTaskSub.getReceiverId()).getFullName(),
                     document.getContentFiles(),
                     document.getExecuteForm().getId(),
-                    document.getSpecialControll().booleanValue()
+                    document.getSpecialControll()!=null? document.getSpecialControll().booleanValue():""
 
             });
         }

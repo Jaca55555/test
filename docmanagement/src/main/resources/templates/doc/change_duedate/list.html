@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:include="fragments/head :: top" th:remove="tag">
+    <title th:text="#{doc_change.perfomer}" >Ijrochini o'zgartirish</title>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        a{
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+<div class="background"> </div>
+
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] end -->
+<object th:include="fragments/nav_menu :: menu" th:remove="tag" ></object>
+<object th:include="fragments/navbar :: navbar" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="col-xl-12 col-md-12 accordion parent-card" id="accordionExample">
+        <!-- filters card begins here -->
+        <div class="card" style="border-radius: 5px">
+            <div class="card-header flex-space-between" id="headingOne" style="flex-flow: nowrap;">
+                <h5 class="mb-0">
+                    <span th:text="#{sys_document.filterHeader}">Саралаш фильтри</span>
+                </h5>
+                <div>
+                    <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
+                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="row p10" style="padding-bottom: 0px;">
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="documentOrganizationId" class="control-label" th:text="#{doc_incoming.senderOrganizationName}">Жўнатувчи ташкилот номи</label>
+                    <select class="form-control" id="documentOrganizationId">
+                        <option value="" th:text="#{sys_select}"></option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="docRegNumber" class="control-label" th:text="#{doc_incoming.docRegNumber}">Хат рақами</label>
+                    <input type="text" class="form-control" id="docRegNumber" />
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="registrationNumber" class="control-label"><span th:text="#{doc_incoming.registrationNumber}">Руйхатга олиш рақами</span></label>
+                    <input type="text" class="form-control" id="registrationNumber" />
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
+                    <div class="row">
+                        <div class="col-6" style="padding-left: 0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                        </div>
+                        <div class="col-6" style="padding-right:0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="dateEnd" th:placeholder="#{sys_end}" />
+                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="taskContent" class="control-label"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
+                    <input type="text" class="form-control" id="taskContent" />
+                </div>
+            </div>
+            <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="row" style="padding-top: 0px;">
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="content" class="control-label" th:text="#{doc_incoming.content}">Хатнинг қисқача мазмуни</label>
+                        <input type="text" class="form-control" id="content" />
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="performerId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
+                        <select class="form-control singleSelect" id="performerId" >
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label for="taskSubType" class="control-label"><span th:text="#{sys_document.taskSubType}">Ижро йўналиши</span></label>
+                        <select class="form-control singleSelect" id="taskSubType">
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                            <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="#{${taskSubType.getName()}}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label for="taskSubStatus" class="control-label" th:text="#{sys_document.taskStatus}">Жорий ҳолати</label>
+                        <select class="form-control singleSelect" id="taskSubStatus">
+                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                            <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="#{${taskSubStatus.getName()}}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12 form-button-container">
+                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
+                            <span th:text="#{sys_document.search}">Қидириш</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="parent-card col-xl-12 mh-1000">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="table-responsive">
+                    <div id="responsive-table-model_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="responsive-table-model" class="table table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
+                                            <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
+                                            <span th:text="#{doc_incoming.registrationDate}">Регистрация санаси</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
+                                            <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
+                                            <span th:text="#{doc_incoming.docRegNumber}">Хужжат санаси</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
+                                            <span th:text="#{sys_document.taskDate}">Ижро муддати</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending">
+                                            <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
+                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/footer :: footer" th:remove="tag" ></object>
+<script th:src="@{/static/datatables/datatables.min.js}"></script>
+
+<script th:inline="javascript">
+    var viewLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangeDueDateView}]];
+    var getOrganization = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).RegistrationOrganization}]];
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+</script>
+<script th:inline="none">
+    var dataDatatableSelector;
+    var thead;
+    var tabFilter = 2;
+
+    function getDatatableConnect() {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect();
+    }
+
+    function getTabDatatableConnect(tab) {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        tabFilter = tab;
+        datatableConnect();
+    }
+
+    function renderStatusColumn(data, type, row, meta) {
+        var html = '';
+        var status=row[8];
+        switch (status) {
+            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+        }
+        return html;
+    }
+
+    /* function renderActionsColumn(data, type, row, meta) {
+         var html = '';
+         html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+         return html;
+     }*/
+
+    function clearFilter() {
+        $('#accordionExample .singleSelect').val(null).select2();
+        $('#accordionExample input').val('');
+    }
+
+    function datatableConnect() {
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [10,25, 50, 100], [10, 25, 50, 100] ],
+            order: [[5, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+
+                dataToSend.page = api !== undefined ? api.page() : 0;
+                dataToSend.size = api !== undefined ? api.page.len() : 25;
+                dataToSend.documentOrganizationId = $('#documentOrganizationId').val();
+                dataToSend.docRegNumber = $('#docRegNumber').val();
+                dataToSend.registrationNumber = $('#registrationNumber').val();
+                dataToSend.dateBegin = $('#dateBegin').val();
+                dataToSend.dateEnd = $('#dateEnd').val();
+                dataToSend.taskContent = $('#taskContent').val();
+                dataToSend.content = $('#content').val();
+                dataToSend.performerId = $('#performerId').val();
+                dataToSend.taskSubType = $('#taskSubType').val();
+                dataToSend.taskSubStatus = $('#taskSubStatus').val();
+
+                dataToSend.tabFilter = tabFilter;
+                dataToSend._csrf = $("#global_csrf").val();
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.post("", dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 1, name: 'document.registrationNumber',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[1]+'</a>';
+                        return html;
+                    },
+                    className: "w-15 text-left"
+                },
+                {data: 2, name: 'document.registrationDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[2]+'</a>';
+                        return html;
+                    },
+                    className: "w-10 text-left"
+                },
+                {data: 3, name: 'document.content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
+                        return html;
+                    },
+                    className: "w-20 text-justify"},
+                {data: 4, name: 'createdAt',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
+                        return html;
+                    },
+                    className: "w-10 text-center"},
+                {data: 5, name: 'dueDate',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
+                        return html;
+                    },
+                    className: "w-10 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
+                {data: 7, name: 'content',className: "text-justify"},
+            ],
+            rowCallback: function (row, data) {
+                $(row).on('click', function () {
+                    location.href = $(row).children()[0].firstElementChild.href
+                })
+                // $(row).children()[0].classList += ` ${data[9][0]}`
+                // $(row).children()[1].classList += ` ${data[9][0]}`
+                // $(row).children()[3].classList += ` ${data[9][0]}`
+                // $(row).children()[4].classList += ` ${data[9][0]}`
+            },
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    $('#performerId').select2();
+    $('#taskSubType').select2();
+    $('#taskSubStatus').select2();
+    $('#documentOrganizationId').select2({
+        ajax: {
+            url: getOrganization,
+            type: "POST",
+            data: function (params) {
+                return { search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val() };
+            }, cache: true
+        }
+    });
+
+    $(document).ready(function () {
+        dataDatatableSelector = $('#responsive-table-model');
+        thead = dataDatatableSelector.html();
+        datatableConnect();
+        $('#filter').on('change', function () {
+            $('#myTab a.active').trigger('click');
+        })
+    });
+</script>
+</body>
+</html>

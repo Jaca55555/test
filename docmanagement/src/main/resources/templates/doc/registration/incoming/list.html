@@ -426,6 +426,9 @@
                 dataToSend.dueDateBeginStr = $('#dueDateBeginStr').val();
                 dataToSend.dueDateEndStr = $('#dueDateEndStr').val();
                 dataToSend.tabFilter = tabFilter;
+                console.log("tabFilter")
+                console.log(tabFilter)
+                console.log("tabFilter")
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
