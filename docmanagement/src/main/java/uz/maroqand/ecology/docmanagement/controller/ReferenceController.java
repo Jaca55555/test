@@ -188,7 +188,7 @@ public class ReferenceController {
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFiltered(
                 user.getOrganizationId(),
-                Collections.singletonList(4), //todo documentTypeId=1
+                Collections.singletonList(4), //todo documentTypeId=4
                 documentOrganizationId,
                 docRegNumber,
                 registrationNumber,

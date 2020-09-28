@@ -14,6 +14,12 @@
         .block {
             display: block !important;
         }
+        tr,td,table{
+            background: white;
+        }
+        .dataTables_scroll{
+            background: white;
+        }
         /*table.dataTable thead .sorting:after,*/
         /*table.dataTable thead .sorting:before,*/
         /*table.dataTable thead .sorting_asc:after,*/
@@ -55,9 +61,20 @@
         .dataTables_scrollBody::-webkit-scrollbar,.dataTables_scrollBody::-webkit-scrollbar-thumb ,.dataTables_scrollBody::-webkit-scrollbar-track  {
             width: 0px;
             display:none;
+
         }
         .pcoded-main-container > .col-xl-12 > .col-xl-3 {
             margin:0 1px
+        }
+        .dataTables_scrollBody{
+            border-bottom: 0px;
+        }
+        #tVerticalScrollExample3{
+            margin-bottom: 0px;
+        }
+        .dataTables_scrollBody{border-bottom: 0px !important;}
+        .dataTables_empty{
+            padding: 88px 0px !important;
         }
     </style>
 </head>
@@ -80,7 +97,7 @@
     <div class="pcoded-main-container">
 
         <div class="col-xl-12 col-md-12" style="display: flex;" >
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="tVerticalScrollExample3" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -98,30 +115,30 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr>
+                    <tr style="height: 116px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
                             <span  th:text="#{doc_check.list}"></span>
                             </a>
                         </td>
                         <td>
-                            <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white ">12</span>
+                            <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white; margin-top: 16%">12</span>
                          </td>
                     </tr>
-                    <tr>
+                    <tr style="height: 116px">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
                                 <span  th:text="#{doc_change.perfomer}"></span>
                             </a></td>
                         <td>
-                            <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white">12</span></td>
+                            <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white;margin-top: 16%">12</span></td>
                     </tr>
                     </tbody>
 
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -152,7 +169,7 @@
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample2" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -184,7 +201,7 @@
                 </table>
 
             </div>
-            <div class="col-xl-3 col-md-3 p-0">
+            <div class="col-xl-3 col-md-3 p-0" style="background: white">
                 <table id="dtVerticalScrollExample1" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -442,9 +459,10 @@
 
         $(document).ready(function () {
             $('#dtVerticalScrollExample').DataTable({
-                "scrollY": "200px",
+                "scrollY": "230px",
                 "scrollCollapse": true,
-                "ordering": false
+                "ordering": false,
+                "border-bottom":0
             });
             $('.dataTables_length').addClass('bs-select');
         });

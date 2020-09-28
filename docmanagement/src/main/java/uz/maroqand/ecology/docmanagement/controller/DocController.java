@@ -113,7 +113,7 @@ public class DocController {
         Date date2=calendar2.getTime();
         System.out.println(date+"####"+date1+"####"+date2);
         model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), userId));
-        model.addAttribute("inProgress",documentTaskSubService.getByDocumentType(TaskSubStatus.InProgress.getId(),userId));
+        model.addAttribute("inProgress",documentTaskSubService.getByDocumentType(TaskSubStatus.New.getId(),userId));
         model.addAttribute("nearDate",documentTaskSubService.getByDuedate(date,date1,userId));
         model.addAttribute("afterDate",documentTaskSubService.getByDuedate(date1,date2,userId));
         model.addAttribute("inner", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.InnerDocuments.getId(), userId));

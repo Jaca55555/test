@@ -142,6 +142,7 @@ public class IncomingController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                status.add(TaskSubStatus.Rejected.getId());
             break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -153,6 +154,7 @@ public class IncomingController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                status.add(TaskSubStatus.Rejected.getId());
                 break;//Муддати якинлашаётган
             case 4:
                 deadlineDateEnd = calendar.getTime();
@@ -161,6 +163,7 @@ public class IncomingController {
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
+                status.add(TaskSubStatus.Rejected.getId());
                 break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();

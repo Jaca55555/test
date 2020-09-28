@@ -30,7 +30,7 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
     Integer countAllByDueDateAndDepartmentId(Date date,Integer departmentId);
-    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.dueDate>?2 AND d.receiverId=?3 ORDER BY d.dueDate desc")
+    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.dueDate>?2 AND d.receiverId=?3 AND d.status<>6 ORDER BY d.dueDate desc")
     List<DocumentTaskSub> getAllByDueDateAndReceiverId(Date date,Date date1,Integer receiverId);
 
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")

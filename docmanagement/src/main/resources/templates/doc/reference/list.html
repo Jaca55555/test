@@ -34,6 +34,15 @@
             border: 1px solid grey;
             margin: 10px;
         }
+        td.border-performance {
+            border-left: 3px solid blue;
+        }
+        td.border-information {
+            border-left: 3px solid grey;
+        }
+        td.border-SpecialControl {
+            border-left: 3px solid red;
+        }
     </style>
 </head>
 <body>
@@ -184,10 +193,6 @@
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
-                                                    <span></span>
-                                                </th>
-
-                                                <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_reference.registrationNumber}">Регистрация рақами</span>
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Last name: activate to sort column ascending">
@@ -234,6 +239,7 @@
         function getCurrentLanguage() {
             return [[__${#locale}__]];
         }
+        var InProgress=[[#{task_sub_status.inProgress}]];
 
         let tab_number = [[${tab_number_}]];
     </script>
@@ -266,31 +272,12 @@
                 case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
                 case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
                 case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+InProgress+'</button>';return html;
                 default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
             }
             return html;
         }
-        function renderInformationColumn(data, type, row, meta) {
-            var html = '';
-            var status = row[11];
-            var specialControll=row[12];
-            console.log(specialControll);
-            if(specialControll===false)
-                switch (status) {
-                    case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.performance}"  style="border-left: 5px solid blue;height: 84px;"></div>';return html;
-                    case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_execute_form.information}"  style=" border-left: 5px solid grey;height: 84px;"1</div>';return html;
-                    default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
-                }
-            else{
-                switch (status) {
-                    case 0: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style="border-left: 5px solid red;height: 84px;"></div>';return html;
-                    case 1: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}"  style=" border-left: 5px solid red;height: 84px;"1</div>';return html;
-                    default: html='<div data-toggle="tooltip" data-placement="left" th:title="#{sys_document.info_tab_specialControll}" style="border-left: 5px solid red; height: 84px;"></div>';return html;
-                }
-            }
-            return html;
-        }
+
        /* function renderActionsColumn(data, type, row, meta) {
             var html = '';
             html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
@@ -339,7 +326,7 @@
                     });
                 },
                 columns: [
-                    {render: renderInformationColumn, name: 'status',className: ""},
+
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
@@ -379,7 +366,6 @@
                         className: "w-10 text-center"},
                     {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
                     {data: 7, name: 'content',className: "text-justify",
-
                         render: function (data, type, row, meta) {
                             var html = '';
                             console.log(row[8]);
@@ -420,13 +406,21 @@
                             });
                             return html;
                         },
-
-
-
-
-
                     },
+                    {data: 11 , name: 'status',visible:false},
+                    {data: 12 , name: 'status',visible:false},
                 ],
+                "createdRow": function ( row, data, index ) {
+                    if ( data[11] * 1 === 0 && data[12]===false) {
+                        $('td', row).eq(0).addClass('border-performance');
+                    }else{
+                        if ( data[11] * 1 === 1 && data[12]===false) {
+                            $('td', row).eq(0).addClass('border-information');
+                        }
+                        else{
+                            $('td', row).eq(0).addClass('border-SpecialControl');
+                        }
+                    }},
                 rowCallback: function (row, data) {
                     $(row).on('click', function () {
                         location.href = $(row).children()[0].firstElementChild.href
