@@ -114,4 +114,16 @@ public class MainController {
         return SysTemplates.ErrorForbidden;
     }
 
+    @RequestMapping(value = SysUrls.SelectLang)
+    public String selectLang(
+            @RequestParam(name = "lang") String lang,
+            @RequestParam(name = "currentUrl") String currentUrl
+    ){
+        lang = lang.substring(0,2);
+        User user = userService.getCurrentUserFromContext();
+        user.setLang(lang);
+        userService.update(user);
+        return "redirect:" + currentUrl;
+    }
+
 }

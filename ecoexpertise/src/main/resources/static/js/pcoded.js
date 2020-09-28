@@ -724,6 +724,7 @@ function switchLanguage(targetLanguage) {
         currentUrl += '?lang='+targetLanguage;
     }
     if (urlAndHash.length > 1) currentUrl += '#' + urlAndHash[1];
+    window.location.href = '/sys/select_lang?lang='+targetLanguage+'&currentUrl='+currentUrl;
 
-    window.location.href = currentUrl;
+    // window.location.href = currentUrl;
 }
