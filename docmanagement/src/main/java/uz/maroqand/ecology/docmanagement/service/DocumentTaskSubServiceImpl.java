@@ -67,6 +67,12 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         statuses.add(TaskSubStatus.ForChangePerformer.getId());
         return documentTaskSubRepository.countByStatus(statuses);
     }
+    @Override
+    public Integer getCountByDueDate() {
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.ForChangeDueDate.getId());
+        return documentTaskSubRepository.countByStatus(statuses);
+    }
 
     @Override
     public DocumentTaskSub update(DocumentTaskSub taskSub) {

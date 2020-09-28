@@ -408,6 +408,7 @@ public class InnerRegistrationController {
         model.addAttribute("journalList", journalService.getStatusActive(user.getOrganizationId(),3));//todo 3
         model.addAttribute("documentViewList", documentViewService.getStatusActiveAndByType(user.getOrganizationId(),"InnerDocuments"));
         model.addAttribute("descriptionList", documentDescriptionService.findAllByOrganizationId(user.getOrganizationId()));
+        model.addAttribute("managerUserList", userService.getEmployeesForDocManageOrganization("chief",user.getOrganizationId()));
         model.addAttribute("chief", userService.getEmployeesForNewDoc("chief"));
         model.addAttribute("executeController", userService.getEmployeesForNewDoc("controller"));
 

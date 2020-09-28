@@ -84,6 +84,10 @@ public class GetNotifacationService {
     public Integer countPerformerByStatus(){
         return documentTaskSubService.getCountByStatus();
     }
+    public Integer countDueDateByStatus(){
+        return documentTaskSubService.getCountByDueDate();
+    }
+
 
     public Integer countIncomingNotByStatus(){
         User user =userService.getCurrentUserFromContext();
