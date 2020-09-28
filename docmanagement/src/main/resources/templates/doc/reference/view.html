@@ -113,6 +113,11 @@
                                                     <i class="feather icon-clock fs20 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub.dueDate!=null ? #dates.format(taskSub.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
+                                                <div class="w100"></div>
+                                                <div  class="column-2 mt-2 text-container-border">
+                                                    <span  th:text="${taskSub.content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                                </div>
+                                                <div class="w100"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -137,6 +142,11 @@
                                                     <i class="feather icon-clock fs20 color-gray"></i>
                                                     <span class="m10-horizontal" th:text="${taskSub1.dueDate!=null ? #dates.format(taskSub1.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                 </div>
+                                                <div class="w100"></div>
+                                                <div  class="column-2 mt-2 text-container-border">
+                                                    <span  th:text="${taskSub1.content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                                </div>
+                                                <div class="w100"></div>
                                             </div>
                                         </div>
                                         <div class="executor col-12 m10-vertical pr-0" th:each="taskSub2 : ${documentTaskSubs}" th:if="${taskSub2.senderId==taskSub1.receiverId && task.id==taskSub2.taskId && (taskSub1.level+1)==taskSub2.level}">
@@ -161,6 +171,11 @@
                                                         <span class="m10-horizontal" th:text="${taskSub2.dueDate!=null ? #dates.format(taskSub2.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                     </div>
                                                 </div>
+                                                <div class="w100"></div>
+                                                <div  class="column-2 mt-2 text-container-border ">
+                                                    <span  th:text="${taskSub2.content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                                </div>
+                                                <div class="w100"></div>
                                             </div>
                                             <div class="executor col-12 m10-vertical pr-0" th:each="taskSub3 : ${documentTaskSubs}" th:if="${taskSub3.senderId==taskSub2.receiverId && task.id==taskSub3.taskId && (taskSub2.level+1)==taskSub3.level}">
                                                 <div class="flex-space-between p0">
@@ -184,6 +199,11 @@
                                                             <span class="m10-horizontal" th:text="${taskSub3.dueDate!=null ? #dates.format(taskSub3.dueDate,'dd.MM.yyyy'):''}">21.11.2019</span>
                                                         </div>
                                                     </div>
+                                                    <div class="w100"></div>
+                                                    <div class="column-2 mt-2 text-container-border ">
+                                                        <span  th:text="${taskSub3.content}">Тегишли тартибда ўрганиб чиқиб таклиф берилсин.</span>
+                                                    </div>
+                                                    <div class="w100"></div>
                                                 </div>
                                             </div>
                                         </div>
