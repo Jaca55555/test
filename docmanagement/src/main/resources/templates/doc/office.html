@@ -66,13 +66,10 @@
         .pcoded-main-container > .col-xl-12 > .col-xl-3 {
             margin:0 1px
         }
-        .dataTables_scrollBody{
-            border-bottom: 0px;
-        }
         #tVerticalScrollExample3{
             margin-bottom: 0px;
         }
-        .dataTables_scrollBody{border-bottom: 0px !important;}
+        .dataTables_scrollBody{border-bottom: 1px solid grey !important;}
         .dataTables_empty{
             padding: 88px 0px !important;
         }
@@ -80,6 +77,7 @@
             line-height: 44px;
             text-align: center
         }
+
     </style>
 </head>
 <body>
@@ -472,7 +470,7 @@
         });
         $(document).ready(function () {
             $('#dtVerticalScrollExample1').DataTable({
-                "scrollY": "200px",
+                "scrollY": "230px",
                 "scrollCollapse": true,
                 "ordering": false
             });
@@ -480,7 +478,7 @@
         });
         $(document).ready(function () {
             $('#dtVerticalScrollExample2').DataTable({
-                "scrollY": "200px",
+                "scrollY": "230px",
                 "scrollCollapse": true,
                 "ordering": false
             });
