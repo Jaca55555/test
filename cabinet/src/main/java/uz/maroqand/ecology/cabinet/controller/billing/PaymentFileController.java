@@ -101,8 +101,19 @@ public class PaymentFileController {
         List<PaymentFile> paymentFileList = paymentFilePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(paymentFileList.size());
         for (PaymentFile paymentFile : paymentFileList){
+            StringBuilder accountString  = null;
             boolean invoiceIsNull = Boolean.TRUE;
             if (paymentFile.getInvoice()!=null) invoiceIsNull = Boolean.FALSE;
+            if (paymentFile.getReceiverAccount()!=null){
+                char accountReceiver[] = paymentFile.getReceiverAccount().toCharArray();
+                accountString = new StringBuilder();
+                for (int i=0; i<accountReceiver.length;i++){
+                    if (i!=0 && (i % 4) ==0 ){
+                        accountString.append(" ");
+                    }
+                    accountString.append(String.valueOf(accountReceiver[i]));
+                }
+            }
             if (paymentFile.getInvoice()==null){
                 String invoiceStr = paymentFile.getDetails();
                 String[] parts = invoiceStr.split(" ");
@@ -125,7 +136,7 @@ public class PaymentFileController {
                 paymentFile.getDetails(),
                 invoiceIsNull,
                 paymentFile.getPayerTin(),
-                paymentFile.getReceiverAccount(),
+                accountString!=null?accountString.toString():"",
                 paymentFile.getReceiverName(),
                 paymentFile.getReceiverInn(),
                 paymentFile.getReceiverMfo()

@@ -144,7 +144,6 @@
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
-<script type="text/javascript" src="/static/js/jquery.inputmask.bundle.min.js"></script>
 
 
 <script th:inline="javascript">
@@ -214,7 +213,7 @@
                 {data: 7, name: 'payerTin'},
                 {data: 3, name: 'paymentDate'},
                 {data: 4, name: 'amount'},
-                {data: 8, name: 'receiverAccount',className : 'cardNumber' },
+                {data: 8, name: 'receiverAccount'},
                 {data: 9, name: 'receiverName'},
                 {data: 10, name: 'receiverInn'},
                 {data: 11, name: 'receiverMfo'},
@@ -245,7 +244,6 @@
             autoclose: true
         });
 
-        $(".cardNumber").mask("9999 9999 9999 9999 9999");
 
     });
 
