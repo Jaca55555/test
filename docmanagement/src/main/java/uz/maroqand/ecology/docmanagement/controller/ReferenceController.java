@@ -137,12 +137,15 @@ public class ReferenceController {
         Calendar calendar = Calendar.getInstance();
         Boolean specialControl = null;
         switch (tabFilter){
-            case 2: type = TaskSubType.Performer.getId();
+            case 2:type = TaskSubType.Performer.getId();
                 status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
-                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.DueDateChanged.getId());
             break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -259,6 +262,10 @@ public class ReferenceController {
             return "redirect:" + DocUrls.ReferenceList;
         }
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.Rejected.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }

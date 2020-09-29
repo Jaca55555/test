@@ -99,11 +99,15 @@ public class InnerController {
                 status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
                 break;
-            case 2:  status = new LinkedHashSet<>();
+            case 2:  type = TaskSubType.Performer.getId();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
-                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.DueDateChanged.getId());
                 break;
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -212,6 +216,10 @@ public class InnerController {
         }
 
         if (documentTaskSub.getStatus().equals(TaskSubStatus.New.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+  if (documentTaskSub.getStatus().equals(TaskSubStatus.Rejected.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
