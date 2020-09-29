@@ -82,7 +82,15 @@ public class BankAPIController {
 
                 paymentFile.setReceiverInn(paymentNew.getReceiver_inn());
                 paymentFile.setReceiverName(paymentNew.getReceiver_name());
-                paymentFile.setReceiverAccount(paymentNew.getReceiver_acc());
+                Integer accountLength= paymentNew.getReceiver_acc().length();
+                if (accountLength>20){
+                    paymentFile.setReceiverAccount(paymentNew.getReceiver_acc().substring(accountLength-20,accountLength));
+                    paymentFile.setReceiverAdd(paymentNew.getReceiver_acc().substring(0,accountLength-20));
+                }else if(accountLength==20){
+                    paymentFile.setReceiverAccount(paymentNew.getReceiver_acc());
+                }else{
+                    paymentFile.setReceiverAdd(paymentNew.getReceiver_acc());
+                }
                 paymentFile.setReceiverMfo(paymentNew.getReceiver_mfo());
 
                 paymentFile.setBankId(paymentNew.getId());

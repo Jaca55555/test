@@ -64,6 +64,10 @@ public class PaymentFile {
     @Column(name = "receiver_account")
     private String receiverAccount;
 
+    //qabul qiluvchi ҳисоб рақами old qo'shimcha
+    @Column(name = "receiver_add")
+    private String receiverAdd;
+
     //Тўловчининг банк МФОси
     @Column(name = "receiver_mfo")
     private String receiverMfo;
