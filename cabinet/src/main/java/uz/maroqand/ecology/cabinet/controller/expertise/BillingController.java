@@ -35,6 +35,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.TinParser;
 
 import java.util.*;
 
@@ -85,10 +86,12 @@ public class BillingController {
             @RequestParam(name = "service", required = false) String service,
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
-            @RequestParam(name = "tin", required = false) Integer tin,
+            @RequestParam(name = "tin", required = false) String tin,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
     ){
+        System.out.println("tin=======");
+        System.out.println(tin);
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
         invoiceNumber = StringUtils.trimToNull(invoiceNumber);
@@ -114,7 +117,7 @@ public class BillingController {
                 regionId,
                 subRegionId,
                 user.getOrganizationId(),
-                tin,
+                TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );
 
