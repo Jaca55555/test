@@ -44,7 +44,8 @@
 <!-- main content start -->
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
-        <div class="card parent-card" id="for_doc_print">
+        <div class="flex" style="display: flex; justify-content: space-between">
+        <div class="card parent-card" id="for_doc_print" style="width: 49%">
             <div class="card-header flex-space-between mobile-column" style="align-items: center;">
                 <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed" >
@@ -136,7 +137,20 @@
                 <hr class="m20-vertical">
             </div>
         </div>
+            <div class="card parent-card" style="width: 49%">
+                <ul class="nav nav-tabs" id="myTab" role="tablist" >
+                    <li class="nav-item" role="presentation" th:each="file, fileStat:${files}">
+                        <a class="nav-link" id="home-tab" data-toggle="tab" th:classappend="${fileStat.first} ? 'active'" href="#home" th:href="#{home}+${file.id}" role="tab" aria-controls="home" th:text="${file.name}">Home</a>
+                    </li>
 
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div style="height: 560px" class="tab-pane fade" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
+                        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz/reg/application/contract/offer_download?offer_id='+file.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

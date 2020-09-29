@@ -99,11 +99,15 @@ public class InnerController {
                 status.add(TaskSubStatus.Initial.getId());
                 status.add(TaskSubStatus.New.getId());
                 break;
-            case 2:  status = new LinkedHashSet<>();
+            case 2:  type = TaskSubType.Performer.getId();
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.New.getId());
                 status.add(TaskSubStatus.InProgress.getId());
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
-                status.add(TaskSubStatus.New.getId());
+                status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.DueDateChanged.getId());
                 break;
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -215,6 +219,10 @@ public class InnerController {
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
+  if (documentTaskSub.getStatus().equals(TaskSubStatus.Rejected.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
 
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
@@ -253,6 +261,7 @@ public class InnerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
+        model.addAttribute("files",document.getContentFiles());
 
         return DocTemplates.InnerView;
     }
