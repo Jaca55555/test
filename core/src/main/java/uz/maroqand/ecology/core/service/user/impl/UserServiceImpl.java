@@ -108,6 +108,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public User findById(Integer id, Integer organizationId) {
         return userRepository.findByIdAndOrganizationId(id, organizationId);
     }

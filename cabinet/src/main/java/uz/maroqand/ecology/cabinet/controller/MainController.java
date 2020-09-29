@@ -1,12 +1,14 @@
 package uz.maroqand.ecology.cabinet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -52,6 +54,7 @@ public class MainController {
             return "redirect:dashboard?lang=oz";
 
         }
+
         return "redirect:dashboard?lang="+user.getLang();
     }
 
@@ -72,6 +75,14 @@ public class MainController {
 
         model.addAttribute("newElements", regApplicationPage.getTotalElements());
         model.addAttribute("logType", logType);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        if (user.getLang() == null || user.getLang().isEmpty()){
+            user.setLang(locale);
+            userService.update(user);
+        }else if (!user.getLang().equals(locale)){
+            return "redirect:" + SysUrls.SelectLang + "?lang="+ user.getLang() + "&currentUrl=/expertise/dashboard";
+        }
+
         return "expertise_dashboard";
     }
 
@@ -83,6 +94,18 @@ public class MainController {
     @RequestMapping("/map")
     public String getMap(){
         return "mapTest";
+    }
+
+    @RequestMapping(value = SysUrls.SelectLang)
+    public String selectLang(
+            @RequestParam(name = "lang") String lang,
+            @RequestParam(name = "currentUrl") String currentUrl
+    ){
+        lang = lang.substring(0,2);
+        User user = userService.getCurrentUserFromContext();
+        user.setLang(lang);
+        userService.update(user);
+        return "redirect:" + currentUrl;
     }
 
     /*@RequestMapping(SysUrls.ErrorInternalServerError)

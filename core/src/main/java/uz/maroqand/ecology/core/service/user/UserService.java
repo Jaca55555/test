@@ -29,6 +29,8 @@ public interface UserService {
     List<User> getAll();
     User findById(Integer id);
 
+    User update(User user);
+
     User findById(Integer id, Integer organizationId);
 
     User createUser(User user);
