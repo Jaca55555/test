@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/static*/**").permitAll()
                 .antMatchers("/doc/file_upload").permitAll()
+                .antMatchers("/doc/file/download").permitAll()
                 .antMatchers("/expertise/conclusion/file_download_for_view").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
                 .antMatchers(SysUrls.ErrorNotFound).permitAll()
