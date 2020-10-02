@@ -121,8 +121,9 @@ public class OutgoingController {
         Set<DocumentOrganization> documentOrganizationSet = documentSub.getDocumentOrganizations();
         if (documentOrganizationSet!=null && documentOrganizationSet.size()>0){
             for (DocumentOrganization documentOrganization: documentOrganizationSet) {
+                if(documentOrganization.getLevel()!=null){
                 if(documentOrganization.getLevel()!=0&&documentOrganization.getLevel()!=null)
-                {document_organization_name +=documentOrganization.getName() + ", ";}
+                {document_organization_name +=documentOrganization.getName() + ", ";}}
                 else{
                     document_organization_name+=documentOrganizationService.getById(documentOrganization.getParent()).getName();
                 }
