@@ -477,6 +477,10 @@
         var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationClearCoordinates}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
+        let regCategory = null;
+        if([[${regApplication.category}]]!=null){
+            regCategory =  getCategoryId([[${regApplication.category}]]);
+        }
         $(document).ready(function () {
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
@@ -496,7 +500,7 @@
             $("#activityId").change(function(){
                 getMaterialList();
             });
-            if (regCategory==3 || regCategory==4){
+            if (regCategory!=null && (regCategory==3 || regCategory==4)){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
             }
@@ -609,9 +613,6 @@
             activitySelect.find('option:first').prop("selected", true);
             activitySelect.change();
             activitySelect.find('.category_'+categoryId).show();
-            console.log(categoryId);
-            console.log(categoryId==3);
-            console.log(categoryId==4);
             if (categoryId==3 || categoryId==4){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);

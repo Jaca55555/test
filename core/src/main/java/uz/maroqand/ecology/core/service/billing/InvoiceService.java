@@ -49,6 +49,7 @@ public interface InvoiceService {
       Integer regionId,
       Integer subRegionId,
       Integer payeeId,
+      Integer tin,
       Pageable pageable
     );
 

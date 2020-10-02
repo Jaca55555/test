@@ -93,7 +93,7 @@ public class RegApplicationMonitoringController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,null,null,null,null, null,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,user.getOrganizationId(),null,null,null, null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements

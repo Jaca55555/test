@@ -246,9 +246,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             Integer regionId,
             Integer subRegionId,
             Integer payeeId,
+            Integer tin,
             Pageable pageable
     ) {
-        return invoiceRepository.findAll(getFilteringSpecification(dateBegin, dateEnd, dateToday, dateThisMonth, status, invoice, service, detail, regionId, subRegionId, payeeId),pageable);
+        return invoiceRepository.findAll(getFilteringSpecification(dateBegin, dateEnd, dateToday, dateThisMonth, status, invoice, service, detail, regionId, subRegionId, payeeId,tin),pageable);
     }
 
     private static Specification<Invoice> getFilteringSpecification(
@@ -262,7 +263,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             final String detail,
             final Integer regionId,
             final Integer subRegionId,
-            final Integer payeeId
+            final Integer payeeId,
+            final Integer tin
     ) {
         return new Specification<Invoice>() {
             @Override
@@ -328,6 +330,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
                 if(subRegionId != null){
                     predicates.add(criteriaBuilder.equal(root.get("client").get("subRegionId"), subRegionId));
+                }
+
+                if(tin != null){
+                    predicates.add(criteriaBuilder.equal(root.get("client").get("tin"), tin));
                 }
 
                 if(payeeId != null){

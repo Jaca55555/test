@@ -88,7 +88,7 @@ public class CoordinateController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
 
-        Page<Coordinate> coordinatePage = coordinateService.findFiltered(id, tin, name, number ,regionId, subRegionId, dateBegin, dateEnd, pageable);
+        Page<Coordinate> coordinatePage = coordinateService.findFiltered(user.getOrganizationId(),id, tin, name, number ,regionId, subRegionId, dateBegin, dateEnd, pageable);
 
         List<Coordinate> coordinateList = coordinatePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(coordinateList.size());

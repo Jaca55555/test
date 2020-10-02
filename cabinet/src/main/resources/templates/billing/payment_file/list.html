@@ -145,6 +145,7 @@
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 
+
 <script th:inline="javascript">
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileListAjax}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileView}]];
@@ -242,6 +243,8 @@
             todayHighlight: true,
             autoclose: true
         });
+
+
     });
 
     $('#data-table').css("width", "100%");
