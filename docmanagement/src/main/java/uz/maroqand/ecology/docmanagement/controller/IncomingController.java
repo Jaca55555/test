@@ -170,6 +170,7 @@ public class IncomingController {
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
+                status.add(TaskSubStatus.Rejected.getId());
                 break;//Ижро назоратида
             case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
             case 7:
