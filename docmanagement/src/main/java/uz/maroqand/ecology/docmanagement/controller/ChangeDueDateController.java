@@ -14,14 +14,12 @@ import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
+import javax.print.Doc;
 import java.util.*;
 
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.*;
@@ -222,11 +220,21 @@ public class ChangeDueDateController {
     }
     @PostMapping(ChangeDueDateTask)
     public String ChangeDueDate(
-            DocumentTaskSub documentTaskSub,
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "duedate")String duedateStr
+            @RequestParam(name = "afterdate")String duedateStr,
+            @RequestParam(name = "content")String content
     ) {
+        DocumentLog documentLog = new DocumentLog();
+        User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
+        Date beforeDate= documentTaskSub1.getDueDate();
+        Date afterDate=DateParser.TryParse(duedateStr, Common.uzbekistanDateFormat);
+        Integer documentId=documentTaskSub1.getDocumentId();
+        System.out.println("docId"+documentId);
+        System.out.println("content="+content);
+        System.out.println("docTypeId"+DocumentLogType.Log.getId());
+        documentLogService.createComment(documentLog,  DocumentLogType.Log.getId(), beforeDate, afterDate ,content,user.getId(),documentId);
+
         documentTaskSub1.setDueDate(DateParser.TryParse(duedateStr, Common.uzbekistanDateFormat));
         documentTaskSub1.setStatus(11);
         documentTaskSubService.update(documentTaskSub1);
@@ -238,7 +246,7 @@ public class ChangeDueDateController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(7);
+        documentTaskSub1.setStatus(documentTaskSub.getStatus());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangeDueDateList;
     }

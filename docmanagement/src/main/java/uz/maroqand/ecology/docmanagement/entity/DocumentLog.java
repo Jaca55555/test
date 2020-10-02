@@ -74,6 +74,14 @@ public class DocumentLog
     @Column(name = "after_status_color")
     private String afterStatusColor;
 
+    //eski muddati
+    @Column(name = "before_date", columnDefinition = "timestamp without time zone")
+    private Date beforeDate;
+
+    //o'zgartirilgan muddati
+    @Column(name = "after_date", columnDefinition = "timestamp without time zone")
+    private Date afterDate;
+
     @Column(name = "attached_doc_id")
     private Integer attachedDocId;
 

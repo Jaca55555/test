@@ -235,7 +235,7 @@ public class ChangePerformerController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(7);
+        documentTaskSub1.setStatus(documentTaskSub.getStatus());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
     }
