@@ -16,7 +16,8 @@ public enum LogType {
     Forwarding(1,"sys_logType.forwarding","sys_logType.forwardingHistory"),
     Performer(2,"sys_logType.performer","sys_logType.performerHistory"),
     Agreement(3,"sys_logType.agreement","sys_logType.agreementHistory"),
-    AgreementComplete(4,"sys_logType.agreementComplete","sys_logType.agreementCompleteHistory");
+    AgreementComplete(4,"sys_logType.agreementComplete","sys_logType.agreementCompleteHistory"),
+    ConclusionComplete(5,"sys_logType.сonclusionComplete","sys_logType.сonclusionCompleteHistory");
 
     private Integer id;
     private String name;
