@@ -11,7 +11,7 @@ public interface CoordinateService {
 
     Coordinate findById(Integer id);
 
-    Page<Coordinate> findFiltered(Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable);
+    Page<Coordinate> findFiltered(Integer reviewId,Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable);
 
     void coordinateView(Integer regApplicationId, Model model);
 
