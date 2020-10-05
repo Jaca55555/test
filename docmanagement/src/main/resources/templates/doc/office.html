@@ -77,7 +77,7 @@
             line-height: 44px;
             text-align: center
         }
-        .dtVerticalScrollExample, .dtVerticalScrollExample1, .dtVerticalScrollExample2{
+        #dtVerticalScrollExample, #dtVerticalScrollExample1, #dtVerticalScrollExample2{
             height: 233px !important;
         }
 
@@ -681,7 +681,7 @@
                     {data: 1, name: 'document.registrationNumber',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'"  >' + row[1]+'</a>';
+                            html += '<a href="'+linkByType(row[9])+'?id='+row[0]+'"  >' + row[1]+'</a>';
                             return html;
                         },
                         className: "text-left fit-content"
@@ -689,7 +689,7 @@
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<a href="'+linkByType(row[10])+'?id='+row[0]+'" >' + row[2]+'</a>';
+                            html += '<a href="'+linkByType(row[9])+'?id='+row[0]+'" >' + row[2]+'</a>';
                             return html;
                         },
                         className: "text-left"

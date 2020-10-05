@@ -190,7 +190,6 @@ public class OutgoingController {
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 user.getOrganizationId(),
                 documentStatusIdToExclude,
-                documentOrganizationId,
                 documentOrganizationIds,
                 registrationNumber,
                 begin,

@@ -209,7 +209,6 @@ public class IncomingController {
                 performerId,
                 taskSubType,
                 taskSubStatus,
-
                 deadlineDateBegin,
                 deadlineDateEnd,
                 type,
