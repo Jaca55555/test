@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="reg_application_list">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{reg_application.id}"></th>
+                <th th:text="#{sys_expertise.objectExpertise}"></th>
+                <th th:text="#{sys_expertise.material}"></th>
+                <th th:text="#{reg_application.createdAt}"></th>
+                <th th:text="#{reg_application.status}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="regApplication : ${regApplicationList}">
+                <th scope="row" th:text="${regApplication.id}"></th>
+                <td>
+                    <span th:if="${regApplication.objectId!=null}" th:text="${@helperService.getObjectExpertise(regApplication.objectId,#locale)}"></span>
+                </td>
+                <td>
+                    <span th:if="${regApplication.materials!=null}" th:text="${@helperService.getMaterials(regApplication.materials,#locale)}"></span>
+                </td>
+                <td>
+                    <span th:if="${regApplication.createdAt!=null}" th:text="${#dates.format(regApplication.createdAt,'dd.MM.yyyy')}"></span>
+                </td>
+                <td>
+                    <span th:if="${regApplication.status!=null}" th:class="${regApplication.status.color}" th:text="${@helperService.getRegApplicationStatus(regApplication.status.id,#locale)}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+</body>
+</html>

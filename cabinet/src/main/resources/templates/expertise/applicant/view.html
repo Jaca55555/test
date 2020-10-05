@@ -38,6 +38,9 @@
                                                     <a class="nav-link show active" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                                 </li>
                                                 <li class="nav-item">
+                                                    <a class="nav-link show" id="reg_application-tab" data-toggle="tab" href="#reg_application" role="tab" aria-controls="reg_application" aria-selected="false" th:text="#{sys_reg_applications}"></a>
+                                                </li>
+                                                <li class="nav-item">
                                                     <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
                                                 </li>
                                                 <li class="nav-item">
@@ -57,6 +60,9 @@
                                                             <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="reg_application" role="tabpanel" aria-labelledby="reg_application-tab">
+                                                    <object th:include="expertise/fragment/reg_application_list :: reg_application_list" th:remove="tag"></object>
                                                 </div>
                                                 <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
                                                     <object th:include="expertise/fragment/contract_list :: contract_list" th:remove="tag"></object>
