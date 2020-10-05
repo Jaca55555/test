@@ -90,7 +90,7 @@ public class OutgoingController {
     public String getOutgoingViewPage(@RequestParam(name = "id")Integer id, Model model) {
 
         Document document = documentService.getById(id);
-        document.getJournal().getName();
+//        document.getJournal().getName();
 
         model.addAttribute("journal_name", document.getJournal().getName());
         model.addAttribute("document_view_name", document.getDocumentView().getName());
