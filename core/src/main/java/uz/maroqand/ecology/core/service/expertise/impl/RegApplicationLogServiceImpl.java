@@ -161,12 +161,27 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             case 4:
                 logType = LogType.AgreementComplete;
                 break;
+            case 5:
+                logType = LogType.ConclusionComplete;
+                break;
             default:
                 return 0;
         }
         List<RegApplicationLog> regApplicationLogList = getAllByLogType(logType);
         System.out.println("size==" + regApplicationLogList.size() + "   type=" + logType + "  id==" + id);
         Integer result = 0;
+
+        if (logType.equals(LogType.ConclusionComplete)){
+            for (RegApplicationLog regApplicationLog : regApplicationLogList) {
+                if (regApplicationLog.getStatus().equals(LogStatus.Initial)
+                        && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())
+                ){
+                    result++;
+                }
+            }
+            return result;
+        }
+
         for (RegApplicationLog regApplicationLog : regApplicationLogList) {
             if ( !regApplicationLog.getRegApplication().getDeleted()
                     && !hashMap.containsKey(regApplicationLog.getRegApplicationId()) && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())

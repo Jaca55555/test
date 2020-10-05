@@ -13,4 +13,10 @@ public class BillingTemplates {
     public static final String PaymentFileView = PaymentFile + "/view";
     public static final String PaymentFileEdit = PaymentFile + "/edit";
 
+    //All Hamma to'lovlar uchun
+    private static final String PaymentFileAll = Prefix + "/payment_file_all";
+    public static final String PaymentFileAllList = PaymentFileAll + "/list";
+    public static final String PaymentFileAllView = PaymentFileAll + "/view";
+    public static final String PaymentFileAllEdit = PaymentFileAll + "/edit";
+
 }

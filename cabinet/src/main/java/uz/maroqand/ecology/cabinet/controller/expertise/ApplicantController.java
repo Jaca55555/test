@@ -203,6 +203,7 @@ public class ApplicantController {
 
 
         model.addAttribute("conclusionList",conclusionListObjects);
+        model.addAttribute("regApplicationList",regApplicationList);
         model.addAttribute("contractList",contractList);
         //TODO Client RegApplication.status=RegApplicationStatus.Approved
         model.addAttribute("applicantAuditList", clientAuditService.getByClientId(client.getId()));

@@ -14,7 +14,7 @@ public enum ConclusionStatus {
 
     Initial(0,"sys_confirmStatus.initial"),
     Active(1,"sys_confirmStatus.returned"),
-    Expired(1,"sys_confirmStatus.returned");
+    Expired(2,"sys_confirmStatus.expired");
 
     private Integer id;
     private String name;
