@@ -400,7 +400,7 @@ public class DocController {
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
-                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
+//                    documentTaskSub.getId()!=null ? documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale):"",
                     document.getDocumentTypeId()
             });
         }

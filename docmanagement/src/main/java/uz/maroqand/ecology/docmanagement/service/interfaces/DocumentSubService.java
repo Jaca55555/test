@@ -33,7 +33,7 @@ public interface DocumentSubService {
 
     DocumentSub getById(Integer id);
 
-    Page<DocumentSub> findFiltered(Integer documentTypeId, Integer organizationId, Integer documentStatusId, Integer documentOrganizationId, Set<Integer> documentOrganizationIds, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
+    Page<DocumentSub> findFiltered(Integer documentTypeId, Integer organizationId, Integer documentStatusId, Set<Integer> documentOrganizationIds, String registrationNumber, Date dateBegin, Date dateEnd, Integer documentViewId, String content, Integer departmentId, Integer performerId, List<DocumentStatus> statuses, Boolean hasAdditionalDocument, Boolean findTodayS, Pageable pageable);
 
     DocumentSub findOneByDocumentId(Integer documentId);
 
@@ -41,7 +41,6 @@ public interface DocumentSubService {
             Integer documentTypeId,
             Integer organizationId,
             Integer documentStatusIdToExclude,
-            Integer documentOrganizationId,
             Set<Integer> documentOrganizationIds,
             String registrationNumber,
             Date dateBegin,

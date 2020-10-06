@@ -28,6 +28,19 @@
     .datepicker> .datepicker-days {
         display: block;
     }
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+
 </style>
 </head>
 <body>
@@ -48,8 +61,46 @@
     <div class="col-xl-12 col-md-12">
 
         <object th:include="doc/change_duedate/document_view :: document_view" th:remove="tag" ></object>
-        <div>
-            <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card parent-card">
+                    <div class="card-header flex-space-between-nowrap mb-0">
+                        <h5 class="mb-0" style="align-self:center">
+                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}" ></span>&nbsp;&nbsp;
+                        </h5>
+                    </div>
+                    <div class="card-body comment-content">
+                        <div class="comment-item flex-space-between" th:each="log: ${logs}">
+                            <div>
+                                <div class="inline-block">
+                                    <i class="fas fa-user-circle fs40 color-gray column-1"></i>
+                                </div>
+                                <div class="inline-block m10-horizontal">
+                                    <span class="color-primary bold" th:text="${log.createdBy.fullName}"></span>
+                                    <br>
+                                    <span th:text="${log.createdBy.position.name}">Руководитель организации</span>
+                                </div>
+                            </div>
+<!--                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">-->
+<!--                                10.05.2019 - 09:35-->
+<!--                            </div>-->
+                                <table>
+                                    <tr>
+                                        <th th:text="#{regApplicationLog.update}"></th>
+                                        <th th:text="#{task.beforeDate}"></th>
+                                        <th th:text="#{task.afterDate}"></th>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}"></td>
+                                        <td th:text="${#dates.format(log.beforeDate, 'dd.MM.yyyy - HH:mm')}"></td>
+                                        <td th:text="${#dates.format(log.afterDate, 'dd.MM.yyyy - HH:mm')}"></td>
+                                    </tr>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
