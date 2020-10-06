@@ -17,6 +17,8 @@ public interface PaymentFileService {
 
     PaymentFile save(PaymentFile paymentFile);
 
+    PaymentFile update(PaymentFile paymentFile, Integer userId);
+
     PaymentFile create(PaymentFile paymentFile);
 
     Page<PaymentFile> findFiltered(
@@ -31,6 +33,7 @@ public interface PaymentFileService {
             String bankMfo,
 
             Boolean isComplete,
+            String account,
             Pageable pageable
     );
 }

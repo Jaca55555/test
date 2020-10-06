@@ -229,6 +229,10 @@ public class RegApplication {
     @Column(name = "agreement_complete_log_id")
     private Integer agreementCompleteLogId;
 
+    //xulosaga number va sana qo'yish
+    @Column(name = "conclusion_complete_log_id")
+    private Integer conclusionCompleteLogId;
+
     /*
      * Technical Fields
      */

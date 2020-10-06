@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/ol/ol.css">
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                        <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
+                                        <hr>
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" th:text="#{sys_payment}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
+                                            </li>
+                                            <li class="nav-item" th:if="${regApplication.conclusionOnline}">
+                                                <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#conclusion" role="tab" aria-controls="conclusion" aria-selected="false" th:text="#{sys_conclusion}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+                                                <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
+                                                <div class="form-group row">
+                                                    <div class="col-md-12 text-center" id="tab-control-buttons">
+                                                        <a class="btn btn-danger text-white" href="/expertise/forwarding/list" th:text="#{sys_back}"></a>
+                                                        <a class="btn btn-primary text-white btnNext" th:text="#{sys_next}"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                                                <object th:include="expertise/fragment/contract :: contract" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                                                <object th:include="expertise/fragment/payment :: payment" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
+                                                <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab" th:if="${regApplication.conclusionOnline}">
+                                                <div class="text-right">
+                                                    <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
+                                                        <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
+                                                    </button>
+                                                </div>
+                                                <div style="border: 1px solid #c5c5c4;">
+                                                    <object th:include="expertise/fragment/conclusion_view :: conclusion" th:remove="tag"></object>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                                                <object th:include="expertise/conclusion_complete/result :: result" th:remove="tag"></object>
+                                            </div>
+                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
+                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script type="text/javascript" src="/static/plugins/printThis.js"></script>
+<script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+    $('.btnNext').click(function() {
+        $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
+    });
+    $('.btnPrevious').click(function() {
+        $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
+    });
+
+    $(document).ready(function () {
+        var hash = window.location.hash;
+        if (hash.length === 0) {
+            hash = '#applicant';
+        }
+        $('.nav-link[href="'+hash+'"]').addClass('active');
+        $(hash).addClass('active show');
+        $('textarea.max-textarea').maxlength({
+            alwaysShow: true
+        });
+
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
+    });
+
+    //file upload
+    var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileUpload}]];
+    var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDelete}]];
+    var regApplicationId = [[${regApplicationLog.id}]];
+
+    function openModalFile() {
+        $('#upload-file-modal').modal('show');
+    }
+
+    function uploadFile(){
+        $('#file-name').parsley().validate();
+        if(!$('#file-name').val() || !$('#file-input').val()){
+            $('#fileDescription').addClass('is-invalid');
+            return;
+        }
+        $('#upload-file-modal').modal('hide');
+
+        var form = new FormData();
+        form.append("id", regApplicationId);
+        form.append("file", $('#file-input').prop('files')[0]);
+        form.append("file_name", $('#file-name').val());
+        form.append("_csrf", $('#global_csrf').val());
+        $.ajax({
+            url: uploadFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if(response.status === 1) {
+                    $('#comment-files-div').append(
+                        '<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                        '   <div class="file">\n' +
+                        '       <a href="'+response.link+'">\n' +
+                        '           <i class="feather icon-file file-icon"></i>\n' +
+                        '           <span>'+response.name+'</span>\n' +
+                        '       </a>\n' +
+                        '       <button type="button" class="file-delete-btn" onclick="deleteFile('+response.fileId+')">\n' +
+                        '           <i class="feather icon-x"></i>\n' +
+                        '       </button>\n' +
+                        '   </div>\n' +
+                        '</div>'
+                    );
+                }
+            },
+            beforeSend: function () {
+                $('#plus-icon').hide();
+                $('#upload-gif').show();
+                $('#percentage').show();
+            },
+            complete: function () {
+                $('#upload-gif').hide();
+                $('#percentage').hide();
+                $('#plus-icon').show();
+            },
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    uploadProgressHandler,
+                    false
+                );
+                return xhr;
+            }
+        });
+    }
+
+    function deleteFile(fileId) {
+        var form = new FormData();
+        form.append("id", regApplicationId);
+        form.append("fileId", fileId);
+        form.append("_csrf", $('#global_csrf').val());
+        $.ajax({
+            url: deleteFileAjaxUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                if(response.status === 1) {
+                    $('#file-block-' + fileId).remove();
+                }
+            }
+        });
+    }
+
+    function uploadProgressHandler(event){
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+</script>
+
+<script src="/static/ol/ol.js" type="text/javascript"></script>
+<script th:inline="javascript" th:if="${coordinate!=null}">
+    var coordinateLatLongList = [[${coordinateLatLongList}]];
+    var coordinateLat = [[${coordinate.latitude}]];
+    var coordinateLong = [[${coordinate.longitude}]];
+
+    var coordinateLongText = [[#{coordinate_long}]];
+    var coordinateLatText = [[#{coordinate_lat}]];
+
+
+</script>
+<script th:if="${coordinate!=null}">
+    var Map = ol.Map;
+    var View = ol.View;
+    var Draw = ol.interaction.Draw;
+    var TileLayer = ol.layer.Tile;
+    var VectorLayer = ol.layer.Vector;
+    var OSM = ol.source.OSM;
+    var VectorSource = ol.source.Vector;
+
+    var raster = new TileLayer({
+        source: new OSM()
+    });
+
+    var source = new VectorSource({wrapX: false});
+
+    var vector = new VectorLayer({
+        source: source
+    });
+
+    var polyCoords = [];
+    // var coords = "41.30881,69.28178 41.30860,69.28136 41.30790,69.28209 41.30812,69.28250".split(' ');
+    // var coords = "69.28178,41.30881 69.28136,41.30860 69.28209,41.30790 69.28250,41.30812".split(' ');
+    var coords = [];
+
+    coords.push(coordinateLat + "," + coordinateLong);
+    for(var i in coordinateLatLongList){
+        coords.push(coordinateLatLongList[i].latitude + "," + coordinateLatLongList[i].longitude);
+    }
+
+    for (var i in coords) {
+        var c = coords[i].split(',');
+        polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
+
+        /*$('#mapModal').append('<div class="col-md-12 row form-group">\n' +
+            '                                                <div class="col-md-2">\n' +
+            '                                                    <h4 class="text-right pad-top">#'+(parseInt(i)+1)+'</h4>\n' +
+            '                                                </div>\n' +
+            '                                                <div class="col-md-3">\n' +
+            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[1])+'">\n' +
+            '                                                </div>\n' +
+            '                                                <div class="col-md-3 offset-md-2">\n' +
+            '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[0])+'">\n' +
+            '                                                </div>\n' +
+            '                                            </div>')*/
+    }
+
+    var feature = new ol.Feature({
+        geometry: new ol.geom.Polygon([polyCoords])
+    });
+
+    var layer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [feature]
+        })
+    });
+
+
+    var map = new Map({
+        layers: [raster, vector, layer],
+        target: 'map',
+        view: new View({
+            // center: ol.proj.fromLonLat([coordinateLat, coordinateLong]),
+            center: ol.proj.transform([parseFloat(coordinateLat), parseFloat(coordinateLong)], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 16
+        })
+    });
+
+    var draw = new Draw({
+        source: source,
+        type: "Polygon"
+    });
+    // map.addInteraction(draw);
+
+    map.on("click", function () {
+        var features = vector.getSource().getFeatures();
+        features.forEach(function (feature) {
+            console.log(feature.getGeometry().getCoordinates()[0][0]);
+            var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
+            console.log(lonlat[0]);
+            console.log(lonlat[1]);
+        })
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.which == 8)
+            vector.getSource().clear();
+    });
+
+    $('#openMapModal').on('click',function () {
+        setTimeout( function() { map.updateSize();}, 200);
+    })
+
+</script>
+</body>
+</html>

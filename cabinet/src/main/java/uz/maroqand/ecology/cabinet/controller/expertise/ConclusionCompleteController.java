@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -14,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.constant.expertise.CommentType;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
-import uz.maroqand.ecology.core.dto.expertise.*;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -29,18 +35,19 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Utkirbek Boltaev on 15.06.2019.
- * (uz) Oxirgi kelishishuv
+ * Created by Sadullayev Akmal on 05.10.2020.
+ * (uz) Oxirgi kelishishuvdan keyingi xulosaga raqam va sana qo'yish
  * (ru)
  */
 @Controller
-public class AgreementCompleteController {
+public class ConclusionCompleteController {
 
     private final RegApplicationService regApplicationService;
     private final ClientService clientService;
@@ -59,7 +66,7 @@ public class AgreementCompleteController {
     private final SmsSendService smsSendService;
 
     @Autowired
-    public AgreementCompleteController(
+    public ConclusionCompleteController(
             RegApplicationService regApplicationService,
             SoatoService soatoService,
             UserService userService,
@@ -93,10 +100,9 @@ public class AgreementCompleteController {
         this.smsSendService = smsSendService;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
-    public String getConfirmListPage(Model model) {
+    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
+    public String getConclusionConfirmListPage(Model model) {
         List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
         logStatusList.add(LogStatus.Denied);
         logStatusList.add(LogStatus.Approved);
 
@@ -105,12 +111,12 @@ public class AgreementCompleteController {
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", logStatusList);
-        return ExpertiseTemplates.AgreementCompleteList;
+        return ExpertiseTemplates.ConclusionCompleteList;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AgreementCompleteListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HashMap<String,Object> getAgreementCompleteListAjax(
+    public HashMap<String,Object> getConclusionCompleteListAjax(
             FilterDto filterDto,
             Pageable pageable
     ){
@@ -133,7 +139,7 @@ public class AgreementCompleteController {
                 filterDto,
                 null,
                 null,
-                LogType.AgreementComplete,
+                LogType.ConclusionComplete,
                 null,
                 pageable
         );
@@ -175,8 +181,8 @@ public class AgreementCompleteController {
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.AgreementCompleteView)
-    public String getAgreementCompleteViewPage(
+    @RequestMapping(ExpertiseUrls.ConclusionCompleteView)
+    public String getConclusionCompleteViewPage(
             @RequestParam(name = "id")Integer logId,
             Model model
     ) {
@@ -184,12 +190,11 @@ public class AgreementCompleteController {
         Integer regApplicationId = regApplicationLog.getRegApplicationId();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.AgreementCompleteList;
+            return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
-        System.out.println(" complete regApplicationID==" + regApplication.getId());
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
@@ -204,88 +209,71 @@ public class AgreementCompleteController {
         model.addAttribute("agreementLogList", agreementLogList);
         model.addAttribute("agreementCompleteLog", regApplicationLog);
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
-        return ExpertiseTemplates.AgreementCompleteView;
+        return ExpertiseTemplates.ConclusionCompleteView;
     }
 
-    @RequestMapping(value = ExpertiseUrls.AgreementCompleteAction,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteAction,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "logId")Integer logId,
-            @RequestParam(name = "agreementStatus")Integer agreementStatus,
-            @RequestParam(name = "comment")String comment
+            @RequestParam(name = "number")String number,
+            @RequestParam(name = "date")String dateStr
     ){
         User user = userService.getCurrentUserFromContext();
-        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
-        if (regApplication == null){
-            return "redirect:" + ExpertiseUrls.AgreementCompleteList;
+        if (regApplication == null || regApplication.getConclusionCompleteLogId() == null || regApplication.getPerformerLogId() == null){
+            return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
 
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
-        regApplicationLogService.update(regApplicationLog, LogStatus.getLogStatus(agreementStatus), comment, user.getId());
-        if(StringUtils.trimToNull(comment) != null){
-            commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
+        RegApplicationLog conclusionLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
+        if (conclusionLog==null){
+            return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
+        }
+        regApplicationLogService.update(conclusionLog, LogStatus.Approved, "", user.getId());
+
+
+
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        switch (performerLog.getStatus()){
+            case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
+            case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
+            case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
+        }
+        regApplicationService.update(regApplication);
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion!=null){
+            conclusion.setNumber(number);
+            conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
+            conclusionService.save(conclusion);
         }
 
-        if(agreementStatus.equals(LogStatus.Approved.getId())){
-            RegApplicationLog conclusionLog = regApplicationLogService.create(regApplication,LogType.ConclusionComplete,"xulosaga sana va number qo'yish",user);
-            conclusionLog.setShow(true);
-            regApplicationLogService.update(conclusionLog,LogStatus.Approved,"",user.getId());
-           /* RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            switch (performerLog.getStatus()){
-                case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
-                case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
-                case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
-            }*/
-            regApplication.setConclusionCompleteLogId(conclusionLog.getId());
-            regApplication.setAgreementStatus(LogStatus.Approved);
-            regApplicationService.update(regApplication);
+        conclusionService.complete(regApplication.getConclusionId());
 
-//            conclusionService.complete(regApplication.getConclusionId());
+        notificationService.create(
+                regApplication.getCreatedById(),
+                NotificationType.Expertise,
+                "sys_notification.new",
+                regApplication.getId(),
+                "sys_notification_message.finished",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
 
-          /*  notificationService.create(
-                    regApplication.getCreatedById(),
-                    NotificationType.Expertise,
-                    "sys_notification.new",
-                    regApplication.getId(),
-                    "sys_notification_message.finished",
-                    "/reg/application/resume?id=" + regApplication.getId(),
-                    user.getId()
-            );
-            notificationService.create(
-                    regApplication.getPerformerId(),
-                    NotificationType.Expertise,
-                    "sys_notification.performerInfo",
-                    regApplication.getId(),
-                     "sys_notification_message.performer_confirm",
-                    "/reg/application/resume?id=" + regApplication.getId(),
-                    user.getId()
-            );*/
-          /*  Client client = clientService.getById(regApplication.getApplicantId());
-            smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());*/
-        }
+        notificationService.create(
+                regApplication.getPerformerId(),
+                NotificationType.Expertise,
+                "sys_notification.performerInfo",
+                regApplication.getId(),
+                 "sys_notification_message.performer_confirm",
+                "/reg/application/resume?id=" + regApplication.getId(),
+                user.getId()
+        );
+        Client client = clientService.getById(regApplication.getApplicantId());
+        smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
 
-        if(agreementStatus.equals(LogStatus.Denied.getId())){
-            regApplication.setAgreementStatus(LogStatus.Denied);
-            regApplication.setLogIndex(regApplication.getLogIndex()+1);
-            RegApplicationLog performerLogNext = regApplicationLogService.create(regApplication, LogType.Performer, comment, user);
-            performerLogNext.setUpdateById(regApplication.getPerformerId());
-            regApplicationLogService.updateDocument(performerLogNext);
-            regApplication.setPerformerLogIdNext(performerLogNext.getId());
-            regApplicationService.update(regApplication);
 
-            notificationService.create(
-                    regApplication.getPerformerId(),
-                    NotificationType.Expertise,
-                    "sys_notification.performerInfo",
-                    regApplication.getId(),
-                    "sys_notification_message.performer_not_confirm",
-                    "/reg/application/resume?id=" + regApplication.getId(),
-                    user.getId()
-            );
-        }
-
-        return "redirect:"+ExpertiseUrls.AgreementCompleteView + "?id=" + regApplicationLog.getId() + "#action";
+        return "redirect:"+ExpertiseUrls.ConclusionCompleteView + "?id=" + logId + "#action";
     }
 
 }

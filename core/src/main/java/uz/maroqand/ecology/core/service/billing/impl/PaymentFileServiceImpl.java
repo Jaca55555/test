@@ -42,6 +42,13 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         return paymentFileRepository.save(paymentFile);
     }
 
+    @Override
+    public PaymentFile update(PaymentFile paymentFile, Integer userId) {
+        paymentFile.setUpdateById(userId);
+        paymentFile.setUpdatedAt(new Date());
+        return paymentFileRepository.save(paymentFile);
+    }
+
     public PaymentFile create(PaymentFile paymentFile){
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);
@@ -60,9 +67,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             String bankMfo,
 
             Boolean isComplete,
+            String account,
             Pageable pageable
     ) {
-        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete),pageable);
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account),pageable);
     }
 
     private static Specification<PaymentFile> getFilteringSpecification(
@@ -74,8 +82,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             final String payerName,
             final String details,
             final String bankMfo,
-            final Boolean isComplete
-    ) {
+            final Boolean isComplete,
+            final String account
+
+            ) {
         return new Specification<PaymentFile>() {
             @Override
             public Predicate toPredicate(Root<PaymentFile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -121,6 +131,9 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     }
                 }
 
+                if(account != null){
+                    predicates.add(criteriaBuilder.equal(root.get("receiverAccount"), account));
+                }
 
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;

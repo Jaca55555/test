@@ -23,7 +23,7 @@
                 <li class="nav-item"><a href="/dashboard" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-home-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.dashboard}"> </span></a></li>
                 <!--<li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT')"><a href="/doc/office" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-file-document-box-outline"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.doc_dashboard}"> </span></a></li>-->
 
-                <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM,EXPERTISE_FORWARDING,EXPERTISE_PERFORMER,EXPERTISE_AGREEMENT,EXPERTISE_AGREEMENT_COMPLETE')">
+                <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('EXPERTISE_CONFIRM,EXPERTISE_FORWARDING,EXPERTISE_PERFORMER,EXPERTISE_AGREEMENT,EXPERTISE_AGREEMENT_COMPLETE,EXPERTISE_CONCLUSION_COMPLETE')">
                     <label th:text="#{sys_expertise_control}"></label>
                 </li>
 
@@ -69,6 +69,13 @@
                         <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(4)}">2</span>
                     </a>
                 </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONCLUSION_COMPLETE')">
+                    <a href="/expertise/conclusion_complete/list" class="nav-link">
+                        <span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span>
+                        <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.conclusionCompleteList}"> </span>
+                        <span class="rounded-notification w-15 text-center" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(5)}">2</span>
+                    </a>
+                </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')">
                     <a href="/expertise/change_deadline/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-inbox-multiple"></i></span>
@@ -91,6 +98,7 @@
                     <label th:text="#{sys_menu.billing}"></label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('BILLING')"><a href="/expertise/billing/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-credit-card"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.billing_list}"> </span></a></li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE_ALL')"><a href="/billing/payment_file_all/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-cash-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file_all}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE')"><a href="/billing/payment_file/list" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-cash-multiple"></i></span><span class="pcoded-mtext" th:text="#{sys_menu.payment_file}"> </span></a></li>
 
 
