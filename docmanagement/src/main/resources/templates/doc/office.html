@@ -41,6 +41,15 @@
         {
             padding: 0 !important;
         }
+        td.border-performance {
+            border-left: 3px solid blue;
+        }
+        td.border-information {
+            border-left: 3px solid grey;
+        }
+        td.border-SpecialControl {
+            border-left: 3px solid red;
+        }
         #dtVerticalScrollExample_wrapper .table-striped,#dtVerticalScrollExample1_wrapper .table-striped,#dtVerticalScrollExample2_wrapper .table-striped {
             margin-top: 0 !important;
         }
@@ -591,6 +600,11 @@
                 case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
                 case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
                 case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[6]+'</button>';return html;
+                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
                 default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[6]+'</button>';return html;
             }
             return html;
