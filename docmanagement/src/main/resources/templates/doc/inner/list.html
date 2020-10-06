@@ -233,9 +233,6 @@
                                                 <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
-                                                <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
-                                            </th>
-                                            <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
                                                 <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                             </th>
                                             <th aria-controls="responsive-table-model" class="sorting" colspan="1" rowspan="1" tabindex="0">
@@ -384,14 +381,7 @@
                             return html;
                         },
                         className: "text-left"},
-                    {data: 4, name: 'createdAt',
-                        render: function (data, type, row, meta) {
-                            var html = '';
-                            html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
-                            return html;
-                        },
-                        className: "text-center"},
-                    {data: 5, name: 'dueDate',
+                    {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
@@ -399,11 +389,10 @@
                         },
                         className: "text-left"},
                     {render: renderStatusColumn,  name: 'status',className: "text-center"},
-                    {data: 7, name: 'content',
+                    {data: 6, name: 'content',
                         render: function (data, type, row, meta) {
                             var html = '';
-                            html += '<b>'+row[7]+'</b><br>'+row[10];
-
+                            html += '<b>'+row[7]+'</b><br>'+row[10]+'<br>';
 
                             $.each(row[11],function (i,file) {
                                 if(file.extension=="pdf") {     html+=

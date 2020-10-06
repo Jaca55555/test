@@ -245,7 +245,9 @@ public class ReferenceController {
                     documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
                     document.getContentFiles(),
                     document.getExecuteForm().getId(),
-                    document.getSpecialControll().booleanValue()
+                    document.getSpecialControll().booleanValue(),
+                    userService.findById(documentTaskSub.getReceiverId()).getFullName()
+
 
             });
         }
