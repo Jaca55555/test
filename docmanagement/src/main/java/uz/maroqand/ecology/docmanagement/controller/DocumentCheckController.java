@@ -103,16 +103,18 @@ public class DocumentCheckController {
         HashMap<String, Object> result = new HashMap<>();
         Integer tabFilter = incomingRegFilter.getTabFilter();
         Set<Integer> taskStatuses = new HashSet<>();
-        if (tabFilter==null || tabFilter>3){
+        if (tabFilter==null){
             taskStatuses.add(TaskStatus.Checking.getId());
-            taskStatuses.add(TaskStatus.Complete.getId());
-            taskStatuses.add(TaskStatus.Rejected.getId());
         }else if(tabFilter==1){
             taskStatuses.add(TaskStatus.Checking.getId());
         }else if(tabFilter==2){
             taskStatuses.add(TaskStatus.Complete.getId());
         }else if(tabFilter==3){
             taskStatuses.add(TaskStatus.Rejected.getId());
+        }else{
+            taskStatuses.add(TaskStatus.Rejected.getId());
+            taskStatuses.add(TaskStatus.Complete.getId());
+            taskStatuses.add(TaskStatus.Checking.getId());
         }
         System.out.println("+++++++++++");
         System.out.println(taskStatuses);
