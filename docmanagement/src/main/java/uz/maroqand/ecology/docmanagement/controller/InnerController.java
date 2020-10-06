@@ -107,7 +107,10 @@ public class InnerController {
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
                 status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.ForChangePerformer.getId());
                 status.add(TaskSubStatus.DueDateChanged.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
                 break;
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -223,10 +226,26 @@ public class InnerController {
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
-
+        if(documentTaskSub.getType()!=null){
+            if(documentTaskSub.getType()==3){
+                documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+                documentTaskSubService.update(documentTaskSub);
+            }}
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChanged.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
         Document document = documentService.getById(documentTaskSub.getDocumentId());
         if (document == null) {
             return "redirect:" + DocUrls.InnerList;
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChangedDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.PerformerDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
         }
 
         DocumentTask documentTask = documentTaskService.getById(documentTaskSub.getTaskId());

@@ -67,8 +67,9 @@ public class ChangePerformerController {
     }
 
     @RequestMapping(value = DocUrls.ChangePerformerList, method = RequestMethod.GET)
-    public String getChangePerformerListPage(Model model) {
+    public String getChangePerformerListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
+        model.addAttribute("tab_number_", tabNumber);
         return DocTemplates.ChangePerformerList;
     }
 
@@ -97,9 +98,28 @@ public class ChangePerformerController {
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-        status = new LinkedHashSet<>();
-        status.add(TaskSubStatus.ForChangePerformer.getId());
-        status.add(TaskSubStatus.PerformerChanged.getId());
+
+
+        switch (tabFilter){
+            case 1:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangePerformer.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
+                status.add(TaskSubStatus.PerformerChanged.getId());
+                break;
+            case 2:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangePerformer.getId());
+                break;//Ижро учун
+            default:
+                departmentId = user.getDepartmentId();
+//                receiverId=null;
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
+                break;//Жами
+        }
         System.out.println(status);
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFilter(
@@ -235,7 +255,7 @@ public class ChangePerformerController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(documentTaskSub.getStatus());
+        documentTaskSub1.setStatus(TaskSubStatus.PerformerDeny.getId());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
     }

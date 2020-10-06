@@ -112,6 +112,18 @@
         </div>
     </div>
     <div class="parent-card col-xl-12 mh-1000">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase active show"  id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span  th:text="#{doc_change.dueDate}">Ижро учун</span>
+                    <span  th:if="${@getNotifacationService.countDueDateByStatus()}!=0" th:text="${@getNotifacationService.countDueDateByStatus()}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
+                </a>
+            </li>
+            <li class="nav-item card-nav-item">
+                <a class="nav-link text-uppercase show" id="tab_filter_1" data-toggle="tab" href="#home" onclick="getTabDatatableConnect(1)" role="tab" aria-controls="home" aria-selected="true"><span th:text="#{sys_document.info_tab_total}">Жами</span>
+                </a>
+            </li>
+        </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="table-responsive">
@@ -166,11 +178,12 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    let tab_number = [[${tab_number_}]];
 </script>
 <script th:inline="none">
     var dataDatatableSelector;
     var thead;
-    var tabFilter = 2;
+    var tabFilter = tab_number == null ? 2 : tab_number;
 
     function getDatatableConnect() {
         dataDatatableSelector.DataTable().destroy();
@@ -200,6 +213,8 @@
             case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
             case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
             case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
             default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
@@ -336,6 +351,15 @@
             $('#myTab a.active').trigger('click');
         })
     });
+    if (tab_number != null) {
+        if (tab_number !== 9) {
+            document.querySelector('#tab_filter_' + tab_number).click();
+        } else {
+            $('#myTab a.active').removeClass('active');
+            $('#home-tab').addClass('active');
+            getTabDatatableConnect(9);
+        }
+    }
 </script>
 </body>
 </html>

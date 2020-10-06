@@ -69,8 +69,13 @@ public class ChangeDueDateController {
     }
 
     @RequestMapping(value = DocUrls.ChangeDueDateList, method = RequestMethod.GET)
-    public String getChangeDueDateListPage(Model model) {
+    public String getChangeDueDateListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
+        model.addAttribute("tab_number_", tabNumber);
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.ForChangeDueDate.getId());
+        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countAllByTypeAndReceiverId(null, user.getId()));
+
         return DocTemplates.ChangeDueDateList;
     }
 
@@ -103,6 +108,26 @@ public class ChangeDueDateController {
         status.add(TaskSubStatus.ForChangeDueDate.getId());
         status.add(TaskSubStatus.DueDateChanged.getId());
         System.out.println(status);
+        switch (tabFilter){
+            case 1:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.DueDateChanged.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                break;
+            case 2:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                break;//Ижро учун
+            default:
+                departmentId = user.getDepartmentId();
+//                receiverId=null;
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
+                break;//Жами
+        }
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFilter(
                 user.getOrganizationId(),
@@ -247,7 +272,7 @@ public class ChangeDueDateController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(documentTaskSub.getStatus());
+        documentTaskSub1.setStatus(TaskSubStatus.DueDateChangedDeny.getId());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangeDueDateList;
     }

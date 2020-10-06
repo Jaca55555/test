@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import javafx.concurrent.Task;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -143,8 +144,11 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.ForChangePerformer.getId());
                 status.add(TaskSubStatus.ForChangeDueDate.getId());
                 status.add(TaskSubStatus.DueDateChanged.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
             break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -157,6 +161,8 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
                 break;//Муддати якинлашаётган
             case 4:
                 deadlineDateEnd = calendar.getTime();
@@ -166,11 +172,14 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
                 break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+
                 break;//Ижро назоратида
             case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
             case 7:
@@ -272,7 +281,21 @@ public class IncomingController {
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
+
+
         if (documentTaskSub.getStatus().equals(TaskSubStatus.Rejected.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChangedDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.PerformerDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChanged.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
@@ -285,8 +308,14 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+
         if(document.getExecuteForm()!=null){
          if(document.getExecuteForm().getId().equals(ExecuteForm.Information.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+            documentTaskSubService.update(documentTaskSub);
+         }}
+        if(documentTaskSub.getType()!=null){
+         if(documentTaskSub.getType()==3){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);
          }}
