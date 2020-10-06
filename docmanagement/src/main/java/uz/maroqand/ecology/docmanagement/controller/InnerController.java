@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -31,13 +32,14 @@ public class InnerController {
     private final DocumentTaskSubService documentTaskSubService;
     private final DocumentViewService documentViewService;
     private final JournalService journalService;
+    private final HelperService helperService;
     private final CommunicationToolService communicationToolService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentHelperService documentHelperService;
     private final DocumentLogService documentLogService;
     private final DocumentTaskContentService documentTaskContentService;
 
-    public InnerController(DocumentTaskContentService documentTaskContentService, UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
+    public InnerController(DocumentTaskContentService documentTaskContentService,HelperService helperService, UserService userService, DocumentService documentService, DocumentSubService documentSubService, DocumentTaskService documentTaskService, DocumentTaskSubService documentTaskSubService, DocumentViewService documentViewService, JournalService journalService, CommunicationToolService communicationToolService, DocumentDescriptionService documentDescriptionService, DocumentHelperService documentHelperService, DocumentLogService documentLogService) {
         this.userService = userService;
         this.documentService = documentService;
         this.documentSubService = documentSubService;
@@ -45,6 +47,7 @@ public class InnerController {
         this.documentTaskSubService = documentTaskSubService;
         this.documentViewService = documentViewService;
         this.journalService = journalService;
+        this.helperService=helperService;
         this.communicationToolService = communicationToolService;
         this.documentDescriptionService = documentDescriptionService;
         this.documentHelperService = documentHelperService;
@@ -194,6 +197,9 @@ public class InnerController {
             if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
                 docContent+=" №"+ document.getDocRegNumber().trim()+",";
             }
+            docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
+
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),

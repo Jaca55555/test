@@ -390,18 +390,35 @@ public class DocController {
         List<Object[]> JSONArray = new ArrayList<>(documentTaskSubList.size());
         for (DocumentTaskSub documentTaskSub : documentTaskSubList) {
             Document document = documentService.getById(documentTaskSub.getDocumentId());
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            String docContent="";
+            if (documentSub!=null && documentSub.getOrganizationId()!=null){
+                DocumentOrganization documentOrganization = documentSub.getOrganization();
+                docContent+=documentOrganization!=null?documentOrganization.getName()+".":"";
+            }
+            if (document.getDocRegNumber()!=null && document.getDocRegNumber()!=""){
+                docContent+=" №"+ document.getDocRegNumber().trim()+",";
+            }
+
+            docContent+=document.getDocRegDate()!=null?( " " + helperService.getTranslation("sys_date",locale) + ": " + Common.uzbekistanDateFormat.format(document.getDocRegDate())):"";
+            docContent+="\n" + (document.getContent()!=null?"</br><span class='text-secondary' style='font-size:13px'>"+document.getContent().trim()+"</span>":"");
+
             JSONArray.add(new Object[]{
                     documentTaskSub.getId(),
                     document.getRegistrationNumber(),
                     document.getRegistrationDate()!=null ? Common.uzbekistanDateFormat.format(document.getRegistrationDate()):"",
-                    document.getContent(),
+                    docContent,
                     documentTaskSub.getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getCreatedAt()):"",
                     documentTaskSub.getDueDate()!=null ? Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()):"",
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
 //                    documentTaskSub.getId()!=null ? documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale):"",
-                    document.getDocumentTypeId()
+                    document.getDocumentTypeId(),
+                    userService.findById(documentTaskSub.getReceiverId()).getFullName(),
+                    document.getContentFiles(),
+                    document.getExecuteForm()!=null?document.getExecuteForm().getId():"",
+                    document.getSpecialControll()!=null ? document.getSpecialControll().booleanValue():""
             });
         }
 
