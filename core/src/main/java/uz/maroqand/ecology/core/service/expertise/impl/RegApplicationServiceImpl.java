@@ -229,6 +229,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if (filterDto!=null) {
+
+                    if (filterDto.getStatus()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getStatus()));
+                    }
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }

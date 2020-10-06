@@ -88,7 +88,7 @@
                                                 <label class="col-form-label" th:text="#{invoice_update_at}"></label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.updatedAt}">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.updatedAt!=null?paymentFile.updatedAt:''}">
                                             </div>
                                         </div>
                                         <div class="form-group row" >

@@ -24,6 +24,7 @@ import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
@@ -46,14 +47,16 @@ public class PaymentFileController {
     private final ClientService clientService;
     private final PaymentService paymentService;
     private final  UserService userService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService, UserService userService) {
+    public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService, UserService userService, OrganizationService organizationService) {
         this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.clientService = clientService;
         this.paymentService = paymentService;
         this.userService = userService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(BillingUrls.PaymentFileList)
@@ -90,7 +93,7 @@ public class PaymentFileController {
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String account = null;
         if (user.getOrganizationId()!=null){
-            Organization organization = user.getOrganization();
+            Organization organization = organizationService.getById(user.getOrganizationId());
             if (organization!=null && organization.getAccount()!=null
                     && !organization.getAccount().isEmpty()){
                 account = organization.getAccount();
@@ -167,10 +170,15 @@ public class PaymentFileController {
     public String getPaymentFileViewPage(@PathVariable("id") Integer id, Model model ){
         PaymentFile paymentFile = paymentFileService.getById(id);
         User user = userService.getCurrentUserFromContext();
-        if(paymentFile==null || StringUtils.trimToNull(paymentFile.getReceiverAccount())==null
-                || user.getOrganizationId()==null
-                || StringUtils.trimToNull(user.getOrganization().getAccount())==null
-                || !paymentFile.getReceiverAccount().equals(user.getOrganization().getAccount())){
+        if (user.getOrganizationId()==null || paymentFile==null){
+            return "redirect: " + BillingUrls.PaymentFileList;
+        }
+        Organization organization = organizationService.getById(user.getOrganizationId());
+        if (organization==null || StringUtils.trimToNull(organization.getAccount())==null){
+            return "redirect: " + BillingUrls.PaymentFileList;
+        }
+        if(StringUtils.trimToNull(paymentFile.getReceiverAccount())==null
+                || !paymentFile.getReceiverAccount().equals(organization.getAccount())){
             return "redirect: " + BillingUrls.PaymentFileList;
         }
 
