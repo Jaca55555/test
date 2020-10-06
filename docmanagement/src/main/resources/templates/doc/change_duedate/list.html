@@ -140,7 +140,7 @@
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.taskResolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
                                     </thead>
@@ -198,6 +198,8 @@
             case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
             case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
             case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
             default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
         }
         return html;
@@ -288,7 +290,15 @@
                     },
                     className: "w-10 text-center"},
                 {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',className: "text-justify"},
+                {data: 7, name: 'content',
+                    render: function (data, type, row, meta) {
+                        var html = '';
+                        html += '<a href="'+viewLink+'?id='+row[0]+'">' + row[7]+'</a>';
+                        html += '<br>';
+                        html += '<span>'+row[10]+'</span>';
+                        return html;
+                    },
+                    className: "text-justify"},
             ],
             rowCallback: function (row, data) {
                 $(row).on('click', function () {
