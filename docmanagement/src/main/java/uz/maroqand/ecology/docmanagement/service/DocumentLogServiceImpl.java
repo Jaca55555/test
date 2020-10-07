@@ -111,4 +111,20 @@ public class DocumentLogServiceImpl implements DocumentLogService {
         return logRepository.save(documentLog1);
 
     }
+    @Override
+    public DocumentLog createUserComment(DocumentLog documentLog, Integer logTypeId, Integer beforeUserId, Integer afterUserId,String content, Integer createdById,Integer documentId) {
+        DocumentLog documentLog1 = new DocumentLog();
+        documentLog1.setContent(content);
+        documentLog1.setDocumentId(documentId);
+        documentLog1.setType(logTypeId);
+        documentLog1.setTaskId(documentLog.getTaskId());
+        documentLog1.setTaskSubId(documentLog.getTaskSubId());
+        documentLog1.setBeforeUserId(beforeUserId);
+        documentLog1.setAfterUserId(afterUserId);
+        documentLog1.setCreatedAt(new Date());
+        documentLog1.setCreatedById(createdById);
+        return logRepository.save(documentLog1);
+
+    }
+
 }

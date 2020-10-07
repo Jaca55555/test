@@ -81,6 +81,14 @@ public class DocumentLog
     //o'zgartirilgan muddati
     @Column(name = "after_date", columnDefinition = "timestamp without time zone")
     private Date afterDate;
+    //avvalgi ijrochi
+    @Column(name = "before_user")
+    private Integer beforeUserId;
+
+    //o'zgartirilgan ijrochi
+    @Column(name = "after_user")
+    private Integer afterUserId;
+
 
     @Column(name = "attached_doc_id")
     private Integer attachedDocId;
