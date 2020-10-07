@@ -206,6 +206,7 @@ public class ChangePerformerController {
                 document.setInsidePurpose(Boolean.FALSE);
             }
         }
+        User user = userService.getCurrentUserFromContext();
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -231,7 +232,8 @@ public class ChangePerformerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));
+//        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));
+        model.addAttribute("performers", userService.getEmployeesForDocManageOrganization("controller",user.getOrganizationId()));
         model.addAttribute("action_url",ChangePerformerTask);
         model.addAttribute("action_uri",ChangePerformerDeny);
         return DocTemplates.ChangePerformerView;
