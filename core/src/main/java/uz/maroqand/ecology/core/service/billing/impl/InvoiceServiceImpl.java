@@ -72,9 +72,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice create(RegApplication regApplication, Requirement requirement) {
+        Organization organization = organizationService.getById(regApplication.getReviewId());
+
         Invoice invoice = new Invoice();
         invoice = createPayer(regApplication, invoice);
-        invoice = createPayee(invoice, requirement);
+        invoice = createPayee(invoice, organization);
         invoice = invoiceRepository.save(invoice);
 
         invoice = createInvoice(regApplication, invoice, requirement);
@@ -85,8 +87,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice modification(RegApplication regApplication, Invoice invoice, Requirement requirement){
+        Organization organization = organizationService.getById(regApplication.getReviewId());
         invoice = createPayer(regApplication, invoice);
-        invoice = createPayee(invoice, requirement);
+        invoice = createPayee(invoice, organization);
 
         MinWage minWage = minWageService.getMinWage();
         Double amountAfter = requirement.getQty() * minWage.getAmount();
@@ -104,14 +107,13 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /*  payee */
-    private Invoice createPayee(Invoice invoice, Requirement requirement) {
-        Organization review = organizationService.getById(requirement.getReviewId());
-        invoice.setPayeeId(requirement.getReviewId());
-        invoice.setPayeeName(review.getNameRu());
-        invoice.setPayeeAccount(review.getAccount());
-        invoice.setPayeeTin(review.getTin());
-        invoice.setPayeeAddress(review.getAddress());
-        invoice.setPayeeMfo(review.getMfo());
+    private Invoice createPayee(Invoice invoice, Organization organization) {
+        invoice.setPayeeId(organization.getId());
+        invoice.setPayeeName(organization.getNameRu());
+        invoice.setPayeeAccount(organization.getAccount());
+        invoice.setPayeeTin(organization.getTin());
+        invoice.setPayeeAddress(organization.getAddress());
+        invoice.setPayeeMfo(organization.getMfo());
         return invoice;
     }
 
@@ -184,7 +186,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setUpdatedAt(new Date());
         invoiceRepository.save(invoice);
 
-        paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
+        Payment payment = paymentService.pay(invoice.getId(), invoice.getAmount(), new Date(), invoice.getDetail(), PaymentType.UPAY);
+        payment.setMessage("for test");
+        paymentService.save(payment);
         checkInvoiceStatus(invoice);
 
         return invoice;

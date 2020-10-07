@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.LoginType;
@@ -79,6 +80,8 @@ public class RegApplicationController {
     private final CoordinateLatLongRepository coordinateLatLongRepository;
     private final SmsSendService smsSendService;
     private final ConclusionService conclusionService;
+    private final GlobalConfigs globalConfigs ;
+    private final DocumentRepoService documentRepoService;
 
     @Autowired
     public RegApplicationController(
@@ -105,7 +108,9 @@ public class RegApplicationController {
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
-            SmsSendService smsSendService, ConclusionService conclusionService) {
+            SmsSendService smsSendService,
+            ConclusionService conclusionService,
+            GlobalConfigs globalConfigs, DocumentRepoService documentRepoService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -134,6 +139,8 @@ public class RegApplicationController {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
         this.smsSendService = smsSendService;
         this.conclusionService = conclusionService;
+        this.globalConfigs = globalConfigs;
+        this.documentRepoService = documentRepoService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationList)
@@ -662,6 +669,7 @@ public class RegApplicationController {
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms);
+        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test") ? ExpertiseUrls.ExpertiseRegApplicationPaymentFree : ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
     }
@@ -792,7 +800,10 @@ public class RegApplicationController {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        model.addAttribute("conclusion",conclusion);
+        model.addAttribute("conclusion", conclusion);
+        if(conclusion != null){
+            model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
+        }
 
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("regApplication", regApplication);

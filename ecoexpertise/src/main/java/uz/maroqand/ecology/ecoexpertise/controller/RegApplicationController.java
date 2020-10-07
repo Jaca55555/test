@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
@@ -27,7 +28,6 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.repository.expertise.FactureProductRepository;
 import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -84,6 +84,8 @@ public class RegApplicationController {
     private final NotificationService notificationService;
     private final FactureService factureService;
 
+    private final GlobalConfigs globalConfigs;
+
     @Autowired
     public RegApplicationController(
             UserService userService,
@@ -115,8 +117,7 @@ public class RegApplicationController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService
-    ) {
+            FactureService factureService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -148,7 +149,7 @@ public class RegApplicationController {
         this.documentRepoService = documentRepoService;
         this.notificationService = notificationService;
         this.factureService = factureService;
-
+        this.globalConfigs = globalConfigs;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -695,9 +696,14 @@ public class RegApplicationController {
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
             }
         }
+
+        System.out.println("config==");
+        System.out.println(globalConfigs.getIsTesting());
+        System.out.println(globalConfigs.getUploadedFilesFolder());
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
+//        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
+        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? RegUrls.RegApplicationPaymentFree : RegUrls.RegApplicationPaymentSendSms);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return RegTemplates.RegApplicationPrepayment;
     }

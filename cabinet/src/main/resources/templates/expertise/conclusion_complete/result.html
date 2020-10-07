@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-md-6" style="border-left: 1px solid #f4f4f4;" >
-        <form method="post" action="/expertise/conclusion_complete/action" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}">
+        <form method="post" action="/expertise/conclusion_complete/action" th:if="${regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" data-parsley-validate="">
             <div class="col-md-12">
                 <h5 class="" th:text="#{sys_performer.conclusionCompleteResult}"></h5>
                 <div class="form-group col-md-10 offset-1">

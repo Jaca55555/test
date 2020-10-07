@@ -248,7 +248,7 @@ public class ConclusionCompleteController {
             conclusionService.save(conclusion);
         }
 
-        conclusionService.complete(regApplication.getConclusionId());
+        conclusionService.complete(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getId());
 
         notificationService.create(
                 regApplication.getCreatedById(),

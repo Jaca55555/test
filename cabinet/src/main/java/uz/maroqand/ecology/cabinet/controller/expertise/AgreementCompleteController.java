@@ -230,7 +230,7 @@ public class AgreementCompleteController {
         if(agreementStatus.equals(LogStatus.Approved.getId())){
             RegApplicationLog conclusionLog = regApplicationLogService.create(regApplication,LogType.ConclusionComplete,"xulosaga sana va number qo'yish",user);
             conclusionLog.setShow(true);
-            regApplicationLogService.update(conclusionLog,LogStatus.Approved,"",user.getId());
+            regApplicationLogService.update(conclusionLog,LogStatus.Initial,"",user.getId());
            /* RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
