@@ -5,6 +5,17 @@
     <title>Title</title>
 </head>
 <body th:fragment="document_view">
+
+<style>
+
+
+    .ndfHFb-c4YZDc-Wrql6b{
+        width: 40px !important;
+        right: 12px !important;
+        opacity: 1;
+    }
+
+</style>
 <div class="flex" style="display: flex; justify-content: space-between">
 <div class="card parent-card" id="for_doc_print" style="width: 49%">
     <div class="card-header flex-space-between mobile-column" style="align-items: center;">
@@ -116,7 +127,7 @@
 </div>
     <div class="card parent-card" style="width: 49%">
         <ul class="nav nav-tabs row" id="myTab" role="tablist" >
-            <li class="nav-item col-3" style="border-right: 1px solid red;border-left: 1px solid red; padding: 0px"  role="presentation" th:each="file, fileStat:${files}">
+            <li class="nav-item col-3" style="border-right: 1px solid lightgrey;border-left: 1px solid lightgrey; padding: 0px"  role="presentation" th:each="file, fileStat:${files}">
                 <a class="nav-link" id="home-tab" data-toggle="tab" th:classappend="${fileStat.first} ? 'active'" href="#home" th:href="'#'+#{home}+${file.id}" role="tab" aria-controls="home" th:text="${#strings.abbreviate(#strings.substringBefore(file.name,'.'), 9)+'.'+file.extension}">Home</a>
             </li>
 

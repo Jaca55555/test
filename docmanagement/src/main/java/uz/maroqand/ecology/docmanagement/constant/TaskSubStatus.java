@@ -24,7 +24,9 @@ public enum TaskSubStatus {
     ForChangePerformer(8,"task_sub_status.performer","light"),
     PerformerChanged(9,"task_sub_status.performerChanged","green"),
     ForChangeDueDate(10,"task_sub_status.DueDate","light"),
-    DueDateChanged(11,"task_sub_status.dueDateChanged","green");
+    DueDateChanged(11,"task_sub_status.dueDateChanged","green"),
+    PerformerDeny(12,"task_sub_status.performerChangedDeny","green"),
+    DueDateChangedDeny(13,"task_sub_status.dueDateChangedDeny","green");
 
 
     private Integer id;
