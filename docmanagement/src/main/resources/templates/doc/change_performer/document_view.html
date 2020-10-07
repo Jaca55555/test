@@ -139,6 +139,10 @@
                 <option th:each="user: ${performers}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
             </select>
                 <div class="row">
+                    <div class="m10-vertical"><span th:text="#{sys_document.comment}" >Изоҳи</span></div>
+                    <textarea class="form-control" id="content" name="content" onfocus="this.value=''" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+                </div>
+                <div class="row">
                     <div class="col align-self-center">
                         <button th:text="#{doc.save_btn}" style="margin-top: 10px" class="btn btn-success"></button>
                     </div>

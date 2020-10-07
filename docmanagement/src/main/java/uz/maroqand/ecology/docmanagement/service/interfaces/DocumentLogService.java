@@ -29,4 +29,5 @@ public interface DocumentLogService {
 
     DocumentLog createLog(DocumentLog documentLog,Integer logTypeId, List<Integer> file_ids, String beforeStatus, String beforeStatusColor, String afterStatus, String afterStatusColor, Integer createdById);
     DocumentLog createComment(DocumentLog documentLog, Integer logTypeId, Date beforeDate,Date afterDate,String content ,Integer createdById,Integer documentId);
+    DocumentLog createUserComment(DocumentLog documentLog, Integer logTypeId, Integer beforeUserId, Integer afterUserId, String content , Integer createdById,Integer documentId);
 }

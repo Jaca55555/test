@@ -2,6 +2,7 @@ package uz.maroqand.ecology.docmanagement.service;
 
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
@@ -48,6 +49,10 @@ public class DocumentHelperService {
     public String getJournalName(Integer id){
         Journal journal = journalService.getById(id);
         return journal!=null? journal.getName():"";
+    }
+    public String getUserName(Integer id){
+        User user  = userService.findById(id);
+        return user!=null? user.getFName():"";
     }
 
     public String getDocumentViewName(Integer id){

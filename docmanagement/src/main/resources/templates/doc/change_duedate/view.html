@@ -39,6 +39,9 @@
         text-align: left;
         padding: 8px;
     }
+    .comment-item{
+        border: 0px !important;
+    }
 
 
 </style>
@@ -66,12 +69,12 @@
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
-                            <span class="card-header-a collapsed" th:text="#{sys_document.comments}" ></span>&nbsp;&nbsp;
+                            <span class="card-header-a collapsed" th:text="#{sys_document.changes}" ></span>&nbsp;&nbsp;
                         </h5>
                     </div>
                     <div class="card-body comment-content">
                         <div class="comment-item flex-space-between" th:each="log: ${logs}">
-                            <div>
+                            <div th:if="${log.beforeDate!=null}">
                                 <div class="inline-block">
                                     <i class="fas fa-user-circle fs40 color-gray column-1"></i>
                                 </div>
@@ -84,7 +87,7 @@
 <!--                            <div class="fs11" th:text="${#dates.format(log.createdAt, 'dd.MM.yyyy - HH:mm')}">-->
 <!--                                10.05.2019 - 09:35-->
 <!--                            </div>-->
-                                <table>
+                                <table th:if="${log.beforeDate!=null}">
                                     <tr>
                                         <th th:text="#{regApplicationLog.update}"></th>
                                         <th th:text="#{task.beforeDate}"></th>
