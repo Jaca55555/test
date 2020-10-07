@@ -244,14 +244,16 @@ public class ChangePerformerController {
             @RequestParam(name = "userid")Integer userid,
             @RequestParam(name = "content")String content
     ) {
+
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
         DocumentLog documentLog = new DocumentLog();
         System.out.println(userid);
-        documentTaskSub1.setReceiverId(userid);
         Integer documentId=documentTaskSub1.getDocumentId();
         User user = userService.getCurrentUserFromContext();
-        documentTaskSub1.setStatus(9);
         documentLogService.createUserComment(documentLog,  DocumentLogType.Log.getId(), documentTaskSub1.getReceiverId(), userid ,content,user.getId(),documentId);
+        documentTaskSub1.setReceiverId(userid);
+
+        documentTaskSub1.setStatus(9);
 
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
