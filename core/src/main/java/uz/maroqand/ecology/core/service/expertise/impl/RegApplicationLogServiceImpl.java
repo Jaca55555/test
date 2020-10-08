@@ -213,7 +213,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             Pageable pageable
     ) {
         User user = userService.getCurrentUserFromContext();
-        Integer orgId = user.getOrganizationId();
+        Integer orgId = userService.isAdmin()?null:user.getOrganizationId();
         return regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, createdById, updateById, type, status,orgId),pageable);
     }
 

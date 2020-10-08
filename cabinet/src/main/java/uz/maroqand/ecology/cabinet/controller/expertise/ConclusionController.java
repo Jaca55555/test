@@ -95,7 +95,7 @@ public class ConclusionController {
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
-        Page<Conclusion> conclusionPage = conclusionService.findFiltered(user.getOrganizationId(),id, dateBegin, dateEnd,tin,name, pageable);
+        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?null:user.getOrganizationId(),id, dateBegin, dateEnd,tin,name, pageable);
         Calendar c = Calendar.getInstance();
         c.set(c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate(),0,0,0);
         List<Conclusion> conclusionList = conclusionPage.getContent();

@@ -116,7 +116,7 @@ public class BillingController {
                 detail,
                 regionId,
                 subRegionId,
-                user.getOrganizationId(),
+                userService.isAdmin()?null:user.getOrganizationId(),
                 TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );

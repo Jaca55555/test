@@ -23,6 +23,8 @@ public interface UserService {
 
     User login(String login, String password);
 
+    Boolean isAdmin();
+
     List<User> getAllByTelegramUsers();
 
     List<User> getEmployeeList();

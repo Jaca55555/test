@@ -42,7 +42,7 @@ public class ChangeDeadlineDateServiceImpl implements ChangeDeadlineDateService 
             Pageable pageable
     ) {
         User user = userService.getCurrentUserFromContext();
-        return changeDeadlineDateRepository.findAll(getFilteringSpecifications(regApplicationId,changeDeadlineDateStatus,user.getOrganizationId()),pageable);
+        return changeDeadlineDateRepository.findAll(getFilteringSpecifications(regApplicationId,changeDeadlineDateStatus,userService.isAdmin()?null:user.getOrganizationId()),pageable);
     }
 
     @Override
