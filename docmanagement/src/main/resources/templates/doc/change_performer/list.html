@@ -115,7 +115,7 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
 
             <li class="nav-item card-nav-item">
-                <a class="nav-link text-uppercase active show"  id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span  th:text="#{doc_change.dueDate}">Ижро учун</span>
+                <a class="nav-link text-uppercase active show"  id="tab_filter_2" data-toggle="tab" href="#profile" onclick="getTabDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span  th:text="#{doc_change.perfomer}">Ижро учун</span>
                     <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
                 </a>
             </li>
@@ -143,9 +143,6 @@
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
-                                            <span th:text="#{sys_document.taskDate}">Хужжат санаси</span>
-                                        </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDeadline}">Ижро муддати</span>
                                         </th>
@@ -153,7 +150,7 @@
                                             <span th:text="#{sys_document.taskStatus}">Жорий ҳолати</span>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">
-                                            <span th:text="#{sys_document.resolution}">Резолюция ва иштирокчилар</span>
+                                            <span th:text="#{sys_document.taskResolution}">Резолюция ва иштирокчилар</span>
                                         </th>
                                     </tr>
                                     </thead>
@@ -292,14 +289,8 @@
                         return html;
                     },
                     className: "w-20 text-justify"},
-                {data: 4, name: 'createdAt',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
-                        return html;
-                    },
-                    className: "w-10 text-center"},
-                {data: 5, name: 'dueDate',
+
+                {data: 4, name: 'dueDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
@@ -307,7 +298,7 @@
                     },
                     className: "w-10 text-center"},
                 {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',className: "text-justify"},
+                {data: 6, name: 'content',className: "text-justify"},
             ],
             rowCallback: function (row, data) {
                 $(row).on('click', function () {
