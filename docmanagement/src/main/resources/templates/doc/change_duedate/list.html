@@ -142,9 +142,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">
                                             <span th:text="#{doc_incoming.content}">Кирувчи хат маълумотлари</span>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending">
-                                            <span th:text="#{doc_incoming.docRegNumber}">Хужжат санаси</span>
-                                        </th>
+
                                         <th class="sorting" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending">
                                             <span th:text="#{sys_document.taskDate}">Ижро муддати</span>
                                         </th>
@@ -290,14 +288,8 @@
                         return html;
                     },
                     className: "w-20 text-justify"},
-                {data: 4, name: 'createdAt',
-                    render: function (data, type, row, meta) {
-                        var html = '';
-                        html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[4]+'</a>';
-                        return html;
-                    },
-                    className: "w-10 text-center"},
-                {data: 5, name: 'dueDate',
+
+                {data: 4, name: 'dueDate',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
@@ -305,7 +297,7 @@
                     },
                     className: "w-10 text-center"},
                 {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
-                {data: 7, name: 'content',
+                {data: 6, name: 'content',
                     render: function (data, type, row, meta) {
                         var html = '';
                         html += '<a href="'+viewLink+'?id='+row[0]+'">' + row[7]+'</a>';

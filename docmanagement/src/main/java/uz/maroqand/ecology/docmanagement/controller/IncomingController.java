@@ -79,13 +79,13 @@ public class IncomingController {
 
         statuses.add(TaskSubStatus.New.getId());
         model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), user.getId()));
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
         statuses.add(TaskSubStatus.Waiting.getId());
         statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
+        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
         model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
@@ -96,11 +96,13 @@ public class IncomingController {
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.Complete.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         statuses.clear();
         statuses.add(TaskStatus.Rejected.getId());
-        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-
+        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
+        statuses.clear();
+        statuses.add(TaskStatus.New.getId());
+        model.addAttribute("informCount",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(),statuses,TaskSubType.Info.getId()));
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
         model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 

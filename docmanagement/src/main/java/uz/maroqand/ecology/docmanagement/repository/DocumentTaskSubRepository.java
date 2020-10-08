@@ -46,8 +46,8 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
     Integer countByReceiverIdAndDueDateGreaterThanEqual(Integer receiverId, Date date);//Муддати кеччикан
 //    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId =?1 AND d.deleted = FALSE AND d.receiverId=?2 AND d.status=?3")
 //    Integer countByReceiverIdAndStatusIn(Integer typeId,Integer receiverId, Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган;//Янги хатлар, Жараёндаги, Ижро этилган
-    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId = :d_id AND d.deleted = FALSE AND d.receiverId= :receiverId AND d.status IN :statuses")
-    Integer countByReceiverIdAndStatus(@Param("d_id") Integer d_id, @Param("receiverId") Integer receiverId, @Param("statuses") Set<Integer> statuses);//Янги хатлар, Жараёндаги, Ижро этилган
+    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN Document dt ON d.documentId = dt.id WHERE dt.documentTypeId = :d_id AND d.deleted = FALSE AND d.receiverId= :receiverId AND d.status IN :statuses AND d.type= :typeId")
+    Integer countByReceiverIdAndStatus(@Param("d_id") Integer d_id, @Param("receiverId") Integer receiverId, @Param("statuses") Set<Integer> statuses,@Param("typeId") Integer taskSubTypeId);//Янги хатлар, Жараёндаги, Ижро этилган
     Integer countByStatus( Set<Integer> statuses);
     Integer countByReceiverId(Integer receiverId);//Жами кирувчи хатлар
 

@@ -22,6 +22,7 @@ import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.constant.*;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -128,7 +129,11 @@ public class OutgoingMailController {
         dateEnd = StringUtils.trimToNull(dateEnd);
         content = StringUtils.trimToNull(content);
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
-
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<DocumentStatus> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControl = null;
         HashMap<String, Object> result = new HashMap<>();
         User user = userService.getCurrentUserFromContext();
         MutableBoolean hasAdditionalDocument = new MutableBoolean();
@@ -137,7 +142,7 @@ public class OutgoingMailController {
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
-
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
         Boolean hasAdditional = !hasAdditionalNotRequired.booleanValue() ? hasAdditionalDocument.booleanValue() : null;
         Boolean findTodayS_ = !findTodaySNotRequired.booleanValue() ? findTodayS.booleanValue() : null;
 
@@ -163,15 +168,20 @@ public class OutgoingMailController {
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Integer userId = userService.getCurrentUserFromContext().getId();
-        List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
-        for (DocumentSub documentSub : documentSubPage) {
+        docFilterDTO.setExecuteDateBegin(deadlineDateBegin!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateBegin):null);
+        docFilterDTO.setExecuteDateEnd(deadlineDateEnd!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateEnd):null);
+        docFilterDTO.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
+        docFilterDTO.setDocumentStatuses(status);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO,user.getOrganizationId(), pageable);
 
-            Document document = documentSub.getDocument();
-            if(document == null) continue;
-            if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
-                    if(document.getCreatedById() != userId && document.getPerformerId() != userId)
-                        continue;
-            }
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            String documentTypeName="";
+
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),

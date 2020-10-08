@@ -21,9 +21,11 @@ import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
 import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.constant.DocumentStatus;
 import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
+import uz.maroqand.ecology.docmanagement.dto.DocFilterDTO;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.DocumentSub;
+import uz.maroqand.ecology.docmanagement.entity.DocumentView;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentOrganizationService;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentService;
@@ -163,7 +165,7 @@ public class OutgoingController {
         Date begin = castDate(dateBegin), end = castDate(dateEnd);
 
         HashMap<String, Object> result = new HashMap<>();
-
+        DocFilterDTO docFilterDTO = new DocFilterDTO();
         Pageable specificPageable = specifyPageableForCurrentFilter(pageable);
         User user = userService.getCurrentUserFromContext();
         Integer departmentId = user.getDepartmentId();
@@ -174,7 +176,11 @@ public class OutgoingController {
         MutableBoolean hasAdditionalNotRequired = new MutableBoolean();
         MutableBoolean  findTodaySNotRequired = new MutableBoolean();
         List<DocumentStatus> statuses = new ArrayList<>(2);
-
+        Date deadlineDateBegin = null;
+        Date deadlineDateEnd = null;
+        Set<DocumentStatus> status = null;
+        Calendar calendar = Calendar.getInstance();
+        Boolean specialControl = null;
         documentSubService.defineFilterInputForOutgoingListTabs(tab, hasAdditionalDocument, findTodayS, statuses, hasAdditionalNotRequired, findTodaySNotRequired);
 
         if(tab == 7){
@@ -204,16 +210,21 @@ public class OutgoingController {
                 specificPageable);
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        List<Object[]> JSONArray = new ArrayList<>(documentSubPage.getTotalPages());
         Integer userId = userService.getCurrentUserFromContext().getId();
-        for (DocumentSub documentSub : documentSubPage) {
-            Document document = documentSub.getDocument();
-            if(document == null) continue;
-            if(document.getInsidePurpose() != null && document.getInsidePurpose()) {
-                if(document.getCreatedById() != userId && document.getPerformerId() != userId)
-                    continue;
-            }
-            System.out.println(documentSub.getDocumentOrganizations());
+        docFilterDTO.setExecuteDateBegin(deadlineDateBegin!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateBegin):null);
+        docFilterDTO.setExecuteDateEnd(deadlineDateEnd!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateEnd):null);
+        docFilterDTO.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
+        docFilterDTO.setDocumentStatuses(status);
+        Page<Document> documentPage = documentService.findFiltered(docFilterDTO,user.getOrganizationId(), pageable);
+
+        List<Document> documentList = documentPage.getContent();
+        List<Object[]> JSONArray = new ArrayList<>(documentList.size());
+
+        for (Document document : documentList) {
+            DocumentSub documentSub = documentSubService.getByDocumentIdForIncoming(document.getId());
+            DocumentView documentView = documentViewService.getById(document.getDocumentViewId());
+            String documentTypeName="";
+
             JSONArray.add(new Object[]{
                     document.getId(),
                     document.getRegistrationNumber(),
