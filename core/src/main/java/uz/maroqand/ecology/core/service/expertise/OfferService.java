@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface OfferService {
 
-    Offer getOffer(Boolean budget);
+    Offer getOffer(Boolean budget,Integer organizationId);
 
     Page<Offer> getAll(Pageable pageable);
 

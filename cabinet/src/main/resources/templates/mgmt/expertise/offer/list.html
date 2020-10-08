@@ -63,6 +63,7 @@
                                                         <th th:text="#{offer.file_uz}"></th>
                                                         <th th:text="#{offer.file_oz}"></th>
                                                         <th th:text="#{offer.file_ru}"></th>
+                                                        <th th:text="#{mntr_user.organization}"></th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -114,6 +115,11 @@
         var currentEditLink = ajaxRequestEditLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group"><a class="btn btninfo btn-sm mr-1" href="'+currentEditLink+'" title="'+labelEdit+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        return html;
+    }
+
+    function renderOrganizationColumn(data, type, row, meta) {
+        var html = ' ' + row[9];
         return html;
     }
     function renderByudjetColumn(data, type, row, meta) {
@@ -172,6 +178,7 @@
                 {render: renderFileUzColumn, orderable: false},
                 {render: renderFileOzColumn, orderable: false},
                 {render: renderFileRuColumn, orderable: false},
+                {render: renderOrganizationColumn, name: 'organizationId'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

@@ -26,8 +26,8 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Offer getOffer(Boolean budget){
-        return offerRepository.findTop1ByActiveTrueAndByudjetOrderByIdDesc(budget);
+    public Offer getOffer(Boolean budget,Integer organizationId){
+        return offerRepository.findTop1ByActiveTrueAndByudjetAndOrganizationIdOrderByIdDesc(budget,organizationId);
     }
 
     @Override

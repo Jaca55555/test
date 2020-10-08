@@ -63,13 +63,19 @@
                                         <div class="card-body">
                                             <form th:action="${action_url}" method="post" th:object="${offer}" data-parsley-validate="" id="offerForm">
                                                 <div class="form-group row">
-                                                    <label for="name" class="col-md-4 col-form-label text-right" th:text="#{offer.name}"></label>
+                                                    <label for="name" class="col-md-4 col-form-label text-right" >
+                                                        <span th:text="#{offer.name}"></span>
+                                                        <span class="required">*</span>:
+                                                    </label>
                                                     <div class="col-md-4">
                                                         <input type="text" class="form-control" id="name" th:field="*{name}" required="">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="control-label col-md-4 text-right"  th:text="#{offer.byudjet}"></label>
+                                                    <label class="control-label col-md-4 text-right"  >
+                                                        <span th:text="#{offer.byudjet}"></span>
+                                                        <span class="required">*</span>:
+                                                    </label>
                                                     <div class="col-md-4">
                                                         <select required="" id="byudjet" name="byudjet" class="form-control">
                                                             <option value="" th:text="#{sys_select}"></option>
@@ -78,6 +84,20 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group row">
+                                                    <label class="control-label col-md-4 text-right" >
+                                                        <span th:text="#{mntr_user.organization}"></span>
+                                                        <span class="required">*</span>:
+                                                    </label>
+                                                    <div class="col-md-4">
+                                                        <select th:field="*{organizationId}" class="form-control" required="required">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group row">
                                                     <label for="fileUz" class="control-label col-md-4 text-right" >
                                                         <span th:text="#{offer.file_uz}"></span>
@@ -149,14 +169,7 @@
         var inputFileOz = document.getElementById('fileOz');
         var inputFileRU = document.getElementById('fileRu');
         var inputFileUz = document.getElementById('fileUz');
-        $('#name').parsley().validate();
-        $('#byudjet').parsley().validate();
-        $('#fileUz').parsley().validate();
-        $('#fileOz').parsley().validate();
-        $('#fileRu').parsley().validate();
-        if (!$('#name').parsley().isValid()
-            || !$('#byudjet').parsley().isValid()
-            || !inputFileUz.classList.contains('miskin-required')
+        if (!inputFileUz.classList.contains('miskin-required')
             || !inputFileOz.classList.contains('miskin-required')
             || !inputFileRU.classList.contains('miskin-required')
         ){

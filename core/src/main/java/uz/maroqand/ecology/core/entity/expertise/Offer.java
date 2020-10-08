@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -38,6 +39,14 @@ public class Offer {
     //true - byudjet tashkilot
     @Column(name = "byudjet",columnDefinition = "boolean DEFAULT false")
     private Boolean byudjet = false;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id", insertable = false, updatable = false)
+    private Organization organization;
+
+    @Column(name = "organization_id")
+    private Integer organizationId;
 
     /*
      * Technical Fields

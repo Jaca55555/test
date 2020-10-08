@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.TableHistoryService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
@@ -44,9 +46,10 @@ public class OfferController {
     private final UserAdditionalService userAdditionalService;
     private final FileService fileService;
     private final HelperService helperService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, FileService fileService, HelperService helperService){
+    public OfferController(OfferService offerService, UserService userService, TableHistoryService tableHistoryService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, FileService fileService, HelperService helperService, OrganizationService organizationService){
         this.offerService = offerService;
         this.userService = userService;
         this.tableHistoryService = tableHistoryService;
@@ -54,6 +57,7 @@ public class OfferController {
         this.userAdditionalService = userAdditionalService;
         this.fileService = fileService;
         this.helperService = helperService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(ExpertiseMgmtUrls.OfferList)
@@ -70,6 +74,7 @@ public class OfferController {
         result.put("recordsTotal", offerPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", offerPage.getTotalElements()); //Filtered elements
 
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         List<Offer> offerList = offerPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(offerList.size());
         for (Offer offer : offerList){
@@ -83,6 +88,7 @@ public class OfferController {
                     offer.getFileOzId()!=null?helperService.getFileName(offer.getFileOzId()):"",
                     offer.getFileRuId()!=null?ExpertiseMgmtUrls.OfferFileDownload+"?file_id=" + offer.getFileRuId():"",
                     offer.getFileRuId()!=null?helperService.getFileName(offer.getFileRuId()):"",
+                    offer.getOrganizationId()!=null?helperService.getOrganizationName(offer.getOrganizationId(),locale):""
             });
         }
         result.put("data",convenientForJSONArray);
@@ -100,6 +106,7 @@ public class OfferController {
         }
 
         model.addAttribute("offer", offer);
+        model.addAttribute("organizationList", organizationService.getList());
         model.addAttribute("action_url", ExpertiseMgmtUrls.OfferEdit);
         model.addAttribute("back_url", ExpertiseMgmtUrls.OfferList);
         model.addAttribute("uzOfferList", offerService.getAllByLanguage());
@@ -126,6 +133,7 @@ public class OfferController {
         oldOffer.setActive(Boolean.TRUE);
         oldOffer.setName(offer.getName());
         oldOffer.setByudjet(byudjet==1?Boolean.TRUE:Boolean.FALSE);
+        oldOffer.setOrganizationId(offer.getOrganizationId());
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
         oldOffer = offerService.save(oldOffer);
