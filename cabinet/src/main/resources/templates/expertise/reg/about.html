@@ -500,7 +500,7 @@
             $("#activityId").change(function(){
                 getMaterialList();
             });
-            if (regCategory!=null && (regCategory==3 || regCategory==4)){
+            if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
             }
@@ -613,7 +613,7 @@
             activitySelect.find('option:first').prop("selected", true);
             activitySelect.change();
             activitySelect.find('.category_'+categoryId).show();
-            if (categoryId==3 || categoryId==4){
+            if (categoryId==3 || categoryId==4 || ($("#objectId").val()==2 && categoryId==2)){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
             }else{
