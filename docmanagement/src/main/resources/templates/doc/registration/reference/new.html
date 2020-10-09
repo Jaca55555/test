@@ -140,16 +140,25 @@
                 <hr class="m30-vertical">
                 <h5 class="mb-0 card-header no-border" th:text="#{doc_reference.reg_files}" style="padding: 5px 20px;">Кирувчи хат ва унинг иловаларининг электрон шакли</h5>
                 <div class="row p20" id="file-container">
-
-                    <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
-                        <div  class="text-center file-icon-container align-self-center color-gray">
-                            <span class="fas fa-plus" id="addFileButton"></span>
-                            <!--                            <input type="file" class="d-none" id="addFile" name="files" multiple required>-->
-                            <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                    <select name="fileIds" id="fileIds" class="d-none" multiple="multiple">
+                    </select>
+                    <div class="file-block" th:each="file: ${document.contentFiles}">
+                        <div class="text-right"><span class="fas fa-trash-alt"></span></div>
+                        <div class="text-center file-icon-container color-red"><span class="fas fa-file-pdf"></span>
+                        </div>
+                        <div class="text-center">
+                            <a th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).FileDownload} + '?id=' + ${file.id}" >
+                                <span th:text="${file.name}" th:id="'fileName_'+${file.id}"></span></a>
+                        </div>
+                    </div>
+                    <div class="file-block flex-center file-button" id="addFileButton">
+                        <div class="text-center file-icon-container align-self-center color-gray">
+                            <span class="fas fa-plus" id="plus-icon"></span>
+                            <input type="file" class="d-none" id="addFile" name="addFile">
+                            <span id="percentage" style="font-size: 35px"><span id="percentage-num"></span>%</span>
                             <img src="/static/doc/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
                         </div>
                     </div>
-
                 </div>
                 <div id="file_ids" class="d-none">
                     <input type="text" name="file_ids" value="">
@@ -157,6 +166,18 @@
                 <div id="addFileDiv">
                     <input type="file" class="d-none" id="addFile2" name="files">
                 </div>
+                <div class="border-warning m20 p20">
+                    <div class="checkbox checkbox-fill d-inline checkbox-danger">
+                        <input type="checkbox" name="insidePurpose" id="checkbox-fill-1" th:checked="${document!=null && document.insidePurpose!=null && document.insidePurpose}">
+                        <label for="checkbox-fill-1" class="cr text-danger" ><span th:text="#{doc_appeal.reg_inside_purpose}">Checked</span></label>
+                    </div>
+                    <div class="m20-vertical">
+                        <span th:text="#{sys_attention}">Диккат:</span>
+                        <br>
+                        <span th:text="#{doc_appeal.reg_inside_purpose_attention}">Хизмат доирасида фойдаланиш учун" белгисига эга бўлган хужжатлар фақат рахбарлар ёки девонхона ходимлари томонидан белгиланган ходимларга кўринади.</span>
+                    </div>
+                </div>
+
                 <hr class="m30-vertical">
                 <div class="row">
                     <div class="col-sm-6 form-group">
@@ -293,69 +314,13 @@
 
 <script type="text/javascript" th:inline="javascript">
     var sys_select = [[#{sys_select}]];
-    function clickPlus() {
-        $('#addFile2').click();
-    }
+
     $(document).ready(function ()
     {
         $('.singleSelect').select2({
             placeholder: sys_select,
             allowClear: true
         });
-        function deleteFunc(id){
-            fetch(`/doc/registration/incoming/file/delete?id=${id}`);
-            $('#addFile2').remove();
-            $(`#file_block_${id}`).remove();
-            $(`#input_file_id_${id}`).remove();
-            $('#addFileDiv').append(`
-             <input type="file" class="d-none" id="addFile2" name="files">
-        `);
-            hearInputClickFunction();
-        }
-        function hearInputClickFunction(){
-            $('#addFile2').on('change', function () {
-                if (this.files[0].size > 10000000) {
-                    swal("Файл не должен занимать больше 10 мб.",'', "warning");
-                    return false;
-                }
-                if(this.files[0].size === 0){
-                    swal("Файл не должен быть пустым", "", "warning");
-                    return false;
-                }
-                let csrf = $("form input[name='_csrf']").val();
-                let files = document.querySelector('#addFile2').files[0];
-                let fd = new FormData();
-                fd.append("file", files);
-                fd.append("_csrf", csrf);
-                $.ajax({
-                    url: "/doc/file_upload",
-                    type: 'post',
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    success: detectExtensionAndDisplay,
-                    beforeSend: function () {
-                        $('#addFileButton').hide();
-                        $('#upload-gif').show();
-                        $('#percentage').show();
-                    },
-                    complete: function () {
-                        $('#upload-gif').hide();
-                        $('#percentage').hide();
-                        $('#addFileButton').show();
-                    },
-                    xhr: function() {
-                        var xhr = new window.XMLHttpRequest();
-                        xhr.upload.addEventListener("progress",
-                            uploadProgressHandler,
-                            false
-                        );
-                        return xhr;
-                    }
-                })
-            });
-        }
         $('#phoneNumber').inputmask("+999(99) 999-99-99");
         var files = [[${document.contentFiles}]];
         if (files!=null && files.length>0){
@@ -457,6 +422,9 @@
                     extension = '';
                     color = 'color-gray';
             }
+            function downloadFileFunction(id) {
+                window.open(`/doc/incoming/file/download?id=${id}`);
+            }
             $('#fileIds').append(`<option selected="selected" value="${data.data.id}">`+fileNameSubString(fileName)+`</option>`);
             $('#file_ids').append(
                 `<input type="text" name="file_ids" id="input_file_id_${data.data.id}" value="${data.data.id}">`
@@ -481,7 +449,11 @@
             }
         });
 
-
+        $(document).on('click', '.fa-trash-alt', function () {
+            $('#fileIds option[value="'+$(this).data('id')+'"]').remove();
+            $(this).parent().parent().remove();
+            $('#addFile').val('');
+        });
 
         $('form').on('submit', function (e) {
             $('#addFile').attr('disabled', 'disabled');
@@ -522,6 +494,7 @@
         var progress = Math.round(percent);
         $('#percentage-num').html(progress);
     }
+
 
 </script>
 
