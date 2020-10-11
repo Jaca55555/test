@@ -10,6 +10,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -71,10 +72,7 @@ public class RegApplicationMonitoringController {
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
     public String expertiseRegApplicationMonitoringList(Model model) {
-        List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
-        logStatusList.add(LogStatus.Approved);
-        logStatusList.add(LogStatus.Denied);
+        List<RegApplicationStatus> logStatusList = RegApplicationStatus.getRegApplicationStatusList();
 
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("subRegions", soatoService.getSubRegions());
@@ -93,7 +91,7 @@ public class RegApplicationMonitoringController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,null,null,null,null, null,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null, null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements

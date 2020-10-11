@@ -52,6 +52,13 @@ public class ExpertiseUrls {
     public static final String AgreementCompleteView = AgreementComplete + "/view";
     public static final String AgreementCompleteAction = AgreementComplete + "/action";
 
+    //rais tasdiqidan keyin xulosaga number va sana qo'yish
+    private static final String ConclusionComplete = Prefix + "/conclusion_complete";
+    public static final String ConclusionCompleteList = ConclusionComplete + "/list";
+    public static final String ConclusionCompleteListAjax = ConclusionComplete + "/list_ajax";
+    public static final String ConclusionCompleteView = ConclusionComplete + "/view";
+    public static final String ConclusionCompleteAction = ConclusionComplete + "/action";
+
 
     public static final String ExpertiseFileDownload = Prefix + "/document/download";
 

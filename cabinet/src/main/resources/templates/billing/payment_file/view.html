@@ -75,8 +75,22 @@
                                                 <input class="form-control" readonly="readonly" th:value="${paymentFile.invoice}">
                                             </div>
                                         </div>
-
-
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_update_by}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.updateById!=null?@helperService.getUserFullNameById(paymentFile.updateById):''}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" >
+                                            <div class="col-md-3 text-right">
+                                                <label class="col-form-label" th:text="#{invoice_update_at}"></label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" readonly="readonly" th:value="${paymentFile.updatedAt!=null?paymentFile.updatedAt:''}">
+                                            </div>
+                                        </div>
                                         <div class="form-group row" >
                                             <div class="col-md-3 text-right">
                                                 <label class="col-form-label" th:text="#{invoice_payer.tin}"></label>

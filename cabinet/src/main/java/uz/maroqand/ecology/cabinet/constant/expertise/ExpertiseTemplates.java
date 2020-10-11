@@ -35,6 +35,11 @@ public class ExpertiseTemplates {
     public static final String AgreementCompleteList = AgreementComplete + "/list";
     public static final String AgreementCompleteView = AgreementComplete + "/view";
 
+    //rais tasdig'idan keyin xulosaga number va sana qo'yish
+    private static final String ConclusionComplete = Prefix + "/conclusion_complete";
+    public static final String ConclusionCompleteList = ConclusionComplete + "/list";
+    public static final String ConclusionCompleteView = ConclusionComplete + "/view";
+
     //Billing
     private static final String Billing = Prefix + "/billing";
     public static final String BillingList = Billing + "/list";

@@ -161,15 +161,30 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             case 4:
                 logType = LogType.AgreementComplete;
                 break;
+            case 5:
+                logType = LogType.ConclusionComplete;
+                break;
             default:
                 return 0;
         }
         List<RegApplicationLog> regApplicationLogList = getAllByLogType(logType);
         System.out.println("size==" + regApplicationLogList.size() + "   type=" + logType + "  id==" + id);
         Integer result = 0;
+
+        if (logType.equals(LogType.ConclusionComplete)){
+            for (RegApplicationLog regApplicationLog : regApplicationLogList) {
+                if (regApplicationLog.getStatus().equals(LogStatus.Initial)
+                        && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())
+                ){
+                    result++;
+                }
+            }
+            return result;
+        }
+
         for (RegApplicationLog regApplicationLog : regApplicationLogList) {
             if ( !regApplicationLog.getRegApplication().getDeleted()
-                    && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
+                    && !hashMap.containsKey(regApplicationLog.getRegApplicationId()) && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())
                     && (regApplicationLog.getStatus().equals(LogStatus.Initial)|| regApplicationLog.getStatus().equals(LogStatus.Resend)
                     || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))
             ) {
@@ -197,7 +212,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             LogStatus status,
             Pageable pageable
     ) {
-        return regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, createdById, updateById, type, status),pageable);
+        User user = userService.getCurrentUserFromContext();
+        Integer orgId = userService.isAdmin()?null:user.getOrganizationId();
+        return regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, createdById, updateById, type, status,orgId),pageable);
     }
 
     private static Specification<RegApplicationLog> getFilteringSpecification(
@@ -205,8 +222,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             final Integer createdById,
             final Integer updateById,
             final LogType type,
-            final LogStatus status
-    ) {
+            final LogStatus status,
+            final Integer orgId
+            ) {
         return new Specification<RegApplicationLog>() {
             @Override
             public Predicate toPredicate(Root<RegApplicationLog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -222,6 +240,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
                 if(filterDto.getTin() != null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("tin"), filterDto.getTin()));
+                }
+                if(orgId != null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), orgId));
                 }
                 if(StringUtils.trimToNull(filterDto.getName()) != null){
                     predicates.add(criteriaBuilder.like(root.join("regApplication").get("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));

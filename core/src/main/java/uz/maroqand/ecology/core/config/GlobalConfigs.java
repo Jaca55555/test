@@ -13,7 +13,17 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "globals")
 public class GlobalConfigs {
 
+    private String IsTesting;
+
     private String UploadedFilesFolder;
+
+    public String getIsTesting() {
+        return IsTesting;
+    }
+
+    public void setIsTesting(String isTesting) {
+        IsTesting = isTesting;
+    }
 
     public String getUploadedFilesFolder() {
         return UploadedFilesFolder;

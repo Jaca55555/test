@@ -88,19 +88,19 @@
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangeDueDateList}" style="padding: 5px 15px">
                         <span class="pcoded-micon color-primary"><i class="fas fa-list-ol"></i></span>
                         <span class="pcoded-mtext" th:text="#{doc_change.dueDate}" style="margin-right: 5px" >Ijro muddatini o'zgartirish</span>
-                        <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countDueDateByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
+                        <span th:if="${@getNotifacationService.countDueDateByStatus()}!=0" th:text="${@getNotifacationService.countDueDateByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px">12</span>
 
                     </a>
                 </li>
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <label th:text="#{sys_office}">Девонхона</label>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
-                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="padding: 5px 15px">
-                        <span class="pcoded-micon"><i class="feather icon-list color-primary"></i></span>
-                        <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>
-                    </a>
-                </li>
+<!--                <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">-->
+<!--                    <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).Dashboard}" style="padding: 5px 15px">-->
+<!--                        <span class="pcoded-micon"><i class="feather icon-list color-primary"></i></span>-->
+<!--                        <span class="pcoded-mtext" th:text="#{sys_document.dashboard}">Хужжатлар иш столи</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REGISTER')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingRegistrationList}" style="padding: 5px 15px">
                         <span class="pcoded-micon"><i class="feather icon-corner-right-down color-green"></i></span>
@@ -227,7 +227,7 @@
                     </a>
                 </li>-->
                 <li class="nav-item pcoded-menu-caption" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_LIST')" >
-                    <label th:text="#{sys.Report}">Хужжатлар</label>
+                    <label th:text="#{sys.report}">Хужжатлар</label>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_REPORT_LIST')">
                     <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReportList}" style="padding: 5px 15px">
@@ -261,18 +261,7 @@
 
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile">
-                        <span class="pcoded-micon"><i class="feather icon-user color-green"></i></span>
-                        <span class="pcoded-mtext" th:text="#{sys_document.my_profile}">Менинг маълумотларим</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <span class="pcoded-micon"><i class="feather icon-log-out color-red"></i></span>
-                        <span class="pcoded-mtext" th:text="#{sys_document.logout}">Тизимдан чиқиш</span>
-                    </a>
-                </li>
+
 
 
             </ul>

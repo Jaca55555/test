@@ -12,7 +12,8 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>
             </div>
             <div class="col-md-6">
-                <select class="form-control" id="performerId" name="performerId">
+                <select class="form-control" id="performerId" name="performerId" >
+                    <option value="" th:text="#{sys_select}"></option>
                     <option th:each="user : ${performerList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
                 </select>
             </div>
@@ -31,7 +32,8 @@
                 <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>
             </div>
             <div class="col-md-5">
-                <select class="form-control" id="agreements" name="agreements">
+                <select class="form-control" id="agreements" name="agreements" >
+                    <option value="" th:text="#{sys_select}"></option>
                     <option th:each="user : ${agreementList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
                 </select>
             </div>

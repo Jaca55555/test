@@ -5,6 +5,7 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,5 +28,6 @@ public interface DocumentLogService {
     DocumentLog update(DocumentLog documentLog);
 
     DocumentLog createLog(DocumentLog documentLog,Integer logTypeId, List<Integer> file_ids, String beforeStatus, String beforeStatusColor, String afterStatus, String afterStatusColor, Integer createdById);
-
+    DocumentLog createComment(DocumentLog documentLog, Integer logTypeId, Date beforeDate,Date afterDate,String content ,Integer createdById,Integer documentId);
+    DocumentLog createUserComment(DocumentLog documentLog, Integer logTypeId, Integer beforeUserId, Integer afterUserId, String content , Integer createdById,Integer documentId);
 }

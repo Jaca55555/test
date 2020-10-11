@@ -5,9 +5,29 @@
     <title>Title</title>
 </head>
 <body th:fragment="conclusion">
+<style>
+    p{
+        margin-bottom: 4px !important;
+        padding-top: 1px !important;
+        text-indent: 3ch !important;
+        text-align: justify !important;
+    }
+    div .image {
+        text-align: center !important;
+    }
+</style>
+<div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
+    <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
 
-<div class="card-block"  id="conclusion">
-    <p th:utext="${conclusion.htmlText}"></p>
+    <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
+    <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_info}"></span> </p>
+    <div class="text-left">
+        <img th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImage + '?id=' + conclusion.documentRepoId}" class="qr-code" />
+    </div>
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_id}"></span> <span th:text="${documentRepo.id}"></span> </p>
+    <p th:if="${documentRepo}"> <span th:text="#{sys_documentRepo_code}"></span> <span th:text="${documentRepo.code}"></span> </p>
 </div>
 
 </body>

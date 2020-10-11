@@ -209,7 +209,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                 //Ko'rib chiquvchi organization
                 if(reviewId!=null){
-                    criteriaBuilder.equal(root.get("reviewId"),reviewId);
+                    predicates.add(criteriaBuilder.equal(root.get("reviewId"),reviewId));
                 }
 
                 System.out.println("logType="+logType);
@@ -229,6 +229,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if (filterDto!=null) {
+
+                    if (filterDto.getStatus()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getStatus()));
+                    }
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }

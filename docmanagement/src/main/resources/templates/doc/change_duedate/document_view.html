@@ -137,10 +137,15 @@
                 <label for="dateBegin" class="control-label"><span th:text="#{doc_incoming.registrationDate}">Рўйхатга олинган сана</span></label>
                 <div class="row">
                     <div class="col-6" style="padding-left: 0;">
-                        <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" name="duedate" />
+                        <input autocomplete="off" class="form-control datepicker date" id="dateBegin" th:placeholder="#{sys_begin}" name="afterdate" />
                         <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="m10-vertical"><span th:text="#{sys_document.comment}" >Изоҳи</span></div>
+                    <textarea class="form-control" id="content" name="content" onfocus="this.value=''" th:placeholder="#{sys_document.enter_comment_text}"></textarea>
+                </div>
+
                 <div class="row">
                     <div class="col align-self-center">
                         <button th:text="#{doc.save_btn}" style="margin-top: 10px" class="btn btn-success"></button>
@@ -151,7 +156,7 @@
                 <input type="hidden"  th:field="*{id}" th:value="*{id}" />
                 <div class="row">
                     <div class="col align-self-center">
-                        <button th:text="#{sys_notConfirm}" style="margin-left: 38%;margin-top: -93px" class="btn btn-danger"></button>
+                        <button th:text="#{sys_notConfirm}" style="margin-left: 38%;margin-top: -110px" class="btn btn-danger"></button>
                     </div>
                 </div>
             </form>

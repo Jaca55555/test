@@ -18,14 +18,14 @@
                             <option value="3" th:text="#{sys_performerStatus.modification}" ></option>
                         </select>
                     </div>
-                    <div class="form-group col-md-10 offset-1">
+                    <!--<div class="form-group col-md-10 offset-1">
                         <label th:text="#{sys_performer.conclusion_number}">Результат заключения</label>
                         <input class="form-control" maxlength="255"  id="number" name="number" required="required"/>
                     </div>
                     <div class="form-group col-md-10 offset-1">
                         <label  th:text="#{sys_conclusion_date}"></label>
                         <input class="form-control datepicker" name="date"  required="" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" th:value="${(conclusion!=null and conclusion.date!=null)? #dates.format(conclusion.date,'dd.MM.yyyy'):''}" />
-                    </div>
+                    </div>-->
                     <div class="form-group col-md-10 offset-1">
                         <textarea class="form-control max-textarea" maxlength="255" rows="4" id="comment" name="comment" th:placeholder="#{sys_comment.messagePlaceholder}"></textarea>
                     </div>

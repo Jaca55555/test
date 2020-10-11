@@ -32,15 +32,19 @@ public class CoordinateServiceImpl implements CoordinateService {
         this.coordinateLatLongRepository = coordinateLatLongRepository;
     }
 
-    public Page<Coordinate> findFiltered(Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable) {
-        return coordinateRepository.findAll(getFilteringSpecification(id, tin, name, number, regionId, subRegionId, dateBegin, dateEnd),pageable);
+    public Page<Coordinate> findFiltered(Integer reviewId,Integer id, Integer tin, String name, String number, Integer regionId, Integer subRegionId, Date dateBegin, Date dateEnd, Pageable pageable) {
+        return coordinateRepository.findAll(getFilteringSpecification(reviewId,id, tin, name, number, regionId, subRegionId, dateBegin, dateEnd),pageable);
     }
 
-    private static Specification<Coordinate> getFilteringSpecification(final Integer id, final Integer tin, final String name, final String number, final Integer regionId, final Integer subRegionId, final Date dateBegin, final Date dateEnd) {
+    private static Specification<Coordinate> getFilteringSpecification(final Integer reviewId, final Integer id, final Integer tin, final String name, final String number, final Integer regionId, final Integer subRegionId, final Date dateBegin, final Date dateEnd) {
         return new Specification<Coordinate>() {
             @Override
             public Predicate toPredicate(Root<Coordinate> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
+
+                if (reviewId!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), reviewId));
+                }
 
                 if(id != null){
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));

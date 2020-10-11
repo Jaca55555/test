@@ -93,14 +93,15 @@ public class ConclusionServiceImpl implements ConclusionService {
 
 
     @Override
-    public Page<Conclusion> findFiltered(Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
+    public Page<Conclusion> findFiltered(Integer reviewId,Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
         Set<ConclusionStatus> conclusionStatusIds  = new HashSet<>();
         conclusionStatusIds.add(ConclusionStatus.Active);
         conclusionStatusIds.add(ConclusionStatus.Expired);
-        return conclusionRepository.findAll(getFilteringSpecification(id,dateBegin,dateEnd,tin,conclusionStatusIds,name),pageable);
+        return conclusionRepository.findAll(getFilteringSpecification(reviewId,id,dateBegin,dateEnd,tin,conclusionStatusIds,name),pageable);
     }
 
     private static Specification<Conclusion> getFilteringSpecification(
+            final Integer reviewId,
             final Integer id,
             final Date dateBegin,
             final Date dateEnd,
@@ -112,6 +113,10 @@ public class ConclusionServiceImpl implements ConclusionService {
             @Override
             public Predicate toPredicate(Root<Conclusion> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
+
+                if (reviewId!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), reviewId));
+                }
 
                 if(id != null){
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));

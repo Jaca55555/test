@@ -228,18 +228,22 @@ public class AgreementCompleteController {
         }
 
         if(agreementStatus.equals(LogStatus.Approved.getId())){
-            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            RegApplicationLog conclusionLog = regApplicationLogService.create(regApplication,LogType.ConclusionComplete,"xulosaga sana va number qo'yish",user);
+            conclusionLog.setShow(true);
+            regApplicationLogService.update(conclusionLog,LogStatus.Initial,"",user.getId());
+           /* RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             switch (performerLog.getStatus()){
                 case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
                 case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
                 case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
-            }
+            }*/
+            regApplication.setConclusionCompleteLogId(conclusionLog.getId());
             regApplication.setAgreementStatus(LogStatus.Approved);
             regApplicationService.update(regApplication);
 
-            conclusionService.complete(regApplication.getConclusionId());
+//            conclusionService.complete(regApplication.getConclusionId());
 
-            notificationService.create(
+          /*  notificationService.create(
                     regApplication.getCreatedById(),
                     NotificationType.Expertise,
                     "sys_notification.new",
@@ -256,9 +260,9 @@ public class AgreementCompleteController {
                      "sys_notification_message.performer_confirm",
                     "/reg/application/resume?id=" + regApplication.getId(),
                     user.getId()
-            );
-            Client client = clientService.getById(regApplication.getApplicantId());
-            smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
+            );*/
+          /*  Client client = clientService.getById(regApplication.getApplicantId());
+            smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());*/
         }
 
         if(agreementStatus.equals(LogStatus.Denied.getId())){

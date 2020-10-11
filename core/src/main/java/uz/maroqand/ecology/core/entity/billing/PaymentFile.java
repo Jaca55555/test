@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.billing;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -64,6 +65,10 @@ public class PaymentFile {
     @Column(name = "receiver_account")
     private String receiverAccount;
 
+    //qabul qiluvchi ҳисоб рақами old qo'shimcha
+    @Column(name = "receiver_add")
+    private String receiverAdd;
+
     //Тўловчининг банк МФОси
     @Column(name = "receiver_mfo")
     private String receiverMfo;
@@ -92,6 +97,14 @@ public class PaymentFile {
 
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "update_by", insertable = false, updatable = false)
+    private User updateBy;
+
+    @Column(name = "update_by")
+    private Integer updateById;
+
 
     @Column(name="updated_at", columnDefinition = "timestamp without time zone")
     private Date updatedAt;

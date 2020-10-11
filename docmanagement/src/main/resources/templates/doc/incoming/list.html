@@ -47,6 +47,10 @@
         td.border-SpecialControl {
             border-left: 3px solid red;
         }
+        table.dataTable tbody tr:nth-of-type(2n+1) {
+            background-color: rgba(4, 169, 245, 0.05) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -173,7 +177,9 @@
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
-                    <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span></a>
+                    <a class="nav-link text-uppercase show" id="tab_filter_6" data-toggle="tab" href="#contact1" onclick="getTabDatatableConnect(6)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_info}">Малъумот учун</span>
+                    <span th:if="${informCount}!=0" th:text="${informCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span></a>
+
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_7" data-toggle="tab" href="#contact2" onclick="getTabDatatableConnect(7)" role="tab" aria-controls="contact" aria-selected="false"><span th:text="#{sys_document.info_tab_finished}">Якунланган</span></a>
@@ -196,7 +202,6 @@
                                     <table id="responsive-table-model" class="table table-hover dataTable" style="width: 100%;" role="grid" aria-describedby="responsive-table-model_info">
                                         <thead>
                                             <tr role="row">
-
                                                 <th class="sorting_asc" tabindex="0" aria-controls="responsive-table-model" rowspan="1" colspan="1" aria-sort="ascending" aria-label="First name: activate to sort column descending">
                                                     <span th:text="#{doc_incoming.registrationNumber}">Регистрация рақами</span>
                                                 </th>
@@ -280,7 +285,12 @@
                 case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
                 case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[5]+'</button>';return html;
                 case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
                 default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[5]+'</button>';return html;
             }
             return html;

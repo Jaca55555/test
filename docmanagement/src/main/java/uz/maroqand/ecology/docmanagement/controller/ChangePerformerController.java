@@ -67,8 +67,9 @@ public class ChangePerformerController {
     }
 
     @RequestMapping(value = DocUrls.ChangePerformerList, method = RequestMethod.GET)
-    public String getChangePerformerListPage(Model model) {
+    public String getChangePerformerListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
+        model.addAttribute("tab_number_", tabNumber);
         return DocTemplates.ChangePerformerList;
     }
 
@@ -97,9 +98,28 @@ public class ChangePerformerController {
         Integer receiverId = user.getId();
         Calendar calendar = Calendar.getInstance();
         Boolean specialControll=null;
-        status = new LinkedHashSet<>();
-        status.add(TaskSubStatus.ForChangePerformer.getId());
-        status.add(TaskSubStatus.PerformerChanged.getId());
+
+
+        switch (tabFilter){
+            case 1:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangePerformer.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
+                status.add(TaskSubStatus.PerformerChanged.getId());
+                break;
+            case 2:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangePerformer.getId());
+                break;//Ижро учун
+            default:
+                departmentId = user.getDepartmentId();
+//                receiverId=null;
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
+                break;//Жами
+        }
         System.out.println(status);
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFilter(
@@ -186,6 +206,7 @@ public class ChangePerformerController {
                 document.setInsidePurpose(Boolean.FALSE);
             }
         }
+        User user = userService.getCurrentUserFromContext();
         List<TaskSubStatus> statuses = new LinkedList<>();
         statuses.add(TaskSubStatus.InProgress);
         statuses.add(TaskSubStatus.Waiting);
@@ -211,21 +232,29 @@ public class ChangePerformerController {
         model.addAttribute("task_statuses", statuses);
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
-        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));
+//        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));
+        model.addAttribute("performers", userService.getEmployeesForDocManageOrganization("controller",user.getOrganizationId()));
         model.addAttribute("action_url",ChangePerformerTask);
         model.addAttribute("action_uri",ChangePerformerDeny);
         return DocTemplates.ChangePerformerView;
     }
     @PostMapping(ChangePerformerTask)
     public String changePerformer(
-            DocumentTaskSub documentTaskSub,
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "userid")Integer userid
+            @RequestParam(name = "userid")Integer userid,
+            @RequestParam(name = "content")String content
     ) {
+
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
+        DocumentLog documentLog = new DocumentLog();
         System.out.println(userid);
+        Integer documentId=documentTaskSub1.getDocumentId();
+        User user = userService.getCurrentUserFromContext();
+        documentLogService.createUserComment(documentLog,  DocumentLogType.Log.getId(), documentTaskSub1.getReceiverId(), userid ,content,user.getId(),documentId);
         documentTaskSub1.setReceiverId(userid);
+
         documentTaskSub1.setStatus(9);
+
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
     }
@@ -235,7 +264,7 @@ public class ChangePerformerController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(7);
+        documentTaskSub1.setStatus(TaskSubStatus.PerformerDeny.getId());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangePerformerList;
     }

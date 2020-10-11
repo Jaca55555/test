@@ -14,14 +14,12 @@ import uz.maroqand.ecology.core.service.user.PositionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
-import uz.maroqand.ecology.docmanagement.constant.DocTemplates;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
-import uz.maroqand.ecology.docmanagement.constant.DocumentTypeEnum;
-import uz.maroqand.ecology.docmanagement.constant.TaskSubStatus;
+import uz.maroqand.ecology.docmanagement.constant.*;
 import uz.maroqand.ecology.docmanagement.entity.DocumentOrganization;
 import uz.maroqand.ecology.docmanagement.entity.*;
 import uz.maroqand.ecology.docmanagement.service.interfaces.*;
 
+import javax.print.Doc;
 import java.util.*;
 
 import static uz.maroqand.ecology.docmanagement.constant.DocUrls.*;
@@ -71,8 +69,13 @@ public class ChangeDueDateController {
     }
 
     @RequestMapping(value = DocUrls.ChangeDueDateList, method = RequestMethod.GET)
-    public String getChangeDueDateListPage(Model model) {
+    public String getChangeDueDateListPage(@RequestParam(name = "tab_number", required = false)Integer tabNumber, Model model) {
         User user = userService.getCurrentUserFromContext();
+        model.addAttribute("tab_number_", tabNumber);
+        Set<Integer> statuses = new LinkedHashSet<>();
+        statuses.add(TaskSubStatus.ForChangeDueDate.getId());
+        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countAllByTypeAndReceiverId(null, user.getId()));
+
         return DocTemplates.ChangeDueDateList;
     }
 
@@ -105,6 +108,26 @@ public class ChangeDueDateController {
         status.add(TaskSubStatus.ForChangeDueDate.getId());
         status.add(TaskSubStatus.DueDateChanged.getId());
         System.out.println(status);
+        switch (tabFilter){
+            case 1:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                status.add(TaskSubStatus.DueDateChanged.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                break;
+            case 2:
+                status = new LinkedHashSet<>();
+                status.add(TaskSubStatus.ForChangeDueDate.getId());
+                break;//Ижро учун
+            default:
+                departmentId = user.getDepartmentId();
+//                receiverId=null;
+                pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(
+                        Sort.Order.asc("status"),
+                        Sort.Order.desc("dueDate")
+                ));
+                break;//Жами
+        }
         HashMap<String, Object> result = new HashMap<>();
         Page<DocumentTaskSub> documentTaskSubs = documentTaskSubService.findFilter(
                 user.getOrganizationId(),
@@ -155,7 +178,8 @@ public class ChangeDueDateController {
                     documentTaskSub.getStatus()!=null ? helperService.getTranslation(TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName(),locale):"",
                     documentTaskSub.getContent(),
                     documentTaskSub.getStatus(),
-                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale)
+                    documentTaskService.getDueColor(documentTaskSub.getDueDate(),false,documentTaskSub.getStatus(),locale),
+                    userService.findById(documentTaskSub.getReceiverId()).getFullName(),
 
             });
         }
@@ -222,11 +246,21 @@ public class ChangeDueDateController {
     }
     @PostMapping(ChangeDueDateTask)
     public String ChangeDueDate(
-            DocumentTaskSub documentTaskSub,
             @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "duedate")String duedateStr
+            @RequestParam(name = "afterdate")String duedateStr,
+            @RequestParam(name = "content")String content
     ) {
+        DocumentLog documentLog = new DocumentLog();
+        User user = userService.getCurrentUserFromContext();
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
+        Date beforeDate= documentTaskSub1.getDueDate();
+        Date afterDate=DateParser.TryParse(duedateStr, Common.uzbekistanDateFormat);
+        Integer documentId=documentTaskSub1.getDocumentId();
+        System.out.println("docId"+documentId);
+        System.out.println("content="+content);
+        System.out.println("docTypeId"+DocumentLogType.Log.getId());
+        documentLogService.createComment(documentLog,  DocumentLogType.Log.getId(), beforeDate, afterDate ,content,user.getId(),documentId);
+
         documentTaskSub1.setDueDate(DateParser.TryParse(duedateStr, Common.uzbekistanDateFormat));
         documentTaskSub1.setStatus(11);
         documentTaskSubService.update(documentTaskSub1);
@@ -238,7 +272,7 @@ public class ChangeDueDateController {
             @RequestParam(name = "id")Integer id
     ) {
         DocumentTaskSub documentTaskSub1=documentTaskSubService.getById(id);
-        documentTaskSub1.setStatus(7);
+        documentTaskSub1.setStatus(TaskSubStatus.DueDateChangedDeny.getId());
         documentTaskSubService.update(documentTaskSub1);
         return "redirect:" + DocUrls.ChangeDueDateList;
     }

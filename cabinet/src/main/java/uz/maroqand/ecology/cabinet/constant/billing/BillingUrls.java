@@ -16,4 +16,12 @@ public class BillingUrls {
     public static final String PaymentFileEdit = PaymentFile + "/edit";
     public static final String PaymentFileEditSubmit = PaymentFile + "/edit_submit";
 
+    // hamma to'lovlarni ko'rish uchun
+    private static final String PaymentFileAll = Prefix + "/payment_file_all";
+    public static final String PaymentFileAllList = PaymentFileAll + "/list";
+    public static final String PaymentFileAllListAjax = PaymentFileAll + "/ajax";
+    public static final String PaymentFileAllView = PaymentFileAll + "/view";
+    public static final String PaymentFileAllEdit = PaymentFileAll + "/edit";
+    public static final String PaymentFileAllEditSubmit = PaymentFileAll + "/edit_submit";
+
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -26,9 +27,12 @@ import uz.maroqand.ecology.ecoexpertise.config.WebMVCConfigs;
 @Configuration
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 @ComponentScan("uz.maroqand.ecology")
-@EnableJpaRepositories(basePackages = "uz.maroqand.ecology.core.repository", repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
+@EnableJpaRepositories(
+        basePackages = "uz.maroqand.ecology.core.repository",
+        repositoryFactoryBeanClass = DataTablesRepositoryFactoryBean.class)
 @EntityScan(basePackages = {"uz.maroqand.ecology.core.entity"})
 @EnableCaching(proxyTargetClass = true)
+@EnableScheduling
 public class EcoExpertiseStarter {
 
     private static final Logger logger = LogManager.getLogger(EcoExpertiseStarter.class);

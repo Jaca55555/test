@@ -88,6 +88,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean isAdmin() {
+        User user = getCurrentUserFromContext();
+        if (user.getRole().getPermissions().contains(Permissions.ADMIN_ROLE)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public List<User> getAllByTelegramUsers() {
         return userRepository.findAllByTelegramUserIdNotNullAndEnabledTrue();
     }

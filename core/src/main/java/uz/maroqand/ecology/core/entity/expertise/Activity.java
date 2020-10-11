@@ -40,6 +40,9 @@ public class Activity {
     @Column(name = "name_ru")
     private String nameRu;
 
+    @Column(name = "enabled", columnDefinition = "boolean DEFAULT false")
+    private Boolean enabled;
+
     public String getNameTranslation(String locale) {
         switch (locale) {
             case "uz":

@@ -236,8 +236,8 @@ public class PerformerController {
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "number")String number,
-            @RequestParam(name = "date")String dateStr,
+//            @RequestParam(name = "number")String number,
+//            @RequestParam(name = "date")String dateStr,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -264,12 +264,12 @@ public class PerformerController {
         regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        /*Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         if (conclusion!=null){
             conclusion.setNumber(number);
             conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
-        }
+        }*/
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();

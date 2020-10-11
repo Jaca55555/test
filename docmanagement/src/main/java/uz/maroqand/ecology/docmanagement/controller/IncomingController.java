@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.docmanagement.controller;
 
+import javafx.concurrent.Task;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,13 +79,13 @@ public class IncomingController {
 
         statuses.add(TaskSubStatus.New.getId());
         model.addAttribute("incoming", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(), user.getId()));
-        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("newDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         statuses.clear();
         statuses.add(TaskSubStatus.InProgress.getId());
         statuses.add(TaskSubStatus.Waiting.getId());
         statuses.add(TaskSubStatus.Agreement.getId());
-        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("inProgressDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
+        model.addAttribute("progress",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null)+documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DAY_OF_MONTH, -1);
         model.addAttribute("lessDeadlineDocumentCount", documentTaskSubService.countByReceiverIdAndDueDateLessThanEqual(user.getId(), calendar1.getTime()));
@@ -95,11 +96,13 @@ public class IncomingController {
 
         statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.Complete.getId());
-        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
+        model.addAttribute("checkingDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
         statuses.clear();
         statuses.add(TaskStatus.Rejected.getId());
-        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses));
-
+        model.addAttribute("rejectedDocumentCount", documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(), statuses,null));
+        statuses.clear();
+        statuses.add(TaskStatus.New.getId());
+        model.addAttribute("informCount",documentTaskSubService.countByReceiverIdAndStatusIn(1,user.getId(),statuses,TaskSubType.Info.getId()));
         model.addAttribute("allDocumentCount", documentTaskSubService.countByReceiverId(user.getId()));
         model.addAttribute("statistic", documentTaskSubService.countAllByTypeAndReceiverId(DocumentTypeEnum.IncomingDocuments.getId(),user.getId()));
 
@@ -143,8 +146,11 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.ForChangePerformer.getId());
                 status.add(TaskSubStatus.ForChangeDueDate.getId());
                 status.add(TaskSubStatus.DueDateChanged.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
             break;//Ижро учун
             case 3:
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -157,6 +163,8 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
                 break;//Муддати якинлашаётган
             case 4:
                 deadlineDateEnd = calendar.getTime();
@@ -166,10 +174,14 @@ public class IncomingController {
                 status.add(TaskSubStatus.Waiting.getId());
                 status.add(TaskSubStatus.Agreement.getId());
                 status.add(TaskSubStatus.Rejected.getId());
+                status.add(TaskSubStatus.DueDateChangedDeny.getId());
+                status.add(TaskSubStatus.PerformerDeny.getId());
                 break;//Муддати кеччикан
             case 5:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Checking.getId());
+                status.add(TaskSubStatus.Rejected.getId());
+
                 break;//Ижро назоратида
             case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
             case 7:
@@ -208,7 +220,6 @@ public class IncomingController {
                 performerId,
                 taskSubType,
                 taskSubStatus,
-
                 deadlineDateBegin,
                 deadlineDateEnd,
                 type,
@@ -272,7 +283,21 @@ public class IncomingController {
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
+
+
         if (documentTaskSub.getStatus().equals(TaskSubStatus.Rejected.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChangedDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.PerformerDeny.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
+            documentTaskSubService.update(documentTaskSub);
+        }
+        if (documentTaskSub.getStatus().equals(TaskSubStatus.DueDateChanged.getId())){
             documentTaskSub.setStatus(TaskSubStatus.InProgress.getId());
             documentTaskSubService.update(documentTaskSub);
         }
@@ -285,8 +310,14 @@ public class IncomingController {
         if (document == null) {
             return "redirect:" + DocUrls.IncomingList;
         }
+
         if(document.getExecuteForm()!=null){
          if(document.getExecuteForm().getId().equals(ExecuteForm.Information.getId())){
+            documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
+            documentTaskSubService.update(documentTaskSub);
+         }}
+        if(documentTaskSub.getType()!=null){
+         if(documentTaskSub.getType()==3){
             documentTaskSub.setStatus(TaskSubStatus.Complete.getId());
             documentTaskSubService.update(documentTaskSub);
          }}

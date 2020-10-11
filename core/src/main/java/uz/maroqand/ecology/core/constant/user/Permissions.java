@@ -21,10 +21,12 @@ public enum Permissions {
     EXPERTISE_PERFORMER(14, 2, "sys_permissions.expertise_performer"),// Ariza natijani kirituvchi (ijrochi)
     EXPERTISE_AGREEMENT(15, 2, "sys_permissions.expertise_agreement"),// Ariza natijasini tasdiqlash
     EXPERTISE_AGREEMENT_COMPLETE(16, 2, "sys_permissions.expertise_agreement_complete"), // Ariza natijasini tasdiqlash va ariza tugatish
+    EXPERTISE_CONCLUSION_COMPLETE(52, 2, "sys_permissions.expertise_conclusion_complete"), // Ariza Rais tasdiqlagandan keyin yakunlash uchun Xulosaga raqam va sana qo'yish
 
     ENTERPRISE_REGISTER(17, 2, "sys_permissions.enterprise_register"), //
     BILLING(18, 2, "sys_permissions.billing"), //
     PAYMENT_FILE(19, 2, "sys_permissions.payment_file"), //
+    PAYMENT_FILE_ALL(53, 2, "sys_permissions.payment_file_all"), //
     COORDINATE_REGISTER(20, 2, "sys_permissions.coordinate_register"), //
 
     APPEAL_ADMIN(21, 2, "sys_permissions.appeal_admin"), //

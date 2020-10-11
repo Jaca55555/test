@@ -35,6 +35,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.TinParser;
 
 import java.util.*;
 
@@ -85,9 +86,12 @@ public class BillingController {
             @RequestParam(name = "service", required = false) String service,
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
+            @RequestParam(name = "tin", required = false) String tin,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
     ){
+        System.out.println("tin=======");
+        System.out.println(tin);
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
         invoiceNumber = StringUtils.trimToNull(invoiceNumber);
@@ -112,7 +116,8 @@ public class BillingController {
                 detail,
                 regionId,
                 subRegionId,
-                user.getOrganizationId(),
+                userService.isAdmin()?null:user.getOrganizationId(),
+                TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );
 
@@ -124,6 +129,12 @@ public class BillingController {
             if (invoice.getClientId()!=null){
                 client = clientService.getById(invoice.getClientId());
             }
+            String clientName = "";
+            String clientTin = "";
+            if (client!=null){
+                clientName = client.getName();
+                clientTin = client.getTin()!=null?client.getTin().toString():"";
+            }
             convenientForJSONArray.add(new Object[]{
                 invoice.getId(),
                 invoice.getInvoice(),
@@ -131,7 +142,7 @@ public class BillingController {
                 invoice.getAmount(),
                 Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
                 invoice.getStatus(),
-                client!=null?client.getName():""
+                clientName + "  <br/>" + clientTin
             });
         }
 
