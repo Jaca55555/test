@@ -667,7 +667,9 @@
                                 '           </div>\n' +
                                 '       </div>\n' +
                                 '   </td>';
-                            if(displayRadioValue()!=1)  {    if ($('#typePerformerIsTaskId_'+id).val()==''){
+
+                            if(displayRadioValue()!=1)
+                            {    if ($('#typePerformerIsTaskId_'+id).val()==''){
                                 html+='<td style="width: 30%">\n' +
                                     '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
                                     '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
@@ -688,18 +690,10 @@
                             } else{
                                 html+='<td style="width: 30%">\n' +
                                     '       <div class="btn-group mb-2 mr-2" id="status_div_id_'+id+'userId_'+userId+'">\n' +
-                                    '           <button type="button" class="btn btn-outline-primary left-radius table-modal-button" id="status_button_'+userId+'">\n' +
-                                    '               <i class="fas fa-exclamation-circle" style="margin-right: 1em"></i>\n' + task_sub_type_info +
-                                    '           </button>\n' +
-                                    '           <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split right-radius table-modal-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
-                                    '               <span class="sr-only"></span>\n' +
-                                    '           </button>\n' +
                                     '           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(109px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">\n' +
-                                    '               <button type="button" class="dropdown-item" onclick="selectType('+id+','+userId+',0)">'+task_sub_type_performer+'</button>\n' +
-                                    '               <button type="button" class="dropdown-item" onclick="selectType('+id+','+userId+',1)">'+task_sub_type_performer_partner+'</button>\n' +
-                                    '               <button type="button" class="dropdown-item" onclick="selectType('+id+','+userId+',2)">'+task_sub_type_control+'</button>\n' +
+                                    '               <button type="button" class="dropdown-item" onclick="selectType('+id+','+userId+',3)">'+task_sub_type_info+'</button>\n' +
                                     '           </div>\n' +
-                                    '           <input type="hidden" name="performer_'+userId+'" id="performerIsTaskId_'+id+'userId_'+userId+'" value="3"/>\n' +
+                                    '           <input type="hidden" name="performer_'+userId+'" id="performerIsTaskId_'+id+'userId_'+userId+'" value="0"/>\n' +
                                     '       </div>\n' +
                                     '   </td>';
                             }}
