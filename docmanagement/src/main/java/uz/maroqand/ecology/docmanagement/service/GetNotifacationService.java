@@ -38,7 +38,7 @@ public class GetNotifacationService {
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-        return documentTaskSubRepository.countByReceiverIdAndStatus(1,user.getId(), statuses,null);
+        return documentTaskSubRepository.countByReceiverIdAndStatus(1,user.getId(), statuses,0);
     }
     public Long countIncomingByStatus2(){
         User user = userService.getCurrentUserFromContext();
@@ -50,7 +50,7 @@ public class GetNotifacationService {
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-        return documentTaskSubRepository.countByReceiverIdAndStatus(3,user.getId(),statuses,null);
+        return documentTaskSubRepository.countByReceiverIdAndStatus(3,user.getId(),statuses,0);
     }
 
     public Long countInnerByStatus2(){
@@ -62,13 +62,13 @@ public class GetNotifacationService {
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-        return documentTaskSubRepository.countByReceiverIdAndStatus(2,user.getId(), statuses,null);
+        return documentTaskSubRepository.countByReceiverIdAndStatus(2,user.getId(), statuses,0);
     }
     public Integer countAppealByStatus(){
         User user =userService.getCurrentUserFromContext();
         Set<Integer> statuses = new LinkedHashSet<>();
         statuses.add(TaskSubStatus.New.getId());
-        return documentTaskSubRepository.countByReceiverIdAndStatus(4,user.getId(), statuses,null);
+        return documentTaskSubRepository.countByReceiverIdAndStatus(4,user.getId(), statuses,0);
     }
 
     public Long countOutgoingByStatus2(){

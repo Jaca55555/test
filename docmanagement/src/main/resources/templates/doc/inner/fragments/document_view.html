@@ -172,8 +172,8 @@
 
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div style="height: 560px" class="tab-pane fade" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
-                <iframe th:src="${'http://docs.google.com/viewer?url=http://cb.eco-service.uz/doc/file/download?id='+file.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+            <div style="height: 560px" class="tab-pane fade holds-the-iframe" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
+                <iframe  id="iframeID" name="iframeID" th:src="${'http://docs.google.com/viewer?url=http://cb.eco-service.uz/doc/file/download?id='+file.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
             </div>
         </div>
     </div>

@@ -17,7 +17,7 @@
                 <h5 class="" th:text="#{sys_performer.conclusionCompleteResult}"></h5>
                 <div class="form-group col-md-10 offset-1">
                     <label th:text="#{sys_performer.conclusion_number}">Результат заключения</label>
-                    <input class="form-control" maxlength="255"  id="number" name="number" th:value="${conclusion.number}" required="required"/>
+                    <input class="form-control" maxlength="255"  id="number" name="number" th:value="${conclusion.number!=null?conclusion.number:''}" required="required"/>
                 </div>
                 <div class="form-group col-md-10 offset-1">
                     <label  th:text="#{sys_conclusion_date}"></label>

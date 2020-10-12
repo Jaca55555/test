@@ -20,6 +20,34 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        .badgebox
+        {
+            opacity: 0;
+        }
+
+        .badgebox + .badge
+        {
+            /* Move the check mark away when unchecked */
+            text-indent: -999999px;
+            /* Makes the badge's width stay the same checked and unchecked */
+            width: 27px;
+        }
+
+        .badgebox:focus + .badge
+        {
+            /* Set something to make the badge looks focused */
+            /* This really depends on the application, in my case it was: */
+
+            /* Adding a light border */
+            box-shadow: inset 0px 0px 5px;
+            /* Taking the difference out of the padding */
+        }
+
+        .badgebox:checked + .badge
+        {
+            /* Move the check mark back when checked */
+            text-indent: 0;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +71,7 @@
             <div class="card-header flex-space-between">
                 <h5 class="mb-0" th:if="${document.id==null}" th:text="#{doc_inner.reg}">Ички хужжатларни рўйхатга олиш</h5>
                 <h5 class="mb-0" th:if="${document.id!=null}"><span th:text="#{doc_inner.edit}">Ички хужжатларни тахрирлаш</span> - <span th:text="${document.registrationNumber}">IN-123456-MRQ</span></h5>
+
                 <div>
                     <div>
                         <button class="btn-icon"><i class="fas fs20 fa-save color-gray"></i></button>
@@ -156,7 +185,12 @@
                             <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item}" class="custom-control-input" th:checked="${item==document.executeForm}">
                             <label class="custom-control-label" th:for="${'executeForm' + item.id}" th:text="#{${item.name}}"></label>
                         </div>
+                        <br>
+                        <button  name="specialControll" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
+                            <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
+                        </button>
                     </div>
+
 
                 </div>
                 <div class="row">
@@ -895,7 +929,10 @@
             autoclose: true
         });
     }
-
+    $('#specialControl').on('click', function () {
+                $('#specialControl i').toggleClass('icon-check-circle').toggleClass('icon-circle');
+                $('#specialControl').toggleClass('btn-danger').toggleClass('btn-outline-danger')
+    });
     function deleteTask(id) {
         $('#task_'+id).remove();
     }

@@ -340,7 +340,7 @@ public class OutgoingMailController {
                 DocumentTypeEnum.OutgoingDocuments.getId(),
                 null,
                 documentStatusIdToExclude,
-                documentOrganizationIds,
+                documentOrganizations,
                 registrationNumber,
                 begin,
                 end,

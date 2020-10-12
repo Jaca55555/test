@@ -10,6 +10,9 @@
         a{
             color: #007bff;
         }
+        table.dataTable tbody tr:nth-of-type(2n+1) {
+            background-color: rgba(4, 169, 245, 0.05) !important;
+        }
     </style>
 </head>
 <body>
@@ -297,7 +300,7 @@
                         return html;
                     },
                     className: "w-10 text-center"},
-                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-17 text-center"},
                 {data: 6, name: 'content',className: "text-justify"},
             ],
             rowCallback: function (row, data) {
