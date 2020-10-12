@@ -307,13 +307,19 @@ public class InnerRegistrationController {
             @RequestParam(name = "file_ids")List<Integer> file_ids,
             @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
             @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
+            @RequestParam(name="specialControll",required = false) Boolean specialControll,
             @RequestBody MultiValueMap<String, String> formData,
             Document document
     ) {
+        System.out.println(specialControll);
         User user = userService.getCurrentUserFromContext();
         Set<File> files = new HashSet<>();
         for(Integer id: file_ids) {
             if (id != null) files.add(fileService.findById(id));
+        }
+        if(specialControll!=null){document.setSpecialControll(specialControll); }
+        else{
+            document.setSpecialControll(false);
         }
         document.setContentFiles(files);
         document.setCreatedAt(new Date());
