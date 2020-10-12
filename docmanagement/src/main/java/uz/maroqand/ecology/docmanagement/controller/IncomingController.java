@@ -184,6 +184,7 @@ public class IncomingController {
 
                 break;//Ижро назоратида
             case 6: type = TaskSubType.Info.getId();break;//Малъумот учун
+
             case 7:
                 status = new LinkedHashSet<>();
                 status.add(TaskSubStatus.Complete.getId());

@@ -468,11 +468,14 @@ public class IncomingRegistrationController {
             if (tagName.equals("performer")){
                 performerType = Integer.parseInt(value);
             }
-
+            System.out.println("executeFormId"+executeFormId);
             if (tagName.equals("dueDateStr")){
                 dueDate = DateParser.TryParse(value, Common.uzbekistanDateFormat);
                 if (userId!=null && performerType!=null && documentTask!=null){
-                    taskSubService.createNewSubTask(0,document,documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    if(executeFormId==1){
+                        taskSubService.createNewSubTask(0,document,documentTask.getId(),documentTask.getContent(),dueDate,3,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));
+                    }else
+                    {  taskSubService.createNewSubTask(0,document,documentTask.getId(),documentTask.getContent(),dueDate,performerType,documentTask.getChiefId(),userId,userService.getUserDepartmentId(userId));}
                     if (performerType==TaskSubType.Performer.getId()){
                         documentTask.setPerformerId(userId);
                         taskService.update(documentTask);
