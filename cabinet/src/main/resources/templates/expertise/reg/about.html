@@ -606,6 +606,9 @@
 
 
         $('#categorySelect').on('change',function () {
+            console.log("----" + $("#objectId").val());
+            console.log("----" + $(this).val());
+
             let categoryId = $('#categorySelect').val();
             let activitySelect = $('#activityId');
             activitySelect.find('option').hide();
@@ -613,7 +616,7 @@
             activitySelect.find('option:first').prop("selected", true);
             activitySelect.change();
             activitySelect.find('.category_'+categoryId).show();
-            if (categoryId==3 || categoryId==4 || ($("#objectId").val()==2 && categoryId==2)){
+            if (categoryId==3 || categoryId==4 || ($("#objectId").val()==4 && categoryId==2)){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
             }else{

@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -51,8 +52,9 @@ public class RegApplicationMonitoringController {
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
     private final RequirementService requirementService;
+    private final OrganizationService organizationService;
 
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -68,6 +70,7 @@ public class RegApplicationMonitoringController {
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.requirementService = requirementService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
@@ -183,6 +186,7 @@ public class RegApplicationMonitoringController {
             @PathVariable("id") Integer id,
             @RequestParam(name = "name") String name,
             @RequestParam(name = "applicationTin") String applicationTin,
+            @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "objectId") Integer objectId,
             @RequestParam(name = "activityId", required = false) Integer activityId,
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
@@ -245,8 +249,13 @@ public class RegApplicationMonitoringController {
         if(requirement==null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "?id=" + id + "&failed=2";
         }
+        Organization organization = null;
+        if (regionId!=null){
+            organization = organizationService.getByRegionId(regionId);
+            regApplication.setRegionId(regionId);
+        }
+        regApplication.setReviewId(organization!=null?organization.getId():requirement.getReviewId());
         regApplication.setRequirementId(requirement.getId());
-        regApplication.setReviewId(requirement.getReviewId());
         regApplication.setDeadline(requirement.getDeadline());
 
         regApplication.setObjectId(objectId);

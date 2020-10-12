@@ -74,6 +74,31 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group row" id="categorySelectDiv">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control" required="" id="categorySelect" >
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:if="${regApplication.category!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" id="regionDiv" style="display: none">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="col-form-label" th:text="#{sys_region}" >Категория</label>
+                                                    <span class="required">*</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control"  id="regionId" th:field="*{regionId}" >
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}" th:selected="${regApplication.regionId==region.id}"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group row" id="activityIdDiv">
                                                 <div class="col-md-3 text-right">
                                                     <label class="col-form-label" th:text="#{sys_about.activity}">Вид деятельности</label>
@@ -88,14 +113,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row" id="categoryDiv">
+                                           <!-- <div class="form-group row" id="categoryDiv">
                                                 <div class="col-md-3 text-right">
                                                     <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                             <div class="form-group row">
                                                 <div class="col-md-3 text-right">
@@ -366,6 +391,15 @@
     $(document).ready(function () {
         var srSelector = $('#materialId');
         srSelector.find('option:selected').show();
+
+        let regCategory = null;
+        if([[${regApplication.category}]]!=null){
+            regCategory =  getCategoryId([[${regApplication.category}]]);
+        }
+
+        var srSelector = $('#materialId');
+        srSelector.find('option:selected').show();
+
         if(coordinate != null){
             $('#coordinates-list').show();
             $('#coordinates-control').show();
@@ -373,8 +407,8 @@
             $('#open-map-btn').prop('disabled', true);
             $('#clear-coordinates-btn').prop('disabled', false);
         }
+
         $('#objectId').select2();
-        $('#activityId').select2();
 
         $("#objectId").change(function(){
             getActivityList();
@@ -382,6 +416,11 @@
         $("#activityId").change(function(){
             getMaterialList();
         });
+        if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
+            $('#regionDiv').show();
+            $('#regionId').prop('required',true);
+        }
+
     });
     function openInputFile() {
         document.getElementById("file-input").click();
@@ -412,22 +451,28 @@
             cache: false,
             success: function (response) {
                 $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
+                $('#categorySelect').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                 $("#materialDiv").text("");
 
                 if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
                     $("#activityIdDiv").hide();
                     $("#activityId").removeAttr('required');
-                    $("#categoryDiv").hide();
+                    $("#categorySelect").removeAttr('required');
+                    // $("#categoryDiv").hide();
+                    $("#categorySelectDiv").hide();
                     materialDiv(response.requirementList[0].materials);
                 }else {
                     $("#activityIdDiv").show();
                     $("#activityId").prop('required',true);
-                    $("#categoryDiv").show();
+                    // $("#categoryDiv").show();
+                    $("#categorySelectDiv").show();
+                    $("#categorySelect").prop('required',true);
 
                     console.log('response.categoryList='+response.categoryList);
                     $.each(response.categoryList, function (keyCategory, valueCategory) {
-                        console.log('valueCategory='+valueCategory);
-                        var options =  $('<optgroup label="'+valueCategory+'">');
+                        var optionCategory = new Option(getCategoryName(valueCategory),getCategoryId(valueCategory),false,false);
+                        $('#categorySelect').append(optionCategory);
+                        // var options =  $('<optgroup label="'+getCategoryName(valueCategory)+'">');
                         $.each(response.activityList, function (key, value) {
                             if(valueCategory === value.category){
                                 var selected = false;
@@ -441,13 +486,16 @@
                                 if (idSelected!="" && idSelected==value.id){
                                     selected = true;
                                 }
-                                options.append(new Option(name, value.id,!selected,selected));
+                                var optionActivity = new Option(name, value.id,!selected,selected);
+                                optionActivity.setAttribute("class","category_"+getCategoryId(value.category));
+                                optionActivity.setAttribute("style","display:none");
+                                $('#activityId').append(optionActivity);
                             }
                         });
-                        $('#activityId').append(options);
+                        // $('#activityId').append(options);
                     });
                 }
-                $('#activityId').change();
+                // $('#activityId').change();
             }
         });
     }
@@ -502,18 +550,72 @@
             $.each(response, function (key, value) {
                 if(value.id===id){
                     var name = '';
+                    var nameShort = '';
                     switch (getCurrentLanguage()){
-                        case 'uz':name=value.name;break;
-                        case 'oz':name=value.nameOz;break;
-                        case 'ru':name=value.nameRu;break;
-                        default :name=value.nameRu;break;
+                        case 'uz':
+                            name=value.name;
+                            nameShort=value.nameShort;
+                            break;
+                        case 'oz':
+                            name=value.nameOz;
+                            nameShort=value.nameShortOz;
+                            break;
+                        case 'ru':
+                            name=value.nameRu;
+                            nameShort=value.nameShortRu;
+                            break;
+                        default :
+                            name=value.nameRu;
+                            nameShort=value.nameShortRu;
+                            break;
                     }
                     console.log('material='+name);
-                    $('#materials-'+id+'-label').text(name);
+                    $('#materials-'+id+'-label').text(nameShort + " - " + name);
                 }
             });
         });
     }
+
+    function getCategoryName(valueCategory) {
+        switch (valueCategory){
+            case 'CategoryAll': return [[#{sys_categoryAll}]];
+            case 'Category1': return [[#{sys_category1}]];
+            case 'Category2': return [[#{sys_category2}]];
+            case 'Category3': return [[#{sys_category3}]];
+            case 'Category4': return [[#{sys_category4}]];
+        }
+    }
+
+    function getCategoryId(valueCategory) {
+        switch (valueCategory){
+            case 'CategoryAll': return 0;
+            case 'Category1': return 1;
+            case 'Category2': return 2;
+            case 'Category3': return 3;
+            case 'Category4': return 4;
+        }
+    }
+
+    $('#categorySelect').on('change',function () {
+        console.log("----" + $("#objectId").val());
+        console.log("----" + $(this).val());
+
+        let categoryId = $('#categorySelect').val();
+        let activitySelect = $('#activityId');
+        activitySelect.find('option').hide();
+        activitySelect.find('option:first').show();
+        activitySelect.find('option:first').prop("selected", true);
+        activitySelect.change();
+        activitySelect.find('.category_'+categoryId).show();
+        if (categoryId==3 || categoryId==4 || ($("#objectId").val()==4 && categoryId==2)){
+            $('#regionDiv').show();
+            $('#regionId').prop('required',true);
+        }else{
+            $('#regionDiv').hide();
+            $('#regionId').prop('required',false);
+        }
+
+    });
 
     function checkedMaretil() {
         var regApplicationMaterials = [[${regApplication.materials}]];
