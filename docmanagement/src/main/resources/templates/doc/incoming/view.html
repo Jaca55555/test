@@ -39,6 +39,9 @@
         right: 12px !important;
         opacity: 1;
     }
+    .holds-the-iframe {
+        background:url(https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif) center center no-repeat;
+    }
 </style>
 </head>
 <body>
@@ -890,6 +893,17 @@
                 return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
             }, cache: true
         }
+    });
+    function reloadIFrame() {
+        document.getElementById("ifm").src=document.getElementById("iframeID").src;
+    }
+    timerId = setInterval("reloadIFrame();", 2000);
+
+    $( document ).ready(function() {
+        $('#iframeID').on('load', function() {
+            clearInterval(timerId);
+            console.log("Finally Loaded");
+        });
     });
 
     function detectExtensionAndDisplay(data){

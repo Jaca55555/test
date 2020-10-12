@@ -31,6 +31,9 @@
     .fa-download{
         color:green;
     }
+    .holds-the-iframe {
+        background:url(https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif) center center no-repeat;
+    }
 </style>
 </head>
 <body>
@@ -865,7 +868,17 @@
                     </div>`
         );
     }
+    function reloadIFrame() {
+        document.getElementById("ifm").src=document.getElementById("iframeID").src;
+    }
+    timerId = setInterval("reloadIFrame();", 2000);
 
+    $( document ).ready(function() {
+        $('#iframeID').on('load', function() {
+            clearInterval(timerId);
+            console.log("Finally Loaded");
+        });
+    });
     function uploadProgressHandler(event)
     {
         var percent = (event.loaded / event.total) * 100;
