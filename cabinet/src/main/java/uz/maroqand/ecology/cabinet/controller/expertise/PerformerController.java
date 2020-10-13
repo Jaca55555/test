@@ -316,7 +316,7 @@ public class PerformerController {
     public String getPerformerActionEditMethod(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-            @RequestParam(name = "number")String number,
+//            @RequestParam(name = "number")String number,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -391,11 +391,11 @@ public class PerformerController {
         }
         regApplicationService.update(regApplication);
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+       /* Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         if (conclusion!=null){
             conclusion.setNumber(number);
             conclusionService.save(conclusion);
-        }
+        }*/
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }

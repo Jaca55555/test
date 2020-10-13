@@ -198,7 +198,7 @@ public class ConclusionCompleteController {
         model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplicationId));
+        model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplication.getId()));
         model.addAttribute("regApplicationLog",regApplicationLog);
 
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
