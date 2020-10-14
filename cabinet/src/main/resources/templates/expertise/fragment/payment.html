@@ -34,6 +34,9 @@
             <p class="text-center text-summa"style="font-size: 22px;">
                 <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
             </p>
+            <p class="text-center text-summa" style="font-size: 15px;" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+                <span style="color: darkblue" th:text="${#numbers.formatDecimal(@invoiceServiceImpl.getPayAmount(invoice.id), 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+            </p>
         </div>
         <div class="col-md-3 col-12">
             <p class="text-center">

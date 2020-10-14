@@ -80,7 +80,7 @@ public class APIController {
             return response;
         }
 
-        Double residualAmount = invoiceService.getInvoiceResidualAmount(invoice);
+        Double residualAmount = invoice.getAmount() - invoiceService.getPayAmount(invoice.getId());
 
         response.setClient(invoice.getPayerName());
         response.setTin(invoice.getPayeeTin().toString());

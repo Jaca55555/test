@@ -93,7 +93,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amountAfter = requirement.getQty() * minWage.getAmount();
-        System.out.println("amountAfter="+amountAfter);
         if(!invoice.getAmount().equals(amountAfter)){
             Double amount = amountAfter - invoice.getAmount();
             Contract contract = contractService.createByAmount(invoice, requirement, amount, ContractType.ModificationApplication);
@@ -152,27 +151,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     /* check */
     @Override
     public Invoice checkInvoiceStatus(Invoice invoice) {
-        System.out.println("checkInvoiceStatus");
-        System.out.println(invoice.getStatus().name());
-        Double paymentAmount = 0.0;
-        List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
-        for (Payment payment:paymentList){
-            if(payment.getStatus().equals(PaymentStatus.Success)){
-                paymentAmount += payment.getAmount();
-            }
-        }
+        Double paymentAmount = getPayAmount(invoice.getId());
         paymentAmount+=0.50;
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-        System.out.println("paymentAmount==" + paymentAmount);
         if (regApplication!=null && regApplication.getCreatedById()!=null && regApplication.getBudget()){
-            System.out.println("if1");
             double partialSuccess = invoice.getAmount()*0.15; // budjet tashkiloti 15 % to'lasa
-            System.out.println("paymentAmount==" + paymentAmount);
-            System.out.println("partialSuccess==" + partialSuccess);
             if (paymentAmount>=partialSuccess && invoice.getAmount()>paymentAmount){
-                System.out.println("if2");
-
-
                 User user = userService.findById(regApplication.getCreatedById());
                 if (user!=null){
                     regApplicationService.sendRegApplicationAfterPayment(regApplication,user,invoice, LocaleContextHolder.getLocale().toLanguageTag());
@@ -184,8 +168,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         if(invoice.getAmount() <= paymentAmount){
-            System.out.println("if3");
-
             invoice.setStatus(InvoiceStatus.Success);
             if (regApplication!=null && regApplication.getCreatedById()!=null){
                 User user = userService.findById(regApplication.getCreatedById());
@@ -201,9 +183,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoice;
     }
 
-
-
-
     public Invoice payTest(Integer id) {
         Invoice invoice = getInvoice(id);
 
@@ -218,6 +197,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         checkInvoiceStatus(invoice);
 
         return invoice;
+    }
+
+    @Override
+    public Double getPayAmount(Integer invoiceId) {
+        Double paymentAmount = 0.0;
+        List<Payment> paymentList = paymentService.getByInvoiceId(invoiceId);
+        for (Payment payment:paymentList){
+            if(payment.getStatus().equals(PaymentStatus.Success)){
+                paymentAmount += payment.getAmount();
+            }
+        }
+        return paymentAmount;
     }
 
     @Override
@@ -241,19 +232,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public Invoice getInvoice(Integer id) {
         return invoiceRepository.findByIdAndDeletedFalse(id);
-    }
-
-    @Override
-    public Double getInvoiceResidualAmount(Invoice invoice) {
-
-        Double amount = invoice.getAmount();
-        List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
-        for (Payment payment:paymentList) {
-            if (payment.getStatus().equals(PaymentStatus.Success) || payment.getStatus().equals(PaymentStatus.AlreadyPaid)){
-                amount-=payment.getAmount();
-            }
-        }
-        return amount;
     }
 
     public Invoice getInvoice(String invoice) {

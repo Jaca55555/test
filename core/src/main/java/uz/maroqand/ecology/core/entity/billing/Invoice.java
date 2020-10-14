@@ -4,6 +4,7 @@ import lombok.Data;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.Organization;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

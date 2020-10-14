@@ -23,13 +23,14 @@ public interface InvoiceService {
 
     Invoice getInvoice(Integer id);
 
-    Double getInvoiceResidualAmount(Invoice invoice); //qoldiq summa to'lanmagan
 
     Invoice getInvoice(String invoice);
 
     Invoice checkInvoiceStatus(Invoice invoice);
 
     Invoice payTest(Integer id);
+
+    Double getPayAmount(Integer invoiceId); //to'langan qismi
 
     List<Invoice> getListByStatus(InvoiceStatus invoiceStatus);
 
