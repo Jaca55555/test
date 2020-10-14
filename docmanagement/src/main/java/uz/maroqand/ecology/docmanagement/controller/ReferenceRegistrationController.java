@@ -295,6 +295,7 @@ public class ReferenceRegistrationController {
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
             @RequestParam(name = "file_ids")List<Integer> file_ids,
+            @RequestParam(name = "specialControl",required = false)Boolean specialControll,
             @RequestBody MultiValueMap<String, String> formData
 
     ) {
@@ -326,7 +327,7 @@ public class ReferenceRegistrationController {
         document.setContentFiles(files);
         document.setCreatedById(user.getId());
 
-        document.setSpecialControll(Boolean.FALSE);
+        if(specialControll!=null) { document.setSpecialControll(specialControll);} else{ document.setSpecialControll(Boolean.FALSE);}
         document.setStatus(DocumentStatus.New);
         document.setRegistrationNumber(docRegNumber);
         document = documentService.createReference(4, document, user);

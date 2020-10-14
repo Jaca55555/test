@@ -180,7 +180,14 @@
                             <input type="radio" name="executeFormId" onclick="displayRadioValue()" th:id="'executeForm'+${executeForm.id}" th:value="${executeForm.id}" class="custom-control-input" th:checked="${document.executeForm!=null && executeForm.id==document.executeForm.id}">
                             <label class="custom-control-label" th:for="'executeForm'+${executeForm.id}" th:text="#{${executeForm.name}}"></label>
                         </div>
+
+                        <div ID="pnlImgSlider1" class="custom-control custom-checkbox">
+                            <input type="checkbox" name="specialControl" class="custom-control-input" id="defaultIndeterminate2" checked>
+                            <label class="custom-control-label" for="defaultIndeterminate2" th:text="#{doc.special_controll}">Default indeterminate</label>
+                        </div>
                     </div>
+
+
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group">
@@ -956,7 +963,16 @@
             autoclose: true
         });
     }
-
+    $(function(){
+        $('input:radio').change(function(){
+            if($(this).val() ==0) {
+                $("#pnlImgSlider1").show();
+            }
+            else {
+                $("#pnlImgSlider1").hide();
+            }
+        });
+    });
     function deleteTask(id) {
         $('#task_'+id).remove();
     }

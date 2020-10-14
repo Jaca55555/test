@@ -182,13 +182,14 @@
                     <div class="col-sm-6 form-group">
                         <label class="control-label" th:text="#{doc_inner.reg_execute_form}">Хатнинг ижроси шакли</label> <br>
                         <div class="custom-control custom-radio custom-control-inline" th:each="item : ${T(uz.maroqand.ecology.docmanagement.constant.ExecuteForm).values()}">
-                            <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item}" class="custom-control-input" th:checked="${item==document.executeForm}">
+                            <input type="radio" name="executeForm" th:id="${'executeForm' + item.id}" th:value="${item.id}" class="custom-control-input" th:checked="${item==document.executeForm}">
                             <label class="custom-control-label" th:for="${'executeForm' + item.id}" th:text="#{${item.name}}"></label>
                         </div>
                         <br>
-                        <button  name="specialControll" type="button" class="btn btn-rounded btn-sm ml-2 m0" id="specialControl" th:classappend="${document.specialControll} ? 'btn-danger' : 'btn-outline-danger'">
-                            <i class="feather icon-check-circle mr-0 pr-2" th:classappend="${document.specialControll} ? 'icon-check-circle' : 'icon-circle'"></i><span th:text="#{doc.special_controll}"></span>
-                        </button>
+                        <div ID="pnlImgSlider1" class="custom-control custom-checkbox">
+                            <input type="checkbox" name="specialControl" class="custom-control-input" id="defaultIndeterminate2" checked>
+                            <label class="custom-control-label" for="defaultIndeterminate2" th:text="#{doc.special_controll}">Default indeterminate</label>
+                        </div>
                     </div>
 
 
@@ -936,7 +937,16 @@
     function deleteTask(id) {
         $('#task_'+id).remove();
     }
-
+    $(function(){
+        $('input:radio').change(function(){
+            if($(this).val() ==0) {
+                $("#pnlImgSlider1").show();
+            }
+            else {
+                $("#pnlImgSlider1").hide();
+            }
+        });
+    });
 </script>
 
 </body>
