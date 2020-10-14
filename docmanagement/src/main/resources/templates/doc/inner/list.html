@@ -366,7 +366,7 @@
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[1]+'</a>';
                             return html;
                         },
-                        className: "text-left"
+                        className: "text-left w-10"
                     },
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
@@ -382,14 +382,14 @@
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[3]+'</a>';
                             return html;
                         },
-                        className: "text-left"},
+                        className: "text-left w-25"},
                     {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
                             var html = '';
                             html += '<a href="'+viewLink+'?id='+row[0]+'" style="'+row[9][0]+'" >' + row[5]+'</a>';
                             return html;
                         },
-                        className: "text-left"},
+                        className: "text-left w-10"},
                     {render: renderStatusColumn,  name: 'status',className: "text-center"},
                     {data: 6, name: 'content',
                         render: function (data, type, row, meta) {
@@ -431,7 +431,7 @@
                             });
                             return html;
                         },
-                        className: "text-justify"},
+                        className: "text-justify w-30"},
 
                 ],
                 "createdRow": function ( row, data, index ) {

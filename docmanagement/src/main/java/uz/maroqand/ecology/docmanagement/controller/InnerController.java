@@ -286,6 +286,7 @@ public class InnerController {
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTask", documentTask);
         model.addAttribute("documentTaskSub", documentTaskSub);
+        model.addAttribute("status",TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName());
         model.addAttribute("documentTaskSubs", documentTaskSubs);
         model.addAttribute("dueDate",Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()));
         model.addAttribute("user", userService.getCurrentUserFromContext());
