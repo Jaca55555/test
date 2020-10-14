@@ -57,7 +57,7 @@
                                     <span th:text="#{sys_currency.sum}"></span>
                                 </span>
                                 <span th:if="${regApplication.addNds!=null and regApplication.addNds}" >
-                                     <span th:text="*{#numbers.formatDecimal(amount/1.15, 1, 'WHITESPACE', 2, 'POINT')}"></span>
+                                     <span th:text="*{#numbers.formatDecimal(amount*0.85, 1, 'WHITESPACE', 2, 'POINT')}"></span>
                                      <span th:text="#{sys_currency.sum}"></span>
                                 </span>
                                 <!--20-->
@@ -86,7 +86,7 @@
                                     0 <span th:text="#{sys_currency.sum}"></span>
                                 </span>
                                 <span th:if="${regApplication.addNds!=null and regApplication.addNds}" >
-                                    <span th:text="*{#numbers.formatDecimal(((amount*15)/115), 1, 'WHITESPACE', 2, 'POINT')}"></span>
+                                    <span th:text="*{#numbers.formatDecimal(amount*0.15, 1, 'WHITESPACE', 2, 'POINT')}"></span>
                                     <span th:text="#{sys_currency.sum}"></span>
                                 </span>
                                 <!--20-->

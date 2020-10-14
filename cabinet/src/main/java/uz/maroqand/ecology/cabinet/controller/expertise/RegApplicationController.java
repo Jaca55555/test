@@ -662,7 +662,7 @@ public class RegApplicationController {
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
             invoiceService.checkInvoiceStatus(invoice);
-            if (invoice.getStatus()== InvoiceStatus.Success){
+            if (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
             }
         }
@@ -739,7 +739,7 @@ public class RegApplicationController {
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
         }
 
-        if(invoice.getStatus().equals(InvoiceStatus.Success)){
+        if(invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
         }
 
@@ -782,7 +782,8 @@ public class RegApplicationController {
         if(invoice == null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
         }
-        if (invoice.getStatus() != InvoiceStatus.Success){
+        invoiceService.checkInvoiceStatus(invoice);
+        if (!invoice.getStatus().equals(InvoiceStatus.Success) || !invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
         }
 
@@ -1279,7 +1280,7 @@ public class RegApplicationController {
         if (regApplication.getInvoiceId()!=null){
             Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             System.out.println("invoice status=" + invoice.getStatus());
-            if(invoice!=null && invoice.getStatus().equals(InvoiceStatus.Success)){
+            if(invoice!=null && (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess))){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + regApplication.getId();
             }

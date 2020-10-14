@@ -37,9 +37,13 @@
         </div>
         <div class="col-md-3 col-12">
             <p class="text-center">
-                <i class="feather icon-check text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
+                <i th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}" class="feather icon-check text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
+                <i th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}" class="feather icon-check-square text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
             </p>
             <p class="text-center" style="margin-bottom: 20px;font-size: 22px;" th:text="#{sys_payment_successful}">Оплата успешно</p>
+            <p class="color-purple text-center" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+                <span style="color: darkblue" th:text="#{sys_invoice_is_budget}"></span>
+            </p>
         </div>
 
         <div class="col-md-12 form-group row" style="margin-top: 40px;">

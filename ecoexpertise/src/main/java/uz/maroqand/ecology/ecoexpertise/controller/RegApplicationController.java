@@ -673,6 +673,8 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
+        System.out.println("RegApplicationPrepayment");
+
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
@@ -692,7 +694,8 @@ public class RegApplicationController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoice = invoiceService.modification(regApplication, invoice, requirement);
-            if (invoice.getStatus()== InvoiceStatus.Success){
+
+            if (invoice.getStatus()==InvoiceStatus.Success || invoice.getStatus()==InvoiceStatus.PartialSuccess){
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
             }
         }
@@ -779,7 +782,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
-        if(invoice.getStatus().equals(InvoiceStatus.Success)){
+        if(invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
             return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
         }
 
@@ -796,6 +799,7 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
+        System.out.println("RegApplicationStatus");
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -805,10 +809,10 @@ public class RegApplicationController {
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         if(invoice == null){
+            System.out.println("invoice == null");
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
-        invoiceService.checkInvoiceStatus(invoice);
-        if (invoice.getStatus() != InvoiceStatus.Success){
+        if (invoice.getStatus()!=InvoiceStatus.Success && invoice.getStatus()!=InvoiceStatus.PartialSuccess){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 

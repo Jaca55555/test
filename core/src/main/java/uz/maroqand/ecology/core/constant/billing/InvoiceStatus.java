@@ -10,4 +10,5 @@ public enum InvoiceStatus {
     Success, //ОПЛАЧЕН , To'langan
     Canceled, //ОТМЕНЕН, Bekor qilingan
     Error, //Не успешно, Xatolik bor
+    PartialSuccess, //ОПЛАЧЕН , To'langan faqat qisman 15%
 }

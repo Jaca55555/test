@@ -152,6 +152,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     /* check */
     @Override
     public Invoice checkInvoiceStatus(Invoice invoice) {
+        System.out.println("checkInvoiceStatus");
+        System.out.println(invoice.getStatus().name());
         Double paymentAmount = 0.0;
         List<Payment> paymentList = paymentService.getByInvoiceId(invoice.getId());
         for (Payment payment:paymentList){
@@ -159,9 +161,32 @@ public class InvoiceServiceImpl implements InvoiceService {
                 paymentAmount += payment.getAmount();
             }
         }
+        paymentAmount+=0.50;
+        RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+        System.out.println("paymentAmount==" + paymentAmount);
+        if (regApplication!=null && regApplication.getCreatedById()!=null && regApplication.getBudget()){
+            System.out.println("if1");
+            double partialSuccess = invoice.getAmount()*0.15; // budjet tashkiloti 15 % to'lasa
+            System.out.println("paymentAmount==" + paymentAmount);
+            System.out.println("partialSuccess==" + partialSuccess);
+            if (paymentAmount>=partialSuccess && invoice.getAmount()>paymentAmount){
+                System.out.println("if2");
+
+
+                User user = userService.findById(regApplication.getCreatedById());
+                if (user!=null){
+                    regApplicationService.sendRegApplicationAfterPayment(regApplication,user,invoice, LocaleContextHolder.getLocale().toLanguageTag());
+                }
+                invoice.setStatus(InvoiceStatus.PartialSuccess);
+                invoiceRepository.save(invoice);
+                return invoice;
+            }
+        }
+
         if(invoice.getAmount() <= paymentAmount){
+            System.out.println("if3");
+
             invoice.setStatus(InvoiceStatus.Success);
-            RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
             if (regApplication!=null && regApplication.getCreatedById()!=null){
                 User user = userService.findById(regApplication.getCreatedById());
                 if (user!=null){
@@ -171,6 +196,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }else {
             invoice.setStatus(InvoiceStatus.Initial);
         }
+
         invoiceRepository.save(invoice);
         return invoice;
     }
