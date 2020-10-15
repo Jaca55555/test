@@ -4,7 +4,8 @@
     <meta th:include="fragments/head :: top" th:remove="tag">
     <title th:text="#{doc_incoming.view}+'/'+${document.registrationNumber}" >Kiruvchi Xatlar Ro'yxati</title>
     <link rel="stylesheet" href="/static/bootstrap-treeview.css">
-<style>
+    <link rel="stylesheet" href="/static/ViewerJS/viewer.css">
+    <style>
     .panel{
         overflow-y: auto;
         overflow-x: auto;
@@ -572,6 +573,7 @@
 <object th:include="fragments/footer :: footer" th:remove="tag"></object>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+<script src="/static/ViewerJS/viewer.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script src="/static/bootstrap-treeview.js"></script>
 
