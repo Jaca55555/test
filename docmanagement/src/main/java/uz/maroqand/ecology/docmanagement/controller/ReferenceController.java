@@ -329,6 +329,7 @@ public class ReferenceController {
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("dueDate",Common.uzbekistanDateFormat.format(documentTaskSub.getDueDate()));
         model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("status",TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName());
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocAndTaskId(document.getId(), task.getId()));

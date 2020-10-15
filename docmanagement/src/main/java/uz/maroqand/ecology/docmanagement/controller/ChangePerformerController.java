@@ -230,6 +230,7 @@ public class ChangePerformerController {
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
         model.addAttribute("task_change_url", DocUrls.DocumentTaskChange);
         model.addAttribute("task_statuses", statuses);
+        model.addAttribute("status",TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName());
         model.addAttribute("docList", documentService.findAllByDocumentTypeIn(docTypes, PageRequest.of(0,100, Sort.Direction.DESC, "id")));
         model.addAttribute("isView", true);
 //        model.addAttribute("performers",userService.getEmployeesForDocManage("controller"));

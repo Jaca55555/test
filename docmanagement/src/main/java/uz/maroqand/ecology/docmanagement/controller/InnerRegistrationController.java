@@ -305,9 +305,9 @@ public class InnerRegistrationController {
             HttpServletRequest httpServletRequest,
             @RequestParam(name = "documentOrganizationId") Integer documentOrganizationId,
             @RequestParam(name = "file_ids")List<Integer> file_ids,
-            @RequestParam(name = "executeForm",required = false) ExecuteForm executeForm,
+            @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlForm",required = false) ControlForm controlForm,
-            @RequestParam(name="specialControll",required = false) Boolean specialControll,
+            @RequestParam(name="specialControl",required = false) Boolean specialControll,
             @RequestBody MultiValueMap<String, String> formData,
             Document document
     ) {
@@ -325,8 +325,8 @@ public class InnerRegistrationController {
         document.setCreatedAt(new Date());
         document.setCreatedById(user.getId());
         document.setDepartmentId(user.getDepartmentId());
-        if (executeForm!=null){
-            document.setExecuteForm(executeForm);
+        if(executeFormId!=null){
+            document.setExecuteForm(ExecuteForm.getExecuteForm(executeFormId));
         }
         if (controlForm!=null){
             document.setControlForm(controlForm);

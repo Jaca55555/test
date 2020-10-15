@@ -378,11 +378,12 @@ public class IncomingRegistrationController {
             @RequestParam(name = "executeFormId", required = false) Integer executeFormId,
             @RequestParam(name = "controlFormId", required = false) Integer controlFormId,
             @RequestParam(name = "file_ids")List<Integer> file_ids,
+            @RequestParam(name = "specialControl",required = false)Boolean specialControll ,
             @RequestBody MultiValueMap<String, String> formData
 
     ) {
         System.out.println("++++++++++++++++");
-
+        System.out.println(specialControll);
         System.out.println("++++++++++++++++");
         Set<File> files = new HashSet<File>();
         for(Integer id: file_ids) {
@@ -417,8 +418,8 @@ public class IncomingRegistrationController {
         System.out.println("____________");
 //        document.setContentFiles(files);
         document.setCreatedById(user.getId());
+if(specialControll!=null) { document.setSpecialControll(specialControll);} else{ document.setSpecialControll(Boolean.FALSE);}
 
-        document.setSpecialControll(Boolean.FALSE);
         document.setStatus(DocumentStatus.New);
         document = documentService.createDoc(DocumentTypeEnum.IncomingDocuments.getId(), document, user);
 

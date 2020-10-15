@@ -232,6 +232,7 @@ public class ChangeDueDateController {
         model.addAttribute("documentSub", documentSubService.getByDocumentIdForIncoming(document.getId()));
         model.addAttribute("documentTaskSub", documentTaskSub);
         model.addAttribute("documentTaskSubs", documentTaskSubs);
+        model.addAttribute("status",TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName());
         model.addAttribute("user", userService.getCurrentUserFromContext());
         model.addAttribute("comment_url", DocUrls.AddComment);
         model.addAttribute("logs", documentLogService.getAllByDocId(document.getId()));
