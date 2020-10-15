@@ -717,7 +717,7 @@
                             html += '<a href="'+linkByType(row[9])+'?id='+row[0]+'"  >' + row[1]+'</a>';
                             return html;
                         },
-                        className: "text-left fit-content"
+                        className: "text-left fit-content w-10"
                     },
                     {data: 2, name: 'document.registrationDate',
                         render: function (data, type, row, meta) {
@@ -727,7 +727,7 @@
                         },
                         className: "text-left"
                     },
-                    {data: 3, name: 'document.content',className: "text-left"},
+                    {data: 3, name: 'document.content',className: "text-left w-25"},
 
                     {data: 4, name: 'dueDate',
                         render: function (data, type, row, meta) {
