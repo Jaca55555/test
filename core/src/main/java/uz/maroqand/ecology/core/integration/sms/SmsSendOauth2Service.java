@@ -115,7 +115,7 @@ public class SmsSendOauth2Service {
 
     public void createContact(AuthTokenInfo authTokenInfo, SmsSend smsSend){
         System.out.println("createContact");
-        System.out.println("Access_token="+authTokenInfo.getAccess_token());
+//        System.out.println("Access_token="+authTokenInfo.getAccess_token());
         try {
             RestTemplate restTemplate = restTemplate();
             ContactDto contactDto = new ContactDto();
