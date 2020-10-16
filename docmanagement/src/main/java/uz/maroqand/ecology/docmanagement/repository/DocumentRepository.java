@@ -55,7 +55,7 @@ public interface DocumentRepository extends DataTablesRepository<Document, Integ
     Long countAllByDocumentTypeIdAndAdditionalDocumentIdNotNullAndOrganizationIdAndDepartmentIdNotAndPerformerId(Integer documentTypeId, Integer organizationId,Integer departmentId, Integer performerId);
 
     Integer countByStatusAndCreatedById(DocumentStatus status,Integer userId);
-
+    Integer countByStatusAndPerformerIdIsNull(DocumentStatus status);
     @Query("SELECT COUNT(d) FROM Document d LEFT JOIN DocumentType dt ON d.documentTypeId = dt.id WHERE dt.type = ?1 AND d.deleted = FALSE")
     Integer countAllDocByType(Integer type);
 
