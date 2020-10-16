@@ -54,7 +54,7 @@ public interface DocumentService {
     Long countAll(Integer documentTypeId, Integer organizationId, Integer departmentId, Integer performerId);
 
     Long countAllByStatus(Integer typeId, DocumentStatus status, Integer organizationId, Integer departmentId, Integer performerId);
-
+    Long countAllByStatusAll(Integer typeId, DocumentStatus status, Integer performerId);
     Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId, Integer performerId);
 
     Long  countAllWhichHaveAdditionalDocuments(Integer documentTypeId, Integer organizationId, Integer departmentId, Integer performerId);
