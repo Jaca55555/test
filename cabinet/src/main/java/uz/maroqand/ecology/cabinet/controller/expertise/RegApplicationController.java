@@ -488,8 +488,9 @@ public class RegApplicationController {
         if(requirement==null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id + "&failed=2";
         }
+        Integer categoryId=activity!=null && activity.getCategory()!=null?activity.getCategory().getId():null;
         Organization organization = null;
-        if (regionId!=null){
+        if (regionId!=null && categoryId!=null && ((objectId==4 && categoryId>=2 && categoryId<=4) || (categoryId>=3 && categoryId<=4))){
             organization = organizationService.getByRegionId(regionId);
             regApplication.setRegionId(regionId);
         }
@@ -783,7 +784,7 @@ public class RegApplicationController {
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
         }
         invoiceService.checkInvoiceStatus(invoice);
-        if (!invoice.getStatus().equals(InvoiceStatus.Success) || !invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
+        if (!invoice.getStatus().equals(InvoiceStatus.Success) && !invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationPrepayment + "?id=" + id;
         }
 

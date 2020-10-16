@@ -29,24 +29,52 @@
             </table>
         </div>
 
-        <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;">
+        <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
             <p class="text-center" th:text="#{sys_payment_amount}" style="font-size: 22px;"> Сумма к оплате </p>
             <p class="text-center text-summa"style="font-size: 22px;">
                 <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
             </p>
-            <p class="text-center text-summa" style="font-size: 15px;" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+            <p class="text-center text-summa" style="font-size: 15px;" >
                 <span style="color: darkblue" th:text="${#numbers.formatDecimal(@invoiceServiceImpl.getPayAmount(invoice.id), 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
             </p>
         </div>
-        <div class="col-md-3 col-12">
+
+
+        <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
+            <p class="text-center" th:text="#{sys_payment_amount}" style="font-size: 22px;"> Сумма к оплате </p>
+            <p class="text-center text-summa"style="font-size: 22px;">
+                <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+            </p>
+        </div>
+
+        <div class="col-md-3 col-12 offset-md-3" style="border-right: 1px solid #dcdfe2;" th:if="${invoice.status!=T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success and invoice.status!=T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+            <p class="text-center" th:text="#{sys_payment_amount}" style="font-size: 22px;"> Сумма к оплате </p>
+            <p class="text-center text-summa"style="font-size: 22px;">
+                <span th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}">4 054 600.00</span>
+            </p>
+        </div>
+        <div class="col-md-3 col-12" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
             <p class="text-center">
-                <i th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}" class="feather icon-check text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
-                <i th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}" class="feather icon-check-square text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
+                <i  class="feather icon-check text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
             </p>
             <p class="text-center" style="margin-bottom: 20px;font-size: 22px;" th:text="#{sys_payment_successful}">Оплата успешно</p>
-            <p class="color-purple text-center" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+        </div>
+
+        <div class="col-md-3 col-12" th:if="${invoice.status==T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+            <p class="text-center">
+                <i  class="feather icon-check-square text-info" style="font-size: 50px;color: #2CDCAE !important; font-weight: bold;"></i>
+            </p>
+            <p class="text-center" style="margin-bottom: 20px;font-size: 22px;" th:text="#{sys_payment_successful}">Оплата успешно</p>
+            <p class="color-purple text-center">
                 <span style="color: darkblue" th:text="#{sys_invoice_is_budget}"></span>
             </p>
+        </div>
+
+        <div class="col-md-3 col-12" th:if="${invoice.status!=T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success and invoice.status!=T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).PartialSuccess}">
+            <p class="text-center">
+                <i  class="feather icon-x text-info" style="font-size: 50px;color: #f44236 !important; font-weight: bold;"></i>
+            </p>
+            <p class="text-center" style="margin-bottom: 20px;font-size: 22px;" th:text="#{sys_payment_not_successful}">Оплата успешно</p>
         </div>
 
         <div class="col-md-12 form-group row" style="margin-top: 40px;">

@@ -440,6 +440,8 @@ public class RegApplicationController {
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
             @RequestParam(name = "coordinates", required = false) List<Double> coordinates
     ){
+        System.out.println("-----------------");
+        System.out.println(regionId);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
@@ -499,7 +501,8 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=2";
         }
         Organization organization = null;
-        if (regionId!=null){
+        Integer categoryId=activity!=null && activity.getCategory()!=null?activity.getCategory().getId():null;
+        if (regionId!=null && categoryId!=null && ((objectId==4 && categoryId>=2 && categoryId<=4) || (categoryId>=3 && categoryId<=4))){
             organization = organizationService.getByRegionId(regionId);
             regApplication.setRegionId(regionId);
         }
