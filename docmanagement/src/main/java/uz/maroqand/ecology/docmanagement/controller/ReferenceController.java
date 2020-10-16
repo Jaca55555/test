@@ -314,6 +314,8 @@ public class ReferenceController {
         statuses.add(TaskSubStatus.Waiting);
         statuses.add(TaskSubStatus.Agreement);
         statuses.add(TaskSubStatus.Checking);
+        statuses.add(TaskSubStatus.ForChangeDueDate);
+        statuses.add(TaskSubStatus.ForChangePerformer);
         List<Integer> docTypes = new ArrayList<>();
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());

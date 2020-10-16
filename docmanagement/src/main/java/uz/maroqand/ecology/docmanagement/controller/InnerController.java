@@ -272,6 +272,7 @@ public class InnerController {
         statuses.add(TaskSubStatus.Agreement);
         statuses.add(TaskSubStatus.Checking);
         statuses.add(TaskSubStatus.ForChangePerformer);
+        statuses.add(TaskSubStatus.ForChangeDueDate);
         List<Integer> docTypes = new ArrayList<>();
         docTypes.add(DocumentTypeEnum.OutgoingDocuments.getId());
         docTypes.add(DocumentTypeEnum.InnerDocuments.getId());

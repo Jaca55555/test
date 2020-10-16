@@ -383,6 +383,9 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentId(typeId, status, organizationId, departmentId)
                 + documentRepository.countAllByDocumentTypeIdAndStatusAndOrganizationIdAndDepartmentIdNotAndPerformerId(typeId, status, organizationId,departmentId, performerId);
     }
+    @Override
+    public Long countAllByStatusAll(Integer typeId, DocumentStatus status, Integer performerId){
+        return documentRepository.countAllByDocumentTypeIdAndStatusAndCreatedById(typeId,status,performerId);    }
 
     @Override
     public Long countAllTodaySDocuments(Integer docTypeId, Integer organizationId, Integer departmentId, Integer performerId){
