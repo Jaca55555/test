@@ -56,7 +56,7 @@
         <object th:include="doc/reference/fragments/document_view :: document_view" th:remove="tag" ></object>
 
         <div class="row flex-space-between" >
-            <div class="col-xl-8 col-sm-12 pl-0 pl-15-mobile">
+            <div class="col-xl-6 col-sm-12 pl-0 pl-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between align-center" style="height:65px;">
                         <h5>
@@ -236,7 +236,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-4 col-sm-12 pr-0 pr-15-mobile">
+            <div class="col-xl-6 col-sm-12 pr-0 pr-15-mobile">
                 <div class="card parent-card">
                     <div class="card-header flex-space-between-nowrap mb-0">
                         <h5 class="mb-0" style="align-self:center">
@@ -266,7 +266,7 @@
                             </div>
 
                             <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
-                                <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
+                                <div class="col-sm-3 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
                                     <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.beforeStatusColor}">
                                         <span th:text="#{${log.beforeStatus}}"></span>
                                     </button>
@@ -276,7 +276,7 @@
                                         <i class="feather icon-arrow-right mr-0"></i>
                                     </button>
                                 </div>
-                                <div class="col-sm-5 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                <div class="col-sm-3 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
                                     <button type="button" th:class="'btn-block btn-sm btn-rounded btn btn-'+${log.afterStatusColor}">
                                         <span  th:text="#{${log.afterStatus}}"></span>
                                     </button>

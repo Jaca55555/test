@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
                 .antMatchers("/static*/**", "/map").permitAll()
                 .antMatchers("/admin/dashboard/**").hasAuthority(Permissions.ADMIN.name())
+                .antMatchers("/billing/payment_file_all/get_invoice").hasAuthority(Permissions.ADMIN_ROLE.name())
                 .antMatchers("/expertise/dashboard/**").hasAuthority(Permissions.EXPERTISE.name())
                 .antMatchers("/doc/dashboard/**").hasAuthority(Permissions.DOC_MANAGEMENT.name())
                 .antMatchers("/dashboard/**").authenticated()

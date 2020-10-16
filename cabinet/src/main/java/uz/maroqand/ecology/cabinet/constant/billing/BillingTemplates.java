@@ -19,4 +19,7 @@ public class BillingTemplates {
     public static final String PaymentFileAllView = PaymentFileAll + "/view";
     public static final String PaymentFileAllEdit = PaymentFileAll + "/edit";
 
+    // xato kiritilgan bank malumotlar kelganda arizadagi invoice bilan ulash ushun qo'shildi
+    public static final String PaymentFileAllConnectInvoice = PaymentFileAll + "/connect_invoice";
+
 }

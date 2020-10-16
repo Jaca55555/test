@@ -58,7 +58,9 @@
                                                         <span th:if="${invoice.createdDate!=null}"  th:text="${#dates.format(invoice.createdDate,'dd.MM.yyyy')}"></span>
                                                     </th>
                                                     <td class="text-center">
-                                                        <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" th:href="${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileAllEditSubmit+'?id='+invoice.id + '&paymentFileId=' + paymentFileId}" ><i class="feather icon-edit" style="margin: 0px"></i></a>
+                                                        <a class="btn btn-sm btn-outline-success pr-2 pl-2 pt-1 pb-1" th:href="${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileAllEditSubmit+'?id='+invoice.id + '&paymentFileId=' + paymentFileId}" >
+                                                            <i class="feather icon-check" style="margin: 0px"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 </tbody>

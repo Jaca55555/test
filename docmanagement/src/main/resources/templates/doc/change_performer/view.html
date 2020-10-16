@@ -128,7 +128,7 @@
                                 10.05.2019 - 09:35
                             </div>
                             <div class="row col-sm-12" th:if="${log.type!=null && log.type==T(uz.maroqand.ecology.docmanagement.constant.DocumentLogType).Log.getId()}">
-                                <div class="col-sm-5 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
+                                <div class="col-sm-3 p-0" th:if="${log.beforeStatus!=null && log.beforeStatus!=''}">
                                     <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
                                         <span th:text="#{${log.beforeStatus}}"></span>
                                     </span>
@@ -144,7 +144,7 @@
                                         <i class="feather icon-arrow-right mr-0"></i>
                                     </button>-->
                                 </div>
-                                <div class="col-sm-5 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
+                                <div class="col-sm-2 p-0" th:if="${log.afterStatus!=null && log.afterStatus!=''}">
                                      <span th:class="'statusSpan badge badge-'+${log.beforeStatusColor}">
                                         <span th:text="#{${log.afterStatus}}"></span>
                                     </span>
@@ -176,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>ad
         </div>
     </div>
 </div>

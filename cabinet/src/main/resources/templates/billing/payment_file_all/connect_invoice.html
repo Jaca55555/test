@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 th:text="#{payment_file_connect_invoice}"></h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped custom-table " id="paymentFile">
+                                                <thead>
+                                                <tr>
+                                                    <th class="w-5">#ID</th>
+                                                    <th class="w-10" th:text="#{invoice}"></th>
+                                                    <th class="w-10" th:text="#{sys_payerName}"></th>
+                                                    <th class="w-10" th:text="#{sys_payment_date}"></th>
+                                                    <th class="w-10" th:text="#{sys_payment_amount}"></th>
+                                                    <th class="w-55" th:text="#{sys_payment_detail}"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody th:object="${paymentFile}">
+                                                <tr >
+                                                    <th th:text="*{id}"></th>
+                                                    <th th:text="*{invoice}"></th>
+                                                    <th th:text="*{payerName}"></th>
+                                                    <th>
+                                                        <span th:if="*{paymentDate}"  th:text="*{#dates.format(paymentDate,'dd.MM.yyyy')}"></span>
+                                                    </th>
+                                                    <th th:text="*{#numbers.formatDecimal(amount, 1, 'WHITESPACE', 2, 'POINT')}"></th>
+                                                    <th th:text="*{details}"></th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div class="row col-md-12">
+                                            <div class="form-group col-sm-4 offset-3">
+                                                <label class="control-label" th:text="#{invoice_number}"></label>
+                                                <input type="text" class="form-control" id="invoiceStr" maxlength="14" minlength="14" data-parsley-type="integer" required="">
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label" > &nbsp;</label>
+                                                <a class="btn btn-info text-white btn-block" href="#" id="search_invoice"  >
+                                                    <i class="feather icon-search"></i>
+                                                    <span th:text="#{sys_search}"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive" id="result-table">
+                                            <h4 th:text="#{result_table}" class="text-center"></h4>
+                                            <table class="table table-striped custom-table ">
+                                                <thead>
+                                                <tr>
+                                                    <th th:text="#{reg_application.id}">#ID</th>
+                                                    <th th:text="#{sys_legal_entity_name}"></th> <!--//applicant.name-->
+                                                    <th th:text="#{sys_payment_date}"></th>
+                                                    <th th:text="#{sys_invoice_detail}"></th>
+                                                    <th th:text="#{sys_payment_amount}"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody >
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center col-md-12">
+                                            <a class="btn btn-danger text-white" href="#" onclick="history.go(-1);return false;" th:text="#{sys_back}"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_position" style="display: none" id="modal"></button>
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<object th:include="mgmt/position/position_add :: position_add" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
+<script th:inline="javascript">
+    var getInvoiceLink = [[${getLink}]];
+
+    $('#search_invoice').on('click',function () {
+        $('#invoiceStr').parsley().validate();
+        if ($('#invoiceStr').parsley().isValid()){
+            $.ajax({
+                url: getInvoiceLink,
+                type: "POST",
+                data: {
+                    invoiceStr:  $('#invoiceStr').val(),
+                    _csrf: $('#global_csrf').val()
+                },
+                processData: false,
+                contentType: false,
+                cache: true,
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    })
+
+</script>
+</body>
+</html>

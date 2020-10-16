@@ -182,7 +182,7 @@
                         </div>
 
                         <div ID="pnlImgSlider1" class="custom-control custom-checkbox">
-                            <input type="checkbox" name="specialControl" class="custom-control-input" id="defaultIndeterminate2" checked>
+                            <input type="checkbox" name="specialControl" th:checked="${document!=null}" class="custom-control-input" id="defaultIndeterminate2" checked>
                             <label class="custom-control-label" for="defaultIndeterminate2" th:text="#{doc.special_controll}">Default indeterminate</label>
                         </div>
                     </div>
@@ -976,7 +976,7 @@
     function deleteTask(id) {
         $('#task_'+id).remove();
     }
-
+    $('input[type=checkbox]').removeAttr('checked');
 </script>
 
 </body>
