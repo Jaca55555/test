@@ -204,20 +204,20 @@
         var html = '';
         var status=row[8];
         switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-            case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+            case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm w-60">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm w-60">'+row[6]+'</button>';return html;
         }
         return html;
     }
@@ -300,7 +300,7 @@
                         return html;
                     },
                     className: "w-10 text-center"},
-                {render: renderStatusColumn, name: 'status',className: "w-15 text-center"},
+                {render: renderStatusColumn, name: 'status',className: "w-10 text-center"},
                 {data: 6, name: 'content',className: "text-justify"},
             ],
             rowCallback: function (row, data) {
