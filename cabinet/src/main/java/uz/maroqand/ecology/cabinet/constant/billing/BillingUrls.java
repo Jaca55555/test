@@ -24,4 +24,10 @@ public class BillingUrls {
     public static final String PaymentFileAllEdit = PaymentFileAll + "/edit";
     public static final String PaymentFileAllEditSubmit = PaymentFileAll + "/edit_submit";
 
+    // xato kiritilgan bank malumotlar kelganda arizadagi invoice bilan ulash ushun qo'shildi
+    public static final String PaymentFileAllConnectInvoice = PaymentFileAll + "/connect_invoice";
+    public static final String PaymentFileAllGetInvoice = PaymentFileAll + "/get_invoice";
+    public static final String PaymentFileAllConnectInvoiceSubmit = PaymentFileAll + "/connect_invoice_submit";
+
+
 }

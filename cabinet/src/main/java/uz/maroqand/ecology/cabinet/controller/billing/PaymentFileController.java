@@ -7,23 +7,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.billing.BillingTemplates;
 import uz.maroqand.ecology.cabinet.constant.billing.BillingUrls;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -48,15 +48,17 @@ public class PaymentFileController {
     private final PaymentService paymentService;
     private final  UserService userService;
     private final OrganizationService organizationService;
+    private final RegApplicationService regApplicationService;
 
     @Autowired
-    public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService, UserService userService, OrganizationService organizationService) {
+    public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService, UserService userService, OrganizationService organizationService, RegApplicationService regApplicationService) {
         this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.clientService = clientService;
         this.paymentService = paymentService;
         this.userService = userService;
         this.organizationService = organizationService;
+        this.regApplicationService = regApplicationService;
     }
 
     @RequestMapping(BillingUrls.PaymentFileList)
@@ -231,7 +233,7 @@ public class PaymentFileController {
     // Hamma to'lovlarni ko'rish uchun
     @RequestMapping(BillingUrls.PaymentFileAllList)
     public String billingAllList(Model model){
-
+        model.addAttribute("isAdmin",userService.isAdmin());
         return BillingTemplates.PaymentFileAllList;
     }
 
@@ -376,6 +378,86 @@ public class PaymentFileController {
                 invoiceService.checkInvoiceStatus(invoice);
             }
         }
+
+        return "redirect:" + BillingUrls.PaymentFileAllList;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileAllConnectInvoice)
+    public String connectInvoice(
+            @RequestParam(name = "id") Integer paymentFileId,
+            Model model
+    ){
+
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null || paymentFile.getInvoice()!=null){
+            return "redirect:" + BillingUrls.PaymentFileAllList;
+        }
+
+        model.addAttribute("paymentFile",paymentFile);
+        model.addAttribute("getLink",BillingUrls.PaymentFileAllGetInvoice);
+
+        return BillingTemplates.PaymentFileAllConnectInvoice;
+
+    }
+
+    // status=-1  invoice topilmadi
+    // status=-2  ariza topilmadi topilmadi
+    @RequestMapping(value = BillingUrls.PaymentFileAllGetInvoice,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getInvoiceDetails (
+            @RequestParam(name = "invoiceStr") String invoiceStr
+    ){
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        Invoice invoice = invoiceService.getInvoice(invoiceStr);
+        if (invoice==null){
+            result.put("status",-1);
+            return result;
+        }
+
+        RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+        if (regApplication==null){
+            result.put("status",-2);
+            return result;
+        }
+
+        result.put("regId",regApplication.getId());
+        result.put("legalName",invoice.getPayeeName());
+        result.put("createdDate",invoice.getCreatedDate());
+        result.put("detail",invoice.getDetail());
+        result.put("amount",invoice.getAmount());
+
+        return result;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileAllConnectInvoiceSubmit)
+    public String connectInvoiceSubmit(
+            @RequestParam(name = "id") Integer paymentFileId,
+            @RequestParam(name = "invoiceId") Integer invoiceId,
+            @RequestParam(name = "regId") Integer regId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null){
+            return "redirect:" + BillingUrls.PaymentFileAllList;
+        }
+
+        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        if (invoice==null){
+            return "redirect:" + BillingUrls.PaymentFileAllList;
+        }
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null || regApplication.getInvoiceId()==null || regApplication.getInvoiceId()!=invoiceId){
+            return "redirect:" + BillingUrls.PaymentFileAllList;
+        }
+
+        paymentFile.setInvoice(invoice.getInvoice());
+        paymentFileService.update(paymentFile,user.getId());
+        Payment payment  = paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+        payment.setMessage("qo'lda biriktirildi. Invoice kelmagan yoki norog'tri kelgan update userId=" + user.getId().toString());
+        paymentService.save(payment);
+        invoiceService.checkInvoiceStatus(invoice);
 
         return "redirect:" + BillingUrls.PaymentFileAllList;
     }
