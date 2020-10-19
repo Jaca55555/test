@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/ol/ol.css">
+    <style>
+        .pad-top{
+            padding-top: calc(.375rem + 1px);
+        }
+        .border-bottom-styled {
+            border-bottom: 1px solid #000;
+            width: 100%;
+            margin-top: 20px
+        }
+        div.page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        div.page.size-A4 {
+            width: 21cm;
+            /*height: 29.7cm;*/
+            padding: 1.5cm 2cm;
+            overflow: auto;
+        }
+        p{
+            margin-bottom: 4px !important;
+            padding-top: 1px !important;
+        }
+        div .image {
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body class="layout-6" style="background: #23b7e5;">
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container" style="margin-left: 0px;">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body" style="min-height: calc(100vh - 130px);padding: 80px 80px;">
+                                            <div class="row">
+                                                
+                                            </div>
+                                            <div class="row" >
+                                                <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">
+                                                    <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
+                                                        <i class="feather icon-printer"></i>
+                                                        <span th:text="#{sys_print}"> print</span>
+                                                    </button>
+                                                </div>
+                                                <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}" id="conclusion">
+                                                    <div class="card-block" id="conclusion-for-print" th:if="${conclusion}">
+                                                        <div th:if="${conclusion.conclusionFileId==null}">
+
+                                                            <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>
+                                                            <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>
+                                                            <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>
+                                                        </div>
+
+                                                        <div th:if="${conclusion.conclusionFileId!=null}" class="text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
+                                                            <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8085/expertise/conclusion/file_download_for_view?id='+conclusion.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+
+    <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+    <script th:inline="javascript">
+        $('#conclusion_print_btn').on('click',function () {
+            $("#conclusion").printThis({
+                debug: false,               // show the iframe for debugging
+                importCSS: true,            // import parent page css
+                importStyle: true,         // import style tags
+                printContainer: false,       // print outer container/$.selector
+                loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+                pageTitle: "",              // add title to print page
+                removeInline: false,        // remove inline styles from print elements
+                removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+                printDelay: 333,            // variable print delay
+                header: null,               // prefix to html
+                footer: null,               // postfix to html
+                base: false,                // preserve the BASE tag or accept a string for the URL
+                formValues: true,           // preserve input/form values
+                canvas: true,              // copy canvas content
+                doctypeString: '',       // enter a different doctype for older markup
+                removeScripts: true,       // remove script tags from print content
+                copyTagClasses: false,      // copy classes from the html & body tag
+                beforePrintEvent: null,     // function for printEvent in iframe
+                beforePrint: null,          // function called before iframe is filled
+                afterPrint: null            // function called before iframe is removed
+            });
+        });
+
+    </script>
+</body>
+</html>

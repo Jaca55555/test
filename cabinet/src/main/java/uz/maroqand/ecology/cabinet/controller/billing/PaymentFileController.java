@@ -400,13 +400,6 @@ public class PaymentFileController {
 
     }
 
-    /*@RequestMapping(value = RegUrls.GetLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public GnkResponseObject getLegalEntityTaxPayerInfo(
-            @RequestParam(name = "tin") Integer tin
-    ) {
-        return gnkService.getLegalEntityByTin(tin);
-    }*/
 
     // status=-1  invoice topilmadi
     // status=-2  ariza topilmadi topilmadi
@@ -455,16 +448,16 @@ public class PaymentFileController {
         User user = userService.getCurrentUserFromContext();
         PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
         if (paymentFile==null){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-1";
         }
 
         Invoice invoice = invoiceService.getInvoice(invoiceId);
         if (invoice==null){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-2";
         }
         RegApplication regApplication = regApplicationService.getById(regId);
-        if (regApplication==null || regApplication.getInvoiceId()==null || regApplication.getInvoiceId()!=invoiceId){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+        if (regApplication==null || regApplication.getInvoiceId()==null || !regApplication.getInvoiceId().equals(invoiceId)){
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-3";
         }
 
         paymentFile.setInvoice(invoice.getInvoice());

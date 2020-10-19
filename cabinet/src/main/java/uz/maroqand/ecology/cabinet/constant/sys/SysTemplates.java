@@ -19,4 +19,6 @@ public class SysTemplates {
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationList = Notification + "/list";
 
+    public static final String ConclusionView = Prefix + "/conclusion_view";
+
 }

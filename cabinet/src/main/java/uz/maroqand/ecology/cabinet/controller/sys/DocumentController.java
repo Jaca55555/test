@@ -10,10 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.cabinet.constant.sys.SysTemplates;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 import uz.maroqand.ecology.core.util.Captcha;
 
@@ -32,15 +36,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Controller
 public class DocumentController {
 
-    private DocumentRepoService documentRepoService;
-    private ConclusionService conclusionService;
+    private final DocumentRepoService documentRepoService;
+    private final ConclusionService conclusionService;
+    private final RegApplicationService regApplicationService;
     private Logger logger = LogManager.getLogger(DocumentController.class);
     private final ConcurrentHashMap<String,String> conHashMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService) {
+    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService, RegApplicationService regApplicationService) {
         this.documentRepoService = documentRepoService;
         this.conclusionService = conclusionService;
+        this.regApplicationService = regApplicationService;
     }
 
     @RequestMapping(value = SysUrls.GetDocument+"/{uuid}", method = RequestMethod.GET)
@@ -51,11 +57,19 @@ public class DocumentController {
         DocumentRepo documentRepo = documentRepoService.getDocumentByUuid(uuid);
         if(documentRepo != null){
             Conclusion conclusion = conclusionService.getById(documentRepo.getId());
+            if (conclusion==null || conclusion.getRegApplicationId()==null){
+                return "redirect:/login";
+            }
+            RegApplication regApplication = regApplicationService.getById(conclusion.getRegApplicationId());
+            if (regApplication==null){
+                return "redirect:/login";
+            }
             model.addAttribute("conclusion",conclusion);
-            model.addAttribute("document",documentRepo);
+            model.addAttribute("regApplication",regApplication);
+            model.addAttribute("documentRepo",documentRepo);
         }
         model.addAttribute("uuid", uuid);
-        return "document_search";
+        return SysTemplates.ConclusionView;
     }
 
     @RequestMapping(value = SysUrls.GetDocument+"/{uuid}", method = RequestMethod.POST)
@@ -109,7 +123,7 @@ public class DocumentController {
         int white = 255 << 16 | 255 << 8 | 255;
         int black = 0;
 
-        String url = "http://172.24.0.218:8080" + SysUrls.GetDocument;
+        String url = "http://localhost:8085/" + SysUrls.GetDocument;
 
         try {
             BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
