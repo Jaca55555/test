@@ -396,6 +396,7 @@ public class IncomingController {
         model.addAttribute("action_url", DocUrls.IncomingTaskSubmit);
         model.addAttribute("back_url", DocUrls.IncomingView+"?id=" + documentTaskSub.getId());
         model.addAttribute("executeForm",document.getExecuteForm().getName());
+        model.addAttribute("status",TaskSubStatus.getTaskStatus(documentTaskSub.getStatus()).getName());
         return DocTemplates.IncomingTask;
     }
 
