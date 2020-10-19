@@ -43,6 +43,9 @@
         table.dataTable thead th{
             border-bottom: 2px solid #eaeaea;
         }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -292,8 +295,8 @@
         let currentViewLink = viewLink + '?id=' + row[0];
         let currentEditLink = editLink + '?id=' + row[0];
         let html = '';
-        html += `<!--<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>-->`;
-        html += `<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
+        html += `<!--<div class="btn-group"><a class="btn btn-info  mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>-->`;
+        html += `<div class="btn-group"><a class="btn btn-warning  mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
         return html;
     }
 

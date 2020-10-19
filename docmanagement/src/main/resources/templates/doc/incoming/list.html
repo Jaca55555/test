@@ -54,6 +54,10 @@
             border-bottom: 2px solid #eaeaea;
         }
 
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -170,7 +174,7 @@
                 </li>
                 <li class="nav-item card-nav-item">
                     <a class="nav-link text-uppercase show" id="tab_filter_5" data-toggle="tab" href="#profile1" onclick="getTabDatatableConnect(5)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_document.info_tab_performer_control}">Ижро назоратида</span>
-                        <span th:if="${checkingDocumentCount}!=0" th:text="${checkingDocumentCount}+#{/}+${rejectedDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
+                        <span th:if="${checkingDocumentCount!=0 || rejectedDocumentCount!=0}" th:text="${checkingDocumentCount}+#{/}+${rejectedDocumentCount}" class="rounded-notifications w-15 text-center" style="height: 20px; margin-right: 5px ;margin-left: 10px;padding: 0px 10px;border-radius: 2px;background:#836cf1;color:white ">12</span>
                     </a>
                 </li>
                 <li class="nav-item card-nav-item">
@@ -275,27 +279,27 @@
             var html = '';
             var status = row[7];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
-                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[5]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[5]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+row[5]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[5]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[5]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[5]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[5]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[5]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[5]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[5]+'</button>';return html;
+                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[5]+'</button>';return html;
+                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[5]+'</button>';return html;
+                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[5]+'</button>';return html;
+                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[5]+'</button>';return html;
+                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[5]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[5]+'</button>';return html;
             }
             return html;
         }
 
        /* function renderActionsColumn(data, type, row, meta) {
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-info mr-1" href="'+viewLink+'?id='+row[0]+'" ><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
             return html;
         }*/
 

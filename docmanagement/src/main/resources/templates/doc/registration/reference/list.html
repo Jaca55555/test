@@ -40,6 +40,9 @@
         table.dataTable thead th{
             border-bottom: 2px solid #eaeaea;
         }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -350,8 +353,8 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var html = '';
-        // html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
-        html += '<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
+        // html += '<div class="btn-group"><a class="btn btn-info  mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        html += '<div class="btn-group"><a class="btn btn-warning  mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>';
         return html;
     }
 
@@ -359,13 +362,13 @@
         var html = '';
         var status=row[8];
         switch (status) {
-            case 0: html='<button type="button" class="btn-rounded btn btn-info  btn-sm">'+row[6]+'</button>';return html;
-            case 1: html='<button type="button" class="btn-rounded btn btn-primary  btn-sm">'+row[6]+'</button>';return html;
-            case 2: html='<button type="button" class="btn-rounded btn btn-warning  btn-sm">'+row[6]+'</button>';return html;
-            case 3: html='<button type="button" class="btn-rounded btn btn-secondary  btn-sm">'+row[6]+'</button>';return html;
-            case 4: html='<button type="button" class="btn-rounded btn btn-success  btn-sm">'+row[6]+'</button>';return html;
-            case 5: html='<button type="button" class="btn-rounded btn btn-danger  btn-sm">'+row[6]+'</button>';return html;
-            default: html='<button type="button" class="btn-rounded btn btn-light  btn-sm">'+row[6]+'</button>';return html;
+            case 0: html='<button type="button" class="btn-rounded btn btn-info  ">'+row[6]+'</button>';return html;
+            case 1: html='<button type="button" class="btn-rounded btn btn-primary  ">'+row[6]+'</button>';return html;
+            case 2: html='<button type="button" class="btn-rounded btn btn-warning  ">'+row[6]+'</button>';return html;
+            case 3: html='<button type="button" class="btn-rounded btn btn-secondary  ">'+row[6]+'</button>';return html;
+            case 4: html='<button type="button" class="btn-rounded btn btn-success  ">'+row[6]+'</button>';return html;
+            case 5: html='<button type="button" class="btn-rounded btn btn-danger  ">'+row[6]+'</button>';return html;
+            default: html='<button type="button" class="btn-rounded btn btn-light  ">'+row[6]+'</button>';return html;
         }
         return html;
     }
