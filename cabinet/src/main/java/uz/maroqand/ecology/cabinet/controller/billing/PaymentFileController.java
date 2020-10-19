@@ -400,12 +400,21 @@ public class PaymentFileController {
 
     }
 
+    /*@RequestMapping(value = RegUrls.GetLegalEntityByTin, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public GnkResponseObject getLegalEntityTaxPayerInfo(
+            @RequestParam(name = "tin") Integer tin
+    ) {
+        return gnkService.getLegalEntityByTin(tin);
+    }*/
+
     // status=-1  invoice topilmadi
     // status=-2  ariza topilmadi topilmadi
-    @RequestMapping(value = BillingUrls.PaymentFileAllGetInvoice,method = RequestMethod.POST)
+    @RequestMapping(value = BillingUrls.PaymentFileAllGetInvoice,method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String,Object> getInvoiceDetails (
-            @RequestParam(name = "invoiceStr") String invoiceStr
+            @RequestParam(name = "invoiceStr") String invoiceStr,
+            @RequestParam(name = "id") Integer payFilieId
     ){
 
         HashMap<String,Object> result = new HashMap<>();
@@ -416,6 +425,11 @@ public class PaymentFileController {
             return result;
         }
 
+        PaymentFile paymentFile = paymentFileService.getById(payFilieId);
+        if (paymentFile==null){
+            result.put("status",-3);
+            return result;
+        }
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
         if (regApplication==null){
             result.put("status",-2);
@@ -424,9 +438,10 @@ public class PaymentFileController {
 
         result.put("regId",regApplication.getId());
         result.put("legalName",invoice.getPayeeName());
-        result.put("createdDate",invoice.getCreatedDate());
+        result.put("createdDate",invoice.getCreatedDate()!=null?Common.uzbekistanDateFormat.format(invoice.getCreatedDate()):"");
         result.put("detail",invoice.getDetail());
         result.put("amount",invoice.getAmount());
+        result.put("actionUrl",BillingUrls.PaymentFileAllConnectInvoiceSubmit + "?id=" + payFilieId + "&invoiceId=" + invoice.getId() + "&regId=" + regApplication.getId());
 
         return result;
     }

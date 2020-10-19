@@ -79,7 +79,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="table-responsive" id="result-table">
+                                        <div class="table-responsive" id="result-table" style="display: none">
                                             <h4 th:text="#{result_table}" class="text-center"></h4>
                                             <table class="table table-striped custom-table ">
                                                 <thead>
@@ -119,24 +119,49 @@
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}" ></script>
 <script th:inline="javascript">
     var getInvoiceLink = [[${getLink}]];
+    var id= [[${paymentFile.id}]]
+    console.log(getInvoiceLink);
 
     $('#search_invoice').on('click',function () {
         $('#invoiceStr').parsley().validate();
         if ($('#invoiceStr').parsley().isValid()){
             $.ajax({
                 url: getInvoiceLink,
-                type: "POST",
                 data: {
-                    invoiceStr:  $('#invoiceStr').val(),
+                    invoiceStr: $('#invoiceStr').val(),
+                    id:id,
                     _csrf: $('#global_csrf').val()
                 },
-                processData: false,
-                contentType: false,
+                type: 'post',
+                dataType: 'json',
                 cache: true,
                 success: function (response) {
-                    console.log(response);
+                    console.log("response="+response);
+                    /*console.log("response.status="+response.status);
+                    console.log("response.legalName="+response.legalName);
+                    console.log("response.createdDate="+response.createdDate);
+                    console.log("response.detail="+response.detail);
+                    console.log("response.amount="+response.amount);
+                    console.log("response.actionUrl="+response.actionUrl);*/
+                    if (response.status==1){
+                        var html='<tr>' +
+                            '<td>' + response.regId + '</td>' +
+                            '<td>' + response.legalName + '</td>' +
+                            '<td>' + response.createdDate + '</td>' +
+                            '<td>' + response.detail + '</td>' +
+                            '<td>' + response.amount + '</td>' +
+                            '<td ><a class="btn btn-info btn-sm mr-1" href="'+response.actionUrl+'"><i class="feather icon-check" style="margin-right: 0px;"></i></a></td>' +
+                            '</tr>';
+                        $('#result-table tbody').append(html);
+                        $('#result-table').show();
+                    }else{
+                        $('#result-table').hide();
+                    }
+                },
+                error: function () {
                 }
             });
+
         }
     })
 
