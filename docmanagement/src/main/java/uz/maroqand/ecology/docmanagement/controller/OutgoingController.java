@@ -215,6 +215,9 @@ public class OutgoingController {
         docFilterDTO.setExecuteDateEnd(deadlineDateEnd!=null?Common.uzbekistanDateAndTimeFormat.format(deadlineDateEnd):null);
         docFilterDTO.setDocumentType(DocumentTypeEnum.OutgoingDocuments.getId());
         docFilterDTO.setDocumentStatuses(status);
+        docFilterDTO.setRegistrationDateBegin(dateBegin);
+        docFilterDTO.setRegistrationDateEnd(dateEnd);
+        docFilterDTO.setRegistrationNumber(registrationNumber);
         Page<Document> documentPage = documentService.findFiltered(docFilterDTO,user.getOrganizationId(), pageable);
 
         List<Document> documentList = documentPage.getContent();
