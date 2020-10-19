@@ -39,9 +39,7 @@
                 </h5>
                 <div>
                     <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
-                    <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20"></i></span>
-                    </a>
+
                 </div>
             </div>
             <div class="row p10" style="padding-bottom: 0px;">
@@ -76,41 +74,38 @@
                     <label for="taskContent" class="control-label"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
                     <input type="text" class="form-control" id="taskContent" />
                 </div>
-            </div>
-            <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="row" style="padding-top: 0px;">
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label for="content" class="control-label" th:text="#{doc_incoming.content}">Хатнинг қисқача мазмуни</label>
-                        <input type="text" class="form-control" id="content" />
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label for="performerId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
-                        <select class="form-control singleSelect" id="performerId" >
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                            <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label for="taskSubType" class="control-label"><span th:text="#{sys_document.taskSubType}">Ижро йўналиши</span></label>
-                        <select class="form-control singleSelect" id="taskSubType">
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                            <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="#{${taskSubType.getName()}}"></option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label for="taskSubStatus" class="control-label" th:text="#{sys_document.taskStatus}">Жорий ҳолати</label>
-                        <select class="form-control singleSelect" id="taskSubStatus">
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                            <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="#{${taskSubStatus.getName()}}"></option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12 form-button-container">
-                        <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
-                            <span th:text="#{sys_document.search}">Қидириш</span>
-                        </button>
-                    </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="content" class="control-label" th:text="#{doc_incoming.content}">Хатнинг қисқача мазмуни</label>
+                    <input type="text" class="form-control" id="content" />
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="performerId" class="control-label" th:text="#{sys_document.performer}">Ижрочи</label>
+                    <select class="form-control singleSelect" id="performerId" >
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                        <option th:each="performer: ${performerList}" th:value="${performer.id}" th:text="${performer.getFullName()}"></option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="taskSubType" class="control-label"><span th:text="#{sys_document.taskSubType}">Ижро йўналиши</span></label>
+                    <select class="form-control singleSelect" id="taskSubType">
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                        <option th:each="taskSubType: ${taskSubTypeList}" th:value="${taskSubType.id}" th:text="#{${taskSubType.getName()}}"></option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="taskSubStatus" class="control-label" th:text="#{sys_document.taskStatus}">Жорий ҳолати</label>
+                    <select class="form-control singleSelect" id="taskSubStatus">
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                        <option th:each="taskSubStatus: ${taskSubStatusList}" th:value="${taskSubStatus.id}" th:text="#{${taskSubStatus.getName()}}"></option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12 form-button-container">
+                    <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4" onclick="getDatatableConnect()">
+                        <span th:text="#{sys_document.search}">Қидириш</span>
+                    </button>
                 </div>
             </div>
+
 
         </div>
     </div>

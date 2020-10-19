@@ -140,9 +140,7 @@
                 </h5>
                 <div>
                     <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
-                    <a class="card-header-a" href="/static/doc" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                    </a>
+
                 </div>
             </div>
             <div class="row p10">
@@ -182,70 +180,67 @@
                         <option th:each="executeForm: ${executeForms}" th:value="${executeForm.id}" th:text="${executeForm.getName()}"></option>
                     </select>
                 </div>
-            </div>
-            <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="row" >
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label for="documentViewId" class="control-label" th:text="#{doc_incoming.documentView}">Хужжат тури</label>
-                        <div class="col-sm-12 p0">
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentViewId" tabindex="-1" aria-hidden="true">
-                                <option></option>
-                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label for="content" class="control-label" th:text="#{doc_incoming.description}">Хатнинг қисқача мазмуни</label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" id="content">
-                            <i class="gray-search fas fa-search  color-gray"></i>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label" for="managerId"><span th:text="#{sys_document.manager}">Рахбарият</span></label>
-                        <select class="col-sm-12" id="managerId">
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 col-sm-12">
-                        <label class="control-label" for="executorId"><span th:text="#{sys_document.performer}">Ижрочилар</span></label>
-                        <select class="col-sm-12" id="executorId">
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="taskContent"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
-                        <div class="col-sm-12 p0">
-                            <input type="text" class="form-control" id="taskContent">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="executeStatus"><span th:text="#{sys_document.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                        <select class="col-sm-12" id="executeStatus" >
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label"><span th:text="#{sys_document.doc_executeDate}">Ижро муддати</span></label>
-                        <div class="row">
-                            <div class="col-6" style="padding-left: 0;">
-                                <input autocomplete="off" class="form-control datepicker date" id="executeDateBegin" placeholder="Дан">
-                                <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
-                            </div>
-                            <div class="col-6" style="padding-right:0;">
-                                <input autocomplete="off" class="form-control datepicker date" id="executeDateEnd" placeholder="гача">
-                                <i class="gray-arrow mdi mdi-calendar color-gray"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3 col-sm-12">
-                        <label class="control-label" for="executeControlStatus"><span th:text="#{sys_document.doc_executeControlStatus}">Ижро назорати холати</span></label>
-                        <select class="col-sm-12" id="executeControlStatus" >
-                            <option value="" th:text="#{sys_select}">Танлаш</option>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label for="documentViewId" class="control-label" th:text="#{doc_incoming.documentView}">Хужжат тури</label>
+                    <div class="col-sm-12 p0">
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="documentViewId" tabindex="-1" aria-hidden="true">
+                            <option></option>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                         </select>
                     </div>
                 </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="content" class="control-label" th:text="#{doc_incoming.description}">Хатнинг қисқача мазмуни</label>
+                    <div class="col-sm-12 p0">
+                        <input type="text" class="form-control" id="content">
+                        <i class="gray-search fas fa-search  color-gray"></i>
+                    </div>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label" for="managerId"><span th:text="#{sys_document.manager}">Рахбарият</span></label>
+                    <select class="col-sm-12" id="managerId">
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-12">
+                    <label class="control-label" for="executorId"><span th:text="#{sys_document.performer}">Ижрочилар</span></label>
+                    <select class="col-sm-12" id="executorId">
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label" for="taskContent"><span th:text="#{sys_document.resolution}">Қўйилган топшириқ (резолюция)</span></label>
+                    <div class="col-sm-12 p0">
+                        <input type="text" class="form-control" id="taskContent">
+                    </div>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label" for="executeStatus"><span th:text="#{sys_document.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
+                    <select class="col-sm-12" id="executeStatus" >
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label"><span th:text="#{sys_document.doc_executeDate}">Ижро муддати</span></label>
+                    <div class="row">
+                        <div class="col-6" style="padding-left: 0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="executeDateBegin" placeholder="Дан">
+                            <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
+                        </div>
+                        <div class="col-6" style="padding-right:0;">
+                            <input autocomplete="off" class="form-control datepicker date" id="executeDateEnd" placeholder="гача">
+                            <i class="gray-arrow mdi mdi-calendar color-gray"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3 col-sm-12">
+                    <label class="control-label" for="executeControlStatus"><span th:text="#{sys_document.doc_executeControlStatus}">Ижро назорати холати</span></label>
+                    <select class="col-sm-12" id="executeControlStatus" >
+                        <option value="" th:text="#{sys_select}">Танлаш</option>
+                    </select>
+                </div>
             </div>
+
         </form>
     </div>
     <div class="parent-card col-xl-12 mh-1000">
