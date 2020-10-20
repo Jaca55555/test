@@ -75,6 +75,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public Integer countAllByStatus(Integer status) {
+        return documentTaskSubRepository.countByStatus(status);
+    }
+
+    @Override
     public DocumentTaskSub update(DocumentTaskSub taskSub) {
         taskSub.setUpdateAt(new Date());
         return documentTaskSubRepository.save(taskSub);
@@ -462,6 +467,11 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
     }
 
     @Override
+    public Integer countAllByDueDate(Date date) {
+        return documentTaskSubRepository.countAllByDueDate(date);
+    }
+
+    @Override
     public Integer countAllByDueDateAndDepartmentId(Date date, Integer departmentId) {
         return documentTaskSubRepository.countAllByDueDateAndDepartmentId(date,departmentId);
     }
@@ -470,6 +480,10 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
         return documentTaskSubRepository.countAllByDueDate1AndDepartmentId(date,departmentId);
     }
 
+    @Override
+    public Integer countAllByDueDate1(Date date) {
+        return documentTaskSubRepository.countAllByDueDate1(date);
+    }
 
     @Override
     public Integer countByReceiverIdAndStatusIn(Integer typeId,Integer receiverId, Set<Integer> statuses,Integer taskSubtypeId){

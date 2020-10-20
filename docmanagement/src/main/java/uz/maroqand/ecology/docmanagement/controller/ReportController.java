@@ -129,8 +129,25 @@ public class ReportController {
                     documentTaskSubService.countAllByStatusAndDepartmentId(6,department.getId()),
                     documentTaskSubService.countAllByDepartmentId(department.getId()),
             });
-        }
 
+        }
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar1 = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 72);
+        System.out.println(calendar.getTime());
+        Date date = calendar.getTime();
+        calendar1.add(Calendar.HOUR_OF_DAY,0);
+        Date date1=calendar1.getTime();
+        convenientForJSONArray.add(new Object[]{
+                null,
+                helperService.getTranslation("total",locale),
+                documentTaskSubService.countAllByStatus(1),
+                documentTaskSubService.countAllByStatus(2),
+                documentTaskSubService.countAllByDueDate(date),
+                documentTaskSubService.countAllByDueDate1(date1),
+                documentTaskSubService.countAllByStatus(6),
+                documentTaskSubRepository.count(),
+        });
         result.put("data", convenientForJSONArray);
         return result; }
     @RequestMapping(value = DocUrls.ReportView, method = RequestMethod.GET)

@@ -181,7 +181,7 @@
             lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
             dom:'lrtip',
-            dom: 'Bfrtip',
+            dom: 'Brtip',
             buttons: [
 
                 'copy', 'csv', 'excel', 'pdf','print'
@@ -243,7 +243,11 @@
             $('#myTab a.active').trigger('click');
         })
     });
-
+    // var table = $('#responsive-table-model').DataTable();
+    // var rowNode = table
+    //     .row.add( [ 1000,'dkjhasd',23, 32,345,45,34,543 ] )
+    //     .draw()
+    //     .node();
     $('#newDocs').on('click',function () {
         $('#myTab a.active').removeClass('active');
         $('#home-tab').addClass('active');
