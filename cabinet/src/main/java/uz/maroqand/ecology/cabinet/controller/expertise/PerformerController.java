@@ -22,14 +22,15 @@ import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -37,7 +38,6 @@ import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
-import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
 
@@ -67,6 +67,7 @@ public class PerformerController {
     private final NotificationService notificationService;
     private final ConclusionService conclusionService;
     private final SmsSendService smsSendService;
+    private final OrganizationService organizationService;
 
     @Autowired
     public PerformerController(
@@ -87,8 +88,8 @@ public class PerformerController {
             ToastrService toastrService,
             NotificationService notificationService,
             ConclusionService conclusionService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            OrganizationService organizationService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -107,6 +108,7 @@ public class PerformerController {
         this.notificationService = notificationService;
         this.conclusionService = conclusionService;
         this.smsSendService = smsSendService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -177,6 +179,7 @@ public class PerformerController {
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
     ) {
+        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
@@ -209,13 +212,14 @@ public class PerformerController {
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
 
-
+        Organization organization = organizationService.getById(user.getOrganizationId());
 
         System.out.println(" performer regApplicationID==" + regApplication.getId());
         Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
         model.addAttribute("conclusion", conclusion);
+        model.addAttribute("organization", organization);
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
