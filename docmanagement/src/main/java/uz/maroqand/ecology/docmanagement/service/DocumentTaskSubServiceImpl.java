@@ -458,7 +458,7 @@ public class DocumentTaskSubServiceImpl implements DocumentTaskSubService {
 
     @Override
     public Integer countAllByStatusAndDepartmentId(Integer status, Integer departmentId) {
-        return documentTaskSubRepository.countAllByStatusAndDepartmentId(status,departmentId);
+        return documentTaskSubRepository.countAllByStatusAndDepartmentIdAndDeletedFalse(status,departmentId);
     }
 
     @Override
