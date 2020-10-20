@@ -56,7 +56,7 @@ public class DocumentController {
     ) {
         DocumentRepo documentRepo = documentRepoService.getDocumentByUuid(uuid);
         if(documentRepo != null){
-            Conclusion conclusion = conclusionService.getById(documentRepo.getId());
+            Conclusion conclusion = conclusionService.getByRepoId(documentRepo.getId());
             if (conclusion==null || conclusion.getRegApplicationId()==null){
                 return "redirect:/login";
             }
