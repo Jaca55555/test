@@ -27,10 +27,10 @@ public interface DocumentTaskSubRepository extends JpaRepository<DocumentTaskSub
 
     List<DocumentTaskSub> findByTaskIdAndDeletedFalse(Integer documentId);
 //    @Query("SELECT COUNT(d) FROM DocumentTaskSub d LEFT JOIN User u ON d.receiverId = u.id WHERE d.status =?1 AND d.deleted = FALSE AND u.departmentId=?2")
-    Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
+    Integer countAllByStatusAndDepartmentIdAndDeletedFalse(Integer status,Integer departmentId);
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
     Integer countAllByDueDateAndDepartmentId(Date date,Integer departmentId);
-    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.dueDate>?2 AND d.receiverId=?3 AND d.status<>6 ORDER BY d.dueDate asc")
+    @Query("SELECT d FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.dueDate>?2 AND d.receiverId=?3 AND d.status<>6 AND d.deleted=false ORDER BY d.dueDate asc")
     List<DocumentTaskSub> getAllByDueDateAndReceiverId(Date date,Date date1,Integer receiverId);
 
     @Query("SELECT COUNT(d) FROM DocumentTaskSub d WHERE d.dueDate<?1 AND d.departmentId=?2")
