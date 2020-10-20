@@ -51,8 +51,40 @@
                                     <div class="card">
                                         <div class="card-body" style="min-height: calc(100vh - 130px);padding: 80px 80px;">
                                             <div class="row">
-
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+                                                        <tr>
+                                                            <th class="w-10" th:text="#{reg_application.id}"></th>
+                                                            <th class="w-40"th:text="#{sys_expertise.objectExpertise}"></th>
+                                                            <th class="w-20"th:text="#{sys_legal_entity_name}"></th>
+                                                            <th class="w-10"th:text="#{sys_tin}"></th>
+                                                            <th class="w-10"th:text="#{reg_application.createdAt}"></th>
+                                                            <th class="w-10"th:text="#{reg_application.status}"></th>
+                                                        </tr>
+                                                        <tr th:object="${regApplication}">
+                                                            <td class="w-10" th:text="*{id}"></td>
+                                                            <td class="w-40">
+                                                                <span th:if="*{objectId!=null}" th:text="*{@helperService.getObjectExpertise(objectId,#locale)}"></span>
+                                                            </td>
+                                                            <td class="w-20">
+                                                                <span th:if="*{applicantId!=null}" th:text="*{applicant.name}"></span>
+                                                            </td>
+                                                            <td class="w-10">
+                                                                <span th:if="*{applicantId!=null}" th:text="*{applicant.tin}"></span>
+                                                            </td>
+                                                            <td class="w-10">
+                                                                <span th:if="*{createdAt!=null}" th:text="*{#dates.format(createdAt,'dd.MM.yyyy HH:mm:ss')}"></span>
+                                                            </td>
+                                                            <td class="w-10">
+                                                                <span th:if="*{status!=null}" th:text="#{*{status.name}}"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
                                             </div>
+                                            <br/>
+                                            <br/>
+                                            <br/>
                                             <div class="row" >
                                                 <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">
                                                     <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
