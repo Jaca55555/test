@@ -24,7 +24,13 @@ public class DocUrls {
     public static final String NotificationList = Notification + "/list";
     public static final String NotificationListAjax = Notification + "/list_ajax";
     public static final String NotificationShowAfter = Notification + "/show/after";
-
+//    Comment
+    private static final String Comment = Prefix + "/comment";
+    public static final String CommentShow = Comment + "/show";
+    public static final String CommentList = Comment + "/list";
+    public static final String CommentListAjax = Comment + "/list_ajax";
+    public static final String CommentShowAfter = Comment + "/show/after";
+//     Comment
     public static final String Dashboard = Prefix + "/dashboard";
     public static final String DocLangSelect = Prefix + "/lang_select";
     public static final String DashboardDocList = Dashboard + "/list_ajax";

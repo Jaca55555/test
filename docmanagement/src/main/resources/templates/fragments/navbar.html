@@ -58,6 +58,27 @@
 <!--          tooltips-->
             </ul>
             <ul class="navbar-nav ml-auto">
+<!--                comment-->
+                <li>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <sub style="font-size: 180%"><i class="icon feather icon-bell"></i></sub>
+                            <sup style="font-size: 100%"><span class="badge badge-warning badge-notification" id="new-comment-count">0</span></sup>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right notification">
+                            <div class="noti-head">
+                                <h6 class="d-inline-block m-b-0" th:text="#{sys_notifications}"></h6>
+                            </div>
+                            <ul class="noti-body" id="comment-body">
+
+                            </ul>
+                            <div class="noti-footer">
+                                <a style="color: black" href="/doc/comment/list" th:text="#{sys_notification.showAll}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+<!--                comment-->
                 <li>
                     <div class="dropdown">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
