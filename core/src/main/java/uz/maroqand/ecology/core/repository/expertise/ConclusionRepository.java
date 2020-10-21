@@ -17,6 +17,7 @@ import java.util.List;
 public interface ConclusionRepository extends JpaRepository<Conclusion, Integer>, JpaSpecificationExecutor<Conclusion> {
 
     Conclusion findByIdAndDeletedFalse(Integer id);
+    Conclusion findByDocumentRepoIdAndDeletedFalse(Integer id);
 
     List<Conclusion> findByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer id);
 

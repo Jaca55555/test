@@ -40,6 +40,12 @@
         table.dataTable tbody tr:nth-of-type(2n+1) {
             background-color: rgba(4, 169, 245, 0.05) !important;
         }
+        table.dataTable thead th{
+            border-bottom: 2px solid #eaeaea;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -128,9 +134,7 @@
                 </h5>
                 <div>
                     <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
-                    <a href="/static/doc/" class="collapsed card-header-a" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <span class="pcoded-micon"><i class="fa fa-level-down-alt color-primary fs20" style="position: relative;top:3px;"></i></span>
-                    </a>
+
                 </div>
             </div>
             <div class="col-xl-12 col-md-12 accordion parent-card pb-0" id="accordion">
@@ -167,30 +171,23 @@
                                 <option th:each="documentView: ${documentViews}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
                             </select>
                         </div>
-                    </div>
-
-                    <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="row">
-                            <div class="form-group col-md-6 col-sm-12">
-                                <label class="control-label" th:text="#{doc_outgoing.content}">Хатнинг кискача мазмуни</label>
-                                <div class="col-sm-12 p0">
-                                    <input type="text" class="form-control" id="content">
-                                </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label class="control-label" th:text="#{doc_outgoing.content}">Хатнинг кискача мазмуни</label>
+                            <div class="col-sm-12 p0">
+                                <input type="text" class="form-control" id="content">
                             </div>
-                            <div class="form-group col-md-4 col-sm-12">
-                                <label for="department_id" class="control-label " th:text="#{doc_outgoing.department}">Хат жунатаётган булим ёки ходим</label>
-                                <div class="col-sm-12 p0">
-                                    <select class="singleSelect2 col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
-                                        <option value th:text="#{sys_select}"></option>
-                                        <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <label for="department_id" class="control-label " th:text="#{doc_outgoing.department}">Хат жунатаётган булим ёки ходим</label>
+                            <div class="col-sm-12 p0">
+                                <select class="singleSelect2 col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="department_id">
+                                    <option value th:text="#{sys_select}"></option>
+                                    <option th:each="department: ${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+                                </select>
                             </div>
-<!--                            <div class="form-group col-md-2 col-sm-12 form-button-container">-->
-<!--                                <button onclick="getDatatableConnect();return false;" type="button" class="btn btn-primary mb-0" th:text="#{sys_document.search}">искать</button>-->
-<!--                            </div>-->
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -298,8 +295,8 @@
         let currentViewLink = viewLink + '?id=' + row[0];
         let currentEditLink = editLink + '?id=' + row[0];
         let html = '';
-        html += `<!--<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>-->`;
-        html += `<div class="btn-group"><a class="btn btn-warning btn-sm mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
+        html += `<!--<div class="btn-group"><a class="btn btn-info  mr-1" href="${currentViewLink} " title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>-->`;
+        html += `<div class="btn-group"><a class="btn btn-warning  mr-1" href="${currentEditLink}" title="'+labelView+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a></div>`;
         return html;
     }
 

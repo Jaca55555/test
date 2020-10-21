@@ -184,7 +184,8 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
         for (RegApplicationLog regApplicationLog : regApplicationLogList) {
             if ( !regApplicationLog.getRegApplication().getDeleted()
-                    && !hashMap.containsKey(regApplicationLog.getRegApplicationId()) && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())
+                    && !hashMap.containsKey(regApplicationLog.getRegApplicationId())
+                    && regApplicationLog.getRegApplication().getReviewId().equals(user.getOrganizationId())
                     && (regApplicationLog.getStatus().equals(LogStatus.Initial)|| regApplicationLog.getStatus().equals(LogStatus.Resend)
                     || (logType.equals(LogType.Agreement) && regApplicationLog.getStatus().equals(LogStatus.New)))
             ) {

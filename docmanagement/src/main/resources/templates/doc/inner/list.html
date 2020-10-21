@@ -46,6 +46,12 @@
         table.dataTable tbody tr:nth-of-type(2n+1) {
             background-color: rgba(4, 169, 245, 0.05) !important;
         }
+        table.dataTable thead th{
+            border-bottom: 2px solid #eaeaea;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -73,9 +79,7 @@
                     </h5>
                     <div>
                         <span onclick="clearFilter()" class="pcoded-micon pointer mr-2"><i class="fa fa-times fs20 color-red"></i></span>
-                        <a class="card-header-a" href="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
-                            <span class="pcoded-micon"><i class="fa fa-level-down-alt fs20 color-primary"></i></span>
-                        </a>
+
                     </div>
                 </div>
                 <div class="row p10" style="padding-bottom: 0px;">
@@ -106,71 +110,29 @@
                             </div>
                         </div>
                     </div>
-
-                </div>
-                <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-
-                    <div class="row" style="padding-top: 0px;">
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
-                            <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
-                                <option value=""></option>
-                                <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible">
-                                <option value=""></option>
-                                <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-4 col-sm-12">
-                            <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
-                            <input class="form-control" id="content">
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
-                                <option value="">Танлаш</option>
-                            </select>
-                        </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label class="control-label"><span th:text="#{doc_incoming.journal}">Хужжат категорияси</span></label>
+                        <select class="singleSelect col-md-3 col-sm-12 select2-hidden-accessible">
+                            <option value=""></option>
+                            <option th:each="journal: ${journalList}" th:value="${journal.id}" th:text="${journal.name}"></option>
+                        </select>
                     </div>
-                    <div class="row" style="padding-top: 0px">
-                        <div class="form-group col-md-3 col-sm-12">
-                            <label class="control-label"><span th:text="#{sys.doc_chief}">Рахбарият</span></label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true" id="chief">
-                                <option value=""></option>
-                                <option th:each="i: ${chief}" th:value="${i.id}" th:text="${i.firstname} + ' ' + ${i.lastname}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-4 col-sm-12">
-                            <label for="dateBegin" class="control-label"><span th:text="#{sys.doc_executeDate}">Ижро муддати</span></label>
-                            <div class="row">
-                                <div class="col-6" style="padding-left: 0;">
-                                    <input autocomplete="off" class="form-control datepicker date" id="executeDateBegin" placeholder="Дан" />
-                                    <i class="gray-arrow mdi mdi-calendar color-gray" style="right:23px"></i>
-                                </div>
-                                <div class="col-6" style="padding-right:0;">
-                                    <input autocomplete="off" class="form-control datepicker date" id="executeDateEnd" placeholder="гача" />
-                                    <i class="gray-arrow mdi mdi-calendar color-gray"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12">
-                            <label class="control-label"><span th:text="#{sys.doc_executeStatus}">Хужжатнинг ижро ҳолати</span></label>
-                            <select class="singleSelect col-sm-12 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-12 form-button-container">
-                            <button type="button" class="btn btn-primary m10-vertical m20-horizontal mt-4"  onclick="getDatatableConnect()">
-                                <span th:text="#{sys_document.search}">Қидириш</span>
-                            </button>
-                        </div>
+                    <div class="form-group col-md-3 col-sm-12">
+                        <label class="control-label"><span th:text="#{doc_incoming.documentView}">Хужжат тури</span></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible">
+                            <option value=""></option>
+                            <option th:each="documentView: ${documentViewList}" th:value="${documentView.id}" th:text="${documentView.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="content" class="control-label"><span th:text="#{doc_incoming.content}">Хужжатнинг қисқача мазмуни</span></label>
+                        <input class="form-control" id="content">
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <label class="control-label"><span th:text="#{doc_incoming.doc_executePath}">Ижро йўналиши</span></label>
+                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="executePath">
+                            <option value="">Танлаш</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -291,7 +253,7 @@
 
         function renderActionsColumn(data, type, row, meta) {
             var html = '';
-            html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+            html += '<div class="btn-group"><a class="btn btn-info mr-1" href="'+viewLink+'?id='+row[0]+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
             return html;
         }
 
@@ -299,20 +261,20 @@
             var html = '';
             var status=row[8];
             switch (status) {
-                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block btn-sm">'+row[6]+'</button>';return html;
-                default: html='<button type="button" class="btn-rounded btn btn-light btn-block btn-sm">'+row[6]+'</button>';return html;
+                case 0: html='<button type="button" class="btn-rounded btn btn-info btn-block">'+row[6]+'</button>';return html;
+                case 1: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
+                case 2: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
+                case 3: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
+                case 4: html='<button type="button" class="btn-rounded btn btn-warning btn-block">'+row[6]+'</button>';return html;
+                case 5: html='<button type="button" class="btn-rounded btn btn-secondary btn-block">'+row[6]+'</button>';return html;
+                case 6: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[6]+'</button>';return html;
+                case 7: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[6]+'</button>';return html;
+                case 9: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[6]+'</button>';return html;
+                case 10: html='<button type="button" class="btn-rounded btn btn-primary btn-block">'+row[6]+'</button>';return html;
+                case 11: html='<button type="button" class="btn-rounded btn btn-success btn-block">'+row[6]+'</button>';return html;
+                case 13: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[6]+'</button>';return html;
+                case 12: html='<button type="button" class="btn-rounded btn btn-danger btn-block">'+row[6]+'</button>';return html;
+                default: html='<button type="button" class="btn-rounded btn btn-light btn-block">'+row[6]+'</button>';return html;
             }
             return html;
         }

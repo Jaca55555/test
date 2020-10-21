@@ -15,6 +15,7 @@ public class IndividualDto {
     private Integer id;
 
     private String individualPinfl;
+    private Integer individualTin;
     //Ф.И.О.
     private String individualName;
 
@@ -38,6 +39,7 @@ public class IndividualDto {
         this.id = applicant.getId();
         this.individualName = applicant.getName();
         this.individualPinfl = applicant.getPinfl();
+        this.individualTin = applicant.getTin();
 
         this.passportSerial = applicant.getPassportSerial();
         this.passportNumber = applicant.getPassportNumber();

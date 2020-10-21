@@ -400,12 +400,14 @@ public class PaymentFileController {
 
     }
 
+
     // status=-1  invoice topilmadi
     // status=-2  ariza topilmadi topilmadi
-    @RequestMapping(value = BillingUrls.PaymentFileAllGetInvoice,method = RequestMethod.POST)
+    @RequestMapping(value = BillingUrls.PaymentFileAllGetInvoice,method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String,Object> getInvoiceDetails (
-            @RequestParam(name = "invoiceStr") String invoiceStr
+            @RequestParam(name = "invoiceStr") String invoiceStr,
+            @RequestParam(name = "id") Integer payFilieId
     ){
 
         HashMap<String,Object> result = new HashMap<>();
@@ -416,6 +418,11 @@ public class PaymentFileController {
             return result;
         }
 
+        PaymentFile paymentFile = paymentFileService.getById(payFilieId);
+        if (paymentFile==null){
+            result.put("status",-3);
+            return result;
+        }
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
         if (regApplication==null){
             result.put("status",-2);
@@ -424,9 +431,10 @@ public class PaymentFileController {
 
         result.put("regId",regApplication.getId());
         result.put("legalName",invoice.getPayeeName());
-        result.put("createdDate",invoice.getCreatedDate());
+        result.put("createdDate",invoice.getCreatedDate()!=null?Common.uzbekistanDateFormat.format(invoice.getCreatedDate()):"");
         result.put("detail",invoice.getDetail());
         result.put("amount",invoice.getAmount());
+        result.put("actionUrl",BillingUrls.PaymentFileAllConnectInvoiceSubmit + "?id=" + payFilieId + "&invoiceId=" + invoice.getId() + "&regId=" + regApplication.getId());
 
         return result;
     }
@@ -440,16 +448,16 @@ public class PaymentFileController {
         User user = userService.getCurrentUserFromContext();
         PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
         if (paymentFile==null){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-1";
         }
 
         Invoice invoice = invoiceService.getInvoice(invoiceId);
         if (invoice==null){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-2";
         }
         RegApplication regApplication = regApplicationService.getById(regId);
-        if (regApplication==null || regApplication.getInvoiceId()==null || regApplication.getInvoiceId()!=invoiceId){
-            return "redirect:" + BillingUrls.PaymentFileAllList;
+        if (regApplication==null || regApplication.getInvoiceId()==null || !regApplication.getInvoiceId().equals(invoiceId)){
+            return "redirect:" + BillingUrls.PaymentFileAllList + "?failed=-3";
         }
 
         paymentFile.setInvoice(invoice.getInvoice());

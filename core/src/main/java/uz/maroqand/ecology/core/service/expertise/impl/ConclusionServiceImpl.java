@@ -38,6 +38,11 @@ public class ConclusionServiceImpl implements ConclusionService {
     }
 
     @Override
+    public Conclusion getByRepoId(Integer id) {
+        return conclusionRepository.findByDocumentRepoIdAndDeletedFalse(id);
+    }
+
+    @Override
     public Conclusion save(Conclusion conclusion) {
         return conclusionRepository.save(conclusion);
     }

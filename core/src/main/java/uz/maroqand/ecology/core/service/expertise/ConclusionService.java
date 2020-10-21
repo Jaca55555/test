@@ -10,6 +10,7 @@ import java.util.List;
 public interface ConclusionService {
 
     Conclusion getById(Integer id);
+    Conclusion getByRepoId(Integer id);
 
     Conclusion save(Conclusion conclusion);
 

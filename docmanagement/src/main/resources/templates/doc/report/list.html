@@ -28,6 +28,9 @@
             padding: 5px;
             border: 1px solid grey;
         }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #04a9f5;
+        }
     </style>
 </head>
 <body>
@@ -178,7 +181,7 @@
             lengthMenu: [ [10,25, 50, 100], [10,25, 50, 100] ],
             order: [[5, 'desc']],
             dom:'lrtip',
-            dom: 'Bfrtip',
+            dom: 'Brtip',
             buttons: [
 
                 'copy', 'csv', 'excel', 'pdf','print'
@@ -208,12 +211,12 @@
             columns: [
                 {data: 0, name: 'id', visible:false},
                 {data: 1, name: 'docIndex'},
-                {data: 2, name: 'name'},
-                {data: 3, name: 'nameOz'},
-                {data: 4, name: 'nameEn'},
-                {data: 5, name: 'nameRu'},
-                {data: 6, name: 'organizationId'},
-                {data: 7, name: 'parentId'},
+                {data: 2, name: 'name',orderable:false},
+                {data: 3, name: 'nameOz',orderable:false},
+                {data: 4, name: 'nameEn',orderable:false},
+                {data: 5, name: 'nameRu',orderable:false},
+                {data: 6, name: 'organizationId',orderable:false},
+                {data: 7, name: 'parentId',orderable:false},
 
             ],
             rowCallback: function (row, data) {
@@ -240,7 +243,11 @@
             $('#myTab a.active').trigger('click');
         })
     });
-
+    // var table = $('#responsive-table-model').DataTable();
+    // var rowNode = table
+    //     .row.add( [ 1000,'dkjhasd',23, 32,345,45,34,543 ] )
+    //     .draw()
+    //     .node();
     $('#newDocs').on('click',function () {
         $('#myTab a.active').removeClass('active');
         $('#home-tab').addClass('active');

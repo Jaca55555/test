@@ -50,7 +50,7 @@
 <div class="pcoded-main-container">
     <div class="col-xl-12 col-md-12">
         <div class="flex" style="display: flex; justify-content: space-between">
-        <div class="card parent-card" id="for_doc_print" style="width: 49%">
+        <div class="card parent-card" id="for_doc_print" style="width: 49%;padding: 0px">
             <div class="card-header flex-space-between mobile-column" style="align-items: center;">
                 <h5 class="mb-0">
                     <span href="" class="card-header-a collapsed" >
@@ -142,16 +142,18 @@
                 <hr class="m20-vertical">
             </div>
         </div>
-            <div class="card parent-card" style="width: 49%">
+            <div class="card parent-card" style="width: 49%;padding: 0px">
                 <ul class="nav nav-tabs row" id="myTab" role="tablist" >
                     <li class="nav-item col-3" style="border-right: 1px solid lightgrey; padding: 0px;border-left: 1px solid lightgrey;" role="presentation" th:each="file, fileStat:${files}">
                         <a class="nav-link" id="home-tab" data-toggle="tab" th:classappend="${fileStat.first} ? 'active'" href="#home" th:href="'#'+#{home}+${file.id}" role="tab" aria-controls="home" th:text="${#strings.abbreviate(#strings.substringBefore(file.name,'.'), 9)+'.'+file.extension}">Home</a>
                     </li>
-
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div  style="height: 560px" class="tab-pane fade" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
-                        <iframe th:src="${'http://docs.google.com/viewer?url=http://cb.eco-service.uz/doc/file/download?id='+file.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                <div class="tab-content" style="height: 100%" id="myTabContent">
+                    <div  th:if="${file.extension!='png' and file.extension!='jpeg' and file.extension!='jpg'}" style="height: 560px" class="holds-the-iframe tab-pane fade" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
+                        <iframe id="iframeID" name="iframeID"  th:src="${'http://docs.google.com/viewer?url=http://cb.eco-service.uz/doc/file/download?id='+file.id+'&amp;embedded=true'}" style="width: 100%;height: 570px;"></iframe>
+                    </div>
+                    <div  th:if="${file.extension=='png' or file.extension=='jpeg' or file.extension=='jpg'}" style="height: 560px" class="holds-the-iframe tab-pane fade" th:classappend="${fileStat.first} ? 'show active'" th:id="#{home}+${file.id}" th:each="file, fileStat : ${files}">
+                        <img style="max-height: 560px;max-width: 730px" th:src="${'http://cb.eco-service.uz/doc/file/download?id='+file.id}" alt="">
                     </div>
                 </div>
             </div>
