@@ -144,6 +144,10 @@ public class DocTemplates {
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationList = Notification + "/list";
 
+//    Comment
+    public static final String Comment = Prefix + "/comment";
+    public static final String CommentList = Comment + "/list";
+//    Comment
     private static final String Report=Prefix+"/report";
     public static final String ReportList = Report + "/list";
     public static final String ReportView = Report + "/view";

@@ -77,6 +77,7 @@ $(document).ready(function() {
                 });
 
     getNotificationList();
+    getCommentList();
     // $('.date').bootstrapMaterialDatePicker({
     //     weekStart: 0,
     //     time: false
@@ -209,4 +210,44 @@ function appendNotification(value) {
         '  <a style="color: black" href="'+value.url+'">'+value.registrationNumber+ " " +value.message+'</a>\n' +
         '</div> </div> </li>';
     $("#noti-body").append(notification);
+}
+function getCommentList() {
+    $.post('/doc/notification/show', {_csrf: $('#global_csrf').val()}, function (data) {
+        var notification = '';
+        if(data.newNotificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.newNotificationTitle+'</p></li>';
+            $("#comment-body").append(notification);
+            $("#new-comment-count").text(data.newNotificationList.length);
+            $("#new-comment-count").show();
+        }else {
+            $("#new-comment-count").hide();
+        }
+        $.each(data.newNotificationList, function( index, value ){
+            appendNotification(value);
+        });
+
+        if(data.notificationList.length>0){
+            notification = '<li class="n-title"> <p class="m-b-0" >'+data.notificationTitle+'</p></li>';
+            $("#comment-body").append(notification);
+        }
+        $.each(data.notificationList, function( index, value ){
+            appendNotification(value);
+        });
+    });
+}
+
+$(".dropdown-toggle").on('click', function() {
+    $.post('/doc/notification/show/after', {_csrf: $('#global_csrf').val()}, function (data) {
+        $("#new-comment-count").hide();
+    });
+});
+
+function appendNotification(value) {
+    var notification =
+        '<li class="notification"> <div class="media"> <div class="media-body">\n' +
+        '  <p><strong>'+value.createdBy+'</strong><span class="n-time text-muted">' +
+        '    <i class="icon feather icon-clock m-r-10"></i>'+value.createdAt+'</span></p>\n' +
+        '  <a style="color: black" href="'+value.url+'">'+value.registrationNumber+ " " +value.message+'</a>\n' +
+        '</div> </div> </li>';
+    $("#comment-body").append(notification);
 }
