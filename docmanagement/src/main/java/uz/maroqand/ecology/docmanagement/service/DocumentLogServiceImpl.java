@@ -1,8 +1,15 @@
 package uz.maroqand.ecology.docmanagement.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.entity.Document;
 import uz.maroqand.ecology.docmanagement.entity.DocumentLog;
 import uz.maroqand.ecology.docmanagement.entity.DocumentTask;
@@ -10,10 +17,11 @@ import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
 import uz.maroqand.ecology.docmanagement.repository.DocumentLogRepository;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentLogService;
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 /**
  * Created by Namazov Jamshid
@@ -127,4 +135,47 @@ public class DocumentLogServiceImpl implements DocumentLogService {
 
     }
 
+    @Override
+    public Page<DocumentLog> findFiltered(String dateBeginStr, String dateEndStr, Integer createdById, Integer type, Pageable pageable) {
+        return logRepository.findAll(getFilteringSpecification(dateBeginStr,dateEndStr,createdById,type),pageable);
+    }
+
+    private static Specification<DocumentLog> getFilteringSpecification(
+            final String dateBeginStr,
+            final String dateEndStr,
+            final Integer createdById,
+            final Integer type
+    ) {
+        return new Specification<DocumentLog>() {
+            @Override
+            public Predicate toPredicate(Root<DocumentLog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
+
+                Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
+                Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
+                if (dateBegin != null && dateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+                }
+                if (dateEnd != null && dateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+                }
+                if (dateBegin != null && dateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+                }
+
+
+                if(createdById != null){
+                    predicates.add(criteriaBuilder.equal(root.get("createdById"), createdById));
+                }
+
+                if(type!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                }
+
+
+                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                return overAll;
+            }
+        };
+    }
 }

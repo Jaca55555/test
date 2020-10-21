@@ -63,10 +63,9 @@
                         <thead>
                         <tr>
                             <th th:text="#{sys_notification.createdBy}"></th>
+                            <th th:text="#{sys_notification.createdBy}"></th>
                             <th th:text="#{sys_notification.createdAt}"></th>
                             <th th:text="#{sys_notification.title}"></th>
-                            <th th:text="#{sys_notification.message}"></th>
-                            <th ></th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -83,7 +82,7 @@
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 
 <script th:inline="javascript">
-    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).NotificationListAjax}]];
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).CommentListAjax}]];
 
     function getCurrentLanguage() {
         return [[__${#locale}__]];
@@ -118,19 +117,11 @@
 
             },
             columns: [
-                {data: 7, name: 'createdById'},
-                {data: 6, name: 'createdAt'},
-                {data: 3, name: 'title'},
-                {
-                    render: function (data, type, row, meta) {
-                        return '<a href="'+row[5]+'" >'+row[4]+'</a>';
-                    },name: 'message'
-                },
-                {
-                    render: function (data, type, row, meta) {
-                        return '<a href="'+row[5]+'" class="btn btn-info btn-sm "><i class="mdi mdi-view-grid" style="margin-right: 0px;"></i></a>';
-                    },orderable:false, className:'text-center'
-                }
+
+                {data: 0, name: 'id' ,visible:false},
+                {data: 1, name: 'createdById'},
+                {data: 2, name: 'createdAt'},
+                {data: 3, name: 'title'}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
