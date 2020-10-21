@@ -24,10 +24,13 @@ public interface DocumentTaskSubService {
     List<DocumentTaskSub> getByDepartmentId(Integer departmentId);
     Integer getCountByStatus();
     Integer getCountByDueDate();
+    Integer countAllByStatus(Integer status);
     DocumentTaskSub createNewSubTask(Integer level, Document document, Integer taskId, String content, Date dueDate, Integer type, Integer senderId, Integer receiverId, Integer departmentId);
     Integer countAllByStatusAndDepartmentId(Integer status,Integer departmentId);
     Integer countAllByDueDateAndDepartmentId(Date date,Integer departmentId);
+    Integer countAllByDueDate(Date date);
     Integer countAllByDueDate1AndDepartmentId(Date date,Integer departmentId);
+    Integer countAllByDueDate1(Date date);
     DocumentTaskSub update(DocumentTaskSub taskSub);
     Integer countAllByDepartmentId(Integer departmentId);
 

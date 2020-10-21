@@ -34,14 +34,15 @@
         /*}*/
         #dtVerticalScrollExample_filter,#dtVerticalScrollExample_info,#dtVerticalScrollExample_length,#dtVerticalScrollExample_paginate,
         #dtVerticalScrollExample1_filter,#dtVerticalScrollExample1_info,#dtVerticalScrollExample1_length,#dtVerticalScrollExample1_paginate,
-        #dtVerticalScrollExample2_filter,#dtVerticalScrollExample2_info,#dtVerticalScrollExample2_length,#dtVerticalScrollExample2_paginate{
+        #dtVerticalScrollExample2_filter,#dtVerticalScrollExample2_info,#dtVerticalScrollExample2_length,#dtVerticalScrollExample2_paginate,
+        #dtVerticalScrollExample3_filter,#dtVerticalScrollExample3_info,#dtVerticalScrollExample3_length,#dtVerticalScrollExample3_paginate{
             display: none;
         }
-        #dtVerticalScrollExample_wrapper .col-sm-12, #dtVerticalScrollExample2_wrapper .col-sm-12, #dtVerticalScrollExample1_wrapper .col-sm-12
+        #dtVerticalScrollExample_wrapper .col-sm-12, #dtVerticalScrollExample2_wrapper .col-sm-12, #dtVerticalScrollExample1_wrapper .col-sm-12, #dtVerticalScrollExample3_wrapper .col-sm-12
         {
             padding: 0 !important;
         }
-        #dtVerticalScrollExample_wrapper .table-striped,#dtVerticalScrollExample1_wrapper .table-striped,#dtVerticalScrollExample2_wrapper .table-striped {
+        #dtVerticalScrollExample_wrapper .table-striped,#dtVerticalScrollExample1_wrapper .table-striped,#dtVerticalScrollExample2_wrapper .table-striped,#dtVerticalScrollExample3_wrapper .table-striped {
             margin-top: 0 !important;
         }
         .table-striped {
@@ -81,8 +82,8 @@
             line-height: 44px;
             text-align: center
         }
-        #dtVerticalScrollExample, #dtVerticalScrollExample1, #dtVerticalScrollExample2{
-            height: 233px !important;
+        #dtVerticalScrollExample, #dtVerticalScrollExample1, #dtVerticalScrollExample2, #dtVerticalScrollExample3{
+            height: 260px !important;
         }
         td.border-performance {
             border-left: 3px solid blue;
@@ -108,6 +109,9 @@
         .dataTables_empty{
             background-color: white;
         }
+        .dataTables_scrollHeadInner{
+            padding-right: 0px !important;
+        }
     </style>
 </head>
 <body>
@@ -129,7 +133,7 @@
     <div class="pcoded-main-container">
 
         <div class="col-xl-12 col-md-12 row" style="display: flex;" >
-            <div class="col-12 col-lg-3 p-0" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')" style="background: white !important;">
+            <div class="col-12 col-lg p-0" sec:authorize="hasAnyAuthority('DOC_MANAGEMENT_CHANGE_PERFORMER')" style="background: white !important;">
                 <table id="tVerticalScrollExample3" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -147,7 +151,7 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr style="height: 77px;background-color: white">
+                    <tr style="height: 86px;background-color: white">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).DocumentCheckList}" style="padding: 5px 15px">
                             <span  th:text="#{doc_check.list}"></span>
@@ -157,7 +161,7 @@
                             <span th:if="${@getNotifacationService.countDocCheckByStatus()}!=0" th:text="${@getNotifacationService.countDocCheckByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px;padding: 0px 30px;background:#b67f13 ;color: white; margin-top: 6%">12</span>
                          </td>
                     </tr>
-                    <tr style="height: 77px;background-color: white">
+                    <tr style="height: 87px;background-color: white">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangePerformerList}" style="padding: 5px 15px">
                                 <span  th:text="#{doc_change.perfomer}"></span>
@@ -165,20 +169,20 @@
                         <td>
                             <span th:if="${@getNotifacationService.countPerformerByStatus()}!=0" th:text="${@getNotifacationService.countPerformerByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white;margin-top: 6%">12</span></td>
                     </tr>
-                    <tr style="height: 78px ; background-color: white">
+                    <tr style="height: 87px ; background-color: white">
                         <td>
                             <a class="nav-link" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ChangeDueDateList}" style="padding: 5px 15px">
                                 <span  th:text="#{doc_change.dueDate}"></span>
                             </a></td>
                         <td>
-                            <span th:if="${@getNotifacationService.countDueDateByStatus()}!=0" th:text="${@getNotifacationService.countDueDateByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: #0a6aa1 ;color: white;margin-top: 6%">12</span></td>
+                            <span th:if="${@getNotifacationService.countDueDateByStatus()}!=0" th:text="${@getNotifacationService.countDueDateByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px; margin-right: 5px; padding: 0px 30px;background: blueviolet ;color: white;margin-top: 6%">12</span></td>
                     </tr>
                     </tbody>
 
                 </table>
 
             </div>
-            <div class="col-12 col-lg-3 p-0" style="background: white">
+            <div class="col-12 col-lg p-0" style="background: white">
                 <table id="dtVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -186,6 +190,37 @@
                         <th colspan="2">
                             <span class="hawcons-icon-1-mail-envelope color-green" style="font-size: 80px;float: left"></span>
                             <h4 style="margin-top: 28px;" th:text="#{doc_incoming.count_new}">Jarayonda</h4>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="th-sm wid"  th:text="#{doc.RegNumber}">Name
+                        </th>
+                        <th class="th-sm wid" th:text="#{sys_document.taskDate}">Position
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr style="background-color: white !important;" th:each="progress:${inNew}">
+                        <td th:switch="${progress.document.documentTypeId}">
+                            <a th:case="1" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).IncomingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="2" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).OutgoingView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="3" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).InnerView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                            <a th:case="4" th:href="${T(uz.maroqand.ecology.docmanagement.constant.DocUrls).ReferenceView}+ '?id=' + ${progress.id}" th:text="${progress.document.registrationNumber}"></a>
+                        </td>
+                        <td th:text="${#dates.format(progress.dueDate,'dd.MM.yyyy')}">Customer Support</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-12 col-lg p-0" style="background: white">
+                <table id="dtVerticalScrollExample3" class="table table-striped table-bordered table-sm" cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                            <span class="hawcons-icon-1-mail-envelope color-green" style="font-size: 80px;float: left"></span>
+                            <h4 style="margin-top: 28px;" th:text="#{doc_reference.in_progress_count}">Jarayonda</h4>
                         </th>
                     </tr>
                     <tr>
@@ -209,7 +244,7 @@
                 </table>
 
             </div>
-            <div class="col-12 col-lg-3 p-0" style="background: white">
+            <div class="col-12 col-lg p-0" style="background: white">
                 <table id="dtVerticalScrollExample2" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -241,7 +276,7 @@
                 </table>
 
             </div>
-            <div class="col-12 col-lg-3 p-0" style="background: white">
+            <div class="col-12 col-lg p-0" style="background: white">
                 <table id="dtVerticalScrollExample1" class="table table-striped table-bordered table-sm" cellspacing="0"
                        width="100%">
                     <thead>
@@ -493,7 +528,7 @@
 
         $(document).ready(function () {
             $('#dtVerticalScrollExample').DataTable({
-                "scrollY": "233px",
+                "scrollY": "260px",
                 "scrollCollapse": true,
                 "ordering": false,
                 "border-bottom":0
@@ -502,7 +537,7 @@
         });
         $(document).ready(function () {
             $('#dtVerticalScrollExample1').DataTable({
-                "scrollY": "233px",
+                "scrollY": "260px",
                 "scrollCollapse": true,
                 "ordering": false
             });
@@ -510,12 +545,22 @@
         });
         $(document).ready(function () {
             $('#dtVerticalScrollExample2').DataTable({
-                "scrollY": "233px",
+                "scrollY": "260px",
                 "scrollCollapse": true,
                 "ordering": false
             });
             $('.dataTables_length').addClass('bs-select');
         });
+        $(document).ready(function () {
+            $('#dtVerticalScrollExample3').DataTable({
+                "scrollY": "260px",
+                "scrollCollapse": true,
+                "ordering": false
+            });
+            $('.dataTables_length').addClass('bs-select');
+        });
+
+
         let statuses = {};
         statuses[0] = [[#{task_status.initial}]];
         statuses[1] = [[#{task_status.new}]];
