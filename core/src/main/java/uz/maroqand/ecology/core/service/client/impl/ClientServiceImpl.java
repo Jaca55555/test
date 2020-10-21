@@ -116,6 +116,7 @@ public class ClientServiceImpl implements ClientService {
         Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
         client.setPinfl(individualDto.getIndividualPinfl());
+        client.setTin(individualDto.getIndividualTin());
         client.setName(individualDto.getIndividualName());
 
         client.setPassportSerial(individualDto.getPassportSerial());
