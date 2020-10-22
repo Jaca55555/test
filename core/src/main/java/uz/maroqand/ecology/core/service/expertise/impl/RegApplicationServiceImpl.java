@@ -233,6 +233,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getStatus()!=null){
                         predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getStatus()));
                     }
+
+                    if (filterDto.getStatusForReg()!=null){
+                        predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
+                    }
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }
@@ -277,6 +281,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getActivityId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
                     }
+
+                    if (filterDto.getConclusionOnline() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
+                    }
+
                     if (filterDto.getObjectId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
                     }

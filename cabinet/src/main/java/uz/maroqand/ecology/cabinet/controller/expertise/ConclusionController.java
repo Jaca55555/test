@@ -74,6 +74,10 @@ public class ConclusionController {
 
     @RequestMapping(ExpertiseUrls.ConclusionList)
     public String conclusionList(Model model){
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions", soatoService.getSubRegions());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
         return ExpertiseTemplates.ConclusionList;
     }
 
@@ -125,6 +129,63 @@ public class ConclusionController {
         return result;
     }
 
+
+    @RequestMapping(value = ExpertiseUrls.ConclusionRegApplicationListAjax,produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getConclusionRegApplicationListAjax(
+            FilterDto filterDto,
+            Pageable pageable
+    ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        User user = userService.getCurrentUserFromContext();
+        Set<RegApplicationStatus> statuses = new HashSet<>();
+        statuses.add(RegApplicationStatus.Approved);
+        statuses.add(RegApplicationStatus.NotConfirmed);
+        filterDto.setStatusForReg(statuses);
+        filterDto.setConclusionOnline(Boolean.FALSE);
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,RegApplicationInputType.ecoService,pageable);
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            convenientForJSONArray.add(new Object[]{
+                    regApplication.getId(),
+                    regApplication.getInputType(),
+                    helperService.getObjectExpertise(regApplication.getObjectId(),locale),
+                    helperService.getMaterials(regApplication.getMaterials(),locale),
+                    regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
+                    regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
+                    regApplication.getApplicantId()!=null?regApplication.getName():"",
+                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():""
+            });
+        }
+        result.put("data",convenientForJSONArray);
+        return result;
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationView)
+    public String conclusionRegApplicationView(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null || regApplication.getConclusionId()==null){
+            return "redirect:" + ExpertiseUrls.ConclusionList;
+        }
+
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("isRegApplication", Boolean.TRUE);
+
+        return ExpertiseTemplates.ConclusionView;
+    }
+
     @RequestMapping(ExpertiseUrls.ConclusionView)
     public String conclusionView(
             @RequestParam(name = "id") Integer id,
@@ -145,9 +206,11 @@ public class ConclusionController {
         }
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("isRegApplication", Boolean.FALSE);
 
         return ExpertiseTemplates.ConclusionView;
     }
+
     @RequestMapping(value = ExpertiseUrls.ConclusionNewList,method = RequestMethod.GET)
     public String getConclusionNewList(Model model){
         List<LogStatus> logStatusList = new ArrayList<>();

@@ -43,70 +43,174 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
-                            <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h5 th:text="#{conclusion_list}"></h5>
-                                        <a class="btn btn-primary float-right" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionNewList}">
-                                            <i class="feather icon-plus"></i>
-                                            <span th:text="#{conclusion.add}"></span>
-                                        </a>
-                                    </div>
-                                    <div class="card-body">
-                                        <form method="post" class="row">
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label">ID</label><br/>
-                                                <input type="text" class="form-control" id="id" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label" th:text="#{sys_legal_entity_name}">ID</label><br/>
-                                                <input type="text" class="form-control" id="name" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label"  th:text="#{sys_tin}">ID</label><br/>
-                                                <input type="text" class="form-control" id="tin" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
-                                                <input type="text" class="form-control datepicker" id="dateBegin" />
-                                            </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
-                                                <input type="text" class="form-control datepicker" id="dateEnd" />
-                                            </div>
-                                            <div class="clearfix"></div>
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link show active" id="online-tab" data-toggle="tab" href="#online" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_conclusion_online.true}"></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{sys_conclusion_online.false}"></a>
+                                            </li>
+                                        </ul>
 
-                                            <div class="col-sm-2 text-right">
-                                                <label class="control-label">&nbsp;</label><br/>
-                                                <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
-                                                    <span th:text="#{sys_search}">Поиск</span>
-                                                </a>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
+tessfsdfsdfd
+                                                <form class="row">
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="tin" class="control-label" th:text="#{sys_tin}">ИНН</label>
+                                                        <input type="text" class="form-control" id="tin_reg">
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="name" class="control-label" th:text="#{sys_legal_entity_name}">Наименование предприятия</label>
+                                                        <input type="text" class="form-control" id="name_reg">
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="applicationId" class="control-label" th:text="#{reg_application.number}">№ id</label>
+                                                        <input type="text" class="form-control" id="applicationId">
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="regionId" class="control-label" th:text="#{sys_region}"></label>
+                                                        <select id="regionId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-4" >
+                                                        <label for="dateBegin" class="control-label" th:text="#{reg_application_log.createdAt}"></label>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <input class="form-control datepicker" id="dateBegin_reg" th:placeholder="#{sys_begin}"/>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <input class="form-control datepicker" id="dateEnd_reg" th:placeholder="#{sys_end}"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-sm-3">
+                                                        <label for="activityId" class="control-label" th:text="#{sys_about.activity}"></label>
+                                                        <select id="activityId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="activity : ${activityList}" th:value="${activity.id}" th:text="${activity.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-3">
+                                                        <label for="objectId" class="control-label" th:text="#{sys_about.objectExpertise}"></label>
+                                                        <select id="objectId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
+                                                        <select id="subRegionId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group col-sm-2 text-right">
+                                                        <label class="control-label">&nbsp;</label></br>
+                                                        <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
+                                                            <i class="feather icon-search mr-1"></i>
+                                                            <span th:text="#{sys_search}">Search</span>
+                                                        </a>
+                                                    </div>
+                                                </form>
+
+                                                <div class="table-responsive">
+                                                    <table id="data-table-reg" class="display table nowrap table-striped table-hover" style="width: 100%">
+                                                        <thead>
+                                                        <tr>
+                                                            <th th:text="#{reg_application.id}"></th>
+                                                            <th th:text="#{reg_application.inputType}"></th>
+                                                            <th th:text="#{sys_expertise.objectExpertise}" style="min-width: 30%"></th>
+                                                            <th th:text="#{sys_legal_entity_name}"></th>
+                                                            <th th:text="#{sys_tin}"></th>
+                                                            <th th:text="#{sys_expertise.material}"></th>
+                                                            <th th:text="#{reg_application.createdAt}"></th>
+                                                            <th th:text="#{reg_application.status}"></th>
+                                                            <th style="max-width: 50px;"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+
                                             </div>
-                                        </form>
-                                        <div class="table-responsive">
-                                            <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
-                                                <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th th:text="#{conclusion.number}"></th>
-                                                    <th th:text="#{conclusion.date}"></th>
-                                                    <th th:text="#{sys_tin}"></th>
-                                                    <th th:text="#{sys_legal_entity_name}"></th>
-                                                    <th th:text="#{sys_company_name}"></th>
-                                                    <th th:text="#{conclusion.material}"></th>
-                                                    <th th:text="#{conclusion.category}"></th>
-                                                    <th th:text="#{conclusion.deadline}"></th>
-                                                    <th th:text="#{conclusion.status}"></th>
-                                                    <th style="max-width: 50px;"></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
+                                            <div class="tab-pane fade active show" id="online" role="tabpanel" aria-labelledby="online-tab">
+
+                                                <div class="col-sm-12">
+                                                    <h5 th:text="#{conclusion_list}"></h5>
+
+                                                    <form method="post" class="row">
+                                                        <div class="form-group col-sm-1">
+                                                            <label class="control-label">ID</label><br/>
+                                                            <input type="text" class="form-control" id="id" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label" th:text="#{sys_legal_entity_name}">ID</label><br/>
+                                                            <input type="text" class="form-control" id="name" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{sys_tin}">ID</label><br/>
+                                                            <input type="text" class="form-control" id="tin" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
+                                                            <input type="text" class="form-control datepicker" id="dateBegin" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
+                                                            <input type="text" class="form-control datepicker" id="dateEnd" />
+                                                        </div>
+                                                        <div class="clearfix"></div>
+
+                                                        <div class="col-sm-3 text-right">
+                                                            <label class="control-label">&nbsp;</label><br/>
+                                                            <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
+                                                                <span th:text="#{sys_search}">Поиск</span>
+                                                            </a>
+                                                            <a class="btn btn-primary float-right" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionNewList}">
+                                                                <i class="feather icon-plus"></i>
+                                                                <span th:text="#{conclusion.add}"></span>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+
+                                                    <div class="table-responsive">
+                                                        <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th th:text="#{conclusion.number}"></th>
+                                                                <th th:text="#{conclusion.date}"></th>
+                                                                <th th:text="#{sys_tin}"></th>
+                                                                <th th:text="#{sys_legal_entity_name}"></th>
+                                                                <th th:text="#{sys_company_name}"></th>
+                                                                <th th:text="#{conclusion.material}"></th>
+                                                                <th th:text="#{conclusion.category}"></th>
+                                                                <th th:text="#{conclusion.deadline}"></th>
+                                                                <th th:text="#{conclusion.status}"></th>
+                                                                <th style="max-width: 50px;"></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
+
+                            <!-- [ sample-page ] start -->
+
                             <!-- [ sample-page ] end -->
                         </div>
                         <!-- [ Main Content ] end -->
@@ -128,7 +232,9 @@
 <script th:inline="javascript">
 
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionListAjax}]];
+    var ajaxRegLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionRegApplicationListAjax}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionView}]];
+    var viewRegLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionRegApplicationView}]];
     var labelView = [[#{sys_view}]];
     var active = [[#{sys_active}]];
     var notActive = [[#{sys_not_active}]];
@@ -140,7 +246,9 @@
     /*<![CDATA[*/
 
     var dataDatatableSelector;
+    var dataDatatableSelectorReg;
     var thead;
+    var theadReg;
 
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
@@ -215,19 +323,94 @@
         datatableConnect();
     }
 
+    function datatableConnectReg() {
+        dataDatatableSelectorReg.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 20,
+            lengthMenu: [ [20, 50, 75, 100], [20, 50, 75, 100] ],
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+                dataToSend.tin = $('#tin_reg').val();
+                dataToSend.name = $('#name_reg').val();
+                dataToSend.contractNumber = "";
+                dataToSend.applicationId = $('#applicationId').val();
+                dataToSend.regionId = $('#regionId').val();
+                dataToSend.subRegionId = $('#subRegionId').val();
+                dataToSend.activityId = $('#activityId').val();
+                dataToSend.objectId = $('#objectId').val();
+                dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
+                dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
+                dataToSend.confirmStatus = $('#confirmStatus').val();
+
+                dataToSend.status = $('#status').val();
+                dataToSend.dateBegin = $('#dateBegin_reg').val();
+                dataToSend.dateEnd = $('#dateEnd_reg').val();
+
+                dataToSend._csrf = $("#global_csrf").val();
+                dataToSend.sort = api.order().length > 0 ? dataToSend.columns[ api.order()[0][0] ].name + ',' + api.order()[0][1] : "id,DESC";
+                $.post(ajaxRegLink, dataToSend, function(data){
+                    callback(data);
+                });
+
+            },
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'inputType'},
+                {data: 2, name: 'objectId'},
+                {data: 7, name: 'applicant.name'},
+                {data: 8, name: 'applicant.tin'},
+                {data: 3, orderable: false},
+                {data: 4, name: 'createdAt'},
+                {
+                    render: function (data, type, row, meta) {
+                        return '<span class="'+row[6]+'">'+row[5]+'</span>';
+                    },name:'status', className:'text-center'
+                },
+                {
+                    render: function (data, type, row, meta) {
+                            return '<a href="'+viewRegLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
+                    }, orderable:false, className:'text-center'
+                }
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+
+    function getRegDatatableConnect() {
+        dataDatatableSelectorReg.DataTable().destroy();
+        dataDatatableSelectorReg.html(theadReg);
+        datatableConnectReg();
+    }
+
     $(document).ready(function () {
         dataDatatableSelector = $('#data-table');
+        dataDatatableSelectorReg = $('#data-table-reg');
         thead = dataDatatableSelector.html();
+        theadReg = dataDatatableSelectorReg.html();
         datatableConnect();
+        datatableConnectReg();
+        bindSubRegionSelectToRegionSelect('#subregionId', '#regionId');
+        mahallaListGetSubRegionId('#subregionId','#mahallaId',getCurrentLanguage());
 
         $('.datepicker').datepicker({
             format: "dd.mm.yyyy",
             todayHighlight: true,
             autoclose: true
         });
+
+        $('#data-table').css("width", "100%");
+        $('#data-table-reg').css("width", "100%");
     });
 
-    $('#data-table').css("width", "100%");
+
 
     /*]]>*/
 </script>

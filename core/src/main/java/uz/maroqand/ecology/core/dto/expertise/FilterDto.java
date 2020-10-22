@@ -1,6 +1,10 @@
 package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+
+import java.util.Set;
 
 /**
  * Created by Utkirbek Boltaev on 22.06.2019.
@@ -25,6 +29,8 @@ public class FilterDto {
     private String deadlineDateBegin;
     private String deadlineDateEnd;
     private Integer status;
+    private Set<RegApplicationStatus> statusForReg;
+    private Boolean conclusionOnline;
 
     private String dateBegin;
     private String dateEnd;

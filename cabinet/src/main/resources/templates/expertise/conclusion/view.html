@@ -55,14 +55,18 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">
+                                        <div class="col-md-12 text-right mb-5" >
                                             <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
                                                 <i class="feather icon-printer"></i>
                                                 <span th:text="#{sys_print}"> print</span>
                                             </button>
                                         </div>
-                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}" id="conclusion">
+                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null && !isRegApplication}" id="conclusion">
                                             <object th:include="expertise/conclusion/conclusion_view :: conclusion" th:remove="tag"></object>
+                                        </div>
+
+                                        <div id="conclusion" th:if="${isRegApplication}" class="text-justify" style="border: #6e45e2 1px dashed;  height: 700px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
+                                            <iframe th:src="${'http://docs.google.com/gview?url=http://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+regApplication.conclusionId+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
                                         </div>
                                     </div>
                                 </div>

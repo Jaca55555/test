@@ -114,10 +114,13 @@ public class ExpertiseUrls {
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionListAjax = Conclusion + "/list_ajax";
     public static final String ConclusionView = Conclusion + "/view";
+    public static final String ConclusionRegApplicationListAjax = Conclusion + "/reg_list_ajax"; // elektron yuklangan
+    public static final String ConclusionRegApplicationView = Conclusion + "/reg_view";
     public static final String ConclusionNewList = Conclusion + "/new_list";
     public static final String ConclusionFileUpload = Conclusion + "/file_upload";
     public static final String ConclusionFileDownload = Conclusion + "/file_download";
     public static final String ConclusionFileDownloadForView = Conclusion + "/file_download_for_view";
+    public static final String ConclusionRegApplicationConclusionIdFileDownloadForView = Conclusion + "/reg_file_download_for_view";
     public static final String ConclusionFileAdd = Conclusion + "/file_add";
 
 
