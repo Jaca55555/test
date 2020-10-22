@@ -107,7 +107,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     predicates.add(criteriaBuilder.equal(root.get("invoice"), invoice));
                 }
                 if(paymentId != null){
-                    predicates.add(criteriaBuilder.equal(root.get("paymentId"), paymentId));
+                    predicates.add(criteriaBuilder.equal(root.get("id"), paymentId));
                 }
 
                 if(payerTin != null){

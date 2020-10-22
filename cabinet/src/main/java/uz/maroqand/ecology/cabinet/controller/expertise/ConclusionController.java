@@ -320,6 +320,25 @@ public class ConclusionController {
         }
     }
 
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdFileDownloadForView)
+    @ResponseBody
+    public ResponseEntity<Resource> conclusionRegApplicationConclusionIdFileDownloadForView(
+            @RequestParam(name = "id") Integer regId
+    ) {
+
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null || !regApplication.getConclusionOnline() || regApplication.getConclusionId()==null){
+            return null;
+        }
+
+        File file = fileService.findById(regApplication.getConclusionId());
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
     @RequestMapping(ExpertiseUrls.ConclusionFileAdd)
     public String conclusionFileAdd(
             @RequestParam(name = "id") Integer regApplicationId,

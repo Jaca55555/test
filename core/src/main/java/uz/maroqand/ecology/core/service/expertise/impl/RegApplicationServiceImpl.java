@@ -284,6 +284,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                     if (filterDto.getConclusionOnline() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
+                        if (!filterDto.getConclusionOnline()){
+                            predicates.add(criteriaBuilder.isNotNull(root.get("conclusionId")));
+                        }else{
+                            predicates.add(criteriaBuilder.isNull(root.get("conclusionId")));
+                        }
                     }
 
                     if (filterDto.getObjectId() != null) {
