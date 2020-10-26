@@ -205,24 +205,34 @@
     function renderDeadlineDateColumn(data, type, row, meta) {
         var html='';
         var deadlineDate1 = row[6];
+        var complete = row[12];
         if (deadlineDate1!='' && deadlineDate1!=null){
-            var parts = deadlineDate1.split('.');
-            var nowDate = new Date();
-            nowDate.setHours(0,0,0,0);
-            var deadlineDate = new Date(parts[2],parts[1]-1,parts[0]);
-            var nearDate = new Date(parts[2],parts[1]-1,parts[0]);
-            nearDate.setDate(nearDate.getDate()-3);
-            nearDate.setHours(0,0,0,0);
-
-            if (nearDate > nowDate){
-                html='<span class="badge badge-info">'+deadlineDate1+'</span>'
-            }else{
-                if (deadlineDate>=nowDate && nearDate<=nowDate){
-                    html='<span class="badge badge-warning">'+deadlineDate1+'</span>'
+            if (complete!=null){
+                if (complete){
+                    html='<span class="badge badge-info">'+deadlineDate1+'</span>'
                 }else{
                     html='<span class="badge badge-danger">'+deadlineDate1+'</span>'
                 }
+            }else{
+                var parts = deadlineDate1.split('.');
+                var nowDate = new Date();
+                nowDate.setHours(0,0,0,0);
+                var deadlineDate = new Date(parts[2],parts[1]-1,parts[0]);
+                var nearDate = new Date(parts[2],parts[1]-1,parts[0]);
+                nearDate.setDate(nearDate.getDate()-3);
+                nearDate.setHours(0,0,0,0);
+
+                if (nearDate > nowDate){
+                    html='<span class="badge badge-info">'+deadlineDate1+'</span>'
+                }else{
+                    if (deadlineDate>=nowDate && nearDate<=nowDate){
+                        html='<span class="badge badge-warning">'+deadlineDate1+'</span>'
+                    }else{
+                        html='<span class="badge badge-danger">'+deadlineDate1+'</span>'
+                    }
+                }
             }
+
         }
 
         return html;

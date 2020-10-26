@@ -155,18 +155,7 @@ public class AgreementCompleteController {
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
             }
 
-            Date deadlineDate=null;
-            if (regApplication!=null && regApplication.getDeadlineDate()!=null){
-                deadlineDate = new Date();
-                deadlineDate = regApplication.getDeadlineDate();
-                if (regApplication.getConclusionCompleteLogId()!=null){
-                    RegApplicationLog conclusionCompleteLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
-                    if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
-                        if (deadlineDate==null) deadlineDate = new Date();
-                        deadlineDate = conclusionCompleteLog.getUpdateAt();
-                    }
-                }
-            }
+
             convenientForJSONArray.add(new Object[]{
                     regApplication!=null?regApplication.getId():"",
                     client!=null?client.getTin():"",
@@ -174,12 +163,13 @@ public class AgreementCompleteController {
                     regApplication!=null && regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication!=null && regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication!=null && regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    deadlineDate != null ?Common.uzbekistanDateFormat.format(deadlineDate):"",
+                    regApplication!=null && regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                     (performerLog!=null && performerLog.getStatus() != null ) ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
                     (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
-                    agreementCompleteLog.getId()
+                    agreementCompleteLog.getId(),
+                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
             });
         }
 

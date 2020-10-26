@@ -10,6 +10,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RegApplicationService {
@@ -37,6 +38,8 @@ public interface RegApplicationService {
     List<RegApplication> getListByPerformerId(Integer performerId);
 
     RegApplication getById(Integer id, Integer createdBy);
+
+    Boolean beforeOrEqualsTrue(RegApplication regApplication);
 
     Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, RegApplicationInputType regApplicationInputType,Pageable pageable);
 

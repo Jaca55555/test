@@ -171,7 +171,8 @@ public class ConclusionCompleteController {
                     (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
-                    agreementCompleteLog.getId()
+                    agreementCompleteLog.getId(),
+                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
             });
         }
 

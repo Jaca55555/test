@@ -71,7 +71,7 @@ public class ClientServiceImpl implements ClientService {
 
         client.setType(ApplicantType.LegalEntity);
 
-        client.setTin(legalEntityDto.getLegalEntityTin());
+        client.setTin(user.getLeTin());
         client.setName(legalEntityDto.getLegalEntityName());
         client.setOpfId(legalEntityDto.getLegalEntityOpfId());
         client.setDirectorFullName(legalEntityDto.getDirectorFullName());
@@ -116,7 +116,7 @@ public class ClientServiceImpl implements ClientService {
         Date passportDateOfExpiry = DateParser.TryParse(individualDto.getPassportDateOfExpiry(), Common.uzbekistanDateFormat);
 
         client.setPinfl(individualDto.getIndividualPinfl());
-        client.setTin(individualDto.getIndividualTin());
+        client.setTin(user.getTin());
         client.setName(individualDto.getIndividualName());
 
         client.setPassportSerial(individualDto.getPassportSerial());

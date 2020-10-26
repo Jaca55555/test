@@ -153,14 +153,6 @@ public class PerformerController {
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            Date deadlineDate=regApplication.getDeadlineDate();
-                if (regApplication.getConclusionCompleteLogId()!=null){
-                    RegApplicationLog conclusionCompleteLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
-                    if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
-                        if (deadlineDate==null) deadlineDate = new Date();
-                        deadlineDate = conclusionCompleteLog.getUpdateAt();
-                    }
-                }
 
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
@@ -169,11 +161,12 @@ public class PerformerController {
                     regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    deadlineDate != null ?Common.uzbekistanDateFormat.format(deadlineDate):"",
+                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                     regApplication.getAgreementStatus() != null ? helperService.getTranslation(regApplication.getAgreementStatus().getAgreementName(),locale):"",
                     regApplication.getAgreementStatus() != null ? regApplication.getAgreementStatus().getId():"",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
-                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():"",
+                    regApplicationService.beforeOrEqualsTrue(regApplication)
             });
         }
 

@@ -275,11 +275,13 @@ public class RegApplicationController {
         IndividualEntrepreneurDto individualEntrepreneurDto = new IndividualEntrepreneurDto();
 
         switch (applicant.getType()){
-            case Individual: individualDto = new IndividualDto(applicant,user);break;
-            case LegalEntity: legalEntityDto = new LegalEntityDto(applicant,user);break;
+            case Individual: individualDto = new IndividualDto(applicant);break;
+            case LegalEntity: legalEntityDto = new LegalEntityDto(applicant);break;
             case ForeignIndividual: foreignIndividualDto = new ForeignIndividualDto(applicant);break;
             case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }
+        individualDto.setIndividualTin(user.getTin());
+        legalEntityDto.setLegalEntityTin(user.getLeTin());
         model.addAttribute("applicant", applicant);
         model.addAttribute("individual", individualDto);
         model.addAttribute("legalEntity", legalEntityDto);

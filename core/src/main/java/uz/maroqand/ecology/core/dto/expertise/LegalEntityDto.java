@@ -34,9 +34,9 @@ public class LegalEntityDto {
 
     public LegalEntityDto(){}
 
-    public LegalEntityDto(Client applicant, User user){
+    public LegalEntityDto(Client applicant){
         this.id = applicant.getId();
-        this.legalEntityTin = user.getLeTin();
+        this.legalEntityTin = applicant.getTin();
         this.legalEntityName = applicant.getName();
 
         this.legalEntityOpfId = applicant.getOpfId();

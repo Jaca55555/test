@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.cabinet.CabinetStarter;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
@@ -55,6 +58,8 @@ public class ConclusionController {
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
     private final FileService fileService;
+
+    private static final Logger logger = LogManager.getLogger(ConclusionController.class);
 
     @Autowired
     public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, FileService fileService) {
@@ -142,6 +147,7 @@ public class ConclusionController {
         statuses.add(RegApplicationStatus.Approved);
         statuses.add(RegApplicationStatus.NotConfirmed);
         filterDto.setStatusForReg(statuses);
+        filterDto.setConclusionOnline(Boolean.FALSE);
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
@@ -175,12 +181,13 @@ public class ConclusionController {
     ){
 
         RegApplication regApplication = regApplicationService.getById(id);
-        if (regApplication==null || regApplication.getConclusionId()==null){
+        if (regApplication==null || regApplication.getConclusionOnline()==null || regApplication.getConclusionOnline()){
             return "redirect:" + ExpertiseUrls.ConclusionList;
         }
-        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("performerLog", performerLog);
         model.addAttribute("isRegApplication", Boolean.TRUE);
 
         return ExpertiseTemplates.ConclusionView;
@@ -322,20 +329,24 @@ public class ConclusionController {
 
     @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdFileDownloadForView)
     @ResponseBody
-    public ResponseEntity<Resource> conclusionRegApplicationConclusionIdFileDownloadForView(
-            @RequestParam(name = "id") Integer regId
-    ) {
-
-        RegApplication regApplication = regApplicationService.getById(regId);
-        if (regApplication==null || !regApplication.getConclusionOnline() || regApplication.getConclusionId()==null){
+    public ResponseEntity<Resource> getConclusionRegApplicationConclusionIdFileDownloadForView(
+            @RequestParam(name = "id") Integer logId,
+            @RequestParam(name = "fileId") Integer fileId
+    ){
+        logger.info("-----ConclusionRegApplicationConclusionIdFileDownloadForView------ PerformerLogId=" + logId + "     fileId=" + fileId);
+        RegApplicationLog performerLog = regApplicationLogService.getById(logId);
+        if (performerLog==null){
             return null;
         }
-
-        File file = fileService.findById(regApplication.getConclusionId());
+        File file = fileService.findById(fileId);
         if (file == null) {
             return null;
         } else {
-            return fileService.getFileAsResourceForDownloading(file);
+            if (performerLog.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
         }
     }
 

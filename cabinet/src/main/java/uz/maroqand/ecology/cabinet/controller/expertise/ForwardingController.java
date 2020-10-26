@@ -33,6 +33,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
@@ -138,14 +139,6 @@ public class ForwardingController {
             Client client = clientService.getById(regApplication.getApplicantId());
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
-            Date deadlineDate = regApplication.getDeadlineDate();
-            if (regApplication.getConclusionCompleteLogId()!=null){
-                RegApplicationLog conclusionCompleteLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
-                if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
-                    if (deadlineDate==null) deadlineDate = new Date();
-                    deadlineDate = conclusionCompleteLog.getUpdateAt();
-                }
-            }
 
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
@@ -154,11 +147,12 @@ public class ForwardingController {
                     regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    deadlineDate != null ?Common.uzbekistanDateFormat.format(deadlineDate):"",
+                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
                     performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
                     performerLog!=null ? performerLog.getStatus().getId():"",
                     forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
-                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():""
+                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():"",
+                    regApplicationService.beforeOrEqualsTrue(regApplication)
             });
         }
 

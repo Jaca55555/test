@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
@@ -32,10 +33,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.persistence.criteria.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
@@ -182,6 +180,31 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public Boolean beforeOrEqualsTrue(RegApplication regApplication) {
+        if ((regApplication.getStatus().equals(RegApplicationStatus.Approved) || regApplication.getStatus().equals(RegApplicationStatus.NotConfirmed))
+                && regApplication.getDeadlineDate()!=null){
+            RegApplicationLog conclusionCompleteLog =regApplication.getConclusionCompleteLogId()!=null?regApplicationLogService.getById(regApplication.getConclusionCompleteLogId()):regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+            if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
+                Date deadlineDate = conclusionCompleteLog.getUpdateAt();
+                Date regDeadline = regApplication.getDeadlineDate();
+                deadlineDate.setHours(0);
+                deadlineDate.setMinutes(0);
+                deadlineDate.setSeconds(0);
+                regDeadline.setHours(0);
+                regDeadline.setMinutes(0);
+                regDeadline.setSeconds(0);
+                if (regDeadline.equals(deadlineDate) || regDeadline.after(deadlineDate)){
+                    return Boolean.TRUE;
+                }else {
+                    return Boolean.FALSE;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public Page<RegApplication> findFiltered(
             FilterDto filterDto,
             Integer reviewId,
@@ -284,11 +307,6 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                     if (filterDto.getConclusionOnline() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
-                        if (!filterDto.getConclusionOnline()){
-                            predicates.add(criteriaBuilder.isNotNull(root.get("conclusionId")));
-                        }else{
-                            predicates.add(criteriaBuilder.isNull(root.get("conclusionId")));
-                        }
                     }
 
                     if (filterDto.getObjectId() != null) {

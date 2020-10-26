@@ -36,7 +36,7 @@ public class IndividualDto {
 
     public IndividualDto(){}
 
-    public IndividualDto(Client applicant, User user){
+    public IndividualDto(Client applicant){
         this.id = applicant.getId();
         this.individualName = applicant.getName();
         this.individualPinfl = applicant.getPinfl();
