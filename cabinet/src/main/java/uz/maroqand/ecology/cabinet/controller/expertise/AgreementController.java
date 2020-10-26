@@ -32,6 +32,7 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -143,6 +144,19 @@ public class AgreementController {
             if (regApplication!=null && regApplicationLog.getIndex()!=null){
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
             }
+            Date deadlineDate=null;
+            if (regApplication!=null && regApplication.getDeadlineDate()!=null){
+                deadlineDate = new Date();
+                deadlineDate = regApplication.getDeadlineDate();
+                if (regApplication.getConclusionCompleteLogId()!=null){
+                    RegApplicationLog conclusionCompleteLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
+                    if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
+                        if (deadlineDate==null) deadlineDate = new Date();
+                        deadlineDate = conclusionCompleteLog.getUpdateAt();
+                    }
+                }
+            }
+
             convenientForJSONArray.add(new Object[]{
                     regApplication!=null?regApplication.getId():"",
                     client!=null?client.getTin():"",
@@ -150,7 +164,7 @@ public class AgreementController {
                     regApplication!=null && regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication!=null && regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication!=null && regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication!=null && regApplication.getDeadlineDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    deadlineDate != null ? Common.uzbekistanDateFormat.format(deadlineDate):"",
                     performerLog != null && performerLog.getStatus() != null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale) : "",
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getAgreementName(),locale) : "",

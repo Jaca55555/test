@@ -65,7 +65,7 @@
                                                             <table class="table border-right border-left border-bottom p-2">
                                                                 <tbody th:if="${#lists.size(permissions)>0}">
                                                                 <tr th:each="permission : ${permissions}" th:if="${permission.type==1}">
-                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="${permission.name}"></span></td>
+                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="#{${permission.name}}"></span></td>
                                                                     <td class="text-right pr-2" style="width: 20%">
                                                                         <div class="switch switch-primary d-inline m-r-10">
                                                                             <input type="checkbox" th:id="${'switch-p-'+permission.id}" th:value="${permission.id}" th:checked="${role.permissions!=null and #lists.contains(role.permissions,permission)}">
@@ -88,7 +88,7 @@
                                                             <table class="table border-right border-left border-bottom p-2">
                                                                 <tbody th:if="${#lists.size(permissions)>0}">
                                                                 <tr th:each="permission : ${permissions}" th:if="${permission.type==2}">
-                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="${permission.name}"></span></td>
+                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="@{${permission.name}}"></span></td>
                                                                     <td class="text-right pr-2" style="width: 20%">
                                                                         <div class="switch switch-primary d-inline m-r-10">
                                                                             <input type="checkbox" th:id="${'switch-p-'+permission.id}" th:value="${permission.id}" th:checked="${role.permissions!=null and #lists.contains(role.permissions,permission)}">
@@ -111,7 +111,7 @@
                                                             <table class="table border-right border-left border-bottom p-2">
                                                                 <tbody th:if="${#lists.size(permissions)>0}">
                                                                 <tr th:each="permission : ${permissions}" th:if="${permission.type==3}">
-                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="${permission.name}"></span></td>
+                                                                    <td class="text-left pl-2" style="width: 80%"><span th:text="#{${permission.name}}"></span></td>
                                                                     <td class="text-right pr-2" style="width: 20%">
                                                                         <div class="switch switch-primary d-inline m-r-10">
                                                                             <input type="checkbox" th:id="${'switch-p-'+permission.id}" th:value="${permission.id}" th:checked="${role.permissions!=null and #lists.contains(role.permissions,permission)}">

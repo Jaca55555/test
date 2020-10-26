@@ -275,8 +275,8 @@ public class RegApplicationController {
         IndividualEntrepreneurDto individualEntrepreneurDto = new IndividualEntrepreneurDto();
 
         switch (applicant.getType()){
-            case Individual: individualDto = new IndividualDto(applicant);break;
-            case LegalEntity: legalEntityDto = new LegalEntityDto(applicant);break;
+            case Individual: individualDto = new IndividualDto(applicant,user);break;
+            case LegalEntity: legalEntityDto = new LegalEntityDto(applicant,user);break;
             case ForeignIndividual: foreignIndividualDto = new ForeignIndividualDto(applicant);break;
             case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }

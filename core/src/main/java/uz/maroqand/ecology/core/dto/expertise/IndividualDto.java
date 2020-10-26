@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 
 /**
@@ -35,7 +36,7 @@ public class IndividualDto {
 
     public IndividualDto(){}
 
-    public IndividualDto(Client applicant){
+    public IndividualDto(Client applicant, User user){
         this.id = applicant.getId();
         this.individualName = applicant.getName();
         this.individualPinfl = applicant.getPinfl();

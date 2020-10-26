@@ -138,6 +138,15 @@ public class ForwardingController {
             Client client = clientService.getById(regApplication.getApplicantId());
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+            Date deadlineDate = regApplication.getDeadlineDate();
+            if (regApplication.getConclusionCompleteLogId()!=null){
+                RegApplicationLog conclusionCompleteLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
+                if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
+                    if (deadlineDate==null) deadlineDate = new Date();
+                    deadlineDate = conclusionCompleteLog.getUpdateAt();
+                }
+            }
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -145,7 +154,7 @@ public class ForwardingController {
                     regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
                     regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
                     regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    deadlineDate != null ?Common.uzbekistanDateFormat.format(deadlineDate):"",
                     performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
                     performerLog!=null ? performerLog.getStatus().getId():"",
                     forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",

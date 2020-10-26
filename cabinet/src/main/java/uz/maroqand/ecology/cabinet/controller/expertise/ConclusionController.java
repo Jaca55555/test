@@ -142,9 +142,8 @@ public class ConclusionController {
         statuses.add(RegApplicationStatus.Approved);
         statuses.add(RegApplicationStatus.NotConfirmed);
         filterDto.setStatusForReg(statuses);
-        filterDto.setConclusionOnline(Boolean.FALSE);
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,RegApplicationInputType.ecoService,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -179,6 +178,7 @@ public class ConclusionController {
         if (regApplication==null || regApplication.getConclusionId()==null){
             return "redirect:" + ExpertiseUrls.ConclusionList;
         }
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("isRegApplication", Boolean.TRUE);
