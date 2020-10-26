@@ -182,8 +182,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public Boolean beforeOrEqualsTrue(RegApplication regApplication) {
         if ((regApplication.getStatus().equals(RegApplicationStatus.Approved) || regApplication.getStatus().equals(RegApplicationStatus.NotConfirmed))
-                && regApplication.getDeadlineDate()!=null){
-            RegApplicationLog conclusionCompleteLog =regApplication.getConclusionCompleteLogId()!=null?regApplicationLogService.getById(regApplication.getConclusionCompleteLogId()):regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+                && regApplication.getDeadlineDate()!=null  && regApplication.getAgreementCompleteLogId()!=null){
+            RegApplicationLog conclusionCompleteLog =regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
             if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
                 Date deadlineDate = conclusionCompleteLog.getUpdateAt();
                 Date regDeadline = regApplication.getDeadlineDate();

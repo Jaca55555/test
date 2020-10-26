@@ -330,9 +330,20 @@ public class ConclusionController {
     @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdFileDownloadForView)
     @ResponseBody
     public ResponseEntity<Resource> getConclusionRegApplicationConclusionIdFileDownloadForView(
-            @RequestParam(name = "id") Integer logId,
-            @RequestParam(name = "fileId") Integer fileId
+            @RequestParam(name = "id") String logIdStr
     ){
+        String [] subString = logIdStr.split("_");
+        if (subString[0].isEmpty() || subString[1].isEmpty()){
+            return null;
+        }
+        Integer logId=null;
+        Integer fileId=null;
+        try {
+            logId=Integer.parseInt(subString[0]);
+            fileId=Integer.parseInt(subString[1]);
+        }catch (Exception e){
+
+        }
         logger.info("-----ConclusionRegApplicationConclusionIdFileDownloadForView------ PerformerLogId=" + logId + "     fileId=" + fileId);
         RegApplicationLog performerLog = regApplicationLogService.getById(logId);
         if (performerLog==null){
