@@ -72,7 +72,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <select class="form-control" required="" id="legalEntityRegionId" name="legalEntityRegionId" disabled="" >
+                <select class="form-control" required="" id="legalEntityRegionId" name="legalEntityRegionId" >
                     <option value="" th:text="#{sys_select}"></option>
                     <option th:each="region : ${regions}" th:value="${region.id}"  th:text="${region.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityRegionId==region.id}"></option>
                 </select>
@@ -98,7 +98,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" readonly="" id="legalEntityAddress" name="legalEntityAddress" th:value="${legalEntity.legalEntityAddress}" data-parsley-maxlength="250">
+                <input class="form-control" required="" id="legalEntityAddress" name="legalEntityAddress" th:value="${legalEntity.legalEntityAddress}" data-parsley-maxlength="250">
             </div>
         </div>
 
@@ -165,7 +165,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" readonly="" id="legalEntityMfo" name="legalEntityMfo" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" th:value="${legalEntity.legalEntityMfo}" >
+                <input class="form-control" required="" id="legalEntityMfo" name="legalEntityMfo" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" th:value="${legalEntity.legalEntityMfo}" >
             </div>
         </div>
 
@@ -175,7 +175,7 @@
                 <span class="required">*</span>
             </div>
             <div class="col-md-6">
-                <input class="form-control" required="" readonly="" id="legalEntityBankName" name="legalEntityBankName" th:value="${legalEntity.legalEntityBankName}" data-parsley-maxlength="250" >
+                <input class="form-control" required=""  id="legalEntityBankName" name="legalEntityBankName" th:value="${legalEntity.legalEntityBankName}" data-parsley-maxlength="250" >
             </div>
         </div>
 
@@ -184,12 +184,12 @@
                 <label class="col-form-label" th:text="#{sys_bank_account}">Расчетный счет (Основной);</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control" readonly="" id="legalEntityBankAccount" data-parsley-minlength="19" data-parsley-maxlength="30" name="legalEntityBankAccount" th:value="${legalEntity.legalEntityBankAccount}" >
+                <input class="form-control" required="" id="legalEntityBankAccount" data-parsley-minlength="19" data-parsley-maxlength="30" name="legalEntityBankAccount" th:value="${legalEntity.legalEntityBankAccount}" >
             </div>
         </div>
 
-        <input type="hidden" name="applicantType" value="LegalEntity" >
-        <input type="hidden" name="id" th:value="${regApplication.id}" >
+        <input type="hidden" name="applicantType" value="LegalEntity">
+        <input type="hidden" name="id" th:value="${regApplication.id}">
         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="row" >
             <div class="form-group col-md-12 text-center" >
