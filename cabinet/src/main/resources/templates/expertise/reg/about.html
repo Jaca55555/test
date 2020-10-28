@@ -494,13 +494,22 @@
             }
             $('#objectId').select2();
 
+            if ($("#objectId").val()!=""){
+                $("#objectId").change();
+            }
+
             $("#objectId").change(function(){
                 getActivityList();
             });
+
             $("#activityId").change(function(){
                 getMaterialList();
             });
-            if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2)) || ($("#objectId").val()==15)){
+            if ($("#objectId").val()==15){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }
+            if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
             }
