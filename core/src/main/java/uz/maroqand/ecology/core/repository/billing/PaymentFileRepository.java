@@ -15,6 +15,4 @@ import java.util.Date;
 @Repository
 public interface PaymentFileRepository extends JpaRepository<PaymentFile, Integer>,JpaSpecificationExecutor<PaymentFile> {
 
-    PaymentFile findByAmountAndPaymentDateAndPayerTin(Double amount, Date paymentDate, Integer payerTin);
-
 }

@@ -63,35 +63,6 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         return paymentFileRepository.save(paymentFile);
     }
 
-    @Override
-    public PaymentFile checkAndCreateOrNotCreate(PaymentFile paymentFile) {
-        if (paymentFile.getAmount()!=null && paymentFile.getPaymentDate()!=null && paymentFile.getPayerTin()!=null){
-            PaymentFile checkFile = paymentFileRepository.findByAmountAndPaymentDateAndPayerTin(paymentFile.getAmount(),paymentFile.getPaymentDate(),paymentFile.getPayerTin());
-           if (checkFile!=null) return checkFile;
-        }
-
-            save(paymentFile);
-            //get Invoice
-            Invoice invoice = null;
-            String invoiceStr = paymentFile.getDetails();
-            String[] parts = invoiceStr.split(" ");
-            for (String invoiceCheck : parts) {
-                if(invoiceCheck.length()==14){
-                    invoice = invoiceService.getInvoice(invoiceCheck);
-                    if(invoice!=null) break;
-                }
-            }
-            if(invoice!=null){
-                paymentFile.setInvoice(invoice.getInvoice());
-                save(paymentFile);
-                paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
-                invoiceService.checkInvoiceStatus(invoice);
-
-            }
-
-        return paymentFile;
-    }
-
     public Page<PaymentFile> findFiltered(
             Date dateBegin,
             Date dateEnd,
