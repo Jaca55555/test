@@ -5,9 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.billing.PaymentType;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.repository.billing.PaymentFileRepository;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
+import uz.maroqand.ecology.core.service.billing.PaymentService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,10 +31,14 @@ import java.util.List;
 public class PaymentFileServiceImpl implements PaymentFileService {
 
     private final PaymentFileRepository paymentFileRepository;
+    private final InvoiceService invoiceService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository) {
+    public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository, InvoiceService invoiceService, PaymentService paymentService) {
         this.paymentFileRepository = paymentFileRepository;
+        this.invoiceService = invoiceService;
+        this.paymentService = paymentService;
     }
 
     public PaymentFile getById(Integer id){
@@ -53,6 +61,35 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);
         return paymentFileRepository.save(paymentFile);
+    }
+
+    @Override
+    public PaymentFile checkAndCreateOrNotCreate(PaymentFile paymentFile) {
+        if (paymentFile.getAmount()!=null && paymentFile.getPaymentDate()!=null && paymentFile.getPayerTin()!=null){
+            PaymentFile checkFile = paymentFileRepository.findByAmountAndPaymentDateAndPayerTin(paymentFile.getAmount(),paymentFile.getPaymentDate(),paymentFile.getPayerTin());
+           if (checkFile!=null) return checkFile;
+        }
+
+            save(paymentFile);
+            //get Invoice
+            Invoice invoice = null;
+            String invoiceStr = paymentFile.getDetails();
+            String[] parts = invoiceStr.split(" ");
+            for (String invoiceCheck : parts) {
+                if(invoiceCheck.length()==14){
+                    invoice = invoiceService.getInvoice(invoiceCheck);
+                    if(invoice!=null) break;
+                }
+            }
+            if(invoice!=null){
+                paymentFile.setInvoice(invoice.getInvoice());
+                save(paymentFile);
+                paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                invoiceService.checkInvoiceStatus(invoice);
+
+            }
+
+        return paymentFile;
     }
 
     public Page<PaymentFile> findFiltered(

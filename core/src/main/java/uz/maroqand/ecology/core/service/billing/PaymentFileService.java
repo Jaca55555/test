@@ -20,6 +20,7 @@ public interface PaymentFileService {
     PaymentFile update(PaymentFile paymentFile, Integer userId);
 
     PaymentFile create(PaymentFile paymentFile);
+    PaymentFile checkAndCreateOrNotCreate(PaymentFile paymentFile);
 
     Page<PaymentFile> findFiltered(
             Date dateBegin,

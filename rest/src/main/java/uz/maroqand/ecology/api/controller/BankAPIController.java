@@ -104,7 +104,7 @@ public class BankAPIController {
                 paymentFile.setPaymentDate(date);
                 paymentFile.setDetails(paymentNew.getDetails());
 
-                paymentFile = paymentFileService.create(paymentFile);
+                paymentFile = paymentFileService.checkAndCreateOrNotCreate(paymentFile);
 
                 data.add(new PaymentResponseData(paymentNew.getId(), paymentFile.getId()));
             }catch (Exception e){
@@ -112,24 +112,6 @@ public class BankAPIController {
                 paymentResponse.setCode("2");
                 paymentResponse.setMessage("Ошибка при преобразовании данных");
                 return paymentResponse;
-            }
-
-            //get Invoice
-            Invoice invoice = null;
-            String invoiceStr = paymentFile.getDetails();
-            String[] parts = invoiceStr.split(" ");
-            for (String invoiceCheck : parts) {
-                if(invoiceCheck.length()==14){
-                    invoice = invoiceService.getInvoice(invoiceCheck);
-                    if(invoice!=null) break;
-                }
-            }
-            if(invoice!=null){
-                paymentFile.setInvoice(invoice.getInvoice());
-                paymentFileService.save(paymentFile);
-                paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
-                invoiceService.checkInvoiceStatus(invoice);
-
             }
 
         }
