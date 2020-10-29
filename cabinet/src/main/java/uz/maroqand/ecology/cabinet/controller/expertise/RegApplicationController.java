@@ -491,7 +491,9 @@ public class RegApplicationController {
         Integer categoryId=activity!=null && activity.getCategory()!=null?activity.getCategory().getId():null;
         Organization organization = null;
         if (regionId != null && (
-                categoryId != null && categoryId >= 3 && categoryId <= 4 || objectId == 15 || (objectId==4 && categoryId!=null && categoryId==2)
+                (categoryId != null && categoryId>= 3 && categoryId <= 4)
+                        || objectId == 15
+                        || (objectId==4 && categoryId!=null && categoryId==2)
         )
         ){
             organization = organizationService.getByRegionId(regionId);
