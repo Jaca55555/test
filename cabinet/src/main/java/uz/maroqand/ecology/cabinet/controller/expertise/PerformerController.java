@@ -29,10 +29,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
-import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
-import uz.maroqand.ecology.core.service.sys.SmsSendService;
-import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -68,6 +65,7 @@ public class PerformerController {
     private final ConclusionService conclusionService;
     private final SmsSendService smsSendService;
     private final OrganizationService organizationService;
+    private final DocumentEditorService documentEditorService;
 
     @Autowired
     public PerformerController(
@@ -89,7 +87,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -109,6 +107,7 @@ public class PerformerController {
         this.conclusionService = conclusionService;
         this.smsSendService = smsSendService;
         this.organizationService = organizationService;
+        this.documentEditorService = documentEditorService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -235,6 +234,10 @@ public class PerformerController {
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
+        List<String[]> dataForReplacingInDocumentEditor = documentEditorService.getDataForReplacingInMurojaatBlanki(regApplication, locale);
+        documentEditorService.buildMurojaatBlanki(regApplication,dataForReplacingInDocumentEditor, user.getId());
+
         return ExpertiseTemplates.PerformerView;
     }
 
