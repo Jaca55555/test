@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.sys.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -9,6 +10,7 @@ import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.File;
+import java.nio.file.Files;
 import uz.maroqand.ecology.core.entity.sys.Option;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -22,10 +24,10 @@ import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.FileNameParser;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
@@ -88,24 +90,23 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
 
         Organization organization = organizationService.getById(userService.getCurrentUserFromContext().getOrganizationId());
 
-
-        forReplace.add(new String[] {"{sys_conclusion.title}", helperService.getTranslation("sys_conclusion.title_" + (organization!=null?organization.getRegionId()+"":""),locale)});
-        forReplace.add(new String[] {"{sys_conclusion.full_adress}", helperService.getTranslation("sys_conclusion.full_adress_" + (organization!=null?organization.getRegionId().toString():""),locale)});
-        forReplace.add(new String[] {"{sys_conclusion.description}", helperService.getTranslation("sys_conclusion.description_" + (organization!=null?organization.getRegionId().toString():""),locale)});
-        forReplace.add(new String[] {"{sys_client}", helperService.getTranslation("sys_client",locale)});
-        forReplace.add(new String[] {"{sys_client.name}", opfName});
-        forReplace.add(new String[] {"{sys_tin}", helperService.getTranslation("sys_tin",locale)});
-        forReplace.add(new String[] {"{applicant.tin}", applicant.getTin().toString()});
-        forReplace.add(new String[] {"{sys_category}", helperService.getTranslation("sys_category",locale)});
-        forReplace.add(new String[] {"{sys_developer}", helperService.getTranslation("sys_developer",locale)});
-        forReplace.add(new String[] {"{sys_developer.name}", developerOpfName});
-        forReplace.add(new String[] {"{sys_expert}", helperService.getTranslation("sys_expert",locale)});
-        forReplace.add(new String[] {"{sys_expert.name}", helperService.getUserFullNameById(regApplication.getPerformerId())});
-        forReplace.add(new String[] {"{sys_organization}", helperService.getTranslation("sys_organization",locale)});
-        forReplace.add(new String[] {"{sys_organization.name}", opfName});
-        forReplace.add(new String[] {"{sys_director}", helperService.getTranslation("sys_director",locale)});
-        forReplace.add(new String[] {"{sys_director.name}", applicant.getDirectorFullName()});
-        forReplace.add(new String[] {"{sys_performer.full}","Исп.:" +  helperService.getUserFullNameById(regApplication.getPerformerId()) + "\n  tel.:"});
+        forReplace.add(new String[] {"sys_conclusion_title", helperService.getTranslation("sys_conclusion.title_" + (organization!=null?organization.getRegionId()+"":""),locale).replaceAll("<br>","\n")});
+        forReplace.add(new String[] {"sys_conclusion_full_adress", helperService.getTranslation("sys_conclusion.full_adress_" + (organization!=null?organization.getRegionId()+"":""),locale).replaceAll("<br>","\n")});
+        forReplace.add(new String[] {"sys_conclusion_description", helperService.getTranslation("sys_conclusion.description_" + (organization!=null?organization.getRegionId()+"":""),locale).replaceAll("<br>","\n")});
+        forReplace.add(new String[] {"sys_client", helperService.getTranslation("sys_client",locale)});
+        forReplace.add(new String[] {"sys_name_cilent", opfName});
+        forReplace.add(new String[] {"sys_tin", helperService.getTranslation("sys_tin",locale)});
+        forReplace.add(new String[] {"tin_applicant", applicant.getTin().toString()});
+        forReplace.add(new String[] {"sys_category", helperService.getTranslation("sys_category",locale)});
+        forReplace.add(new String[] {"sys_developer", helperService.getTranslation("sys_developer",locale)});
+        forReplace.add(new String[] {"sys_name_developer", developerOpfName});
+        forReplace.add(new String[] {"sys_expert", helperService.getTranslation("sys_expert",locale)});
+        forReplace.add(new String[] {"sys_name_expert", helperService.getUserFullNameById(regApplication.getPerformerId())});
+        forReplace.add(new String[] {"sys_organization", helperService.getTranslation("sys_organization",locale)});
+        forReplace.add(new String[] {"sys_name_organization", opfName});
+        forReplace.add(new String[] {"sys_director", helperService.getTranslation("sys_director",locale)});
+        forReplace.add(new String[] {"sys_name_director", applicant.getDirectorFullName()==null || applicant.getDirectorFullName().isEmpty()?"-":applicant.getDirectorFullName()});
+        forReplace.add(new String[] {"sys_performer.full","Исп.:" +  helperService.getUserFullNameById(regApplication.getPerformerId()) + "\n  tel.:"});
 
         return forReplace;
     }
@@ -156,10 +157,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
 
         try {
             XWPFDocument doc = new XWPFDocument(new FileInputStream(inputFilePath));
-
-            doc = replaceTextNew(doc, stringsToReplace);
-
-            System.out.println("outputFilePath2="+outputFilePath2);
+            replaceTextNew(doc, stringsToReplace);
             saveWord(outputFilePath2, doc);
 
             File fileEntity = new File();
@@ -173,8 +171,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
             return fileEntity;
         }
         catch(Exception e){
-            System.out.println("e.getMessage()==" + e.getMessage());
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
     }
@@ -246,6 +243,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
                     }
                 }
             }
+
         }
         return count;
     }
@@ -269,29 +267,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
                 for (XWPFTableCell cell : row.getTableCells()) {
-                    for (XWPFParagraph p : cell.getParagraphs()) {
-                        for (XWPFRun r : p.getRuns()) {
-                            for(String key: replacementMap.keySet()) {
-                                String text = r.getText(0);
-
-                                if (text != null && text.contains(key)) {
-                                    text = text.replace(key, replacementMap.get(key));
-
-                                    if (text.contains("\n")) {
-                                        String[] lines = text.split("\n");
-                                        r.setText(lines[0], 0); // set first line into XWPFRun
-                                        for (int i = 1; i < lines.length; i++) {
-                                            // add break and insert new text
-                                            r.addBreak();
-                                            r.setText(lines[i]);
-                                        }
-                                    } else {
-                                        r.setText(text, 0);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    replaceInParagraphs(cell.getParagraphs(), replacementMap);
                 }
             }
         }
