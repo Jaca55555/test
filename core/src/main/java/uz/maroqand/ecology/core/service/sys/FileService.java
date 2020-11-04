@@ -21,6 +21,8 @@ public interface FileService {
 
     String getPathForUpload();
 
+    Resource loadAsResource(String fileName);
+
     File save(File file);
 
 }

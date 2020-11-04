@@ -35,6 +35,7 @@ public class ExpertiseUrls {
     public static final String PerformerView = Performer + "/view";
     public static final String PerformerAction = Performer + "/action";
     public static final String PerformerActionEdit = Performer + "/action/edit";
+    public static final String PerformerConclusionIsOnline = Performer + "/conclusion_is_online";
     public static final String PerformerConclusionSave = Performer + "/conclusion_save";
     public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";
 

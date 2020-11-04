@@ -183,6 +183,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public Resource loadAsResource(String fileName) {
+        File file = fileRepository.findByNameAndDeletedFalse(fileName);
+        if (file!=null){
+            return getFileAsResource(file);
+        }
+        return null;
+    }
+
+    @Override
     public File save(File file) {
         return fileRepository.save(file);
     }

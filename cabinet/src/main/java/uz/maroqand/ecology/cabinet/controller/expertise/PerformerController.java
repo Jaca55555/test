@@ -10,10 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
@@ -235,18 +232,40 @@ public class PerformerController {
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
 
+        return ExpertiseTemplates.PerformerView;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.PerformerConclusionIsOnline)
+    @ResponseBody
+    public HashMap<String,Object> performerConclusionIsOnline(@RequestParam(name = "id")Integer regId){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status",0);
+        User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null){
+            result.put("status",-1);
+            return result;
+        }
         List<String[]> dataForReplacingInDocumentEditor = documentEditorService.getDataForReplacingInMurojaatBlanki(regApplication, locale);
         documentEditorService.buildMurojaatBlanki(regApplication,dataForReplacingInDocumentEditor, user.getId());
 
-        return ExpertiseTemplates.PerformerView;
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regId);
+        if (conclusion==null || conclusion.getConclusionWordFileId()==null){
+            result.put("status",-2);
+            return result;
+        }
+        File file = fileService.findById(conclusion.getConclusionWordFileId());
+        result.put("status",1);
+        result.put("storageId",file.getPath());
+
+        return result;
     }
 
     @RequestMapping(value = ExpertiseUrls.PerformerAction,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-//            @RequestParam(name = "number")String number,
-//            @RequestParam(name = "date")String dateStr,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -272,13 +291,6 @@ public class PerformerController {
         regApplication.setAgreementStatus(LogStatus.Initial);
         regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
-
-        /*Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        if (conclusion!=null){
-            conclusion.setNumber(number);
-            conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
-            conclusionService.save(conclusion);
-        }*/
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
@@ -399,12 +411,6 @@ public class PerformerController {
             regApplication.setAgreementCompleteLogId(null);
         }
         regApplicationService.update(regApplication);
-
-       /* Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        if (conclusion!=null){
-            conclusion.setNumber(number);
-            conclusionService.save(conclusion);
-        }*/
 
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }

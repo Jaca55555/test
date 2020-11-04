@@ -76,17 +76,10 @@ public class ConclusionServiceImpl implements ConclusionService {
     @Override
     public Conclusion complete(Integer conclusionId){
         Conclusion conclusion = getById(conclusionId);
-        /*if(conclusion.getNumber()!=null){
-            return null;
-        }*/
 
         DocumentRepo documentRepo = documentRepoService.create(DocumentRepoType.Conclusion, conclusion.getId());
         conclusion.setDocumentRepoId(documentRepo.getId());
         conclusion.setStatus(ConclusionStatus.Active);
-//        conclusion.setNumber(conclusion.getId().toString()); //todo xulosa raqami ketma ket ketadimi prefix suffix bo’lmaydimi?
-//        conclusion.setDate(new Date());
-//        conclusion.setDeadlineDate();
-//        conclusion.setFiles();
 
         return conclusionRepository.save(conclusion);
     }
