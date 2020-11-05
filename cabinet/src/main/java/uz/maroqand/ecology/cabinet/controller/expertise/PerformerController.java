@@ -216,6 +216,7 @@ public class PerformerController {
         Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
+        model.addAttribute("filename", conclusion!=null && conclusion.getConclusionWordFileId()!=null? helperService.getFileName(conclusion.getConclusionWordFileId()):"");
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("organization", organization);
 
@@ -257,7 +258,7 @@ public class PerformerController {
         }
         File file = fileService.findById(conclusion.getConclusionWordFileId());
         result.put("status",1);
-        result.put("storageId",file.getPath());
+        result.put("filename",file.getName());
 
         return result;
     }

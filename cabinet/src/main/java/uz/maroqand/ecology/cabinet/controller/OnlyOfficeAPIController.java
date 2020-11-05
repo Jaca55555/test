@@ -2,14 +2,15 @@ package uz.maroqand.ecology.cabinet.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.impl.FileServiceImpl;
+import uz.maroqand.ecology.core.util.EditorRequest;
+import uz.maroqand.ecology.core.util.EditorResponse;
 
-import javax.annotation.Resource;
+import java.io.IOException;
 
 
 @RestController
@@ -22,21 +23,30 @@ public class OnlyOfficeAPIController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/docs/{filename:.+}")
+    @RequestMapping("/onlyoffice")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    public ResponseEntity<Resource> serveFile(@RequestParam(name = "filename" ) String filename) {
+        System.out.println("serveFile");
+        System.out.println("filename" + filename);
+        File file = fileService.getByName(filename);
+        if (file==null){
+            return null;
+        }
+        return fileService.getFileAsResourceForDownloading(file);
     }
 
-    @RequestMapping("/api/fixationCallback")
-    public ResponseEntity<CallbackResponse> fixationCallback(@RequestBody CallbackRequest callbackRequest) throws IOException {
-        try {
-            storageService.processDocument(callbackRequest, true);
+    @RequestMapping("/onlyoffice/fixationCallback")
+    public ResponseEntity<EditorResponse> fixationCallback(@RequestBody EditorRequest callbackRequest) throws IOException {
+        System.out.println(callbackRequest.getKey());
+        System.out.println(callbackRequest.getUrl());
+        System.out.println(callbackRequest.getStatus());
+        /*try {
+
+//            fileService.processDocument(callbackRequest, true);
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            return ResponseEntity.ok(new CallbackResponse("-1"));
-        }
-        return ResponseEntity.ok(new CallbackResponse("0"));
+            return ResponseEntity.ok(new EditorResponse(-1));
+        }*/
+        return ResponseEntity.ok(new EditorResponse(0));
     }
 }

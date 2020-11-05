@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static*/**").permitAll()
+                .antMatchers("/onlyoffice/**").permitAll()
                 .antMatchers("/doc/file_upload").permitAll()
                 .antMatchers("/doc/file/download").permitAll()
                 .antMatchers("/expertise/conclusion/file_download_for_view").permitAll()
@@ -96,7 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.csrf().ignoringAntMatchers("/login");
+        http.csrf().ignoringAntMatchers("/login","/onlyoffice","/onlyoffice/fixationCallback");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()
