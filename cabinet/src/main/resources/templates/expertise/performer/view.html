@@ -186,23 +186,10 @@
         window.docEditor = new DocsAPI.DocEditor("placeholder",
             {
                 "document": {
-                    "permissions": {
-                        "changeHistory": true,
-                        "comment": true,
-                        "copy": true,
-                        "download": true,
-                        "edit": true,
-                        "fillForms": true,
-                        "modifyContentControl": true,
-                        "modifyFilter": true,
-                        "print": true,
-                        "rename": true,
-                        "review": true
-                    },
                     "fileType": "docx",
                     "key": "\'" + data + "\'",
                     "title": "\'" + data + "\'",
-                    "url": "http://localhost:8085/onlyoffice?filename=\'"+ data + "\'",
+                    "url": "http://localhost:8085/onlyoffice?filename="+ data,
                 },
                 "editorConfig": {
                     "callbackUrl": "http://localhost:8085/onlyoffice/fixationCallback",
