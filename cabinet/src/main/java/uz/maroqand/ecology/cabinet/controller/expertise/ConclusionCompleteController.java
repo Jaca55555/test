@@ -230,9 +230,8 @@ public class ConclusionCompleteController {
         if (conclusionLog==null){
             return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
+
         regApplicationLogService.update(conclusionLog, LogStatus.Approved, "", user.getId());
-
-
 
         RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
         switch (performerLog.getStatus()){
@@ -247,9 +246,8 @@ public class ConclusionCompleteController {
             conclusion.setNumber(number);
             conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
+            conclusionService.complete(conclusion.getId());
         }
-
-        conclusionService.complete(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getId());
 
         notificationService.create(
                 regApplication.getCreatedById(),

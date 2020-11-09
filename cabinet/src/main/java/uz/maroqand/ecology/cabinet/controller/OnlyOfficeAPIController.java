@@ -37,9 +37,9 @@ public class OnlyOfficeAPIController {
 
     @RequestMapping("/onlyoffice/fixationCallback")
     public ResponseEntity<EditorResponse> fixationCallback(@RequestBody EditorRequest callbackRequest) throws IOException {
-        System.out.println(callbackRequest.getKey());
-        System.out.println(callbackRequest.getUrl());
-        System.out.println(callbackRequest.getStatus());
+        System.out.println("key==" + callbackRequest.getKey());
+        System.out.println("url==" + callbackRequest.getUrl());
+        System.out.println("status" + callbackRequest.getStatus());
         /*try {
 
 //            fileService.processDocument(callbackRequest, true);
