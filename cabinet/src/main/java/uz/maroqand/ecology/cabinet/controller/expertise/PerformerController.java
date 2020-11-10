@@ -251,6 +251,7 @@ public class PerformerController {
         List<String[]> dataForReplacingInDocumentEditor = documentEditorService.getDataForReplacingInMurojaatBlanki(regApplication, locale);
         documentEditorService.buildMurojaatBlanki(regApplication,dataForReplacingInDocumentEditor, user.getId());
 
+
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regId);
         if (conclusion==null || conclusion.getConclusionWordFileId()==null){
             result.put("status",-2);

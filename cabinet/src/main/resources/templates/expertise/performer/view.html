@@ -168,9 +168,9 @@
 
 </script>
 
-<script type="text/javascript" src="http://localhost:8099/web-apps/apps/api/documents/api.js"></script>
+<!--<script type="text/javascript" src="http://localhost:8099/web-apps/apps/api/documents/api.js"></script>-->
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
 
 
     function getWordAPI() {
@@ -185,31 +185,10 @@
         window.docEditor = new DocsAPI.DocEditor("placeholder",
             {
                 "document": {
-                    "permissions": {
-                        "changeHistory": false,
-                        "comment": false,
-                        "copy": true,
-                        "download": true,
-                        "edit": true,
-                        "fillForms": false,
-                        "modifyContentControl": true,
-                        "modifyFilter": true,
-                        "print": true,
-                        "rename": false,
-                        "review": true
-                    },
                     "fileType": "docx",
                     "key": data,
                     "title": "Example Document Title.docx",
                     "url": "http://172.24.0.157:8085/onlyoffice?filename="+ data + "",
-                },
-                "status":"2",
-                "services": {
-                    "CoAuthoring": {
-                        "server": {
-                            "savetimeoutdelay": 3000
-                        }
-                    }
                 },
                 "editorConfig": {
                     "callbackUrl": "http://172.24.0.157:8085/onlyoffice/fixationCallback",
@@ -221,7 +200,7 @@
 
     }
 
-</script>
+</script>-->
 
 <script type="text/javascript" th:inline="javascript">
 
@@ -244,7 +223,7 @@
                 console.log(response);
                 if(response.status==1){
                     $('#filename').val(response.filename);
-                    getWordAPI();
+                    // getWordAPI();
                 }
             }
         });
@@ -478,7 +457,6 @@
         $('#openMapModal').on('click',function () {
             setTimeout( function() { map.updateSize();}, 200);
         })
-    }
 </script>
 </body>
 </html>

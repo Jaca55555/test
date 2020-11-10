@@ -1,33 +1,39 @@
 package uz.maroqand.ecology.core.service.sys.impl;
 
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.util.Units;
+import org.springframework.context.i18n.LocaleContextHolder;
+import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
+import uz.maroqand.ecology.core.service.expertise.ConclusionService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.File;
-import java.nio.file.Files;
+
 import uz.maroqand.ecology.core.entity.sys.Option;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.ProjectDeveloperService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
-import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
-import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.OptionService;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.FileNameParser;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
@@ -47,8 +53,9 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
     private final UserService userService;
     private final ClientService clientService;
     private final ConclusionService conclusionService;
+    private final DocumentRepoService documentRepoService;
 
-    public DocumentEditorServiceImpl(HelperService helperService, FileService fileService, RegApplicationService regApplicationService, OptionService optionService, ProjectDeveloperService projectDeveloperService, OrganizationService organizationService, UserService userService, ClientService clientService, ConclusionService conclusionService) {
+    public DocumentEditorServiceImpl(HelperService helperService, FileService fileService, RegApplicationService regApplicationService, OptionService optionService, ProjectDeveloperService projectDeveloperService, OrganizationService organizationService, UserService userService, ClientService clientService, ConclusionService conclusionService, DocumentRepoService documentRepoService) {
         this.helperService = helperService;
         this.fileService = fileService;
         this.regApplicationService = regApplicationService;
@@ -58,6 +65,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
         this.userService = userService;
         this.clientService = clientService;
         this.conclusionService = conclusionService;
+        this.documentRepoService = documentRepoService;
     }
 
     private Logger logger = LogManager.getLogger(DocumentEditorServiceImpl.class);
@@ -138,6 +146,83 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public Boolean conclusionComplete(Conclusion conclusion) {
+
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        if (conclusion==null || conclusion.getConclusionWordFileId()==null || conclusion.getDocumentRepoId()==null){
+            return false;
+        }
+
+        DocumentRepo documentRepo = documentRepoService.getDocument(conclusion.getDocumentRepoId());
+        if (documentRepo==null){
+            return false;
+        }
+
+        File conclusionfile = fileService.findById(conclusion.getConclusionWordFileId());
+        if (conclusionfile==null){
+            return false;
+        }
+            Option option = optionService.getOption("conclusion_blank_file");
+            Integer optionVal;
+            if(option!=null){
+                optionVal = Integer.parseInt(option.getValue());
+            }else {
+                optionVal = 1;
+            }
+
+            File input = fileService.findById(optionVal);
+            if (input!=null){
+                String inputFilePath = input.getPath();
+                String outputFileDirectory = fileService.getPathForUpload();
+                String outputFilePath2 = outputFileDirectory + "/" + conclusionfile.getName();
+
+                try {
+
+                    XWPFDocument doc = new XWPFDocument(new FileInputStream(inputFilePath));
+                    XWPFParagraph newPara = doc.createParagraph();
+                    XWPFRun newRun = newPara.createRun();
+                    newRun.setText(helperService.getTranslation("sys_conclusion_number", locale) + " :" + conclusion.getNumber());
+                    newRun.addBreak();
+                    newRun.setText(helperService.getTranslation("sys_conclusion_date", locale) + (conclusion.getDate() != null ? Common.uzbekistanDateFormat.format(conclusion.getDate()) : ""));
+                    newRun.addBreak();
+                    newRun.setText(helperService.getTranslation("sys_documentRepo_info", locale));
+                    newRun.addBreak();
+
+                    QRCodeWriter writer = new QRCodeWriter();
+                    int width = 116, height = 116;
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // create an empty image
+                    int white = 255 << 16 | 255 << 8 | 255;
+                    int black = 0;
+
+                    String url = "http://cb.eco-service.uz/repository/get-document";
+
+                    try {
+                        BitMatrix bitMatrix = writer.encode(url + "/" + documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
+                        for (int i = 0; i < width; i++) {
+                            for (int j = 0; j < height; j++) {
+                                image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
+                            }
+                        }
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(image, "jpg", baos);
+                        baos.flush();
+                        InputStream is = new ByteArrayInputStream(baos.toByteArray());
+                        baos.close();
+                        newRun.addPicture(is, XWPFDocument.PICTURE_TYPE_JPEG, "new", Units.toEMU(100), Units.toEMU(12 * 6 / 9 * 9));
+                        is.close();
+                        saveWord(outputFilePath2, doc);
+                        return true;
+                    }catch (Exception e){
+
+                    }
+                }catch (Exception e){
+
+                }
+            }
+        return false;
     }
 
     public File replaceStringsInWordDocument(Integer fileId, List<String[]> stringsToReplace, String fileName) {

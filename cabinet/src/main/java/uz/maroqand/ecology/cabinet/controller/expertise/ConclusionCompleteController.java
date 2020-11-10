@@ -1,7 +1,5 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -29,6 +27,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -64,6 +63,7 @@ public class ConclusionCompleteController {
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
+    private final DocumentEditorService documentEditorService;
 
     @Autowired
     public ConclusionCompleteController(
@@ -81,8 +81,8 @@ public class ConclusionCompleteController {
             CoordinateService coordinateService,
             ConclusionService conclusionService,
             NotificationService notificationService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            DocumentEditorService documentEditorService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -98,6 +98,7 @@ public class ConclusionCompleteController {
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
+        this.documentEditorService = documentEditorService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
@@ -247,6 +248,7 @@ public class ConclusionCompleteController {
             conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
             conclusionService.complete(conclusion.getId());
+            documentEditorService.conclusionComplete(conclusion);
         }
 
         notificationService.create(
