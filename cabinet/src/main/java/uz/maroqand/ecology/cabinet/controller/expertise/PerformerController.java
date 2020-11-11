@@ -182,6 +182,7 @@ public class PerformerController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
+
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -202,21 +203,28 @@ public class PerformerController {
         }
         model.addAttribute("developerOpfName", developerOpfName);
 
+        RegApplicationLog performerLog = null;
         if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
-            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogIdNext()));
+            performerLog =  regApplicationLogService.getById(regApplication.getPerformerLogIdNext());
             model.addAttribute("action_url", ExpertiseUrls.PerformerActionEdit);
         } else {
-            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+            performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
-
+        model.addAttribute("performerLog",performerLog);
         Organization organization = organizationService.getById(user.getOrganizationId());
+        System.out.println(" performe r regApplicationID==" + regApplication.getId());
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        String filename = "";
+        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
+            File file = fileService.findById(conclusion.getConclusionWordFileId());
+            filename = file!=null?file.getName():"";
+        }
+        model.addAttribute("filename", filename);
 
-        System.out.println(" performer regApplicationID==" + regApplication.getId());
-        Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
+        model.addAttribute("performerLogStatus", performerLog != null && performerLog.getStatus() != null && (performerLog.getStatus().equals(LogStatus.Initial) || performerLog.getStatus().equals(LogStatus.Denied)));
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
-        model.addAttribute("filename", conclusion!=null && conclusion.getConclusionWordFileId()!=null? helperService.getFileName(conclusion.getConclusionWordFileId()):"");
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("organization", organization);
 

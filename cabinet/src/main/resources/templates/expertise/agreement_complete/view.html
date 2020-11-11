@@ -110,12 +110,15 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="filename" th:value="${filename}">
+
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+<script type="text/javascript" src="http://172.24.0.157:8099/web-apps/apps/api/documents/api.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     $('.btnNext').click(function() {
@@ -124,6 +127,35 @@
     $('.btnPrevious').click(function() {
         $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
     });
+
+    function getWordAPI() {
+        console.log($('#filename').val());
+        if ($('#filename').val()==undefined || $('#filename').val()==null || $('#filename').val()==""){
+            return
+        }
+
+        var data = $('#filename').val();
+        console.log("getWordAPI")
+        console.log("data==" + data)
+
+        window.docEditor = new DocsAPI.DocEditor("placeholder",
+            {
+                "document": {
+                    "fileType": "docx",
+                    "key": data,
+                    "title": "" + data  + " ",
+                    "url": "http://172.24.0.157:8085/docEditor/"+ data + "",
+                },
+                "editorConfig": {
+                    "callbackUrl": "http://172.24.0.157:8085/onlyoffice/fixationCallback",
+                    "lang": "ru",
+                    "mode": "view"
+                },
+                "height": "100%",
+                "width": "100%"
+            });
+
+    }
 
     $(document).ready(function () {
         var hash = window.location.hash;
@@ -135,6 +167,7 @@
         $('textarea.max-textarea').maxlength({
             alwaysShow: true
         });
+        getWordAPI();
     });
 
     //file upload

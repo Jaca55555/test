@@ -97,10 +97,11 @@
                                                         <i class="mdi mdi-content-save f-20"></i>
                                                         <span th:text="#{sys_conclusion_online}"></span>
                                                     </button>
-                                                    <button th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}" class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
-                                                    <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>
+<!--                                                    <button th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}" class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>-->
+<!--                                                    <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>-->
                                                 </div>
-                                                <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
+<!--                                                <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>-->
+                                                <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
 
                                                 <div class="text-right" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}">
                                                     <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
@@ -143,56 +144,42 @@
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
 <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
-<!-- Ckeditor js -->
-<script src="/static/plugins/ckeditor/js/document/ckeditor.js"></script>
-<script src="/static/plugins/ckeditor/js/document/FileSaver.js"></script>
-<script src="/static/plugins/ckeditor/js/document/jquery.wordexport.js"></script>
 
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 
 
-<!-- Ckeditor js -->
-<script>
-    DecoupledEditor
-        .create(document.querySelector('.document-editor__editable'))
-        .then(editor => {
-            const toolbarContainer = document.querySelector('#document-editor');
-            toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-        })
-        .catch(error => {
-        });
 
-    $("#test12").click(function (events) {
-        $('.document-editor__editable').wordExport();
-    });
 
-</script>
+<script type="text/javascript" src="http://195.158.9.82:8099/web-apps/apps/api/documents/api.js"></script>
 
-<!--<script type="text/javascript" src="http://localhost:8099/web-apps/apps/api/documents/api.js"></script>-->
-
-<!--<script type="text/javascript">
-
+<script type="text/javascript" th:inline="javascript">
+    let performerLogStatus = [[${performerLogStatus}]]
+    var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
+    var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
+    var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     function getWordAPI() {
-        if ($('#filename').val()==undefined || $('#filename').val()==null){
+        console.log($('#filename').val());
+        if ($('#filename').val()==undefined || $('#filename').val()==null || $('#filename').val()==""){
             return
         }
 
         var data = $('#filename').val();
         console.log("getWordAPI")
-        console.log("data" + data)
+        console.log("data==" + data)
 
         window.docEditor = new DocsAPI.DocEditor("placeholder",
             {
                 "document": {
                     "fileType": "docx",
                     "key": data,
-                    "title": "Example Document Title.docx",
-                    "url": "http://172.24.0.157:8085/onlyoffice?filename="+ data + "",
+                    "title": "" + data  + " ",
+                    "url": "http://bo.eco-service.uz/docEditor/"+ data + "",
                 },
                 "editorConfig": {
-                    "callbackUrl": "http://172.24.0.157:8085/onlyoffice/fixationCallback",
+                    "callbackUrl": "http://bo.eco-service.uz/onlyoffice/fixationCallback",
                     "lang": "ru",
+                    "mode": performerLogStatus==false?"view":"edit",
                 },
                 "height": "100%",
                 "width": "100%"
@@ -200,13 +187,6 @@
 
     }
 
-</script>-->
-
-<script type="text/javascript" th:inline="javascript">
-
-    var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
-    var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
-    var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
     function isOnlineConculision() {
         var form = new FormData();
@@ -223,7 +203,7 @@
                 console.log(response);
                 if(response.status==1){
                     $('#filename').val(response.filename);
-                    // getWordAPI();
+                    getWordAPI();
                 }
             }
         });
@@ -251,7 +231,7 @@
             alwaysShow: true
         });
         borderNone();
-
+        getWordAPI();
         $('.datepicker').datepicker({
             format: "dd.mm.yyyy",
             todayHighlight: true,
@@ -280,13 +260,6 @@
             }
         })
     }
-
-    /*$('#form-confirm').on('submit',function () {
-        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
-        if (conclusionOnline==true){
-            saveConculision();
-        }
-    });*/
 
     function saveConculision() {
         var form = new FormData();

@@ -4,10 +4,19 @@ package uz.maroqand.ecology.core.service.sys.impl;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
@@ -34,6 +43,8 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.FileNameParser;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -161,23 +172,16 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
             return false;
         }
 
-        File conclusionfile = fileService.findById(conclusion.getConclusionWordFileId());
-        if (conclusionfile==null){
+        File input = fileService.findById(conclusion.getConclusionWordFileId());
+        if (input==null){
             return false;
         }
-            Option option = optionService.getOption("conclusion_blank_file");
-            Integer optionVal;
-            if(option!=null){
-                optionVal = Integer.parseInt(option.getValue());
-            }else {
-                optionVal = 1;
-            }
 
-            File input = fileService.findById(optionVal);
+
             if (input!=null){
                 String inputFilePath = input.getPath();
                 String outputFileDirectory = fileService.getPathForUpload();
-                String outputFilePath2 = outputFileDirectory + "/" + conclusionfile.getName();
+                String outputFilePath2 = outputFileDirectory + "/" + input.getName();
 
                 try {
 
@@ -213,7 +217,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
                         baos.close();
                         newRun.addPicture(is, XWPFDocument.PICTURE_TYPE_JPEG, "new", Units.toEMU(100), Units.toEMU(12 * 6 / 9 * 9));
                         is.close();
-                        saveWord(outputFilePath2, doc);
+                        saveWord(input.getPath(), doc);
                         return true;
                     }catch (Exception e){
 
@@ -222,6 +226,18 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
 
                 }
             }
+        return false;
+    }
+
+    @Override
+    public Boolean saveFileInputDownload(String fileName, String url) {
+        try{
+
+            File file = fileService.getByName(fileName);
+            saveFile(new URL(url),file.getPath());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -358,6 +374,8 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
         }
     }
 
+
+
     private void saveWord(String filePath, XWPFDocument doc) throws FileNotFoundException, IOException {
         FileOutputStream out = null;
         System.out.println("/saveWord.filePath="+filePath);
@@ -370,4 +388,33 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
         }
     }
 
+    public static boolean saveFile(URL fileURL, String fileSavePath) {
+
+        boolean isSucceed = true;
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        HttpGet httpGet = new HttpGet(fileURL.toString());
+        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0");
+        httpGet.addHeader("Referer", "https://www.google.com");
+
+        try {
+            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpEntity fileEntity = httpResponse.getEntity();
+
+            System.out.println("fileSavePath==" + fileSavePath);
+            if (fileEntity != null) {
+                FileUtils.copyInputStreamToFile(fileEntity.getContent(), new java.io.File(fileSavePath));
+            }
+
+        } catch (IOException e) {
+            isSucceed = false;
+        }
+
+        httpGet.releaseConnection();
+
+        return isSucceed;
+    }
+
 }
+

@@ -19,5 +19,7 @@ public interface DocumentEditorService {
 
     Boolean conclusionComplete(Conclusion conclusion);
 
+    Boolean saveFileInputDownload(String fileName, String url);
+
 
 }

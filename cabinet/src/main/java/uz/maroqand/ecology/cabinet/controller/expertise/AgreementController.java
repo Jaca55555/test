@@ -20,10 +20,12 @@ import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -32,7 +34,6 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class AgreementController {
     private final ToastrService toastrService;
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
+    private final FileService fileService;
 
     @Autowired
     public AgreementController(
@@ -76,8 +78,8 @@ public class AgreementController {
             CoordinateService coordinateService,
             ToastrService toastrService,
             ConclusionService conclusionService,
-            NotificationService notificationService
-    ){
+            NotificationService notificationService,
+            FileService fileService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -93,6 +95,7 @@ public class AgreementController {
         this.toastrService = toastrService;
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -196,6 +199,15 @@ public class AgreementController {
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         RegApplicationLog agreementCompleteLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.AgreementComplete, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        String filename = "";
+        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
+            File file = fileService.findById(conclusion.getConclusionWordFileId());
+            filename = file!=null?file.getName():"";
+        }
+        model.addAttribute("filename", filename);
+
 
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

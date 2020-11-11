@@ -23,11 +23,13 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -64,6 +66,7 @@ public class ConclusionCompleteController {
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
     private final DocumentEditorService documentEditorService;
+    private final FileService fileService;
 
     @Autowired
     public ConclusionCompleteController(
@@ -82,7 +85,7 @@ public class ConclusionCompleteController {
             ConclusionService conclusionService,
             NotificationService notificationService,
             SmsSendService smsSendService,
-            DocumentEditorService documentEditorService) {
+            DocumentEditorService documentEditorService, FileService fileService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -99,6 +102,7 @@ public class ConclusionCompleteController {
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
         this.documentEditorService = documentEditorService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
@@ -205,6 +209,14 @@ public class ConclusionCompleteController {
 
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        String filename = "";
+        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
+            File file = fileService.findById(conclusion.getConclusionWordFileId());
+            filename = file!=null?file.getName():"";
+        }
+        model.addAttribute("filename", filename);
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);
