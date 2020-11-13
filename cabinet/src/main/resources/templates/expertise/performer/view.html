@@ -150,7 +150,7 @@
 
 
 
-<script type="text/javascript" src="http://195.158.9.82:8099/web-apps/apps/api/documents/api.js"></script>
+<script type="text/javascript" th:src="@{${ServerIp + '/web-apps/apps/api/documents/api.js'}}"></script>
 
 <script type="text/javascript" th:inline="javascript">
     let performerLogStatus = [[${performerLogStatus}]]
@@ -174,10 +174,10 @@
                     "fileType": "docx",
                     "key": data,
                     "title": "" + data  + " ",
-                    "url": "http://bo.eco-service.uz/docEditor/"+ data + "",
+                    "url": "[[${localIp}]]/docEditor/"+ data + "",
                 },
                 "editorConfig": {
-                    "callbackUrl": "http://bo.eco-service.uz/onlyoffice/fixationCallback",
+                    "callbackUrl": "[[${localIp}]]/onlyoffice/fixationCallback",
                     "lang": "ru",
                     "mode": performerLogStatus==false?"view":"edit",
                 },

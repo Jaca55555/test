@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
@@ -63,6 +64,7 @@ public class PerformerController {
     private final SmsSendService smsSendService;
     private final OrganizationService organizationService;
     private final DocumentEditorService documentEditorService;
+    private final GlobalConfigs globalConfigs;
 
     @Autowired
     public PerformerController(
@@ -84,7 +86,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService, DocumentEditorService documentEditorService) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -105,6 +107,7 @@ public class PerformerController {
         this.smsSendService = smsSendService;
         this.organizationService = organizationService;
         this.documentEditorService = documentEditorService;
+        this.globalConfigs = globalConfigs;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -227,6 +230,8 @@ public class PerformerController {
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("organization", organization);
+        model.addAttribute("ServerIp", globalConfigs.getServerIp());
+        model.addAttribute("LocalIp", globalConfigs.getLocalIp());
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
