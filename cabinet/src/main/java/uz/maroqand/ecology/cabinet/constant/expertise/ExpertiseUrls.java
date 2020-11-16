@@ -122,6 +122,7 @@ public class ExpertiseUrls {
     public static final String ConclusionFileDownload = Conclusion + "/file_download";
     public static final String ConclusionFileDownloadForView = Conclusion + "/file_download_for_view";
     public static final String ConclusionRegApplicationConclusionIdFileDownloadForView = Conclusion + "/reg_file_download_for_view";
+    public static final String ConclusionRegApplicationConclusionIdWordFileDownloadForView = Conclusion + "/reg_word_file_download_for_view";
     public static final String ConclusionFileAdd = Conclusion + "/file_add";
 
 

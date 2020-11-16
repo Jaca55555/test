@@ -361,6 +361,36 @@ public class ConclusionController {
         }
     }
 
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdWordFileDownloadForView)
+    @ResponseBody
+    public ResponseEntity<Resource> getConclusionRegApplicationConclusionIdWordFileDownloadForView(
+            @RequestParam(name = "id") String logIdStr
+    ){
+        String [] subString = logIdStr.split("_");
+        if (subString[0].isEmpty() || subString[1].isEmpty()){
+            return null;
+        }
+        Integer conclusion=null;
+        Integer fileId=null;
+        try {
+            conclusion=Integer.parseInt(subString[0]);
+            fileId=Integer.parseInt(subString[1]);
+        }catch (Exception e){
+
+        }
+        Conclusion conclusion1  = conclusionService.getById(conclusion);
+        if (conclusion1==null || conclusion1.getConclusionWordFileId()==null
+                || !conclusion1.getConclusionWordFileId().equals(fileId)){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
     @RequestMapping(ExpertiseUrls.ConclusionFileAdd)
     public String conclusionFileAdd(
             @RequestParam(name = "id") Integer regApplicationId,

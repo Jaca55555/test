@@ -157,7 +157,6 @@
     var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
-
     function getWordAPI() {
         console.log($('#filename').val());
         if ($('#filename').val()==undefined || $('#filename').val()==null || $('#filename').val()==""){
@@ -174,10 +173,10 @@
                     "fileType": "docx",
                     "key": data,
                     "title": "" + data  + " ",
-                    "url": "[[${localIp}]]/docEditor/"+ data + "",
+                    "url":"http://bo.eco-service.uz/docEditor/"+ data + "",
                 },
                 "editorConfig": {
-                    "callbackUrl": "[[${localIp}]]/onlyoffice/fixationCallback",
+                    "callbackUrl": "http://bo.eco-service.uz/onlyoffice/fixationCallback",
                     "lang": "ru",
                     "mode": performerLogStatus==false?"view":"edit",
                 },

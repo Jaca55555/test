@@ -43,14 +43,18 @@ public class OnlyOfficeAPIController {
 
     @RequestMapping("/onlyoffice/fixationCallback")
     public ResponseEntity<EditorResponse> fixationCallback(@RequestBody EditorRequest callbackRequest) throws IOException {
+
         System.out.println("key==" + callbackRequest.getKey());
         System.out.println("url==" + callbackRequest.getUrl());
         System.out.println("status==" + callbackRequest.getStatus());
+
         if (callbackRequest.getStatus()!=2 && callbackRequest.getStatus()!=3){
+            System.out.println("if1==");
             return ResponseEntity.ok(new EditorResponse(0));
         }
         boolean isSave = documentEditorService.saveFileInputDownload(callbackRequest.getKey(),callbackRequest.getUrl());
         if(isSave){
+            System.out.println("isSave==");
             return ResponseEntity.ok(new EditorResponse(0));
         }
         return ResponseEntity.ok(new EditorResponse(-1));

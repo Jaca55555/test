@@ -210,14 +210,6 @@ public class ConclusionCompleteController {
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        String filename = "";
-        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
-            File file = fileService.findById(conclusion.getConclusionWordFileId());
-            filename = file!=null?file.getName():"";
-        }
-        model.addAttribute("filename", filename);
-
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);
         model.addAttribute("agreementLogList", agreementLogList);

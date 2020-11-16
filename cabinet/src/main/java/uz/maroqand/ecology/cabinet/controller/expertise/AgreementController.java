@@ -200,15 +200,6 @@ public class AgreementController {
         RegApplicationLog agreementCompleteLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.AgreementComplete, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
 
-        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        String filename = "";
-        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
-            File file = fileService.findById(conclusion.getConclusionWordFileId());
-            filename = file!=null?file.getName():"";
-        }
-        model.addAttribute("filename", filename);
-
-
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);

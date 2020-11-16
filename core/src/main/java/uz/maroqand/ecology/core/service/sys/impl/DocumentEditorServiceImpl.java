@@ -44,7 +44,13 @@ import uz.maroqand.ecology.core.util.FileNameParser;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -66,6 +72,9 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
     private final ConclusionService conclusionService;
     private final DocumentRepoService documentRepoService;
 
+    private Logger logger = LogManager.getLogger(DocumentEditorServiceImpl.class);
+
+
     public DocumentEditorServiceImpl(HelperService helperService, FileService fileService, RegApplicationService regApplicationService, OptionService optionService, ProjectDeveloperService projectDeveloperService, OrganizationService organizationService, UserService userService, ClientService clientService, ConclusionService conclusionService, DocumentRepoService documentRepoService) {
         this.helperService = helperService;
         this.fileService = fileService;
@@ -78,8 +87,6 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
         this.conclusionService = conclusionService;
         this.documentRepoService = documentRepoService;
     }
-
-    private Logger logger = LogManager.getLogger(DocumentEditorServiceImpl.class);
 
     public List<String[]> getDataForReplacingInMurojaatBlanki(RegApplication regApplication, String locale) {
         List<String[]> forReplace = new LinkedList<>();
@@ -231,10 +238,35 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
 
     @Override
     public Boolean saveFileInputDownload(String fileName, String url) {
+        System.out.println("saveFileInputDownload");
         try{
-
             File file = fileService.getByName(fileName);
-            saveFile(new URL(url),file.getPath());
+            System.out.println("url==" + url);
+            logger.info("url==" + url);
+            logger.info("file.getPath()==" + file.getPath());
+            System.out.println("file.getPath()==" + file.getPath());
+
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            HttpGet httpGet = new HttpGet(file.getPath());
+            httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0");
+            httpGet.addHeader("Referer", "https://www.google.com");
+
+            try {
+                CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+                HttpEntity fileEntity = httpResponse.getEntity();
+                System.out.println("fileSavePath==" + file.getPath());
+                if (fileEntity != null) {
+                    FileUtils.copyInputStreamToFile(fileEntity.getContent(), new java.io.File(file.getPath()));
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            httpGet.releaseConnection();
+
+//            saveFile(new URL(url),file.getPath());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -392,26 +424,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
 
         boolean isSucceed = true;
 
-        CloseableHttpClient httpClient = HttpClients.createDefault();
 
-        HttpGet httpGet = new HttpGet(fileURL.toString());
-        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0");
-        httpGet.addHeader("Referer", "https://www.google.com");
-
-        try {
-            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-            HttpEntity fileEntity = httpResponse.getEntity();
-
-            System.out.println("fileSavePath==" + fileSavePath);
-            if (fileEntity != null) {
-                FileUtils.copyInputStreamToFile(fileEntity.getContent(), new java.io.File(fileSavePath));
-            }
-
-        } catch (IOException e) {
-            isSucceed = false;
-        }
-
-        httpGet.releaseConnection();
 
         return isSucceed;
     }
