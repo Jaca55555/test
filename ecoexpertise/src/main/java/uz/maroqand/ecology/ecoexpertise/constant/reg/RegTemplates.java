@@ -14,6 +14,7 @@ public class RegTemplates {
     public static final String RegApplicationStatus = RegApplication + "/status";
 
     public static final String RegApplicationList = RegApplication + "/list";
+    public static final String RegApplicationWaitingContractList = RegApplication + "/waiting_contract_list";
 
 
     private static final String Appeal = "appeal";

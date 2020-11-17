@@ -23,6 +23,8 @@ public interface RegApplicationService {
 
     List<RegApplication> getByClientId(Integer id);
 
+    List<RegApplication> getByClientIdAndContractNull(Integer id);
+
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 
     RegApplication getByOneInvoiceId(Integer invoiceId);
@@ -30,6 +32,8 @@ public interface RegApplicationService {
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);
+
+    RegApplication getByIdAndUserTin(Integer id, User user);
 
     RegApplication sendRegApplicationAfterPayment(RegApplication regApplication, User user, Invoice invoice, String locale);
 

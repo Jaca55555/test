@@ -43,6 +43,7 @@ public class RegUrls {
     public static final String RegApplicationGetOkedName = RegApplication + "/get_oked_name";
 
     public static final String RegApplicationList = RegApplication + "/list";
+    public static final String RegApplicationWaitingList = RegApplication + "/waiting_list";// tasdiqini kutayotgan shartnomalar ro'yxati
     public static final String RegApplicationListAjax = RegApplication + "/list_ajax";
 
     private static final String Appeal = Prefix + "/appeal";

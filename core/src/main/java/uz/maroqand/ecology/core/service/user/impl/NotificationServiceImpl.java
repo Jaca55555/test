@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.service.user.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,9 +8,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.user.NotificationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
+import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.user.Notification;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.user.NotificationRepository;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -20,8 +24,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by Utkirbek Boltaev on 24.06.2019.
@@ -33,10 +35,14 @@ import java.util.concurrent.ConcurrentMap;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final UserService userService;
+    private final ClientService clientService;
 
     @Autowired
-    public NotificationServiceImpl(NotificationRepository notificationRepository) {
+    public NotificationServiceImpl(NotificationRepository notificationRepository, UserService userService, ClientService clientService) {
         this.notificationRepository = notificationRepository;
+        this.userService = userService;
+        this.clientService = clientService;
     }
 
 //    private ConcurrentMap<Integer, List<Notification>> notificationMap;
@@ -92,6 +98,22 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void createForRegContract(Integer tin, NotificationType type, String title, Integer applicationNumber, String message, Integer userId) {
+        Notification notification = new Notification();
+        notification.setType(type);
+        notification.setStatus(NotificationStatus.New);
+
+        notification.setTin(tin);
+        notification.setTitle(title);
+        notification.setApplicationNumber(applicationNumber);
+        notification.setMessage(message);
+
+        notification.setCreatedAt(new Date());
+        notification.setCreatedById(userId);
+        notificationRepository.saveAndFlush(notification);
+    }
+
+    @Override
     public void create(Integer reviewerId, NotificationType type, String title, String registrationNumber, String message, String url, Integer userId) {
         Notification notification = new Notification();
         notification.setType(type);
@@ -113,7 +135,16 @@ public class NotificationServiceImpl implements NotificationService {
         newNotificationMap.get(notification.getReviewerId()).add(notification);*/
     }
 
-    public List<Notification> getNotificationList(Integer reviewerId,NotificationType notificationType){
+    @Override
+    public void confirmContractRegApplication(Integer regId) {
+        Notification notification = notificationRepository.findByApplicationNumberAndStatus(regId,NotificationStatus.New);
+        if (notification!=null){
+            notification.setStatus(NotificationStatus.Reviewed);
+            notificationRepository.save(notification);
+        }
+    }
+
+    public List<Notification> getNotificationList(Integer reviewerId, NotificationType notificationType){
         Pageable limit = PageRequest.of(0,10);
         return notificationRepository.findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(reviewerId, NotificationStatus.Reviewed, notificationType,limit);
         /*if (notificationMap.containsKey(reviewerId)) {
@@ -175,6 +206,35 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.findAll(getFilteringSpecification(dateBeginStr, dateEndStr, reviewerId, createdById,notificationType), pageable);
     }
 
+    @Override
+    public List<Notification> getListByUser(User user) {
+        if (user.getLeTin()==null && user.getTin()==null){
+            return null;
+        }
+        List<Notification> notificationList = new ArrayList<>();
+        if (user.getTin()!=null){
+            List<Notification> notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getTin(),NotificationStatus.New);
+            if (notifications.size()>0){
+                notificationList.addAll(notifications);
+            }
+        }
+        if (user.getLeTin()!=null){
+            List<Notification> notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getLeTin(),NotificationStatus.New);
+            if (notifications.size()>0){
+                notificationList.addAll(notifications);
+            }
+        }
+        return notificationList;
+    }
+
+    @Override
+    public Integer getNotificationRegContract() {
+        User user = userService.getCurrentUserFromContext();
+        if (user.getTin()==null && user.getLeTin()==null) return 0;
+        List<Notification> notificationList = getListByUser(user);
+        return notificationList!=null?notificationList.size():0;
+    }
+
     private static Specification<Notification> getFilteringSpecification(
             final String dateBeginStr,
             final String dateEndStr,
@@ -212,8 +272,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
                 predicates.add( notDeleted );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }

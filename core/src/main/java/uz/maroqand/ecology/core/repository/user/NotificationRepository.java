@@ -20,4 +20,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
 
     List<Notification> findByReviewerIdAndStatusAndTypeAndDeletedFalseOrderByIdDesc(Integer reviewerId, NotificationStatus status, NotificationType notificationType, Pageable pageable);
 
+    List<Notification> findByTinAndStatusAndDeletedFalse(Integer tin, NotificationStatus status);
+
+    Notification findByApplicationNumberAndStatus(Integer applicationNumber, NotificationStatus status);
 }

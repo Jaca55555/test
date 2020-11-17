@@ -553,11 +553,8 @@
                     $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $('#categorySelect').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $("#materialDiv").text("");
-                    alert(response)
                     console.log(response)
                     if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
-                        alert("-----" + $("#objectId").val())
-                        console.log("-----" + $("#objectId").val())
                         $("#activityIdDiv").hide();
                         $("#activityId").removeAttr('required');
                         $("#categorySelect").removeAttr('required');

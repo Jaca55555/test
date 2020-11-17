@@ -52,6 +52,9 @@
                                                         <div class="alert alert-primary col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" >
                                                             <p th:text="#{reg_application.confirmStatusInitial}">Ваша заявка в процессе рассмотрения и будет рассмотрена в течении одного рабочего дня.</p>
                                                         </div>
+                                                        <div class="alert alert-warning col-md-8 offset-2" role="alert" th:if="${field!=null}" >
+                                                            <p th:text="#{reg_application.not_contract_confirm}">Ваша заявка в процессе рассмотрения и будет рассмотрена в течении одного рабочего дня.</p>
+                                                        </div>
 
                                                         <div class="alert alert-success col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}">
                                                             <p th:text="#{reg_application.confirmStatusApproved}">Ваша заявка успешно рассмотрено, теперь вы можете заключить договор.</p>

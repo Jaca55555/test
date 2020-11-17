@@ -1,10 +1,14 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +31,7 @@ import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
+import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -165,8 +170,19 @@ public class RegApplicationController {
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
+        FilterDto filterDto = new FilterDto();
+        filterDto.setByLeTin(user.getLeTin());
+        filterDto.setByTin(user.getTin());
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(null,null,null,null,user.getId(),RegApplicationInputType.ecoService,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                null,
+                null,
+                null,
+                user.getId(),
+                RegApplicationInputType.ecoService,
+                pageable);
+
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -195,6 +211,25 @@ public class RegApplicationController {
     }
 
 
+    @RequestMapping(value = RegUrls.RegApplicationWaitingList)
+    public String getWaitingContractList(Model model){
+
+        User user = userService.getCurrentUserFromContext();
+        List<Notification> notificationList = notificationService.getListByUser(user);
+        List<RegApplication> regApplicationList = new ArrayList<>();
+        for (Notification notification: notificationList) {
+            RegApplication regApplication = regApplicationService.getById(notification.getApplicationNumber());
+            if (regApplication!=null){
+                regApplicationList.add(regApplication);
+            }
+        }
+
+        model.addAttribute("regApplicationList",regApplicationList);
+        model.addAttribute("actionUrl",RegUrls.RegApplicationResume);
+
+        return RegTemplates.RegApplicationWaitingContractList;
+    }
+
     /*
     * Start
     * */
@@ -213,8 +248,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
 
         switch (regApplication.getStep()){
@@ -403,6 +441,12 @@ public class RegApplicationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if (regApplication==null){
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
+        }
         String check = check(regApplication,user);
         if(check!=null){
             return check;
@@ -540,12 +584,16 @@ public class RegApplicationController {
     @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.GET)
     public String getWaitingPage(
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "field",required = false) Integer field,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null) {
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
@@ -556,6 +604,7 @@ public class RegApplicationController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
         model.addAttribute("back_url", RegUrls.RegApplicationAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
@@ -569,7 +618,10 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null) {
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         if (regApplication.getConfirmLogId()!=null){
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
@@ -587,11 +639,15 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
+        System.out.println("contractt=====");
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
 
         if (regApplication.getConfirmLogId()!=null){
@@ -620,6 +676,14 @@ public class RegApplicationController {
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
         }else {
             //offerta tasdiqlanmagan
+            if ((user.getLeTin()==null && user.getTin()==null)
+                    || (
+                            user.getTin()!=null && !regApplication.getApplicant().getTin().equals(user.getTin())
+                         || user.getLeTin()!=null && !regApplication.getApplicant().getTin().equals(user.getLeTin())
+                        )
+            ){
+                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId() +  "&field=" + -1;
+            }
             offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
             model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
         }
@@ -647,7 +711,7 @@ public class RegApplicationController {
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
         regApplication.setOfferId(offer.getId());
-
+        notificationService.confirmContractRegApplication(regApplication.getId());
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
         regApplication.setContractDate(new Date());

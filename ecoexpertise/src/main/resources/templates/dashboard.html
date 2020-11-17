@@ -46,6 +46,19 @@
                                         </div>
                                         <div class="col-md-6 col-xl-3">
                                             <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                <div class="text-left" style="position: absolute; padding-top: 5%; margin-left: 84%">
+                                                    <span class="badge-success" style="padding:80% 120%; border-radius: 30%; font-size: 22px">
+                                                        <span th:text="${@notificationServiceImpl.getNotificationRegContract()}">0</span>
+                                                    </span>
+                                                </div>
+                                                <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationWaitingList}">
+                                                    <i class="feather icon-check-square" style="font-size: 40px;padding-bottom: 25px;color: #9575CD;"></i>
+                                                    <h5  style="margin-top: 25px;" th:text="#{sys_waiting.application}">Обрашения</h5>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-3">
+                                            <div class="card" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
                                                 <a class="card-block text-center" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationList}">
                                                     <i class="feather icon-list" style="font-size: 40px;padding-bottom: 25px;color: #9575CD;"></i>
                                                     <h5  style="margin-top: 25px;" th:text="#{reg_application.list}"></h5>

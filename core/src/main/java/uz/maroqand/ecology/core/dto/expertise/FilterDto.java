@@ -35,4 +35,7 @@ public class FilterDto {
     private String dateBegin;
     private String dateEnd;
 
+    private Integer byTin;
+    private Integer byLeTin;
+
 }

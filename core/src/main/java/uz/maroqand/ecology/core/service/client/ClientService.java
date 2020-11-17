@@ -12,12 +12,15 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ClientService {
 
     Client getById(Integer id);
 
     Client getByTin(Integer tin);
+
+    List<Client> getByListTin(Integer tin);
 
     Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message);
 

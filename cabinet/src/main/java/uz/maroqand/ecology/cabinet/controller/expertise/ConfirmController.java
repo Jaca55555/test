@@ -247,6 +247,16 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
+
+        notificationService.createForRegContract(
+                regApplication.getApplicant().getTin(),
+                NotificationType.RegContract,
+                "sys_reg_application.contract_wait",
+                regApplication.getId(),
+                "Ariza shartnoma tasdiqlashga yuborildi",
+                user.getId()
+        );
+
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz tasdiqlandi keyingi bosqishga o'tishingiz mumkin, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
         return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";
