@@ -79,8 +79,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public List<RegApplication> getByClientIdAndContractNull(Integer id) {
-        return regApplicationRepository.findByApplicantIdAndContractNumberIsNullAndDeletedFalse(id);
+    public List<RegApplication> getByClientIdDeletedFalse(Integer id) {
+        return regApplicationRepository.findByApplicantIdAndDeletedFalse(id);
     }
 
     @Override
@@ -143,32 +143,43 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
     @Override
     public RegApplication getByIdAndUserTin(Integer id, User user) {
-        if (user==null) return null;
+
+        System.out.println("getByIdAndUserTin");
+        if (user==null){
+            System.out.println("if  user==null");
+            return null;
+        }
 
         if (user.getTin()!=null){
+
             List<Client> clientList = clientService.getByListTin(user.getTin());
-            for (Client client: clientList) {
-                List<RegApplication> regApplications = getByClientIdAndContractNull(client.getId());
-                for (RegApplication regApplication :regApplications){
-                    if (regApplication.getId().equals(id)){
-                        return regApplication;
-                    }
-                }
-            }
+            System.out.println("if  user.getTin()!=null  " + clientList.size());
+            RegApplication regApplication = getRegApplication(id, clientList);
+            if (regApplication != null) return regApplication;
         }
 
         if (user.getLeTin()!=null){
+
             List<Client> clientList = clientService.getByListTin(user.getLeTin());
-            for (Client client: clientList) {
-                List<RegApplication> regApplications = getByClientIdAndContractNull(client.getId());
-                for (RegApplication regApplication :regApplications){
-                    if (regApplication.getId().equals(id)){
-                        return regApplication;
-                    }
+            System.out.println("if  user.getLeTin()!=null  " + clientList.size());
+            RegApplication regApplication = getRegApplication(id, clientList);
+            if (regApplication != null) return regApplication;
+        }
+        System.out.println("else");
+
+        return null;
+    }
+
+    private RegApplication getRegApplication(Integer id, List<Client> clientList) {
+        for (Client client: clientList) {
+            List<RegApplication> regApplications = getByClientIdDeletedFalse(client.getId());
+            for (RegApplication regApplication :regApplications){
+                if (regApplication.getId().equals(id)){
+                    System.out.println("if  regApplication.getId().equals(id)");
+                    return regApplication;
                 }
             }
         }
-
         return null;
     }
 
@@ -356,30 +367,27 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     System.out.println("userId");
                     Predicate byUserId, byLeTin, byTin;
                     byUserId = criteriaBuilder.equal(root.get("createdById"), userId);
-                    if (filterDto!=null && (filterDto.getByLeTin()!=null || filterDto.getTin()!=null)
+                    if (filterDto!=null && (filterDto.getByLeTin()!=null || filterDto.getByTin()!=null)
                             && regApplicationInputType!=null && regApplicationInputType.equals(RegApplicationInputType.ecoService)
                     ){
                         if (filterDto.getByLeTin()!=null && filterDto.getByTin()!=null){
-                            System.out.println("filterDto.getByLeTin()!=null && filterDto.getTin()!=null");
                             byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
                             byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
-                            predicates.add(criteriaBuilder.or(byUserId, byLeTin, byTin));
+                            predicates.add(criteriaBuilder.or(byLeTin, byTin,byUserId));
                         }else{
-                            if (filterDto.getTin()!=null && filterDto.getByLeTin()==null){
-                                byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin());
-                                predicates.add(criteriaBuilder.or(byUserId, byTin));
+                            if (filterDto.getByTin()!=null && filterDto.getByLeTin()==null){
+                                byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
+                                predicates.add(criteriaBuilder.or(byTin, byUserId));
                             }else{
-                                if (filterDto.getTin()==null && filterDto.getByLeTin()!=null) {
+                                if (filterDto.getByTin()==null && filterDto.getByLeTin()!=null) {
                                     byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
-                                    predicates.add(criteriaBuilder.or(byUserId, byLeTin));
+                                    predicates.add(criteriaBuilder.or(byLeTin,byUserId));
                                 }
                             }
                         }
                     }else{
                         predicates.add(byUserId);
                     }
-                    predicates.add(byUserId);
-
                 }
 
                 if(regApplicationInputType!=null){

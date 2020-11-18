@@ -227,13 +227,13 @@
                 getOkedName();
             }
 
-            if ($('#individualTin').parsley().isValid()){
+           /* if ($('#individualTin').parsley().isValid()){
                 $('#individualTin').change();
             }
 
             if ($('#legalEntityTin').parsley().isValid()){
                 $('#legalEntityTin').change();
-            }
+            }*/
 
         });
 
@@ -420,7 +420,8 @@
                         $("#legalEntityMfo").val(val.mfo);
                         $("#legalEntityBankAccount").val(val.account);
                         $("#legalEntityBankName").val(val.bankname);
-                    }else {
+                    }
+                    /*else {
                         $("#legalEntityName").val("");
                         $("#legalEntityRegionId").val("");
                         $("#legalEntityRegionId").change();
@@ -436,7 +437,7 @@
                         $("#legalEntityMfo").val("");
                         $("#legalEntityBankAccount").val("");
                         $("#legalEntityBankName").val("");
-                    }
+                    }*/
                 },
                 error: function () {
                 }
@@ -473,7 +474,8 @@
                         $("#individualPhone").val(val.phone);
                         $("#individualEmail").val(val.email);
                         $("#individualAddress").val(val.address);
-                    }else {
+                    }
+                    /*else {
                         $("#individualName").val("");
                         $("#individualRegionId").val("");
                         $("#individualRegionId").change();
@@ -482,7 +484,7 @@
                         $("#individualPhone").val("");
                         $("#individualEmail").val("");
                         $("#individualAddress").val("");
-                    }
+                    }*/
                 },
                 error: function () {
                 }

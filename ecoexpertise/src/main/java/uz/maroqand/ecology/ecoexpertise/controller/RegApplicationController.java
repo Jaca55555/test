@@ -318,8 +318,8 @@ public class RegApplicationController {
             case ForeignIndividual: foreignIndividualDto = new ForeignIndividualDto(applicant);break;
             case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }
-        individualDto.setIndividualTin(user.getTin());
-        legalEntityDto.setLegalEntityTin(user.getLeTin());
+        individualDto.setIndividualTin(individualDto.getIndividualTin()==null?user.getTin():individualDto.getIndividualTin());
+        legalEntityDto.setLegalEntityTin(legalEntityDto.getLegalEntityTin()==null?user.getLeTin():legalEntityDto.getLegalEntityTin());
         model.addAttribute("applicant", applicant);
         model.addAttribute("individual", individualDto);
         model.addAttribute("legalEntity", legalEntityDto);
@@ -643,7 +643,7 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+           /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 return "redirect:" + RegUrls.RegApplicationList;
@@ -701,8 +701,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         if(regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
@@ -728,8 +731,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         if(regApplication.getOfferId()==null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
@@ -752,7 +758,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
 
         if(regApplication.getOfferId() == null){
@@ -804,6 +814,13 @@ public class RegApplicationController {
         String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        if (regApplication==null){
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return null;
+            }
+        }
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
 
         return paymentService.sendSmsPaymentAndGetResponseMap(
@@ -845,7 +862,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication == null) {
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         if (regApplication.getInvoiceId() == null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
@@ -878,7 +899,11 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
@@ -915,7 +940,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication==null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
 
         if(!regApplication.getStatus().equals(RegApplicationStatus.Modification)){
@@ -947,7 +976,11 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication == null){
-            return "redirect:" + RegUrls.RegApplicationList;
+            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+            if (regApplication==null){
+                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+                return "redirect:" + RegUrls.RegApplicationList;
+            }
         }
         /*UserAdditional userAdditional = userAdditionalService.getById(user.getUserAdditionalId());
         if (userAdditional==null){

@@ -23,7 +23,7 @@ public interface RegApplicationService {
 
     List<RegApplication> getByClientId(Integer id);
 
-    List<RegApplication> getByClientIdAndContractNull(Integer id);
+    List<RegApplication> getByClientIdDeletedFalse(Integer id);
 
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 
