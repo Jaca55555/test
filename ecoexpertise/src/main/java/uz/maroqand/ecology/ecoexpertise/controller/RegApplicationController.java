@@ -677,12 +677,8 @@ public class RegApplicationController {
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
         }else {
             //offerta tasdiqlanmagan
-            if ((user.getLeTin()==null && user.getTin()==null)
-                    || (
-                            user.getTin()!=null && !regApplication.getApplicant().getTin().equals(user.getTin())
-                         || user.getLeTin()!=null && !regApplication.getApplicant().getTin().equals(user.getLeTin())
-                        )
-            ){
+            RegApplication regApplicationCheck = regApplicationService.getByIdAndUserTin(regApplication.getId(),user);
+            if (regApplicationCheck==null || !regApplicationCheck.getId().equals(regApplication.getId())){
                 return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId() +  "&field=" + -1;
             }
             offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());

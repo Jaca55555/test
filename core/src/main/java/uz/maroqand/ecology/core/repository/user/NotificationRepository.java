@@ -22,5 +22,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
 
     List<Notification> findByTinAndStatusAndDeletedFalse(Integer tin, NotificationStatus status);
 
-    Notification findByApplicationNumberAndStatus(Integer applicationNumber, NotificationStatus status);
+    Notification findByApplicationNumberAndStatusAndType(Integer applicationNumber, NotificationStatus status, NotificationType type);
 }
