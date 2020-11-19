@@ -216,6 +216,7 @@ public class RegApplicationController {
 
         User user = userService.getCurrentUserFromContext();
         List<Notification> notificationList = notificationService.getListByUser(user);
+
         List<RegApplication> regApplicationList = new ArrayList<>();
         for (Notification notification: notificationList) {
             RegApplication regApplication = regApplicationService.getById(notification.getApplicationNumber());
@@ -816,10 +817,6 @@ public class RegApplicationController {
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication==null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return null;
-            }
         }
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
 

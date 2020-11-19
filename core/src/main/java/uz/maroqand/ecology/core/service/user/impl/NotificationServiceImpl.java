@@ -208,18 +208,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getListByUser(User user) {
+        List<Notification> notifications = new ArrayList<>();
         if (user.getLeTin()==null && user.getTin()==null){
-            return null;
+            return notifications;
         }
         List<Notification> notificationList = new ArrayList<>();
         if (user.getTin()!=null){
-            List<Notification> notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getTin(),NotificationStatus.New);
+            notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getTin(),NotificationStatus.New);
             if (notifications.size()>0){
                 notificationList.addAll(notifications);
             }
         }
         if (user.getLeTin()!=null){
-            List<Notification> notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getLeTin(),NotificationStatus.New);
+            notifications = notificationRepository.findByTinAndStatusAndDeletedFalse(user.getLeTin(),NotificationStatus.New);
             if (notifications.size()>0){
                 notificationList.addAll(notifications);
             }
