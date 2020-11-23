@@ -177,6 +177,7 @@
     var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
+    var isSaveConclusion = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsSave}]];
     /*function getWordAPI() {
         console.log($('#filename').val());
         if ($('#filename').val()==undefined || $('#filename').val()==null || $('#filename').val()==""){
@@ -227,6 +228,37 @@
             }
         });
     }*/
+
+    $('#form-confirm-button').on('click',function () {
+        // alert("save");
+        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
+        if (conclusionOnline==="true"){
+            console.log("save");
+            var form = new FormData();
+            form.append("id", [[${regApplication.id}]]);
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: isSaveConclusion,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.status==1){
+                        $('#conclusion_alert').hide();
+                       $('#form-confirm').submit();
+                    }else{
+                        $('#conclusion_alert').show();
+                    }
+                }
+            });
+        }else{
+            $('#conclusion_alert').hide();
+            $('#form-confirm').submit();
+        }
+    });
 
     var conclusionId= [[${conclusionId}]];
     $('.btnNext').click(function() {

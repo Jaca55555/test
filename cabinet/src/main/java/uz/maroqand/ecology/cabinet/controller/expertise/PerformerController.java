@@ -465,6 +465,30 @@ public class PerformerController {
         result.put("status",1);
         return result;
     }
+    @RequestMapping(ExpertiseUrls.PerformerConclusionIsSave)
+    @ResponseBody
+    public HashMap<String,Object> getPerformerConclusionIsSave(
+            @RequestParam(name = "id") Integer id
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        Integer status=1;
+        result.put("status",status);
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            status=0;
+            result.put("status",status);
+            return result;
+        }
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion == null  || conclusion.getHtmlText()==null || conclusion.getHtmlText().isEmpty()){
+            status=-1;
+            result.put("status",status);
+            return result;
+        }
+
+        return result;
+    }
+
 
     @RequestMapping(ExpertiseUrls.PerformerChangeDeadlineDate)
     @ResponseBody

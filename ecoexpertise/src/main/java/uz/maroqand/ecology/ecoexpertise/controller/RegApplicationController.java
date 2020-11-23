@@ -774,11 +774,10 @@ public class RegApplicationController {
             regApplicationService.update(regApplication);
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            invoice = invoiceService.modification(regApplication, invoice, requirement);
-
             if (invoice.getStatus()==InvoiceStatus.Success || invoice.getStatus()==InvoiceStatus.PartialSuccess){
                 return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
             }
+            invoice = invoiceService.modification(regApplication, invoice, requirement);
         }
 
         System.out.println("config==");
