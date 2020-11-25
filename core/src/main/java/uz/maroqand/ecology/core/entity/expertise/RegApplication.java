@@ -46,6 +46,10 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationInputType inputType;
 
+    @Column(name = "reg_application_category_type")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationCategoryType regApplicationCategoryType;
+
     //Объект экспертизы
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "object_id", insertable = false, updatable = false)

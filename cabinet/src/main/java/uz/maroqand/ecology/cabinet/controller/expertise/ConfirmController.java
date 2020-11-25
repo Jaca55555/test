@@ -247,7 +247,6 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
-
         notificationService.createForRegContract(
                 regApplication.getApplicant().getTin(),
                 NotificationType.RegContract,
