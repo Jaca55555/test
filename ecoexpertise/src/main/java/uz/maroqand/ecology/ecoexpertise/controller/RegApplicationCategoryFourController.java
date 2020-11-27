@@ -541,6 +541,7 @@ public class RegApplicationCategoryFourController {
         if(check!=null){
             return check;
         }
+
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.ACHZM.ordinal()+1);

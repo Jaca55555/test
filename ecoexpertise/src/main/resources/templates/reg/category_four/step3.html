@@ -51,6 +51,22 @@
                                                 <div class="form-group col-md-12" >
                                                     <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
 
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.territory_description}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.territoryDescription}" required="" maxlength="254"  />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            m <sup>2</sup>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
