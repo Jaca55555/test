@@ -6,10 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.expertise.LogStatus;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
@@ -61,13 +58,15 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         this.factureService = factureService;
     }
 
-    public RegApplication create(User user,RegApplicationInputType inputType){
+    @Override
+    public RegApplication create(User user,RegApplicationInputType inputType,RegApplicationCategoryType categoryType){
         RegApplication regApplication = new RegApplication();
         regApplication.setInputType(inputType);
+        regApplication.setRegApplicationCategoryType(categoryType);
         regApplication.setCreatedAt(new Date());
         regApplication.setCreatedById(user.getId());
         regApplication.setStatus(RegApplicationStatus.Initial);
-        regApplication.setStep(RegApplicationStep.APPLICANT);
+        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.APPLICANT);
 
         regApplicationRepository.save(regApplication);
         return regApplication;

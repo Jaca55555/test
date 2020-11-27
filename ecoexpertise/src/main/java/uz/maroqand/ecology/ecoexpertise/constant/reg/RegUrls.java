@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.ecoexpertise.constant.reg;
 
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+
 public class RegUrls {
     private static final String Prefix = "/reg";
 
@@ -33,6 +35,37 @@ public class RegUrls {
     public static final String RegApplicationPaymentFree = RegApplication + "/payment/free";
     public static final String RegApplicationStatus = RegApplication + "/status";
     public static final String RegApplicationResend = RegApplication + "/resend";
+
+    // for category type 4
+    private static final String RegApplicationFourCategory = RegApplication + "/category_four";
+    public static final String RegApplicationFourCategoryResume = RegApplicationFourCategory + "/resume";
+    public static final String RegApplicationFourCategoryStart = RegApplicationFourCategory + "/start";
+    public static final String RegApplicationFourCategoryApplicant = RegApplicationFourCategory + "/applicant";
+    public static final String RegApplicationFourCategorySendSMSCode = RegApplicationFourCategory + "/send_sms_code";
+    public static final String RegApplicationFourCategoryGetSMSCode = RegApplicationFourCategory + "/get_sms_code";
+
+    public static final String RegApplicationFourCategoryAbout = RegApplicationFourCategory + "/about";
+    public static final String RegApplicationFourCategoryGetActivity = RegApplicationFourCategory + "/activity";
+    public static final String RegApplicationFourCategoryGetMaterials = RegApplicationFourCategory + "/materials";
+    public static final String RegApplicationFourCategoryGetMaterial = RegApplicationFourCategory + "/material";
+
+
+    public static final String RegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
+    public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+    public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
+    public static final String RegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
+    public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
+
+    public static final String RegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
+    public static final String RegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";
+    public static final String RegApplicationFourCategoryContractConfirm = RegApplicationFourCategory + "/contract/confirm";
+
+    public static final String RegApplicationFourCategoryPrepayment = RegApplicationFourCategory + "/prepayment";
+    public static final String RegApplicationFourCategoryPaymentSendSms = RegApplicationFourCategory + "/payment/send_sms";
+    public static final String RegApplicationFourCategoryPaymentConfirmSms = RegApplicationFourCategory + "/payment/confirm_sms";
+    public static final String RegApplicationFourCategoryPaymentFree = RegApplicationFourCategory + "/payment/free";
+    public static final String RegApplicationFourCategoryStatus = RegApplicationFourCategory + "/status";
+    public static final String RegApplicationFourCategoryResend = RegApplicationFourCategory + "/resend";
 
     public static final String RegApplicationConclusionDownload = Prefix + "/conclusion_file/download";
     public static final String RegApplicationConfirmFacture = RegApplication + "/confirm/facture";

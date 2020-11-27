@@ -7,6 +7,7 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
 import uz.maroqand.ecology.core.entity.user.User;
 
@@ -19,7 +20,7 @@ public interface RegApplicationService {
 
     void update(RegApplication regApplication);
 
-    RegApplication create(User user,RegApplicationInputType inputType);
+    RegApplication create(User user, RegApplicationInputType inputType, RegApplicationCategoryType categoryType);
 
     List<RegApplication> getByClientId(Integer id);
 

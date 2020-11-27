@@ -20,6 +20,8 @@ public interface RequirementService {
 
     List<Requirement> getRequirementExpertise(Integer objectExpertiseId);
 
+    List<Requirement> getByCategory(Category category);
+
     List<Requirement> getAllList();
 
     Page<Requirement> findFiltered(

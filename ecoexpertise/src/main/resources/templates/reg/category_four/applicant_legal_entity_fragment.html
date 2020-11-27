@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="legal_entity">
+
+    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_tin}">СТИР</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="legalEntityTin" name="legalEntityTin" data-parsley-type="digits" data-parsley-minlength="9" data-parsley-maxlength="9" maxlength="9" th:value="${legalEntity.legalEntityTin}">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_legal_entity_name}">Фирменное наименование предприятия</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required=""  id="legalEntityName" name="legalEntityName" th:value="${legalEntity.legalEntityName}" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_opf}">Организационно правовая форма предприятия</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="legalEntityOpfId" name="legalEntityOpfId" data-parsley-errors-container="#legalEntityOpf-error">
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option value="100" th:text="${@opfServiceImpl.getById(100).getNameTranslation(#locale)}" ></option>
+                    <option value="1521" th:text="${@opfServiceImpl.getById(1521).getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==1521}"></option>
+                    <option value="1522" th:text="${@opfServiceImpl.getById(1522).getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==1522}"></option>
+                    <option  th:each="opf : ${opfLegalEntityList}" th:if="${opf.id!=100}" th:value="${opf.id}" th:text="${opf.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityOpfId==opf.id}" th:disabled="${(opf.id!=1522 || opf.id!=1521) and opf.parentId==null }"></option>
+                </select>
+                <div id="legalEntityOpf-error"></div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_director_full_name}">Директор</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="directorFullName" name="directorFullName" th:value="${legalEntity.directorFullName}" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_oked}">ОКЭД</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control"  onkeypress="getOkedName()" required="" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" id="oked" name="oked" th:value="${legalEntity.oked}" placeholder="81100">
+                <small id="okedName" class="form-text text-muted" style="display: none"></small>
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_legal_entity_address}">Faoliyatni amalga oshirish manzili</p>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="legalEntityRegionId" name="legalEntityRegionId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="region : ${regions}" th:value="${region.id}"  th:text="${region.getNameTranslation(#locale)}" th:selected="${legalEntity.legalEntityRegionId==region.id}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_subregion}">Туман</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" required="" id="legalEntitySubRegionId" name="legalEntitySubRegionId">
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="sub_region : ${sub_regions}" th:value="${sub_region.id}" th:text="${sub_region.getNameTranslation(#locale)}" th:class="${'sr-'+sub_region.parentId}" th:selected="${legalEntity.legalEntitySubRegionId==sub_region.id}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_address}">Адрес</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="legalEntityAddress" name="legalEntityAddress" th:value="${legalEntity.legalEntityAddress}" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_legal_entity_contact}"></p>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control phone" id="legalEntityPhone" name="legalEntityPhone" th:value="${legalEntity.legalEntityPhone}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input class="form-control phone" required="" id="legalEntityMobilePhone" name="legalEntityMobilePhone" th:value="${legalEntity.legalEntityMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
+                <span id="errorPhone_legalEntityMobilePhone"></span>
+            </div>
+            <div class="col-md-2 pl-0">
+                <button class="btn btn-info btn-block" type="button" id="send_code_button_legalEntityMobilePhone" onclick="getSMSCode('legalEntityMobilePhone')" >
+                    <span id="timer_legalEntityMobilePhone"></span>
+                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group row" id="sms_code_legalEntityMobilePhone" style="display: none">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_code_confirm}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control only-number" placeholder="000000" minlength="6" maxlength="6" name="code" id="code_legalEntityMobilePhone" data-parsley-minlength="6" data-parsley-maxlength="6" data-parsley-type="integer"/>
+            </div>
+            <div class="col-md-2 row pr-0">
+                <div class="col-md-2">
+                    <i class="mdi mdi-check-outline" id="allow_legalEntityMobilePhone" style="color: green;font-size: 30px" hidden=""></i>
+                    <i class="mdi mdi-close-outline" id="notAllow_legalEntityMobilePhone" style="color: red;font-size: 30px" hidden=""></i>
+                </div>
+                <div class="col-md-10 pr-0">
+                    <button type="button" class="btn btn-success btn-block p-0" onclick="confirmSmsCode('legalEntityMobilePhone')"><i class="mdi mdi-telegram mr-0" style="font-size: 25px"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_email}">Электронный адрес;</label>
+            </div>
+            <div class="col-md-6">
+                <input type="email" class="form-control" id="legalEntityEmail" name="legalEntityEmail" th:value="${legalEntity.legalEntityEmail}" data-parsley-maxlength="250">
+            </div>
+        </div>
+
+        <p class="text-center" th:text="#{sys_bank_info}">Xizmat ko'rsatuvchi bank</p>
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_mfo}">МФО обслуживающего банка;</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="legalEntityMfo" name="legalEntityMfo" data-parsley-minlength="5" data-parsley-maxlength="5" maxlength="5" data-parsley-type="digits" th:value="${legalEntity.legalEntityMfo}" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_bank_name}">Наименование обслуживающего банка;</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required=""  id="legalEntityBankName" name="legalEntityBankName" th:value="${legalEntity.legalEntityBankName}" data-parsley-maxlength="250" >
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_bank_account}">Расчетный счет (Основной);</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" required="" id="legalEntityBankAccount" data-parsley-minlength="19" data-parsley-maxlength="30" name="legalEntityBankAccount" th:value="${legalEntity.legalEntityBankAccount}" >
+            </div>
+        </div>
+
+        <input type="hidden" name="applicantType" value="LegalEntity">
+        <input type="hidden" name="id" th:value="${regApplication.id}">
+        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="row" >
+            <div class="form-group col-md-12 text-center" >
+                <button type="button" class="btn btn-danger" th:text="#{sys_cancel}" data-toggle="modal" data-target="#cancel_modal">Отмена</button>
+                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

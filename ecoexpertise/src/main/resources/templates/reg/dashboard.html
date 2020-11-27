@@ -41,8 +41,7 @@
                                     <div class="card">
                                         <div class="card-body" style="min-height: calc(100vh - 130px);">
                                             <div class="row">
-
-                                            <div class="col-md-12 col-sm-12">
+                                            <div class="col-md-6 col-sm-6">
                                                 <div class="card card-border-c-purple" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
                                                     <div class="card-header">
                                                         <a href="#" class="text-secondary" th:text="#{sys_dashboard.newProject}">Новий проект </a>
@@ -56,6 +55,24 @@
                                                         <hr>
                                                         <div class="task-board text-right">
                                                             <a class="btn btn-square btn-primary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationStart}" th:text="#{sys_start}">Boshlash</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="card card-border-c-purple" style="box-shadow: 0px 0px 15px 5px rgba(69, 90, 100, 0.09);">
+                                                    <div class="card-header">
+                                                        <a href="#" class="text-secondary" th:text="#{sys_dashboard.newProject}">Новий проект </a>
+                                                    </div>
+                                                    <div class="card-block card-task">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <p class="task-detail" th:utext="#{sys_dashboard.newProjectDescriptionCategoryFourAdditional}"></p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="task-board text-right">
+                                                            <a class="btn btn-square btn-primary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStart}" th:text="#{sys_start}">Boshlash</a>
                                                         </div>
                                                     </div>
                                                 </div>

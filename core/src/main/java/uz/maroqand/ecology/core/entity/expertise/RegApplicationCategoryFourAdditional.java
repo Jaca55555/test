@@ -56,6 +56,10 @@ public class RegApplicationCategoryFourAdditional {
     @Column(name = "cultural_heritage_description" , columnDefinition = "TEXT")
     private String culturalHeritageDescription;
 
+    //Танланган ер участкасидаги мавжуд ҳайвонот дунёси
+    @Column(name = "animal_count_additional" , columnDefinition = "TEXT")
+    private String animalCountAdditional;
+
     //Танланган ер участкасидаги мавжуд усимлик дунёси (номи, сони, қурилиш остига тушувчи дарахтлар сони)
     @Column(name = "tree_count_additional" , columnDefinition = "TEXT")
     private String treeCountAdditional;
@@ -111,6 +115,8 @@ public class RegApplicationCategoryFourAdditional {
     private String sourceMaterial;
 
     //step 4
+
+
 
     //step5
     //Чиқиндилар ҳисоби

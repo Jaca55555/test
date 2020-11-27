@@ -50,6 +50,11 @@ public class RequirementServiceImpl implements RequirementService {
     }
 
     @Override
+    public List<Requirement> getByCategory(Category category) {
+        return requirementRepository.findByCategory(category);
+    }
+
+    @Override
     public List<Requirement> getAllList() {
         return requirementRepository.findAll();
     }

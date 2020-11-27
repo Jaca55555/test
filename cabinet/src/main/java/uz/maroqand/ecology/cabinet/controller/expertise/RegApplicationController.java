@@ -192,7 +192,7 @@ public class RegApplicationController {
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationStart)
     public String getExpertiseRegApplicationStart() {
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.create(user,RegApplicationInputType.cabinet);
+        RegApplication regApplication = regApplicationService.create(user,RegApplicationInputType.cabinet,RegApplicationCategoryType.oneToTree);
 
         return "redirect:"+ ExpertiseUrls.ExpertiseRegApplicationApplicant + "?id=" + regApplication.getId();
     }
