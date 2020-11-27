@@ -18,7 +18,7 @@ public class BoilerCharacteristics {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    
+
     @Column
     private String name;
 
