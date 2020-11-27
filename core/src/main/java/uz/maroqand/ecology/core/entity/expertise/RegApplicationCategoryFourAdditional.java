@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.PollutionMeasures;
 import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.persistence.*;
@@ -87,7 +88,7 @@ public class RegApplicationCategoryFourAdditional {
 
     // Асфальт йўл ва йўлаклар ётказилган майдони
     @Column(name = "road_area", precision = 20, scale = 2)
-    private Double RoadArea;
+    private Double roadArea;
 
     //Объектнинг иш фаолияти, иш тартиби,ишчилар сони
     @Column(name = "work_schedule", columnDefinition = "TEXT")
@@ -109,13 +110,57 @@ public class RegApplicationCategoryFourAdditional {
     @Column(name = "source_material", columnDefinition = "TEXT")
     private String sourceMaterial;
 
-
-
-
     //step 4
 
+    //step5
+    //Чиқиндилар ҳисоби
+    //Объектнинг иш фаолияти натижасида хосил буладиган чикиндилар тури ва микдори
+    @Column(name = "about_waste", columnDefinition = "TEXT")
+    private String aboutWaste;
 
+    //Сув таъминоти ва оқава сув тизими
+    // Сув таьминоти манбаси номи (мавжуд туман водопровод тизими ёки артезиан кудук) ва хажми
+    @Column(name = "water_volume", columnDefinition = "TEXT")
+    private String waterVolume;
 
+    //Окава сувларини ташлаш манбаси (канализация, гидроизоляцияланган хандак ва б.) ва хажми
+    @Column(name = "source_water", columnDefinition = "TEXT")
+    private String sourceWater;
+
+    //Иситиш тизими
+    @Column(name = "heating_system", columnDefinition = "TEXT")
+    private String heatingSystem;
+
+    //Ёнғинга қарши тадбирлар
+    @Column(name = "firefighting_measures", columnDefinition = "TEXT")
+    private String firefightingMeasures;
+
+    //Вентиляция
+    @Column(name = "ventilation", columnDefinition = "TEXT")
+    private String ventilation;
+
+    //Фавқулодда вазиятларга қарши тадбирлар
+    @Column(name = "emergency_measures", columnDefinition = "TEXT")
+    private String emergencyMeasures;
+
+    //Qozon nomi
+    @Column(name = "boiler_name")
+    private String boilerName;
+
+    //Қозон характеристикаси
+    @ManyToMany
+    @JoinTable(name = "category_four_additional_jt_boiler_characteristics",
+            joinColumns = { @JoinColumn(name = "category_four_additional") },
+            inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics") })
+    private Set<BoilerCharacteristics> boilerCharacteristics;
+
+    //step6
+    //Атроф муҳитни ифлосланишини камайтирувчи тадбирлар
+    @ManyToMany
+    @JoinTable(name = "category_four_additional_jt_events",
+            joinColumns = { @JoinColumn(name = "category_four_additional") },
+            inverseJoinColumns = { @JoinColumn(name = "event_id") })
+    private Set<PollutionMeasures> pollutionMeasures;
 
     //step 7
 
@@ -131,41 +176,17 @@ public class RegApplicationCategoryFourAdditional {
     @Column(name = "sewage_availability", columnDefinition = "TEXT")
     private String sewageAvailability;
 
+    //Чиқариладиган ташланмалар миқдори ва таркиби
+    @Column(name = "discard_amount_about", columnDefinition = "TEXT")
+    private String discardAmountAbout;
 
+    //Чиқиндилар миқдори ва уларни жойлаштириш шартлари
+    @Column(name = "waste_amount_about", columnDefinition = "TEXT")
+    private String wasteAmountAbout;
 
-
-
-    //Дата заключения
-    @Column(name="date", columnDefinition = "timestamp without time zone")
-    private Date date;
-
-    //Дата окончания срока
-    @Column(name = "deadline_date")
-    private Date deadlineDate;
-
-    // text conslusion
-    @Column(columnDefinition = "TEXT")
-    private String htmlText;
-
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_repo_id", insertable = false, updatable = false)
-    private DocumentRepo documentRepo;*/
-
-    @Column(name = "document_repo_id")
-    private Integer documentRepoId;
-
-    @Column(name = "conclusion_word_file_id")
-    private Integer conclusionWordFileId; // for online yozilgan file id
-
-    @Column(name = "conclusion_file_id")
-    private Integer conclusionFileId; // for reestrga yuklangan arizalar uchun xulosa yuklash
-
-    @Column(name = "uploaded_user")
-    private Integer uploadedUser; // for reestrga yuklangan arizalar uchun xulosa yuklasgan userId
-
-    /*
-     * Technical Fields
-     */
+    //Табиатни муҳофаза қилиш тадбирлари
+    @Column(name = "events", columnDefinition = "TEXT")
+    private String events;
 
     //ilova fayllar
     @ManyToMany
