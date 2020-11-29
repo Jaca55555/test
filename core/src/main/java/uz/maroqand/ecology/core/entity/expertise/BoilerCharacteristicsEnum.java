@@ -37,8 +37,7 @@ public enum BoilerCharacteristicsEnum {                                         
     }
 
     public static List<BoilerCharacteristicsEnum> getBoilerCharacteristics() {
-        List<BoilerCharacteristicsEnum> boilerCharacteristicList = new LinkedList<>(Arrays.asList(BoilerCharacteristicsEnum.values()));
-        return boilerCharacteristicList;
+        return new LinkedList<>(Arrays.asList(BoilerCharacteristicsEnum.values()));
     }
 
     public Integer getId() {

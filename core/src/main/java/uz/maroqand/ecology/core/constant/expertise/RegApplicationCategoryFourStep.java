@@ -3,11 +3,11 @@ package uz.maroqand.ecology.core.constant.expertise;
 public enum RegApplicationCategoryFourStep {
     APPLICANT,
     ABOUT,
-    TIK, //Texnik iqtisodiy ko'rsatkichlar
-    ACHZM, //ACHZM manbasini xatlov
-    STE, //Sanitar - texnik yechimlar
-    AMIK, //AMIK tadbirlar
-    SJB, //Savollarga javob berish
+    STEP3, //Texnik iqtisodiy ko'rsatkichlar
+    STEP4, //ACHZM manbasini xatlov
+    STEP5, //Sanitar - texnik yechimlar
+    STEP6, //AMIK tadbirlar
+    STEP7, //Savollarga javob berish
     WAITING,
     CONTRACT,
     PAYMENT,

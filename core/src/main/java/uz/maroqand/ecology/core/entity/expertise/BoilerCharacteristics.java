@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity.expertise;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 //Қозон характеристикаси
 @Data
@@ -30,5 +31,7 @@ public class BoilerCharacteristics {
     @Column(name = "amount", precision = 20, scale = 2)
     private Double amount;
 
+    @Column(name="deleted", columnDefinition = "boolean default false")
+    private Boolean deleted;
 
 }

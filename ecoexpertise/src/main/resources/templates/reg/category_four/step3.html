@@ -53,12 +53,12 @@
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_about.territory_description}"></label>
+                                                                <label class="col-form-label" th:text="#{sys_step_3.common_area}"></label>
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="input-group mb-3">
-                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.territoryDescription}" required="" maxlength="254"  />
+                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.commonArea}" required="" data-parsley-type="number" data-parsley-errors-container="#error_commonArea" />
                                                                     <div class="input-group-append">
                                                                         <span class="input-group-text">
                                                                             m <sup>2</sup>
@@ -66,9 +66,121 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div id="error_commonArea" class="col-md-6 offset-3"></div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.building_under_area}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.buildingUnderArea}" required="" data-parsley-type="number" data-parsley-errors-container="#error_buildingUnderArea" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            m <sup>2</sup>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="error_buildingUnderArea" class="col-md-6 offset-3"></div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.area_additional}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.areaAdditional}" required="" data-parsley-type="number" data-parsley-errors-container="#error_areaAdditional" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            m <sup>2</sup>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="error_areaAdditional" class="col-md-6 offset-3"></div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.road_area}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.roadArea}" required="" data-parsley-type="number" data-parsley-errors-container="#error_roadArea" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            m <sup>2</sup>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="error_roadArea" class="col-md-6 offset-3"></div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.work_schedule}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.workSchedule}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.production_capacity}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control" type="text" maxlength="254"  th:field="${regApplicationCategoryFourAdditional.productionCapacity}" required="" data-parsley-errors-container="#error_productionCapacity" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                           (y/tonna, y/dona v.h)
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="error_productionCapacity" class="col-md-6 offset-3"></div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.technological_process}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.technologicalProcess}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.material_additional}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.materialAdditional}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_3.source_material}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sourceMaterial}" required="" maxlength="254"  />
+                                                            </div>
                                                         </div>
 
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" name="regApplicationCategoryFourAdditionalId" th:value="${regApplicationCategoryFourAdditional.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >

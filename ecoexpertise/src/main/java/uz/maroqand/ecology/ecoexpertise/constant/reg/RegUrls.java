@@ -53,6 +53,11 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
     public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
     public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
+
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
+
     public static final String RegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
     public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
 

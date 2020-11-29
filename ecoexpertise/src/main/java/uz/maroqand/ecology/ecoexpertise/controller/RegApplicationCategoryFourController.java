@@ -73,8 +73,11 @@ public class RegApplicationCategoryFourController {
     private final NotificationService notificationService;
     private final FactureService factureService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final BoilerCharacteristicsService boilerCharacteristicsService;
 
     private final GlobalConfigs globalConfigs;
+
+    private final String RegListRedirect = "redirect:" + RegUrls.RegApplicationList;
 
     @Autowired
     public RegApplicationCategoryFourController(
@@ -107,7 +110,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -140,6 +143,7 @@ public class RegApplicationCategoryFourController {
         this.notificationService = notificationService;
         this.factureService = factureService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.boilerCharacteristicsService = boilerCharacteristicsService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -164,7 +168,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
 
@@ -175,18 +179,18 @@ public class RegApplicationCategoryFourController {
         switch (regApplication.getCategoryFourStep()){
             case APPLICANT: return "redirect:" + RegUrls.RegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
             case ABOUT: return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
-            case TIK:
-            case ACHZM:
-            case STE:
-            case AMIK:
-            case SJB:
+            case STEP3:
+            case STEP4:
+            case STEP5:
+            case STEP6:
+            case STEP7:
             case WAITING: return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
             case CONTRACT: return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + regApplication.getId();
             case PAYMENT: return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
             case STATUS: return "redirect:" + RegUrls.RegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();
         }
 
-        return "redirect:" + RegUrls.RegApplicationList;
+        return RegListRedirect;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryApplicant,method = RequestMethod.GET)
@@ -347,7 +351,7 @@ public class RegApplicationCategoryFourController {
         if (regApplication==null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         String check = check(regApplication,user);
@@ -497,7 +501,7 @@ public class RegApplicationCategoryFourController {
 
 
 
-        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.TIK);
+        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP3);
         regApplicationService.update(regApplication);
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id;
     }
@@ -514,18 +518,41 @@ public class RegApplicationCategoryFourController {
         if(check!=null){
             return check;
         }
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
         model.addAttribute("regApplication",regApplication);
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional
+        );
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.TIK.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep3;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep3Post(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regApplicationCategoryFourAdditionalId") Integer regApplicationCategoryFourAdditionalId,
+            RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional
     ){
 
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditionalOld==null || !regApplicationCategoryFourAdditionalOld.getId().equals(regApplicationCategoryFourAdditionalId)){
+            return RegListRedirect + "#field=2";
+        }
+
+        regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
+        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
+        regApplicationService.update(regApplication);
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id;
     }
 
@@ -542,9 +569,15 @@ public class RegApplicationCategoryFourController {
             return check;
         }
 
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.ACHZM.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep4;
     }
@@ -570,11 +603,141 @@ public class RegApplicationCategoryFourController {
         if(check!=null){
             return check;
         }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        if (regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+            regApplicationCategoryFourAdditionalService.createBolier(regApplicationCategoryFourAdditional,user.getId());
+
+        }
+
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STE.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep5;
+    }
+
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsCreate)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationFourCategoryBoilerCharacteristicsCreate(
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "amount") Double amount
+    ){
+        System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
+        Integer status = 0;
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+
+        HashMap<String,Object> response = new HashMap<>();
+        response.put("status",status);
+
+        if (regApplication==null ){
+            return response;
+        }
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return response;
+        }
+        Set<BoilerCharacteristics> boilerCharacteristics = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        if (boilerCharacteristics==null) boilerCharacteristics = new HashSet<>();
+        BoilerCharacteristics characteristics = new BoilerCharacteristics();
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics.setDeleted(Boolean.FALSE);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristics.add(characteristics);
+        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristics);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        response.put("status",1);
+        response.put("data",characteristics);
+
+        return response;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEdit)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler") String name,
+            @RequestParam(name = "type_boiler") String type,
+            @RequestParam(name = "amount_boiler") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return -1;
+        }
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        return 1 + "";
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsDelete)
+    @ResponseBody
+    public String regApplicationFourCategoryBoilerCharacteristicsDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId
+    ) {
+
+        String status = "1";
+        User user = userService.getCurrentUserFromContext();
+       RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
+            status = "0";
+            return status;
+        }
+
+        BoilerCharacteristics characteristics = boilerCharacteristicsService.getById(id);
+        if (characteristics == null) {
+            status = "-1";
+            return status;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        if (boilerCharacteristicsSet == null || boilerCharacteristicsSet.isEmpty() || !boilerCharacteristicsSet.contains(characteristics)) {
+            status = "-2";
+            return status;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        characteristics.setDeleted(Boolean.TRUE);
+        boilerCharacteristicsService.save(characteristics);
+        return status;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep5, method = RequestMethod.POST)
@@ -598,9 +761,15 @@ public class RegApplicationCategoryFourController {
         if(check!=null){
             return check;
         }
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.AMIK.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep6;
     }
@@ -627,9 +796,16 @@ public class RegApplicationCategoryFourController {
         if(check!=null){
             return check;
         }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.SJB.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryStep7;
     }
 
@@ -672,7 +848,7 @@ public class RegApplicationCategoryFourController {
         if(regApplication == null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null) {
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
@@ -687,7 +863,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.SJB.ordinal()+1);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryWaiting;
     }
 
@@ -700,7 +876,7 @@ public class RegApplicationCategoryFourController {
         if(regApplication == null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null) {
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         if (regApplication.getConfirmLogId()!=null){
@@ -726,7 +902,7 @@ public class RegApplicationCategoryFourController {
            /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
 
@@ -780,7 +956,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         if(regApplication.getOfferId() != null){
@@ -810,7 +986,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         if(regApplication.getOfferId()==null){
@@ -837,7 +1013,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
 
@@ -936,7 +1112,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
         if (regApplication.getInvoiceId() == null){
@@ -973,7 +1149,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
 
@@ -1014,7 +1190,7 @@ public class RegApplicationCategoryFourController {
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return "redirect:" + RegUrls.RegApplicationList;
+                return RegListRedirect;
             }
         }
 
@@ -1104,7 +1280,7 @@ public class RegApplicationCategoryFourController {
         if(regApplication == null || (regApplication.getRegApplicationCategoryType()==null || regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.oneToTree))){
             System.out.println("if=1");
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-            return "redirect:" + RegUrls.RegApplicationList;
+            return RegListRedirect;
         }
         Boolean modification = true;
         if (regApplication.getPerformerLogId()!=null){

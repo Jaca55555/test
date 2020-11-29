@@ -157,7 +157,7 @@ public class RegApplicationCategoryFourAdditional {
     @ManyToMany
     @JoinTable(name = "category_four_additional_jt_boiler_characteristics",
             joinColumns = { @JoinColumn(name = "category_four_additional") },
-            inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics") })
+            inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics")})
     private Set<BoilerCharacteristics> boilerCharacteristics;
 
     //step6

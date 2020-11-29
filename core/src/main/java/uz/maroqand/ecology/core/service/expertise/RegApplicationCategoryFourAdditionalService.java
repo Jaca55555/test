@@ -12,4 +12,10 @@ public interface RegApplicationCategoryFourAdditionalService {
 
     RegApplicationCategoryFourAdditional save(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional);
 
+    void createBolier(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,Integer userId);
+
+    RegApplicationCategoryFourAdditional update(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,Integer userId);
+
+    RegApplicationCategoryFourAdditional saveStep3(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId);
+
 }
