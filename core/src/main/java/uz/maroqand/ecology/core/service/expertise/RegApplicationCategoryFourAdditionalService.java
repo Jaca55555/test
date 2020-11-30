@@ -17,5 +17,9 @@ public interface RegApplicationCategoryFourAdditionalService {
     RegApplicationCategoryFourAdditional update(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,Integer userId);
 
     RegApplicationCategoryFourAdditional saveStep3(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId);
+    
+    RegApplicationCategoryFourAdditional saveStep5(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId);
+
+    RegApplicationCategoryFourAdditional saveStep7(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional,RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId);
 
 }

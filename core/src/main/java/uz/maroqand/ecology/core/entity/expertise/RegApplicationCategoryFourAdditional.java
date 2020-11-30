@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
-import uz.maroqand.ecology.core.entity.PollutionMeasures;
 import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.persistence.*;
@@ -158,6 +157,7 @@ public class RegApplicationCategoryFourAdditional {
     @JoinTable(name = "category_four_additional_jt_boiler_characteristics",
             joinColumns = { @JoinColumn(name = "category_four_additional") },
             inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics")})
+    @OrderBy(value = "id asc")
     private Set<BoilerCharacteristics> boilerCharacteristics;
 
     //step6
@@ -166,6 +166,7 @@ public class RegApplicationCategoryFourAdditional {
     @JoinTable(name = "category_four_additional_jt_events",
             joinColumns = { @JoinColumn(name = "category_four_additional") },
             inverseJoinColumns = { @JoinColumn(name = "event_id") })
+    @OrderBy(value = "id asc")
     private Set<PollutionMeasures> pollutionMeasures;
 
     //step 7
@@ -199,6 +200,7 @@ public class RegApplicationCategoryFourAdditional {
     @JoinTable(name = "conclusion_jt_files",
             joinColumns = { @JoinColumn(name = "files") },
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    @OrderBy(value = "id desc")
     private Set<File> files;
 
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")

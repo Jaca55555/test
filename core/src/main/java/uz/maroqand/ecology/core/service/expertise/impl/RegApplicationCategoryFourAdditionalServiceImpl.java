@@ -75,4 +75,29 @@ public class RegApplicationCategoryFourAdditionalServiceImpl implements RegAppli
         regApplicationCategoryFourAdditionalOld.setSourceMaterial(regApplicationCategoryFourAdditional.getSourceMaterial());
         return update(regApplicationCategoryFourAdditionalOld,userId);
     }
+
+    @Override
+    public RegApplicationCategoryFourAdditional saveStep5(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional, RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId) {
+
+        regApplicationCategoryFourAdditionalOld.setAboutWaste(regApplicationCategoryFourAdditional.getAboutWaste());
+        regApplicationCategoryFourAdditionalOld.setWaterVolume(regApplicationCategoryFourAdditional.getWaterVolume());
+        regApplicationCategoryFourAdditionalOld.setSourceWater(regApplicationCategoryFourAdditional.getSourceWater());
+        regApplicationCategoryFourAdditionalOld.setHeatingSystem(regApplicationCategoryFourAdditional.getHeatingSystem());
+        regApplicationCategoryFourAdditionalOld.setFirefightingMeasures(regApplicationCategoryFourAdditional.getFirefightingMeasures());
+        regApplicationCategoryFourAdditionalOld.setVentilation(regApplicationCategoryFourAdditional.getVentilation());
+        regApplicationCategoryFourAdditionalOld.setEmergencyMeasures(regApplicationCategoryFourAdditional.getEmergencyMeasures());
+
+        return update(regApplicationCategoryFourAdditionalOld,userId);
+    }
+
+    @Override
+    public RegApplicationCategoryFourAdditional saveStep7(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional, RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId) {
+        regApplicationCategoryFourAdditionalOld.setObjectPlacementPlan(regApplicationCategoryFourAdditional.getObjectPlacementPlan());
+        regApplicationCategoryFourAdditionalOld.setProductionDescription(regApplicationCategoryFourAdditional.getProductionDescription());
+        regApplicationCategoryFourAdditionalOld.setSewageAvailability(regApplicationCategoryFourAdditional.getSewageAvailability());
+        regApplicationCategoryFourAdditionalOld.setDiscardAmountAbout(regApplicationCategoryFourAdditional.getDiscardAmountAbout());
+        regApplicationCategoryFourAdditionalOld.setWasteAmountAbout(regApplicationCategoryFourAdditional.getWasteAmountAbout());
+        regApplicationCategoryFourAdditionalOld.setEvents(regApplicationCategoryFourAdditional.getEvents());
+        return update(regApplicationCategoryFourAdditionalOld,userId);
+    }
 }

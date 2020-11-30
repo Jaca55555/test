@@ -5,6 +5,7 @@
     <!-- smart-wizard css -->
     <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
     <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+<!--    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_arrows.min.css">-->
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
@@ -49,7 +50,9 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
-                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" >
+                                                    <div class="col-md-8 offset-2 text-center" id="alert-not_save-characteristics">
+                                                    </div>
+                                                    <form action="" method="post" th:object="${regApplicationCategoryFourAdditional}" data-parsley-validate="" id="form-step5">
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
@@ -120,11 +123,12 @@
                                                         </div>
 
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" name="addId" th:value="${regApplicationCategoryFourAdditional.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
                                                                 <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                                <button type="button" class="btn btn-primary" th:text="#{sys_next}" onclick="isSaveBoilerCharacteristice()">Далее</button>
                                                                 <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#boilerModal" style="border-radius: 5px">
                                                                     <i class="feather icon-alert-triangle"></i><span th:text="#{boiler_info}">info</span>
                                                                 </button>
@@ -147,7 +151,7 @@
     </div>
 
 <div class="modal fade" id="boilerModal" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title}"></h4>
@@ -157,42 +161,50 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table  table-striped" id="boiler-table">
-                        <thead>
-                        <tr>
-                            <th style="width: 40%">Қозон характеристикаси</th>
-                            <th style="width: 30%">Ўлчов бирлиги</th>
-                            <th style="width: 15%">
-                                <input class="form-control" type="text"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />
-                            </th>
-                            <th style="width: 15%"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tbody th:if="${#lists.size(regApplicationCategoryFourAdditional.boilerCharacteristics)>0}">
+                    <div class="col-md-12 text-center" id="alert-isSave" >
+                    </div>
+
+                    <form id="boiler_form" action="">
+                        <table class="table  table-striped" id="boiler-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 40%">Қозон характеристикаси</th>
+                                <th style="width: 30%">Ўлчов бирлиги</th>
+                                <th style="width: 15%" colspan="2">
+                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplicationCategoryFourAdditional.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody th:if="${#lists.size(regApplicationCategoryFourAdditional.boilerCharacteristics)>0}">
                             <tr th:each="boilerCharacteristic :${regApplicationCategoryFourAdditional.boilerCharacteristics}">
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%"></td>
                                 <td th:utext="#{${boilerCharacteristic.type}}" style="width: 30%"></td>
                                 <td style="width: 15%">
-                                    <input class="form-control" type="text" th:value="${boilerCharacteristic.amount}" required="" data-parsley-type="number" maxlength="5"/>
+                                    <input class="form-control" type="text" th:name="${'boilerAmount_' + boilerCharacteristic.id}" th:value="${boilerCharacteristic.amount}" required="" data-parsley-type="number" maxlength="5"/>
                                 </td>
                                 <td style="width: 15%"></td>
                             </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr style="background-color: rgba(0, 0, 0, 0.05);" >
-                            <th class="text-right" colspan="4">
-                                <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
-                                    <i class="feather icon-plus"></i>
-                                    <span th:text="#{sys_add}"></span>
-                                </button>
-                            </th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </tbody>
+                            <tfoot>
+                            <tr style="background-color: rgba(0, 0, 0, 0.05);" >
+                                <th class="text-right" colspan="4">
+                                    <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
+                                        <i class="feather icon-plus"></i>
+                                        <span th:text="#{sys_add}"></span>
+                                    </button>
+                                </th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                        <input type="hidden" name="regCategory_id" th:value="${regApplicationCategoryFourAdditional.id}" />
+                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveBoiler()"><span th:text="#{sys_save}"></span></button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>
             </div>
         </div>
@@ -207,18 +219,67 @@
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
 
 <script th:inline="javascript">
-    var regApplicationId = [[${regApplication.id}]]
-    var regAddId = [[${regApplicationCategoryFourAdditional.id}]]
+    var regApplicationId = [[${regApplication.id}]];
+    var regAddId = [[${regApplicationCategoryFourAdditional.id}]];
 
     var labelDelete = [[#{sys_delete}]];
     var labelEdit = [[#{sys_edit}]];
     var editLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEdit}]];
     var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
     var createLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
+    var saveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerSave}]];
+    var isSaveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerIsSave}]];
     var _csrf = [[${_csrf.token}]];
+    var isSavingTitle = [[#{sys_is_saving}]];
+    var isNotSavingTitle = [[#{sys_is_not_saving}]];
 
     function getCurrentLanguage() {
         return [[__${#locale}__]];
+    }
+
+    function isSaveBoilerCharacteristice(){
+        $.ajax({
+            url: isSaveBoilerLink,
+            data: {
+                id: regAddId,
+                _csrf: _csrf
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                if (response==true){
+                    $('#alert-not_save-characteristics').html('')
+                    $('#form-step5').submit();
+                }else{
+                    $('#alert-not_save-characteristics').html('<div class="alert alert-warning alert-dismissible" role="alert">'+ [[#{sys_not_saved_boiler_characteristics}]]  +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function saveBoiler() {
+        $('#boiler_name').parsley().validate();
+        if ($('#boiler_name').parsley().isValid()){
+            $.ajax({
+                url: saveBoilerLink,
+                data: $("#boiler_form").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.status==1){
+                        $('#alert-isSave').html('<div class="alert alert-success alert-dismissible" role="alert">'+ isSavingTitle +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                    }else{
+                        $('#alert-isSave').html('<div class="alert alert-warning alert-dismissible" role="alert">'+ isNotSavingTitle +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
     }
 
     var n=0;

@@ -49,9 +49,65 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
-                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
+                                                    <form action="" method="post" th:object="${regApplicationCategoryFourAdditional}" data-parsley-validate="" id="about-form">
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.object_placement_plan}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.objectPlacementPlan}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
 
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.production_description}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.productionDescription}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
 
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.sewage_availability}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sewageAvailability}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.discard_amount_about}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.discardAmountAbout}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.waste_amount_about}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.wasteAmountAbout}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.events}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.events}" required="" maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" name="regAddId" th:value="${regApplicationCategoryFourAdditional.id}" />
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >

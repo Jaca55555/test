@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
@@ -74,6 +72,7 @@ public class RegApplicationCategoryFourController {
     private final FactureService factureService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
     private final BoilerCharacteristicsService boilerCharacteristicsService;
+    private final PollutionMeasuresService pollutionMeasuresService;
 
     private final GlobalConfigs globalConfigs;
 
@@ -110,7 +109,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -144,6 +143,7 @@ public class RegApplicationCategoryFourController {
         this.factureService = factureService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.boilerCharacteristicsService = boilerCharacteristicsService;
+        this.pollutionMeasuresService = pollutionMeasuresService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -740,10 +740,96 @@ public class RegApplicationCategoryFourController {
         return status;
     }
 
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerSave)
+    @ResponseBody
+    public HashMap<String,Object> isSaving(
+            @RequestParam(name = "regCategory_id") Integer regCategoryId,
+            @RequestParam(name = "boiler_name") String boilerName,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",0);
+        Map<String,String> map = formData.toSingleValueMap();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regCategoryId);
+        if (regApplicationCategoryFourAdditional==null
+                || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null
+                || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+            return result;
+        }
+        regApplicationCategoryFourAdditional.setBoilerName(boilerName);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        // BoilerCharacteristics hammasini id orqali mapga solindi
+        HashMap<Integer,BoilerCharacteristics> boilerCharacteristicsHashMap = new HashMap<>();
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        for (BoilerCharacteristics boilerCharacteristics: boilerCharacteristicsSet) {
+            if (!boilerCharacteristicsHashMap.containsKey(boilerCharacteristics.getId())){
+                boilerCharacteristicsHashMap.put(boilerCharacteristics.getId(),boilerCharacteristics);
+            }
+        }
+
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+            Integer boilerId = null;
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            if (tagName.equals("boilerAmount")){
+
+                try {
+                    boilerId = Integer.parseInt(paramName[1]);
+                }catch (Exception ignored){}
+
+                Double value = null;
+                if (boilerCharacteristicsHashMap.containsKey(boilerId) && boilerId!=null){
+                    String valueStr = mapEntry.getValue().replaceAll(" ","");
+
+                    try {
+                        value = Double.parseDouble(valueStr);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        return result;
+                    }
+
+                    BoilerCharacteristics boilerCharacteristics = boilerCharacteristicsHashMap.get(boilerId);
+                    boilerCharacteristics.setAmount(value);
+                    boilerCharacteristicsService.save(boilerCharacteristics);
+
+                }
+
+            }
+        }
+        result.put("status",1);
+
+        return result;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerIsSave)
+    @ResponseBody
+    public Boolean isSavedBoilercharacteristic(@RequestParam(name = "id") Integer id){
+        return isSavingBoiler(id);
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep5, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep5Post(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "addId") Integer addId,
+            RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional
     ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditionalOld==null || !regApplicationCategoryFourAdditionalOld.getId().equals(addId)){
+            return RegListRedirect;
+        }
+
+        regApplicationCategoryFourAdditionalService.saveStep5(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
+
+        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
+        regApplicationService.update(regApplication);
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id;
     }
@@ -766,21 +852,124 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect;
         }
 
+
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id);
+        model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep6;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresCreate)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationFourCategoryPollutionMeasuresCreate(
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "eventName") String eventName
+    ){
+        System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
+        Integer status = 0;
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String,Object> response = new HashMap<>();
+        response.put("status",status);
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return response;
+        }
+        Set<PollutionMeasures> pollutionMeasuresSet = regApplicationCategoryFourAdditional.getPollutionMeasures();
+        if (pollutionMeasuresSet==null) pollutionMeasuresSet = new HashSet<>();
+        PollutionMeasures pollutionMeasures = new PollutionMeasures();
+        pollutionMeasures.setEventName(eventName);
+        pollutionMeasures.setDeleted(Boolean.FALSE);
+        pollutionMeasures = pollutionMeasuresService.save(pollutionMeasures);
+        pollutionMeasuresSet.add(pollutionMeasures);
+        regApplicationCategoryFourAdditional.setPollutionMeasures(pollutionMeasuresSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        response.put("status",1);
+        response.put("data",pollutionMeasures);
+
+        return response;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresEdit)
+    @ResponseBody
+    public Object regApplicationFourCategoryPollutionMeasuresEdit(
+            Model model,
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "eventName") String eventName
+    ){
+        System.out.println("regId" + regAddId);
+        System.out.println("id" + id);
+        System.out.println("eventName" + eventName);
+        User user = userService.getCurrentUserFromContext();
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return -1;
+        }
+        Set<PollutionMeasures> pollutionMeasuresSet = regApplicationCategoryFourAdditional.getPollutionMeasures();
+
+        PollutionMeasures pollutionMeasures = pollutionMeasuresService.getById(id);
+        if (!pollutionMeasuresSet.contains(pollutionMeasures)){
+            return 2;
+        }
+        pollutionMeasuresSet.remove(pollutionMeasures);
+        pollutionMeasures.setEventName(eventName);
+        pollutionMeasures = pollutionMeasuresService.save(pollutionMeasures);
+        pollutionMeasuresSet.add(pollutionMeasures);
+        regApplicationCategoryFourAdditional.setPollutionMeasures(pollutionMeasuresSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        return 1 + "";
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresDelete)
+    @ResponseBody
+    public String regApplicationFourCategoryPollutionMeasuresDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId
+    ) {
+
+        String status = "1";
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
+            status = "0";
+            return status;
+        }
+
+        PollutionMeasures pollutionMeasures = pollutionMeasuresService.getById(id);
+        if (pollutionMeasures == null) {
+            status = "-1";
+            return status;
+        }
+
+        Set<PollutionMeasures> pollutionMeasuresSet = regApplicationCategoryFourAdditional.getPollutionMeasures();
+        if (pollutionMeasuresSet == null || pollutionMeasuresSet.isEmpty() || !pollutionMeasuresSet.contains(pollutionMeasures)) {
+            status = "-2";
+            return status;
+        }
+        pollutionMeasuresSet.remove(pollutionMeasures);
+        regApplicationCategoryFourAdditional.setPollutionMeasures(pollutionMeasuresSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        pollutionMeasures.setDeleted(Boolean.TRUE);
+        pollutionMeasuresService.save(pollutionMeasures);
+        return status;
+    }
+
+
+
+  /*  @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep6Post(
             @RequestParam(name = "id") Integer id
     ){
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
-    }
+    }*/
 
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep7, method = RequestMethod.GET)
@@ -811,20 +1000,25 @@ public class RegApplicationCategoryFourController {
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep7, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep7Post(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "id") Integer id,
+            RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional
     ){
 
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
 
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditionalOld==null || !regApplicationCategoryFourAdditionalOld.getId().equals(regAddId)){
+            return RegListRedirect;
+        }
 
+        regApplicationCategoryFourAdditionalService.saveStep7(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
 
-
-
-
-
-
-        RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+        /*RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
             RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
             regApplication.setConfirmLogAt(new Date());
@@ -832,8 +1026,9 @@ public class RegApplicationCategoryFourController {
             regApplication.setStatus(RegApplicationStatus.CheckSent);
         }
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.WAITING);
-        regApplicationService.update(regApplication);
-        return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+        regApplicationService.update(regApplication);*/
+        return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
+//        return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
     }
 
 
@@ -853,7 +1048,7 @@ public class RegApplicationCategoryFourController {
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + id;
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
         }
         if (regApplication.getForwardingLogId() != null){
             return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
@@ -862,7 +1057,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
+        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryWaiting;
     }
@@ -1300,8 +1495,22 @@ public class RegApplicationCategoryFourController {
                 return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + regApplication.getId();
             }
         }
-        System.out.println("if000");
         return null;
     }
 
+    //RegApplicationCategoryFourAdditionalId
+    private Boolean isSavingBoiler(Integer regAddId){
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+            return Boolean.FALSE;
+        }
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        for (BoilerCharacteristics boilerCharacteristics:boilerCharacteristicsSet){
+            if (boilerCharacteristics.getAmount()==null || boilerCharacteristics.getAmount()==0.0){
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.TRUE;
+    }
 }

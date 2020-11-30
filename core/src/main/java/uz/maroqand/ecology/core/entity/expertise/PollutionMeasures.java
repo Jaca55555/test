@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.entity;
+package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * Created by Utkirbek Boltaev on 16.06.2019.
+ * Created by Sadullayev Akmal on 26.11.2020.
  * (uz)
  * (ru)
  */
@@ -38,11 +38,4 @@ public class PollutionMeasures {
      */
     @Column(name = "deleted", columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
-
-    @Column(name = "created_by")
-    private Integer createdById;
-
-    @Column(name = "created_at", columnDefinition = "timestamp without time zone")
-    private Date createdAt;
-
 }

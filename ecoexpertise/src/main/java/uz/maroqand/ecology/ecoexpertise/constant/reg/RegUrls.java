@@ -58,7 +58,15 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
     public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
 
+    public static final String RegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
+    public static final String RegApplicationFourCategoryBoilerIsSave = RegApplicationFourCategory + "/boiler_characteristics_is_save";
+
     public static final String RegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
+
+    public static final String RegApplicationFourCategoryPollutionMeasuresCreate = RegApplicationFourCategory + "/pollution_measures_create";
+    public static final String RegApplicationFourCategoryPollutionMeasuresEdit = RegApplicationFourCategory + "/pollution_measures_edit";
+    public static final String RegApplicationFourCategoryPollutionMeasuresDelete = RegApplicationFourCategory + "/pollution_measures_delete";
+
     public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
 
     public static final String RegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
