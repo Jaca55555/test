@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.entity.expertise.BoilerCharacteristics;
 import uz.maroqand.ecology.core.entity.expertise.BoilerCharacteristicsEnum;
+import uz.maroqand.ecology.core.entity.expertise.HarmfulSubstancesAmount;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryFourAdditional;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationCategoryFourAdditionalRepository;
 import uz.maroqand.ecology.core.service.expertise.BoilerCharacteristicsService;
@@ -56,6 +57,28 @@ public class RegApplicationCategoryFourAdditionalServiceImpl implements RegAppli
     }
 
     @Override
+    public HarmfulSubstancesAmount step4_3_total(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional) {
+        HarmfulSubstancesAmount harmfulSubstancesAmountTotal = new HarmfulSubstancesAmount();
+        harmfulSubstancesAmountTotal.setName("sys_total");
+        harmfulSubstancesAmountTotal.setSubstancesAmount(0.0);
+        harmfulSubstancesAmountTotal.setForCleaning(0.0);
+        harmfulSubstancesAmountTotal.setCaught(0.0);
+        harmfulSubstancesAmountTotal.setUsed(0.0);
+        harmfulSubstancesAmountTotal.setAtmosphereAmount(0.0);
+        Set<HarmfulSubstancesAmount> harmfulSubstancesAmountSet = regApplicationCategoryFourAdditional.getHarmfulSubstancesAmounts();
+
+        for (HarmfulSubstancesAmount harmfulSubstancesAmount:harmfulSubstancesAmountSet) {
+            harmfulSubstancesAmountTotal.setSubstancesAmount(harmfulSubstancesAmount.getSubstancesAmount() + harmfulSubstancesAmountTotal.getSubstancesAmount());
+            harmfulSubstancesAmountTotal.setForCleaning(harmfulSubstancesAmount.getForCleaning() + harmfulSubstancesAmountTotal.getForCleaning());
+            harmfulSubstancesAmountTotal.setCaught(harmfulSubstancesAmount.getCaught() + harmfulSubstancesAmountTotal.getCaught());
+            harmfulSubstancesAmountTotal.setUsed(harmfulSubstancesAmount.getUsed() + harmfulSubstancesAmountTotal.getUsed());
+            harmfulSubstancesAmountTotal.setAtmosphereAmount(harmfulSubstancesAmount.getAtmosphereAmount() + harmfulSubstancesAmountTotal.getAtmosphereAmount());
+        }
+
+        return harmfulSubstancesAmountTotal;
+    }
+
+    @Override
     public RegApplicationCategoryFourAdditional update(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional, Integer userId) {
         regApplicationCategoryFourAdditional.setUpdateAt(new Date());
         regApplicationCategoryFourAdditional.setUpdateById(userId);
@@ -73,6 +96,22 @@ public class RegApplicationCategoryFourAdditionalServiceImpl implements RegAppli
         regApplicationCategoryFourAdditionalOld.setTechnologicalProcess(regApplicationCategoryFourAdditional.getTechnologicalProcess());
         regApplicationCategoryFourAdditionalOld.setMaterialAdditional(regApplicationCategoryFourAdditional.getMaterialAdditional());
         regApplicationCategoryFourAdditionalOld.setSourceMaterial(regApplicationCategoryFourAdditional.getSourceMaterial());
+        return update(regApplicationCategoryFourAdditionalOld,userId);
+    }
+
+    @Override
+    public RegApplicationCategoryFourAdditional saveStep4_3(RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional, RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld, Integer userId) {
+        regApplicationCategoryFourAdditionalOld.setHardValueOne(regApplicationCategoryFourAdditional.getHardValueOne());
+        regApplicationCategoryFourAdditionalOld.setHardValueTwo(regApplicationCategoryFourAdditional.getHardValueTwo());
+        regApplicationCategoryFourAdditionalOld.setHardValueThree(regApplicationCategoryFourAdditional.getHardValueThree());
+        regApplicationCategoryFourAdditionalOld.setHardValueFour(regApplicationCategoryFourAdditional.getHardValueFour());
+        regApplicationCategoryFourAdditionalOld.setHardValueFive(regApplicationCategoryFourAdditional.getHardValueFive());
+
+        regApplicationCategoryFourAdditionalOld.setLiquidValueOne(regApplicationCategoryFourAdditional.getLiquidValueOne());
+        regApplicationCategoryFourAdditionalOld.setLiquidValueTwo(regApplicationCategoryFourAdditional.getLiquidValueTwo());
+        regApplicationCategoryFourAdditionalOld.setLiquidValueThree(regApplicationCategoryFourAdditional.getLiquidValueThree());
+        regApplicationCategoryFourAdditionalOld.setLiquidValueFour(regApplicationCategoryFourAdditional.getLiquidValueFour());
+        regApplicationCategoryFourAdditionalOld.setLiquidValueFive(regApplicationCategoryFourAdditional.getLiquidValueFive());
         return update(regApplicationCategoryFourAdditionalOld,userId);
     }
 

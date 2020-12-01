@@ -49,66 +49,73 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
-                                                    <div class="card">
-                                                        <div class="card-header">
-                                                            <h5 th:text="#{sys_step_4.air_pool}">Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот</h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <div class="table-responsive">
-                                                                <table class="table  table-striped" id="pollution-table">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th style="width: 10%">№</th>
-                                                                        <th  th:text="#{sys_step_4.name}">Tadbir nomi</th>
-                                                                        <th  th:text="#{sys_step_4.jobName}">Tadbir nomi</th>
-                                                                        <th  th:text="#{sys_step_4.fuelType}">Tadbir nomi</th>
-                                                                        <th  th:text="#{sys_step_4.numberOfSources}">Tadbir nomi</th>
-                                                                        <th  th:text="#{sys_step_4.substances}">Tadbir nomi</th>
-                                                                        <th  th:text="#{sys_step_4.airSubstance}">Tadbir nomi</th>
-                                                                        <th ></th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tbody >
-                                                                    <tr th:id="${'row_' + airPool.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
-                                                                        <td th:id="${airPool.id}" th:utext="${airPool.id}" style="width: 10%"></td>
-                                                                        <td th:utext="${airPool.name}"></td>
-                                                                        <td th:utext="${airPool.jobName}"></td>
-                                                                        <td th:utext="${airPool.fuelType}"></td>
-                                                                        <td th:utext="${airPool.numberOfSources}"></td>
-                                                                        <td th:utext="${airPool.substances}"></td>
-                                                                        <td th:utext="${airPool.airSubstance}"></td>
-                                                                        <td style="width: 10%">
-                                                                            <a class="btn btn-primary btn-sm list-btn ">
-                                                                                <i class="feather icon-edit-1 mr-0"></i>
-                                                                            </a>
-                                                                            <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${airPool.id}+')'">
-                                                                                <i class="feather icon-x-square mr-0"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr></tr>
-                                                                    </tbody>
-                                                                    <tfoot>
-                                                                    <tr style="background-color: rgba(0, 0, 0, 0.05);" >
-                                                                        <th class="text-right" colspan="8">
-                                                                            <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
-                                                                                <i class="feather icon-plus"></i>
-                                                                                <span th:text="#{sys_add}"></span>
-                                                                            </button>
-                                                                        </th>
-                                                                    </tr>
-                                                                    </tfoot>
-                                                                </table>
+                                                    <form action="" method="post" th:object="${regApplicationCategoryFourAdditional}" data-parsley-validate="" id="about-form">
+
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 th:text="#{sys_step_4.air_pool}">Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table  table-striped" id="pollution-table">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th style="width: 10%">№</th>
+                                                                            <th  th:text="#{sys_step_4.name}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4.jobName}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4.fuelType}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4.numberOfSources}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4.substances}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4.airSubstance}">Tadbir nomi</th>
+                                                                            <th ></th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tbody >
+                                                                        <tr th:id="${'row_' + airPool.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
+                                                                            <td th:id="${airPool.id}" th:utext="${airPool.id}" style="width: 10%"></td>
+                                                                            <td th:utext="${airPool.name}"></td>
+                                                                            <td th:utext="${airPool.jobName}"></td>
+                                                                            <td th:utext="${airPool.fuelType}"></td>
+                                                                            <td th:utext="${airPool.numberOfSources}"></td>
+                                                                            <td th:utext="${airPool.substances}"></td>
+                                                                            <td th:utext="${airPool.airSubstance}"></td>
+                                                                            <td style="width: 10%">
+                                                                                <a class="btn btn-primary btn-sm list-btn ">
+                                                                                    <i class="feather icon-edit-1 mr-0"></i>
+                                                                                </a>
+                                                                                <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${airPool.id}+')'">
+                                                                                    <i class="feather icon-x-square mr-0"></i>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr></tr>
+                                                                        </tbody>
+                                                                        <tfoot>
+                                                                        <tr style="background-color: rgba(0, 0, 0, 0.05);" >
+                                                                            <th class="text-right" colspan="8">
+                                                                                <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
+                                                                                    <i class="feather icon-plus"></i>
+                                                                                    <span th:text="#{sys_add}"></span>
+                                                                                </button>
+                                                                            </th>
+                                                                        </tr>
+                                                                        </tfoot>
+                                                                    </table>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row" >
-                                                        <div class="form-group col-md-12 text-center" >
-                                                            <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                            <a  th:href="${next_url}" class="btn btn-primary" th:text="#{sys_next}">Отмена</a>
+
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" name="regAddId" th:value="${regApplicationCategoryFourAdditional.id}" />
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

@@ -74,6 +74,7 @@ public class RegApplicationCategoryFourController {
     private final BoilerCharacteristicsService boilerCharacteristicsService;
     private final PollutionMeasuresService pollutionMeasuresService;
     private final AirPoolService airPoolService;
+    private final HarmfulSubstancesAmountService harmfulSubstancesAmountService;
 
     private final GlobalConfigs globalConfigs;
 
@@ -110,7 +111,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, HarmfulSubstancesAmountService harmfulSubstancesAmountService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -146,6 +147,7 @@ public class RegApplicationCategoryFourController {
         this.boilerCharacteristicsService = boilerCharacteristicsService;
         this.pollutionMeasuresService = pollutionMeasuresService;
         this.airPoolService = airPoolService;
+        this.harmfulSubstancesAmountService = harmfulSubstancesAmountService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -180,16 +182,16 @@ public class RegApplicationCategoryFourController {
 
         switch (regApplication.getCategoryFourStep()){
             case APPLICANT: return "redirect:" + RegUrls.RegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
-            case ABOUT: return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
-            case STEP3:
-            case STEP4:
-            case STEP5:
-            case STEP6:
-            case STEP7:
-            case WAITING: return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
-            case CONTRACT: return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + regApplication.getId();
-            case PAYMENT: return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
-            case STATUS: return "redirect:" + RegUrls.RegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();
+            case     ABOUT: return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
+            case     STEP3: return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + regApplication.getId();
+            case     STEP4: return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
+            case     STEP5: return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
+            case     STEP6: return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
+            case     STEP7: return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
+            case   WAITING: return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
+            case  CONTRACT: return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + regApplication.getId();
+            case   PAYMENT: return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
+            case    STATUS: return "redirect:" + RegUrls.RegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();
         }
 
         return RegListRedirect;
@@ -579,6 +581,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
+        model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep4Submit + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep4;
@@ -715,19 +718,182 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect;
         }
 
-        if (regApplicationCategoryFourAdditional.getAirPools()==null || !regApplicationCategoryFourAdditional.getAirPools().isEmpty()){
+        if (regApplicationCategoryFourAdditional.getAirPools()==null || regApplicationCategoryFourAdditional.getAirPools().isEmpty()){
             return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id;
         }
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id;
     }
 
-    
-
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.POST)
-    public String regApplicationFourCategoryStep4Post(
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2, method = RequestMethod.GET)
+    public String regApplicationFourCategoryStep4_2Get(
             @RequestParam(name = "id") Integer id
     ){
+
+
+        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_3 + "?id=" + id;
+
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_3, method = RequestMethod.GET)
+    public String regApplicationFourCategoryStep4_3Get(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
+        model.addAttribute("step4_3_total",regApplicationCategoryFourAdditionalService.step4_3_total(regApplicationCategoryFourAdditional));
+        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+
+    return RegTemplates.RegApplicationFourCategoryStep4_3;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountCreate)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationFourCategoryHarmfulSubstancesAmountCreate(
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "substancesAmount") Double substancesAmount,
+            @RequestParam(name = "forCleaning") Double forCleaning,
+            @RequestParam(name = "caught") Double caught,
+            @RequestParam(name = "used") Double used,
+            @RequestParam(name = "atmosphereAmount") Double atmosphereAmount
+    ){
+        System.out.println("regApplicationFourCategoryAirPoolCreate");
+        Integer status = 0;
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String,Object> response = new HashMap<>();
+        response.put("status",status);
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return response;
+        }
+        Set<HarmfulSubstancesAmount> harmfulSubstancesAmounts = regApplicationCategoryFourAdditional.getHarmfulSubstancesAmounts();
+        if (harmfulSubstancesAmounts==null) harmfulSubstancesAmounts = new HashSet<>();
+        HarmfulSubstancesAmount harmfulSubstancesAmount = new HarmfulSubstancesAmount();
+        harmfulSubstancesAmount.setName(name);
+        harmfulSubstancesAmount.setSubstancesAmount(substancesAmount);
+        harmfulSubstancesAmount.setForCleaning(forCleaning);
+        harmfulSubstancesAmount.setCaught(caught);
+        harmfulSubstancesAmount.setUsed(used);
+        harmfulSubstancesAmount.setAtmosphereAmount(atmosphereAmount);
+        harmfulSubstancesAmount.setDeleted(Boolean.FALSE);
+        harmfulSubstancesAmount = harmfulSubstancesAmountService.save(harmfulSubstancesAmount);
+        harmfulSubstancesAmounts.add(harmfulSubstancesAmount);
+        regApplicationCategoryFourAdditional.setHarmfulSubstancesAmounts(harmfulSubstancesAmounts);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        response.put("status",1);
+        response.put("data",harmfulSubstancesAmount);
+
+        return response;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountEdit)
+    @ResponseBody
+    public Object regApplicationFourCategoryHarmfulSubstancesAmountEdit(
+            Model model,
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "substancesAmount") Double substancesAmount,
+            @RequestParam(name = "forCleaning") Double forCleaning,
+            @RequestParam(name = "caught") Double caught,
+            @RequestParam(name = "used") Double used,
+            @RequestParam(name = "atmosphereAmount") Double atmosphereAmount
+    ){
+        User user = userService.getCurrentUserFromContext();
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return -1;
+        }
+        Set<HarmfulSubstancesAmount> harmfulSubstancesAmounts = regApplicationCategoryFourAdditional.getHarmfulSubstancesAmounts();
+
+        HarmfulSubstancesAmount harmfulSubstancesAmount = harmfulSubstancesAmountService.getById(id);
+        if (!harmfulSubstancesAmounts.contains(harmfulSubstancesAmount)){
+            return 2;
+        }
+        harmfulSubstancesAmounts.remove(harmfulSubstancesAmount);
+        harmfulSubstancesAmount.setName(name);
+        harmfulSubstancesAmount.setSubstancesAmount(substancesAmount);
+        harmfulSubstancesAmount.setForCleaning(forCleaning);
+        harmfulSubstancesAmount.setCaught(caught);
+        harmfulSubstancesAmount.setUsed(used);
+        harmfulSubstancesAmount.setAtmosphereAmount(atmosphereAmount);
+        harmfulSubstancesAmount = harmfulSubstancesAmountService.save(harmfulSubstancesAmount);
+        harmfulSubstancesAmounts.add(harmfulSubstancesAmount);
+        regApplicationCategoryFourAdditional.setHarmfulSubstancesAmounts(harmfulSubstancesAmounts);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        return 1 + "";
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountDelete)
+    @ResponseBody
+    public String regApplicationFourCategoryHarmfulSubstancesAmountDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId
+    ) {
+
+        String status = "1";
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
+            status = "0";
+            return status;
+        }
+
+        HarmfulSubstancesAmount harmfulSubstancesAmount = harmfulSubstancesAmountService.getById(id);
+        if (harmfulSubstancesAmount == null) {
+            status = "-1";
+            return status;
+        }
+
+        Set<HarmfulSubstancesAmount> harmfulSubstancesAmounts = regApplicationCategoryFourAdditional.getHarmfulSubstancesAmounts();
+        if (harmfulSubstancesAmounts == null || harmfulSubstancesAmounts.isEmpty() || !harmfulSubstancesAmounts.contains(harmfulSubstancesAmount)) {
+            status = "-2";
+            return status;
+        }
+        harmfulSubstancesAmounts.remove(harmfulSubstancesAmount);
+        regApplicationCategoryFourAdditional.setHarmfulSubstancesAmounts(harmfulSubstancesAmounts);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        harmfulSubstancesAmount.setDeleted(Boolean.TRUE);
+        harmfulSubstancesAmountService.save(harmfulSubstancesAmount);
+        return status;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_3, method = RequestMethod.POST)
+    public String regApplicationFourCategoryStep4Post(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId,
+            RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional
+            ){
+
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditionalOld==null || !regApplicationCategoryFourAdditionalOld.getId().equals(regAddId)){
+            return RegListRedirect;
+        }
+
+        regApplicationCategoryFourAdditionalService.saveStep4_3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id;
     }

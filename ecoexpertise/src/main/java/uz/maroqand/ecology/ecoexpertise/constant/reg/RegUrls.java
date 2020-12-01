@@ -58,6 +58,11 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryAirPoolDelete = RegApplicationFourCategory + "/air_pool_delete";
 
     public static final String RegApplicationFourCategoryStep4_2 = RegApplicationFourCategory + "/step4_2";
+    public static final String RegApplicationFourCategoryStep4_3 = RegApplicationFourCategory + "/step4_3";
+
+    public static final String RegApplicationFourCategoryHarmfulSubstancesAmountCreate = RegApplicationFourCategory + "/harmful_substances_amount_create";
+    public static final String RegApplicationFourCategoryHarmfulSubstancesAmountEdit = RegApplicationFourCategory + "/harmful_substances_amount_edit";
+    public static final String RegApplicationFourCategoryHarmfulSubstancesAmountDelete = RegApplicationFourCategory + "/harmful_substances_amount_delete";
 
     public static final String RegApplicationFourCategoryStep4Submit = RegApplicationFourCategory + "/step4_submit";
     public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";

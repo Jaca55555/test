@@ -124,6 +124,50 @@ public class RegApplicationCategoryFourAdditional {
     private Set<AirPool> airPools;
 
 
+    //step 4.3
+
+    //Зарарли моддаларни умумий миқдори, уларни тозалаш ва фойдаланиш
+    @ManyToMany
+    @JoinTable(name = "category_four_additional_jt_harmful_substances_amount",
+            joinColumns = { @JoinColumn(name = "category_four_additional") },
+            inverseJoinColumns = { @JoinColumn(name = "harmful_substances_amount")})
+    @OrderBy(value = "id asc")
+    private Set<HarmfulSubstancesAmount> harmfulSubstancesAmounts;
+
+    //Қаттиқ ташламалар
+
+    @Column(name = "hard_value_one", precision = 20, scale = 2)
+    private Double hardValueOne;
+
+    @Column(name = "hard_value_two", precision = 20, scale = 2)
+    private Double hardValueTwo;
+
+    @Column(name = "hard_value_three", precision = 20, scale = 2)
+    private Double hardValueThree;
+
+    @Column(name = "hard_value_four", precision = 20, scale = 2)
+    private Double hardValueFour;
+
+    @Column(name = "hard_value_five", precision = 20, scale = 2)
+    private Double hardValueFive;
+
+    //Газ ва суюқ ҳолдаги ташламалар
+
+    @Column(name = "liquid_value_one", precision = 20, scale = 2)
+    private Double liquidValueOne;
+
+    @Column(name = "liquid_value_two", precision = 20, scale = 2)
+    private Double liquidValueTwo;
+
+    @Column(name = "liquid_value_three", precision = 20, scale = 2)
+    private Double liquidValueThree;
+
+    @Column(name = "liquid_value_our", precision = 20, scale = 2)
+    private Double liquidValueFour;
+
+    @Column(name = "liquid_value_five", precision = 20, scale = 2)
+    private Double liquidValueFive;
+
     //step5
     //Чиқиндилар ҳисоби
     //Объектнинг иш фаолияти натижасида хосил буладиган чикиндилар тури ва микдори
