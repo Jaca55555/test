@@ -73,6 +73,7 @@ public class RegApplicationCategoryFourController {
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
     private final BoilerCharacteristicsService boilerCharacteristicsService;
     private final PollutionMeasuresService pollutionMeasuresService;
+    private final AirPoolService airPoolService;
 
     private final GlobalConfigs globalConfigs;
 
@@ -109,7 +110,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -144,6 +145,7 @@ public class RegApplicationCategoryFourController {
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.boilerCharacteristicsService = boilerCharacteristicsService;
         this.pollutionMeasuresService = pollutionMeasuresService;
+        this.airPoolService = airPoolService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -581,6 +583,146 @@ public class RegApplicationCategoryFourController {
 
         return RegTemplates.RegApplicationFourCategoryStep4;
     }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolCreate)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationFourCategoryAirPoolCreate(
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "jobName") String jobName,
+            @RequestParam(name = "fuelType") String fuelType,
+            @RequestParam(name = "numberOfSources") Integer numberOfSources,
+            @RequestParam(name = "substances") String substances,
+            @RequestParam(name = "airSubstance") String airSubstance
+    ){
+        System.out.println("regApplicationFourCategoryAirPoolCreate");
+        Integer status = 0;
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String,Object> response = new HashMap<>();
+        response.put("status",status);
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return response;
+        }
+        Set<AirPool> airPoolSet = regApplicationCategoryFourAdditional.getAirPools();
+        if (airPoolSet==null) airPoolSet = new HashSet<>();
+        AirPool airPool = new AirPool();
+        airPool.setName(name);
+        airPool.setJobName(jobName);
+        airPool.setFuelType(fuelType);
+        airPool.setNumberOfSources(numberOfSources);
+        airPool.setSubstances(substances);
+        airPool.setAirSubstance(airSubstance);
+        airPool.setDeleted(Boolean.FALSE);
+        airPool = airPoolService.save(airPool);
+        airPoolSet.add(airPool);
+        regApplicationCategoryFourAdditional.setAirPools(airPoolSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        response.put("status",1);
+        response.put("data",airPool);
+
+        return response;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolEdit)
+    @ResponseBody
+    public Object regApplicationFourCategoryAirPoolEdit(
+            Model model,
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "jobName") String jobName,
+            @RequestParam(name = "fuelType") String fuelType,
+            @RequestParam(name = "numberOfSources") Integer numberOfSources,
+            @RequestParam(name = "substances") String substances,
+            @RequestParam(name = "airSubstance") String airSubstance
+    ){
+        User user = userService.getCurrentUserFromContext();
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional==null ){
+            return -1;
+        }
+        Set<AirPool> airPoolSet = regApplicationCategoryFourAdditional.getAirPools();
+
+        AirPool airPool = airPoolService.getById(id);
+        if (!airPoolSet.contains(airPool)){
+            return 2;
+        }
+        airPoolSet.remove(airPool);
+        airPool.setName(name);
+        airPool.setJobName(jobName);
+        airPool.setFuelType(fuelType);
+        airPool.setNumberOfSources(numberOfSources);
+        airPool.setSubstances(substances);
+        airPool.setAirSubstance(airSubstance);
+        airPool = airPoolService.save(airPool);
+        airPoolSet.add(airPool);
+        regApplicationCategoryFourAdditional.setAirPools(airPoolSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        return 1 + "";
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolDelete)
+    @ResponseBody
+    public String regApplicationFourCategoryAirPoolDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId
+    ) {
+
+        String status = "1";
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
+            status = "0";
+            return status;
+        }
+
+        AirPool airPool = airPoolService.getById(id);
+        if (airPool == null) {
+            status = "-1";
+            return status;
+        }
+
+        Set<AirPool> airPoolSet = regApplicationCategoryFourAdditional.getAirPools();
+        if (airPoolSet == null || airPoolSet.isEmpty() || !airPoolSet.contains(airPool)) {
+            status = "-2";
+            return status;
+        }
+        airPoolSet.remove(airPool);
+        regApplicationCategoryFourAdditional.setAirPools(airPoolSet);
+        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+
+        airPool.setDeleted(Boolean.TRUE);
+        airPoolService.save(airPool);
+        return status;
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4Submit)
+    public String regApplicationFourCategoryStep4Submit(
+            @RequestParam(name = "id") Integer id
+    ){
+        User user = userService.getCurrentUserFromContext();
+
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
+
+        if (regApplicationCategoryFourAdditional.getAirPools()==null || !regApplicationCategoryFourAdditional.getAirPools().isEmpty()){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id;
+        }
+
+        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id;
+    }
+
+    
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep4Post(

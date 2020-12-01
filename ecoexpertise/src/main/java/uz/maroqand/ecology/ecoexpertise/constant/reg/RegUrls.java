@@ -52,6 +52,14 @@ public class RegUrls {
 
     public static final String RegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
     public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+
+    public static final String RegApplicationFourCategoryAirPoolCreate = RegApplicationFourCategory + "/air_pool_create";
+    public static final String RegApplicationFourCategoryAirPoolEdit = RegApplicationFourCategory + "/air_pool_edit";
+    public static final String RegApplicationFourCategoryAirPoolDelete = RegApplicationFourCategory + "/air_pool_delete";
+
+    public static final String RegApplicationFourCategoryStep4_2 = RegApplicationFourCategory + "/step4_2";
+
+    public static final String RegApplicationFourCategoryStep4Submit = RegApplicationFourCategory + "/step4_submit";
     public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
 
     public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";

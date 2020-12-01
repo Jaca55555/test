@@ -115,6 +115,13 @@ public class RegApplicationCategoryFourAdditional {
 
     //step 4
 
+    //Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот
+    @ManyToMany
+    @JoinTable(name = "category_four_additional_jt_air_pool",
+            joinColumns = { @JoinColumn(name = "category_four_additional") },
+            inverseJoinColumns = { @JoinColumn(name = "air_pool")})
+    @OrderBy(value = "id asc")
+    private Set<AirPool> airPools;
 
 
     //step5
