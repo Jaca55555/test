@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.ecoexpertise.controller;
+package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -9,11 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
+import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
-import uz.maroqand.ecology.core.dto.expertise.*;
+import uz.maroqand.ecology.core.dto.expertise.ForeignIndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualDto;
+import uz.maroqand.ecology.core.dto.expertise.IndividualEntrepreneurDto;
+import uz.maroqand.ecology.core.dto.expertise.LegalEntityDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -35,9 +40,6 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.ecoexpertise.constant.reg.RegTemplates;
-import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
-import uz.maroqand.ecology.ecoexpertise.mips.MIPIndividualsPassportInfoService;
 
 import java.util.*;
 
@@ -65,7 +67,6 @@ public class RegApplicationCategoryFourController {
     private final CountryService countryService;
     private final OKEDService okedService;
     private final GnkService gnkService;
-    private final MIPIndividualsPassportInfoService mipIndividualsPassportInfoService;
     private final ToastrService toastrService;
     private final CoordinateRepository coordinateRepository;
     private final CoordinateLatLongRepository coordinateLatLongRepository;
@@ -84,7 +85,7 @@ public class RegApplicationCategoryFourController {
 
     private final GlobalConfigs globalConfigs;
 
-    private final String RegListRedirect = "redirect:" + RegUrls.RegApplicationList;
+    private final String RegListRedirect = "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
 
     @Autowired
     public RegApplicationCategoryFourController(
@@ -109,7 +110,6 @@ public class RegApplicationCategoryFourController {
             CountryService countryService,
             OKEDService okedService,
             GnkService gnkService,
-            MIPIndividualsPassportInfoService mipIndividualsPassportInfoService,
             ToastrService toastrService,
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
@@ -140,7 +140,6 @@ public class RegApplicationCategoryFourController {
         this.countryService = countryService;
         this.okedService = okedService;
         this.gnkService = gnkService;
-        this.mipIndividualsPassportInfoService = mipIndividualsPassportInfoService;
         this.toastrService = toastrService;
         this.coordinateRepository = coordinateRepository;
         this.coordinateLatLongRepository = coordinateLatLongRepository;
@@ -162,15 +161,15 @@ public class RegApplicationCategoryFourController {
     /*
     * Start
     * */
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStart)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStart)
     public String getStartCategoryFour() {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.create(user,RegApplicationInputType.ecoService,RegApplicationCategoryType.fourType);
 
-        return "redirect:"+ RegUrls.RegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
+        return "redirect:"+ ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryResume,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryResume,method = RequestMethod.GET)
     public String getResumeMethod(
             @RequestParam(name = "id") Integer id
     ) {
@@ -185,27 +184,27 @@ public class RegApplicationCategoryFourController {
         }
 
         if (regApplication.getRegApplicationCategoryType()==null || regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.oneToTree)){
-            return "redirect:" + RegUrls.RegApplicationResume + "?id=" + regApplication.getId();
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationResume + "?id=" + regApplication.getId();
         }
 
         switch (regApplication.getCategoryFourStep()){
-            case APPLICANT: return "redirect:" + RegUrls.RegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
-            case     ABOUT: return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
-            case     STEP3: return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + regApplication.getId();
-            case     STEP4: return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
-            case     STEP5: return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
-            case     STEP6: return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
-            case     STEP7: return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
-            case   WAITING: return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
-            case  CONTRACT: return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + regApplication.getId();
-            case   PAYMENT: return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
-            case    STATUS: return "redirect:" + RegUrls.RegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();
+            case APPLICANT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
+            case     ABOUT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
+            case     STEP3: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + regApplication.getId();
+            case     STEP4: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
+            case     STEP5: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
+            case     STEP6: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
+            case     STEP7: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
+            case   WAITING: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
+            case  CONTRACT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + regApplication.getId();
+            case   PAYMENT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
+            case    STATUS: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();
         }
 
         return RegListRedirect;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryApplicant,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant,method = RequestMethod.GET)
     public String getApplicantCategoryFourPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -253,10 +252,10 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("sub_regions", soatoService.getSubRegions());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.APPLICANT.ordinal()+1);
-        return RegTemplates.RegApplicationFourCategoryApplicant;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryApplicant;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryApplicant,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant,method = RequestMethod.POST)
     public String createRegApplication(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "applicantType") String applicantType,
@@ -296,17 +295,17 @@ public class RegApplicationCategoryFourController {
         /*SmsSend smsSend = smsSendService.getById(regApplication.getCheckedSmsId());
         if (smsSend==null){
             toastrService.create(user.getId(), ToastrType.Error, "Telefon raqam tasdiqlanmagan.","Telefon raqam tasdiqlanmagan.");
-            return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
+            return  "redirect:" + ExpertiseUrls.RegApplicationApplicant + "?id=" + id;
         }
         applicant.setMobilePhone("");*/
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout + "?id=" + id;
     }
 
     //1 --> yuborildi
     //2 --> arizachi topilmadi
     //3 --> bu raqamga jo'natib bo'lmaydi
-    @RequestMapping(value = RegUrls.RegApplicationFourCategorySendSMSCode,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategorySendSMSCode,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategorySendSMSCode(
             @RequestParam(name = "mobilePhone") String mobilePhone,
@@ -321,7 +320,7 @@ public class RegApplicationCategoryFourController {
     //status==2 regApplication == null
     //status==3 smssend == null
     //status==4 notConfirm
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryGetSMSCode,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryGetSMSCode,method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryGetSMSCode(
             @RequestParam(name = "code") Integer code,
@@ -353,7 +352,7 @@ public class RegApplicationCategoryFourController {
 
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAbout,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout,method = RequestMethod.GET)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -389,12 +388,12 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryApplicant + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.ABOUT.ordinal()+1);
-        return RegTemplates.RegApplicationFourCategoryAbout;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryAbout;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAbout,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout,method = RequestMethod.POST)
     public String regApplicationFourCategoryAbout(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "objectId") Integer objectId,
@@ -490,13 +489,13 @@ public class RegApplicationCategoryFourController {
             requirementList = requirementService.getRequirementExpertise(objectId);
         }
         if(requirementList.size()==0){
-            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=1";
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id + "&failed=1";
         }else if(requirementList.size()==1){
             requirement = requirementList.get(0);
         }
 
         if(requirement==null){
-            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id + "&failed=2";
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationAbout + "?id=" + id + "&failed=2";
         }
         Organization organization = organizationService.getByRegionId(regionId);;
         regApplication.setRegionId(regionId);
@@ -515,10 +514,10 @@ public class RegApplicationCategoryFourController {
 
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP3);
         regApplicationService.update(regApplication);
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep3(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -538,13 +537,13 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional
         );
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
 
-        return RegTemplates.RegApplicationFourCategoryStep3;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep3;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep3Post(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "regApplicationCategoryFourAdditionalId") Integer regApplicationCategoryFourAdditionalId,
@@ -565,10 +564,10 @@ public class RegApplicationCategoryFourController {
         regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
         regApplicationService.update(regApplication);
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep4(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -588,14 +587,14 @@ public class RegApplicationCategoryFourController {
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
-        model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep4Submit + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id);
+        model.addAttribute("next_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4Submit + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
-        return RegTemplates.RegApplicationFourCategoryStep4;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolCreate)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryAirPoolCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryAirPoolCreate(
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -649,7 +648,7 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolEdit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryAirPoolEdit)
     @ResponseBody
     public Object regApplicationFourCategoryAirPoolEdit(
             Model model,
@@ -702,7 +701,7 @@ public class RegApplicationCategoryFourController {
         return 1 + "";
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryAirPoolDelete)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryAirPoolDelete)
     @ResponseBody
     public String regApplicationFourCategoryAirPoolDelete(
             @RequestParam(name = "id") Integer id,
@@ -738,7 +737,7 @@ public class RegApplicationCategoryFourController {
         return status;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4Submit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4Submit)
     public String regApplicationFourCategoryStep4Submit(
             @RequestParam(name = "id") Integer id
     ){
@@ -755,13 +754,13 @@ public class RegApplicationCategoryFourController {
         }
 
         if (regApplicationCategoryFourAdditional.getAirPools()==null || regApplicationCategoryFourAdditional.getAirPools().isEmpty()){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + id;
         }
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2 + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep4_2Get(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -781,15 +780,15 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("air_pools",regApplicationCategoryFourAdditional.getAirPools());
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
-        return RegTemplates.RegApplicationFourCategoryStep4_2;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4_2;
 
     }
 
     //fileUpload
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2FileUpload, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> uploadFile(
             @RequestParam(name = "id") Integer id,
@@ -815,7 +814,7 @@ public class RegApplicationCategoryFourController {
             airPoolService.save(airPool);
 
             responseMap.put("name", file.getName());
-            responseMap.put("link", RegUrls.RegApplicationFourCategoryStep4_2FileDownload+ "?file_id=" + file.getId() + "&id=" + airPool.getId());
+            responseMap.put("link", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2FileDownload+ "?file_id=" + file.getId() + "&id=" + airPool.getId());
             responseMap.put("fileId", file.getId());
             responseMap.put("status", 1);
         }
@@ -823,7 +822,7 @@ public class RegApplicationCategoryFourController {
     }
 
     //fileDownload
-    @RequestMapping(RegUrls.RegApplicationFourCategoryStep4_2FileDownload)
+    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2FileDownload)
     public ResponseEntity<Resource> downloadFile(
             @RequestParam(name = "file_id") Integer fileId,
             @RequestParam(name = "id") Integer id
@@ -842,7 +841,7 @@ public class RegApplicationCategoryFourController {
     }
 
     //fileDelete
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2FileDelete, method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2FileDelete, method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public HashMap<String, Object> deleteFile(
             @RequestParam(name = "id") Integer id,
@@ -876,7 +875,7 @@ public class RegApplicationCategoryFourController {
         return responseMap;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryDescriptionOfSourcesAdditionalCreate)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryDescriptionOfSourcesAdditionalCreate(
             @RequestParam(name = "id") Integer id,
@@ -915,7 +914,7 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryDescriptionOfSourcesAdditionalEdit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalEdit)
     @ResponseBody
     public Object regApplicationFourCategoryDescriptionOfSourcesAdditionalEdit(
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -958,7 +957,7 @@ public class RegApplicationCategoryFourController {
         return 1 + "";
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryDescriptionOfSourcesAdditionalDelete)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalDelete)
     @ResponseBody
     public String regApplicationFourCategoryDescriptionOfSourcesAdditionalDelete(
             @RequestParam(name = "id") Integer id,
@@ -987,7 +986,7 @@ public class RegApplicationCategoryFourController {
         return status;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2, method = RequestMethod.POST)
     public String postRegApplicationFourCategoryStep4_2(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -1064,12 +1063,12 @@ public class RegApplicationCategoryFourController {
             }
         }
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_3 + "?id=" + regApplication.getId();
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_3 + "?id=" + regApplication.getId();
     }
 
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_3, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_3, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep4_3Get(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1088,13 +1087,13 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("step4_3_total",regApplicationCategoryFourAdditionalService.step4_3_total(regApplicationCategoryFourAdditional));
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
-    return RegTemplates.RegApplicationFourCategoryStep4_3;
+    return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4_3;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountCreate)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryHarmfulSubstancesAmountCreate(
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -1135,7 +1134,7 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountEdit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountEdit)
     @ResponseBody
     public Object regApplicationFourCategoryHarmfulSubstancesAmountEdit(
             Model model,
@@ -1174,7 +1173,7 @@ public class RegApplicationCategoryFourController {
         return 1 + "";
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryHarmfulSubstancesAmountDelete)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountDelete)
     @ResponseBody
     public String regApplicationFourCategoryHarmfulSubstancesAmountDelete(
             @RequestParam(name = "id") Integer id,
@@ -1209,7 +1208,7 @@ public class RegApplicationCategoryFourController {
         return status;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_3, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_3, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep4Post(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -1229,11 +1228,11 @@ public class RegApplicationCategoryFourController {
 
         regApplicationCategoryFourAdditionalService.saveStep4_3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + id;
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep5, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep5(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1258,14 +1257,14 @@ public class RegApplicationCategoryFourController {
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
 
-        return RegTemplates.RegApplicationFourCategoryStep5;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep5;
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsCreate)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerCharacteristicsCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryBoilerCharacteristicsCreate(
             @RequestParam(name = "regId") Integer regId,
@@ -1306,7 +1305,7 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEdit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit)
     @ResponseBody
     public Object regApplicationFourCategoryBoilerCharacteristicsEdit(
             Model model,
@@ -1347,7 +1346,7 @@ public class RegApplicationCategoryFourController {
         return 1 + "";
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsDelete)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerCharacteristicsDelete)
     @ResponseBody
     public String regApplicationFourCategoryBoilerCharacteristicsDelete(
             @RequestParam(name = "id") Integer id,
@@ -1382,7 +1381,7 @@ public class RegApplicationCategoryFourController {
         return status;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerSave)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerSave)
     @ResponseBody
     public HashMap<String,Object> isSaving(
             @RequestParam(name = "regCategory_id") Integer regCategoryId,
@@ -1445,13 +1444,13 @@ public class RegApplicationCategoryFourController {
         return result;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerIsSave)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerIsSave)
     @ResponseBody
     public Boolean isSavedBoilercharacteristic(@RequestParam(name = "id") Integer id){
         return isSavingBoiler(id);
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep5, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep5Post(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "addId") Integer addId,
@@ -1473,11 +1472,11 @@ public class RegApplicationCategoryFourController {
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
         regApplicationService.update(regApplication);
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + id;
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep6(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1497,14 +1496,14 @@ public class RegApplicationCategoryFourController {
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id);
-        model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + id);
+        model.addAttribute("next_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
 
-        return RegTemplates.RegApplicationFourCategoryStep6;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep6;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresCreate)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPollutionMeasuresCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryPollutionMeasuresCreate(
             @RequestParam(name = "regAddId") Integer regAddId,
@@ -1536,7 +1535,7 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresEdit)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPollutionMeasuresEdit)
     @ResponseBody
     public Object regApplicationFourCategoryPollutionMeasuresEdit(
             Model model,
@@ -1568,7 +1567,7 @@ public class RegApplicationCategoryFourController {
         return 1 + "";
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPollutionMeasuresDelete)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPollutionMeasuresDelete)
     @ResponseBody
     public String regApplicationFourCategoryPollutionMeasuresDelete(
             @RequestParam(name = "id") Integer id,
@@ -1605,16 +1604,16 @@ public class RegApplicationCategoryFourController {
 
 
 
-  /*  @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
+  /*  @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep6Post(
             @RequestParam(name = "id") Integer id
     ){
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
     }*/
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep7, method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep7(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1635,12 +1634,12 @@ public class RegApplicationCategoryFourController {
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
-        return RegTemplates.RegApplicationFourCategoryStep7;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep7;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep7, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep7Post(
             @RequestParam(name = "regAddId") Integer regAddId,
             @RequestParam(name = "id") Integer id,
@@ -1669,12 +1668,12 @@ public class RegApplicationCategoryFourController {
         }
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.WAITING);
         regApplicationService.update(regApplication);
-//        return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
-        return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+//        return "redirect:" + ExpertiseUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryWaiting,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting,method = RequestMethod.GET)
     public String regApplicationFourCategoryWaiting(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "field",required = false) Integer field,
@@ -1690,21 +1689,21 @@ public class RegApplicationCategoryFourController {
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id;
         }
         if (regApplication.getForwardingLogId() != null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
-        return RegTemplates.RegApplicationFourCategoryWaiting;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryWaiting;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryWaiting,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting,method = RequestMethod.POST)
     public String regApplicationFourCategoryWaiting(
             @RequestParam(name = "id") Integer id
     ){
@@ -1720,14 +1719,14 @@ public class RegApplicationCategoryFourController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             if(regApplicationLog.getStatus()!=LogStatus.Approved){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlari tasdiqlanmagan.");
-                return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
             }
         }
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryContract,method = RequestMethod.GET)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract,method = RequestMethod.GET)
     public String getContractPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1747,18 +1746,18 @@ public class RegApplicationCategoryFourController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             if(regApplicationLog.getStatus()!=LogStatus.Approved){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
-                return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
             }
         }
         if (regApplication.getConfirmLogId()==null){
             toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
         }
 
         if (regApplication.getPerformerLogId()!=null){
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             if(regApplicationLog.getStatus() != LogStatus.Modification){
-                return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + id;
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
             }
         }
 
@@ -1766,24 +1765,24 @@ public class RegApplicationCategoryFourController {
         if(regApplication.getOfferId()!=null){
             //offerta tasdiqlangan
             offer = offerService.getById(regApplication.getOfferId());
-            model.addAttribute("action_url", RegUrls.RegApplicationFourCategoryContract);
+            model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract);
         }else {
             //offerta tasdiqlanmagan
             RegApplication regApplicationCheck = regApplicationService.getByIdAndUserTin(regApplication.getId(),user);
             if (regApplicationCheck==null || !regApplicationCheck.getId().equals(regApplication.getId())){
-                return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId() +  "&field=" + -1;
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId() +  "&field=" + -1;
             }
             offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
-            model.addAttribute("action_url", RegUrls.RegApplicationFourCategoryContractConfirm);
+            model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm);
         }
 
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
-        return RegTemplates.RegApplicationContract;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryContract;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryContractConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm,method = RequestMethod.POST)
     public String regApplicationContractConfirm(
             @RequestParam(name = "id") Integer id
     ){
@@ -1798,7 +1797,7 @@ public class RegApplicationCategoryFourController {
         }
         if(regApplication.getOfferId() != null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
@@ -1810,10 +1809,10 @@ public class RegApplicationCategoryFourController {
         regApplication.setStep(RegApplicationStep.CONTRACT);
         regApplicationService.update(regApplication);
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryContract,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract,method = RequestMethod.POST)
     public String regApplicationContract(
             @RequestParam(name = "id") Integer id
     ){
@@ -1828,16 +1827,16 @@ public class RegApplicationCategoryFourController {
         }
         if(regApplication.getOfferId()==null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
 
         regApplication.setStep(RegApplicationStep.PAYMENT);
         regApplicationService.update(regApplication);
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPrepayment)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment)
     public String getPrepaymentPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1856,7 +1855,7 @@ public class RegApplicationCategoryFourController {
 
         if(regApplication.getOfferId() == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
         Invoice invoice;
@@ -1867,7 +1866,7 @@ public class RegApplicationCategoryFourController {
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             if (invoice.getStatus()==InvoiceStatus.Success || invoice.getStatus()==InvoiceStatus.PartialSuccess){
-                return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + id;
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
             }
             invoice = invoiceService.modification(regApplication, invoice, requirement);
         }
@@ -1877,14 +1876,14 @@ public class RegApplicationCategoryFourController {
         System.out.println(globalConfigs.getUploadedFilesFolder());
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-//        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
-        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? RegUrls.RegApplicationFourCategoryPaymentFree : RegUrls.RegApplicationFourCategoryPaymentSendSms);
+//        model.addAttribute("action_url", ExpertiseUrls.RegApplicationPaymentSendSms);
+        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree : ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms);
         model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
-        return RegTemplates.RegApplicationFourCategoryPrepayment;
+        return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPaymentSendSms)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms)
     @ResponseBody
     public Map<String,Object> sendSmsPayment(
             @RequestParam(name = "id") Integer id,
@@ -1898,8 +1897,8 @@ public class RegApplicationCategoryFourController {
         System.out.println("cardNumber=" + cardNumber);
         System.out.println("cardMonth=" + cardMonth);
         System.out.println("cardYear=" + cardYear);
-        String failUrl = RegUrls.RegApplicationFourCategoryPaymentSendSms;
-        String successUrl = RegUrls.RegApplicationFourCategoryPaymentConfirmSms;
+        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms;
+        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication==null){
@@ -1918,7 +1917,7 @@ public class RegApplicationCategoryFourController {
         );
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPaymentConfirmSms)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms)
     @ResponseBody
     public Map<String, Object> confirmSmsPayment(
             @RequestParam(name = "id") Integer applicationId,
@@ -1926,8 +1925,8 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "paymentId") Integer paymentId,
             @RequestParam(name = "confirmSms") String confirmSms
     ) {
-        String successUrl = RegUrls.RegApplicationFourCategoryStatus+ "?id=" + applicationId;
-        String failUrl = RegUrls.RegApplicationFourCategoryPaymentConfirmSms;
+        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus+ "?id=" + applicationId;
+        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
 
         return paymentService.confirmSmsAndGetResponseAsMap(
                 applicationId,
@@ -1939,7 +1938,7 @@ public class RegApplicationCategoryFourController {
         );
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryPaymentFree)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree)
     public String getPaymentFreeMethod(
             @RequestParam(name = "id") Integer id
     ) {
@@ -1953,16 +1952,16 @@ public class RegApplicationCategoryFourController {
             }
         }
         if (regApplication.getInvoiceId() == null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
         }
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         if (invoice == null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
         }
 
         if(invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
         }
 
         //todo invoice amount 0 bo'lishi kerak
@@ -1970,10 +1969,10 @@ public class RegApplicationCategoryFourController {
         /*if(invoice.getAmount().equals(0.0)){
             invoiceService.payTest(invoice.getId());
         }*/
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStatus)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1993,10 +1992,10 @@ public class RegApplicationCategoryFourController {
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
         if(invoice == null){
             System.out.println("invoice == null");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
         }
         if (invoice.getStatus()!=InvoiceStatus.Success && invoice.getStatus()!=InvoiceStatus.PartialSuccess){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
         }
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
@@ -2012,12 +2011,12 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("back_url", RegUrls.RegApplicationList);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationList);
         model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
-        return RegTemplates.RegApplicationFourCategoryStatus;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStatus;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryResend)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryResend)
     public String getResendMethod(
             @RequestParam(name = "id") Integer id
     ) {
@@ -2033,7 +2032,7 @@ public class RegApplicationCategoryFourController {
 
         if(!regApplication.getStatus().equals(RegApplicationStatus.Modification)){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","");
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
         }
 
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
@@ -2051,13 +2050,13 @@ public class RegApplicationCategoryFourController {
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplicationService.update(regApplication);
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
     }
 
 
 
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryGetActivity, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryGetActivity, method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getActivity(
             @RequestParam(name = "objectId") Integer objectId
@@ -2083,7 +2082,7 @@ public class RegApplicationCategoryFourController {
         return result;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryGetMaterials, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryGetMaterials, method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getMaterialList(
             @RequestParam(name = "objectId") Integer objectId,
@@ -2104,7 +2103,7 @@ public class RegApplicationCategoryFourController {
         return result;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryGetMaterial, method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryGetMaterial, method = RequestMethod.POST)
     @ResponseBody
     public List<Material> getMaterial(
             @RequestParam(name = "materialId") Integer materialId
@@ -2124,7 +2123,7 @@ public class RegApplicationCategoryFourController {
             System.out.println("if=2");
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             if(regApplicationLog.getStatus() != LogStatus.Modification){
-                return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
             }else {
                 modification = false;
             }
@@ -2134,7 +2133,7 @@ public class RegApplicationCategoryFourController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
             if(regApplicationLog.getStatus() != LogStatus.Denied){
                 toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Arizachi ma'lumotlarini o'zgartirishga Ruxsat yo'q.");
-                return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
+                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
             }
         }
         return null;

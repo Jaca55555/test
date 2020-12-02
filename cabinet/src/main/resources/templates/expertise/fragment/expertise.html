@@ -32,6 +32,16 @@
             </div>
         </div>
 
+        <div class="form-group row" th:if="${regApplication.regionId!=null}">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_region}">Вилоят</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getSoatoName(regApplication.regionId,#locale)}" >
+            </div>
+        </div>
+
+
         <div class="form-group row" >
             <div class="col-md-3 text-right">
                 <label class="col-form-label" th:text="#{sys_about.material}"></label>
@@ -47,6 +57,26 @@
             </div>
             <div class="col-md-6">
                 <input class="form-control" readonly="readonly" th:value="${regApplication.name}" >
+            </div>
+        </div>
+
+        <div class="form-group row" th:if="${regApplication.regApplicationCategoryType !=null && regApplication.regApplicationCategoryType ==1 && regApplicationCategoryFourAdditional!=null}">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_about.object_blanket}">Умумий қисм</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.objectBlanket}" readonly="readonly"/>
+            </div>
+        </div>
+
+        <div class="form-group row" th:if="${regApplication.regApplicationCategoryType !=null && regApplication.regApplicationCategoryType ==1 && regApplicationCategoryFourAdditional!=null}">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_about.coordinate_description}">Танланган ёки ажратилган ер майдони﻿ҳақида қисқача маълумот</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.coordinateDescription}" readonly="readonly" />
             </div>
         </div>
 
@@ -74,6 +104,88 @@
             </div>
             <div class="col-md-6">
                 <input class="form-control" readonly="readonly" th:value="${projectDeveloper!=null && projectDeveloper.opfId!=null ? @helperService.getOpfName(projectDeveloper.opfId,#locale):''}" >
+            </div>
+        </div>
+
+        <div th:if="${regApplication.regApplicationCategoryType !=null && regApplication.regApplicationCategoryType ==1 && regApplicationCategoryFourAdditional!=null}">
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.bordering_objects}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.borderingObjects}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.territory_description}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.territoryDescription}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.cultural_heritage_description}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.culturalHeritageDescription}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.animal_count_additional}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.animalCountAdditional}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.tree_count_additional}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.treeCountAdditional}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.water_information}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.waterInformation}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.structures_information}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.structuresInformation}" required="" maxlength="254"  />
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_about.about_wind_speed}"></label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.aboutWindSpeed}" required="" maxlength="254"  />
+                </div>
             </div>
         </div>
 

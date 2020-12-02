@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="category_step6">
+
+<div class="card-block"  >
+    <div class="row" >
+        <div class="form-group col-md-8 offset-2" >
+            <div class="card">
+                <div class="card-header">
+                    <h5 th:text="#{sys_step_6.pollution_measures}">Атроф муҳитни ифлосланишини камайтирувчи тадбирлар</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table  table-striped" id="pollution-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%">№</th>
+                                <th style="width: 70%" th:text="#{sys_step_6.pollution_measures_event_name}">Tadbir nomi</th>
+                                <th style="width: 20%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody >
+                            <tr  th:if="${#lists.size(regApplicationCategoryFourAdditional.pollutionMeasures)>0}" th:each="pollutionMeasure :${regApplicationCategoryFourAdditional.pollutionMeasures}">
+                                <td  th:utext="${pollutionMeasure.id}" style="width: 10%"></td>
+                                <td th:utext="${pollutionMeasure.eventName}" style="width: 70%"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -20,7 +20,6 @@ import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
-import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -61,6 +60,7 @@ public class AgreementController {
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
     private final FileService fileService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public AgreementController(
@@ -79,7 +79,7 @@ public class AgreementController {
             ToastrService toastrService,
             ConclusionService conclusionService,
             NotificationService notificationService,
-            FileService fileService){
+            FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -96,6 +96,7 @@ public class AgreementController {
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
         this.fileService = fileService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -199,6 +200,13 @@ public class AgreementController {
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         RegApplicationLog agreementCompleteLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.AgreementComplete, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

@@ -82,6 +82,22 @@ public class ExpertiseTemplates {
     public static final String ExpertiseRegApplicationPayment = ExpertiseReg + "/payment";
     public static final String ExpertiseRegApplicationStatus = ExpertiseReg + "/status";
 
+    //category 4
+    private static final String RegApplicationFourCategory = ExpertiseReg + "/category_four";
+    public static final String ExpertiseRegApplicationFourCategoryApplicant = RegApplicationFourCategory + "/applicant";
+    public static final String ExpertiseRegApplicationFourCategoryAbout = RegApplicationFourCategory + "/about";
+    public static final String ExpertiseRegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
+    public static final String ExpertiseRegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+    public static final String ExpertiseRegApplicationFourCategoryStep4_2 = RegApplicationFourCategory + "/step4_2";
+    public static final String ExpertiseRegApplicationFourCategoryStep4_3 = RegApplicationFourCategory + "/step4_3";
+    public static final String ExpertiseRegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
+    public static final String ExpertiseRegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
+    public static final String ExpertiseRegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
+    public static final String ExpertiseRegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
+    public static final String ExpertiseRegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";
+    public static final String ExpertiseRegApplicationFourCategoryPrepayment = RegApplicationFourCategory + "/prepayment";
+    public static final String ExpertiseRegApplicationFourCategoryStatus = RegApplicationFourCategory + "/status";
+
     public static final String ExpertiseRegApplicationList = ExpertiseReg + "/list";
 
     public static final String ExpertiseRegApplicationMonitoringList = ExpertiseReg + "/mntr/list";

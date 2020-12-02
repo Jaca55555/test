@@ -19,7 +19,6 @@ import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
-import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -60,6 +59,7 @@ public class AgreementCompleteController {
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
     private final FileService fileService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public AgreementCompleteController(
@@ -78,7 +78,7 @@ public class AgreementCompleteController {
             ConclusionService conclusionService,
             NotificationService notificationService,
             SmsSendService smsSendService,
-            FileService fileService) {
+            FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -95,6 +95,7 @@ public class AgreementCompleteController {
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
         this.fileService = fileService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -205,6 +206,12 @@ public class AgreementCompleteController {
 
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);

@@ -53,8 +53,9 @@ public class RegApplicationMonitoringController {
     private final ActivityService activityService;
     private final RequirementService requirementService;
     private final OrganizationService organizationService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -71,6 +72,7 @@ public class RegApplicationMonitoringController {
         this.activityService = activityService;
         this.requirementService = requirementService;
         this.organizationService = organizationService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
@@ -147,6 +149,12 @@ public class RegApplicationMonitoringController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant", applicant);

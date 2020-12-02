@@ -51,6 +51,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
                                             </li>
+                                            <li class="nav-item" th:if="${regApplicationCategoryFourAdditional!=null}">
+                                                <a class="nav-link show" id="category-4-tab" data-toggle="tab" href="#category-4" role="tab" aria-controls="category-4" aria-selected="false" th:text="#{sys_category_4}"></a>
+                                            </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#confirmation" role="tab" aria-controls="confirmation" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                             </li>
@@ -68,6 +71,11 @@
                                             <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
+
+                                            <div class="tab-pane fade" id="category-4" role="tabpanel" aria-labelledby="category-4" th:if="${regApplicationCategoryFourAdditional!=null}">
+                                                    <object th:include="expertise/fragment/category_four/category_4_all_add :: category_step_add" th:remove="tag" ></object>
+                                            </div>
+
                                             <div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
                                                 <object th:include="expertise/confirm/action :: action" th:remove="tag"></object>
                                             </div>

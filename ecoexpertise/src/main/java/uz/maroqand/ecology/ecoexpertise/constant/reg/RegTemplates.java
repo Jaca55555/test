@@ -25,7 +25,6 @@ public class RegTemplates {
     public static final String RegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
     public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
     public static final String RegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
-    public static final String RegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";
     public static final String RegApplicationFourCategoryPrepayment = RegApplicationFourCategory + "/prepayment";
     public static final String RegApplicationFourCategoryStatus = RegApplicationFourCategory + "/status";
 

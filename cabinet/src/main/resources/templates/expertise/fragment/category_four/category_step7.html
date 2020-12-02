@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="category_step7">
+
+<div class="card-block"  >
+    <div class="row" >
+        <div class="form-group col-md-12" >
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.object_placement_plan}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.objectPlacementPlan}" readonly="readonly" ></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.production_description}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.productionDescription}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.sewage_availability}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sewageAvailability}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.discard_amount_about}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.discardAmountAbout}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.waste_amount_about}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.wasteAmountAbout}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_7.events}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.events}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

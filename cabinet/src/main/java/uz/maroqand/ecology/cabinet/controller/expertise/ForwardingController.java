@@ -33,7 +33,6 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
@@ -60,6 +59,7 @@ public class ForwardingController {
     private final NotificationService notificationService;
     private final CommentService commentService;
     private final SmsSendService smsSendService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public ForwardingController(
@@ -78,8 +78,8 @@ public class ForwardingController {
             ToastrService toastrService,
             NotificationService notificationService,
             CommentService commentService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -96,6 +96,7 @@ public class ForwardingController {
         this.notificationService = notificationService;
         this.commentService = commentService;
         this.smsSendService = smsSendService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -185,6 +186,13 @@ public class ForwardingController {
         model.addAttribute("performerList", userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
         model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

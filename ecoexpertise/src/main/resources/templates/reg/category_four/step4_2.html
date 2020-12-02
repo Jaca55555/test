@@ -17,6 +17,10 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+
+        .table td, .table th{
+            text-align: center;
+        }
         .required-border{
             border: 1px dashed darkred;
         }
@@ -207,10 +211,10 @@
                                                                     </div>
 
                                                                     <div class="col-md-6 table-responsive">
-                                                                        <table class="table  table-striped" id="pollution-table">
+                                                                        <table class="table  table-striped" th:id="'des_add_table_' + ${airPool.id}">
                                                                             <thead>
                                                                             <tr>
-                                                                                <th rowspan="2" th:text="#{description_of_sources_additional.name}"></th>
+                                                                                <th rowspan="2" th:text="#{description_of_sourcDees_additional.name}"></th>
                                                                                 <th colspan="2">Зарарли модда миқдори</th>
                                                                                 <th rowspan="2" th:text="#{description_of_sources_additional.establishedQuota}"></th>
                                                                                 <th rowspan="2" th:text="#{description_of_sources_additional.concentration}"></th>
@@ -221,29 +225,27 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            <!--<tr th:id="${'row_' + airPool.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
-                                                                                <td th:id="${airPool.id}" th:utext="${airPool.id}" style="width: 10%"></td>
-                                                                                <td th:utext="${airPool.name}"></td>
-                                                                                <td th:utext="${airPool.jobName}"></td>
-                                                                                <td th:utext="${airPool.fuelType}"></td>
-                                                                                <td th:utext="${airPool.numberOfSources}"></td>
-                                                                                <td th:utext="${airPool.substances}"></td>
-                                                                                <td th:utext="${airPool.airSubstance}"></td>
+                                                                            <tr th:id="${'row_' + desAdd.id }" th:data-id="${desAdd.id}"  th:data-name="${airPool.id}" th:if="${#lists.size(airPool.descriptionOfSourcesAdditionals)>0}" th:each="desAdd :${airPool.descriptionOfSourcesAdditionals}">
+                                                                                <td th:id="${desAdd.id}" th:utext="${desAdd.name}" style="width: 10%"></td>
+                                                                                <td th:utext="${desAdd.gSek}"></td>
+                                                                                <td th:utext="${desAdd.tYil}"></td>
+                                                                                <td th:utext="${desAdd.establishedQuota}"></td>
+                                                                                <td th:utext="${desAdd.concentration}"></td>
                                                                                 <td style="width: 10%">
                                                                                     <a class="btn btn-primary btn-sm list-btn ">
                                                                                         <i class="feather icon-edit-1 mr-0"></i>
                                                                                     </a>
-                                                                                    <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${airPool.id}+')'">
+                                                                                    <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${desAdd.id}+',' + ${airPool.id} + ')'">
                                                                                         <i class="feather icon-x-square mr-0"></i>
                                                                                     </a>
                                                                                 </td>
-                                                                            </tr>-->
+                                                                            </tr>
                                                                             <tr></tr>
                                                                             </tbody>
                                                                             <tfoot>
                                                                             <tr style="background-color: rgba(0, 0, 0, 0.05);" >
                                                                                 <th class="text-right" colspan="8">
-                                                                                    <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
+                                                                                    <button type="button" th:onclick="'createInput('+${airPool.id}+')'" class="btn btn-success btn-sm">
                                                                                         <i class="feather icon-plus"></i>
                                                                                         <span th:text="#{sys_add}"></span>
                                                                                     </button>
@@ -253,7 +255,7 @@
                                                                         </table>
                                                                     </div>
                                                                     <div class="col-md-12">
-                                                                        <div class="col-md-6 offset-md-3 row" style="padding: 5px 0 5px 0;" id="files-div">
+                                                                        <div class="col-md-6 offset-md-3 row" style="padding: 5px 0 5px 0;" th:id="'files-div_' + ${airPool.id}">
                                                                             <a href="#upload-file-modal" th:onclick="'openModalFile('+${airPool.id}+')'" class="col-md-3" style="padding-bottom: 25px;">
                                                                                 <div class="add-file">
                                                                                     <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
@@ -361,47 +363,41 @@
 
 <script th:inline="javascript">
     var n=0;
-    var regAddId = [[${regApplicationCategoryFourAdditional.id}]];
     var _csrf = [[${_csrf.token}]];
 
     var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStep4_2FileUpload}]];
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStep4_2FileDelete}]];
 
-    var editLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryAirPoolEdit}]];
-    var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryAirPoolDelete}]];
-    var createLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryAirPoolCreate}]];
+    var editLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryDescriptionOfSourcesAdditionalEdit}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryDescriptionOfSourcesAdditionalDelete}]];
+    var createLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryDescriptionOfSourcesAdditionalCreate}]];
 
     /*new row*/
-    function createInput(){
+    function createInput(id){
         if (n==0) {
             n=1;
-            $('#pollution-table tbody tr:last').after(
+            $('#des_add_table_' + id +' tbody tr:last').after(
                 '<tr id="input_add">' +
                 '<td>' +
+                '<input id="name_'+id+'" name="name"  class="form-control" type="text" required="" data-parsley-maxlength="255"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="name" name="name"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
+                '<input id="gSek_'+id+'" name="gSek"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="jobName" name="jobName"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
+                '<input id="tYil_'+id+'" name="tYil"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="fuelType" name="fuelType"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
+                '<input id="establishedQuota_'+id+'" name="establishedQuota"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="numberOfSources" name="numberOfSources"  class="form-control " type="text" required="" data-parsley-type="integer"/>' +
+                '<input id="concentration_'+id+'" name="concentration"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="substances" name="substances"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
-                '</td>' +
-                '<td>' +
-                '<input id="airSubstance" name="airSubstance"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
-                '</td>' +
-                '<td>' +
-                '<button type="button" onclick="addExecutive()" class="btn btn-sm btn-outline-primary mr-0">\n' +
+                '<button type="button" onclick="addExecutive(' + id + ')" class="btn btn-sm btn-outline-primary mr-0">\n' +
                 '<i class="feather icon-check-square mr-0" aria-hidden="true"></i>' +
                 '</button>' +
-                '<button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-warning">\n' +
+                '<button type="button" onclick="cancelExecutive(' + id + ')" class="btn btn-sm btn-outline-warning">\n' +
                 '<i class="feather icon-x-square mr-0" aria-hidden="true"></i>' +
                 '</button>' +
                 '</td>' +
@@ -411,34 +407,30 @@
     }
 
     //add base
-    function addExecutive(){
-        $('#name').parsley().validate();
-        $('#jobName').parsley().validate();
-        $('#fuelType').parsley().validate();
-        $('#numberOfSources').parsley().validate();
-        $('#substances').parsley().validate();
-        $('#airSubstance').parsley().validate();
-        var name = $('#name').val();
-        var jobName = $('#jobName').val();
-        var fuelType = $('#fuelType').val();
-        var numberOfSources = $('#numberOfSources').val();
-        var substances = $('#substances').val();
-        var airSubstance = $('#airSubstance').val();
-        if( $('#name').parsley().isValid() &&
-            $('#jobName').parsley().isValid() &&
-        $('#fuelType').parsley().isValid() &&
-        $('#numberOfSources').parsley().isValid() &&
-        $('#substances').parsley().isValid() &&
-        $('#airSubstance').parsley().isValid() ) {
+    function addExecutive(id){
+        $('#name_'+id).parsley().validate();
+        $('#gSek_'+id).parsley().validate();
+        $('#tYil_'+id).parsley().validate();
+        $('#establishedQuota_'+id).parsley().validate();
+        $('#concentration_'+id).parsley().validate();
+        var name = $('#name_'+id).val();
+        var gSek = $('#gSek_'+id).val();
+        var tYil = $('#tYil_'+id).val();
+        var establishedQuota = $('#establishedQuota_'+id).val();
+        var concentration = $('#concentration_'+id).val();
+        if( $('#name_'+id).parsley().isValid() &&
+            $('#gSek_'+id).parsley().isValid() &&
+        $('#tYil_'+id).parsley().isValid() &&
+        $('#establishedQuota_'+id).parsley().isValid() &&
+        $('#concentration_'+id).parsley().isValid()){
 
             var form = new FormData();
-            form.append("regAddId", regAddId);
+            form.append("id", id);
             form.append("name", name);
-            form.append("jobName", jobName);
-            form.append("fuelType", fuelType);
-            form.append("numberOfSources", numberOfSources);
-            form.append("substances", substances);
-            form.append("airSubstance", airSubstance);
+            form.append("gSek", gSek);
+            form.append("tYil", tYil);
+            form.append("establishedQuota", establishedQuota);
+            form.append("concentration", concentration);
             form.append("_csrf", _csrf);
 
             $.ajax({
@@ -451,25 +443,22 @@
                 success: function (response) {
                     if (response.status==1){
                         console.log(response)
-                        var id = response.data.id;
+                        var addId = response.data.id;
                         var name = response.data.name;
-                        var jobName = response.data.jobName;
-                        var fuelType = response.data.fuelType;
-                        var numberOfSources = response.data.numberOfSources;
-                        var substances = response.data.substances;
-                        var airSubstance = response.data.airSubstance;
-                        var actions = '<a class="btn btn-primary btn-sm list-btn mr-0" ><i class="feather icon-edit-1 mr-0"></i></a>' +
-                            '<a class="btn btn-warning btn-sm list-btn" onclick="mymodal('+id+')" ><i class="feather icon-x-square mr-0"></i></a>';
-                        cancelExecutive();
-                        $('#pollution-table tbody tr:last').after('' +
-                            '<tr id="row_' + id + '">' +
-                            '<td id="'+id+'">' + id + '</td>' +
-                            '<td>' + name + '</td>' +
-                            '<td>' + jobName + '</td>' +
-                            '<td>' + fuelType + '</td>' +
-                            '<td>' + numberOfSources + '</td>' +
-                            '<td>' + substances + '</td>' +
-                            '<td>' + airSubstance + '</td>' +
+                        var gSek = response.data.gsek;
+                        var tYil = response.data.tyil;
+                        var establishedQuota = response.data.establishedQuota;
+                        var concentration = response.data.concentration;
+                        var actions = '<a class="btn btn-primary btn-sm list-btn " ><i class="feather icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-warning btn-sm list-btn" onclick="mymodal('+id+',' + addId + ')" ><i class="feather icon-x-square mr-0"></i></a>';
+                        cancelExecutive(id);
+                        $('#des_add_table_'+id+' tbody tr:last').after('' +
+                            '<tr id="row_' + addId + '" data-name = ' + id + 'data-id="' + addId + '">' +
+                            '<td id="'+id+'">' + name + '</td>' +
+                            '<td>' + gSek + '</td>' +
+                            '<td>' + tYil + '</td>' +
+                            '<td>' + establishedQuota + '</td>' +
+                            '<td>' + concentration + '</td>' +
                             '<td>' + actions + '</td></tr>');
                     }
                 }
@@ -477,17 +466,17 @@
         }
     }
 
-    function cancelExecutive(){
+    function cancelExecutive(id){
         n=0;
         $('#input_add').remove();
     }
 
     /*delete modal*/
-    function mymodal(id){
+    function mymodal(id,addId){
 
         var form = new FormData();
         form.append("id",id);
-        form.append("regAddId",regAddId);
+        form.append("regAddId",addId);
         form.append("_csrf", _csrf);
         $.ajax({
             type: "POST",
@@ -532,7 +521,7 @@
             success: function (response) {
                 if(response.status == 1) {
 
-                    $('#files-div').append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
+                    $('#files-div_' + $('#airPoolId').val()).append('<div class="col-md-3" id="file-block-'+response.fileId+'">\n' +
                         '                                                    <div class="file">\n' +
                         '                                                        <a href="'+response.link+'">\n' +
                         '                                                            <i class="feather icon-file file-icon"></i>\n' +
@@ -599,56 +588,56 @@
 </script>
 <script>
 
-    $("#pollution-table").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
+    $(".table").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
         $(this).removeClass().addClass("feather icon-check-circle mr-0");
-        var $row = $(this).closest("tr").off("mousedown");
-        var $tds = $row.find("td").not(':last').not(':first');
-        var $idn=0;
+        let row = $(this).closest("tr").off("mousedown");
+        let id = row.attr('data-id');
+        let $tds = row.find("td").not(':last');
+        let $idn=0;
         $.each($tds, function(i, el) {
             var txt = $(this).text();
             $idn++;
             if ($idn==1) {
-                $(this).html("").append("<input id='name' name='name'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='name_" +id+ "' name='name'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
             }
             if ($idn==2) {
-                $(this).html("").append("<input id='jobName' name='jobName'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='gSek_" +id+ "' name='gSek'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
             }
             if ($idn==3) {
-                $(this).html("").append("<input id='fuelType' name='fuelType'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='tYil_" +id+ "' name='tYil'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
             }
             if ($idn==4) {
-                $(this).html("").append("<input id='numberOfSources' name='numberOfSources'  class='form-control' type='text' required='' data-parsley-type='integer'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='establishedQuota_" +id+ "' name='establishedQuota'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
             }
             if ($idn==5) {
-                $(this).html("").append("<input id='substances' name='substances'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
-            }
-            if ($idn==6) {
-                $(this).html("").append("<input id='airSubstance' name='airSubstance'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='concentration_" +id+ "' name='concentration'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
             }
         });
     });
 
-    $("#pollution-table").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
-        var $row = $(this).closest("tr");
-        var $tds = $row.find("td").not(':last').not(':first');
-        var id=$row.find("td").first().attr('id');
-        console.log($tds);
-        $('#name').parsley().validate();
-        $('#jobName').parsley().validate();
-        $('#fuelType').parsley().validate();
-        $('#numberOfSources').parsley().validate();
-        $('#substances').parsley().validate();
-        $('#airSubstance').parsley().validate();
-        if( $('#name').parsley().isValid(),
-            $('#jobName').parsley().isValid(),
-            $('#fuelType').parsley().isValid(),
-            $('#numberOfSources').parsley().isValid(),
-            $('#substances').parsley().isValid(),
-            $('#airSubstance').parsley().isValid() ){
+    $(".table").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+        let row = $(this).closest("tr");
+        console.log(row.attr('id'));
+        let tds = row.find("td").not(':last');
+        let  id=row.find("td").first().attr('id');
+        console.log(tds);
+        let regAddId = row.attr('data-name');
+
+        $('#name_'+id).parsley().validate();
+        $('#gSek_'+id).parsley().validate();
+        $('#tYil_'+id).parsley().validate();
+        $('#establishedQuota_'+id).parsley().validate();
+        $('#concentration_'+id).parsley().validate();
+
+        if( $('#name_'+id).parsley().isValid() &&
+            $('#gSek_'+id).parsley().isValid() &&
+            $('#tYil_'+id).parsley().isValid() &&
+            $('#establishedQuota_'+id).parsley().isValid() &&
+            $('#concentration_'+id).parsley().isValid()){
             var form = new FormData();
-            $.each($tds, function(i, el) {
+            $.each(tds, function(i, el) {
                 var txt = $(this).find("input").val();
-                var txtId = $(this).find("input").attr('id');
+                var txtId = $(this).find("input").attr('name');
                 form.append(txtId,txt);
                 $(this).html(txt);
             });
@@ -661,7 +650,7 @@
                 url:editLink,
                 data:form,
                 success: function(response){
-                    console.log("refresh");
+                    console.log("res=" + response);
                 },
                 processData: false,
                 contentType: false,

@@ -63,6 +63,10 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep4_2FileDownload = RegApplication + "/step4_2_file_download";
     public static final String RegApplicationFourCategoryStep4_2FileDelete = RegApplication + "/step4_2_file_delete";
 
+    public static final String RegApplicationFourCategoryDescriptionOfSourcesAdditionalCreate = RegApplicationFourCategory + "/description_of_sources_additional_create";
+    public static final String RegApplicationFourCategoryDescriptionOfSourcesAdditionalEdit = RegApplicationFourCategory + "/description_of_sources_additional_edit";
+    public static final String RegApplicationFourCategoryDescriptionOfSourcesAdditionalDelete = RegApplicationFourCategory + "/description_of_sources_additional_delete";
+
     public static final String RegApplicationFourCategoryStep4_3 = RegApplicationFourCategory + "/step4_3";
 
     public static final String RegApplicationFourCategoryHarmfulSubstancesAmountCreate = RegApplicationFourCategory + "/harmful_substances_amount_create";

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="category_step5">
+
+<div class="card-block"  >
+    <div class="row" >
+        <div class="form-group col-md-12" >
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.about_waste}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.aboutWaste}" readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.water_volume}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.waterVolume}" readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.source_water}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sourceWater}" readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.heating_system}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.heatingSystem}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.firefighting_measures}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.firefightingMeasures}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.ventilation}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.ventilation}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <div class="col-md-3 text-right">
+                    <label class="col-form-label" th:text="#{sys_step_5.emergency_measures}">Наименование объекта</label>
+                    <span class="required">*</span>
+                </div>
+                <div class="col-md-6">
+                    <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.emergencyMeasures}" readonly="readonly"  ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table  table-striped" id="boiler-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 40%">Қозон характеристикаси</th>
+                        <th style="width: 30%">Ўлчов бирлиги</th>
+                        <th style="width: 15%" colspan="2">
+                            <input class="form-control col-md-10" type="text" th:value="${regApplicationCategoryFourAdditional.boilerName}"  readonly="readonly" />
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tbody th:if="${#lists.size(regApplicationCategoryFourAdditional.boilerCharacteristics)>0}">
+                    <tr th:each="boilerCharacteristic :${regApplicationCategoryFourAdditional.boilerCharacteristics}">
+                        <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%"></td>
+                        <td th:utext="#{${boilerCharacteristic.type}}" style="width: 30%"></td>
+                        <td style="width: 15%">
+                            <input class="form-control" type="text" th:value="${boilerCharacteristic.amount}" readonly="readonly"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

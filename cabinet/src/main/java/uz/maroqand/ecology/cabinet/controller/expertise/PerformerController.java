@@ -65,6 +65,7 @@ public class PerformerController {
     private final OrganizationService organizationService;
     private final DocumentEditorService documentEditorService;
     private final GlobalConfigs globalConfigs;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public PerformerController(
@@ -86,7 +87,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -108,6 +109,7 @@ public class PerformerController {
         this.organizationService = organizationService;
         this.documentEditorService = documentEditorService;
         this.globalConfigs = globalConfigs;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -224,6 +226,12 @@ public class PerformerController {
             filename = file!=null?file.getName():"";
         }
         model.addAttribute("filename", filename);
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
         model.addAttribute("performerLogStatus", performerLog != null && performerLog.getStatus() != null && (performerLog.getStatus().equals(LogStatus.Initial) || performerLog.getStatus().equals(LogStatus.Denied)));
