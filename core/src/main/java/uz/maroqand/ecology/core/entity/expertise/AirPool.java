@@ -1,8 +1,10 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.persistence.*;
+import java.util.Set;
 
 //Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот
 @Data
@@ -42,6 +44,28 @@ public class AirPool {
     //    Ифлослантирувчи моддаларнинг атмосфера хавосига чиқарилиши
     @Column(name = "air_substance")
     private String airSubstance;
+
+//    4.2
+    @ManyToMany
+    @JoinTable(name = "air_pool_jt_description_of_sources",
+            joinColumns = { @JoinColumn(name = "air_pool") },
+            inverseJoinColumns = { @JoinColumn(name = "description_of_sources")})
+    @OrderBy(value = "id asc")
+    private Set<DescriptionOfSources> descriptionOfSources;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "description_of_sources_jt_files",
+            joinColumns = { @JoinColumn(name = "description_of_sources_id") },
+            inverseJoinColumns = { @JoinColumn(name = "file_id") })
+    private Set<File> files;
+
+
+    @ManyToMany
+    @JoinTable(name = "description_of_sources_jt_additional",
+            joinColumns = { @JoinColumn(name = "description_of_sources_id") },
+            inverseJoinColumns = { @JoinColumn(name = "additional_id")})
+    @OrderBy(value = "id asc")
+    private Set<DescriptionOfSourcesAdditional> descriptionOfSourcesAdditionals;
 
     @Column(name="deleted", columnDefinition = "boolean default false")
     private Boolean deleted;

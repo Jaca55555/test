@@ -159,7 +159,7 @@
                 '<input id="fuelType" name="fuelType"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
                 '</td>' +
                 '<td>' +
-                '<input id="numberOfSources" name="numberOfSources"  class="form-control " type="text" required="" data-parsley-type="integer"/>' +
+                '<input id="numberOfSources" name="numberOfSources"  class="form-control " type="text" required="" data-parsley-type="digits"/>' +
                 '</td>' +
                 '<td>' +
                 '<input id="substances" name="substances"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
@@ -199,7 +199,7 @@
         $('#fuelType').parsley().isValid() &&
         $('#numberOfSources').parsley().isValid() &&
         $('#substances').parsley().isValid() &&
-        $('#airSubstance').parsley().isValid() ) {
+        $('#airSubstance').parsley().isValid()) {
 
             var form = new FormData();
             form.append("regAddId", regAddId);
@@ -294,7 +294,7 @@
                 $(this).html("").append("<input id='fuelType' name='fuelType'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
             }
             if ($idn==4) {
-                $(this).html("").append("<input id='numberOfSources' name='numberOfSources'  class='form-control' type='text' required='' data-parsley-type='integer'  value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='numberOfSources' name='numberOfSources'  class='form-control' type='text' required='' data-parsley-type='digits'  value=\""+txt+"\"/>");
             }
             if ($idn==5) {
                 $(this).html("").append("<input id='substances' name='substances'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");

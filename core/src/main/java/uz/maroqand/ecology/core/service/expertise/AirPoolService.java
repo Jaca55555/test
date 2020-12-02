@@ -7,6 +7,8 @@ public interface AirPoolService {
 
     AirPool save(AirPool airPool);
 
+    AirPool removeAllDescriptionNotSaved(AirPool airPool);
+
     AirPool getById(Integer id);
 
 }

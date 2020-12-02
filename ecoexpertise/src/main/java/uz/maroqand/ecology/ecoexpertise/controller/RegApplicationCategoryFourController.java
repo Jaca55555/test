@@ -2,10 +2,13 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
@@ -14,6 +17,7 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -75,6 +79,8 @@ public class RegApplicationCategoryFourController {
     private final PollutionMeasuresService pollutionMeasuresService;
     private final AirPoolService airPoolService;
     private final HarmfulSubstancesAmountService harmfulSubstancesAmountService;
+    private final DescriptionOfSourcesService descriptionOfSourcesService;
+    private final DescriptionOfSourcesAdditionalService descriptionOfSourcesAdditionalService;
 
     private final GlobalConfigs globalConfigs;
 
@@ -111,7 +117,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, HarmfulSubstancesAmountService harmfulSubstancesAmountService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, HarmfulSubstancesAmountService harmfulSubstancesAmountService, DescriptionOfSourcesService descriptionOfSourcesService, DescriptionOfSourcesAdditionalService descriptionOfSourcesAdditionalService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -148,6 +154,8 @@ public class RegApplicationCategoryFourController {
         this.pollutionMeasuresService = pollutionMeasuresService;
         this.airPoolService = airPoolService;
         this.harmfulSubstancesAmountService = harmfulSubstancesAmountService;
+        this.descriptionOfSourcesService = descriptionOfSourcesService;
+        this.descriptionOfSourcesAdditionalService = descriptionOfSourcesAdditionalService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -618,6 +626,19 @@ public class RegApplicationCategoryFourController {
         airPool.setSubstances(substances);
         airPool.setAirSubstance(airSubstance);
         airPool.setDeleted(Boolean.FALSE);
+
+        if (numberOfSources>0){
+            Set<DescriptionOfSources> descriptionOfSourcesSet = airPool.getDescriptionOfSources();
+            if (descriptionOfSourcesSet==null) descriptionOfSourcesSet = new HashSet<>();
+            for (Integer id=1; id<=numberOfSources; id++) {
+                DescriptionOfSources descriptionOfSources = new DescriptionOfSources();
+                descriptionOfSources.setDeleted(Boolean.FALSE);
+                descriptionOfSourcesService.save(descriptionOfSources);
+                descriptionOfSourcesSet.add(descriptionOfSources);
+            }
+            airPool.setDescriptionOfSources(descriptionOfSourcesSet);
+        }
+
         airPool = airPoolService.save(airPool);
         airPoolSet.add(airPool);
         regApplicationCategoryFourAdditional.setAirPools(airPoolSet);
@@ -657,6 +678,20 @@ public class RegApplicationCategoryFourController {
         airPool.setName(name);
         airPool.setJobName(jobName);
         airPool.setFuelType(fuelType);
+        if (!airPool.getNumberOfSources().equals(numberOfSources)){
+            airPoolService.removeAllDescriptionNotSaved(airPool);
+            if (numberOfSources>0){
+                Set<DescriptionOfSources> descriptionOfSourcesSet = airPool.getDescriptionOfSources();
+                if (descriptionOfSourcesSet==null) descriptionOfSourcesSet = new HashSet<>();
+                for (Integer idSource=1; idSource<=numberOfSources; idSource++) {
+                    DescriptionOfSources descriptionOfSources = new DescriptionOfSources();
+                    descriptionOfSources.setDeleted(Boolean.FALSE);
+                    descriptionOfSourcesService.save(descriptionOfSources);
+                    descriptionOfSourcesSet.add(descriptionOfSources);
+                }
+                airPool.setDescriptionOfSources(descriptionOfSourcesSet);
+            }
+        }
         airPool.setNumberOfSources(numberOfSources);
         airPool.setSubstances(substances);
         airPool.setAirSubstance(airSubstance);
@@ -698,6 +733,7 @@ public class RegApplicationCategoryFourController {
         regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
 
         airPool.setDeleted(Boolean.TRUE);
+        airPoolService.removeAllDescriptionNotSaved(airPool);
         airPoolService.save(airPool);
         return status;
     }
@@ -727,12 +763,197 @@ public class RegApplicationCategoryFourController {
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep4_2Get(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            Model model
     ){
 
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
 
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_3 + "?id=" + id;
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null){
+            return RegListRedirect;
+        }
 
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
+        model.addAttribute("air_pools",regApplicationCategoryFourAdditional.getAirPools());
+        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+
+        return RegTemplates.RegApplicationFourCategoryStep4_2;
+
+    }
+
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2, method = RequestMethod.POST)
+    public String postRegApplicationFourCategoryStep4_2(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+        if (regApplication==null){
+            return RegListRedirect;
+        }
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        if (regApplicationCategoryFourAdditional==null || !regApplicationCategoryFourAdditional.getId().equals(regAddId)
+                || regApplicationCategoryFourAdditional.getAirPools()==null || regApplicationCategoryFourAdditional.getAirPools().isEmpty()){
+            return RegListRedirect;
+        }
+        Map<String,String> map = formData.toSingleValueMap();
+
+        HashMap<Integer,DescriptionOfSources> descriptionOfSourcesHashMap = new HashMap<>();
+        Set<AirPool>airPoolSet = regApplicationCategoryFourAdditional.getAirPools();
+        for (AirPool airPool:airPoolSet) {
+            for (DescriptionOfSources descriptionOfSources: airPool.getDescriptionOfSources()){
+                if (!descriptionOfSourcesHashMap.containsKey(descriptionOfSources.getId())){
+                    descriptionOfSourcesHashMap.put(descriptionOfSources.getId(),descriptionOfSources);
+                }
+            }
+        }
+
+        DescriptionOfSources descriptionOfSources = new DescriptionOfSources();
+
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+            Integer boilerId = null;
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            Integer decId=null;
+            System.out.println("tagname" + tagName);
+
+            if (paramName.length>1){
+                try {
+                    decId = Integer.parseInt(paramName[1]);
+                }catch (Exception e){
+
+                }
+                System.out.println(paramName[1]);
+            }
+            Double value = null;
+            if (decId!=null && descriptionOfSourcesHashMap.containsKey(decId)){
+                String valueStr = mapEntry.getValue().replaceAll(" ","");
+
+                try {
+                    value = Double.parseDouble(valueStr);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                if (tagName.equals("sourcesHeight")){
+                    descriptionOfSources = descriptionOfSourcesHashMap.get(decId);
+                    descriptionOfSources.setSourcesHeight(value);
+                }
+                if (tagName.equals("sourcesDiometer")){
+                    descriptionOfSources.setSourcesDiometer(value);
+                }
+                if (tagName.equals("sourcesW")){
+                    descriptionOfSources.setSourcesW(value);
+                }
+                if (tagName.equals("sourcesV")){
+                    descriptionOfSources.setSourcesV(value);
+                }
+                if (tagName.equals("sourcesT")){
+                    descriptionOfSources.setSourcesT(value);
+                    descriptionOfSourcesService.save(descriptionOfSources);
+                }
+            }
+        }
+
+        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + regApplication.getId();
+    }
+
+    //fileUpload
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "file_name") String fileNname,
+            @RequestParam(name = "file") MultipartFile multipartFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        AirPool airPool = airPoolService.getById(id);
+        if (airPoolService == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"airPool="+airPool.getId(),fileNname);
+        if (file != null) {
+            Set<File> fileSet = airPool.getFiles();
+            fileSet.add(file);
+            airPool.setFiles(fileSet);
+            airPoolService.save(airPool);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("link", RegUrls.RegApplicationFourCategoryStep4_2FileDownload+ "?file_id=" + file.getId() + "&id=" + airPool.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    //fileDownload
+    @RequestMapping(RegUrls.RegApplicationFourCategoryStep4_2FileDownload)
+    public ResponseEntity<Resource> downloadFile(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "id") Integer id
+    ){
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            AirPool airPool = airPoolService.getById(id);
+            if (airPool==null || airPool.getFiles()==null
+                    || airPool.getFiles().isEmpty() || !airPool.getFiles().contains(file)){
+                return null;
+            }
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    //fileDelete
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_2FileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> deleteFile(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        AirPool airPool = airPoolService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (airPool == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = airPool.getFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                airPoolService.save(airPool);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4_3, method = RequestMethod.GET)
