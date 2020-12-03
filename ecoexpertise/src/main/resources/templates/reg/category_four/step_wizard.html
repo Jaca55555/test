@@ -19,7 +19,7 @@
                     <p class="m-0" th:text="#{reg_application.step_about}">This is step content</p>
                 </a>
             </li>
-            <li th:class="${step_id == 3 ? 'nav-item active' : step_id > 3? 'nav-item done' : 'nav-item'}">
+            <li th:class="${step_id == 3 ? 'nav-item active' : step_id > 3? 'nav-item done' :  'nav-item'}">
                 <a th:href="${step_id > 3 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStep3 + '?id=' + regApplication.id : '#'}" class="nav-link">
                     <h6 th:text="#{sys_step_3}">Step 3</h6>
                     <p class="m-0" th:text="#{reg_application_category_four.step_3}">This is step content</p>

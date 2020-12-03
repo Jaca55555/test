@@ -303,6 +303,10 @@ public class RegApplicationController {
             return check;
         }
 
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryApplicant + "?id=" + id;
+        }
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         //client begin
@@ -457,6 +461,10 @@ public class RegApplicationController {
             return check;
         }
 
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + id;
+        }
+
         Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
         if(coordinate != null){
             model.addAttribute("coordinate", coordinate);
@@ -600,6 +608,11 @@ public class RegApplicationController {
                 return "redirect:" + RegUrls.RegApplicationList;
             }
         }
+
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
+        }
+
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
             return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
@@ -653,6 +666,10 @@ public class RegApplicationController {
             if (regApplication==null){
                 return "redirect:" + RegUrls.RegApplicationList;
             }
+        }
+
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
         }
 
         if (regApplication.getConfirmLogId()!=null){
@@ -766,6 +783,9 @@ public class RegApplicationController {
             }
         }
 
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
+        }
         if(regApplication.getOfferId() == null){
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
             return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
@@ -864,6 +884,11 @@ public class RegApplicationController {
                 return "redirect:" + RegUrls.RegApplicationList;
             }
         }
+
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryPaymentFree + "?id=" + id;
+        }
+
         if (regApplication.getInvoiceId() == null){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
@@ -900,6 +925,10 @@ public class RegApplicationController {
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
                 return "redirect:" + RegUrls.RegApplicationList;
             }
+        }
+
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStatus + "?id=" + id;
         }
 
         Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
@@ -941,6 +970,10 @@ public class RegApplicationController {
                 toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
                 return "redirect:" + RegUrls.RegApplicationList;
             }
+        }
+
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryResend + "?id=" + id;
         }
 
         if(!regApplication.getStatus().equals(RegApplicationStatus.Modification)){

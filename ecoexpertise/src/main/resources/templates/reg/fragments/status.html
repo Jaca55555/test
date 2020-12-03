@@ -71,10 +71,10 @@
     <!--Modification-->
     <div class="col-md-12 text-center" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification}">
         <div class="col-md-12" >
-            <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationApplicant + '?id=' + regApplication.id}">
+            <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryApplicant + '?id=' + regApplication.id}">
                 <i class="mdi mdi-backspace"></i> <span th:text="#{sys_back_to_edit}"></span>
             </a>
-            <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationResend + '?id=' + regApplication.id}">
+            <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryResend + '?id=' + regApplication.id}">
                 <i class="feather icon-rotate-cw"></i> <span th:text="#{sys_send_to_review}"></span>
             </a>
         </div>
