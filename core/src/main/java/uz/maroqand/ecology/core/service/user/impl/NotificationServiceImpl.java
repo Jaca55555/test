@@ -137,11 +137,16 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void confirmContractRegApplication(Integer regId) {
-        Notification notification = notificationRepository.findByApplicationNumberAndStatusAndType(regId,NotificationStatus.New,NotificationType.RegContract);
+        Notification notification = getByRegApplicationConfirm(regId);
         if (notification!=null){
             notification.setStatus(NotificationStatus.Reviewed);
             notificationRepository.save(notification);
         }
+    }
+
+    @Override
+    public Notification getByRegApplicationConfirm(Integer regId) {
+        return notificationRepository.findByApplicationNumberAndStatusAndType(regId,NotificationStatus.New,NotificationType.RegContract);
     }
 
     public List<Notification> getNotificationList(Integer reviewerId, NotificationType notificationType){

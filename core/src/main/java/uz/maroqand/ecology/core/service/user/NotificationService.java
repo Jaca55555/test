@@ -19,6 +19,8 @@ public interface NotificationService {
 
     void confirmContractRegApplication(Integer regId);
 
+    Notification getByRegApplicationConfirm(Integer regId);
+
     List<Notification> getNotificationList(Integer reviewerId,NotificationType notificationType);
 
     List<Notification> getNewNotificationList(Integer reviewerId,NotificationType notificationType);

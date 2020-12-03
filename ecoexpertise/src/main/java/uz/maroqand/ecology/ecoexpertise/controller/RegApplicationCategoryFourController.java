@@ -1251,10 +1251,10 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect;
         }
 
-        if (regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+       /* if (regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
             regApplicationCategoryFourAdditionalService.createBolier(regApplicationCategoryFourAdditional,user.getId());
 
-        }
+        }*/
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
@@ -1289,7 +1289,7 @@ public class RegApplicationCategoryFourController {
             return response;
         }
         Set<BoilerCharacteristics> boilerCharacteristics = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
-        if (boilerCharacteristics==null) boilerCharacteristics = new HashSet<>();
+        if (boilerCharacteristics==null || boilerCharacteristics.isEmpty()) boilerCharacteristics = new HashSet<>();
         BoilerCharacteristics characteristics = new BoilerCharacteristics();
         characteristics.setName(name);
         characteristics.setType(type);

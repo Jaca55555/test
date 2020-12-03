@@ -57,10 +57,10 @@
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_step_5.about_waste}">Наименование объекта</label>
-                                                                <span class="required">*</span>
+<!--                                                                <span class="required">*</span>-->
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.aboutWaste}" required="" maxlength="254"  ></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.aboutWaste}" maxlength="254"  ></textarea>
                                                             </div>
                                                         </div>
 
@@ -70,7 +70,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.waterVolume}" required="" maxlength="254"></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.waterVolume}" maxlength="254"></textarea>
                                                             </div>
                                                         </div>
 
@@ -80,7 +80,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sourceWater}" required="" maxlength="254"></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sourceWater}" maxlength="254"></textarea>
                                                             </div>
                                                         </div>
 
@@ -90,7 +90,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.heatingSystem}" required="" maxlength="254"  ></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.heatingSystem}" maxlength="254"  ></textarea>
                                                             </div>
                                                         </div>
 
@@ -100,7 +100,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.firefightingMeasures}" required="" maxlength="254"  ></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.firefightingMeasures}" maxlength="254"  ></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row" >
@@ -109,7 +109,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.ventilation}" required="" maxlength="254"  ></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.ventilation}"  maxlength="254"  ></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row" >
@@ -118,7 +118,7 @@
                                                                 <span class="required">*</span>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.emergencyMeasures}" required="" maxlength="254"  ></textarea>
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.emergencyMeasures}"  maxlength="254"  ></textarea>
                                                             </div>
                                                         </div>
 
@@ -128,7 +128,7 @@
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
                                                                 <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                                <button type="button" class="btn btn-primary" th:text="#{sys_next}" onclick="isSaveBoilerCharacteristice()">Далее</button>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}">Далее</button>
                                                                 <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#boilerModal" style="border-radius: 5px">
                                                                     <i class="feather icon-alert-triangle"></i><span th:text="#{boiler_info}">info</span>
                                                                 </button>
@@ -176,8 +176,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tbody th:if="${#lists.size(regApplicationCategoryFourAdditional.boilerCharacteristics)>0}">
-                            <tr th:each="boilerCharacteristic :${regApplicationCategoryFourAdditional.boilerCharacteristics}">
+                            <tbody >
+                            <tr th:each="boilerCharacteristic :${regApplicationCategoryFourAdditional.boilerCharacteristics}" th:if="${#lists.size(regApplicationCategoryFourAdditional.boilerCharacteristics)>0}">
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%"></td>
                                 <td th:utext="#{${boilerCharacteristic.type}}" style="width: 30%"></td>
                                 <td style="width: 15%">
@@ -185,6 +185,7 @@
                                 </td>
                                 <td style="width: 15%"></td>
                             </tr>
+                        <tr></tr>
                             </tbody>
                             <tfoot>
                             <tr style="background-color: rgba(0, 0, 0, 0.05);" >
@@ -249,7 +250,7 @@
             success: function (response) {
                 console.log(response);
                 if (response==true){
-                    $('#alert-not_save-characteristics').html('')
+                    $('#alert-not_save-characteristics').html('');
                     $('#form-step5').submit();
                 }else{
                     $('#alert-not_save-characteristics').html('<div class="alert alert-warning alert-dismissible" role="alert">'+ [[#{sys_not_saved_boiler_characteristics}]]  +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')

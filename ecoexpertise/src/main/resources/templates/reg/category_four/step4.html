@@ -70,19 +70,19 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <tbody >
-                                                                    <tr th:id="${'row_' + airPool.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
-                                                                        <td th:id="${airPool.id}" th:utext="${airPool.id}" style="width: 10%"></td>
-                                                                        <td th:utext="${airPool.name}"></td>
-                                                                        <td th:utext="${airPool.jobName}"></td>
-                                                                        <td th:utext="${airPool.fuelType}"></td>
-                                                                        <td th:utext="${airPool.numberOfSources}"></td>
-                                                                        <td th:utext="${airPool.substances}"></td>
-                                                                        <td th:utext="${airPool.airSubstance}"></td>
+                                                                    <tr th:id="${'row_' + itar.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="itar,index :${regApplicationCategoryFourAdditional.airPools}">
+                                                                        <td th:id="${itar.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                        <td th:utext="${itar.name}"></td>
+                                                                        <td th:utext="${itar.jobName}"></td>
+                                                                        <td th:utext="${itar.fuelType}"></td>
+                                                                        <td th:utext="${itar.numberOfSources}"></td>
+                                                                        <td th:utext="${itar.substances}"></td>
+                                                                        <td th:utext="${itar.airSubstance}"></td>
                                                                         <td style="width: 10%">
                                                                             <a class="btn btn-primary btn-sm list-btn ">
                                                                                 <i class="feather icon-edit-1 mr-0"></i>
                                                                             </a>
-                                                                            <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${airPool.id}+')'">
+                                                                            <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${itar.id}+')'">
                                                                                 <i class="feather icon-x-square mr-0"></i>
                                                                             </a>
                                                                         </td>
@@ -220,8 +220,9 @@
                 cache: false,
                 success: function (response) {
                     if (response.status==1){
-                        console.log(response)
-                        var id = response.data.id;
+                        console.log(response);
+                        window.location.reload();
+                        /*var id = response.data.id;
                         var name = response.data.name;
                         var jobName = response.data.jobName;
                         var fuelType = response.data.fuelType;
@@ -240,7 +241,7 @@
                             '<td>' + numberOfSources + '</td>' +
                             '<td>' + substances + '</td>' +
                             '<td>' + airSubstance + '</td>' +
-                            '<td>' + actions + '</td></tr>');
+                            '<td>' + actions + '</td></tr>');*/
                     }
                 }
             });

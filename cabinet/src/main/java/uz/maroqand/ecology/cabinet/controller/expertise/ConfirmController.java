@@ -24,6 +24,7 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -256,14 +257,17 @@ public class ConfirmController {
                 user.getId()
         );
 
-        notificationService.createForRegContract(
-                regApplication.getApplicant().getTin(),
-                NotificationType.RegContract,
-                "sys_reg_application.contract_wait",
-                regApplication.getId(),
-                "Ariza shartnoma tasdiqlashga yuborildi",
-                user.getId()
-        );
+        Notification notification = notificationService.getByRegApplicationConfirm(regApplication.getId());
+        if (notification==null){
+            notificationService.createForRegContract(
+                    regApplication.getApplicant().getTin(),
+                    NotificationType.RegContract,
+                    "sys_reg_application.contract_wait",
+                    regApplication.getId(),
+                    "Ariza shartnoma tasdiqlashga yuborildi",
+                    user.getId()
+            );
+        }
 
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz tasdiqlandi keyingi bosqishga o'tishingiz mumkin, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
