@@ -82,6 +82,7 @@ public class ExpertiseUrls {
     public static final String BillingListAjax = Billing + "/list_ajax";
     public static final String BillingView = Billing + "/view";
     public static final String BillingEdit = Billing + "/edit";
+    public static final String BillingInvoiceIsNol = Billing + "/amount_is_nol";
     public static final String BillingDelete = Billing + "/delete";
 
 

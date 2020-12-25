@@ -71,6 +71,8 @@ public class BillingController {
     public String billingList(Model model){
         model.addAttribute("regionsList", soatoService.getRegions());
         model.addAttribute("subRegionsList", soatoService.getSubRegions());
+        model.addAttribute("isAdmin",userService.isAdmin());
+        model.addAttribute("nol_url",ExpertiseUrls.BillingInvoiceIsNol);
         return ExpertiseTemplates.BillingList;
     }
 
@@ -287,6 +289,24 @@ public class BillingController {
         Invoice invoice = invoiceService.getInvoice(id);
         if (invoice==null || !invoice.getStatus().equals(InvoiceStatus.Initial)) return "redirect:" + ExpertiseUrls.BillingList;
         invoiceService.cancelInvoice(invoice);
+        return "redirect:" + ExpertiseUrls.BillingList;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.BillingInvoiceIsNol)
+    public String invoiceIsNol(
+            @RequestParam(name = "invoiceId") Integer id,
+            @RequestParam(name = "description") String description
+    ){
+
+        Invoice invoice = invoiceService.getInvoice(id);
+        if (invoice!=null && !invoice.getStatus().equals(InvoiceStatus.Success) && !invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
+            String details = invoice.getDetail()!=null?invoice.getDetail():"";
+            details+="\n"+description + "    " + invoice.getAmount().toString() + "-->0.0";
+            invoice.setAmount(0.0);
+            invoice.setStatus(InvoiceStatus.Success);
+            invoice.setDetail(details);
+            invoiceService.save(invoice);
+        }
         return "redirect:" + ExpertiseUrls.BillingList;
     }
 
