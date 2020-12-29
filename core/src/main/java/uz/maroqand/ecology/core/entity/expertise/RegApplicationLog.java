@@ -73,6 +73,10 @@ public class RegApplicationLog {
     @Enumerated(EnumType.ORDINAL)
     private LogStatus status;
 
+    //Yopilgan arizani xulosani o'zgartirishga ruxsat ochish uchun
+    @Column(name = "old_status")
+    private Integer oldStatus;
+
     @Size(max = 1000)
     @Column(name = "comment",columnDefinition = "TEXT")
     private String comment;

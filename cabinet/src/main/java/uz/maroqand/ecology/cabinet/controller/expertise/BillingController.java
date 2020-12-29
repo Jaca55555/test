@@ -305,6 +305,8 @@ public class BillingController {
             invoice.setAmount(0.0);
             invoice.setStatus(InvoiceStatus.Success);
             invoice.setDetail(details);
+            invoice.setUpdatedAt(new Date());
+            invoice.setUpdateById(userService.getCurrentUserFromContext().getId());
             invoiceService.save(invoice);
         }
         return "redirect:" + ExpertiseUrls.BillingList;

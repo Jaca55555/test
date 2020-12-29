@@ -84,6 +84,7 @@ public class RegApplicationMonitoringController {
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("statusList", logStatusList);
+        model.addAttribute("isAdmin", userService.isAdmin());
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringList;
     }
 
@@ -96,7 +97,14 @@ public class RegApplicationMonitoringController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null, null,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                userService.isAdmin()?null:user.getOrganizationId(),
+                null,
+                null,
+                null,
+                null,
+                pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -105,6 +113,10 @@ public class RegApplicationMonitoringController {
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
+            RegApplicationLog performerLog = null;
+            if (regApplication.getPerformerId()!=null){
+                performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            }
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     regApplication.getInputType(),
@@ -114,8 +126,8 @@ public class RegApplicationMonitoringController {
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
                     regApplication.getApplicantId()!=null?regApplication.getName():"",
-                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():""
-
+                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():"",
+                    performerLog
             });
         }
         result.put("data",convenientForJSONArray);
