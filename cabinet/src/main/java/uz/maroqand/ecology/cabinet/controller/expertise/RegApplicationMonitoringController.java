@@ -127,7 +127,8 @@ public class RegApplicationMonitoringController {
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
                     regApplication.getApplicantId()!=null?regApplication.getName():"",
                     regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():"",
-                    performerLog
+                    performerLog,
+                    performerLog!=null && performerLog.getOldStatus()!=null
             });
         }
         result.put("data",convenientForJSONArray);
@@ -295,5 +296,7 @@ public class RegApplicationMonitoringController {
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
     }
+
+    @RequestMapping()
 
 }
