@@ -366,7 +366,7 @@ public class PaymentFileController {
 
         PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
         if (paymentFile!=null && paymentFile.getInvoice()!=null && !paymentFile.getInvoice().isEmpty()){
-            paymentFileService.removeInvoiceIsDublicate(paymentFile);
+            paymentFileService.removeInvoiceIsDublicate(paymentFile,userService.getCurrentUserFromContext().getId());
         }
 
         return "redirect:" + BillingUrls.PaymentFileAllList;
