@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.repository.billing.PaymentFileRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -46,6 +47,11 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     }
 
     @Override
+    public List<PaymentFile> getByInvoice(String invoice) {
+        return paymentFileRepository.findByInvoiceAndDeletedFalse(invoice);
+    }
+
+    @Override
     public PaymentFile save(PaymentFile paymentFile) {
         return paymentFileRepository.save(paymentFile);
     }
@@ -61,6 +67,12 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);
         return paymentFileRepository.save(paymentFile);
+    }
+
+    @Override
+    public void removeInvoiceIsDublicate(PaymentFile paymentFile, Integer userId) {
+        //todo paymentFile ichiga paymentId yozib keyin o'chirishni qilish kerak
+
     }
 
     public Page<PaymentFile> findFiltered(

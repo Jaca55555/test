@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -297,6 +298,24 @@ public class RegApplicationMonitoringController {
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
     }
 
-    @RequestMapping()
+    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationMonitoringPerformerConclusionEdit)
+    public String expertiseRegApplicationMonitoringPerformerConclusionEdit(@RequestParam(name = "id") Integer logId){
+        System.out.println("logId==" + logId);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog!=null && regApplicationLog.getStatus()!=null){
+            LogStatus statusId ;
+            if (regApplicationLog.getOldStatus()!=null){
+                statusId = LogStatus.getLogStatus(regApplicationLog.getOldStatus());
+                regApplicationLog.setOldStatus(null);
+            }else{
+                regApplicationLog.setOldStatus(regApplicationLog.getStatus().getId());
+                statusId = LogStatus.Initial;
+            }
+            regApplicationLog.setShow(true);
+            regApplicationLogService.update(regApplicationLog,statusId,"",userService.getCurrentUserFromContext().getId());
+        }
+
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+    }
 
 }

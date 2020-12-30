@@ -248,12 +248,12 @@
                             if ([[${isAdmin}]] && row[9] !== null){
                                 if (row[10]==true){
                                     html+='<br/>' +
-                                        '<a href="'+editPerformerLink+'?id='+row[0]+'" class="btn btn-danger btn-sm ">' +
+                                        '<a href="'+editPerformerLink+'?id='+row[9].id+'" class="btn btn-danger btn-sm ">' +
                                         '<i class="feather icon-file-plus" style="margin-right: 0px;"></i>' +
                                         '</a>';
                                 }else{
                                     html+='<br/>' +
-                                        '<a href="'+editPerformerLink+'?id='+row[0]+'" class="btn btn-success btn-sm ">' +
+                                        '<a href="'+editPerformerLink+'?id='+row[9].id+'" class="btn btn-success btn-sm ">' +
                                         '<i class="feather icon-file-plus" style="margin-right: 0px;"></i>' +
                                         '</a>';
                                 }
