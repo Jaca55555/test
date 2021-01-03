@@ -95,7 +95,17 @@ public class RegApplicationCategoryFourAdditionalServiceImpl implements RegAppli
         regApplicationCategoryFourAdditionalOld.setProductionCapacity(regApplicationCategoryFourAdditional.getProductionCapacity());
         regApplicationCategoryFourAdditionalOld.setTechnologicalProcess(regApplicationCategoryFourAdditional.getTechnologicalProcess());
         regApplicationCategoryFourAdditionalOld.setMaterialAdditional(regApplicationCategoryFourAdditional.getMaterialAdditional());
+        regApplicationCategoryFourAdditionalOld.setStep3Material(regApplicationCategoryFourAdditional.getStep3Material());
         regApplicationCategoryFourAdditionalOld.setSourceMaterial(regApplicationCategoryFourAdditional.getSourceMaterial());
+        regApplicationCategoryFourAdditionalOld.setStep3Texno(regApplicationCategoryFourAdditional.getStep3Texno());
+        regApplicationCategoryFourAdditionalOld.setStep3Heat(regApplicationCategoryFourAdditional.getStep3Heat());
+        regApplicationCategoryFourAdditionalOld.setStep3Water(regApplicationCategoryFourAdditional.getStep3Water());
+        regApplicationCategoryFourAdditionalOld.setStep3Sewer(regApplicationCategoryFourAdditional.getStep3Sewer());
+        regApplicationCategoryFourAdditionalOld.setStep3Sewage(regApplicationCategoryFourAdditional.getStep3Sewage());
+        regApplicationCategoryFourAdditionalOld.setStep3WaterTreatment(regApplicationCategoryFourAdditional.getStep3WaterTreatment());
+        regApplicationCategoryFourAdditionalOld.setStep3Waste(regApplicationCategoryFourAdditional.getStep3Waste());
+        regApplicationCategoryFourAdditionalOld.setStep3Event(regApplicationCategoryFourAdditional.getStep3Event());
+        regApplicationCategoryFourAdditionalOld.setStep3Household(regApplicationCategoryFourAdditional.getStep3Household());
         return update(regApplicationCategoryFourAdditionalOld,userId);
     }
 

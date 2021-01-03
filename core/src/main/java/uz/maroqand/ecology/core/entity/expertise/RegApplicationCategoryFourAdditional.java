@@ -35,43 +35,43 @@ public class RegApplicationCategoryFourAdditional {
 
     //step 2
 
-    //Умумий қисм
+    //Объект худудининг фойдаланиш тури
     @Column(name = "object_blanket" , columnDefinition = "TEXT")
     private String objectBlanket;
 
-    //Танланган ёки ажратилган ер майдони ﻿ҳақида қисқача маълумот
+    /*//Танланган ёки ажратилган ер майдони ﻿ҳақида қисқача маълумот
     @Column(name = "coordinate_description" , columnDefinition = "TEXT")
-    private String coordinateDescription;
+    private String coordinateDescription;*/
 
-    //Энг яқин аҳоли хонадонлари жойлашган жойлар (чегарадош объектлар тўғрисида маълумот)
+    //Энг якин турар-жой биноларигача бўлган масофа (м)
     @Column(name = "bordering_objects", columnDefinition = "TEXT")
     private String borderingObjects;
 
-    //Объектнинг муҳофаза қилинадиган ҳудудларга нисбатан жойлашганлиги ﻿тўғрисида маълумот
+    //Ер усти сув оқимларининг мавжудлиги/мавжуд эмаслиги тўғрисида маълумот
     @Column(name = "territory_description", columnDefinition = "TEXT")
     private String territoryDescription;
 
-    //Маданий мерос объекларига нисбатан ﻿жойлашганлиги тўғрисида маълумот
+    //Ер ости сувлари тўғрисида маълумот
     @Column(name = "cultural_heritage_description" , columnDefinition = "TEXT")
     private String culturalHeritageDescription;
 
-    //Танланган ер участкасидаги мавжуд ҳайвонот дунёси
+    //Муҳофаза этиладиган табиий ҳудудлар тўғрисида маълумот
     @Column(name = "animal_count_additional" , columnDefinition = "TEXT")
     private String animalCountAdditional;
 
-    //Танланган ер участкасидаги мавжуд усимлик дунёси (номи, сони, қурилиш остига тушувчи дарахтлар сони)
+    //Маданий мерос объектлари тўғрисида маълумот
     @Column(name = "tree_count_additional" , columnDefinition = "TEXT")
     private String treeCountAdditional;
 
-    //Ер ости ва ер усти сувлари тўғрисида маълумот (гидрологик, гидрогеологик, геологик шароитлар)
+    //Лойиҳалаш ишлари олиб борилаётган ҳудудда Ўзбекистон Республикаси
     @Column(name = "water_information" , columnDefinition = "TEXT")
     private String waterInformation;
 
-    //Мавжуд ва режалаштирилаётган мухандислик иншоотлари тугрисида маьлумот
+    //“Қизил китоби”га киритилган ўсимликлар ва ҳайвонларнинг мавжудлиги/мавжуд эмаслиги тўғрисидаги маълумотлар
     @Column(name = "structures_information" , columnDefinition = "TEXT")
     private String structuresInformation;
 
-    //Энг катта шамол йўналиши, йил давомида иситиладиган давр хамда ўртача шамол тезлиги тўғрисида маълумот
+    //Объектнинг режалаштирилган жойлашуви ҳудудида дарахтларнинг ўсиши ёки мавжуд эмаслиги, шунингдек, кесиладиган дарахтларнинг мавжудлиги/мавжуд эмаслиги тўғрисида маълумот
     @Column(name = "about_wind_speed" , columnDefinition = "TEXT")
     private String aboutWindSpeed;
 
@@ -97,21 +97,69 @@ public class RegApplicationCategoryFourAdditional {
     @Column(name = "work_schedule", columnDefinition = "TEXT")
     private String workSchedule;
 
-    //Объектнинг ишлаб чиқариш куввати
+    //Режалаштирилган фаолият, объектнинг ишлаб чиқариш қуввати  (т/йилига,  дона/йилигав.ҳ)
     @Column(name = "production_capacity", columnDefinition = "TEXT")
     private String productionCapacity;
 
-    //Технологик жараён тавсифи
+    //Ишлаб чиқариладиган маҳсулотлари рўйхати
     @Column(name = "technological_process", columnDefinition = "TEXT")
     private String technologicalProcess;
 
-    //Хомашё тавсифи ва миқдори
+    //Корхонанинг таркиби
     @Column(name = "material_additional", columnDefinition = "TEXT")
     private String materialAdditional;
 
-    //Хомашё манбалари
+    //Технологик жиҳозларнинг таркиби
+    @Column(name = "step_3_material", columnDefinition = "TEXT")
+    private String step3Material;
+
+    //Хом ашё ва материалларнинг таркиби
     @Column(name = "source_material", columnDefinition = "TEXT")
     private String sourceMaterial;
+
+    //Технологик жараённинг тавсифи
+    @Column(name = "step_3_texno", columnDefinition = "TEXT")
+    private String step3Texno;
+
+    //Объектнинг иссиқлик таъминоти манбаи
+    @Column(name = "step_3_heat", columnDefinition = "TEXT")
+    private String step3Heat;
+
+    //Объектда сув таъминоти манбаи, сув истеъмолчилари
+    @Column(name = "step_3_water", columnDefinition = "TEXT")
+    private String step3Water;
+
+    //Канализация ва канализация тозалаш иншоотларининг мавжудлиги
+    @Column(name = "step_3_sewer", columnDefinition = "TEXT")
+    private String step3Sewer;
+
+    //Оқова сувларни қабул қилувчи
+    @Column(name = "step_3_sewage", columnDefinition = "TEXT")
+    private String step3Sewage;
+
+    //Сувни қайта ишлаш ёки сувни қайта ишлатиш тизимларининг мавжудлиги
+    @Column(name = "step_3_water_treatment", columnDefinition = "TEXT")
+    private String step3WaterTreatment;
+
+    //Чиқиндилар рўйхати
+    @Column(name = "step_3_waste", columnDefinition = "TEXT")
+    private String step3Waste;
+
+    //Режалаштирилган экологик чора-тадбирлар
+    @Column(name = "step_3_event", columnDefinition = "TEXT")
+    private String step3Event;
+
+    //Маиший чиқиндилар билан боғлиқ ишларни амлага оширилиши тўғрисида маълумот
+    @Column(name = "step_3_household", columnDefinition = "TEXT")
+    private String step3Household;
+
+
+    @ManyToMany
+    @JoinTable(name = "step3_jt_files",
+            joinColumns = { @JoinColumn(name = "step3") },
+            inverseJoinColumns = { @JoinColumn(name = "files")})
+    @OrderBy(value = "id asc")
+    private Set<File> planFiles;
 
     //step 4
 

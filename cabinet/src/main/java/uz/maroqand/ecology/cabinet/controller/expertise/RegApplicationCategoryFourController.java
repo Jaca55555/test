@@ -434,7 +434,7 @@ public class RegApplicationCategoryFourController {
         }
         regApplicationCategoryFourAdditional.setRegApplicationId(regApplication.getId());
         regApplicationCategoryFourAdditional.setObjectBlanket(objectBlanket);
-        regApplicationCategoryFourAdditional.setCoordinateDescription(coordinateDescription);
+//        regApplicationCategoryFourAdditional.setCoordinateDescription(coordinateDescription);
         regApplicationCategoryFourAdditional.setBorderingObjects(borderingObjects);
         regApplicationCategoryFourAdditional.setTerritoryDescription(territoryDescription);
         regApplicationCategoryFourAdditional.setCulturalHeritageDescription(culturalHeritageDescription);
@@ -541,6 +541,95 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
 
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep3;
+    }
+
+    //fileUpload
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> expertiseRegApplicationFourCategoryStep3FileUpload(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "file_name") String fileNname,
+            @RequestParam(name = "file") MultipartFile multipartFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(id);
+        if (regApplicationCategoryFourAdditional == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"regApplicationCategoryFourAdditional="+regApplicationCategoryFourAdditional.getId(),fileNname);
+        if (file != null) {
+            Set<File> fileSet = regApplicationCategoryFourAdditional.getPlanFiles();
+            if (regApplicationCategoryFourAdditional.getPlanFiles()==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            regApplicationCategoryFourAdditional.setPlanFiles(fileSet);
+            regApplicationCategoryFourAdditionalService.save(regApplicationCategoryFourAdditional);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("link", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3FileDownload+ "?file_id=" + file.getId() + "&id=" + regApplicationCategoryFourAdditional.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    //fileDownload
+    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3FileDownload)
+    public ResponseEntity<Resource> expertiseRegApplicationFourCategoryStep3FileDownload(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "id") Integer id
+    ){
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            RegApplicationCategoryFourAdditional applicationCategoryFourAdditionalirPool = regApplicationCategoryFourAdditionalService.getById(id);
+            if (applicationCategoryFourAdditionalirPool==null || applicationCategoryFourAdditionalirPool.getPlanFiles()==null
+                    || applicationCategoryFourAdditionalirPool.getPlanFiles().isEmpty() || !applicationCategoryFourAdditionalirPool.getPlanFiles().contains(file)){
+                return null;
+            }
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    //fileDelete
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3FileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> expertiseRegApplicationFourCategoryStep3FileDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (regApplicationCategoryFourAdditional == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = regApplicationCategoryFourAdditional.getPlanFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                regApplicationCategoryFourAdditionalService.save(regApplicationCategoryFourAdditional);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3, method = RequestMethod.POST)

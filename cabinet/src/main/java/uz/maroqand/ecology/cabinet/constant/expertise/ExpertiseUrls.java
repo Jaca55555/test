@@ -184,6 +184,11 @@ public class ExpertiseUrls {
 
 
     public static final String ExpertiseRegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileUpload = RegApplicationFourCategory + "/step3_file_upload";
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileDownload = RegApplicationFourCategory + "/step3_file_download";
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileDelete = RegApplicationFourCategory + "/step3_file_delete";
+
     public static final String ExpertiseRegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
 
     public static final String ExpertiseRegApplicationFourCategoryAirPoolCreate = RegApplicationFourCategory + "/air_pool_create";

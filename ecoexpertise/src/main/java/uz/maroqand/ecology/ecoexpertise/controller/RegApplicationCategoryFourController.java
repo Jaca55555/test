@@ -404,7 +404,7 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "objectBlanket") String objectBlanket,
-            @RequestParam(name = "coordinateDescription") String coordinateDescription,
+//            @RequestParam(name = "coordinateDescription") String coordinateDescription,
             @RequestParam(name = "borderingObjects") String borderingObjects,
             @RequestParam(name = "territoryDescription") String territoryDescription,
             @RequestParam(name = "culturalHeritageDescription") String culturalHeritageDescription,
@@ -435,7 +435,7 @@ public class RegApplicationCategoryFourController {
         }
         regApplicationCategoryFourAdditional.setRegApplicationId(regApplication.getId());
         regApplicationCategoryFourAdditional.setObjectBlanket(objectBlanket);
-        regApplicationCategoryFourAdditional.setCoordinateDescription(coordinateDescription);
+//        regApplicationCategoryFourAdditional.setCoordinateDescription(coordinateDescription);
         regApplicationCategoryFourAdditional.setBorderingObjects(borderingObjects);
         regApplicationCategoryFourAdditional.setTerritoryDescription(territoryDescription);
         regApplicationCategoryFourAdditional.setCulturalHeritageDescription(culturalHeritageDescription);
@@ -521,6 +521,7 @@ public class RegApplicationCategoryFourController {
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep3(
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "field",required = false) Integer field,
             Model model
             ){
 
@@ -536,12 +537,102 @@ public class RegApplicationCategoryFourController {
         }
 
         model.addAttribute("regApplication",regApplication);
+        model.addAttribute("field",field);
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional
         );
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep3;
+    }
+
+    //fileUpload
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3FileUpload, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> regApplicationFourCategoryStep3FileUpload(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "file_name") String fileNname,
+            @RequestParam(name = "file") MultipartFile multipartFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(id);
+        if (regApplicationCategoryFourAdditional == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+
+        File file = fileService.uploadFile(multipartFile, user.getId(),"regApplicationCategoryFourAdditional="+regApplicationCategoryFourAdditional.getId(),fileNname);
+        if (file != null) {
+            Set<File> fileSet = regApplicationCategoryFourAdditional.getPlanFiles();
+            if (fileSet==null) fileSet = new HashSet<>();
+            fileSet.add(file);
+            regApplicationCategoryFourAdditional.setPlanFiles(fileSet);
+            regApplicationCategoryFourAdditionalService.save(regApplicationCategoryFourAdditional);
+
+            responseMap.put("name", file.getName());
+            responseMap.put("link", RegUrls.RegApplicationFourCategoryStep3FileDownload+ "?file_id=" + file.getId() + "&id=" + regApplicationCategoryFourAdditional.getId());
+            responseMap.put("fileId", file.getId());
+            responseMap.put("status", 1);
+        }
+        return responseMap;
+    }
+
+    //fileDownload
+    @RequestMapping(RegUrls.RegApplicationFourCategoryStep3FileDownload)
+    public ResponseEntity<Resource> regApplicationFourCategoryStep3FileDownload(
+            @RequestParam(name = "file_id") Integer fileId,
+            @RequestParam(name = "id") Integer id
+    ){
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(id);
+            if (regApplicationCategoryFourAdditional==null || regApplicationCategoryFourAdditional.getPlanFiles()==null
+                    || regApplicationCategoryFourAdditional.getPlanFiles().isEmpty() || !regApplicationCategoryFourAdditional.getPlanFiles().contains(file)){
+                return null;
+            }
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    //fileDelete
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3FileDelete, method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String, Object> regApplicationFourCategoryStep3FileDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "fileId") Integer fileId
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(id);
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", 0);
+
+        if (regApplicationCategoryFourAdditional == null) {
+            responseMap.put("message", "Object not found.");
+            return responseMap;
+        }
+        File file = fileService.findByIdAndUploadUserId(fileId, user.getId());
+
+        if (file != null) {
+            Set<File> fileSet = regApplicationCategoryFourAdditional.getPlanFiles();
+            if(fileSet.contains(file)) {
+                fileSet.remove(file);
+                regApplicationCategoryFourAdditionalService.save(regApplicationCategoryFourAdditional);
+
+                file.setDeleted(true);
+                file.setDateDeleted(new Date());
+                file.setDeletedById(user.getId());
+                fileService.save(file);
+                responseMap.put("status", 1);
+            }
+        }
+        return responseMap;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep3, method = RequestMethod.POST)
@@ -562,10 +653,18 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect + "#field=2";
         }
 
-        regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
-        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
-        regApplicationService.update(regApplication);
-        return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id;
+
+        regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
+        if (regApplicationCategoryFourAdditionalOld.getPlanFiles()==null
+                || regApplicationCategoryFourAdditionalOld.getPlanFiles().isEmpty()
+                || regApplicationCategoryFourAdditionalOld.getPlanFiles().size()==0
+        ){
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id + "&field=1";
+        }else{
+            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
+            regApplicationService.update(regApplication);
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id;
+        }
     }
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.GET)
