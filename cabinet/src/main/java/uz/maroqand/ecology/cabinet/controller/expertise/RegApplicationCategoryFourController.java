@@ -191,10 +191,10 @@ public class RegApplicationCategoryFourController {
             case APPLICANT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
             case     ABOUT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
             case     STEP3: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + regApplication.getId();
-            case     STEP4: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
-            case     STEP5: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
-            case     STEP6: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
-            case     STEP7: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
+//            case     STEP4: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
+//            case     STEP5: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
+//            case     STEP6: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
+//            case     STEP7: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
             case   WAITING: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
             case  CONTRACT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + regApplication.getId();
             case   PAYMENT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
@@ -651,7 +651,7 @@ public class RegApplicationCategoryFourController {
         }
 
         regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
-        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
+//        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
         regApplicationService.update(regApplication);
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id;
     }
@@ -678,7 +678,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id);
         model.addAttribute("next_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4Submit + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4;
     }
@@ -870,7 +870,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("air_pools",regApplicationCategoryFourAdditional.getAirPools());
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4_2;
 
@@ -1177,7 +1177,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("step4_3_total",regApplicationCategoryFourAdditionalService.step4_3_total(regApplicationCategoryFourAdditional));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4_2 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
     return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep4_3;
     }
@@ -1347,7 +1347,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
 
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep5;
     }
@@ -1558,7 +1558,7 @@ public class RegApplicationCategoryFourController {
 
         regApplicationCategoryFourAdditionalService.saveStep5(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
 
-        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
+//        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
         regApplicationService.update(regApplication);
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + id;
@@ -1587,7 +1587,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + id);
         model.addAttribute("next_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
 
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep6;
     }
@@ -1724,7 +1724,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStep7;
     }
 
@@ -1788,7 +1788,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryWaiting;
     }
 

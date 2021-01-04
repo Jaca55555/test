@@ -192,10 +192,10 @@ public class RegApplicationCategoryFourController {
             case APPLICANT: return "redirect:" + RegUrls.RegApplicationFourCategoryApplicant + "?id=" + regApplication.getId();
             case     ABOUT: return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + regApplication.getId();
             case     STEP3: return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + regApplication.getId();
-            case     STEP4: return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
-            case     STEP5: return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
-            case     STEP6: return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
-            case     STEP7: return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
+//            case     STEP4: return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + regApplication.getId();
+//            case     STEP5: return "redirect:" + RegUrls.RegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
+//            case     STEP6: return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
+//            case     STEP7: return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
             case   WAITING: return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
             case  CONTRACT: return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + regApplication.getId();
             case   PAYMENT: return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
@@ -538,8 +538,7 @@ public class RegApplicationCategoryFourController {
 
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("field",field);
-        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional
-        );
+        model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
 
@@ -661,9 +660,17 @@ public class RegApplicationCategoryFourController {
         ){
             return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id + "&field=1";
         }else{
-            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
+
+            RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
+                RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
+                regApplication.setConfirmLogAt(new Date());
+                regApplication.setConfirmLogId(regApplicationLog.getId());
+                regApplication.setStatus(RegApplicationStatus.CheckSent);
+            }
+            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.WAITING);
             regApplicationService.update(regApplication);
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id;
+            return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
         }
     }
 
@@ -689,7 +696,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
         model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep4Submit + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep4;
     }
@@ -881,7 +888,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("air_pools",regApplicationCategoryFourAdditional.getAirPools());
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep4_2;
 
@@ -1188,7 +1195,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("step4_3_total",regApplicationCategoryFourAdditionalService.step4_3_total(regApplicationCategoryFourAdditional));
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4_2 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP4.ordinal()+1);
 
     return RegTemplates.RegApplicationFourCategoryStep4_3;
     }
@@ -1358,7 +1365,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep4 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP5.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep5;
     }
@@ -1569,7 +1576,7 @@ public class RegApplicationCategoryFourController {
 
         regApplicationCategoryFourAdditionalService.saveStep5(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
 
-        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
+//        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP6);
         regApplicationService.update(regApplication);
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id;
@@ -1598,7 +1605,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep5 + "?id=" + id);
         model.addAttribute("next_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP6.ordinal()+1);
 
         return RegTemplates.RegApplicationFourCategoryStep6;
     }
@@ -1735,7 +1742,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep6 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryStep7;
     }
 
@@ -1799,7 +1806,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
         model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
-        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryWaiting;
     }
 

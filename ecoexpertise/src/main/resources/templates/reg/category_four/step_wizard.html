@@ -25,7 +25,8 @@
                     <p class="m-0" th:text="#{reg_application_category_four.step_3}">This is step content</p>
                 </a>
             </li>
-            <li th:class="${step_id == 4 ? 'nav-item active' : step_id > 4? 'nav-item done' : 'nav-item'}">
+
+            <!--<li th:class="${step_id == 4 ? 'nav-item active' : step_id > 4? 'nav-item done' : 'nav-item'}">
                 <a th:href="${step_id > 4 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStep4 + '?id=' + regApplication.id : '#'}" class="nav-link">
                     <h6 th:text="#{sys_step_4}">Step 4</h6>
                     <p class="m-0" th:text="#{reg_application_category_four.step_4}">This is step content</p>
@@ -48,22 +49,23 @@
                     <h6 th:text="#{sys_step_7}">Step 7</h6>
                     <p class="m-0" th:text="#{reg_application_category_four.step_7}">This is step content</p>
                 </a>
-            </li>
-            <li th:class="${step_id == 8 ? 'nav-item active' : step_id > 8? 'nav-item done' : 'nav-item'}">
-                <a th:href="${step_id > 8 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryContract + '?id=' + regApplication.id : '#'}" class="nav-link">
-                    <h6 th:text="#{sys_step_8}">Step 3</h6>
+            </li>-->
+
+            <li th:class="${step_id == 4 ? 'nav-item active' : step_id > 4 ? 'nav-item done' : 'nav-item'}">
+                <a th:href="${step_id > 4 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryContract + '?id=' + regApplication.id : '#'}" class="nav-link">
+                    <h6 th:text="#{sys_step_4}">Step 3</h6>
                     <p class="m-0" th:text="#{reg_application.step_contract}">This is step content</p>
                 </a>
             </li>
-            <li th:class="${step_id == 9 ? 'nav-item active' : step_id > 9? 'nav-item done' : 'nav-item'}">
-                <a th:href="${step_id > 9 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryPrepayment + '?id=' + regApplication.id : '#'}" class="nav-link">
-                    <h6 th:text="#{sys_step_9}">Step 4</h6>
+            <li th:class="${step_id == 5 ? 'nav-item active' : step_id > 5 ? 'nav-item done' : 'nav-item'}">
+                <a th:href="${step_id > 5 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryPrepayment + '?id=' + regApplication.id : '#'}" class="nav-link">
+                    <h6 th:text="#{sys_step_5}">Step 4</h6>
                     <p class="m-0" th:text="#{reg_application.step_prepayment}">This is step content</p>
                 </a>
             </li>
-            <li th:class="${step_id == 10 ? 'nav-item active' : step_id > 10? 'nav-item done' : 'nav-item'}">
-                <a th:href="${step_id > 9 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStatus + '?id=' + regApplication.id : '#'}" class="nav-link">
-                    <h6 th:text="#{sys_step_10}">Step 5</h6>
+            <li th:class="${step_id == 6 ? 'nav-item active' : step_id > 6 ? 'nav-item done' : 'nav-item'}">
+                <a th:href="${step_id > 6 ? T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStatus + '?id=' + regApplication.id : '#'}" class="nav-link">
+                    <h6 th:text="#{sys_step_6}">Step 5</h6>
                     <p class="m-0" th:text="#{reg_application.step_status}">This is step text</p>
                 </a>
             </li>
