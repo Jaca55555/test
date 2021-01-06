@@ -410,7 +410,7 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "culturalHeritageDescription") String culturalHeritageDescription,
             @RequestParam(name = "animalCountAdditional") String animalCountAdditional,
             @RequestParam(name = "treeCountAdditional") String treeCountAdditional,
-            @RequestParam(name = "waterInformation") String waterInformation,
+//            @RequestParam(name = "waterInformation") String waterInformation,
             @RequestParam(name = "structuresInformation") String structuresInformation,
             @RequestParam(name = "aboutWindSpeed") String aboutWindSpeed,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
@@ -441,7 +441,7 @@ public class RegApplicationCategoryFourController {
         regApplicationCategoryFourAdditional.setCulturalHeritageDescription(culturalHeritageDescription);
         regApplicationCategoryFourAdditional.setAnimalCountAdditional(animalCountAdditional);
         regApplicationCategoryFourAdditional.setTreeCountAdditional(treeCountAdditional);
-        regApplicationCategoryFourAdditional.setWaterInformation(waterInformation);
+//        regApplicationCategoryFourAdditional.setWaterInformation(waterInformation);
         regApplicationCategoryFourAdditional.setStructuresInformation(structuresInformation);
         regApplicationCategoryFourAdditional.setAboutWindSpeed(aboutWindSpeed);
         regApplicationCategoryFourAdditionalService.save(regApplicationCategoryFourAdditional);

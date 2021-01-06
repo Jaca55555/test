@@ -471,10 +471,17 @@ public class RegApplicationController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
         }
 
+        List<Category> categoryList = new ArrayList<>();
+        for (Category category: Category.getCategoryList()) {
+            if (category.getId()!=4){
+                categoryList.add(category);
+            }
+        }
+
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
-        model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
@@ -1301,6 +1308,7 @@ public class RegApplicationController {
         List<Category> categoryList = new LinkedList<>();
         List<Requirement> requirementList = requirementService.getRequirementExpertise(objectId);
         for(Requirement requirement: requirementList){
+            if (requirement.getCategory().getId()!=4)
             categoryList.add(requirement.getCategory());
         }
         List<Activity> activityList = activityService.getByInCategory(categoryList);
