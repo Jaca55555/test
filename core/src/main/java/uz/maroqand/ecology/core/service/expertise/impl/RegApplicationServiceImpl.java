@@ -299,7 +299,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                 if (filterDto!=null) {
                     if (filterDto.getStatus()!=null){
-                        predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getStatus()));
+                        System.out.println("filterDto.getStatus()"+filterDto.getLogStatus());
+//                        System.out.println(root.get("status").get("id"));
+                        predicates.add(criteriaBuilder.equal(root.get("agreementStatus"),filterDto.getLogStatus()));
                     }
 
                     if (filterDto.getStatusForReg()!=null){
@@ -322,16 +324,31 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                     }
 
-                    Date dateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
+                    Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
+                    Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
+
+                    if (regDateBegin != null && regDateEnd == null) {
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), regDateBegin));
+                    }
+                    if (regDateEnd != null && regDateBegin == null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), regDateEnd));
+                    }
+                    if (regDateBegin != null && regDateEnd != null) {
+                        predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
+                    }
+
+                    Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);
+                    Date dateEnd = DateParser.TryParse(filterDto.getDateEnd(), Common.uzbekistanDateFormat);
+//                    System.out.println("dateBegin"+dateBegin);
+//                    System.out.println("dateEnd"+dateEnd);
                     if (dateBegin != null && dateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), dateBegin));
+                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateBegin));
                     }
                     if (dateEnd != null && dateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), dateEnd));
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateEnd));
                     }
                     if (dateBegin != null && dateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), dateBegin, dateEnd));
+                        predicates.add(criteriaBuilder.between(root.get("confirmLogAt").as(Date.class), dateBegin, dateEnd));
                     }
 
                     Date deadlineDateBegin = DateParser.TryParse(filterDto.getDeadlineDateBegin(), Common.uzbekistanDateFormat);
