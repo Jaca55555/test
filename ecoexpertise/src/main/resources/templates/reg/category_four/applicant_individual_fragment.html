@@ -140,16 +140,16 @@
                 <label class="col-form-label" th:text="#{sys_mobile_phone}">Мобильный телефон (для смс уведомление);</label>
                 <span class="required">*</span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <input class="form-control phone" required="" id="individualMobilePhone" name="individualMobilePhone" th:value="${individual.individualMobilePhone}" data-parsley-maxlength="17" data-parsley-minlength="17" placeholder="+998 ( -- ) --- -- --">
                 <span id="errorPhone_individualMobilePhone"></span>
             </div>
-            <div class="col-md-2 pl-0">
-                <button class="btn btn-info btn-block" type="button" id="send_code_button_individualMobilePhone" onclick="getSMSCode('individualMobilePhone')" >
-                    <span id="timer_individualMobilePhone"></span>
-                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>
-                </button>
-            </div>
+<!--            <div class="col-md-2 pl-0">-->
+<!--                <button class="btn btn-info btn-block" type="button" id="send_code_button_individualMobilePhone" onclick="getSMSCode('individualMobilePhone')" >-->
+<!--                    <span id="timer_individualMobilePhone"></span>-->
+<!--                    <span th:text="#{sys_phone.confirm}">Tasdiqlash</span>-->
+<!--                </button>-->
+<!--            </div>-->
         </div>
 
         <div class="form-group row" id="sms_code_individualMobilePhone" style="display: none">
