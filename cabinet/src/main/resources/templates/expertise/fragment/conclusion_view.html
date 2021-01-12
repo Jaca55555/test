@@ -19,7 +19,11 @@
 </style>
 <!--contenteditable="true"-->
 
-<div class="card-block" id="conclusion-for-print">
+<div class="card-block" id="conclusion-for-print"  style=" width: 100%;height: 29.7cm;" th:if="${conclusion!=null && conclusion.conclusionWordFileId!=null}">
+    <iframe th:src="${'http://docs.google.com/gview?url=http://bo.eco-service.uz/expertise/conclusion/reg_word_file_download_for_view?id='+conclusion.id+'_' + conclusion.conclusionWordFileId +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+
+</div>
+<div class="card-block" id="conclusion-for-print" th:if="${conclusion!=null && conclusion.conclusionWordFileId==null}">
     <p th:utext="${conclusion!=null? #strings.replace(conclusion.htmlText,'contenteditable',''):''}"></p>
 </div>
 

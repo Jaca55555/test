@@ -65,7 +65,7 @@
                                                                     <table class="table border-right border-left border-bottom p-2">
                                                                         <tbody >
                                                                         <tr th:each="permission : ${role.permissions}" th:if="${#lists.size(role.permissions)>0}">
-                                                                            <td class="text-left pl-2" style="width: 80%"><span th:text="${permission.name}"></span></td>
+                                                                            <td class="text-left pl-2" style="width: 80%"><span th:text="#{${permission.name}}"></span></td>
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>

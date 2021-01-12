@@ -361,6 +361,18 @@ public class PaymentFileController {
         return BillingTemplates.PaymentFileAllEdit;
     }
 
+    @RequestMapping(BillingUrls.PaymentFilIsRemoveInvoiceView)
+    public String paymentFilIsRemoveInvoiceView(@RequestParam(name = "id") Integer paymentFileId){
+
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile!=null && paymentFile.getInvoice()!=null && !paymentFile.getInvoice().isEmpty()){
+            paymentFileService.removeInvoiceIsDublicate(paymentFile,userService.getCurrentUserFromContext().getId());
+        }
+
+        return "redirect:" + BillingUrls.PaymentFileAllList;
+    }
+
+
     @RequestMapping(BillingUrls.PaymentFileAllEditSubmit)
     public String joinAllInvoiceId(
             @RequestParam(name = "id") Integer id,

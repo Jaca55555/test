@@ -1,7 +1,5 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -22,13 +20,13 @@ import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
-import uz.maroqand.ecology.core.entity.expertise.Conclusion;
-import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -64,6 +62,9 @@ public class ConclusionCompleteController {
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
+    private final DocumentEditorService documentEditorService;
+    private final FileService fileService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public ConclusionCompleteController(
@@ -81,8 +82,8 @@ public class ConclusionCompleteController {
             CoordinateService coordinateService,
             ConclusionService conclusionService,
             NotificationService notificationService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -98,6 +99,9 @@ public class ConclusionCompleteController {
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
+        this.documentEditorService = documentEditorService;
+        this.fileService = fileService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
@@ -171,7 +175,8 @@ public class ConclusionCompleteController {
                     (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
-                    agreementCompleteLog.getId()
+                    agreementCompleteLog.getId(),
+                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
             });
         }
 
@@ -204,6 +209,12 @@ public class ConclusionCompleteController {
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
 
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
+
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);
         model.addAttribute("agreementLogList", agreementLogList);
@@ -229,9 +240,8 @@ public class ConclusionCompleteController {
         if (conclusionLog==null){
             return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
+
         regApplicationLogService.update(conclusionLog, LogStatus.Approved, "", user.getId());
-
-
 
         RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
         switch (performerLog.getStatus()){
@@ -246,9 +256,9 @@ public class ConclusionCompleteController {
             conclusion.setNumber(number);
             conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
+            conclusionService.complete(conclusion.getId());
+            documentEditorService.conclusionComplete(conclusion);
         }
-
-        conclusionService.complete(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getId());
 
         notificationService.create(
                 regApplication.getCreatedById(),

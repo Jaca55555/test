@@ -59,6 +59,7 @@ public class ForwardingController {
     private final NotificationService notificationService;
     private final CommentService commentService;
     private final SmsSendService smsSendService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public ForwardingController(
@@ -77,8 +78,8 @@ public class ForwardingController {
             ToastrService toastrService,
             NotificationService notificationService,
             CommentService commentService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -95,6 +96,7 @@ public class ForwardingController {
         this.notificationService = notificationService;
         this.commentService = commentService;
         this.smsSendService = smsSendService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -138,6 +140,7 @@ public class ForwardingController {
             Client client = clientService.getById(regApplication.getApplicantId());
             RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -149,7 +152,8 @@ public class ForwardingController {
                     performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
                     performerLog!=null ? performerLog.getStatus().getId():"",
                     forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
-                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():""
+                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():"",
+                    regApplicationService.beforeOrEqualsTrue(regApplication)
             });
         }
 
@@ -182,6 +186,13 @@ public class ForwardingController {
         model.addAttribute("performerList", userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
         model.addAttribute("departmentList", departmentService.getByOrganizationId(user.getOrganizationId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

@@ -154,7 +154,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         Double paymentAmount = getPayAmount(invoice.getId());
         paymentAmount+=0.50;
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-        if (regApplication!=null && regApplication.getCreatedById()!=null && regApplication.getBudget()){
+        if (regApplication!=null
+                && regApplication.getCreatedById()!=null
+                && regApplication.getBudget()){
             double partialSuccess = invoice.getAmount()*0.15; // budjet tashkiloti 15 % to'lasa
             if (paymentAmount>=partialSuccess && invoice.getAmount()>paymentAmount){
                 User user = userService.findById(regApplication.getCreatedById());
@@ -232,6 +234,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public Invoice getInvoice(Integer id) {
         return invoiceRepository.findByIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public Invoice save(Invoice invoice) {
+        return invoiceRepository.save(invoice);
     }
 
     public Invoice getInvoice(String invoice) {

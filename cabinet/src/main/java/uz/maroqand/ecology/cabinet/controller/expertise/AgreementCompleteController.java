@@ -23,6 +23,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -57,6 +58,8 @@ public class AgreementCompleteController {
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
+    private final FileService fileService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public AgreementCompleteController(
@@ -74,8 +77,8 @@ public class AgreementCompleteController {
             CoordinateService coordinateService,
             ConclusionService conclusionService,
             NotificationService notificationService,
-            SmsSendService smsSendService
-    ) {
+            SmsSendService smsSendService,
+            FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -91,6 +94,8 @@ public class AgreementCompleteController {
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
+        this.fileService = fileService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
@@ -153,6 +158,8 @@ public class AgreementCompleteController {
             if (regApplication!=null && agreementCompleteLog.getIndex()!=null){
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
             }
+
+
             convenientForJSONArray.add(new Object[]{
                     regApplication!=null?regApplication.getId():"",
                     client!=null?client.getTin():"",
@@ -165,7 +172,8 @@ public class AgreementCompleteController {
                     (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
                     agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
                     agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
-                    agreementCompleteLog.getId()
+                    agreementCompleteLog.getId(),
+                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
             });
         }
 
@@ -198,6 +206,12 @@ public class AgreementCompleteController {
 
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("lastCommentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CONFIDENTIAL));
         model.addAttribute("performerLog", performerLog);

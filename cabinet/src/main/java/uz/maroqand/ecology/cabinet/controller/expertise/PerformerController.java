@@ -10,13 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
@@ -29,10 +27,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
-import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.OrganizationService;
-import uz.maroqand.ecology.core.service.sys.SmsSendService;
-import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -68,6 +63,9 @@ public class PerformerController {
     private final ConclusionService conclusionService;
     private final SmsSendService smsSendService;
     private final OrganizationService organizationService;
+    private final DocumentEditorService documentEditorService;
+    private final GlobalConfigs globalConfigs;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public PerformerController(
@@ -89,7 +87,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -109,6 +107,9 @@ public class PerformerController {
         this.conclusionService = conclusionService;
         this.smsSendService = smsSendService;
         this.organizationService = organizationService;
+        this.documentEditorService = documentEditorService;
+        this.globalConfigs = globalConfigs;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -153,6 +154,7 @@ public class PerformerController {
         for (RegApplication regApplication : regApplicationList){
             Client client = clientService.getById(regApplication.getApplicantId());
             RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     client.getTin(),
@@ -164,7 +166,8 @@ public class PerformerController {
                     regApplication.getAgreementStatus() != null ? helperService.getTranslation(regApplication.getAgreementStatus().getAgreementName(),locale):"",
                     regApplication.getAgreementStatus() != null ? regApplication.getAgreementStatus().getId():"",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getPerformerName(), locale):"",
-                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():""
+                    regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId():"",
+                    regApplicationService.beforeOrEqualsTrue(regApplication)
             });
         }
 
@@ -184,6 +187,7 @@ public class PerformerController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.PerformerList;
         }
+
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -204,22 +208,38 @@ public class PerformerController {
         }
         model.addAttribute("developerOpfName", developerOpfName);
 
+        RegApplicationLog performerLog = null;
         if (regApplication.getAgreementStatus() != null && regApplication.getAgreementStatus().equals(LogStatus.Denied)){
-            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogIdNext()));
+            performerLog =  regApplicationLogService.getById(regApplication.getPerformerLogIdNext());
             model.addAttribute("action_url", ExpertiseUrls.PerformerActionEdit);
         } else {
-            model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
+            performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             model.addAttribute("action_url", ExpertiseUrls.PerformerAction);
         }
-
+        model.addAttribute("performerLog",performerLog);
         Organization organization = organizationService.getById(user.getOrganizationId());
+        System.out.println(" performe r regApplicationID==" + regApplication.getId());
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        String filename = "";
+        if (conclusion!=null && conclusion.getConclusionWordFileId()!=null){
+            File file = fileService.findById(conclusion.getConclusionWordFileId());
+            filename = file!=null?file.getName():"";
+        }
+        model.addAttribute("filename", filename);
 
-        System.out.println(" performer regApplicationID==" + regApplication.getId());
-        Conclusion conclusion = conclusionService.getById(regApplication.getConclusionId());
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
+
         model.addAttribute("conclusionId", conclusion!=null?conclusion.getId():0);
+        model.addAttribute("performerLogStatus", performerLog != null && performerLog.getStatus() != null && (performerLog.getStatus().equals(LogStatus.Initial) || performerLog.getStatus().equals(LogStatus.Denied)));
         model.addAttribute("conclusionText", conclusion!=null?conclusion.getHtmlText():"");
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("organization", organization);
+        model.addAttribute("ServerIp", globalConfigs.getServerIp());
+        model.addAttribute("LocalIp", globalConfigs.getLocalIp());
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
@@ -233,15 +253,42 @@ public class PerformerController {
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
         model.addAttribute("agreementCompleteLog", regApplicationLogService.getById(regApplication.getAgreementCompleteLogId()));
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
         return ExpertiseTemplates.PerformerView;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.PerformerConclusionIsOnline)
+    @ResponseBody
+    public HashMap<String,Object> performerConclusionIsOnline(@RequestParam(name = "id")Integer regId){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status",0);
+        User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null){
+            result.put("status",-1);
+            return result;
+        }
+        List<String[]> dataForReplacingInDocumentEditor = documentEditorService.getDataForReplacingInMurojaatBlanki(regApplication, locale);
+        documentEditorService.buildMurojaatBlanki(regApplication,dataForReplacingInDocumentEditor, user.getId());
+
+
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regId);
+        if (conclusion==null || conclusion.getConclusionWordFileId()==null){
+            result.put("status",-2);
+            return result;
+        }
+        File file = fileService.findById(conclusion.getConclusionWordFileId());
+        result.put("status",1);
+        result.put("filename",file.getName());
+
+        return result;
     }
 
     @RequestMapping(value = ExpertiseUrls.PerformerAction,method = RequestMethod.POST)
     public String confirmApplication(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-//            @RequestParam(name = "number")String number,
-//            @RequestParam(name = "date")String dateStr,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
@@ -267,13 +314,6 @@ public class PerformerController {
         regApplication.setAgreementStatus(LogStatus.Initial);
         regApplication.setConclusionOnline(conclusionOnline);
         regApplicationService.update(regApplication);
-
-        /*Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        if (conclusion!=null){
-            conclusion.setNumber(number);
-            conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
-            conclusionService.save(conclusion);
-        }*/
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
@@ -395,12 +435,6 @@ public class PerformerController {
         }
         regApplicationService.update(regApplication);
 
-       /* Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        if (conclusion!=null){
-            conclusion.setNumber(number);
-            conclusionService.save(conclusion);
-        }*/
-
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
@@ -439,6 +473,30 @@ public class PerformerController {
         result.put("status",1);
         return result;
     }
+    @RequestMapping(ExpertiseUrls.PerformerConclusionIsSave)
+    @ResponseBody
+    public HashMap<String,Object> getPerformerConclusionIsSave(
+            @RequestParam(name = "id") Integer id
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        Integer status=1;
+        result.put("status",status);
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            status=0;
+            result.put("status",status);
+            return result;
+        }
+        Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
+        if (conclusion == null  || conclusion.getHtmlText()==null || conclusion.getHtmlText().isEmpty()){
+            status=-1;
+            result.put("status",status);
+            return result;
+        }
+
+        return result;
+    }
+
 
     @RequestMapping(ExpertiseUrls.PerformerChangeDeadlineDate)
     @ResponseBody

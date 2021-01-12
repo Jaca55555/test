@@ -24,6 +24,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
@@ -58,6 +59,8 @@ public class AgreementController {
     private final ToastrService toastrService;
     private final ConclusionService conclusionService;
     private final NotificationService notificationService;
+    private final FileService fileService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public AgreementController(
@@ -75,8 +78,8 @@ public class AgreementController {
             CoordinateService coordinateService,
             ToastrService toastrService,
             ConclusionService conclusionService,
-            NotificationService notificationService
-    ){
+            NotificationService notificationService,
+            FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -92,6 +95,8 @@ public class AgreementController {
         this.toastrService = toastrService;
         this.conclusionService = conclusionService;
         this.notificationService = notificationService;
+        this.fileService = fileService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.AgreementList)
@@ -143,6 +148,7 @@ public class AgreementController {
             if (regApplication!=null && regApplicationLog.getIndex()!=null){
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
             }
+
             convenientForJSONArray.add(new Object[]{
                     regApplication!=null?regApplication.getId():"",
                     client!=null?client.getTin():"",
@@ -155,7 +161,8 @@ public class AgreementController {
                     performerLog != null && performerLog.getStatus() != null ? performerLog.getStatus().getId() : "",
                     regApplicationLog.getStatus() != null ? helperService.getTranslation(regApplicationLog.getStatus().getAgreementName(),locale) : "",
                     regApplicationLog.getStatus() != null ? regApplicationLog.getStatus().getId() : "",
-                    regApplicationLog.getId()
+                    regApplicationLog.getId(),
+                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
             });
         }
 
@@ -193,6 +200,13 @@ public class AgreementController {
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         RegApplicationLog agreementCompleteLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.AgreementComplete, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
+
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="category_step4">
+
+<div class="card-block"  >
+<!--    step 4.1-->
+    <div class="row" >
+        <div class="form-group col-md-12" >
+            <div class="card">
+                <div class="card-header">
+                    <h5 th:text="#{sys_step_4.air_pool}">Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table  table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%">№</th>
+                                <th  th:text="#{sys_step_4.name}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4.jobName}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4.fuelType}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4.numberOfSources}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4.substances}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4.airSubstance}">Tadbir nomi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody >
+                            <tr th:id="${'row_' + airPool.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
+                                <td  th:utext="${airPool.id}" style="width: 10%"></td>
+                                <td th:utext="${airPool.name}"></td>
+                                <td th:utext="${airPool.jobName}"></td>
+                                <td th:utext="${airPool.fuelType}"></td>
+                                <td th:utext="${airPool.numberOfSources}"></td>
+                                <td th:utext="${airPool.substances}"></td>
+                                <td th:utext="${airPool.airSubstance}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--    sep 4.2-->
+
+    <div class="row" >
+        <div class="form-group col-md-12" >
+            <div class="card">
+                <div class="card-header">
+                    <h5 th:text="#{sys_step_4_2.description_of_sources}"></h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-lg-5" th:if="${#lists.size(regApplicationCategoryFourAdditional.airPools)>0}" th:each="airPool :${regApplicationCategoryFourAdditional.airPools}">
+                        <div class="col-md-6 table-responsive">
+                            <table class="table  table-striped" id="description-table">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{description_of_sources.sourcesHeight}"></th>
+                                    <th th:text="#{description_of_sources.sourcesDiometer}"></th>
+                                    <th th:text="#{description_of_sources.sourcesW}"></th>
+                                    <th th:text="#{description_of_sources.sourcesV}"></th>
+                                    <th th:text="#{description_of_sources.sourcesT}"></th>
+                                </tr>
+                                </thead>
+                                <tbody >
+                                <tr  th:if="${#lists.size(airPool.descriptionOfSources)>0}" th:each="description :${airPool.descriptionOfSources}">
+                                    <td><input  th:value="${description.sourcesHeight}" class="form-control " type="text" readonly="readonly"/></td>
+                                    <td><input  th:value="${description.sourcesDiometer}" class="form-control " type="text" readonly="readonly"/></td>
+                                    <td><input  th:value="${description.sourcesW}" class="form-control " type="text" readonly="readonly"/></td>
+                                    <td><input  th:value="${description.sourcesV}" class="form-control " type="text" readonly="readonly"/></td>
+                                    <td><input  th:value="${description.sourcesT}" class="form-control " type="text" readonly="readonly"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6 table-responsive">
+                            <table class="table  table-striped" th:id="'des_add_table_' + ${airPool.id}">
+                                <thead>
+                                <tr>
+                                    <th rowspan="2" th:text="#{description_of_sourcDees_additional.name}"></th>
+                                    <th colspan="2">Зарарли модда миқдори</th>
+                                    <th rowspan="2" th:text="#{description_of_sources_additional.establishedQuota}"></th>
+                                    <th rowspan="2" th:text="#{description_of_sources_additional.concentration}"></th>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{description_of_sources_additional.gSek}"></th>
+                                    <th th:text="#{description_of_sources_additional.tYil}"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:id="${'row_' + desAdd.id }" th:data-id="${desAdd.id}"  th:data-name="${airPool.id}" th:if="${#lists.size(airPool.descriptionOfSourcesAdditionals)>0}" th:each="desAdd :${airPool.descriptionOfSourcesAdditionals}">
+                                    <td th:id="${desAdd.id}" th:utext="${desAdd.name}" style="width: 10%"></td>
+                                    <td th:utext="${desAdd.gSek}"></td>
+                                    <td th:utext="${desAdd.tYil}"></td>
+                                    <td th:utext="${desAdd.establishedQuota}"></td>
+                                    <td th:utext="${desAdd.concentration}"></td>
+                                </tr>
+                                <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6 offset-md-3 row" style="padding: 5px 0 5px 0;" id="files-div">
+                                <div class="col-md-3" th:each="file : ${airPool.files}">
+                                    <div class="file">
+                                        <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryStep4_2FileDownload + '?file_id=' + file.id + '&id=' + airPool.id }">
+                                            <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                            <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                            <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                            <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                            <i th:if="${file.extension!='doc'
+                                                        && file.extension!='docx'
+                                                        && file.extension!='xls'
+                                                        && file.extension!='xlsx'
+                                                        && file.extension!='pdf'
+                                                        && file.extension!='png'
+                                                        && file.extension!='jpg'
+                                                        && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                            <span th:text="${file.description}"></span>
+                                            <p th:text="${file.name}"></p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--   step 4.3-->
+    <div class="row" >
+        <div class="form-group col-md-12" >
+            <div class="card">
+                <div class="card-header">
+                    <h5 th:text="#{sys_step_4_3.harmful_substances}">Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table  table-striped" id="pollution-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%">№</th>
+                                <th  th:text="#{sys_step_4_3.name}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4_3.substancesAmount}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4_3.forCleaning}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4_3.caught}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4_3.used}">Tadbir nomi</th>
+                                <th  th:text="#{sys_step_4_3.atmosphereAmount}">Tadbir nomi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody >
+                            <tr th:id="${'row_' + harmfulSubstances.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.harmfulSubstancesAmounts)>0}" th:each="harmfulSubstances :${regApplicationCategoryFourAdditional.harmfulSubstancesAmounts}">
+                                <td th:id="${harmfulSubstances.id}" th:utext="${harmfulSubstances.id}" style="width: 10%"></td>
+                                <td th:text="${harmfulSubstances.name}"></td>
+                                <td th:text="${harmfulSubstances.substancesAmount}"></td>
+                                <td th:text="${harmfulSubstances.forCleaning}"></td>
+                                <td th:text="${harmfulSubstances.caught}"></td>
+                                <td th:text="${harmfulSubstances.used}"></td>
+                                <td th:text="${harmfulSubstances.atmosphereAmount}"></td>
+                            </tr>
+                            <tr></tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="2" th:text="#{${step4_3_total.name}}">Jami</td>
+                                <td th:text="${step4_3_total.substancesAmount}">1</td>
+                                <td th:text="${step4_3_total.forCleaning}">2</td>
+                                <td th:text="${step4_3_total.caught}">3</td>
+                                <td th:text="${step4_3_total.used}">4</td>
+                                <td th:text="${step4_3_total.atmosphereAmount}">5</td>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th colspan="2"style="width: 30%" th:text="#{sys_step_4_3.hard_value}">Қаттиқ ташламалар</th>
+                                <td>
+                                    <input th:value="${regApplicationCategoryFourAdditional.hardValueOne}"  class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.hardValueTwo}" class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.hardValueThree}" class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input th:value="${regApplicationCategoryFourAdditional.hardValueFour}" class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input th:value="${regApplicationCategoryFourAdditional.hardValueFive}" class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" th:text="#{sys_step_4_3.liquid_value}">Газ ва суюқ ҳолдаги ташламалар</th>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.liquidValueOne}" class="form-control " type="text" readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.liquidValueTwo}" class="form-control " readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.liquidValueThree}" class="form-control " readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.liquidValueFour}" class="form-control " readonly="readonly"/>
+                                </td>
+                                <td>
+                                    <input  th:value="${regApplicationCategoryFourAdditional.liquidValueFive}" class="form-control " readonly="readonly"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

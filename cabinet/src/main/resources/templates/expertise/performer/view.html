@@ -58,6 +58,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
                                             </li>
+                                            <li class="nav-item" th:if="${regApplicationCategoryFourAdditional!=null}">
+                                                <a class="nav-link show" id="category-4-tab" data-toggle="tab" href="#category-4" role="tab" aria-controls="category-4" aria-selected="false" th:text="#{sys_category_4}"></a>
+                                            </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#conclusion" role="tab" aria-controls="conclusion" aria-selected="false" th:text="#{sys_conclusion}"></a>
                                             </li>
@@ -91,12 +94,21 @@
                                             <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
+                                            <div class="tab-pane fade" id="category-4" role="tabpanel" aria-labelledby="category-4" th:if="${regApplicationCategoryFourAdditional!=null}">
+                                                <object th:include="expertise/fragment/category_four/category_4_all_add :: category_step_add" th:remove="tag" ></object>
+                                            </div>
+
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
                                                 <div class="text-right" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
+                                                    <!--<button th:if="${conclusion==null || conclusion.conclusionWordFileId==null}" class="btn btn-success btn-sm" onclick="isOnlineConculision()">
+                                                        <i class="mdi mdi-content-save f-20"></i>
+                                                        <span th:text="#{sys_conclusion_online}"></span>
+                                                    </button>-->
                                                     <button th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}" class="btn btn-success btn-sm" onclick="saveConculision()"><i class="mdi mdi-content-save f-20"></i><span th:text="#{sys_save}"></span></button>
                                                     <button class="btn btn-primary btn-sm" onclick="$('#document-editor__editable').printThis();"><i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span></button>
                                                 </div>
                                                 <object th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>
+<!--                                                <object th:include="expertise/performer/conclusion :: conclusion" th:remove="tag"></object>-->
 
                                                 <div class="text-right" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}">
                                                     <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
@@ -106,6 +118,7 @@
                                                 <div style="border: 1px solid #c5c5c4;" th:if="${performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial and performerLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend}">
                                                     <object th:include="expertise/fragment/conclusion_view :: conclusion" th:remove="tag"></object>
                                                 </div>
+<!--                                                <input type="hidden" id="filename" th:value="${filename}">-->
                                             </div>
                                             <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
                                                 <object th:include="expertise/performer/result :: result" th:remove="tag"></object>
@@ -145,7 +158,6 @@
 
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 
-
 <!-- Ckeditor js -->
 <script>
     DecoupledEditor
@@ -163,7 +175,98 @@
 
 </script>
 
+
+<!--<script type="text/javascript" th:src="@{${ServerIp + '/web-apps/apps/api/documents/api.js'}}"></script>-->
+
 <script type="text/javascript" th:inline="javascript">
+    let performerLogStatus = [[${performerLogStatus}]]
+
+    var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
+    var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
+    var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
+    var isSaveConclusion = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsSave}]];
+    /*function getWordAPI() {
+        console.log($('#filename').val());
+        if ($('#filename').val()==undefined || $('#filename').val()==null || $('#filename').val()==""){
+            return
+        }
+
+        var data = $('#filename').val();
+        console.log("getWordAPI")
+        console.log("data==" + data)
+
+        window.docEditor = new DocsAPI.DocEditor("placeholder",
+            {
+                "document": {
+                    "fileType": "docx",
+                    "key": data,
+                    "title": "" + data  + " ",
+                    "url":"http://bo.eco-service.uz/docEditor/"+ data + "",
+                },
+                "editorConfig": {
+                    "callbackUrl": "http://bo.eco-service.uz/onlyoffice/fixationCallback",
+                    "lang": "ru",
+                    "mode": performerLogStatus==false?"view":"edit",
+                },
+                "height": "100%",
+                "width": "100%"
+            });
+
+    }*/
+
+
+    /*function isOnlineConculision() {
+        var form = new FormData();
+        form.append("id",[[${regApplication.id}]]);
+        form.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: isOnlineConculisionUrl,
+            type: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if(response.status==1){
+                    $('#filename').val(response.filename);
+                    getWordAPI();
+                }
+            }
+        });
+    }*/
+
+    $('#form-confirm-button').on('click',function () {
+        // alert("save");
+        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
+        if (conclusionOnline==="true"){
+            console.log("save");
+            var form = new FormData();
+            form.append("id", [[${regApplication.id}]]);
+            form.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: isSaveConclusion,
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.status==1){
+                        $('#conclusion_alert').hide();
+                       $('#form-confirm').submit();
+                    }else{
+                        $('#conclusion_alert').show();
+                    }
+                }
+            });
+        }else{
+            $('#conclusion_alert').hide();
+            $('#form-confirm').submit();
+        }
+    });
+
     var conclusionId= [[${conclusionId}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
@@ -176,6 +279,7 @@
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
     var changeDeadlineDateUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerChangeDeadlineDate}]];
 
+
     $(document).ready(function () {
         var hash = window.location.hash;
         if (hash.length === 0) {
@@ -187,7 +291,7 @@
             alwaysShow: true
         });
         borderNone();
-
+        // getWordAPI();
         $('.datepicker').datepicker({
             format: "dd.mm.yyyy",
             todayHighlight: true,
@@ -216,13 +320,6 @@
             }
         })
     }
-
-    $('#form-confirm').on('submit',function () {
-        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
-        if (conclusionOnline==true){
-            saveConculision();
-        }
-    });
 
     function saveConculision() {
         var form = new FormData();

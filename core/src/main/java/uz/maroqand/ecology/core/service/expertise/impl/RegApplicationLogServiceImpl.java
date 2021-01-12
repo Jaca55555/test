@@ -69,7 +69,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         if(id==null){
             return null;
         }
-        return regApplicationLogRepository.getOne(id);
+        return regApplicationLogRepository.findById(id).get();
     }
 
     public RegApplicationLog create(

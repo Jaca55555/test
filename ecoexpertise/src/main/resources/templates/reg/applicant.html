@@ -226,6 +226,15 @@
             if ($('#oked').val()!=''){
                 getOkedName();
             }
+
+           /* if ($('#individualTin').parsley().isValid()){
+                $('#individualTin').change();
+            }
+
+            if ($('#legalEntityTin').parsley().isValid()){
+                $('#legalEntityTin').change();
+            }*/
+
         });
 
         $(".phone").mask('+999(99)999-99-99');
@@ -411,7 +420,8 @@
                         $("#legalEntityMfo").val(val.mfo);
                         $("#legalEntityBankAccount").val(val.account);
                         $("#legalEntityBankName").val(val.bankname);
-                    }else {
+                    }
+                    /*else {
                         $("#legalEntityName").val("");
                         $("#legalEntityRegionId").val("");
                         $("#legalEntityRegionId").change();
@@ -427,7 +437,54 @@
                         $("#legalEntityMfo").val("");
                         $("#legalEntityBankAccount").val("");
                         $("#legalEntityBankName").val("");
+                    }*/
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
+
+        $('#individualTin').change(function () {
+
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#individualName").val(val.name);
+
+                        $("#individualRegionId").val("17" + val.obl_code.padStart(2, "0"));
+                        $("#individualRegionId").change();
+                        $("#individualSubRegionId").val(val.subRegioId);
+                        $("#individualSubRegionId").change();
+
+                        $("#individualPhone").val(val.phone);
+                        $("#individualEmail").val(val.email);
+                        $("#individualAddress").val(val.address);
                     }
+                    /*else {
+                        $("#individualName").val("");
+                        $("#individualRegionId").val("");
+                        $("#individualRegionId").change();
+                        $("#individualSubRegionId").val("");
+                        $("#individualSubRegionId").change();
+                        $("#individualPhone").val("");
+                        $("#individualEmail").val("");
+                        $("#individualAddress").val("");
+                    }*/
                 },
                 error: function () {
                 }

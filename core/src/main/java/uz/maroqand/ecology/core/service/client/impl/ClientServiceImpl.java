@@ -56,6 +56,11 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findTop1ByTinAndDeletedFalseOrderByIdDesc(tin);
     }
 
+    @Override
+    public List<Client> getByListTin(Integer tin) {
+        return clientRepository.findByTinAndDeletedFalse(tin);
+    }
+
     //Yuridik shaxs
     @Override
     public Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message) {

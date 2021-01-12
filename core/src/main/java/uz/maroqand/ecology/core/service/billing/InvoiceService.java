@@ -23,6 +23,7 @@ public interface InvoiceService {
 
     Invoice getInvoice(Integer id);
 
+    Invoice save(Invoice invoice);
 
     Invoice getInvoice(String invoice);
 

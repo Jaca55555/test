@@ -5,9 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.billing.PaymentType;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.repository.billing.PaymentFileRepository;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
+import uz.maroqand.ecology.core.service.billing.PaymentService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,14 +32,23 @@ import java.util.List;
 public class PaymentFileServiceImpl implements PaymentFileService {
 
     private final PaymentFileRepository paymentFileRepository;
+    private final InvoiceService invoiceService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository) {
+    public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository, InvoiceService invoiceService, PaymentService paymentService) {
         this.paymentFileRepository = paymentFileRepository;
+        this.invoiceService = invoiceService;
+        this.paymentService = paymentService;
     }
 
     public PaymentFile getById(Integer id){
         return paymentFileRepository.getOne(id);
+    }
+
+    @Override
+    public List<PaymentFile> getByInvoice(String invoice) {
+        return paymentFileRepository.findByInvoiceAndDeletedFalse(invoice);
     }
 
     @Override
@@ -53,6 +67,12 @@ public class PaymentFileServiceImpl implements PaymentFileService {
         paymentFile.setCreatedAt(new Date());
         paymentFile.setDeleted(false);
         return paymentFileRepository.save(paymentFile);
+    }
+
+    @Override
+    public void removeInvoiceIsDublicate(PaymentFile paymentFile, Integer userId) {
+        //todo paymentFile ichiga paymentId yozib keyin o'chirishni qilish kerak
+
     }
 
     public Page<PaymentFile> findFiltered(
@@ -107,7 +127,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     predicates.add(criteriaBuilder.equal(root.get("invoice"), invoice));
                 }
                 if(paymentId != null){
-                    predicates.add(criteriaBuilder.equal(root.get("paymentId"), paymentId));
+                    predicates.add(criteriaBuilder.equal(root.get("id"), paymentId));
                 }
 
                 if(payerTin != null){

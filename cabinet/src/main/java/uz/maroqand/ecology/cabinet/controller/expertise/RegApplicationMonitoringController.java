@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -53,8 +54,9 @@ public class RegApplicationMonitoringController {
     private final ActivityService activityService;
     private final RequirementService requirementService;
     private final OrganizationService organizationService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -71,6 +73,7 @@ public class RegApplicationMonitoringController {
         this.activityService = activityService;
         this.requirementService = requirementService;
         this.organizationService = organizationService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringList)
@@ -82,6 +85,7 @@ public class RegApplicationMonitoringController {
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("statusList", logStatusList);
+        model.addAttribute("isAdmin", userService.isAdmin());
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringList;
     }
 
@@ -94,7 +98,14 @@ public class RegApplicationMonitoringController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null, null,pageable);
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                userService.isAdmin()?null:user.getOrganizationId(),
+                null,
+                null,
+                null,
+                null,
+                pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -103,6 +114,10 @@ public class RegApplicationMonitoringController {
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
+            RegApplicationLog performerLog = null;
+            if (regApplication.getPerformerId()!=null){
+                performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            }
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     regApplication.getInputType(),
@@ -112,8 +127,9 @@ public class RegApplicationMonitoringController {
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
                     regApplication.getApplicantId()!=null?regApplication.getName():"",
-                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():""
-
+                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():"",
+                    performerLog,
+                    performerLog!=null && performerLog.getOldStatus()!=null
             });
         }
         result.put("data",convenientForJSONArray);
@@ -147,6 +163,12 @@ public class RegApplicationMonitoringController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
+
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
 
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("applicant", applicant);
@@ -274,6 +296,26 @@ public class RegApplicationMonitoringController {
         regApplicationService.update(regApplication);
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
+    }
+
+    @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationMonitoringPerformerConclusionEdit)
+    public String expertiseRegApplicationMonitoringPerformerConclusionEdit(@RequestParam(name = "id") Integer logId){
+        System.out.println("logId==" + logId);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (regApplicationLog!=null && regApplicationLog.getStatus()!=null){
+            LogStatus statusId ;
+            if (regApplicationLog.getOldStatus()!=null){
+                statusId = LogStatus.getLogStatus(regApplicationLog.getOldStatus());
+                regApplicationLog.setOldStatus(null);
+            }else{
+                regApplicationLog.setOldStatus(regApplicationLog.getStatus().getId());
+                statusId = LogStatus.Initial;
+            }
+            regApplicationLog.setShow(true);
+            regApplicationLogService.update(regApplicationLog,statusId,"",userService.getCurrentUserFromContext().getId());
+        }
+
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
     }
 
 }

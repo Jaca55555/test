@@ -21,6 +21,8 @@ public interface FileService {
 
     String getPathForUpload();
 
+    File getByName(String name);
+
     File save(File file);
 
 }

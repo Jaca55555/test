@@ -107,4 +107,7 @@ public class Invoice {
     @Column(name="updated_at", columnDefinition = "timestamp without time zone")
     private Date updatedAt;
 
+    @Column(name = "update_by_id")
+    private Integer updateById;
+
 }

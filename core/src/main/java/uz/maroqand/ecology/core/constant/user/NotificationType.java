@@ -7,5 +7,6 @@ package uz.maroqand.ecology.core.constant.user;
  */
 public enum NotificationType {
     Expertise,
-    Document
+    Document,
+    RegContract
 }

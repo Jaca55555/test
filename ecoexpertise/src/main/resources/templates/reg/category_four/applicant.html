@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/css/select2.min.css">
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        ol.linenums {
+            margin: 0 0 0 -8px;
+        }
+    </style>
+</head>
+<body class="layout-6">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeLegalEntity" name="applicantType" class="custom-control-input" value="0" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).LegalEntity}" >
+                                                        <label class="custom-control-label" for="applicantTypeLegalEntity" th:text="#{sys_legal_entity}">Yuridik shaxs</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeIndividual" name="applicantType" value="1" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).Individual}" >
+                                                        <label class="custom-control-label" for="applicantTypeIndividual" th:text="#{sys_individual}">Jismoniy shaxs</label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeIndividualEnterprise" name="applicantType" value="2" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).IndividualEnterprise}" >
+                                                        <label class="custom-control-label" for="applicantTypeIndividualEnterprise" th:text="#{sys_individual_enterprise}">Jismoniy shaxs</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="applicantTypeForeignIndividual" name="applicantType" value="3" class="custom-control-input" th:checked="${applicant.type == T(uz.maroqand.ecology.core.constant.expertise.ApplicantType).ForeignIndividual}" >
+                                                        <label class="custom-control-label" for="applicantTypeForeignIndividual" th:text="#{sys_foreign_individual}">Jismoniy shaxs</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="selectFormsLegal">
+                                                <object th:include="reg/category_four/applicant_legal_entity_fragment :: legal_entity" th:remove="tag"></object>
+                                            </div>
+                                            <div id="selectFormsindividual">
+                                                <object th:include="reg/category_four/applicant_individual_fragment :: individual" th:remove="tag"></object>
+                                            </div>
+                                            <div id="selectFormsForeignIndividual">
+                                                <object th:include="reg/category_four/applicant_foreign_individual_fragment :: foreign_individual" th:remove="tag"></object>
+                                            </div>
+                                            <div id="selectFormsIndividualEntrepreneur">
+                                                <object th:include="reg/category_four/applicant_individual_entrepreneur _fragment :: individual_entrepreneur" th:remove="tag"></object>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{sys_cancel.modal_title}" style="float: left">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationApplicantCancel}" method="post" data-parsley-validate="">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label >
+                                <span th:text="#{sys_message}"></span>
+                                <span class="required">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="message" required="" maxlength="254" minlength="3"/>
+                        </div>
+                        <input type="hidden" name="id" th:value="${regApplication.id}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button class="btn btn-danger" data-dismiss="modal" aria-label="Close" type="button" th:text="#{sys_cancel}" ></button>
+                        <button class="btn btn-primary"  type="submit" th:text="#{sys_confirm}" ></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pinfl -->
+    <div class="modal fade" id="pinflModal" tabindex="-1" role="dialog" aria-labelledby="pinflModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pinflModalCenterTitle" th:text="#{pinfl_modal_title}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img th:if="__${#locale}__=='uz'"  src="/static/images/pinfl_uz.png" style="width: 100%; height: auto">
+                    <img th:if="__${#locale}__=='oz'"  src="/static/images/pinfl_uz.png" style="width: 100%; height: auto">
+                    <img th:if="__${#locale}__=='ru'"  src="/static/images/pinfl_ru.png" style="width: 100%; height: auto">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+    <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
+
+    <script th:inline="javascript">
+        var regApplicationId = [[${regApplication.id}]];
+        var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
+        var sendSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationSendSMSCode}]];
+        var confirmSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetSMSCode}]];
+        var oked_name_text = [[#{sys_oked_name}]];
+        var oked_not_name_text = [[#{sys_not_oked_name}]];
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
+        var individualByPinfl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetIndividualByPinfl}]];
+        var notFoundRegApplication = [[#{not_found_reg_application}]];//arizachi topilmadi
+        var notSendSMSThisNumber= [[#{not_send_sms_this_number}]];//bu raqamga sms jo'natib bo'lmaydi
+        var sendSMSThisNumber= [[#{send_sms_this_number}]];//bu raqamga sms jo'natildi
+
+        $(document).ready(function () {
+            (function () {
+                var keystoppedTimer = null;
+                var keystoppedInputs = document.getElementsByTagName('input');
+                for (var i = 0, l = keystoppedInputs.length; i < l; i++) {
+                    keystoppedInputs[i].addEventListener('keydown', function (event) {
+                        clearTimeout(keystoppedTimer);
+                        keystoppedTimer = setTimeout(function () {
+                            event.target.dispatchEvent(new Event('keystopped'));
+                        }, 600);
+                    }, false);
+                }
+            }());
+
+            document.getElementById('oked').addEventListener('keystopped', function (event) {
+                getOkedName();
+            }, false);
+
+            bindSubRegionSelectToRegionSelect('#individualSubRegionId', '#individualRegionId');
+            bindSubRegionSelectToRegionSelect('#entrepreneurSubRegionId', '#entrepreneurRegionId');
+            bindSubRegionSelectToRegionSelect('#legalEntitySubRegionId', '#legalEntityRegionId');
+            var checkVal=$("input[name='applicantType']:checked").val();
+            selectForm(checkVal);
+            $('.datepicker').datepicker({
+                format: "dd.mm.yyyy",
+                todayHighlight: true,
+                autoclose: true
+                // startDate: '-130y',
+                // endDate: '-5y'
+            });
+            $('#legalEntityOpfId').parsley().validate();
+            $('#legalEntityOpfId').select2();
+            $('#foreignCountryId').parsley().validate();
+            $('#foreignCountryId').select2();
+            $('#legalEntityOpfId').on('change',function () {
+                $('#legalEntityOpfId').parsley().validate();
+            });
+            $('#foreignCountryId').on('change',function () {
+                $('#foreignCountryId').parsley().validate();
+            });
+            $('#foreignCitizenshipId').select2();
+
+            if ($('#oked').val()!=''){
+                getOkedName();
+            }
+
+           /* if ($('#individualTin').parsley().isValid()){
+                $('#individualTin').change();
+            }
+
+            if ($('#legalEntityTin').parsley().isValid()){
+                $('#legalEntityTin').change();
+            }*/
+
+        });
+
+        $(".phone").mask('+999(99)999-99-99');
+        $("#legalEntityBankAccount").mask('9999 9999 9999 9999 9999 9999 9999');
+
+        $('input[name="applicantType"]:radio').change(function () {
+            selectForm($(this).val());
+        });
+
+
+        //1 --> yuborildi
+        //2 --> arizachi topilmadi
+        //3 --> bu raqamga jo'natib bo'lmaydi
+        function getSMSCode(id) {
+            $('#'+id).parsley().validate();
+            if ($('#'+id).parsley().isValid()){
+
+                $.ajax({
+                    url: sendSMSCodeLink,
+                    data: {
+                        mobilePhone: $('#'+id).val(),
+                        id: regApplicationId,
+                        _csrf: $('#global_csrf').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    cache: true,
+                    success: function (response) {
+                        console.log(response.status);
+                        if (response.status==1){
+                            $('#errorPhone_'+id).html(sendSMSThisNumber);
+                            $('#sms_code_'+id).show();
+                            $('#allow_'+id).attr("hidden", true);
+                            $('#notAllow_'+id).attr("hidden", false);
+                            timerAdd(id);
+                        }else{
+                            if (response.status==2){
+                                $('#errorPhone_'+id).html(notFoundRegApplication);
+                            }else{
+                                if (response.status==3){
+                                    $('#errorPhone_'+id).html(notSendSMSThisNumber);
+                                }
+                            }
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+
+        function confirmSmsCode(id) {
+            $('#code_'+id).parsley().validate();
+            $('#'+id).parsley().validate();
+            if ($('#code_'+id).parsley().isValid() && $('#'+id).parsley().isValid()){
+                $.ajax({
+                    url: confirmSMSCodeLink,
+                    data: {
+                        code: $('#code_'+id).val(),
+                        phone: $('#'+id).val(),
+                        id: regApplicationId,
+                        _csrf: $('#global_csrf').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    cache: true,
+                    success: function (response) {
+                        console.log(response.status);
+                        if (response.status==1){
+                            $('#allow_'+id).attr("hidden", false);
+                            $('#notAllow_'+id).attr("hidden", true);
+                            $('#code_'+id).prop('readonly',true);
+                        }else{
+                            $('#allow_'+id).attr("hidden", true);
+                            $('#notAllow_'+id).attr("hidden", false);
+                            $('#code_'+id).prop('readonly',false);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }else{
+                console.log("error");
+            }
+
+        }
+        
+        function getOkedName() {
+
+            $('#oked').parsley().validate();
+            if ( $('#oked').parsley().isValid()){
+                $.ajax({
+                    url: getOkedNameLink,
+                    data: {
+                        okedCode: $('#oked').val(),
+                        _csrf: $('#global_csrf').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    cache: true,
+                    success: function (response) {
+                        if (response.status==1){
+                            $('#okedName').show();
+                            $('#okedName').html('<span>'+oked_name_text+'</span>&nbsp;<span>'+response.okedName+'</span>');
+                        }else{
+                            $('#okedName').show();
+                            $('#okedName').html('<span>'+oked_not_name_text+'</span>');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }else{
+                $('#okedName').hide();
+            }
+        }
+
+        function selectForm(checkval) {
+            $('#selectFormsLegal').hide();
+            $('#selectFormsindividual').hide();
+            $('#selectFormsForeignIndividual').hide();
+            $('#selectFormsIndividualEntrepreneur').hide();
+
+            switch (checkval){
+                case '0':$('#selectFormsLegal').show();break;
+                case '1':$('#selectFormsindividual').show();break;
+                case '2':$('#selectFormsIndividualEntrepreneur').show();break;
+                case '3':$('#selectFormsForeignIndividual').show();break;
+                default: $('#selectFormsLegal').show();break;
+            }
+        }
+        $(".only-alpha").on("input", function(){
+            var regexp = /[^a-zA-Z]/g;
+            if($(this).val().match(regexp)){
+                $(this).val( $(this).val().replace(regexp,'') );
+            }
+        });
+
+        $('.only-number').keyup(function() {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+        $('#legalEntityTin').change(function () {
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#legalEntityName").val(val.name);
+
+                        $("#legalEntityRegionId").val("17" + val.obl_code.padStart(2, "0"));
+                        $("#legalEntityRegionId").change();
+                        $("#legalEntitySubRegionId").val(val.subRegioId);
+                        $("#legalEntitySubRegionId").change();
+
+                        $("#legalEntityOpfId").val(val.opfId);
+                        $("#legalEntityOpfId").change();
+
+                        $("#directorFullName").val(val.director);
+
+                        $("#oked").val(val.oked);
+
+                        $("#legalEntityPhone").val(val.phone);
+                        $("#legalEntityEmail").val(val.email);
+                        $("#legalEntityAddress").val(val.address);
+
+                        $("#legalEntityMfo").val(val.mfo);
+                        $("#legalEntityBankAccount").val(val.account);
+                        $("#legalEntityBankName").val(val.bankname);
+                    }
+                    /*else {
+                        $("#legalEntityName").val("");
+                        $("#legalEntityRegionId").val("");
+                        $("#legalEntityRegionId").change();
+                        $("#legalEntitySubRegionId").val("");
+                        $("#legalEntitySubRegionId").change();
+                        $("#legalEntityOpfId").val("");
+                        $("#legalEntityOpfId").change();
+                        $("#directorFullName").val("");
+                        $("#oked").val("");
+                        $("#legalEntityPhone").val("");
+                        $("#legalEntityEmail").val("");
+                        $("#legalEntityAddress").val("");
+                        $("#legalEntityMfo").val("");
+                        $("#legalEntityBankAccount").val("");
+                        $("#legalEntityBankName").val("");
+                    }*/
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
+
+        $('#individualTin').change(function () {
+
+            var TIN = $(this).val();
+            if(TIN.length != 9) return;
+
+            $.ajax({
+                url: leInfoUrlGnk,
+                data: {
+                    tin: TIN,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#individualName").val(val.name);
+
+                        $("#individualRegionId").val("17" + val.obl_code.padStart(2, "0"));
+                        $("#individualRegionId").change();
+                        $("#individualSubRegionId").val(val.subRegioId);
+                        $("#individualSubRegionId").change();
+
+                        $("#individualPhone").val(val.phone);
+                        $("#individualEmail").val(val.email);
+                        $("#individualAddress").val(val.address);
+                    }
+                    /*else {
+                        $("#individualName").val("");
+                        $("#individualRegionId").val("");
+                        $("#individualRegionId").change();
+                        $("#individualSubRegionId").val("");
+                        $("#individualSubRegionId").change();
+                        $("#individualPhone").val("");
+                        $("#individualEmail").val("");
+                        $("#individualAddress").val("");
+                    }*/
+                },
+                error: function () {
+                }
+            });
+
+        }).change();
+
+        $('#passportSerial, #passportNumber, #individualPinfl').change(function () {
+            var pSerial = $('#passportSerial').val();
+            var pNumber = $('#passportNumber').val();
+            var pinfl = $('#individualPinfl').val();
+
+            if (pSerial.length !== 2 || pNumber.length !== 7 || pinfl.length !== 14) return;
+            console.log('individualByPinfl');
+            $.ajax({
+                url: individualByPinfl,
+                data: {
+                    p_serial: pSerial+""+pNumber,
+                    pinfl: pinfl,
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    console.log("response="+response);
+                    console.log("response.err_code="+response.err_code);
+                    if(response.err_code==='0'){
+                        var val = response.root[0];
+                        $("#legalEntityName").val(val.aname);
+
+                        $("#directorFullName").val(val.director);
+
+                        $("#oked").val(val.oked);
+
+                        $("#legalEntityPhone").val(val.phone);
+                        $("#legalEntityEmail").val(val.email);
+                        $("#legalEntityAddress").val(val.address);
+
+                        $("#legalEntityMfo").val(val.mfo);
+                        $("#legalEntityBankAccount").val(val.account);
+                        $("#legalEntityBankName").val(val.bankname);
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+
+        function timerAdd(id) {
+            var now = new Date().getTime();
+            var deadline = now+90000;
+            $("#send_code_button_"+id).prop("disabled",true);
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var t = deadline - now;
+                var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((t % (1000 * 60)) / 1000);
+                if (seconds<10) seconds="0"+seconds;
+                document.getElementById("timer_"+id).innerHTML = "0" + minutes + ":" + seconds + " ";
+                if (t < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer_"+id).innerHTML = "";
+                    $("#send_code_button_"+id).prop("disabled",false);
+                }
+            }, 1000);
+        }
+
+
+    </script>
+</body>
+</html>

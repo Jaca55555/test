@@ -52,6 +52,9 @@ public class Notification {
     @Column(name = "reviewer_id")
     private Integer reviewerId;
 
+    @Column(name = "tin")
+    private Integer tin;
+
     @Column
     private String url;
 

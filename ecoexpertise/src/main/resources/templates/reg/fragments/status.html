@@ -69,7 +69,7 @@
     </div>
 
     <!--Modification-->
-    <div class="col-md-12 text-center" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification}">
+    <div class="col-md-12 text-center" th:if="${regApplication.status!=null &&  regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).oneToTree}">
         <div class="col-md-12" >
             <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationApplicant + '?id=' + regApplication.id}">
                 <i class="mdi mdi-backspace"></i> <span th:text="#{sys_back_to_edit}"></span>
@@ -80,6 +80,17 @@
         </div>
     </div>
 
+    <!--Modification-->
+    <div class="col-md-12 text-center" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).fourType}">
+        <div class="col-md-12" >
+            <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryApplicant + '?id=' + regApplication.id}">
+                <i class="mdi mdi-backspace"></i> <span th:text="#{sys_back_to_edit}"></span>
+            </a>
+            <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryResend + '?id=' + regApplication.id}">
+                <i class="feather icon-rotate-cw"></i> <span th:text="#{sys_send_to_review}"></span>
+            </a>
+        </div>
+    </div>
 
     <!-- Modal Pinfl -->
     <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalCenterTitle" aria-hidden="true">

@@ -46,6 +46,11 @@ public class RegApplication {
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationInputType inputType;
 
+    // category 4 uchun
+    @Column(name = "reg_application_category_type")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationCategoryType regApplicationCategoryType;
+
     //Объект экспертизы
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "object_id", insertable = false, updatable = false)
@@ -184,6 +189,10 @@ public class RegApplication {
     @Column(name = "step")
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationStep step;
+
+    @Column(name = "category_four_step")
+    @Enumerated(EnumType.ORDINAL)
+    private RegApplicationCategoryFourStep categoryFourStep;
 
     @Column(name = "conclusion_online",columnDefinition = "boolean DEFAULT true")
     private Boolean conclusionOnline = true;

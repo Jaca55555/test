@@ -32,6 +32,7 @@ public interface UserService {
     User findById(Integer id);
 
     User update(User user);
+//    User getByTin(User user);
 
     User findById(Integer id, Integer organizationId);
 

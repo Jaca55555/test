@@ -494,12 +494,21 @@
             }
             $('#objectId').select2();
 
+            if ($("#objectId").val()!=""){
+                $("#objectId").change();
+            }
+
             $("#objectId").change(function(){
                 getActivityList();
             });
+
             $("#activityId").change(function(){
                 getMaterialList();
             });
+            if ($("#objectId").val()==15){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }
             if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
@@ -543,6 +552,13 @@
                         $("#categorySelect").removeAttr('required');
                         // $("#categoryDiv").hide();
                         $("#categorySelectDiv").hide();
+                        if ($("#objectId").val()==15){
+                            $('#regionDiv').show();
+                            $('#regionId').prop('required',true);
+                        }else{
+                            $('#regionDiv').hide();
+                            $('#regionId').prop('required',false);
+                        }
                         materialDiv(response.requirementList[0].materials);
                     }else {
                         $("#activityIdDiv").show();

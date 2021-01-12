@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.entity.user.Notification;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.List;
 
@@ -15,6 +16,10 @@ import java.util.List;
 public interface NotificationService {
 
 //    void initialization();
+
+    void confirmContractRegApplication(Integer regId);
+
+    Notification getByRegApplicationConfirm(Integer regId);
 
     List<Notification> getNotificationList(Integer reviewerId,NotificationType notificationType);
 
@@ -29,6 +34,16 @@ public interface NotificationService {
             Integer applicationNumber,
             String message,
             String url,
+            Integer userId
+    );
+
+
+    void createForRegContract(
+            Integer tin, //type
+            NotificationType type,
+            String title,
+            Integer applicationNumber,
+            String message,
             Integer userId
     );
 
@@ -50,5 +65,9 @@ public interface NotificationService {
             NotificationType notificationType,
             Pageable pageable
     );
+
+    List<Notification> getListByUser(User user);
+
+    Integer getNotificationRegContract();
 
 }

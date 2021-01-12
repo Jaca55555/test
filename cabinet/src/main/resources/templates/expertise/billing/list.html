@@ -389,6 +389,39 @@
     </div>
 </div>
 
+
+
+
+<div id="invoice-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="map-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="map-modal-label" th:text="#{invoice.amount_nol_title}">Modal Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form th:action="${nol_url}" data-parsley-validate="" >
+                <div class="modal-body">
+                    <div class="form-group row" >
+                        <div class="col-md-4 text-right">
+                            <label class="col-form-label" th:text="#{invoice.amount_nol_descripotion}"></label>
+                            <span class="required">*</span>
+                        </div>
+                        <div class="col-md-8">
+                            <input class="form-control" name="description" type="text" minlength="5" required="" maxlength="254"  />
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="invoiceId" id="invoiceId" />
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{sys_cancel}">Close</button>
+                    <button type="submit" class="btn btn-success" th:text="#{sys_confirm}" >Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
@@ -407,7 +440,11 @@
     var statusInitial = [[#{invoice_status.initial}]];
     var statusSuccess = [[#{invoice_status.success}]];
     var statusCanceled = [[#{invoice_status.canceled}]];
+    var isNol = [[#{invoice_amount.nol}]];
     var statusError = [[#{invoice_status.error}]];
+    var isAdmin = [[${isAdmin}]];
+
+
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -433,14 +470,23 @@
         if (row[5] == "Initial"){
             html+='<button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" ><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button>\n' +
                  '<button class="btn btn-danger btn-sm mr-1" onclick="deleteInvoice('+row[0]+')"  title="'+labelDelete+'"><i class="mdi mdi-close-circle-outline" style="margin-right: 0px;"></i></button>\n';
+
         }
+
         html+='</div>';
+        if (isAdmin==true && row[5] == "Initial"){
+            html+='<button class="btn btn-success btn-sm mr-1 mt-1" onclick="invoiceAmountNolModal('+row[0]+')" data-toggle="modal" data-target="#invoice-modal" id="invoice-modal-btn" title="'+isNol+'"><i class="mdi mdi-folder-edit mr-2 ml-2" ></i></button>';
+        }
         /*html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
 
             html += '<div class="btn-group"><button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
             html += '<div class="btn-group"><button class="btn btn-danger btn-sm mr-1" ><i class="mdi mdi-close-circle-outline" style="margin-right: 0px;"></i></button></div>';
         }*/
         return html;
+    }
+
+    function invoiceAmountNolModal(id) {
+        $('#invoiceId').val(id);
     }
 
     function renderStatusColumn(data, type, row, meta) {

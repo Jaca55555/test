@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Option;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.integration.common.EcoGovService;
+import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OptionService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
@@ -30,12 +36,16 @@ public class MainController {
     private final EcoGovService ecoGovService;
     private final RegApplicationService regApplicationService;
     private final UserService userService;
+    private final FileService fileService;
+    private final OptionService optionService;
 
     @Autowired
-    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService, UserService userService) {
+    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService, UserService userService, FileService fileService, OptionService optionService) {
         this.ecoGovService = ecoGovService;
         this.regApplicationService = regApplicationService;
         this.userService = userService;
+        this.fileService = fileService;
+        this.optionService = optionService;
     }
 
     @RequestMapping("/")
@@ -52,6 +62,28 @@ public class MainController {
         model.addAttribute("total", total);
         model.addAttribute("done", done);
         return "index";
+    }
+
+    //fileDownload
+    @RequestMapping("/get_modal_file")
+    public ResponseEntity<Resource> get_modal_file(
+    ){
+        Option option = optionService.getOption("eco_notification");
+
+        Integer optionVal;
+        if(option!=null){
+            optionVal = Integer.parseInt(option.getValue());
+        }else {
+            optionVal = null;
+        }
+        if (optionVal==null) return null;
+
+        File file = fileService.findById(optionVal);
+        if (file == null ) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
 
     @RequestMapping("/login")

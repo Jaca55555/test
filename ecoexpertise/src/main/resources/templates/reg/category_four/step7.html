@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ol/ol.css">
+    <link rel="stylesheet" href="/static/css/select2.min.css">
+</head>
+<body class="layout-6">
+<!--<div style="display: none;" id="loader_box"></div>-->
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12" >
+                                                    <form action="" method="post" th:object="${regApplicationCategoryFourAdditional}" data-parsley-validate="" id="about-form">
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.object_placement_plan}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.objectPlacementPlan}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.production_description}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.productionDescription}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.sewage_availability}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.sewageAvailability}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.discard_amount_about}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.discardAmountAbout}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.waste_amount_about}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.wasteAmountAbout}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_step_7.events}">Наименование объекта</label>
+<!--                                                                <span class="required">*</span>-->
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <textarea rows="3" class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.events}"  maxlength="254"  ></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" name="regAddId" th:value="${regApplicationCategoryFourAdditional.id}" />
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+
+</body>
+</html>

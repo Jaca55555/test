@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import uz.maroqand.ecology.cabinet.CabinetStarter;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
@@ -56,6 +59,8 @@ public class ConclusionController {
     private final ActivityService activityService;
     private final FileService fileService;
 
+    private static final Logger logger = LogManager.getLogger(ConclusionController.class);
+
     @Autowired
     public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, FileService fileService) {
         this.userService = userService;
@@ -74,6 +79,10 @@ public class ConclusionController {
 
     @RequestMapping(ExpertiseUrls.ConclusionList)
     public String conclusionList(Model model){
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions", soatoService.getSubRegions());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
         return ExpertiseTemplates.ConclusionList;
     }
 
@@ -125,6 +134,65 @@ public class ConclusionController {
         return result;
     }
 
+
+    @RequestMapping(value = ExpertiseUrls.ConclusionRegApplicationListAjax,produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getConclusionRegApplicationListAjax(
+            FilterDto filterDto,
+            Pageable pageable
+    ) {
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        User user = userService.getCurrentUserFromContext();
+        Set<RegApplicationStatus> statuses = new HashSet<>();
+        statuses.add(RegApplicationStatus.Approved);
+        statuses.add(RegApplicationStatus.NotConfirmed);
+        filterDto.setStatusForReg(statuses);
+        filterDto.setConclusionOnline(Boolean.FALSE);
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,null,pageable);
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            convenientForJSONArray.add(new Object[]{
+                    regApplication.getId(),
+                    regApplication.getInputType(),
+                    helperService.getObjectExpertise(regApplication.getObjectId(),locale),
+                    helperService.getMaterials(regApplication.getMaterials(),locale),
+                    regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
+                    regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
+                    regApplication.getApplicantId()!=null?regApplication.getName():"",
+                    regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():""
+            });
+        }
+        result.put("data",convenientForJSONArray);
+        return result;
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationView)
+    public String conclusionRegApplicationView(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ){
+
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication==null || regApplication.getConclusionOnline()==null || regApplication.getConclusionOnline()){
+            return "redirect:" + ExpertiseUrls.ConclusionList;
+        }
+        RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+
+        model.addAttribute("regApplication", regApplication);
+        model.addAttribute("performerLog", performerLog);
+        model.addAttribute("isRegApplication", Boolean.TRUE);
+
+        return ExpertiseTemplates.ConclusionView;
+    }
+
     @RequestMapping(ExpertiseUrls.ConclusionView)
     public String conclusionView(
             @RequestParam(name = "id") Integer id,
@@ -145,9 +213,11 @@ public class ConclusionController {
         }
         model.addAttribute("conclusion", conclusion);
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("isRegApplication", Boolean.FALSE);
 
         return ExpertiseTemplates.ConclusionView;
     }
+
     @RequestMapping(value = ExpertiseUrls.ConclusionNewList,method = RequestMethod.GET)
     public String getConclusionNewList(Model model){
         List<LogStatus> logStatusList = new ArrayList<>();
@@ -250,6 +320,70 @@ public class ConclusionController {
         }
 
         File file = fileService.findById(conclusion.getConclusionFileId());
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdFileDownloadForView)
+    @ResponseBody
+    public ResponseEntity<Resource> getConclusionRegApplicationConclusionIdFileDownloadForView(
+            @RequestParam(name = "id") String logIdStr
+    ){
+        String [] subString = logIdStr.split("_");
+        if (subString[0].isEmpty() || subString[1].isEmpty()){
+            return null;
+        }
+        Integer logId=null;
+        Integer fileId=null;
+        try {
+            logId=Integer.parseInt(subString[0]);
+            fileId=Integer.parseInt(subString[1]);
+        }catch (Exception e){
+
+        }
+        logger.info("-----ConclusionRegApplicationConclusionIdFileDownloadForView------ PerformerLogId=" + logId + "     fileId=" + fileId);
+        RegApplicationLog performerLog = regApplicationLogService.getById(logId);
+        if (performerLog==null){
+            return null;
+        }
+        File file = fileService.findById(fileId);
+        if (file == null) {
+            return null;
+        } else {
+            if (performerLog.getDocumentFiles().contains(file)){
+                return fileService.getFileAsResourceForDownloading(file);
+            }else{
+                return  null;
+            }
+        }
+    }
+
+    @RequestMapping(ExpertiseUrls.ConclusionRegApplicationConclusionIdWordFileDownloadForView)
+    @ResponseBody
+    public ResponseEntity<Resource> getConclusionRegApplicationConclusionIdWordFileDownloadForView(
+            @RequestParam(name = "id") String logIdStr
+    ){
+        String [] subString = logIdStr.split("_");
+        if (subString[0].isEmpty() || subString[1].isEmpty()){
+            return null;
+        }
+        Integer conclusion=null;
+        Integer fileId=null;
+        try {
+            conclusion=Integer.parseInt(subString[0]);
+            fileId=Integer.parseInt(subString[1]);
+        }catch (Exception e){
+
+        }
+        Conclusion conclusion1  = conclusionService.getById(conclusion);
+        if (conclusion1==null || conclusion1.getConclusionWordFileId()==null
+                || !conclusion1.getConclusionWordFileId().equals(fileId)){
+            return null;
+        }
+        File file = fileService.findById(fileId);
         if (file == null) {
             return null;
         } else {

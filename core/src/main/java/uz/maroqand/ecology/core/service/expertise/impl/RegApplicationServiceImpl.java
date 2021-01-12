@@ -6,9 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
-import uz.maroqand.ecology.core.constant.expertise.RegApplicationStep;
+import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
@@ -32,10 +30,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.persistence.criteria.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
@@ -63,13 +58,15 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         this.factureService = factureService;
     }
 
-    public RegApplication create(User user,RegApplicationInputType inputType){
+    @Override
+    public RegApplication create(User user,RegApplicationInputType inputType,RegApplicationCategoryType categoryType){
         RegApplication regApplication = new RegApplication();
         regApplication.setInputType(inputType);
+        regApplication.setRegApplicationCategoryType(categoryType);
         regApplication.setCreatedAt(new Date());
         regApplication.setCreatedById(user.getId());
         regApplication.setStatus(RegApplicationStatus.Initial);
-        regApplication.setStep(RegApplicationStep.APPLICANT);
+        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.APPLICANT);
 
         regApplicationRepository.save(regApplication);
         return regApplication;
@@ -78,6 +75,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public List<RegApplication> getByClientId(Integer id) {
         return regApplicationRepository.findByApplicantId(id);
+    }
+
+    @Override
+    public List<RegApplication> getByClientIdDeletedFalse(Integer id) {
+        return regApplicationRepository.findByApplicantIdAndDeletedFalse(id);
     }
 
     @Override
@@ -139,6 +141,48 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByIdAndUserTin(Integer id, User user) {
+
+        System.out.println("getByIdAndUserTin");
+        if (user==null){
+            System.out.println("if  user==null");
+            return null;
+        }
+
+        if (user.getTin()!=null){
+
+            List<Client> clientList = clientService.getByListTin(user.getTin());
+            System.out.println("if  user.getTin()!=null  " + clientList.size());
+            RegApplication regApplication = getRegApplication(id, clientList);
+            if (regApplication != null) return regApplication;
+        }
+
+        if (user.getLeTin()!=null){
+
+            List<Client> clientList = clientService.getByListTin(user.getLeTin());
+            System.out.println("if  user.getLeTin()!=null  " + clientList.size());
+            RegApplication regApplication = getRegApplication(id, clientList);
+            if (regApplication != null) return regApplication;
+        }
+        System.out.println("else");
+
+        return null;
+    }
+
+    private RegApplication getRegApplication(Integer id, List<Client> clientList) {
+        for (Client client: clientList) {
+            List<RegApplication> regApplications = getByClientIdDeletedFalse(client.getId());
+            for (RegApplication regApplication :regApplications){
+                if (regApplication.getId().equals(id)){
+                    System.out.println("if  regApplication.getId().equals(id)");
+                    return regApplication;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public RegApplication sendRegApplicationAfterPayment(RegApplication regApplication,User user, Invoice invoice, String locale) {
         if (regApplication!=null && regApplication.getForwardingLogId() == null){
                 regApplication.setLogIndex(1);
@@ -179,6 +223,31 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public RegApplication getById(Integer id, Integer createdBy) {
         if(id==null) return null;
         return regApplicationRepository.findByIdAndCreatedByIdAndDeletedFalse(id, createdBy);
+    }
+
+    @Override
+    public Boolean beforeOrEqualsTrue(RegApplication regApplication) {
+        if ((regApplication.getStatus().equals(RegApplicationStatus.Approved) || regApplication.getStatus().equals(RegApplicationStatus.NotConfirmed))
+                && regApplication.getDeadlineDate()!=null  && regApplication.getAgreementCompleteLogId()!=null){
+            RegApplicationLog conclusionCompleteLog =regApplicationLogService.getById(regApplication.getAgreementCompleteLogId());
+            if (conclusionCompleteLog!=null && conclusionCompleteLog.getStatus().equals(LogStatus.Approved) && conclusionCompleteLog.getUpdateAt()!=null){
+                Date deadlineDate = conclusionCompleteLog.getUpdateAt();
+                Date regDeadline = regApplication.getDeadlineDate();
+                deadlineDate.setHours(0);
+                deadlineDate.setMinutes(0);
+                deadlineDate.setSeconds(0);
+                regDeadline.setHours(0);
+                regDeadline.setMinutes(0);
+                regDeadline.setSeconds(0);
+                if (regDeadline.equals(deadlineDate) || regDeadline.after(deadlineDate)){
+                    return Boolean.TRUE;
+                }else {
+                    return Boolean.FALSE;
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -229,9 +298,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if (filterDto!=null) {
-
                     if (filterDto.getStatus()!=null){
                         predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getStatus()));
+                    }
+
+                    if (filterDto.getStatusForReg()!=null){
+                        predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
                     }
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
@@ -277,6 +349,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getActivityId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
                     }
+
+                    if (filterDto.getConclusionOnline() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
+                    }
+
                     if (filterDto.getObjectId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
                     }
@@ -286,7 +363,30 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if(userId!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("createdById"), userId));
+                    System.out.println("userId");
+                    Predicate byUserId, byLeTin, byTin;
+                    byUserId = criteriaBuilder.equal(root.get("createdById"), userId);
+                    if (filterDto!=null && (filterDto.getByLeTin()!=null || filterDto.getByTin()!=null)
+                            && regApplicationInputType!=null && regApplicationInputType.equals(RegApplicationInputType.ecoService)
+                    ){
+                        if (filterDto.getByLeTin()!=null && filterDto.getByTin()!=null){
+                            byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
+                            byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
+                            predicates.add(criteriaBuilder.or(byLeTin, byTin,byUserId));
+                        }else{
+                            if (filterDto.getByTin()!=null && filterDto.getByLeTin()==null){
+                                byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
+                                predicates.add(criteriaBuilder.or(byTin, byUserId));
+                            }else{
+                                if (filterDto.getByTin()==null && filterDto.getByLeTin()!=null) {
+                                    byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
+                                    predicates.add(criteriaBuilder.or(byLeTin,byUserId));
+                                }
+                            }
+                        }
+                    }else{
+                        predicates.add(byUserId);
+                    }
                 }
 
                 if(regApplicationInputType!=null){
@@ -295,8 +395,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                 Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
                 predicates.add( notDeleted );
-                Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                return overAll;
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }

@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +9,10 @@ import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.sys.DocumentRepoType;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.repository.expertise.ConclusionRepository;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
+import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -76,18 +77,10 @@ public class ConclusionServiceImpl implements ConclusionService {
     @Override
     public Conclusion complete(Integer conclusionId){
         Conclusion conclusion = getById(conclusionId);
-        /*if(conclusion.getNumber()!=null){
-            return null;
-        }*/
 
         DocumentRepo documentRepo = documentRepoService.create(DocumentRepoType.Conclusion, conclusion.getId());
         conclusion.setDocumentRepoId(documentRepo.getId());
         conclusion.setStatus(ConclusionStatus.Active);
-//        conclusion.setNumber(conclusion.getId().toString()); //todo xulosa raqami ketma ket ketadimi prefix suffix bo’lmaydimi?
-//        conclusion.setDate(new Date());
-//        conclusion.setDeadlineDate();
-//        conclusion.setFiles();
-
         return conclusionRepository.save(conclusion);
     }
 

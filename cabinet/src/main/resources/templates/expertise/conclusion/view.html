@@ -55,18 +55,41 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-body" style="min-height: calc(100vh - 130px);">
-                                        <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">
+                                        <div class="col-md-12 text-right mb-5" >
                                             <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">
                                                 <i class="feather icon-printer"></i>
                                                 <span th:text="#{sys_print}"> print</span>
                                             </button>
                                         </div>
-                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}" id="conclusion">
+                                        <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null && !isRegApplication}" id="conclusion">
                                             <object th:include="expertise/conclusion/conclusion_view :: conclusion" th:remove="tag"></object>
                                         </div>
+
+                                        <div class="col-md-12 " th:if="${performerLog!=null && #lists.size(performerLog.documentFiles)>0 && isRegApplication}">
+                                            <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
+
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item" th:each="documentFile,iter :${performerLog.documentFiles}">
+                                                    <a th:class="${iter.index==0?'nav-link show active':'nav-link show'}" th:id="${'online-tab' + documentFile.id}" data-toggle="tab" th:href="${'#online'+ documentFile.id}" role="tab" th:aria-controls="${'contract'+documentFile.id}" aria-selected="false" >
+                                                        <span th:text="${documentFile.name}"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="tab-content" id="myTabContent" >
+                                                <div   th:class="${iter.index==0?'tab-pane fade show active':'tab-pane fade'}" th:each="documentFile,iter :${performerLog.documentFiles}"  th:id="${'online' + documentFile.id}" role="tabpanel" th:aria-labelledby="${'applicant'+documentFile.id+'-tab'}">
+                                                    <div  style="border: #6e45e2 1px dashed;  height: 800px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
+                                                        <iframe th:src="${'http://docs.google.com/gview?url=http://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+performerLog.id+'_' + documentFile.id +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
+
                             <div class="text-center col-md-12">
                                 <a class="btn btn-danger text-white" href="#" onclick="history.go(-1);return false;" th:text="#{sys_back}"></a>
                             </div>
@@ -105,6 +128,10 @@
             beforePrint: null,          // function called before iframe is filled
             afterPrint: null            // function called before iframe is removed
         });
+    });
+    
+    $(document).ready(function () {
+
     });
 
 </script>

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import uz.maroqand.ecology.core.constant.billing.PaymentStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.dto.api.Response;
+import uz.maroqand.ecology.core.dto.api.ResponsePay;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -15,6 +16,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class APIController {
     private final Logger logger = LogManager.getLogger(APIController.class);
 
     private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
+
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
@@ -84,9 +87,9 @@ public class APIController {
 
         response.setClient(invoice.getPayerName());
         response.setTin(invoice.getPayeeTin().toString());
-        response.setAmount(invoice.getAmount().toString());
-        response.setPaidAmount((invoice.getAmount()-residualAmount) + "");
-        response.setResidualAmount(residualAmount.toString());
+        response.setAmount(Common.decimalFormat.format(invoice.getAmount()));
+        response.setPaidAmount(Common.decimalFormat.format(invoice.getAmount()-residualAmount));
+        response.setResidualAmount(Common.decimalFormat.format(residualAmount));
 
 
         response.setStatus("0");
@@ -96,7 +99,7 @@ public class APIController {
 
     @RequestMapping(value = "/upay/payment", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Response upayPayment(
+    public ResponsePay upayPayment(
             @RequestHeader(value="Auth", required = false) String auth,
             @RequestParam(value="upayTransId", required = false) String upayTransId,
             @RequestParam(value="upayTransTime", required = false) String upayTransTime,
@@ -121,11 +124,12 @@ public class APIController {
         logger.info("RequestParams="+parametersMap);
         logger.info("HeadersMap="+headersMap);
 
+        System.out.println("auth" + auth);
 
         logger.info("Auth:{}, upayTransId:{}, upayTransTime:{}, upayPaymentAmount:{}, personalAccount:{}",
                 auth, upayTransId, upayTransTime, upayPaymentAmount, personalAccount);
 
-        Response response = new Response();
+        ResponsePay response = new ResponsePay();
 
         if(auth==null || !auth.equals(AUTH_KEY)){
             response.setStatus("-1");
@@ -152,6 +156,12 @@ public class APIController {
             return response;
         }
 
+        if (amount==null || amount>(invoice.getAmount()-invoiceService.getPayAmount(invoice.getId()))){
+            response.setStatus("-4");
+            response.setMessage("Сумма платежа большая");
+            return response;
+        }
+
         Date time = DateParser.TryParse(upayTransTime, Common.uzbekistanDateAndTimeFormat);
         Payment payment = new Payment();
         payment.setType(PaymentType.UPAY);
@@ -161,6 +171,7 @@ public class APIController {
         payment.setPaymentDate(time);
         payment.setRegisteredAt(new Date());
         payment.setDeleted(Boolean.FALSE);
+        payment.setInvoiceId(invoice.getId());
         paymentService.save(payment);
 
         response.setStatus("0");

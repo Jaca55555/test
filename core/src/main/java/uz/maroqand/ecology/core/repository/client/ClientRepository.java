@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.client.Client;
 
+import java.util.List;
+
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
  * (uz)
@@ -14,6 +16,8 @@ import uz.maroqand.ecology.core.entity.client.Client;
 public interface ClientRepository extends JpaRepository<Client, Integer>, JpaSpecificationExecutor<Client> {
 
     Client findTop1ByTinAndDeletedFalseOrderByIdDesc(Integer tin);
+
+    List<Client> findByTinAndDeletedFalse(Integer tin);
 
     Client findByIdAndDeletedFalse(Integer Id);
 

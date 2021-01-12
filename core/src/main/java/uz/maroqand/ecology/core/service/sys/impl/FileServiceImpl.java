@@ -183,6 +183,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public File getByName(String name) {
+        return fileRepository.findTop1ByNameAndDeletedFalseOrderByDateUploadedDesc(name);
+    }
+
+    @Override
     public File save(File file) {
         return fileRepository.save(file);
     }

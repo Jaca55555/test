@@ -35,7 +35,9 @@ public class ExpertiseUrls {
     public static final String PerformerView = Performer + "/view";
     public static final String PerformerAction = Performer + "/action";
     public static final String PerformerActionEdit = Performer + "/action/edit";
+    public static final String PerformerConclusionIsOnline = Performer + "/conclusion_is_online";
     public static final String PerformerConclusionSave = Performer + "/conclusion_save";
+    public static final String PerformerConclusionIsSave = Performer + "/conclusion_is_save";
     public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";
 
     //Kelishish
@@ -80,6 +82,7 @@ public class ExpertiseUrls {
     public static final String BillingListAjax = Billing + "/list_ajax";
     public static final String BillingView = Billing + "/view";
     public static final String BillingEdit = Billing + "/edit";
+    public static final String BillingInvoiceIsNol = Billing + "/amount_is_nol";
     public static final String BillingDelete = Billing + "/delete";
 
 
@@ -114,10 +117,14 @@ public class ExpertiseUrls {
     public static final String ConclusionList = Conclusion + "/list";
     public static final String ConclusionListAjax = Conclusion + "/list_ajax";
     public static final String ConclusionView = Conclusion + "/view";
+    public static final String ConclusionRegApplicationListAjax = Conclusion + "/reg_list_ajax"; // elektron yuklangan
+    public static final String ConclusionRegApplicationView = Conclusion + "/reg_view";
     public static final String ConclusionNewList = Conclusion + "/new_list";
     public static final String ConclusionFileUpload = Conclusion + "/file_upload";
     public static final String ConclusionFileDownload = Conclusion + "/file_download";
     public static final String ConclusionFileDownloadForView = Conclusion + "/file_download_for_view";
+    public static final String ConclusionRegApplicationConclusionIdFileDownloadForView = Conclusion + "/reg_file_download_for_view";
+    public static final String ConclusionRegApplicationConclusionIdWordFileDownloadForView = Conclusion + "/reg_word_file_download_for_view";
     public static final String ConclusionFileAdd = Conclusion + "/file_add";
 
 
@@ -161,6 +168,78 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationCommentDelete = ExpertiseReg + "/comment/file/delete";
     public static final String ExpertiseRegApplicationGetOkedName = ExpertiseRegApplication + "/get_oked_name";
 
+
+    // for category type 4
+    private static final String RegApplicationFourCategory = ExpertiseRegApplication + "/category_four";
+    public static final String ExpertiseRegApplicationFourCategoryResume = RegApplicationFourCategory + "/resume";
+    public static final String ExpertiseRegApplicationFourCategoryStart = RegApplicationFourCategory + "/start";
+    public static final String ExpertiseRegApplicationFourCategoryApplicant = RegApplicationFourCategory + "/applicant";
+    public static final String ExpertiseRegApplicationFourCategorySendSMSCode = RegApplicationFourCategory + "/send_sms_code";
+    public static final String ExpertiseRegApplicationFourCategoryGetSMSCode = RegApplicationFourCategory + "/get_sms_code";
+
+    public static final String ExpertiseRegApplicationFourCategoryAbout = RegApplicationFourCategory + "/about";
+    public static final String ExpertiseRegApplicationFourCategoryGetActivity = RegApplicationFourCategory + "/activity";
+    public static final String ExpertiseRegApplicationFourCategoryGetMaterials = RegApplicationFourCategory + "/materials";
+    public static final String ExpertiseRegApplicationFourCategoryGetMaterial = RegApplicationFourCategory + "/material";
+
+
+    public static final String ExpertiseRegApplicationFourCategoryStep3 = RegApplicationFourCategory + "/step3";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileUpload = RegApplicationFourCategory + "/step3_file_upload";
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileDownload = RegApplicationFourCategory + "/step3_file_download";
+    public static final String ExpertiseRegApplicationFourCategoryStep3FileDelete = RegApplicationFourCategory + "/step3_file_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+
+    public static final String ExpertiseRegApplicationFourCategoryAirPoolCreate = RegApplicationFourCategory + "/air_pool_create";
+    public static final String ExpertiseRegApplicationFourCategoryAirPoolEdit = RegApplicationFourCategory + "/air_pool_edit";
+    public static final String ExpertiseRegApplicationFourCategoryAirPoolDelete = RegApplicationFourCategory + "/air_pool_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep4_2 = RegApplicationFourCategory + "/step4_2";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep4_2FileUpload = ExpertiseRegApplication + "/step4_2_file_upload";
+    public static final String ExpertiseRegApplicationFourCategoryStep4_2FileDownload = ExpertiseRegApplication + "/step4_2_file_download";
+    public static final String ExpertiseRegApplicationFourCategoryStep4_2FileDelete = ExpertiseRegApplication + "/step4_2_file_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalCreate = RegApplicationFourCategory + "/description_of_sources_additional_create";
+    public static final String ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalEdit = RegApplicationFourCategory + "/description_of_sources_additional_edit";
+    public static final String ExpertiseRegApplicationFourCategoryDescriptionOfSourcesAdditionalDelete = RegApplicationFourCategory + "/description_of_sources_additional_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep4_3 = RegApplicationFourCategory + "/step4_3";
+
+    public static final String ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountCreate = RegApplicationFourCategory + "/harmful_substances_amount_create";
+    public static final String ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountEdit = RegApplicationFourCategory + "/harmful_substances_amount_edit";
+    public static final String ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountDelete = RegApplicationFourCategory + "/harmful_substances_amount_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep4Submit = RegApplicationFourCategory + "/step4_submit";
+    public static final String ExpertiseRegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
+
+    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
+    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
+    public static final String ExpertiseRegApplicationFourCategoryBoilerIsSave = RegApplicationFourCategory + "/boiler_characteristics_is_save";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep6 = RegApplicationFourCategory + "/step6";
+
+    public static final String ExpertiseRegApplicationFourCategoryPollutionMeasuresCreate = RegApplicationFourCategory + "/pollution_measures_create";
+    public static final String ExpertiseRegApplicationFourCategoryPollutionMeasuresEdit = RegApplicationFourCategory + "/pollution_measures_edit";
+    public static final String ExpertiseRegApplicationFourCategoryPollutionMeasuresDelete = RegApplicationFourCategory + "/pollution_measures_delete";
+
+    public static final String ExpertiseRegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
+
+    public static final String ExpertiseRegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
+    public static final String ExpertiseRegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";
+    public static final String ExpertiseRegApplicationFourCategoryContractConfirm = RegApplicationFourCategory + "/contract/confirm";
+
+    public static final String ExpertiseRegApplicationFourCategoryPrepayment = RegApplicationFourCategory + "/prepayment";
+    public static final String ExpertiseRegApplicationFourCategoryPaymentSendSms = RegApplicationFourCategory + "/payment/send_sms";
+    public static final String ExpertiseRegApplicationFourCategoryPaymentConfirmSms = RegApplicationFourCategory + "/payment/confirm_sms";
+    public static final String ExpertiseRegApplicationFourCategoryPaymentFree = RegApplicationFourCategory + "/payment/free";
+    public static final String ExpertiseRegApplicationFourCategoryStatus = RegApplicationFourCategory + "/status";
+    public static final String ExpertiseRegApplicationFourCategoryResend = RegApplicationFourCategory + "/resend";
+
     public static final String ExpertiseRegApplicationList = ExpertiseRegApplication + "/list";
     public static final String ExpertiseRegApplicationListAjax = ExpertiseRegApplication + "/list_ajax";
 
@@ -169,6 +248,7 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationMonitoringListAjax = ExpertiseRegApplicationMonitoring + "/list_ajax";
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseRegApplicationMonitoring + "/view";
     public static final String ExpertiseRegApplicationMonitoringEdit = ExpertiseRegApplicationMonitoring + "/edit";
+    public static final String ExpertiseRegApplicationMonitoringPerformerConclusionEdit = ExpertiseRegApplicationMonitoring + "/performer_conclusion_edit"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
 
     public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
     public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";

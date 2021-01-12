@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.client.Client;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.util.Common;
 
 /**

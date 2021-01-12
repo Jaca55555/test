@@ -502,12 +502,21 @@
             $('#objectId').select2();
             // $('#activityId').select2();
 
+            if ($("#objectId").val()!=""){
+                $("#objectId").change();
+            }
+
             $("#objectId").change(function(){
                 getActivityList();
             });
             $("#activityId").change(function(){
                 getMaterialList();
             });
+            if ($("#objectId").val()==15){
+                $('#regionDiv').show();
+                $('#regionId').prop('required',true);
+            }
+
             if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
                 $('#regionDiv').show();
                 $('#regionId').prop('required',true);
@@ -544,13 +553,21 @@
                     $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $('#categorySelect').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $("#materialDiv").text("");
-
+                    console.log(response)
                     if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
                         $("#activityIdDiv").hide();
                         $("#activityId").removeAttr('required');
                         $("#categorySelect").removeAttr('required');
                         // $("#categoryDiv").hide();
                         $("#categorySelectDiv").hide();
+
+                        if ($("#objectId").val()==15){
+                            $('#regionDiv').show();
+                            $('#regionId').prop('required',true);
+                        }else{
+                            $('#regionDiv').hide();
+                            $('#regionId').prop('required',false);
+                        }
                         materialDiv(response.requirementList[0].materials);
                     }else {
                         $("#activityIdDiv").show();

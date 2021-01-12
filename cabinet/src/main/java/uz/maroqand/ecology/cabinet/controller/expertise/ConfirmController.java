@@ -24,6 +24,7 @@ import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
@@ -65,6 +66,7 @@ public class ConfirmController {
     private final ToastrService toastrService;
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public ConfirmController(
@@ -81,7 +83,7 @@ public class ConfirmController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
-            NotificationService notificationService, SmsSendService smsSendService){
+            NotificationService notificationService, SmsSendService smsSendService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -97,6 +99,7 @@ public class ConfirmController {
         this.toastrService = toastrService;
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -201,6 +204,12 @@ public class ConfirmController {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
 
+        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
+        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
+        }
+        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
+
         model.addAttribute("applicant", applicant);
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
@@ -247,6 +256,19 @@ public class ConfirmController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
+
+        Notification notification = notificationService.getByRegApplicationConfirm(regApplication.getId());
+        if (notification==null){
+            notificationService.createForRegContract(
+                    regApplication.getApplicant().getTin(),
+                    NotificationType.RegContract,
+                    "sys_reg_application.contract_wait",
+                    regApplication.getId(),
+                    "Ariza shartnoma tasdiqlashga yuborildi",
+                    user.getId()
+            );
+        }
+
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), "Arizangiz tasdiqlandi keyingi bosqishga o'tishingiz mumkin, ariza raqami " + regApplication.getId(), regApplication.getId(), client.getName());
         return "redirect:"+ExpertiseUrls.ConfirmView + "?logId=" + logId + "#confirmation";

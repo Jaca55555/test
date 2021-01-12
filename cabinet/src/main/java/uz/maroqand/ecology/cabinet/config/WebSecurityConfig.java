@@ -47,9 +47,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/static*/**").permitAll()
+                .antMatchers("/docEditor/**").permitAll()
+                .antMatchers("/onlyoffice/fixationCallback").permitAll()
                 .antMatchers("/doc/file_upload").permitAll()
                 .antMatchers("/doc/file/download").permitAll()
                 .antMatchers("/expertise/conclusion/file_download_for_view").permitAll()
+                .antMatchers("/expertise/conclusion/reg_file_download_for_view").permitAll()
+                .antMatchers("/expertise/conclusion/reg_word_file_download_for_view").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
                 .antMatchers(SysUrls.GetDocument +"/**").permitAll()
                 .antMatchers(SysUrls.GetQRImage +"/**").permitAll()
@@ -95,7 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.csrf().ignoringAntMatchers("/login");
+        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()
