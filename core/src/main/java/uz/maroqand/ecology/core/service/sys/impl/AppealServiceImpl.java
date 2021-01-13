@@ -79,6 +79,11 @@ public class AppealServiceImpl implements AppealService {
         return appealRepository.findByIdAndCreatedByIdAndDeletedFalse(id,createdById);
     }
 
+    @Override
+    public Integer getbyStatus() {
+        return appealRepository.countAllByAppealStatusAndDeletedFalse(AppealStatus.Open);
+    }
+
     public Page<Appeal> findFiltered(
             Integer appealId,
             Integer appealType,

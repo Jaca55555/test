@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.sys;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.sys.AppealStatus;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.user.User;
 
@@ -24,7 +25,7 @@ public interface AppealService {
     Appeal delete(Appeal appeal,User user);
 
     Appeal getById(Integer id,Integer createdById);
-
+    Integer getbyStatus();
     Page<Appeal> findFiltered(
             Integer appealId,
             Integer appealType,

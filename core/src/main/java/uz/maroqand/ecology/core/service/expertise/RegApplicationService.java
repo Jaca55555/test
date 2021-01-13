@@ -30,6 +30,8 @@ public interface RegApplicationService {
 
     RegApplication getByOneInvoiceId(Integer invoiceId);
 
+    RegApplication getTopByOneInvoiceId(Integer invoiceId);
+
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);

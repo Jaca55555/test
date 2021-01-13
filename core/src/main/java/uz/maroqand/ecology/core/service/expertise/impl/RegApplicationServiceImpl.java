@@ -93,6 +93,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getTopByOneInvoiceId(Integer invoiceId) {
+        return regApplicationRepository.findTop1ByInvoiceIdAndDeletedFalse(invoiceId);
+    }
+
+    @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
