@@ -298,7 +298,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if (filterDto!=null) {
-                    if (filterDto.getStatus()!=null){
+                    if (filterDto.getLogStatus()!=null){
                         System.out.println("filterDto.getStatus()"+filterDto.getLogStatus());
 //                        System.out.println(root.get("status").get("id"));
                         predicates.add(criteriaBuilder.equal(root.get("agreementStatus"),filterDto.getLogStatus()));
