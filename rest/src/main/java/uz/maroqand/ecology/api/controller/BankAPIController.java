@@ -14,6 +14,7 @@ import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.*;
 
@@ -36,14 +37,16 @@ public class BankAPIController {
     private PaymentService paymentService;
     private RegApplicationService regApplicationService;
     private UserService userService;
+    private OrganizationService organizationService;
 
     @Autowired
-    public BankAPIController(PaymentFileService paymentFileService, RegApplicationService regApplicationService, InvoiceService invoiceService, PaymentService paymentService, UserService userService) {
+    public BankAPIController(PaymentFileService paymentFileService, RegApplicationService regApplicationService, InvoiceService invoiceService, PaymentService paymentService, UserService userService, OrganizationService organizationService) {
         this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.paymentService = paymentService;
         this.regApplicationService=regApplicationService;
         this.userService = userService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = "/payment/new", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8",produces = "application/json;charset=UTF-8")
@@ -134,7 +137,7 @@ public class BankAPIController {
             if(invoice!=null){
               RegApplication regApplication = regApplicationService.getTopByOneInvoiceId(invoice.getId());
               if (regApplication!=null) {
-                  String account = userService.findById(regApplication.getReviewId()).getOrganization().getAccount();
+                  String account = organizationService.getById(regApplication.getReviewId()).getAccount();
                   if (paymentFile.getReceiverAccount().equals(account)) {
                       paymentFile.setInvoice(invoice.getInvoice());
                       paymentFileService.save(paymentFile);
