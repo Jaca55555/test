@@ -104,16 +104,17 @@ public class ConfirmController {
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
     public String getConfirmListPage(Model model) {
-        List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
-        logStatusList.add(LogStatus.Approved);
-        logStatusList.add(LogStatus.Denied);
+        List<RegApplicationStatus> regApplicationStatusList = new ArrayList<>();
+//        regApplicationStatusList.add(LogStatus.Initial);
+        regApplicationStatusList.add(RegApplicationStatus.Initial);
+        regApplicationStatusList.add(RegApplicationStatus.Approved);
+        regApplicationStatusList.add(RegApplicationStatus.Canceled);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", logStatusList);
+        model.addAttribute("statusList", regApplicationStatusList);
         return ExpertiseTemplates.ConfirmList;
     }
 
@@ -153,8 +154,8 @@ public class ConfirmController {
                 client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
                 client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplication.getConfirmLogAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplication.getConfirmLogAt()):"",
-                regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
-                regApplicationLog.getStatus()!=null? regApplicationLog.getStatus().getId():"",
+                regApplication.getStatus()!=null? helperService.getTranslation(regApplication.getStatus().getName(),locale):"",
+                regApplication.getStatus()!=null? regApplication.getStatus().getId():"",
                 regApplicationLog.getId()
             });
         }

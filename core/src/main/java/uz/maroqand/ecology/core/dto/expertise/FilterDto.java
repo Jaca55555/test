@@ -30,7 +30,7 @@ public class FilterDto {
     private String deadlineDateBegin;
     private String deadlineDateEnd;
     private Integer status;
-    private LogStatus logStatus;
+    private RegApplicationStatus regApplicationStatus;
     private Set<RegApplicationStatus> statusForReg;
     private Boolean conclusionOnline;
 

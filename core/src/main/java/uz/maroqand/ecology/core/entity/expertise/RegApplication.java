@@ -41,7 +41,6 @@ public class RegApplication {
     @Column(name = "applicant_type")
     @Enumerated(EnumType.ORDINAL)
     private ApplicantType applicantType;
-
     @Column(name = "input_type")
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationInputType inputType;

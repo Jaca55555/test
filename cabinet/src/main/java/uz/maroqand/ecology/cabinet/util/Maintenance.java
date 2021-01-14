@@ -38,7 +38,7 @@ public class Maintenance {
                 Calendar c = Calendar.getInstance();
                 Date date = new Date();
                 c.setTime(date);
-                c.add(Calendar.DATE,-90);    // shu kunning o'zi ham qo'shildi
+                c.add(Calendar.DATE,-31);    // shu kunning o'zi ham qo'shildi
                 Date expireDate = c.getTime();
 //                Invoice yaratilganiga 90 kundan oshgan
                 if (createdDate.before(expireDate)){
