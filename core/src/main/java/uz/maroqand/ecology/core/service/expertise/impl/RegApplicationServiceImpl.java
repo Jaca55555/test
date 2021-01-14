@@ -320,7 +320,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getApplicationId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
                     }
-
+                    if(filterDto.getOrganizationId() != null){
+                        predicates.add(criteriaBuilder.equal(root.get("reviewId"),filterDto.getOrganizationId()));
+                    }
                     if (filterDto.getRegionId() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
                     }

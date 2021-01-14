@@ -31,6 +31,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -67,6 +68,7 @@ public class ConfirmController {
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final OrganizationService organizationService;
 
     @Autowired
     public ConfirmController(
@@ -83,7 +85,7 @@ public class ConfirmController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
-            NotificationService notificationService, SmsSendService smsSendService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService){
+            NotificationService notificationService, SmsSendService smsSendService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, OrganizationService organizationService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -100,6 +102,7 @@ public class ConfirmController {
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -115,6 +118,7 @@ public class ConfirmController {
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", regApplicationStatusList);
+        model.addAttribute("organizationList", organizationService.getList());
         return ExpertiseTemplates.ConfirmList;
     }
 
@@ -137,7 +141,7 @@ public class ConfirmController {
                 RegApplicationInputType.ecoService,
                 pageable
         );
-
+        System.out.println(filterDto);
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
@@ -149,14 +153,11 @@ public class ConfirmController {
                 client != null ? client.getTin() : "",
                 client != null ? client.getName() : "",
                 client != null ? helperService.getApplicantType(client.getType().getId(),locale):"",
-                client != null ? client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"" : "",
-                client != null ? client.getOked() : "",
-                client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
-                client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplication.getConfirmLogAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplication.getConfirmLogAt()):"",
                 regApplication.getStatus()!=null? helperService.getTranslation(regApplication.getStatus().getName(),locale):"",
                 regApplication.getStatus()!=null? regApplication.getStatus().getId():"",
-                regApplicationLog.getId()
+                regApplicationLog.getId(),
+                regApplication.getReviewId()!=null ? organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale):""
             });
         }
 

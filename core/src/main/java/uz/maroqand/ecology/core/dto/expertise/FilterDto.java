@@ -33,7 +33,7 @@ public class FilterDto {
     private RegApplicationStatus regApplicationStatus;
     private Set<RegApplicationStatus> statusForReg;
     private Boolean conclusionOnline;
-
+    private Integer organizationId;
     private String dateBegin;
     private String dateEnd;
 
