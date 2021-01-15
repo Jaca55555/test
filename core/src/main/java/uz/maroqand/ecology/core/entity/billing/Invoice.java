@@ -56,6 +56,7 @@ public class Invoice {
     @Column(name = "payee_tin")
     private Integer payeeTin;
 
+
     @Column(name = "payee_address")
     private String payeeAddress;
 
