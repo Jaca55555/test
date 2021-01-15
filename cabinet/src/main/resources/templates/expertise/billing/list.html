@@ -104,6 +104,10 @@
                                                         <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label for="regApplication" class="control-label" th:text="#{reg_application.id}">ИНН</label>
+                                                    <input type="number" class="form-control"  id="regApplication" data-parsley-type="integer">
+                                                </div>
                                                 <div class="clearfix"></div>
 
                                                 <div class="col-sm-12 text-right">
@@ -126,6 +130,7 @@
                                             <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
                                                 <thead>
                                                 <tr>
+                                                    <th th:text="#{reg_application.id}"></th>
                                                     <th th:text="#{invoice_number}"></th>
                                                     <th th:text="#{sys_organization_name}"></th>
                                                     <th th:text="#{sys_client}"></th>
@@ -537,6 +542,7 @@
                 dataToSend.regionId = $("#regionId").val();
                 dataToSend.subRegionId = $("#subRegionId").val();
                 dataToSend.tin = $("#tin").val();
+                dataToSend.regApplication = $("#regApplication").val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -547,6 +553,7 @@
                 });
             },
             columns: [
+                {data: 7, orderable:false},
                 {data: 1, name: 'invoice'},
                 {data: 2, name: 'organizationName', orderable:false},
                 {data: 6, name: 'client.name'},

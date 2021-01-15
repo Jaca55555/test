@@ -89,11 +89,17 @@ public class BillingController {
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "tin", required = false) String tin,
+            @RequestParam(name = "regApplication", required = false) Integer regApplication,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
     ){
         System.out.println("tin=======");
-        System.out.println(tin);
+        System.out.println(regApplication);
+        Integer id=null;
+
+        if(regApplication!=null) {
+           id=regApplicationService.getById(regApplication)!=null ? regApplicationService.getById(regApplication).getInvoiceId():null;
+        }
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
         invoiceNumber = StringUtils.trimToNull(invoiceNumber);
@@ -106,8 +112,9 @@ public class BillingController {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
-
+        System.out.println("id="+id);
         Page<Invoice> invoicePage = invoiceService.findFiltered(
+                id,
                 dateBegin,
                 dateEnd,
                 dateToday,
@@ -144,7 +151,8 @@ public class BillingController {
                 invoice.getAmount(),
                 Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
                 invoice.getStatus(),
-                clientName + "  <br/>" + clientTin
+                clientName + "  <br/>" + clientTin,
+                invoice.getId()!=null ? regApplicationService.getByOneInvoiceId(invoice.getId())!=null ? regApplicationService.getByOneInvoiceId(invoice.getId()).getId():"":""
             });
         }
 

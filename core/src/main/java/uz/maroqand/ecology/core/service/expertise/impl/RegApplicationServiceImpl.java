@@ -307,7 +307,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 //                        System.out.println(filterDto.getRegApplicationStatus().getName());
                         predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getRegApplicationStatus()));
                     }
-
+                    if(filterDto.getRegApplicationCategoryType()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("regApplicationCategoryType"),filterDto.getRegApplicationCategoryType()));
+                    }
                     if (filterDto.getStatusForReg()!=null){
                         predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
                     }

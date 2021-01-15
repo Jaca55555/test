@@ -103,6 +103,7 @@ public class ConfirmController {
         this.smsSendService = smsSendService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.organizationService = organizationService;
+
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
@@ -119,6 +120,7 @@ public class ConfirmController {
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", regApplicationStatusList);
         model.addAttribute("organizationList", organizationService.getList());
+        model.addAttribute("regApplicationCategoryType", RegApplicationCategoryType.getRegApplicationCategoryTypeList());
         return ExpertiseTemplates.ConfirmList;
     }
 
@@ -157,7 +159,8 @@ public class ConfirmController {
                 regApplication.getStatus()!=null? helperService.getTranslation(regApplication.getStatus().getName(),locale):"",
                 regApplication.getStatus()!=null? regApplication.getStatus().getId():"",
                 regApplicationLog.getId(),
-                regApplication.getReviewId()!=null ? organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale):""
+                regApplication.getReviewId()!=null ? organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale):"",
+                regApplication.getRegApplicationCategoryType()!=null ? helperService.getTranslation(regApplication.getRegApplicationCategoryType().getName(),locale):"",
             });
         }
 

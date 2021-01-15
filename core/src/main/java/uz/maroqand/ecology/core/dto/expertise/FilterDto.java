@@ -4,6 +4,7 @@ import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType;
 
 import java.util.Set;
 
@@ -39,5 +40,5 @@ public class FilterDto {
 
     private Integer byTin;
     private Integer byLeTin;
-
+    private RegApplicationCategoryType regApplicationCategoryType;
 }
