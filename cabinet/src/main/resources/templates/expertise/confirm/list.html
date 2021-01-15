@@ -199,10 +199,13 @@
         var statusLabel = '';
         if (row[6]===0)statusLabel += '<span class="badge badge-secondary">'+row[5]+'</span>';
         if (row[6]===1)statusLabel += '<span class="badge badge-secondary">'+row[5]+'</span>';
-        if (row[6]===2)statusLabel += '<span class="badge badge-warning">'+row[5]+'</span>';
-        if (row[6]===3)statusLabel += '<span class="badge badge-warning">'+row[5]+'</span>';
-        if (row[6]===4)statusLabel +='<span class="badge badge-success">'+row[5]+'</span>';
-        if (row[6]===5)statusLabel +='<span class="badge badge-danger">'+row[5]+'</span>';
+        if (row[6]===2)statusLabel += '<span class="badge badge-success">'+row[5]+'</span>';
+        if (row[6]===3)statusLabel += '<span class="badge badge-danger">'+row[5]+'</span>';
+        if (row[6]===4)statusLabel +='<span class="badge badge-info">'+row[5]+'</span>';
+        if (row[6]===5)statusLabel +='<span class="badge badge-warning">'+row[5]+'</span>';
+        if (row[6]===6)statusLabel += '<span class="badge badge-success">'+row[5]+'</span>';
+        if (row[6]===7)statusLabel +='<span class="badge badge-danger">'+row[5]+'</span>';
+        if (row[6]===8)statusLabel +='<span class="badge badge-danger">'+row[5]+'</span>';
         return statusLabel;
     }
 
