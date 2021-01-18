@@ -17,7 +17,7 @@ import java.util.List;
 public interface RegApplicationRepository extends DataTablesRepository<RegApplication, Integer>, JpaRepository<RegApplication, Integer>, JpaSpecificationExecutor<RegApplication> {
 
     RegApplication findByIdAndDeletedFalse(Integer id);
-
+    RegApplication findByContractNumber(String contractNumber);
     List<RegApplication> findByApplicantId(Integer id);
 
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);

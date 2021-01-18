@@ -89,6 +89,7 @@ public class BillingController {
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "tin", required = false) String tin,
+            @RequestParam(name = "contract", required = false) String contract,
             @RequestParam(name = "regApplication", required = false) Integer regApplication,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
@@ -96,9 +97,12 @@ public class BillingController {
         System.out.println("tin=======");
         System.out.println(regApplication);
         Integer id=null;
-
+        System.out.println("contract="+contract);
         if(regApplication!=null) {
            id=regApplicationService.getById(regApplication)!=null ? regApplicationService.getById(regApplication).getInvoiceId():null;
+        }
+        if(contract!=null) {
+            id=regApplicationService.getByContractNumber(contract)!=null ? regApplicationService.getByContractNumber(contract).getInvoiceId():null;
         }
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);

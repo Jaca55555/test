@@ -146,6 +146,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByContractNumber(String contractNumber) {
+        return regApplicationRepository.findByContractNumber(contractNumber);
+    }
+
+    @Override
     public RegApplication getByIdAndUserTin(Integer id, User user) {
 
         System.out.println("getByIdAndUserTin");

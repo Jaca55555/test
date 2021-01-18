@@ -35,7 +35,7 @@ public interface RegApplicationService {
     List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse();
 
     RegApplication getById(Integer id);
-
+    RegApplication getByContractNumber(String contractNumber);
     RegApplication getByIdAndUserTin(Integer id, User user);
 
     RegApplication sendRegApplicationAfterPayment(RegApplication regApplication, User user, Invoice invoice, String locale);
