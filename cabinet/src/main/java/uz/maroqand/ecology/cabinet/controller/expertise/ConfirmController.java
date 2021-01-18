@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
@@ -113,14 +114,19 @@ public class ConfirmController {
         regApplicationStatusList.add(RegApplicationStatus.Initial);
         regApplicationStatusList.add(RegApplicationStatus.Approved);
         regApplicationStatusList.add(RegApplicationStatus.Canceled);
+        regApplicationStatusList.add(RegApplicationStatus.CheckSent);
+        regApplicationStatusList.add(RegApplicationStatus.CheckConfirmed);
+        regApplicationStatusList.add(RegApplicationStatus.Process);
+        regApplicationStatusList.add(RegApplicationStatus.Modification);
+        regApplicationStatusList.add(RegApplicationStatus.NotConfirmed);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", regApplicationStatusList);
+        model.addAttribute("statusList", RegApplicationStatus.getRegApplicationStatusList());
         model.addAttribute("organizationList", organizationService.getList());
-        model.addAttribute("regApplicationCategoryType", RegApplicationCategoryType.getRegApplicationCategoryTypeList());
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.ConfirmList;
     }
 

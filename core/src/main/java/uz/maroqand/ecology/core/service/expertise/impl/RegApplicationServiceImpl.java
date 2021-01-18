@@ -328,6 +328,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getRegionId() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
                     }
+                    if(filterDto.getCategory()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("category"),filterDto.getCategory()));
+                    }
                     if (filterDto.getSubRegionId() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                     }
