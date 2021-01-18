@@ -124,7 +124,8 @@ public class ConclusionController {
                     regApplication!=null && regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
-                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():""
+                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():"",
+                    regApplication!=null ? regApplication.getId():"",
             });
         }
 
