@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
@@ -83,6 +84,8 @@ public class ConclusionController {
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("organizationList", organizationService.getList());
+        model.addAttribute("category", Category.getCategoryList());
+
         return ExpertiseTemplates.ConclusionList;
     }
 
@@ -94,9 +97,13 @@ public class ConclusionController {
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
             @RequestParam(name = "tin", required = false) String tinStr,
             @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "category", required = false)Category category,
+            @RequestParam(name = "organizationId", required = false)Integer organizationId,
+            @RequestParam(name = "regionId", required = false)Integer regionId,
+            @RequestParam(name = "subRegionId", required = false)Integer subRegionId,
             Pageable pageable
     ){
-
+        System.out.println(category);
         Integer tin = TinParser.trimIndividualsTinToNull(tinStr);
         name = StringUtils.trimToNull(name);
         User user = userService.getCurrentUserFromContext();
@@ -104,7 +111,7 @@ public class ConclusionController {
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
-        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?null:user.getOrganizationId(),id, dateBegin, dateEnd,tin,name, pageable);
+        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?null:user.getOrganizationId(),id, dateBegin, dateEnd,tin,regionId,subRegionId,name,category,pageable);
         Calendar c = Calendar.getInstance();
         c.set(c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate(),0,0,0);
         List<Conclusion> conclusionList = conclusionPage.getContent();

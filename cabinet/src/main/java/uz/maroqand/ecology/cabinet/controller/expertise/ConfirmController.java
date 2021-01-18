@@ -166,7 +166,7 @@ public class ConfirmController {
                 regApplication.getStatus()!=null? regApplication.getStatus().getId():"",
                 regApplicationLog.getId(),
                 regApplication.getReviewId()!=null ? organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale):"",
-                regApplication.getRegApplicationCategoryType()!=null ? helperService.getTranslation(regApplication.getRegApplicationCategoryType().getName(),locale):"",
+                regApplication.getCategory()!=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale):"",
             });
         }
 

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.sys.DocumentRepoType;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
@@ -91,11 +92,11 @@ public class ConclusionServiceImpl implements ConclusionService {
 
 
     @Override
-    public Page<Conclusion> findFiltered(Integer reviewId,Integer id, Date dateBegin, Date dateEnd, Integer tin, String name,Pageable pageable) {
+    public Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category, Pageable pageable) {
         Set<ConclusionStatus> conclusionStatusIds  = new HashSet<>();
         conclusionStatusIds.add(ConclusionStatus.Active);
         conclusionStatusIds.add(ConclusionStatus.Expired);
-        return conclusionRepository.findAll(getFilteringSpecification(reviewId,id,dateBegin,dateEnd,tin,conclusionStatusIds,name),pageable);
+        return conclusionRepository.findAll(getFilteringSpecification(reviewId,id,dateBegin,dateEnd,tin,regionId,subRegionId,conclusionStatusIds,name,category),pageable);
     }
 
     private static Specification<Conclusion> getFilteringSpecification(
@@ -104,8 +105,11 @@ public class ConclusionServiceImpl implements ConclusionService {
             final Date dateBegin,
             final Date dateEnd,
             final Integer tin,
+            final Integer regionId,
+            final Integer subRegionId,
             final Set<ConclusionStatus> conclusionStatuses,
-            final String name
+            final String name,
+            final Category category
     ) {
         return new Specification<Conclusion>() {
             @Override
@@ -119,11 +123,18 @@ public class ConclusionServiceImpl implements ConclusionService {
                 if(id != null){
                     predicates.add(criteriaBuilder.equal(root.get("id"), id));
                 }
-
+                if(regionId!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("regionId"),regionId));
+                }
+                if(subRegionId!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("subRegionId"),subRegionId));
+                }
                 if(conclusionStatuses != null){
                     predicates.add(criteriaBuilder.in(root.get("status")).value(conclusionStatuses));
                 }
-
+                if(category !=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("category"),category));
+                }
                 if(dateBegin != null && dateEnd != null){
                     predicates.add(criteriaBuilder.between(root.get("date"), dateBegin, dateEnd));
                 }

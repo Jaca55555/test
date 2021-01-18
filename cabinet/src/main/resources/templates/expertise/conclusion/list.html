@@ -109,6 +109,13 @@
                                                             <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                         </select>
                                                     </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="regionId" class="control-label" th:text="#{sys_region}"></label>
+                                                        <select id="regionId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
                                                     <div class="form-group col-sm-3">
                                                         <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
                                                         <select id="organizationId" class="form-control">
@@ -170,8 +177,36 @@
                                                             <input type="text" class="form-control datepicker" id="dateBegin" />
                                                         </div>
                                                         <div class="form-group col-sm-2">
+                                                            <label for="regionId1" class="control-label" th:text="#{sys_region}"></label>
+                                                            <select id="regionId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label for="subRegionId1" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
+                                                            <select id="subRegionId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
                                                             <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
                                                             <input type="text" class="form-control datepicker" id="dateEnd" />
+                                                        </div>
+                                                        <div class="form-group col-sm-3">
+                                                            <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                            <select id="category" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="regApp : ${category}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-3">
+                                                            <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                            <select id="organizationId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                            </select>
                                                         </div>
                                                         <div class="clearfix"></div>
 
@@ -296,6 +331,10 @@
                 dataToSend.dateEnd = $("#dateEnd").val();
                 dataToSend.name = $("#name").val();
                 dataToSend.tin = $("#tin").val();
+                dataToSend.category=$("#category").val();
+                dataToSend.regionId = $('#regionId1').val();
+                dataToSend.subRegionId = $('#subRegionId1').val();
+                dataToSend.organizationId= $('#organizationId1').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
