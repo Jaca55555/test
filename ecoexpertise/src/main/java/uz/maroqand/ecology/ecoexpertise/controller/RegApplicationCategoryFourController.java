@@ -674,7 +674,7 @@ public class RegApplicationCategoryFourController {
         }
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.GET)
+    /*@RequestMapping(value = RegUrls.RegApplicationFourCategoryStep4, method = RequestMethod.GET)
     public String regApplicationFourCategoryStep4(
             @RequestParam(name = "id") Integer id,
             Model model
@@ -1357,10 +1357,10 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect;
         }
 
-       /* if (regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+       *//* if (regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
             regApplicationCategoryFourAdditionalService.createBolier(regApplicationCategoryFourAdditional,user.getId());
 
-        }*/
+        }*//*
 
         model.addAttribute("regApplicationCategoryFourAdditional",regApplicationCategoryFourAdditional);
         model.addAttribute("regApplication",regApplication);
@@ -1711,13 +1711,13 @@ public class RegApplicationCategoryFourController {
 
 
 
-  /*  @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
+  *//*  @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep6, method = RequestMethod.POST)
     public String regApplicationFourCategoryStep6Post(
             @RequestParam(name = "id") Integer id
     ){
 
         return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
-    }*/
+    }*//*
 
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryStep7, method = RequestMethod.GET)
@@ -1777,7 +1777,7 @@ public class RegApplicationCategoryFourController {
         regApplicationService.update(regApplication);
 //        return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
         return "redirect:" + RegUrls.RegApplicationFourCategoryWaiting + "?id=" + id;
-    }
+    }*/
 
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryWaiting,method = RequestMethod.GET)
@@ -1796,7 +1796,7 @@ public class RegApplicationCategoryFourController {
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id;
+            return "redirect:" + RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id;
         }
         if (regApplication.getForwardingLogId() != null){
             return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
@@ -1805,8 +1805,8 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep7 + "?id=" + id);
-//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+        model.addAttribute("back_url", RegUrls.RegApplicationFourCategoryStep3 + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryWaiting;
     }
 
@@ -1985,7 +1985,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication", regApplication);
 //        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
         model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? RegUrls.RegApplicationFourCategoryPaymentFree : RegUrls.RegApplicationFourCategoryPaymentSendSms);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryPrepayment;
     }
 
@@ -2119,7 +2119,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url", RegUrls.RegApplicationList);
-        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
         return RegTemplates.RegApplicationFourCategoryStatus;
     }
 

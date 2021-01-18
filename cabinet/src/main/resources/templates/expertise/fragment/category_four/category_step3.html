@@ -7,79 +7,99 @@
 <body th:fragment="category_step3">
 
 <div class="card-block"  >
-    <div class="row" >
+    <div class="row" th:object="${regApplication}">
         <div class="form-group col-md-12" >
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.common_area}"></label>
-                    <span class="required">*</span>
-                </div>
+            <div class="row">
                 <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.commonArea}" readonly="readonly" />
-                        <div class="input-group-append">
-                            <span class="input-group-text">
-                                m <sup>2</sup>
-                            </span>
+
+                    <div class="form-group row" >
+                        <div class="col-md-4 text-right">
+                            <label class="col-form-label" th:text="#{sys_step_3.common_area}"></label>
+                            <span class="required">*</span>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" readonly="" th:field="${regApplicationCategoryFourAdditional.commonArea}" data-parsley-type="number" data-parsley-errors-container="#error_commonArea" />
+                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        m <sup>2</sup>
+                                                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="form-group row" >
+                        <div class="col-md-4 text-right">
+                            <label class="col-form-label" th:text="#{sys_step_3.building_under_area}"></label>
+                            <span class="required">*</span>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.buildingUnderArea}" readonly data-parsley-type="number" data-parsley-errors-container="#error_buildingUnderArea" />
+                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        m <sup>2</sup>
+                                                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="error_buildingUnderArea" class="col-md-7 offset-4"></div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+                    <div class="form-group row" >
+                        <div class="col-md-4 text-right">
+                            <label class="col-form-label" th:text="#{sys_step_3.area_additional}"></label>
+                            <span class="required">*</span>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.areaAdditional}" readonly="readonly" data-parsley-type="number" data-parsley-errors-container="#error_areaAdditional" />
+                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        m <sup>2</sup>
+                                                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="error_areaAdditional" class="col-md-7 offset-4"></div>
+                    </div>
+
+                    <div class="form-group row" >
+                        <div class="col-md-4 text-right">
+                            <label class="col-form-label" th:text="#{sys_step_3.road_area}"></label>
+                            <span class="required">*</span>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.roadArea}" readonly data-parsley-type="number" data-parsley-errors-container="#error_roadArea" />
+                                <div class="input-group-append">
+                                                                    <span class="input-group-text">
+                                                                        m <sup>2</sup>
+                                                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="error_roadArea" class="col-md-7 offset-4"></div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.building_under_area}"></label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.buildingUnderArea}" readonly="readonly" />
-                        <div class="input-group-append">
-                            <span class="input-group-text">
-                                m <sup>2</sup>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.area_additional}"></label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.areaAdditional}" readonly="readonly"/>
-                        <div class="input-group-append">
-                            <span class="input-group-text">
-                                m <sup>2</sup>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.road_area}"></label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.roadArea}" readonly="readonly"/>
-                        <div class="input-group-append">
-                            <span class="input-group-text">
-                                m <sup>2</sup>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div id="error_roadArea" class="col-md-6 offset-3"></div>
-            </div>
             <div class="col-md-12">
-                <div class="col-md-6 offset-md-3 row" style="padding: 5px 0 5px 0;" >
-                    <div class="col-md-3" th:each="file : ${regApplicationCategoryFourAdditional.planFiles}">
+                <h5 class="text-center" th:text="#{sys_step_3.plan_files_upload}"> Объектнинг жойлашув режасини юклаш</h5>
+                <!--<div class="col-md-6 offset-md-3 row" style="padding: 5px 0 5px 0;" id="files-div">
+                    <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                        <div class="add-file">
+                            <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                            <span id="percentage"><span id="percentage-num"></span>%</span>
+                            <i class="feather icon-plus" id="plus-icon"></i>
+                        </div>
+                    </a>-->
+                    <div class="col-md-3" th:each="file : ${regApplicationCategoryFourAdditional.planFiles}" th:id="${'file-block-' + file.id}">
                         <div class="file">
                             <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryStep3FileDownload + '?file_id=' + file.id + '&id=' + regApplicationCategoryFourAdditional.id }">
                                 <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
@@ -87,165 +107,186 @@
                                 <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
                                 <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
                                 <i th:if="${file.extension!='doc'
-                                                        && file.extension!='docx'
-                                                        && file.extension!='xls'
-                                                        && file.extension!='xlsx'
-                                                        && file.extension!='pdf'
-                                                        && file.extension!='png'
-                                                        && file.extension!='jpg'
-                                                        && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                                                                                && file.extension!='docx'
+                                                                                                && file.extension!='xls'
+                                                                                                && file.extension!='xlsx'
+                                                                                                && file.extension!='pdf'
+                                                                                                && file.extension!='png'
+                                                                                                && file.extension!='jpg'
+                                                                                                && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
                                 <span th:text="${file.description}"></span>
                                 <p th:text="${file.name}"></p>
                             </a>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.work_schedule}">Наименование объекта</label>
-                    <span class="required">*</span>
                 </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.workSchedule}" readonly="readonly"  />
-                </div>
-            </div>
+        </div>
 
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.production_capacity}"></label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="text"   th:value="${regApplicationCategoryFourAdditional.productionCapacity}" readonly="readonly" />
-                        <div class="input-group-append">
-                            <span class="input-group-text" th:utext="#{sys_step_3.birlik}">
-                               (y/tonna, y/dona v.h)
-                            </span>
-                        </div>
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.work_schedule}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control"  readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.workSchedule}" required="" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.production_capacity}"></label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input class="form-control" type="text" readonly="readonly" maxlength="254"  th:field="${regApplicationCategoryFourAdditional.productionCapacity}" data-parsley-errors-container="#error_productionCapacity" />
+                    <div class="input-group-append">
+                                                                <span class="input-group-text" th:utext="#{sys_step_3.birlik}">
+                                                                   (y/tonna, y/dona v.h)
+                                                                </span>
                     </div>
                 </div>
             </div>
+            <div id="error_productionCapacity" class="col-md-6 offset-3"></div>
+        </div>
 
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.technological_process}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.technologicalProcess}" readonly="readonly" />
-                </div>
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.technological_process}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.material_additional}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.materialAdditional}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.technologicalProcess}" maxlength="254"  />
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_material}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Material}" readonly="readonly" />
-                </div>
-            </div>
+        </div>
 
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.source_material}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.sourceMaterial}" readonly="readonly" />
-                </div>
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.material_additional}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_texno}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Texno}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.materialAdditional}" maxlength="254"  />
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_heat}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Heat}" readonly="readonly" />
-                </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_material}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_water}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Water}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Material}" maxlength="254"  />
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_sewer}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Sewer}" readonly="readonly" />
-                </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.source_material}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_sewage}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Sewage}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.sourceMaterial}" maxlength="254"  />
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_water_treatment}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3WaterTreatment}" readonly="readonly" />
-                </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_texno}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_waste}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Waste}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Texno}" maxlength="254"  />
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_event}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Event}" readonly="readonly" />
-                </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_heat}">Наименование объекта</label>
+                <span class="required">*</span>
             </div>
-            <div class="form-group row" >
-                <div class="col-md-3 text-right">
-                    <label class="col-form-label" th:text="#{sys_step_3.step_3_household}">Наименование объекта</label>
-                    <span class="required">*</span>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" th:value="${regApplicationCategoryFourAdditional.step3Household}" readonly="readonly" />
-                </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Heat}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_water}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" type="text" readonly="readonly" th:field="${regApplicationCategoryFourAdditional.step3Water}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_sewer}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Sewer}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_sewage}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Sewage}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_water_treatment}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3WaterTreatment}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_waste}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Waste}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_event}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" type="text" required="" th:field="${regApplicationCategoryFourAdditional.step3Event}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="form-group row col-md-12" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_step_3.step_3_household}">Наименование объекта</label>
+                <span class="required">*</span>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" type="text" th:field="${regApplicationCategoryFourAdditional.step3Household}" maxlength="254"  />
+            </div>
+        </div>
+
+        <div class="alert alert-light row col-md-8 offset-2" role="alert">
+            <div class="col-auto">
+                <button class="btn drp-icon btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-alert-triangle"></i></button>
+            </div>
+            <div class="col-auto f-25" style="padding: inherit">
+                <span th:utext="#{sys_step_3.alert}"></span>
             </div>
         </div>
     </div>

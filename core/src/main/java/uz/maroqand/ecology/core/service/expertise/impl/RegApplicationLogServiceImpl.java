@@ -136,7 +136,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
     @Override
     public List<RegApplicationLog> getAllByLogType(LogType logType) {
-        return regApplicationLogRepository.findByTypeOrderByIdDesc(logType);
+        return regApplicationLogRepository.findByTypeAndDeletedFalseOrderByIdDesc(logType);
     }
 
     @Override

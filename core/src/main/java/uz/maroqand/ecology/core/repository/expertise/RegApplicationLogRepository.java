@@ -30,6 +30,6 @@ public interface RegApplicationLogRepository extends JpaRepository<RegApplicatio
 
     List<RegApplicationLog> findByRegApplicationIdAndTypeAndShowTrueAndDeletedFalseOrderByIdDesc(Integer regApplicationId, LogType type);
 
-    List<RegApplicationLog> findByTypeOrderByIdDesc(LogType logType);
+    List<RegApplicationLog> findByTypeAndDeletedFalseOrderByIdDesc(LogType logType);
 
 }

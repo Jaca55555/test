@@ -56,7 +56,7 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep3FileDownload = RegApplication + "/step3_file_download";
     public static final String RegApplicationFourCategoryStep3FileDelete = RegApplication + "/step3_file_delete";
 
-    public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+   /* public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
 
     public static final String RegApplicationFourCategoryAirPoolCreate = RegApplicationFourCategory + "/air_pool_create";
     public static final String RegApplicationFourCategoryAirPoolEdit = RegApplicationFourCategory + "/air_pool_edit";
@@ -94,7 +94,7 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryPollutionMeasuresEdit = RegApplicationFourCategory + "/pollution_measures_edit";
     public static final String RegApplicationFourCategoryPollutionMeasuresDelete = RegApplicationFourCategory + "/pollution_measures_delete";
 
-    public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
+    public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";*/
 
     public static final String RegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
     public static final String RegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";
