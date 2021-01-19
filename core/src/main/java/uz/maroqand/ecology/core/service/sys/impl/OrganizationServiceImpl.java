@@ -48,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setLastNumber(organization.getLastNumber()+1);
         organizationRepository.save(organization);
 
-        String number = organization.getLastNumber()+"-"+"/19";
+        String number = organization.getLastNumber()+"-"+"/21";
         return number;
     }
 
