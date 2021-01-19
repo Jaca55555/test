@@ -1,7 +1,9 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.CommentStatus;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
 import uz.maroqand.ecology.core.entity.expertise.Comment;
 import uz.maroqand.ecology.core.repository.expertise.CommentRepository;
@@ -47,4 +49,8 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(id, type);
     }
 
+    @Override
+    public Integer CountByStatusAndPerformerId(CommentStatus status, CommentType type, Integer performerId, Integer regApplicationId) {
+        return commentRepository.CountByStatusAndPerformerId(status,type, performerId,regApplicationId);
+    }
 }

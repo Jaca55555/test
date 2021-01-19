@@ -242,6 +242,7 @@ public class PerformerController {
         model.addAttribute("LocalIp", globalConfigs.getLocalIp());
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
+        model.addAttribute("commentCount",commentService.CountByStatusAndPerformerId(CommentStatus.New,CommentType.CHAT,user.getId(),regApplicationId));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
 

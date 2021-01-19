@@ -69,6 +69,8 @@
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}"></a>
+                                                <span class="rounded-notification w-15 text-center" th:if="${commentCount}!=0" style="height: 20px" th:text="${commentCount}">2</span>
+
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
