@@ -173,8 +173,17 @@
                                                             <input type="text" class="form-control" id="tin" />
                                                         </div>
                                                         <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{reg_application.id}">ID</label><br/>
+                                                            <input type="text" class="form-control" id="regApplicationId" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
                                                             <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
                                                             <input type="text" class="form-control datepicker" id="dateBegin" />
+                                                        </div>
+
+                                                        <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
+                                                            <input type="text" class="form-control datepicker" id="dateEnd" />
                                                         </div>
                                                         <div class="form-group col-sm-2">
                                                             <label for="regionId1" class="control-label" th:text="#{sys_region}"></label>
@@ -189,10 +198,6 @@
                                                                 <option value="" th:text="#{sys_select}"></option>
                                                                 <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                             </select>
-                                                        </div>
-                                                        <div class="form-group col-sm-2">
-                                                            <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
-                                                            <input type="text" class="form-control datepicker" id="dateEnd" />
                                                         </div>
                                                         <div class="form-group col-sm-3">
                                                             <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
@@ -210,7 +215,7 @@
                                                         </div>
                                                         <div class="clearfix"></div>
 
-                                                        <div class="col-sm-3 text-right">
+                                                        <div class="col-sm-12 text-right">
                                                             <label class="control-label">&nbsp;</label><br/>
                                                             <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                                 <span th:text="#{sys_search}">Поиск</span>
@@ -335,6 +340,7 @@
                 dataToSend.regionId = $('#regionId1').val();
                 dataToSend.subRegionId = $('#subRegionId1').val();
                 dataToSend.organizationId= $('#organizationId1').val();
+                dataToSend.regApplicationId=$('#regApplicationId').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];

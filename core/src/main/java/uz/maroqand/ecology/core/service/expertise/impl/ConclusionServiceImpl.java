@@ -92,11 +92,11 @@ public class ConclusionServiceImpl implements ConclusionService {
 
 
     @Override
-    public Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category, Pageable pageable) {
+    public Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category,Integer regApplicationId, Pageable pageable) {
         Set<ConclusionStatus> conclusionStatusIds  = new HashSet<>();
         conclusionStatusIds.add(ConclusionStatus.Active);
         conclusionStatusIds.add(ConclusionStatus.Expired);
-        return conclusionRepository.findAll(getFilteringSpecification(reviewId,id,dateBegin,dateEnd,tin,regionId,subRegionId,conclusionStatusIds,name,category),pageable);
+        return conclusionRepository.findAll(getFilteringSpecification(reviewId,id,dateBegin,dateEnd,tin,regionId,subRegionId,conclusionStatusIds,name,category,regApplicationId),pageable);
     }
 
     private static Specification<Conclusion> getFilteringSpecification(
@@ -109,7 +109,8 @@ public class ConclusionServiceImpl implements ConclusionService {
             final Integer subRegionId,
             final Set<ConclusionStatus> conclusionStatuses,
             final String name,
-            final Category category
+            final Category category,
+            final Integer regApplicationId
     ) {
         return new Specification<Conclusion>() {
             @Override
@@ -118,6 +119,9 @@ public class ConclusionServiceImpl implements ConclusionService {
 
                 if (reviewId!=null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), reviewId));
+                }
+                if (regApplicationId!=null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("id"), regApplicationId));
                 }
 
                 if(id != null){

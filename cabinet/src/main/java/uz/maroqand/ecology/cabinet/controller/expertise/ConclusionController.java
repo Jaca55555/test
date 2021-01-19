@@ -101,6 +101,7 @@ public class ConclusionController {
             @RequestParam(name = "organizationId", required = false)Integer organizationId,
             @RequestParam(name = "regionId", required = false)Integer regionId,
             @RequestParam(name = "subRegionId", required = false)Integer subRegionId,
+            @RequestParam(name = "regApplicationId", required = false)Integer regApplicationId,
             Pageable pageable
     ){
         System.out.println(category);
@@ -111,7 +112,7 @@ public class ConclusionController {
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
-        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?organizationId:user.getOrganizationId(),id, dateBegin, dateEnd,tin,regionId,subRegionId,name,category,pageable);
+        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?organizationId:user.getOrganizationId(),id, dateBegin, dateEnd,tin,regionId,subRegionId,name,category,regApplicationId,pageable);
         Calendar c = Calendar.getInstance();
         c.set(c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate(),0,0,0);
         List<Conclusion> conclusionList = conclusionPage.getContent();

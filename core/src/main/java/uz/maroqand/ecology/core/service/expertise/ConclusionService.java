@@ -17,7 +17,7 @@ public interface ConclusionService {
 
     Conclusion getByRegApplicationIdLast(Integer id);
 
-    Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category, Pageable pageable);
+    Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category,Integer regApplicationId, Pageable pageable);
 
     Conclusion create(Integer regApplicationId, String text, Integer createdById);
 
