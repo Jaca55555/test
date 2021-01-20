@@ -182,7 +182,7 @@ public class EmployeeController {
                 firstname,
                 middlename,
                 null,
-                null,//TODO organizationId
+                user.getOrganizationId(),//TODO organizationId
                 null,
                 null,
                 1,
