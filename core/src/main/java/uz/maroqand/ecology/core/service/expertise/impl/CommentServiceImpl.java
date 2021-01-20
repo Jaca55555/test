@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setRegApplicationId(regApplicationId);
         comment.setType(type);
         comment.setMessage(message);
-
+        comment.setStatus(CommentStatus.New);
         comment.setCreatedById(createdById);
         comment.setCreatedAt(new Date());
         return commentRepository.save(comment);

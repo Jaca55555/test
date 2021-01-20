@@ -97,13 +97,17 @@ public class BillingController {
         System.out.println("tin=======");
         System.out.println(regApplication);
         Integer id=null;
-        System.out.println("contract="+contract);
-        if(regApplication!=null) {
-           id=regApplicationService.getById(regApplication)!=null ? regApplicationService.getById(regApplication).getInvoiceId():null;
+
+        System.out.println("regApplicationId="+id);
+        if (!contract.isEmpty() && regApplication==null) {
+            id = regApplicationService.getByContractNumber(contract) != null ? regApplicationService.getByContractNumber(contract).getInvoiceId() : null;
         }
-        if(contract!=null) {
-            id=regApplicationService.getByContractNumber(contract)!=null ? regApplicationService.getByContractNumber(contract).getInvoiceId():null;
+        if (regApplication != null && contract.isEmpty()) {
+            id = regApplicationService.getById(regApplication) != null ? regApplicationService.getById(regApplication).getInvoiceId() : null;
         }
+        System.out.println("contractId="+id);
+
+        System.out.println("id="+id);
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
         invoiceNumber = StringUtils.trimToNull(invoiceNumber);
