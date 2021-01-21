@@ -100,10 +100,10 @@ public class BillingController {
 
         System.out.println("regApplicationId="+id);
         if (!contract.isEmpty() && regApplication==null) {
-            id = regApplicationService.getByContractNumber(contract) != null ? regApplicationService.getByContractNumber(contract).getInvoiceId() : null;
+            id = regApplicationService.getByContractNumber(contract) != null ? regApplicationService.getByContractNumber(contract).getInvoiceId() : 0;
         }
         if (regApplication != null && contract.isEmpty()) {
-            id = regApplicationService.getById(regApplication) != null ? regApplicationService.getById(regApplication).getInvoiceId() : null;
+            id = regApplicationService.getById(regApplication) != null ? regApplicationService.getById(regApplication).getInvoiceId() : 0;
         }
         System.out.println("contractId="+id);
 
