@@ -1907,6 +1907,11 @@ public class RegApplicationCategoryFourController {
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        System.out.println("##########################################################################");
+        System.out.println("id="+id);
+        System.out.println("user"+user.getId());
+        System.out.println("##########################################################################");
+
         if(regApplication == null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){

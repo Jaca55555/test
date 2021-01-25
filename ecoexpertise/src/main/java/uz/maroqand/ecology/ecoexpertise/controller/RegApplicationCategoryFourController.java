@@ -1908,7 +1908,8 @@ public class RegApplicationCategoryFourController {
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
-        regApplication.setOfferId(offer.getId());
+        System.out.println("offer="+offer);
+        regApplication.setOfferId(null);
         notificationService.confirmContractRegApplication(regApplication.getId());
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
