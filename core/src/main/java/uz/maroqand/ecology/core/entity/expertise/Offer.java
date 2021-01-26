@@ -70,6 +70,12 @@ public class Offer {
     @Column(name = "created_by")
     private Integer createdById;
 
+    @Column(name = "tag_name")
+    private String tagName;
+
+    @Column(name = "document_repo_id")
+    private Integer documentRepoId;
+
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "update_by", insertable = false, updatable = false)
     private User updateBy;*/

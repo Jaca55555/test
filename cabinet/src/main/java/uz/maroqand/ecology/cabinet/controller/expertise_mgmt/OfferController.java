@@ -78,6 +78,9 @@ public class OfferController {
         List<Offer> offerList = offerPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(offerList.size());
         for (Offer offer : offerList){
+            System.out.println("##############################");
+            System.out.println(offer);
+            System.out.println("##############################");
             convenientForJSONArray.add(new Object[]{
                     offer.getId(),
                     offer.getName(),
@@ -129,6 +132,14 @@ public class OfferController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        if(byudjet==1){
+            oldOffer.setTagName("budget_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+//            oldOffer.setTagTitle("offer_description_budget_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+        }else{
+            oldOffer.setTagName("farm_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+//            oldOffer.setTagTitle("offer_description_farm_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+
+        }
         oldOffer.setDeleted(Boolean.FALSE);
         oldOffer.setActive(Boolean.TRUE);
         oldOffer.setName(offer.getName());
@@ -136,6 +147,7 @@ public class OfferController {
         oldOffer.setOrganizationId(offer.getOrganizationId());
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
+//        offerService.complete(offer.getId());
         oldOffer = offerService.save(oldOffer);
         String after = "";
         try {

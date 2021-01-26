@@ -22,7 +22,7 @@ public interface OfferService {
     Offer save(Offer offer);
 
     List<Offer> getAllByLanguage();
-
+    Offer complete(Integer offerId);
     Integer getOfferFileIdByLanguage(Offer offer,String locale);
 
 }

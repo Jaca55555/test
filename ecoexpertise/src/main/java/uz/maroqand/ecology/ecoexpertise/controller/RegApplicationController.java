@@ -738,6 +738,8 @@ public class RegApplicationController {
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
+
+        offerService.complete(offer.getId());
         regApplication.setOfferId(offer.getId());
         notificationService.confirmContractRegApplication(regApplication.getId());
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());

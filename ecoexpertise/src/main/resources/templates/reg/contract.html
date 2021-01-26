@@ -55,7 +55,6 @@
                                                     <form style="width: 90%;margin: 0 auto;padding-top: 30px" th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="" id="contract">
                                                         <p style="font-weight: bold" th:utext="#{text1}"></p>
                                                         <div style="text-align: justify" th:utext="#{text2}"></div>
-                                                        <p style="float: left;text-align: justify" th:utext="#{text3}"></p>
                                                         <div id="checkInput" th:if="${regApplication.offerId==null}">
                                                             <div class="custom-control custom-checkbox mb-3 mt-4">
                                                                 <input type="checkbox" class="custom-control-input" id="confirm" required="">
