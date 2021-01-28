@@ -61,7 +61,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer complete(Integer offerId){
         Offer offer = getById(offerId);
-        if (offer.getDocumentRepoId()!=null) {
+        if (offer.getDocumentRepoId()==null) {
             DocumentRepo documentRepo = documentRepoService.create(DocumentRepoType.Offer, offer.getId());
             offer.setDocumentRepoId(documentRepo.getId());
         }
