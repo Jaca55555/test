@@ -109,7 +109,7 @@ public class DocumentController {
         int white = 255 << 16 | 255 << 8 | 255;
         int black = 0;
 
-        String url = "http://cb.eco-service.uz" + SysUrls.GetDocument;
+        String url = "http://fo.eco-service.uz" + SysUrls.GetDocument;
 
         try {
             BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
