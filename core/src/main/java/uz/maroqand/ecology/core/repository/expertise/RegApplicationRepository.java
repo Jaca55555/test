@@ -23,7 +23,7 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);
 
     List<RegApplication> findByInvoiceId(Integer invoiceId);
-
+    RegApplication findByOfferIdAndDeletedFalse(Integer offerId);
     RegApplication findByInvoiceIdAndDeletedFalse(Integer invoiceId);
     RegApplication findTop1ByInvoiceIdAndDeletedFalse(Integer invoiceId);
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();

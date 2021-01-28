@@ -51,8 +51,9 @@
                                                     <i class="feather icon-printer"></i>
                                                     <span th:text="#{sys_print}"> print</span>
                                                 </button>
-                                                <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%" >
-                                                    <form style="width: 90%;margin: 0 auto;padding-top: 30px" th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="" id="contract">
+
+                                                    <form style="width: 90%;margin: 0 auto;padding-top: 30px" th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="" >
+                                                        <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto" id="contract">
                                                         <p style="font-weight: bold" th:utext="#{text1}"></p>
                                                         <div style="text-align: justify" th:utext="#{text2}"></div>
                                                         <div id="checkInput" th:if="${regApplication.offerId==null}">
@@ -64,9 +65,11 @@
                                                                 <button type="submit" class="btn btn-primary disabled" id="confirmButton" th:text="#{reg_application.digitalSignature}"> </button>
                                                             </div>
                                                         </div>
-
+                                                        <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                            <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + regApplication.offerId}" class="qr-code" />
+                                                        </div>
+                                                        </div>
                                                         <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
-                                                            <img src="https://miro.medium.com/max/1424/1*sHmqYIYMV_C3TUhucHrT4w.png" alt="" width="120px">
                                                             <div class="row col-12">
                                                                 <div class="col-md-7  text-left " style="color: #2f9c0a;">
                                                                     <span class="hei-50 wid-50 d-inline-block mr-4">
@@ -90,7 +93,7 @@
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" >
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                     </form>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>

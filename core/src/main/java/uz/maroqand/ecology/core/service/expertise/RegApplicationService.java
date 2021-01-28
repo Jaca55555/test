@@ -21,7 +21,7 @@ public interface RegApplicationService {
     void update(RegApplication regApplication);
 
     RegApplication create(User user, RegApplicationInputType inputType, RegApplicationCategoryType categoryType);
-
+    RegApplication getByOfferId(Integer offerId);
     List<RegApplication> getByClientId(Integer id);
 
     List<RegApplication> getByClientIdDeletedFalse(Integer id);

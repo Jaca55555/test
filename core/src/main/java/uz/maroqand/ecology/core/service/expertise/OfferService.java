@@ -16,7 +16,7 @@ public interface OfferService {
     Offer getOffer(Boolean budget,Integer organizationId);
 
     Page<Offer> getAll(Pageable pageable);
-
+    Offer getByDocumentRepoId(Integer repoId);
     Offer getById(Integer id);
 
     Offer save(Offer offer);

@@ -738,6 +738,9 @@ public class RegApplicationController {
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
+        if (offer==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
 
         offerService.complete(offer.getId());
         regApplication.setOfferId(offer.getId());

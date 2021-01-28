@@ -40,8 +40,13 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    public Offer getByDocumentRepoId(Integer repoId) {
+        return offerRepository.findByDocumentRepoIdAndDeletedFalse(repoId);
+    }
+
+    @Override
     public Offer getById(Integer id){
-        return offerRepository.findById(id).get();
+        return offerRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override

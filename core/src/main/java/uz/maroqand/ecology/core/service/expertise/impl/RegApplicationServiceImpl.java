@@ -73,6 +73,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByOfferId(Integer offerId) {
+        return regApplicationRepository.findByOfferIdAndDeletedFalse(offerId);
+    }
+
+    @Override
     public List<RegApplication> getByClientId(Integer id) {
         return regApplicationRepository.findByApplicantId(id);
     }
