@@ -46,7 +46,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public Offer getById(Integer id){
-        return offerRepository.findByIdAndDeletedFalse(id);
+        return offerRepository.findById(id).get();
     }
 
     @Override
