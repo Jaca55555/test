@@ -10,9 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
+import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
+import uz.maroqand.ecology.core.service.expertise.OfferService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 import uz.maroqand.ecology.core.util.Captcha;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
@@ -34,24 +40,46 @@ public class DocumentController {
 
     private DocumentRepoService documentRepoService;
     private ConclusionService conclusionService;
+    private RegApplicationService regApplicationService;
+    private ObjectExpertiseService objectExpertiseService;
+    private InvoiceService invoiceService;
+    private OfferService offerService;
     private Logger logger = LogManager.getLogger(DocumentController.class);
     private final ConcurrentHashMap<String,String> conHashMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService) {
+    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService, RegApplicationService regApplicationService, ObjectExpertiseService objectExpertiseService, InvoiceService invoiceService, OfferService offerService) {
         this.documentRepoService = documentRepoService;
         this.conclusionService = conclusionService;
+        this.regApplicationService = regApplicationService;
+        this.objectExpertiseService = objectExpertiseService;
+        this.invoiceService = invoiceService;
+        this.offerService = offerService;
     }
 
-    @RequestMapping(value = SysUrls.GetDocument+"/{uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = SysUrls.GetDocument+"/{uuid}"+"/{rid}", method = RequestMethod.GET)
     public String getDocumentPage(
             @PathVariable("uuid") String uuid,
+            @PathVariable("rid") Integer rid,
             Model model
     ) {
+//        System.out.println("rid="+rid);
         DocumentRepo documentRepo = documentRepoService.getDocumentByUuid(uuid);
         if(documentRepo != null){
-            Conclusion conclusion = conclusionService.getById(documentRepo.getId());
-            model.addAttribute("conclusion",conclusion);
+//            Conclusion conclusion = conclusionService.getById(documentRepo.getId());
+//            model.addAttribute("conclusion",conclusion);
+            System.out.println("documentRepoId="+documentRepo.getId());
+            System.out.println("offerService.getByDocumentRepoId(documentRepo.getId())="+offerService.getByDocumentRepoId(documentRepo.getId()));
+            if(offerService.getByDocumentRepoId(documentRepo.getId())!=null){
+            RegApplication regApplication= regApplicationService.getById(rid);
+            String objectExpertise = objectExpertiseService.getById(regApplication.getObjectId()).getName();
+            Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+            model.addAttribute("invoice",invoice);
+            model.addAttribute("objectExpertise",objectExpertise);
+            model.addAttribute("regApplication",regApplication);
+
+            }
+
             model.addAttribute("document",documentRepo);
         }
         model.addAttribute("uuid", uuid);
@@ -75,7 +103,10 @@ public class DocumentController {
         if(documentRepo == null){
             return "redirect:" + SysUrls.GetDocument  + "/" + uuid + "&failed=2";
         }
-
+        if(offerService.getByDocumentRepoId(documentRepo.getId())!=null){
+            RegApplication regApplication= regApplicationService.getByOfferId(offerService.getByDocumentRepoId(documentRepo.getId()).getId());
+            model.addAttribute("regApplication",regApplication);
+        }
         Conclusion conclusion = conclusionService.getById(documentRepo.getApplicationId());
         model.addAttribute("conclusion",conclusion);
         model.addAttribute("documentRepo",documentRepo);
@@ -97,8 +128,10 @@ public class DocumentController {
     @RequestMapping(value = SysUrls.GetQRImage, produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] getQRImage(
-            @RequestParam("id") Integer id
+            @RequestParam("id") Integer id,
+            @RequestParam("rid") Integer rid
     ) {
+        System.out.println("regId="+rid);
         DocumentRepo documentRepo = documentRepoService.getDocument(id);
         if(documentRepo == null){
             return new byte[]{};
@@ -112,7 +145,7 @@ public class DocumentController {
         String url = "http://fo.eco-service.uz" + SysUrls.GetDocument;
 
         try {
-            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
+            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid()+"/"+rid, BarcodeFormat.QR_CODE, width, height);
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one

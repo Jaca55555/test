@@ -56,6 +56,11 @@
                                                         <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto" id="contract">
                                                         <p style="font-weight: bold" th:utext="#{text1}"></p>
                                                         <div style="text-align: justify" th:utext="#{text2}"></div>
+
+                                                        <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                            <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
+                                                        </div>
+                                                        </div>
                                                         <div id="checkInput" th:if="${regApplication.offerId==null}">
                                                             <div class="custom-control custom-checkbox mb-3 mt-4">
                                                                 <input type="checkbox" class="custom-control-input" id="confirm" required="">
@@ -64,10 +69,6 @@
                                                             <div class="custom-control text-center" >
                                                                 <button type="submit" class="btn btn-primary disabled" id="confirmButton" th:text="#{reg_application.digitalSignature}"> </button>
                                                             </div>
-                                                        </div>
-                                                        <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
-                                                            <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + regApplication.offerId}" class="qr-code" />
-                                                        </div>
                                                         </div>
                                                         <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
                                                             <div class="row col-12">

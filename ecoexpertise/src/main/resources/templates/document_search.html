@@ -49,66 +49,55 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-<!--                                    <div class="card-body" style="min-height: calc(100vh - 130px);padding: 80px 80px;">-->
-<!--                                        <div class="row">-->
-<!--                                            <div class="table-responsive">-->
-<!--                                                <table class="table table-bordered">-->
-<!--                                                    <tr>-->
-<!--                                                        <th class="w-10" th:text="#{reg_application.id}"></th>-->
-<!--                                                        <th class="w-40"th:text="#{sys_expertise.objectExpertise}"></th>-->
-<!--                                                        <th class="w-20"th:text="#{sys_legal_entity_name}"></th>-->
-<!--                                                        <th class="w-10"th:text="#{sys_tin}"></th>-->
-<!--                                                        <th class="w-10"th:text="#{reg_application.createdAt}"></th>-->
-<!--                                                        <th class="w-10"th:text="#{reg_application.status}"></th>-->
-<!--                                                    </tr>-->
-<!--                                                    <tr th:object="${regApplication}">-->
-<!--                                                        <td class="w-10" th:text="*{id}"></td>-->
-<!--                                                        <td class="w-40">-->
-<!--                                                            <span th:if="*{objectId!=null}" th:text="*{@helperService.getObjectExpertise(objectId,#locale)}"></span>-->
-<!--                                                        </td>-->
-<!--                                                        <td class="w-20">-->
-<!--                                                            <span th:if="*{applicantId!=null}" th:text="*{applicant.name}"></span>-->
-<!--                                                        </td>-->
-<!--                                                        <td class="w-10">-->
-<!--                                                            <span th:if="*{applicantId!=null}" th:text="*{applicant.tin}"></span>-->
-<!--                                                        </td>-->
-<!--                                                        <td class="w-10">-->
-<!--                                                            <span th:if="*{createdAt!=null}" th:text="*{#dates.format(createdAt,'dd.MM.yyyy HH:mm:ss')}"></span>-->
-<!--                                                        </td>-->
-<!--                                                        <td class="w-10">-->
-<!--                                                            <span th:if="*{status!=null}" th:text="#{*{status.name}}"></span>-->
-<!--                                                        </td>-->
-<!--                                                    </tr>-->
-<!--                                                </table>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <br/>-->
-<!--                                        <br/>-->
-<!--                                        <br/>-->
-<!--                                        <div class="row" >-->
-<!--                                            <div class="col-md-12 text-right mb-5" th:if="${conclusion!=null}">-->
-<!--                                                <button class="btn btn-primary pl-5 pr-5" id="conclusion_print_btn">-->
-<!--                                                    <i class="feather icon-printer"></i>-->
-<!--                                                    <span th:text="#{sys_print}"> print</span>-->
-<!--                                                </button>-->
-<!--                                            </div>-->
-<!--                                            <div   style="padding: 0px 38px; border: 1px dashed #b7c5d4" th:if="${conclusion!=null}" id="conclusion">-->
-<!--                                                <div class="card-block" id="conclusion-for-print" th:if="${conclusion}">-->
-<!--                                                    <div th:if="${conclusion.conclusionFileId==null}">-->
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);padding: 80px 80px;">
+                                        <h1 style="text-align: center" th:text="#{regApplication.title}"></h1>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                    <th class="w-10" th:text="#{reg_application_number}"></th>
+                                                    <th class="w-40"th:text="${regApplication.id}"></th>
+                                                </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{coordinate.object_expertise}"></th>
+                                                        <th class="w-40"th:text="${objectExpertise}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{front.company_name}"></th>
+                                                        <th class="w-40"th:text="${regApplication.applicant.name}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{sys_tin_individual}"></th>
+                                                        <th class="w-40"th:text="${regApplication.applicant.tin}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{mntr_expertise_requirement.qty}"></th>
+                                                        <th class="w-40" th:if="${invoice!=null}" th:text="*{#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'POINT')}"></th>
+                                                        <th class="w-40" th:unless="${invoice!=null}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{sys_invoice.invoice}"></th>
+                                                        <th class="w-40" th:if="${invoice!=null}" th:text="${invoice.invoice}"></th>
+                                                        <th class="w-40" th:unless="${invoice!=null}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{sys_contract.number}"></th>
+                                                        <th class="w-40"th:text="${regApplication.contractNumber}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{sys_contractDate}"></th>
+                                                        <th class="w-40"th:text="${regApplication.contractDate!=null ? #dates.format(regApplication.contractDate,'dd.MM.yyyy'):''}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-10" th:text="#{invoice.status}"></th>
+                                                        <th class="w-40" th:if="${invoice!=null}" th:text="#{invoice.status.+${invoice.status}}"></th>
+                                                        <th class="w-40" th:unless="${invoice!=null}"></th>
+                                                    </tr>
 
-<!--                                                        <p th:utext="${#strings.replace(conclusion.htmlText,'contenteditable','')}"></p>-->
-<!--                                                        <p><span th:text="#{sys_conclusion_number}"></span> <span th:text="${conclusion.number}"></span> </p>-->
-<!--                                                        <p><span th:text="#{sys_conclusion_date}"></span> <span th:text="${conclusion.date!=nul? #dates.format(conclusion.date,'dd.MM.yyyy'):''}"></span> </p>-->
-<!--                                                    </div>-->
+                                                </table>
+                                            </div>
+                                        </div>
 
-<!--                                                    <div th:if="${conclusion.conclusionFileId!=null}" class="text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >-->
-<!--                                                        <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz:8085/expertise/conclusion/file_download_for_view?id='+conclusion.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-                                    Hello World
                                 </div>
                             </div>
                         </div>

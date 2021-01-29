@@ -78,9 +78,6 @@ public class OfferController {
         List<Offer> offerList = offerPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(offerList.size());
         for (Offer offer : offerList){
-            System.out.println("##############################");
-            System.out.println(offer);
-            System.out.println("##############################");
             convenientForJSONArray.add(new Object[]{
                     offer.getId(),
                     offer.getName(),
@@ -147,7 +144,6 @@ public class OfferController {
         oldOffer.setOrganizationId(offer.getOrganizationId());
         oldOffer.setUpdateAt(new Date());
         oldOffer.setUpdateById(user.getId());
-//        offerService.complete(offer.getId());
         oldOffer = offerService.save(oldOffer);
         String after = "";
         try {
