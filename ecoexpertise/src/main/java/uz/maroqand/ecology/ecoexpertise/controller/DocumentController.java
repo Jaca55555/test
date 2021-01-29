@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -75,6 +76,14 @@ public class DocumentController {
             String objectExpertise = objectExpertiseService.getById(regApplication.getObjectId()).getName();
             Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             model.addAttribute("invoice",invoice);
+            String status="";
+            if(invoice!=null){
+            if(invoice.getStatus()== InvoiceStatus.Initial){
+                status="invoice_status.initial";
+            }else if(invoice.getStatus()==InvoiceStatus.Success){
+                status="invoice_status.success";
+            }}
+            model.addAttribute("status",status);
             model.addAttribute("objectExpertise",objectExpertise);
             model.addAttribute("regApplication",regApplication);
 
