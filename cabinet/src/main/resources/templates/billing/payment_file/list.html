@@ -43,122 +43,6 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
-                            <div id="billing-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="col-md-12 row" style="font-size:24px;margin-bottom: 15px;">
-                                                <div class="col-md-6" style="color: #3EBFEA;" id="status-initial">
-                                                    <i class="feather icon-settings"></i>
-                                                    <span th:text="#{invoice_status.initial}">В процессе</span>
-                                                </div>
-                                                <div class="col-md-6" style="color: #31B79A;" id="status-success">
-                                                    <i class="feather icon-check-circle"></i>
-                                                    <span th:text="#{invoice_status.success}">Инвойс оплачен</span>
-                                                </div>
-                                                <div class="col-md-6" style="color: #F7432C;" id="status-canceled">
-                                                    <i class="feather icon-x-circle"></i>
-                                                    <span th:text="#{invoice_status.canceled}">Инвойс отменен</span>
-                                                </div>
-                                                <div class="col-md-6" style="color: #F7D705;" id="status-error">
-                                                    <i class="feather icon-alert-triangle"></i>
-                                                    <span th:text="#{invoice_status.error}">Не успешно</span>
-                                                </div>
-                                                <div class="col-md-6 text-right" style="color: #937676;">
-                                                    <span><span th:text="#{sys_date}">Дата</span>: <span id="date">27.06.2019</span></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12 row" style="font-size: 12px;color:#73869A; margin-bottom: 50px;">
-                                                <div class="col-md-4">
-                                                    <span><span th:text="#{invoice_payee}">Назначение</span> <br><b id="payee-name">Центр Единого Окна</b></span><br>
-                                                    <span><span th:text="#{invoice_payee.tin}">ИНН</span>: <span id="payee-tin">201122919</span></span><br>
-                                                    <span><span th:text="#{invoice_payee.account}">Аккаунт</span>: <span id="payee-account">401428601274043422199255</span></span><br>
-                                                    <span><span th:text="#{invoice_payee.address}">Адресс</span>: <span id="payee-address"></span></span><br>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <span th:text="#{invoice_payer}">Плательщик</span><br>
-                                                    <span><b class="payer-name">BEKMURODOV ORZUMURODJN ABDUMAJIT O'G'LI</b></span><br>
-                                                    <span><span th:text="#{invoice_payer.type}">Тип плательщика</span>: <span id="payer-type">Физическое лицо</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.tin}">ИНН</span>: <span id="payer-tin">61035739</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.passport}">Паспорт</span>: <span id="payer-passport">АА83471245</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.phone}">Телефон</span>: <span id="payer-phone">949345479</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.email}">Email</span>: <span id="payer-mail">bekmurod@mail.ru</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.bank}">Банк</span>: <span id="payer-bank">Xalq Bank</span></span><br>
-                                                    <span><span th:text="#{invoice_payer.bank_account}">Банк</span>: <span id="payer-bank-account">Xalq Bank</span></span><br>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <span><span th:text="#{invoice_number}">Номер инвойся</span>: <b>#<span class="invoice-number">47239949861205</span></b></span><br>
-                                                    <span><span th:text="#{invoice_expiryAt}">Срок истечения</span>: <span id="expiry-at">21.06.2020 00:17</span></span><br>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12" style="font-size: 12px; color: #73869A; margin-bottom: 50px;">
-                                                <table class="table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th width="30%" th:text="#{invoice_name}">Наименование</th>
-                                                        <th width="57%" th:text="#{invoice_detail_all}">Описание</th>
-                                                        <th width="13%" th:text="#{invoice_cost}">Стоимость</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td th:text="#{sys_service_name}">Перегистрация Общество с ограниченной отвественностью (через сеть интернет)</td>
-                                                        <td id="invoice-detail">ID: 47239949861205, Перерегистрация Общество с ограниченной отвественоость (через сеть интернет), BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI, Бир Дарча Маркази - Olmaliq</td>
-                                                        <td><b><span id="invoice-qty">0.125</span>MRZP</b></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td th:text="#{sys_total}">Итого</td>
-                                                        <td></td>
-                                                        <td><span id="invoice-amount">25,341.25</span> UZS</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div style="font-size: 24px; color: #ABB7C3;" th:text="#{invoice_payments}">Платежи по инвойсу:</div>
-                                                <table class="table" style="color: #778A9D;font-size: 12px;">
-                                                    <thead>
-                                                    <tr>
-                                                        <th width="30%"></th>
-                                                        <th th:text="#{sys_data}">Дата</th>
-                                                        <th width="15%" th:text="#{sys_sum}">Сумма</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="payments">
-                                                    <!--<tr>
-                                                        <td class="text-center"><i class="feather icon-credit-card" style="font-size: 30px;"></i></td>
-                                                        <td>27.06.2019 00:22:36</td>
-                                                        <td>25,341.25 UZS</td>
-                                                    </tr>-->
-                                                    <tr>
-                                                        <td></td>
-                                                        <td th:text="#{sys_total}">Итого:</td>
-                                                        <td><span id="payment-total">25,341.25</span> UZS</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td th:text="#{sys_left_pay}">Осталось оплатить:</td>
-                                                        <td><span id="invoice-left">0.00</span> UZS</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Закрыть</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- [ sample-page ] start -->
                             <div class="col-sm-12">
                                 <div class="card">
@@ -265,7 +149,6 @@
 <script th:inline="javascript">
     var ajaxLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileListAjax}]];
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileView}]];
-    var viewLinkModal = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileEdit}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
@@ -284,77 +167,7 @@
         }
         return html;
     }
-    function renderInvoiceColumn(data, type, row, meta) {
-        var currentDeleteLink = invoiceDeleteLink + '?id=' + row[0];
-        var html = '';
-        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
-            '           <button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[1]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;">'+row[1]+'</i></button>';
 
-        html+='</div>';
-
-        /*html += '<div class="btn-group"><button class="btn btn-info btn-sm mr-1" onclick="billingView('+row[0]+')" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></button></div>';
-
-            html += '<div class="btn-group"><button class="btn btn-warning btn-sm mr-1" onclick="billingEdit('+row[0]+')" title="'+labelView+'"><i class="mdi mdi-circle-edit-outline" style="margin-right: 0px;"></i></button></div>';
-            html += '<div class="btn-group"><button class="btn btn-danger btn-sm mr-1" ><i class="mdi mdi-close-circle-outline" style="margin-right: 0px;"></i></button></div>';
-        }*/
-        return html;
-    }
-    function billingView(id) {
-        $.ajax({
-            url: viewLinkModal,
-            data: {
-                id: id
-            },
-            success: function (response) {
-                $('.invoice-number').html(response.invoiceNumber);
-                $('.payer-name').html(response.payerName);
-
-                invoiceStatus(response.invoiceStatus);
-
-                $('#date').html(response.invoiceDate);
-                $('#payee-name').html(response.payeeName);
-                $('#payee-tin').html(response.payeeTin);
-                $('#payee-account').html(response.payeeAccount);
-                $('#payee-address').html(response.payeeAddress);
-
-                $('#payer-type').html(response.payerType);
-                $('#payer-tin').html(response.payerTin);
-                $('#payer-passport').html(response.payerPassport);
-                $('#payer-phone').html(response.payerPhone);
-                $('#payer-mail').html(response.payerEmail);
-                $('#payer-bank').html(response.payerBank);
-                $('#payer-bank-account').html(response.payerBankAccount);
-
-                $('#expiry-at').html(response.invoiceExpiryAt);
-                $('#invoice-detail').html(response.invoiceDetail);
-                $('#invoice-qty').html(response.invoiceQty);
-                $('#invoice-amount').html(response.invoiceAmount);
-                $('#payment-total').html(response.paymentTotal.toFixed(2));
-                $('#invoice-left').html(response.invoiceLeft.toFixed(2));
-
-
-                $('.payment-tr').remove();
-                $.each(response.payments, function (index, value) {
-                    var type = value[0];
-                    var img_src = "";
-
-                    if(type == "BANK")
-                        img_src = "/static/images/bank.png";
-                    if(type == "UPAY")
-                        img_src = "/static/images/upay.png";
-                    if(type == "INTERNET_BANKING")
-                        img_src = "/static/images/transfer.png";
-
-                    $('#payments').prepend('<tr class="payment-tr">\n' +
-                        '                                <td class="text-center"><img src="'+img_src+'" style="max-height: 30px;"></td>\n' +
-                        '                                <td>'+value[1]+'</td>\n' +
-                        '                                <td>'+value[2]+' UZS <span style="display: none">'+value[3]+'</span></td>\n' +
-                        '                            </tr>');
-                });
-                $('#billing-view').modal('show');
-            }
-        });
-    }
     function datatableConnect() {
         dataDatatableSelector.DataTable({
             processing: true,
@@ -395,7 +208,7 @@
             },
             columns: [
                 {data: 0, name: 'id'},
-                {render:renderInvoiceColumn,orderable:false},
+                {data: 1, name: 'invoice'},
                 {data: 2, name: 'payerName'},
                 {data: 7, name: 'payerTin'},
                 {data: 3, name: 'paymentDate'},
