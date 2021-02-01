@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.Conclusion;
+import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.DocumentRepo;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -83,10 +84,12 @@ public class DocumentController {
             }else if(invoice.getStatus()==InvoiceStatus.Success){
                 status="invoice_status.success";
             }}
+                Offer offer;
+                offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
             model.addAttribute("status",status);
             model.addAttribute("objectExpertise",objectExpertise);
             model.addAttribute("regApplication",regApplication);
-
+            model.addAttribute("offer",offer);
             }
 
             model.addAttribute("document",documentRepo);
