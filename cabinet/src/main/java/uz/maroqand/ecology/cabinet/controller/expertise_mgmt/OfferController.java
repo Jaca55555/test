@@ -78,6 +78,17 @@ public class OfferController {
         List<Offer> offerList = offerPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(offerList.size());
         for (Offer offer : offerList){
+            if(offer.getTagName()==null){
+                if(offer.getByudjet()){
+                    offer.setTagName("budget_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+                }else{
+                    offer.setTagName("farm_"+organizationService.getById(offer.getOrganizationId()).getRegionId().toString());
+                }
+                offerService.save(offer);
+                System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                System.out.println(offer);
+                System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            }
             convenientForJSONArray.add(new Object[]{
                     offer.getId(),
                     offer.getName(),
