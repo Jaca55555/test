@@ -22,6 +22,8 @@ import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Captcha;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
@@ -46,17 +48,21 @@ public class DocumentController {
     private ObjectExpertiseService objectExpertiseService;
     private InvoiceService invoiceService;
     private OfferService offerService;
+    private UserService userService;
+    private OrganizationService organizationService;
     private Logger logger = LogManager.getLogger(DocumentController.class);
     private final ConcurrentHashMap<String,String> conHashMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService, RegApplicationService regApplicationService, ObjectExpertiseService objectExpertiseService, InvoiceService invoiceService, OfferService offerService) {
+    public DocumentController(DocumentRepoService documentRepoService, ConclusionService conclusionService, RegApplicationService regApplicationService, ObjectExpertiseService objectExpertiseService, InvoiceService invoiceService, OfferService offerService, UserService userService, OrganizationService organizationService) {
         this.documentRepoService = documentRepoService;
         this.conclusionService = conclusionService;
         this.regApplicationService = regApplicationService;
         this.objectExpertiseService = objectExpertiseService;
         this.invoiceService = invoiceService;
         this.offerService = offerService;
+        this.userService = userService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = SysUrls.GetDocument+"/{uuid}"+"/{rid}", method = RequestMethod.GET)
@@ -90,6 +96,7 @@ public class DocumentController {
             model.addAttribute("objectExpertise",objectExpertise);
             model.addAttribute("regApplication",regApplication);
             model.addAttribute("offer",offer);
+            model.addAttribute("organization",organizationService.getById(regApplication.getReviewId()).getName());
             }
 
             model.addAttribute("document",documentRepo);
