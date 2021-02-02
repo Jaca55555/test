@@ -132,6 +132,12 @@ public class RegUrls {
     public static final String AppealFileUpload = Appeal + "/file";
     public static final String AppealImages = Appeal + "/images";
 
+    private static final String Offer = Prefix + "/offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferListAjax = Offer + "/list_ajax";
+    public static final String OfferView = Offer + "/view";
+
+
     public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
     public static final String GetIndividualByPinfl = Prefix + "/get_individual";
 
