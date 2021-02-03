@@ -7,11 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
+import uz.maroqand.ecology.core.entity.sys.AppealSub;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -30,15 +34,17 @@ public class OfferController {
     private RegApplicationService regApplicationService;
     private HelperService helperService;
     private OrganizationService organizationService;
+    private OfferService offerService;
 
 
 
     @Autowired
-    public OfferController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, OrganizationService organizationService) {
+    public OfferController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, OrganizationService organizationService, OfferService offerService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.helperService = helperService;
         this.organizationService = organizationService;
+        this.offerService = offerService;
     }
 
     @RequestMapping(RegUrls.OfferList)
@@ -85,6 +91,19 @@ public class OfferController {
         result.put("data",convenientForJSONArray);
         return result;
 }
+    @RequestMapping(value = RegUrls.OfferView)
+    public String appealUser(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        Offer offer = offerService.getById(id);
+        if(offer==null){
+            return "redirect:" + RegUrls.OfferList;
+        }
+        model.addAttribute("offer",offer);
+        return RegTemplates.OfferView;
+    }
+
 
 
 
