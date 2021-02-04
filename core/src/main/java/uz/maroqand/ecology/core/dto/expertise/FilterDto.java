@@ -38,7 +38,7 @@ public class FilterDto {
     private Integer organizationId;
     private String dateBegin;
     private String dateEnd;
-
+    private Integer offerId;
     private Integer byTin;
     private Integer byLeTin;
     private RegApplicationCategoryType regApplicationCategoryType;

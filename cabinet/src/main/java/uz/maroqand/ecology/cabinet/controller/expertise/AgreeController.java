@@ -15,10 +15,12 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -31,42 +33,55 @@ public class AgreeController {
     private UserService userService;
     private RegApplicationService regApplicationService;
     private HelperService helperService;
+    private SoatoService soatoService;
     private OrganizationService organizationService;
     private OfferService offerService;
 
 
 
     @Autowired
-    public AgreeController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, OrganizationService organizationService, OfferService offerService) {
+    public AgreeController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, SoatoService soatoService, OrganizationService organizationService, OfferService offerService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.helperService = helperService;
+        this.soatoService = soatoService;
         this.organizationService = organizationService;
         this.offerService = offerService;
     }
 
     @RequestMapping(ExpertiseUrls.AgreeList)
     public String appealUserListPage( Model model ) {
+        model.addAttribute("regions",soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("organizationList", organizationService.getList());
         return ExpertiseTemplates.AgreeList;
     }
     @RequestMapping(value = ExpertiseUrls.AgreeListAjax,produces = "application/json")
     @ResponseBody
     public HashMap<String,Object> offerListAjax(
+            FilterDto filterDto,
+             @RequestParam(value = "organizationTin",required = false)Integer organizationTin,
             Pageable pageable
     ) {
+        System.out.println("organizationTin="+organizationTin);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
-        FilterDto filterDto = new FilterDto();
+        Integer organizationId=null;
+        Organization organization = organizationService.getByTin(organizationTin);
+        if (organizationTin!=null){
+             organizationId = organization!=null?organization.getId():1;
+        }
+        System.out.println("organization="+organization);
         filterDto.setByLeTin(user.getLeTin());
         filterDto.setByTin(user.getTin());
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                null,
+                organizationId,
                 null,
                 null,
                 user.getId(),
-                RegApplicationInputType.ecoService,
+                null,
                 pageable);
 
         HashMap<String, Object> result = new HashMap<>();
@@ -81,7 +96,7 @@ public class AgreeController {
                     regApplication.getId(),
                     regApplication.getOfferId(),
                     regApplication.getConfirmLogAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getConfirmLogAt()):"",
-                    null,
+                    regApplication.getApplicant().getTin(),
                     organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale),
                     organizationService.getById(regApplication.getReviewId()).getTin(),
             });

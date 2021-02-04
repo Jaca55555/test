@@ -11,7 +11,7 @@ public interface OrganizationService {
 
     Organization getById(Integer id);
     Organization getByRegionId(Integer id);
-
+    Organization getByTin(Integer tin);
     List<Organization> getList();
 
     String getContractNumber(Integer organizationId);
