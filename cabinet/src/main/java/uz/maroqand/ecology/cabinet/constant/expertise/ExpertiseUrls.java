@@ -257,4 +257,9 @@ public class ExpertiseUrls {
     private static final String Facture = Prefix + "/facture";
     public static final String FactureList = Facture + "/list";
     public static final String FactureView = Facture + "/view";
+
+    private static final String  Agree = Prefix + "/agree";
+    public static final String AgreeList = Agree + "/list";
+    public static final String AgreeListAjax = Agree + "/list_ajax";
+    public static final String AgreeView = Agree + "/view";
 }

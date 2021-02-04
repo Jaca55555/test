@@ -109,4 +109,9 @@ public class ExpertiseTemplates {
     public static final String FactureList = Facture + "/list";
     public static final String FactureView = Facture + "/view";
 
+    //Birinchi tekshiruv
+    private static final String Agree = Prefix + "/agree";
+    public static final String AgreeList = Agree + "/list";
+    public static final String AgreeView = Agree + "/view";
+
 }
