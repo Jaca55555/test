@@ -89,8 +89,8 @@ public class AgreeController {
                     regApplication.getOfferId(),
                     regApplication.getConfirmLogAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getConfirmLogAt()):"",
                     regApplication.getApplicant().getTin(),
-                    regApplication.getApplicant().getName(),
-                    regApplication.getApplicant().getTin(),
+                    organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale),
+                    organizationService.getById(regApplication.getReviewId()).getTin(),
             });
         }
         result.put("data",convenientForJSONArray);
