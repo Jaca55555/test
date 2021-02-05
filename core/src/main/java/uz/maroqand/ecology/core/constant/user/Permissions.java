@@ -34,7 +34,8 @@ public enum Permissions {
 
     EXPERTISE_REG(23, 2, "sys_permissions.expertise_reg"), //
     EXPERTISE_MONITORING(24, 2, "sys_permissions.expertise_monitoring"), //
-    FACTURE_MONITORING(25, 2, "sys_permissions.facture_monitoring"), //
+    FACTURE_MONITORING(25, 2, "sys_permissions.facture_monitoring"),
+    EXPERTISE_AGREE(26, 2, "sys_permissions.expertise_agree"), //
 
     //doc management
     DOC_MANAGEMENT(40, 3, "sys_permissions.docManagement"), //Электрон Хужжатлар Юритиш Тизимига кириш
