@@ -55,7 +55,7 @@
                                                 <input type="text" class="form-control" id="applicationId">
                                             </div>
                                             <div class="form-group col-sm-2">
-                                                <label for="offerId" class="control-label" th:text="#{offer.id}">ИНН</label>
+                                                <label for="offerId" class="control-label" th:text="#{contract.number}">ИНН</label>
                                                 <input type="text" class="form-control" id="offerId">
                                             </div>
                                             <div class="form-group col-sm-2">
@@ -112,7 +112,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th th:text="#{regApplication.id}"></th>
-                                                    <th th:text="#{offer.id}"></th>
+                                                    <th th:text="#{contract.number}"></th>
                                                     <th th:text="#{regApplication.confirmLogAt}"></th>
                                                     <th th:text="#{sys_organization.name}"></th>
                                                     <th th:text="#{sys_organization.tin}"></th>
@@ -182,7 +182,7 @@
                 dataToSend.size = api != undefined ? api.page.len() : 25;
                 dataToSend.tin = $('#tin').val();
                 dataToSend.applicationId = $('#applicationId').val();
-                dataToSend.offerId = $('#offerId').val();
+                dataToSend.contractNumber = $('#offerId').val();
                 dataToSend.name = $('#name').val();
                 // dataToSend.organizationId= $('#organizationId').val();
                 dataToSend.regionId = $('#regionId').val();
@@ -198,11 +198,11 @@
                 });
             },
             columns: [
-                {data: 0,orderable:false },
-                {data: 1,orderable:false },
-                {data: 2,orderable:false },
-                {data: 4,orderable:false },
-                {data: 5,orderable:false },
+                {data: 0 ,name: 'id'},
+                {data: 6,name:'contractNumber' },
+                {data: 2 , name:'confirmLogAt'},
+                {data: 4 , name:'applicant.name'},
+                {data: 5 ,name:'applicant.tin'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

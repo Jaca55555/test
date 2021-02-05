@@ -69,7 +69,7 @@ public class AgreeController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                user.getOrganizationId(),
+                 user.getOrganizationId(),
                 null,
                 null,
                 null,
@@ -91,6 +91,7 @@ public class AgreeController {
                     regApplication.getApplicant().getTin(),
                     regApplication.getApplicant().getName(),
                     regApplication.getApplicant().getTin(),
+                    regApplication.getContractNumber()
             });
         }
         result.put("data",convenientForJSONArray);
