@@ -60,27 +60,19 @@ public class AgreeController {
     @ResponseBody
     public HashMap<String,Object> offerListAjax(
             FilterDto filterDto,
-             @RequestParam(value = "organizationTin",required = false)Integer organizationTin,
             Pageable pageable
     ) {
-        System.out.println("organizationTin="+organizationTin);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
-        Integer organizationId=null;
-        Organization organization = organizationService.getByTin(organizationTin);
-        if (organizationTin!=null){
-             organizationId = organization!=null?organization.getId():1;
-        }
-        System.out.println("organization="+organization);
-        filterDto.setByLeTin(user.getLeTin());
-        filterDto.setByTin(user.getTin());
+//        filterDto.setByLeTin(user.getLeTin());
+//        filterDto.setByTin(user.getTin());
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                organizationId,
+                user.getOrganizationId(),
                 null,
                 null,
-                user.getId(),
+                null,
                 null,
                 pageable);
 
@@ -97,8 +89,8 @@ public class AgreeController {
                     regApplication.getOfferId(),
                     regApplication.getConfirmLogAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getConfirmLogAt()):"",
                     regApplication.getApplicant().getTin(),
-                    organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale),
-                    organizationService.getById(regApplication.getReviewId()).getTin(),
+                    regApplication.getApplicant().getName(),
+                    regApplication.getApplicant().getTin(),
             });
         }
         result.put("data",convenientForJSONArray);
