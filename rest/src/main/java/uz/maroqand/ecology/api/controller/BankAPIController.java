@@ -148,7 +148,9 @@ public class BankAPIController {
                   if (!account.isEmpty() && paymentFile.getReceiverAccount().equals(account)) {
                       paymentFile.setInvoice(invoice.getInvoice());
                       paymentFileService.save(paymentFile);
-                      paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                      if(paymentFile.getPayerTin()!=null && regApplication.getApplicant()!=null && regApplication.getApplicant().getTin() != paymentFile.getPayerTin()){
+                          paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                      }
                       invoiceService.checkInvoiceStatus(invoice);
 
                   }

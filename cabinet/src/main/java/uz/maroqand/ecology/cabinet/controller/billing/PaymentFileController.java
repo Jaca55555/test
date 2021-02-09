@@ -113,7 +113,7 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                account,
+                null,
                 pageable
         );
 
@@ -158,7 +158,9 @@ public class PaymentFileController {
                 accountString!=null?accountString.toString():"",
                 paymentFile.getReceiverName(),
                 paymentFile.getReceiverInn(),
-                paymentFile.getReceiverMfo()
+                paymentFile.getReceiverMfo(),
+                paymentFile.getInvoice()!=null? invoiceService.getInvoice(paymentFile.getInvoice())!=null ? invoiceService.getInvoice(paymentFile.getInvoice()).getId():null:null,
+
             });
         }
 
