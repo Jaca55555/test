@@ -174,7 +174,7 @@ public class BillingController {
     @ResponseBody
     public HashMap<String,Object> billingView(@RequestParam(name = "id") Integer id){
         HashMap<String,Object> result = new HashMap<>();
-
+        System.out.println("invoiceId="+id);
         Invoice invoice = invoiceService.getInvoice(id);
         if(invoice == null){
             return null;
@@ -182,7 +182,7 @@ public class BillingController {
         Client client = clientService.getById(invoice.getClientId());
         List<Payment> paymentList = paymentService.getByInvoiceId(id);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
+//        regApplicationService.getByInvoiceId(id);
         Double paymentTotal = 0.0;
         Double invoiceLeft = invoice.getAmount();
 
@@ -200,7 +200,7 @@ public class BillingController {
         invoiceLeft -= paymentTotal;
         result.put("paymentTotal",paymentTotal);
         result.put("invoiceLeft",invoiceLeft);
-
+        result.put("regApplicationId",regApplicationService.getTopByOneInvoiceId(id)!=null?regApplicationService.getTopByOneInvoiceId(id).getId():"");
         result.put("invoiceNumber", invoice.getInvoice());
         result.put("invoiceStatus", invoice.getStatus());
         result.put("invoiceDate", invoice.getCreatedDate() != null ? Common.uzbekistanDateFormat.format(invoice.getCreatedDate()) : "");

@@ -47,7 +47,11 @@
                                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span></h5>
+                                            <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span>
+                                            <span style="margin-left: 50px" th:text="#{reg_application_number}"></span>
+                                            <span class="regApplication-id"></span>
+                                            </h5>
+
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         </div>
                                         <div class="modal-body">
@@ -307,8 +311,9 @@
             success: function (response) {
                 $('.invoice-number').html(response.invoiceNumber);
                 $('.payer-name').html(response.payerName);
+                $('.regApplication-id').html(response.regApplicationId);
 
-
+                invoiceStatus(response.invoiceStatus);
 
                 $('#date').html(response.invoiceDate);
                 $('#payee-name').html(response.payeeName);
@@ -431,7 +436,22 @@
 
 
     });
+    function invoiceStatus(status) {
+        $('#status-initial').hide();
+        $('#status-success').hide();
+        $('#status-canceled').hide();
+        $('#status-error').hide();
 
+        if(status == "Initial")
+            $('#status-initial').show();
+        if(status == "Success")
+            $('#status-success').show();
+        if(status == "Canceled")
+            $('#status-canceled').show();
+        if(status == "Error")
+            $('#status-error').show();
+
+    }
     $('#data-table').css("width", "100%");
 
     /*]]>*/

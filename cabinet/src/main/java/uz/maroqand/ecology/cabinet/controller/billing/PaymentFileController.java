@@ -113,14 +113,13 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                null,
+                account,
                 pageable
         );
 
         List<PaymentFile> paymentFileList = paymentFilePage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(paymentFileList.size());
         for (PaymentFile paymentFile : paymentFileList){
-            System.out.println("paymentFile"+paymentFile);
             StringBuilder accountString  = null;
             boolean invoiceIsNull = Boolean.TRUE;
             if (paymentFile.getInvoice()!=null) invoiceIsNull = Boolean.FALSE;

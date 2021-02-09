@@ -57,7 +57,7 @@
                                                         <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>
 
                                                         <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
-                                                            <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
+                                                            <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
                                                         </div>
                                                         </div>
                                                         <div id="checkInput" th:if="${regApplication.offerId==null}">

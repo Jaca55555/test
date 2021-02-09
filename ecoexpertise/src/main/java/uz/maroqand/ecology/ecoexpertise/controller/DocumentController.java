@@ -65,8 +65,8 @@ public class DocumentController {
         this.organizationService = organizationService;
     }
 
-    @RequestMapping(value = SysUrls.GetDocument+"/{uuid}"+"/{rid}", method = RequestMethod.GET)
-    public String getDocumentPage(
+    @RequestMapping(value = SysUrls.GetOffer+"/{uuid}"+"/{rid}", method = RequestMethod.GET)
+    public String getOfferPage(
             @PathVariable("uuid") String uuid,
             @PathVariable("rid") Integer rid,
             Model model
@@ -102,6 +102,91 @@ public class DocumentController {
             model.addAttribute("document",documentRepo);
         }
         model.addAttribute("uuid", uuid);
+        return "document_search_for_conclusion";
+    }
+
+    @RequestMapping(value = SysUrls.GetOffer+"/{uuid}", method = RequestMethod.POST)
+    public String GetOffer(
+            @PathVariable("uuid") String uuid,
+            @RequestParam("code") String code,
+            @RequestParam("answer") String answer,
+            HttpServletRequest request,
+            Model model
+    ) {
+        HttpSession session = request.getSession();
+        logger.debug("GetOffer uuid=" + uuid+", code="+code+" ,session.getId()="+session.getId()+", answer="+answer);
+        if(!conHashMap.containsKey(session.getId()) || !conHashMap.get(session.getId()).equals(answer)){
+            return "redirect:" + SysUrls.GetDocument  + "/" + uuid + "&failed=1";
+        }
+        DocumentRepo documentRepo = documentRepoService.getDocumentByUuid(uuid);
+        if(documentRepo == null){
+            return "redirect:" + SysUrls.GetOffer  + "/" + uuid + "&failed=2";
+        }
+        if(offerService.getByDocumentRepoId(documentRepo.getId())!=null){
+            RegApplication regApplication= regApplicationService.getByOfferId(offerService.getByDocumentRepoId(documentRepo.getId()).getId());
+            model.addAttribute("regApplication",regApplication);
+        }
+        Conclusion conclusion = conclusionService.getById(documentRepo.getApplicationId());
+        model.addAttribute("conclusion",conclusion);
+        model.addAttribute("documentRepo",documentRepo);
+        return "document_view";
+    }
+
+
+    @RequestMapping(value = SysUrls.GetQRImageOffer, produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getQRImage(
+            @RequestParam("id") Integer id,
+            @RequestParam("rid") Integer rid
+    ) {
+        System.out.println("regId="+rid);
+        DocumentRepo documentRepo = documentRepoService.getDocument(id);
+        if(documentRepo == null){
+            return new byte[]{};
+        }
+        QRCodeWriter writer = new QRCodeWriter();
+        int width = 116, height = 116;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // create an empty image
+        int white = 255 << 16 | 255 << 8 | 255;
+        int black = 0;
+
+        String url = "http://eco-service.uz" + SysUrls.GetOffer;
+
+        try {
+            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid()+"/"+rid, BarcodeFormat.QR_CODE, width, height);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
+                }
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write( image, "jpg", baos );
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new byte[]{};
+    }
+
+
+
+//    #################################################################3
+
+    @RequestMapping(value = SysUrls.GetDocument+"/{uuid}", method = RequestMethod.GET)
+    public String getDocumentPage(
+            @PathVariable("uuid") String uuid,
+            Model model
+    ) {
+        DocumentRepo documentRepo = documentRepoService.getDocumentByUuid(uuid);
+        if(documentRepo != null){
+            Conclusion conclusion = conclusionService.getById(documentRepo.getId());
+            model.addAttribute("conclusion",conclusion);
+            model.addAttribute("document",documentRepo);
+        }
+        model.addAttribute("uuid", uuid);
         return "document_search";
     }
 
@@ -122,10 +207,7 @@ public class DocumentController {
         if(documentRepo == null){
             return "redirect:" + SysUrls.GetDocument  + "/" + uuid + "&failed=2";
         }
-        if(offerService.getByDocumentRepoId(documentRepo.getId())!=null){
-            RegApplication regApplication= regApplicationService.getByOfferId(offerService.getByDocumentRepoId(documentRepo.getId()).getId());
-            model.addAttribute("regApplication",regApplication);
-        }
+
         Conclusion conclusion = conclusionService.getById(documentRepo.getApplicationId());
         model.addAttribute("conclusion",conclusion);
         model.addAttribute("documentRepo",documentRepo);
@@ -147,10 +229,8 @@ public class DocumentController {
     @RequestMapping(value = SysUrls.GetQRImage, produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] getQRImage(
-            @RequestParam("id") Integer id,
-            @RequestParam("rid") Integer rid
+            @RequestParam("id") Integer id
     ) {
-        System.out.println("regId="+rid);
         DocumentRepo documentRepo = documentRepoService.getDocument(id);
         if(documentRepo == null){
             return new byte[]{};
@@ -161,10 +241,10 @@ public class DocumentController {
         int white = 255 << 16 | 255 << 8 | 255;
         int black = 0;
 
-        String url = "http://fo.eco-service.uz" + SysUrls.GetDocument;
+        String url = "http://cb.eco-service.uz" + SysUrls.GetDocument;
 
         try {
-            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid()+"/"+rid, BarcodeFormat.QR_CODE, width, height);
+            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
