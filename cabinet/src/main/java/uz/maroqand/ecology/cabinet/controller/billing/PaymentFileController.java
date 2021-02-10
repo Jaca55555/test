@@ -113,7 +113,7 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                null,
+                account,
                 pageable
         );
 
@@ -148,7 +148,7 @@ public class PaymentFileController {
             }
             convenientForJSONArray.add(new Object[]{
                 paymentFile.getId(),
-                paymentFile.getInvoice(),
+                paymentFile.getInvoice()!=null ? paymentFile.getInvoice():"",
                 paymentFile.getPayerName(),
                 paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
                 String.format("% ,.1f", paymentFile.getAmount()),

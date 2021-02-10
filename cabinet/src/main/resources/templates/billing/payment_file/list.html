@@ -336,6 +336,8 @@
                 $('#invoice-qty').html(response.invoiceQty);
                 $('#invoice-amount').html(response.invoiceAmount);
 
+                $('#payment-total').html(response.paymentTotal.toFixed(2));
+                $('#invoice-left').html(response.invoiceLeft.toFixed(2));
 
 
                 $('.payment-tr').remove();
