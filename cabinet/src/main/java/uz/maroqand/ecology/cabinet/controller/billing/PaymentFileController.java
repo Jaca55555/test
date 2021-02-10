@@ -316,7 +316,7 @@ public class PaymentFileController {
             }
             convenientForJSONArray.add(new Object[]{
                     paymentFile.getId(),
-                    paymentFile.getInvoice(),
+                    paymentFile.getInvoice()!=null ? paymentFile.getInvoice():"",
                     paymentFile.getPayerName(),
                     paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
                     String.format("% ,.1f", paymentFile.getAmount()),
@@ -486,5 +486,93 @@ public class PaymentFileController {
         invoiceService.checkInvoiceStatus(invoice);
 
         return "redirect:" + BillingUrls.PaymentFileAllList;
+    }
+//########################################
+    @RequestMapping(BillingUrls.PaymentFileConnectInvoice)
+    public String connectInvoiceBilling(
+            @RequestParam(name = "id") Integer paymentFileId,
+            Model model
+    ){
+
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null || paymentFile.getInvoice()!=null){
+            return "redirect:" + BillingUrls.PaymentFileList;
+        }
+
+        model.addAttribute("paymentFile",paymentFile);
+        model.addAttribute("getLink",BillingUrls.PaymentFileGetInvoice);
+
+        return BillingTemplates.PaymentFileConnectInvoice;
+
+    }
+
+
+    // status=-1  invoice topilmadi
+    // status=-2  ariza topilmadi topilmadi
+    @RequestMapping(value = BillingUrls.PaymentFileGetInvoice,method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String,Object> getInvoiceDetailsBilling (
+            @RequestParam(name = "invoiceStr") String invoiceStr,
+            @RequestParam(name = "id") Integer payFilieId
+    ){
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        Invoice invoice = invoiceService.getInvoice(invoiceStr);
+        if (invoice==null){
+            result.put("status",-1);
+            return result;
+        }
+
+        PaymentFile paymentFile = paymentFileService.getById(payFilieId);
+        if (paymentFile==null){
+            result.put("status",-3);
+            return result;
+        }
+        RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+        if (regApplication==null){
+            result.put("status",-2);
+            return result;
+        }
+
+        result.put("regId",regApplication.getId());
+        result.put("legalName",invoice.getPayeeName());
+        result.put("createdDate",invoice.getCreatedDate()!=null?Common.uzbekistanDateFormat.format(invoice.getCreatedDate()):"");
+        result.put("detail",invoice.getDetail());
+        result.put("amount",invoice.getAmount());
+        result.put("actionUrl",BillingUrls.PaymentFileConnectInvoiceSubmit + "?id=" + payFilieId + "&invoiceId=" + invoice.getId() + "&regId=" + regApplication.getId());
+
+        return result;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileConnectInvoiceSubmit)
+    public String connectInvoiceSubmitBilling(
+            @RequestParam(name = "id") Integer paymentFileId,
+            @RequestParam(name = "invoiceId") Integer invoiceId,
+            @RequestParam(name = "regId") Integer regId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-1";
+        }
+
+        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        if (invoice==null){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-2";
+        }
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null || regApplication.getInvoiceId()==null || !regApplication.getInvoiceId().equals(invoiceId)){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-3";
+        }
+
+        paymentFile.setInvoice(invoice.getInvoice());
+        paymentFileService.update(paymentFile,user.getId());
+        Payment payment  = paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+        payment.setMessage("qo'lda biriktirildi. Invoice kelmagan yoki norog'tri kelgan update userId=" + user.getId().toString());
+        paymentService.save(payment);
+        invoiceService.checkInvoiceStatus(invoice);
+
+        return "redirect:" + BillingUrls.PaymentFileList;
     }
 }

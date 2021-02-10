@@ -29,6 +29,9 @@ public class BillingUrls {
     public static final String PaymentFileAllConnectInvoice = PaymentFileAll + "/connect_invoice";
     public static final String PaymentFileAllGetInvoice = PaymentFileAll + "/get_invoice";
     public static final String PaymentFileAllConnectInvoiceSubmit = PaymentFileAll + "/connect_invoice_submit";
+    public static final String PaymentFileConnectInvoice = PaymentFile + "/connect_invoice";
+    public static final String PaymentFileGetInvoice = PaymentFile + "/get_invoice";
+    public static final String PaymentFileConnectInvoiceSubmit = PaymentFile + "/connect_invoice_submit";
 
 
 }
