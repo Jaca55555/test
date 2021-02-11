@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Option;
@@ -22,6 +23,8 @@ import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import org.springframework.data.domain.Pageable;
+
+import java.util.Set;
 
 
 /**
@@ -54,8 +57,18 @@ public class MainController {
         try {
             element = new String(element.getBytes("utf8"));
         }catch (Exception e){}
-
-        Long total = regApplicationService.findFiltered(new FilterDto(), null, null, null, null, null,pageable).getTotalElements();
+        FilterDto filterDto = new FilterDto();
+        Set<RegApplicationStatus> statusForReg = null;
+        statusForReg.add(RegApplicationStatus.CheckSent);
+        statusForReg.add(RegApplicationStatus.CheckConfirmed);
+        statusForReg.add(RegApplicationStatus.CheckNotConfirmed);
+        statusForReg.add(RegApplicationStatus.Process);
+        statusForReg.add(RegApplicationStatus.Modification);
+        statusForReg.add(RegApplicationStatus.Approved);
+        statusForReg.add(RegApplicationStatus.NotConfirmed);
+        statusForReg.add(RegApplicationStatus.Canceled);
+        filterDto.setStatusForReg(statusForReg);
+        Long total = regApplicationService.findFiltered(filterDto, null, null, null, null, null,pageable).getTotalElements();
         Long done = regApplicationService.findFiltered(new FilterDto(), null, LogType.AgreementComplete, null, null, null,pageable).getTotalElements();
 
         model.addAttribute("element", element);
