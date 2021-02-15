@@ -142,7 +142,7 @@ public class ConfirmController {
         System.out.println("user.OrgId===" + user.getOrganizationId());
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                userService.isAdmin()?null:user.getOrganizationId(),
+                userService.isAdmin()||user.getRole().getId()==16 ? null:user.getOrganizationId(),
                 LogType.Confirm,
                 null,
                 null,

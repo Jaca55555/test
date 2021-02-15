@@ -133,7 +133,7 @@ public class BillingController {
                 detail,
                 regionId,
                 subRegionId,
-                userService.isAdmin()?null:user.getOrganizationId(),
+                userService.isAdmin()||user.getRole().getId()==16?null:user.getOrganizationId(),
                 TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );
