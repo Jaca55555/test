@@ -48,6 +48,11 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public List<RegApplicationLog> findAll() {
+        return regApplicationLogRepository.findAll();
+    }
+
+    @Override
     public List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type){
         return regApplicationLogRepository.findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(regApplicationId, type);
     }
