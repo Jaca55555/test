@@ -53,6 +53,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -996,7 +997,29 @@ public class RegApplicationController {
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
-
+        Date currentDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+        if(regApplication.getCategory()!=null){
+            switch (regApplication.getCategory().getId()){
+                case 1:
+                    c.add(Calendar.DATE,10);
+                    Date currentDatePlusOne = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusOne);
+                case 2:
+                    c.add(Calendar.DATE,7);
+                    Date currentDatePlusTwo = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusTwo);
+                case 3:
+                    c.add(Calendar.DATE,5);
+                    Date currentDatePlusThree = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusThree);
+                case 4:
+                    c.add(Calendar.DATE,5);
+                    Date currentDatePlusFour = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusFour);
+            }
+        }
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerId(null);
         regApplication.setPerformerLogId(null);
