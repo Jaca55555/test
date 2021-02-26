@@ -1004,32 +1004,26 @@ public class RegApplicationController {
         c.setTime(currentDate);
         if(regApplication.getCategory()!=null){
             switch (regApplication.getCategory().getId()){
+                case 0:
                 case 1:
                     c.add(Calendar.DATE,10);
-                    Date currentDatePlusOne = c.getTime();
-                    regApplication.setDeadlineDate(currentDatePlusOne);
-                    System.out.println("1-tip sanasi o'zgardi: " + currentDatePlusOne);
-                    logger.info("1-tip sanasi o'zgardi: " + currentDatePlusOne );
+                    Date currentDatePlusZero = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusZero);
                     break;
                 case 2:
                     c.add(Calendar.DATE,7);
                     Date currentDatePlusTwo = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusTwo);
-                    System.out.println("2-tip sanasi o'zgardi: " + currentDatePlusTwo);
-                    logger.info("2-tip sanasi o'zgardi: " + currentDatePlusTwo);
                     break;
                 case 3:
                     c.add(Calendar.DATE,5);
                     Date currentDatePlusThree = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusThree);
-                   logger.info("3-tip sanasi o'zgardi: " + currentDatePlusThree);
-                    System.out.println("3-tip sanasi o'zgardi: " + currentDatePlusThree);
                     break;
                 case 4:
-                    c.add(Calendar.DATE,5);
+                    c.add(Calendar.DATE,3);
                     Date currentDatePlusFour = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusFour);
-                    System.out.println("4-tip sanasi o'zgardi: " + currentDatePlusFour);
                     break;
             }
         }
