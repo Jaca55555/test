@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -89,7 +91,7 @@ public class RegApplicationController {
     private final DocumentRepoService documentRepoService;
     private final NotificationService notificationService;
     private final FactureService factureService;
-
+    private Logger logger = LogManager.getLogger(RegApplicationController.class);
     private final GlobalConfigs globalConfigs;
 
     @Autowired
@@ -587,7 +589,7 @@ public class RegApplicationController {
         regApplication.setMaterials(materials);
 
         regApplication.setActivityId(activityId);
-        regApplication.setCategory(activity!=null? activity.getCategory():null);
+        regApplication.setCategory(activity!=null? activity.getCategory():Category.CategoryAll);
 
         RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
@@ -993,7 +995,31 @@ public class RegApplicationController {
             toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","");
             return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + regApplication.getId();
         }
-
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
@@ -1006,20 +1032,57 @@ public class RegApplicationController {
                     c.add(Calendar.DATE,10);
                     Date currentDatePlusOne = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusOne);
+                    System.out.println("1-tip sanasi o'zgardi: " + currentDatePlusOne);
+                    logger.info("1-tip sanasi o'zgardi: " + currentDatePlusOne );
+                    break;
                 case 2:
                     c.add(Calendar.DATE,7);
                     Date currentDatePlusTwo = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusTwo);
+                    System.out.println("2-tip sanasi o'zgardi: " + currentDatePlusTwo);
+                    logger.info("2-tip sanasi o'zgardi: " + currentDatePlusTwo);
+                    break;
                 case 3:
                     c.add(Calendar.DATE,5);
                     Date currentDatePlusThree = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusThree);
+                   logger.info("3-tip sanasi o'zgardi: " + currentDatePlusThree);
+                    System.out.println("3-tip sanasi o'zgardi: " + currentDatePlusThree);
+                    break;
                 case 4:
                     c.add(Calendar.DATE,5);
                     Date currentDatePlusFour = c.getTime();
                     regApplication.setDeadlineDate(currentDatePlusFour);
+                    System.out.println("4-tip sanasi o'zgardi: " + currentDatePlusFour);
+                    break;
             }
         }
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+        System.out.println("***************************************************************");
+
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerId(null);
         regApplication.setPerformerLogId(null);

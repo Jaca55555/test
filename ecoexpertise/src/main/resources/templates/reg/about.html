@@ -410,9 +410,10 @@
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
                                                                 <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                           <span th:if="${regApplication.status!=null &&  regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).oneToTree}">
                                                                             <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationResend + '?id=' + regApplication.id}">
                                                                                 <i class="feather icon-rotate-cw"></i> <span th:text="#{sys_send_to_review}"></span>
-                                                                            </a>
+                                                                            </a></span>
                                                                 <button type="button" onclick="submitForm()" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
                                                             </div>
                                                         </div>
