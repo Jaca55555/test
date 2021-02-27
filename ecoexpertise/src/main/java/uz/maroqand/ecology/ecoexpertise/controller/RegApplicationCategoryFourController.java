@@ -2147,7 +2147,34 @@ public class RegApplicationCategoryFourController {
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
-
+        Date currentDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+        if(regApplication.getCategory()!=null){
+            switch (regApplication.getCategory().getId()){
+                case 0:
+                case 1:
+                    c.add(Calendar.DATE,10);
+                    Date currentDatePlusZero = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusZero);
+                    break;
+                case 2:
+                    c.add(Calendar.DATE,7);
+                    Date currentDatePlusTwo = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusTwo);
+                    break;
+                case 3:
+                    c.add(Calendar.DATE,5);
+                    Date currentDatePlusThree = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusThree);
+                    break;
+                case 4:
+                    c.add(Calendar.DATE,3);
+                    Date currentDatePlusFour = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusFour);
+                    break;
+            }
+        }
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerId(null);
         regApplication.setPerformerLogId(null);
