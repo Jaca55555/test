@@ -30,6 +30,11 @@ public class ExpertiseTemplates {
     public static final String AgreementList = Agreement + "/list";
     public static final String AgreementView = Agreement + "/view";
 
+    //Hisobot-Report
+    private static final String Report = Prefix + "/report";
+    public static final String ReportList = Report + "/list";
+
+
     //Oxirgi kelishuv
     private static final String AgreementComplete = Prefix + "/agreement_complete";
     public static final String AgreementCompleteList = AgreementComplete + "/list";

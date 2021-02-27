@@ -85,6 +85,10 @@ public class ExpertiseUrls {
     public static final String BillingInvoiceIsNol = Billing + "/amount_is_nol";
     public static final String BillingDelete = Billing + "/delete";
 
+    //Report
+    private static final String Report = Prefix + "/report";
+    public static final String ReportList = Report + "/list";
+    public static final String ReportListAjax = Report + "/list_ajax";
 
     //Applicant
     private static final String Applicant = Prefix + "/applicant";
