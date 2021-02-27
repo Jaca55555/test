@@ -127,7 +127,7 @@ public class AgreementController {
         Page<RegApplicationLog> regApplicationLogs = regApplicationLogService.findFiltered(
                 filterDto,
                 null,
-                user.getId(),
+                userService.isAdmin() ? null : user.getId(),
                 LogType.Agreement,
                 null,
                 pageable
