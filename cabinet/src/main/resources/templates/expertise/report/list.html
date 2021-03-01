@@ -13,9 +13,23 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        .rotate {
+            /* FF3.5+ */
+            -moz-transform: rotate(-90.0deg);
+            /* Opera 10.5 */
+            -o-transform: rotate(-90.0deg);
+            /* Saf3.1+, Chrome */
+            -webkit-transform: rotate(-90.0deg);
+            /* Standard */
+            transform: rotate(-90.0deg);
 
-
-
+        }
+        table.dataTable{
+            border-collapse: collapse !important;
+        }
+        .table thead th{
+            vertical-align: middle !important;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -166,6 +180,8 @@
 
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script th:src="@{/static/datatables/input.js}"></script>
+<script th:src="@{/static/datatables/buttons.print.min.js}"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
@@ -196,7 +212,12 @@
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[0, 'desc']],
-            dom: 'lrtip',
+            dom: 'lBrtip',
+            buttons: [
+
+                'copy', 'csv', 'excel', 'pdf','print'
+
+            ],
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
 
@@ -216,31 +237,31 @@
             },
             columns: [
                 {data: 0, orderable:false},
-                {data: 1, orderable:false},
-                {data: 2, orderable:false},
-                {data: 3, orderable:false},
-                {data: 4, orderable:false},
-                {data: 5, orderable:false},
-                {data: 6, orderable:false},
-                {data: 7, orderable:false},
-                {data: 8, orderable:false},
-                {data: 9, orderable:false},
-                {data: 10, orderable:false},
-                {data: 11, orderable:false},
-                {data: 12, orderable:false},
-                {data: 13, orderable:false},
-                {data: 14, orderable:false},
-                {data: 15, orderable:false},
-                {data: 16, orderable:false},
-                {data: 17, orderable:false},
-                {data: 18, orderable:false},
-                {data: 19, orderable:false},
-                {data: 20, orderable:false},
-                {data: 21, orderable:false},
-                {data: 22, orderable:false},
-                {data: 23, orderable:false},
-                {data: 24, orderable:false},
-                {data: 25, orderable:false}
+                {data: 1, orderable:false,className:'text-center'},
+                {data: 2, orderable:false,className:'text-center'},
+                {data: 3, orderable:false,className:'text-center'},
+                {data: 4, orderable:false,className:'text-center'},
+                {data: 5, orderable:false,className:'text-center'},
+                {data: 6, orderable:false,className:'text-center'},
+                {data: 7, orderable:false,className:'text-center'},
+                {data: 8, orderable:false,className:'text-center'},
+                {data: 9, orderable:false,className:'text-center'},
+                {data: 10, orderable:false,className:'text-center'},
+                {data: 11, orderable:false,className:'text-center'},
+                {data: 12, orderable:false,className:'text-center'},
+                {data: 13, orderable:false,className:'text-center'},
+                {data: 14, orderable:false,className:'text-center'},
+                {data: 15, orderable:false,className:'text-center'},
+                {data: 16, orderable:false,className:'text-center'},
+                {data: 17, orderable:false,className:'text-center'},
+                {data: 18, orderable:false,className:'text-center'},
+                {data: 19, orderable:false,className:'text-center'},
+                {data: 20, orderable:false,className:'text-center'},
+                {data: 21, orderable:false,className:'text-center'},
+                {data: 22, orderable:false,className:'text-center'},
+                {data: 23, orderable:false,className:'text-center'},
+                {data: 24, orderable:false,className:'text-center'},
+                {data: 25, orderable:false,className:'text-center'}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
