@@ -278,6 +278,16 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId,regApplicationInputType),pageable);
     }
 
+    @Override
+    public Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId) {
+        return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,status,regionId);
+    }
+
+    @Override
+    public Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status, Integer subRegionId) {
+        return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,status,subRegionId);
+    }
+
     private static Specification<RegApplication> getFilteringSpecification(
             final FilterDto filterDto,
             final Integer reviewId,
