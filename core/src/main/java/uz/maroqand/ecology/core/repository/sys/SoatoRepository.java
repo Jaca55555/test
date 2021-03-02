@@ -1,5 +1,8 @@
 package uz.maroqand.ecology.core.repository.sys;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +23,6 @@ public interface SoatoRepository extends JpaRepository<Soato, Integer> {
     List<Soato> getAll();
     @Query("SELECT f FROM Soato f WHERE f.id=?1")
     List<Soato> findByParentId(Long id);
+
+    Page<Soato> findAll(Specification<Soato> filteringSpecification, Pageable pageable);
 }

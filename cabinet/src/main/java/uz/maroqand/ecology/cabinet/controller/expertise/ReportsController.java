@@ -1,13 +1,18 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
@@ -15,12 +20,17 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.sys.Soato;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.docmanagement.constant.DocUrls;
+import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
+import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ReportsController {
@@ -43,13 +53,15 @@ public class ReportsController {
     @RequestMapping(value = ExpertiseUrls.ReportListAjax, produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public HashMap<String,Object> getReportsListAjax(
-            FilterDto filterDto,
+            @RequestParam(name = "regionId", required = false)Integer regionId,
+            @RequestParam(name = "subRegionId[]", required = false) Set<Integer> subRegionIds,
             Pageable pageable
     ) {
+        System.out.println("SubRegionIds="+subRegionIds);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        System.out.println("RegionId="+filterDto.getRegionId());
-        System.out.println("SubRegionId="+filterDto.getSubRegionId());
-        Page<Soato> soatoPage = soatoService.getFiltered(pageable);
+//        System.out.println("RegionId="+filterDto.getRegionId());
+//        System.out.println("SubRegionId="+filterDto.getSubRegionId());
+        Page<Soato> soatoPage = soatoService.getFiltered(regionId,subRegionIds,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", soatoPage.getTotalElements()); //Total elements
@@ -93,6 +105,31 @@ public class ReportsController {
             });
         }
         result.put("data",convenientForJSONArray);
+        return result;
+    }
+    @RequestMapping(value = ExpertiseUrls.ReportSoato, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getSoatoListAjax(
+            @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "page") Integer page
+    ){
+        search = StringUtils.trimToNull(search);
+        PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
+        Page<Soato> soatoPage = soatoService.getFiltered(null,null,null,pageRequest);
+        HashMap<String,Object> result = new HashMap<>();
+        List<Select2Dto> select2DtoList = new ArrayList<>();
+        for (Soato soato :soatoPage.getContent()) {
+            select2DtoList.add(new Select2Dto(soato.getId(), soato.getName()));
+        }
+
+        Select2PaginationDto paginationDto = new Select2PaginationDto();
+        paginationDto.setMore(true);
+        paginationDto.setSize(15);
+        paginationDto.setTotal(soatoPage.getTotalElements());
+
+        result.put("results", select2DtoList);
+        result.put("pagination", paginationDto);
+        result.put("total_count", soatoPage.getTotalElements());
         return result;
     }
 }

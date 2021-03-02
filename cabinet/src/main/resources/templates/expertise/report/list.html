@@ -92,9 +92,8 @@
 
                                                 <div class="form-group col-sm-2">
                                                     <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
-                                                    <select id="subRegionId" class="form-control">
-                                                        <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                    <select id="subRegionId" class="form-control" multiple="multiple">
+                                                        <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}"  th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                     </select>
                                                 </div>
 
@@ -196,6 +195,15 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    $('#subRegionId').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportSoato}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
 </script>
 <script th:inline="none">
     /*<![CDATA[*/

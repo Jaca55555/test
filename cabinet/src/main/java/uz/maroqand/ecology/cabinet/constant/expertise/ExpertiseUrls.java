@@ -89,6 +89,7 @@ public class ExpertiseUrls {
     private static final String Report = Prefix + "/report";
     public static final String ReportList = Report + "/list";
     public static final String ReportListAjax = Report + "/list_ajax";
+    public static final String ReportSoato= Report+"/soato";
 
     //Applicant
     private static final String Applicant = Prefix + "/applicant";
