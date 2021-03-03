@@ -15,6 +15,6 @@ public interface SoatoService {
 
     List<Soato> getSubRegions();
     List<Soato> getSubregionsbyregionId(Long id);
-    Page<Soato> getFiltered(Integer regionId, Set<Integer> subRegionIds, Integer organizationId, Pageable pageable);
+    Page<Soato> getFiltered(Integer regionId, Set<Integer> subRegionIds, Set<Integer> organizationIds, Pageable pageable);
 
 }

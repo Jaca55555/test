@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -50,13 +51,13 @@ public class SoatoServiceImpl implements SoatoService {
     public List<Soato> getSubregionsbyregionId(Long id){
         return soatoRepository.findByParentId(id);
     }
-    public Page<Soato> getFiltered(Integer regionId, Set<Integer> subRegionIds, Integer organizationId, Pageable pageable){
-        return soatoRepository.findAll(getFilteringSpecification(regionId,subRegionIds,organizationId),pageable);
+    public Page<Soato> getFiltered(Integer regionId, Set<Integer> subRegionIds,Set <Integer> organizationIds, Pageable pageable){
+        return soatoRepository.findAll(getFilteringSpecification(regionId,subRegionIds,organizationIds),pageable);
     }
     private static Specification<Soato> getFilteringSpecification(
             final Integer regionId,
             final Set<Integer> subRegionIds,
-            final Integer organizationId
+            final Set<Integer> organizationIds
     ) {
         return new Specification<Soato>() {
             @Override
@@ -71,6 +72,10 @@ public class SoatoServiceImpl implements SoatoService {
                         predicates.add(criteriaBuilder.in(root.get("id")).value(subRegionIds));
                     }
                 }
+
+
+
+
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         };

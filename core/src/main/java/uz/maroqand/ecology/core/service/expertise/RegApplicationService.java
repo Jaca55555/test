@@ -15,6 +15,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public interface RegApplicationService {
 
@@ -51,6 +52,6 @@ public interface RegApplicationService {
     Boolean beforeOrEqualsTrue(RegApplication regApplication);
 
     Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, RegApplicationInputType regApplicationInputType,Pageable pageable);
-    Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status,Integer regionId);
-    Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status,Integer subRegionId);
+    Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId, Set<Integer> organizationIds);
+    Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status,Integer subRegionId,Set<Integer> organizationIds);
 }

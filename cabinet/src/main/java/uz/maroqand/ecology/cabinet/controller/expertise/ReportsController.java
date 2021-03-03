@@ -18,36 +18,35 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
-import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
-import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
-import uz.maroqand.ecology.docmanagement.constant.DocUrls;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
 import uz.maroqand.ecology.docmanagement.dto.Select2PaginationDto;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class ReportsController {
 
     private final SoatoService soatoService;
     private final RegApplicationService regApplicationService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public ReportsController(SoatoService soatoService, RegApplicationService regApplicationService){
+    public ReportsController(SoatoService soatoService, RegApplicationService regApplicationService, OrganizationService organizationService){
        this.soatoService=soatoService;
         this.regApplicationService = regApplicationService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ReportList)
     public String getReport(Model model) {
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
+        model.addAttribute("organizationList", organizationService.getList());
         return ExpertiseTemplates.ReportList;
     }
     @RequestMapping(value = ExpertiseUrls.ReportListAjax, produces = "application/json", method = RequestMethod.GET)
@@ -55,13 +54,33 @@ public class ReportsController {
     public HashMap<String,Object> getReportsListAjax(
             @RequestParam(name = "regionId", required = false)Integer regionId,
             @RequestParam(name = "subRegionId[]", required = false) Set<Integer> subRegionIds,
+            @RequestParam(name = "organizationId[]", required = false) Set<Integer> organizationIds,
             Pageable pageable
     ) {
+        System.out.println("OrganizationIds="+organizationIds);
         System.out.println("SubRegionIds="+subRegionIds);
+
+        if(organizationIds==null){
+            Set<Integer>organizations=new HashSet<>();
+            for (int i=1;i<=19;i++){
+               if(i==2){
+                   continue;
+               }
+
+                organizations.add(i);
+            }
+            System.out.println("organizations="+organizations);
+            organizationIds=organizations;
+        }
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 //        System.out.println("RegionId="+filterDto.getRegionId());
 //        System.out.println("SubRegionId="+filterDto.getSubRegionId());
-        Page<Soato> soatoPage = soatoService.getFiltered(regionId,subRegionIds,null,pageable);
+        System.out.println("organizationId="+organizationIds);
+        Set<Integer> subRegions = new HashSet<>();
+        if (subRegionIds==null||regionId==null){
+            subRegions.add(1);
+        }
+        Page<Soato> soatoPage = soatoService.getFiltered(regionId,subRegionIds!=null||regionId!=null?subRegionIds:subRegions,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", soatoPage.getTotalElements()); //Total elements
@@ -72,35 +91,35 @@ public class ReportsController {
         for (Soato soato : soatoList){
             convenientForJSONArray.add(new Object[]{
                     soato.getNameTranslation(locale),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, null,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,null,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Process,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Process,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Approved,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Approved,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.NotConfirmed,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.NotConfirmed,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Modification,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Modification,soato.getId()),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category1, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category1,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, null,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,null,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Process,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Process,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Approved,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Approved,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.NotConfirmed,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.NotConfirmed,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Modification,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Modification,soato.getId()),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category2, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category2,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, null,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,null,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Process,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Process,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Approved,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Approved,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.NotConfirmed,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.NotConfirmed,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Modification,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Modification,soato.getId()),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category3, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category3,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, null,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,null,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Process,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Process,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Approved,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Approved,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.NotConfirmed,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.NotConfirmed,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Modification,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Modification,soato.getId()),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, null,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,null,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Process,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Process,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Approved,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Approved,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.NotConfirmed,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.NotConfirmed,soato.getId()),
-                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Modification,soato.getId()):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Modification,soato.getId()),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
             });
         }
@@ -130,6 +149,31 @@ public class ReportsController {
         result.put("results", select2DtoList);
         result.put("pagination", paginationDto);
         result.put("total_count", soatoPage.getTotalElements());
+        return result;
+    }
+    @RequestMapping(value = ExpertiseUrls.ReportOrganization, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getSoatoOrganization(
+            @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "page") Integer page
+    ){
+        search = StringUtils.trimToNull(search);
+        PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
+        Page<Organization> organizationPage = organizationService.getFiltered(search,null,null,pageRequest);
+        HashMap<String,Object> result = new HashMap<>();
+        List<Select2Dto> select2DtoList = new ArrayList<>();
+        for (Organization organization :organizationPage.getContent()) {
+            select2DtoList.add(new Select2Dto(organization.getId(), organization.getName()));
+        }
+
+        Select2PaginationDto paginationDto = new Select2PaginationDto();
+        paginationDto.setMore(true);
+        paginationDto.setSize(15);
+        paginationDto.setTotal(organizationPage.getTotalElements());
+
+        result.put("results", select2DtoList);
+        result.put("pagination", paginationDto);
+        result.put("total_count", organizationPage.getTotalElements());
         return result;
     }
 }

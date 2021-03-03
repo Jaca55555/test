@@ -279,13 +279,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId) {
-        return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,status,regionId);
+    public Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
+        return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,status,regionId,organizationIds);
     }
 
     @Override
-    public Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status, Integer subRegionId) {
-        return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,status,subRegionId);
+    public Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
+        return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,status,subRegionId,organizationIds);
     }
 
     private static Specification<RegApplication> getFilteringSpecification(

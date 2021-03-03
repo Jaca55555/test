@@ -93,7 +93,13 @@
                                                 <div class="form-group col-sm-2">
                                                     <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
                                                     <select id="subRegionId" class="form-control" multiple="multiple">
-                                                        <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}"  th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                    <select id="organizationId" style="padding: 10px 20px;height: auto;width: 100%;" class="form-control" multiple="multiple">
+
                                                     </select>
                                                 </div>
 
@@ -204,6 +210,15 @@
             }, cache: true
         }
     });
+    $('#organizationId').select2({
+        ajax: {
+            url: [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportOrganization}]],
+            type: "POST",
+            data: function (params) {
+                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+            }, cache: true
+        }
+    });
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
@@ -232,6 +247,7 @@
                 dataToSend.page = api != undefined ? api.page() : 0;
                 dataToSend.size = api != undefined ? api.page.len() : 25;
                 dataToSend.regionId = $('#regionId').val();
+                dataToSend.organizationId = $('#organizationId').val();
                 dataToSend.subRegionId = $('#subRegionId').val();
                 dataToSend.regDateBegin = $('#regDateBegin').val();
                 dataToSend.regDateEnd = $('#regDateEnd').val();
