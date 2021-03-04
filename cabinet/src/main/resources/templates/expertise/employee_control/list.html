@@ -34,6 +34,51 @@
         <div class="pcoded-content">
             <div class="pcoded-inner-content">
                 <div class="main-body">
+                    <div id="billing-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span>
+                                        <span style="margin-left: 50px" th:text="#{reg_application_number}"></span>
+                                        <span class="regApplication-id"></span>
+                                    </h5>
+
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 th:text="#{sys_menu.forwardingList}"></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive break-word" id="result" >
+                                                <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th th:text="#{reg_application.number}"></th>
+                                                        <th th:text="#{sys_tin}"></th>
+                                                        <th th:text="#{sys_legal_entity_name}"></th>
+                                                        <th th:text="#{sys_about.material}"></th>
+                                                        <th th:text="#{sys_about.activity}"></th>
+                                                        <th th:text="#{sys_list.registration_date}"></th>
+                                                        <th th:text="#{sys_list.deadline_date}"></th>
+                                                        <th th:text="#{sys_conclusion_status}"></th>
+                                                        <th th:text="#{sys_status}"></th>
+                                                        <th ></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">Закрыть</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
@@ -176,13 +221,52 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    var viewLinkModal = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
     var labelView = "View";
     var dataDatatableSelector;
     var thead;
+    function billingView(id) {
+        $.ajax({
+            url: viewLinkModal,
+            data: {
+                id: id
+            },
+            success: function (response) {
+                $('.invoice-number').html(response.invoiceNumber);
+                $('.payer-name').html(response.payerName);
+                $('.regApplication-id').html(response.regApplicationId);
 
+
+
+                $('#date').html(response.invoiceDate);
+                $('#payee-name').html(response.payeeName);
+                $('#payee-tin').html(response.payeeTin);
+                $('#payee-account').html(response.payeeAccount);
+                $('#payee-address').html(response.payeeAddress);
+
+                $('#payer-type').html(response.payerType);
+                $('#payer-tin').html(response.payerTin);
+                $('#payer-passport').html(response.payerPassport);
+                $('#payer-phone').html(response.payerPhone);
+                $('#payer-mail').html(response.payerEmail);
+                $('#payer-bank').html(response.payerBank);
+                $('#payer-bank-account').html(response.payerBankAccount);
+
+                $('#expiry-at').html(response.invoiceExpiryAt);
+                $('#invoice-detail').html(response.invoiceDetail);
+                $('#invoice-qty').html(response.invoiceQty);
+                $('#invoice-amount').html(response.invoiceAmount);
+
+
+                $('.payment-tr').remove();
+
+                $('#billing-view').modal('show');
+            }
+        });
+    }
     function renderStatusColumn(data, type, row, meta) {
         var proccess1 = 0;
         if (row[2]!=0){
@@ -199,7 +283,34 @@
            '                                            </div>';
         return html;
     }
-
+    function renderAllColumn(data, type, row, meta) {
+        var html = '';
+        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
+            '           <button class="" style="border: none;background: transparent" onclick="billingView('+row[0]+')">'+row[2]+'</button>';
+        html+='</div>';
+        return html;
+    }
+    function renderProcessColumn(data, type, row, meta) {
+        var html = '';
+        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
+            '           <button class="" style="border: none;background: transparent">'+row[3]+'</button>';
+        html+='</div>';
+        return html;
+    }
+    function renderLateDoneColumn(data, type, row, meta) {
+        var html = '';
+        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
+            '           <button class="" style="border: none;background: transparent">'+row[4]+'</button>';
+        html+='</div>';
+        return html;
+    }
+    function renderDoneColumn(data, type, row, meta) {
+        var html = '';
+        html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
+            '           <button class="" style="border: none;background: transparent">'+row[5]+'</button>';
+        html+='</div>';
+        return html;
+    }
     function datatableConnect() {
             dataDatatableSelector.DataTable({
             processing: true,
@@ -233,10 +344,10 @@
                 {data: 0, name: 'id'},
                 {data: 0, render: renderStatusColumn, orderable: false},
                 {data: 1, name: 'firstname'},
-                {data: 2, orderable:false},
-                {data: 3, orderable:false },
-                {data: 4, orderable:false},
-                {data: 5, orderable:false},
+                {data: 2,render:renderAllColumn, orderable:false},
+                {data: 3,render: renderProcessColumn,orderable:false },
+                {data: 4,render: renderLateDoneColumn, orderable:false},
+                {data: 5,render: renderDoneColumn, orderable:false},
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
