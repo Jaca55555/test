@@ -960,10 +960,10 @@ public class RegApplicationController {
         if(conclusion != null){
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
-
+        Offer offer = offerService.getById(regApplication.getOfferId());
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
-
+        model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));

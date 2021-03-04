@@ -146,6 +146,11 @@
                                         <object th:include="reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
 
                                         <div class="container mt-lg-5">
+                                            <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationContractOfferDownload + '?id=' + offer.id}" class="m-b-5 d-block text-secondary">
+                                                <button class="btn btn-primary pl-5 pr-5">
+                                                    <i class="feather icon-printer"></i>
+                                                    <span th:text="#{sys_print}">Письмо КМК-234 от 23.01.2019 г.pdf</span>  </button>
+                                            </a>
                                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                                 <li class="nav-item">
                                                     <a class="nav-link show active" id="status-tab" data-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="true" th:if="${regApplication.status!=null}" th:text="#{reg_application.status}"></a>
